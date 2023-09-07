@@ -3,19 +3,22 @@ import { Request, Response } from 'express'
 import adjudicationUrls from '../../utils/urlGenerator'
 import DecisionTreeService from '../../services/decisionTreeService'
 import PlaceOnReportService from '../../services/placeOnReportService'
+import CheckOnBehalfOfSessionService from './checkOnBehalfOfSessionService'
 
 export default class CheckCreateOnBehalfOfPage {
   constructor(
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly placeOnReportService: PlaceOnReportService
+    private readonly placeOnReportService: PlaceOnReportService,
+    private readonly checkOnBehalfOfSessionService: CheckOnBehalfOfSessionService
   ) {}
 
-  private renderView = async (req: Request, res: Response): Promise<void> => {
+  view = async (req: Request, res: Response): Promise<void> => {
     const draftId = Number(req.params.draftId)
     const { user } = res.locals
     const { prisoner } = await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
-    const createdOnBehalfOfOfficer = req.session.createdOnBehalfOfOfficer[draftId]
-    const createdOnBehalfOfReason = req.session.createdOnBehalfOfReason[draftId]
+
+    const createdOnBehalfOfOfficer = this.checkOnBehalfOfSessionService.getCreatedOnBehalfOfOfficer(req, draftId)
+    const createdOnBehalfOfReason = this.checkOnBehalfOfSessionService.getCreatedOnBehalfOfReason(req, draftId)
     const checkData = [
       {
         label: 'New reporting officer',
@@ -38,12 +41,10 @@ export default class CheckCreateOnBehalfOfPage {
     })
   }
 
-  view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res)
-
   submit = async (req: Request, res: Response): Promise<void> => {
     const draftId = Number(req.params.draftId)
-    const createdOnBehalfOfOfficer = req.session.createdOnBehalfOfOfficer[draftId]
-    const createdOnBehalfOfReason = req.session.createdOnBehalfOfReason[draftId]
+    const createdOnBehalfOfOfficer = this.checkOnBehalfOfSessionService.getCreatedOnBehalfOfOfficer(req, draftId)
+    const createdOnBehalfOfReason = this.checkOnBehalfOfSessionService.getCreatedOnBehalfOfReason(req, draftId)
 
     const { user } = res.locals
     await this.placeOnReportService.setCreatedOnBehalfOf(
@@ -52,8 +53,8 @@ export default class CheckCreateOnBehalfOfPage {
       createdOnBehalfOfReason,
       user
     )
-    delete req.session.createdOnBehalfOfOfficer[draftId]
-    delete req.session.createdOnBehalfOfReason[draftId]
+    this.checkOnBehalfOfSessionService.deleteCreatedOnBehalfOfOfficer(req, draftId)
+    this.checkOnBehalfOfSessionService.deleteCreatedOnBehalfOfReason(req, draftId)
 
     const { prisoner } = await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
     return res.redirect(adjudicationUrls.incidentDetails.urls.edit(prisoner.prisonerNumber, draftId))

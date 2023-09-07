@@ -99,6 +99,7 @@ export default function routes(
     outcomesService,
     punishmentsService,
     chartApiService,
+    checkOnBehalfOfSessionService,
   }: Services
 ): Router {
   router.use(
@@ -232,7 +233,7 @@ export default function routes(
 
   router.use(
     adjudicationUrls.createOnBehalfOf.root,
-    createOnBehalfOfRoutes({ decisionTreeService, placeOnReportService })
+    createOnBehalfOfRoutes({ decisionTreeService, placeOnReportService, checkOnBehalfOfSessionService })
   )
 
   router.use(

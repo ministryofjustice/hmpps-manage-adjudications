@@ -1,7 +1,6 @@
 import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
-import PlaceOnReportService from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import TestData from '../testutils/testData'
 import DecisionTreeService from '../../services/decisionTreeService'
@@ -9,28 +8,23 @@ import { IncidentRole } from '../../incidentRole/IncidentRole'
 import CheckOnBehalfOfSessionService from './checkOnBehalfOfSessionService'
 
 jest.mock('../../services/decisionTreeService.ts')
-jest.mock('../../services/placeOnReportService.ts')
 jest.mock('./checkOnBehalfOfSessionService.ts')
 
 const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
-const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
 const checkOnBehalfOfSessionService = new CheckOnBehalfOfSessionService() as jest.Mocked<CheckOnBehalfOfSessionService>
 const testData = new TestData()
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes(
-    { production: false },
-    { placeOnReportService, decisionTreeService, checkOnBehalfOfSessionService }
-  )
+  app = appWithAllRoutes({ production: false }, { decisionTreeService, checkOnBehalfOfSessionService })
 })
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /create-on-behalf-of/confirm', () => {
+describe('GET /create-on-behalf-of/reason', () => {
   beforeEach(() => {
     decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
       draftAdjudication: testData.draftAdjudication({
@@ -60,16 +54,16 @@ describe('GET /create-on-behalf-of/confirm', () => {
 
   it('should load the check page', () => {
     return request(app)
-      .get(adjudicationUrls.createOnBehalfOf.urls.check(100))
+      .get(`${adjudicationUrls.createOnBehalfOf.urls.reason(100)}?createdOnBehalfOfOfficer=some%20officer`)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Check your answers')
+        expect(res.text).toContain('Why are you creating this report for some officer?')
         expect(res.text).toContain('Return to report 100')
       })
   })
 })
 
-describe('POST /create-on-behalf-of/confirm', () => {
+describe('POST /create-on-behalf-of/reason', () => {
   beforeEach(() => {
     decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
       draftAdjudication: testData.draftAdjudication({
@@ -97,12 +91,10 @@ describe('POST /create-on-behalf-of/confirm', () => {
     })
   })
 
-  it('should redirect to the incident details page when the form is submitted', () => {
+  it('should redirect to the check page when the form is submitted', () => {
     return request(app)
-      .post(adjudicationUrls.createOnBehalfOf.urls.check(100))
-      .expect('Location', adjudicationUrls.incidentDetails.urls.edit('G5512GK', 100))
-      .expect(() => {
-        expect(placeOnReportService.setCreatedOnBehalfOf).toHaveBeenCalledTimes(1)
-      })
+      .post(adjudicationUrls.createOnBehalfOf.urls.reason(100))
+      .send({ createdOnBehalfOfReason: 'some reason' })
+      .expect('Location', adjudicationUrls.createOnBehalfOf.urls.check(100))
   })
 })
