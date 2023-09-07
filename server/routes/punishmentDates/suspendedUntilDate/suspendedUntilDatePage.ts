@@ -2,17 +2,18 @@
 import url from 'url'
 import { Request, Response } from 'express'
 import { ParsedUrlQueryInput } from 'querystring'
+import validateForm from './suspendedUntilValidation'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
-import { hasAnyRole } from '../../../utils/utils'
+import { hasAnyRole, apiDateToDatePicker, datePickerToApi } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import validateForm from './isPunishmentSuspendedValidation'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
-  suspended?: string
+  suspendedUntil?: string
 }
 
 export enum PageRequestType {
@@ -28,7 +29,7 @@ class PageOptions {
   }
 }
 
-export default class PunishmentSuspendedPage {
+export default class SuspendedUntilDatePage {
   pageOptions: PageOptions
 
   constructor(
@@ -42,12 +43,12 @@ export default class PunishmentSuspendedPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, suspended } = pageData
+    const { error, suspendedUntil } = pageData
 
-    return res.render(`pages/punishmentIsSuspended.njk`, {
+    return res.render(`pages/punishmentSuspendedUntilDate.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
-      suspended,
+      suspendedUntil,
     })
   }
 
@@ -62,7 +63,7 @@ export default class PunishmentSuspendedPage {
     if (this.pageOptions.isEdit()) {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
       return this.renderView(req, res, {
-        suspended: sessionData.suspendedUntil ? 'yes' : 'no',
+        suspendedUntil: sessionData.suspendedUntil && apiDateToDatePicker(sessionData.suspendedUntil),
       })
     }
 
@@ -71,41 +72,40 @@ export default class PunishmentSuspendedPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
-    const { suspended } = req.body
+    const { suspendedUntil } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
+    const type = PunishmentType[punishmentType as string]
 
     const error = validateForm({
-      suspended,
+      suspendedUntil,
     })
 
     if (error)
       return this.renderView(req, res, {
         error,
-        suspended,
+        suspendedUntil,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req, suspended)
-    return res.redirect(
-      url.format({
-        pathname: redirectUrlPrefix,
-        query: {
-          punishmentType,
-          privilegeType,
-          otherPrivilege,
-          stoppagePercentage,
-          days,
-        } as ParsedUrlQueryInput,
-      })
-    )
-  }
+    try {
+      const punishmentData = {
+        type,
+        privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+        otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
+        stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
+        days: Number(days),
+        suspendedUntil: suspendedUntil ? datePickerToApi(suspendedUntil) : null,
+      }
 
-  getRedirectUrl = (chargeNumber: string, req: Request, suspended: string) => {
-    if (this.pageOptions.isEdit()) {
-      if (suspended === 'yes')
-        return adjudicationUrls.punishmentSuspendedUntil.urls.edit(chargeNumber, req.params.redisId)
-      return adjudicationUrls.punishmentStartDate.urls.edit(chargeNumber, req.params.redisId)
+      if (this.pageOptions.isEdit()) {
+        await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
+      } else {
+        await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
+      }
+    } catch (postError) {
+      res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
+      throw postError
     }
-    if (suspended === 'yes') return adjudicationUrls.punishmentSuspendedUntil.urls.start(chargeNumber)
-    return adjudicationUrls.punishmentStartDate.urls.start(chargeNumber)
+
+    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

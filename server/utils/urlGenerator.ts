@@ -711,6 +711,15 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentStartDate.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
+  punishmentAutomaticDateSchedule: {
+    root: '/punishment-automatic-date-schedule',
+    matchers: {
+      start: '/:chargeNumber',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentAutomaticDateSchedule.root}/${chargeNumber}`,
+    },
+  },
   numberOfAdditionalDays: {
     root: '/number-additional-days',
     matchers: {
