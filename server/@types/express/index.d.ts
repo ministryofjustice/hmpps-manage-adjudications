@@ -33,6 +33,8 @@ declare module 'express-session' {
     punishments: { [key: string]; punishments? }
     userDetails: UserDetails
     punishmentReasonForChange: { [key: string]; punishmentReasonForChange? }
+    createdOnBehalfOfOfficer: { [key: string]; string? }
+    createdOnBehalfOfReason: { [key: string]; string? }
   }
 }
 

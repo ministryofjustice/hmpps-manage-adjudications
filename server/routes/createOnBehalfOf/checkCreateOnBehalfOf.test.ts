@@ -54,7 +54,7 @@ describe('GET /create-on-behalf-of', () => {
 
   it('should load the check page', () => {
     return request(app)
-      .get(adjudicationUrls.createOnBehalfOf.url.check(100))
+      .get(adjudicationUrls.createOnBehalfOf.urls.check(100))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Check your answers')
@@ -93,7 +93,7 @@ describe('POST /create-on-behalf-of', () => {
 
   it('should redirect to the incident details page when the form is submitted', () => {
     return request(app)
-      .post(adjudicationUrls.createOnBehalfOf.url.check(100))
+      .post(adjudicationUrls.createOnBehalfOf.urls.check(100))
       .expect('Location', adjudicationUrls.incidentDetails.urls.edit('G5512GK', 100))
       .expect(() => {
         expect(placeOnReportService.setCreatedOnBehalfOf).toHaveBeenCalledTimes(1)

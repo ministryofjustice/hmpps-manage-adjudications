@@ -74,14 +74,14 @@ context('Check create on behalf of', () => {
   })
 
   it('should contain the required page elements', () => {
-    cy.visit(adjudicationUrls.createOnBehalfOf.url.check(3456))
+    cy.visit(adjudicationUrls.createOnBehalfOf.urls.check(3456))
     const checkCreateOnBehalfOfPage: CheckCreateOnBehalfOfPage = Page.verifyOnPage(CheckCreateOnBehalfOfPage)
     checkCreateOnBehalfOfPage.submitButton().should('exist')
     checkCreateOnBehalfOfPage.cancelLink().should('exist')
   })
 
   it('should redirect to the incident details page when the form is submitted', () => {
-    cy.visit(adjudicationUrls.createOnBehalfOf.url.check(3456))
+    cy.visit(adjudicationUrls.createOnBehalfOf.urls.check(3456))
     const checkCreateOnBehalfOfPage: CheckCreateOnBehalfOfPage = Page.verifyOnPage(CheckCreateOnBehalfOfPage)
     checkCreateOnBehalfOfPage.submitButton().click()
   })

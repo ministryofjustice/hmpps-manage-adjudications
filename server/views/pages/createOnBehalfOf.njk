@@ -1,0 +1,56 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "Enter the new reporting officers name" %}
+
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        {{ govukInput({
+          name: "createdOnBehalfOfOfficer",
+          id: "createdOnBehalfOfOfficer",
+          classes: "govuk-!-width-two-thirds",
+          attributes: { "data-qa": "officers-name" },
+          errorMessage: "createdOnBehalfOfOfficer" | findError(errors),
+          value: sessionCreatedOnBehalfOfOfficer
+        }) }}
+
+        <div class="flex-container flex-center">
+          {{ govukButton({
+            text: 'Continue',
+            type: 'submit',
+            preventDoubleClick: true,
+            classes: "govuk-button--submit govuk-!-margin-right-6",
+            attributes: { "data-qa": "create-on-behalf-of-continue" }
+          }) }}
+
+          <p class="govuk-body govuk-!-margin-top-1">
+            <a href="{{ cancelHref }}" class="govuk-link" data-qa="cancel">Return to report {{ draftId }}</a>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </form>
+{% endblock %}
