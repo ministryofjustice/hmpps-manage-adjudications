@@ -160,9 +160,13 @@ const adjudicationUrls = {
   createOnBehalfOf: {
     root: '/create-on-behalf-of',
     matchers: {
+      start: '/:draftId',
+      reason: '/:draftId/reason',
       check: '/:draftId/check',
     },
-    url: {
+    urls: {
+      start: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}`,
+      reason: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}/reason`,
       check: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}/check`,
     },
   },

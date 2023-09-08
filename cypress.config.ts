@@ -20,7 +20,6 @@ export default defineConfig({
   reporterOptions: {
     configFile: 'reporter-config.json',
   },
-  videoUploadOnPasses: false,
   taskTimeout: 60000,
   viewportWidth: 1024,
   viewportHeight: 768,
