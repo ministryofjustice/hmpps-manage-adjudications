@@ -503,6 +503,56 @@ describe('reportedAdjudicationsService', () => {
       }
       expect(result).toEqual(expectedResult)
     })
+    it('returns the correct information with created on behalf of officer', async () => {
+      const draftAdjudication = testData.draftAdjudication({
+        id: 10,
+        prisonerNumber: 'G6123VU',
+        dateTimeOfIncident: '2021-11-16T07:21:00',
+        dateTimeOfDiscovery: '2021-11-17T08:22:00',
+        locationId: 25538,
+        incidentStatement: {
+          statement: 'Statement for a test',
+        },
+        incidentRole: {
+          associatedPrisonersNumber: 'G6415GD',
+          roleCode: '25b',
+        },
+        createdOnBehalfOfOfficer: 'some officer',
+        createdOnBehalfOfReason: 'some reason',
+      })
+      const result = await service.getPrisonerReport(user, draftAdjudication)
+      const expectedResult = {
+        incidentDetails: [
+          {
+            label: 'Reporting Officer',
+            value: 'T. User on behalf of some officer',
+          },
+          {
+            label: 'Date of incident',
+            value: '16 November 2021',
+          },
+          {
+            label: 'Time of incident',
+            value: '07:21',
+          },
+          {
+            label: 'Location',
+            value: 'Closed Visits, Moorland (HMP & YOI)',
+          },
+          {
+            label: 'Date of discovery',
+            value: '17 November 2021',
+          },
+          {
+            label: 'Time of discovery',
+            value: '08:22',
+          },
+        ],
+        statement: 'Statement for a test',
+        isYouthOffender: false,
+      }
+      expect(result).toEqual(expectedResult)
+    })
   })
 
   describe('getReviewDetails', () => {

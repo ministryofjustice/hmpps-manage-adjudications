@@ -42,6 +42,7 @@ export default class CreateOnBehalfOfPage {
       })
     }
 
+    req.session.redirectUrl = req.query.referrer as string
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.createOnBehalfOf.urls.reason(draftId),

@@ -24,6 +24,7 @@ export default class CheckCreateOnBehalfOfPage {
         label: 'New reporting officer',
         value: createdOnBehalfOfOfficer,
         changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.start(draftId)}`,
+        dataQa: 'reporting-officer-changeLink',
       },
       {
         label: 'Reason why you are reporting on their behalf',
@@ -31,6 +32,7 @@ export default class CheckCreateOnBehalfOfPage {
         changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.reason(
           draftId
         )}?createdOnBehalfOfOfficer=${createdOnBehalfOfOfficer}`,
+        dataQa: 'reason-changeLink',
       },
     ]
 
@@ -56,7 +58,6 @@ export default class CheckCreateOnBehalfOfPage {
     this.createOnBehalfOfSessionService.deleteCreatedOnBehalfOfOfficer(req, draftId)
     this.createOnBehalfOfSessionService.deleteCreatedOnBehalfOfReason(req, draftId)
 
-    const { prisoner } = await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
-    return res.redirect(adjudicationUrls.incidentDetails.urls.edit(prisoner.prisonerNumber, draftId))
+    return res.redirect(req.session.redirectUrl)
   }
 }

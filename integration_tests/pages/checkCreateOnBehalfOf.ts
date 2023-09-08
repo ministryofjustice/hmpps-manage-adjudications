@@ -5,7 +5,9 @@ export default class CheckCreateOnBehalfOfPage extends Page {
     super('Check your answers')
   }
 
-  changeLink = (): PageElement => cy.get('[data-qa="change-link"]')
+  reportingOfficerChangeLink = (): PageElement => cy.get('[data-qa="reporting-officer-changeLink"]')
+
+  reasonChangeLink = (): PageElement => cy.get('[data-qa="reason-changeLink"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="create-on-behalf-of-confirm"]')
 

@@ -228,6 +228,63 @@ describe('placeOnReportService', () => {
           {
             label: 'Reporting Officer',
             value: 'T. User',
+            changeLinkHref: adjudicationUrls.createOnBehalfOf.urls.start(10),
+          },
+          {
+            label: 'Date of incident',
+            value: '4 November 2021',
+          },
+          {
+            label: 'Time of incident',
+            value: '07:20',
+          },
+          {
+            label: 'Location',
+            value: 'Houseblock 2',
+          },
+          {
+            label: 'Date of discovery',
+            value: '5 November 2021',
+          },
+          {
+            label: 'Time of discovery',
+            value: '07:21',
+          },
+        ],
+        statement: "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
+        chargeNumber: '123456',
+        isYouthOffender: false,
+      }
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns the draft adjudication information - created on behalf of officer', async () => {
+      getDraftAdjudication.mockResolvedValue({
+        draftAdjudication: testData.draftAdjudication({
+          id: 10,
+          chargeNumber: '123456',
+          prisonerNumber: 'G6123VU',
+          dateTimeOfIncident: '2021-11-04T07:20:00',
+          dateTimeOfDiscovery: '2021-11-05T07:21:00',
+          locationId: 25655,
+          incidentStatement: {
+            statement:
+              "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
+          },
+          createdOnBehalfOfOfficer: 'some officer',
+          createdOnBehalfOfReason: 'some reason',
+        }),
+      })
+
+      hmppsManageUsersClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
+
+      const locations = testData.residentialLocations()
+
+      const result = await service.getCheckYourAnswersInfo(10, locations, user)
+      const expectedResult = {
+        incidentDetails: [
+          {
+            label: 'Reporting Officer',
+            value: 'T. User on behalf of some officer',
           },
           {
             label: 'Date of incident',

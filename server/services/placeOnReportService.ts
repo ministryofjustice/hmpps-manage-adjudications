@@ -180,10 +180,22 @@ export default class PlaceOnReportService {
 
     const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
 
+    let reportingOfficer: string = getFormattedOfficerName(reporter.name)
+    let changeReportingOfficerLink = ''
+    if (draftAdjudication.createdOnBehalfOfOfficer) {
+      reportingOfficer += ` on behalf of ${draftAdjudication.createdOnBehalfOfOfficer}`
+    } else {
+      changeReportingOfficerLink = `${adjudicationUrls.createOnBehalfOf.urls.start(
+        draftId
+      )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(draftId)}`
+    }
+
     const incidentDetails = [
       {
         label: 'Reporting Officer',
-        value: getFormattedOfficerName(reporter.name),
+        value: reportingOfficer,
+        changeLinkHref: changeReportingOfficerLink,
+        dataQa: 'reporting-officer-changeLink',
       },
       {
         label: 'Date of incident',
