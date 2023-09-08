@@ -5,19 +5,20 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import TestData from '../testutils/testData'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
-import CheckOnBehalfOfSessionService from './checkOnBehalfOfSessionService'
+import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'
 
 jest.mock('../../services/decisionTreeService.ts')
-jest.mock('./checkOnBehalfOfSessionService.ts')
+jest.mock('./createOnBehalfOfSessionService.ts')
 
 const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
-const checkOnBehalfOfSessionService = new CheckOnBehalfOfSessionService() as jest.Mocked<CheckOnBehalfOfSessionService>
+const createOnBehalfOfSessionService =
+  new CreateOnBehalfOfSessionService() as jest.Mocked<CreateOnBehalfOfSessionService>
 const testData = new TestData()
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { decisionTreeService, checkOnBehalfOfSessionService })
+  app = appWithAllRoutes({ production: false }, { decisionTreeService, createOnBehalfOfSessionService })
 })
 
 afterEach(() => {
@@ -99,5 +100,15 @@ describe('POST /create-on-behalf-of', () => {
         'Location',
         `${adjudicationUrls.createOnBehalfOf.urls.reason(100)}?createdOnBehalfOfOfficer=some%20officer`
       )
+  })
+
+  it('should render error summary with correct validation message', () => {
+    return request(app)
+      .post(adjudicationUrls.createOnBehalfOf.urls.start(100))
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('There is a problem')
+        expect(res.text).toContain('Enter the new reporting officers name')
+      })
   })
 })

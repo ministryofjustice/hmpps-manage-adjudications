@@ -3,13 +3,13 @@ import { Request, Response } from 'express'
 import adjudicationUrls from '../../utils/urlGenerator'
 import DecisionTreeService from '../../services/decisionTreeService'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import CheckOnBehalfOfSessionService from './checkOnBehalfOfSessionService'
+import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'
 
 export default class CheckCreateOnBehalfOfPage {
   constructor(
     private readonly decisionTreeService: DecisionTreeService,
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly checkOnBehalfOfSessionService: CheckOnBehalfOfSessionService
+    private readonly createOnBehalfOfSessionService: CreateOnBehalfOfSessionService
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
@@ -17,8 +17,8 @@ export default class CheckCreateOnBehalfOfPage {
     const { user } = res.locals
     const { prisoner } = await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
 
-    const createdOnBehalfOfOfficer = this.checkOnBehalfOfSessionService.getCreatedOnBehalfOfOfficer(req, draftId)
-    const createdOnBehalfOfReason = this.checkOnBehalfOfSessionService.getCreatedOnBehalfOfReason(req, draftId)
+    const createdOnBehalfOfOfficer = this.createOnBehalfOfSessionService.getCreatedOnBehalfOfOfficer(req, draftId)
+    const createdOnBehalfOfReason = this.createOnBehalfOfSessionService.getCreatedOnBehalfOfReason(req, draftId)
     const checkData = [
       {
         label: 'New reporting officer',
@@ -42,19 +42,19 @@ export default class CheckCreateOnBehalfOfPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const draftId = Number(req.params.draftId)
-    const createdOnBehalfOfOfficer = this.checkOnBehalfOfSessionService.getCreatedOnBehalfOfOfficer(req, draftId)
-    const createdOnBehalfOfReason = this.checkOnBehalfOfSessionService.getCreatedOnBehalfOfReason(req, draftId)
-
     const { user } = res.locals
+    const draftId = Number(req.params.draftId)
+    const createdOnBehalfOfOfficer = this.createOnBehalfOfSessionService.getCreatedOnBehalfOfOfficer(req, draftId)
+    const createdOnBehalfOfReason = this.createOnBehalfOfSessionService.getCreatedOnBehalfOfReason(req, draftId)
+
     await this.placeOnReportService.setCreatedOnBehalfOf(
       draftId,
       createdOnBehalfOfOfficer,
       createdOnBehalfOfReason,
       user
     )
-    this.checkOnBehalfOfSessionService.deleteCreatedOnBehalfOfOfficer(req, draftId)
-    this.checkOnBehalfOfSessionService.deleteCreatedOnBehalfOfReason(req, draftId)
+    this.createOnBehalfOfSessionService.deleteCreatedOnBehalfOfOfficer(req, draftId)
+    this.createOnBehalfOfSessionService.deleteCreatedOnBehalfOfReason(req, draftId)
 
     const { prisoner } = await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
     return res.redirect(adjudicationUrls.incidentDetails.urls.edit(prisoner.prisonerNumber, draftId))

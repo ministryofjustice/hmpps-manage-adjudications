@@ -6,15 +6,16 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import TestData from '../testutils/testData'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { IncidentRole } from '../../incidentRole/IncidentRole'
-import CheckOnBehalfOfSessionService from './checkOnBehalfOfSessionService'
+import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'
 
 jest.mock('../../services/decisionTreeService.ts')
 jest.mock('../../services/placeOnReportService.ts')
-jest.mock('./checkOnBehalfOfSessionService.ts')
+jest.mock('./createOnBehalfOfSessionService.ts')
 
 const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
 const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
-const checkOnBehalfOfSessionService = new CheckOnBehalfOfSessionService() as jest.Mocked<CheckOnBehalfOfSessionService>
+const createOnBehalfOfSessionService =
+  new CreateOnBehalfOfSessionService() as jest.Mocked<CreateOnBehalfOfSessionService>
 const testData = new TestData()
 
 let app: Express
@@ -22,7 +23,7 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
-    { placeOnReportService, decisionTreeService, checkOnBehalfOfSessionService }
+    { placeOnReportService, decisionTreeService, createOnBehalfOfSessionService }
   )
 })
 

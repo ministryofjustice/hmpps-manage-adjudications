@@ -1,12 +1,13 @@
 import { Request } from 'express'
 
-export default class CheckOnBehalfOfSessionService {
+export default class CreateOnBehalfOfSessionService {
   setCreatedOnBehalfOfOfficer(req: Request, draftId: number, createdOnBehalfOfOfficer: string): void {
-    this.setCreatedOnBehalfOf(req, draftId)
+    this.setCreatedOnBehalfOfForDraftId(req, draftId)
     req.session.createdOnBehalfOf[draftId].createdOnBehalfOfOfficer = createdOnBehalfOfOfficer
   }
 
   getCreatedOnBehalfOfOfficer(req: Request, draftId: number): string {
+    this.setCreatedOnBehalfOfForDraftId(req, draftId)
     return req.session.createdOnBehalfOf[draftId].createdOnBehalfOfOfficer
   }
 
@@ -15,11 +16,12 @@ export default class CheckOnBehalfOfSessionService {
   }
 
   setCreatedOnBehalfOfReason(req: Request, draftId: number, createdOnBehalfOfReason: string): void {
-    this.setCreatedOnBehalfOf(req, draftId)
+    this.setCreatedOnBehalfOfForDraftId(req, draftId)
     req.session.createdOnBehalfOf[draftId].createdOnBehalfOfReason = createdOnBehalfOfReason
   }
 
   getCreatedOnBehalfOfReason(req: Request, draftId: number): string {
+    this.setCreatedOnBehalfOfForDraftId(req, draftId)
     return req.session.createdOnBehalfOf[draftId].createdOnBehalfOfReason
   }
 
@@ -27,7 +29,7 @@ export default class CheckOnBehalfOfSessionService {
     delete req.session.createdOnBehalfOf[draftId].createdOnBehalfOfReason
   }
 
-  setCreatedOnBehalfOf(req: Request, draftId: number) {
+  private setCreatedOnBehalfOfForDraftId(req: Request, draftId: number): void {
     if (!req.session.createdOnBehalfOf) {
       req.session.createdOnBehalfOf = {}
     }

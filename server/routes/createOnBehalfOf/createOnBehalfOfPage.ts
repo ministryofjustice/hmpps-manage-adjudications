@@ -4,28 +4,19 @@ import url from 'url'
 import adjudicationUrls from '../../utils/urlGenerator'
 import DecisionTreeService from '../../services/decisionTreeService'
 import validateForm from './createOnBehalfOfValidation'
-import CheckOnBehalfOfSessionService from './checkOnBehalfOfSessionService'
+import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'
 
 export default class CreateOnBehalfOfPage {
   constructor(
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly checkOnBehalfOfSessionService: CheckOnBehalfOfSessionService
+    private readonly createOnBehalfOfSessionService: CreateOnBehalfOfSessionService
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
     const draftId = Number(req.params.draftId)
     const { user } = res.locals
     const { prisoner } = await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
-
-    const createdOnBehalfOfOfficer = this.checkOnBehalfOfSessionService.getCreatedOnBehalfOfOfficer(req, draftId)
-    // if (!req.session.createdOnBehalfOfOfficer) {
-    //   req.session.createdOnBehalfOfOfficer = {}
-    // }
-    // if (!req.session.createdOnBehalfOfOfficer[draftId]) {
-    //   req.session.createdOnBehalfOfOfficer[draftId] = {}
-    // } else {
-    //   createdOnBehalfOfOfficer = req.session.createdOnBehalfOfOfficer[draftId]
-    // }
+    const createdOnBehalfOfOfficer = this.createOnBehalfOfSessionService.getCreatedOnBehalfOfOfficer(req, draftId)
 
     return res.render(`pages/createOnBehalfOf`, {
       draftId,

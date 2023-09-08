@@ -6,28 +6,28 @@ import CheckCreateOnBehalfOfRoutes from './checkCreateOnBehalfOf'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import CreateOnBehalfOfRoutes from './createOnBehalfOf'
 import CreateOnBehalfOfReasonRoutes from './createOnBehalfOfReason'
-import CheckOnBehalfOfSessionService from './checkOnBehalfOfSessionService'
+import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'
 
 export default function createOnBehalfOfRoutes({
   decisionTreeService,
   placeOnReportService,
-  checkOnBehalfOfSessionService,
+  createOnBehalfOfSessionService,
 }: {
   decisionTreeService: DecisionTreeService
   placeOnReportService: PlaceOnReportService
-  checkOnBehalfOfSessionService: CheckOnBehalfOfSessionService
+  createOnBehalfOfSessionService: CreateOnBehalfOfSessionService
 }): Router {
   const router = express.Router()
 
-  const createOnBehalfOfRoute = new CreateOnBehalfOfRoutes(decisionTreeService, checkOnBehalfOfSessionService)
+  const createOnBehalfOfRoute = new CreateOnBehalfOfRoutes(decisionTreeService, createOnBehalfOfSessionService)
   const createOnBehalfOfReasonRoute = new CreateOnBehalfOfReasonRoutes(
     decisionTreeService,
-    checkOnBehalfOfSessionService
+    createOnBehalfOfSessionService
   )
   const checkCreateOnBehalfOfRoute = new CheckCreateOnBehalfOfRoutes(
     decisionTreeService,
     placeOnReportService,
-    checkOnBehalfOfSessionService
+    createOnBehalfOfSessionService
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))

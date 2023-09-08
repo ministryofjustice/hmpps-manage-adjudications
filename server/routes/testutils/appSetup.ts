@@ -23,7 +23,7 @@ import PunishmentsService from '../../services/punishmentsService'
 
 import type { ApplicationInfo } from '../../applicationInfo'
 import ChartApiService from '../../services/chartApiService'
-import CheckOnBehalfOfSessionService from '../createOnBehalfOf/checkOnBehalfOfSessionService'
+import CreateOnBehalfOfSessionService from '../createOnBehalfOf/createOnBehalfOfSessionService'
 
 const testAppInfo: ApplicationInfo = {
   applicationName: 'test',
@@ -129,7 +129,7 @@ export default function appWithAllRoutes(
       punishmentsService: {} as PunishmentsService,
       applicationInfo: {} as ApplicationInfo,
       chartApiService: {} as ChartApiService,
-      checkOnBehalfOfSessionService: {} as CheckOnBehalfOfSessionService,
+      createOnBehalfOfSessionService: {} as CreateOnBehalfOfSessionService,
       ...overrides,
     }),
     production,
