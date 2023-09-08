@@ -36,7 +36,7 @@ describe('GET will this punishment be suspended page', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentSuspended.urls.edit('100', uuidv4()))
+      .get(adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -47,7 +47,7 @@ describe('GET will this punishment be suspended page', () => {
 describe('GET punishment-suspended page', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentSuspended.urls.edit('100', uuidv4()))
+      .get(adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Will this punishment be suspended?')
@@ -59,7 +59,7 @@ describe('POST punishment-suspended page', () => {
   it('should save data - suspended', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.isPunishmentSuspended.urls.edit(
+        `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(
           '100',
           'XYZ'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=5`
@@ -88,7 +88,7 @@ describe('POST punishment-suspended page', () => {
   it('should redirect - not suspended', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.isPunishmentSuspended.urls.edit(
+        `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(
           '100',
           'XYZ'
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=6`

@@ -1,15 +1,16 @@
 /* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
-import validateForm from './numberOfAdditionalDaysValidation'
+import { ParsedUrlQueryInput } from 'querystring'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 import { User } from '../../../data/hmppsManageUsersClient'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import validateForm from './numberOfDaysValidation'
 
 type PageData = {
   error?: FormError
@@ -19,7 +20,6 @@ type PageData = {
 export enum PageRequestType {
   CREATION,
   EDIT,
-  MANUAL_EDIT,
 }
 
 class PageOptions {
@@ -28,13 +28,9 @@ class PageOptions {
   isEdit(): boolean {
     return this.pageType === PageRequestType.EDIT
   }
-
-  isManualEdit(): boolean {
-    return this.pageType === PageRequestType.MANUAL_EDIT
-  }
 }
 
-export default class NumberOfAdditionalDaysPage {
+export default class PunishmentNumberOfDaysPage {
   pageOptions: PageOptions
 
   constructor(
@@ -50,7 +46,7 @@ export default class NumberOfAdditionalDaysPage {
     const { chargeNumber } = req.params
     const { error, days } = pageData
 
-    return res.render(`pages/numberOfAdditionalDays.njk`, {
+    return res.render(`pages/punishmentNumberOfDays.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       days,
@@ -67,7 +63,6 @@ export default class NumberOfAdditionalDaysPage {
 
     if (this.pageOptions.isEdit()) {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
-
       return this.renderView(req, res, {
         days: sessionData.days,
       })
@@ -77,10 +72,10 @@ export default class NumberOfAdditionalDaysPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
     const { chargeNumber } = req.params
+    const { user } = res.locals
     const { days } = req.body
-    const { punishmentType, privilegeType } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.query
     const type = PunishmentType[punishmentType as string]
 
     const trimmedDays = days ? Number(String(days).trim()) : null
@@ -103,19 +98,22 @@ export default class NumberOfAdditionalDaysPage {
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-        query: { ...req.query, days: trimmedDays },
+        query: {
+          punishmentType,
+          privilegeType,
+          otherPrivilege,
+          stoppagePercentage,
+          days: trimmedDays,
+        } as ParsedUrlQueryInput,
       })
     )
   }
 
-  private getRedirectUrl = (chargeNumber: string, req: Request) => {
+  getRedirectUrl = (chargeNumber: string, req: Request) => {
     if (this.pageOptions.isEdit()) {
-      return adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(chargeNumber, req.params.redisId)
+      return adjudicationUrls.punishmentIsSuspended.urls.edit(chargeNumber, req.params.redisId)
     }
-    if (this.pageOptions.isManualEdit()) {
-      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(chargeNumber)
-    }
-    return adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.start(chargeNumber)
+    return adjudicationUrls.punishmentIsSuspended.urls.start(chargeNumber)
   }
 
   getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {

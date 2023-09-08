@@ -4,14 +4,14 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
-import TestData from '../../testutils/testData'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import config from '../../../config'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 
-const testData = new TestData()
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -26,27 +26,25 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-    reportedAdjudication: testData.reportedAdjudication({
-      chargeNumber: '1524494',
-      prisonerNumber: 'G6415GD',
-      dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
-    }),
-  })
+  config.automaticPunishmentDatesFlag = 'true'
 })
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET number of additional days page', () => {
+describe('GET', () => {
   beforeEach(() => {
     app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.numberOfAdditionalDays.urls.start('100'))
+      .get(
+        `${adjudicationUrls.punishmentSuspendedUntil.urls.start(
+          '100'
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+      )
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -54,34 +52,47 @@ describe('GET number of additional days page', () => {
   })
 })
 
-describe('GET number of additional days page', () => {
+describe('GET', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.numberOfAdditionalDays.urls.start('100'))
+      .get(
+        `${adjudicationUrls.punishmentSuspendedUntil.urls.start(
+          '100'
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+      )
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Enter the number of additional days')
+        expect(res.text).toContain('Enter the date the punishment is suspended until')
       })
   })
 })
 
-describe('POST number of additional days page', () => {
-  it('should redirect', () => {
+describe('POST ', () => {
+  it('redirects to the award punishment page and saves to session', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.numberOfAdditionalDays.urls.start(
+        `${adjudicationUrls.punishmentSuspendedUntil.urls.start(
           '100'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
       )
       .send({
-        days: 10,
+        suspendedUntil: '13/12/2023',
       })
       .expect(302)
-      .expect(
-        'Location',
-        `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.start(
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
+      .then(() =>
+        expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
+          expect.anything(),
+          {
+            type: PunishmentType.PRIVILEGE,
+            privilegeType: PrivilegeType.OTHER,
+            otherPrivilege: 'nintendo switch',
+            days: 6,
+            suspendedUntil: '2023-12-13',
+            stoppagePercentage: null,
+          },
           '100'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
+        )
       )
   })
 })

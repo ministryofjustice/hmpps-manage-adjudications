@@ -4,8 +4,10 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
-import TestData from '../../testutils/testData'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
+import config from '../../../config'
+import TestData from '../../testutils/testData'
+import { PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
@@ -33,20 +35,32 @@ beforeEach(() => {
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
     }),
   })
+  punishmentsService.getSessionPunishment.mockResolvedValue({
+    type: PunishmentType.EXCLUSION_WORK,
+    days: 10,
+    suspendedUntil: '4/4/2023',
+  })
+
+  config.automaticPunishmentDatesFlag = 'true'
 })
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET number of additional days page', () => {
+describe('GET', () => {
   beforeEach(() => {
     app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.numberOfAdditionalDays.urls.start('100'))
+      .get(
+        `${adjudicationUrls.punishmentNumberOfDays.urls.edit(
+          '100',
+          'xyz'
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
+      )
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -54,34 +68,41 @@ describe('GET number of additional days page', () => {
   })
 })
 
-describe('GET number of additional days page', () => {
+describe('GET', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.numberOfAdditionalDays.urls.start('100'))
+      .get(
+        `${adjudicationUrls.punishmentNumberOfDays.urls.edit(
+          '100',
+          'xyz'
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
+      )
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Enter the number of additional days')
+        expect(res.text).toContain('Enter the number of days this punishment will last')
       })
   })
 })
 
-describe('POST number of additional days page', () => {
-  it('should redirect', () => {
+describe('POST ', () => {
+  it('redirects to the is the punishment suspended page', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.numberOfAdditionalDays.urls.start(
-          '100'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`
+        `${adjudicationUrls.punishmentNumberOfDays.urls.edit(
+          '100',
+          'xyz'
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
       )
       .send({
-        days: 10,
+        days: 2,
       })
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.start(
-          '100'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
+        `${adjudicationUrls.punishmentIsSuspended.urls.edit(
+          '100',
+          'xyz'
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=2`
       )
   })
 })

@@ -1,0 +1,54 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../macros/datePicker.njk" import datePicker %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set title = "Enter the date the punishment is suspended until" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {{
+        datePicker({
+          id: 'suspendedUntil',
+          name: 'suspendedUntil',
+          date: suspendedUntil,
+          attributes: {'data-disable-future-date':'false', 'data-qa': "suspended-until-date-picker" },
+          classes: 'govuk-input--width-10',
+          errorMessage: errors | findErrors(['suspendedUntil'])
+        })
+      }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: 'Continue',
+          type: "submit",
+          preventDoubleClick: true,
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "punishment-suspended-until-submit" }
+        }) }}
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-suspended-until-cancel'>Return to 'Award punishments and add money for damages'</a>
+      </div>
+
+    </form>
+  </div>
+{% endblock %}

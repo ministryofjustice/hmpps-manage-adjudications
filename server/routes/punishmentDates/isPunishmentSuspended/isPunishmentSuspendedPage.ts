@@ -1,25 +1,23 @@
 /* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
-import validateForm from './numberOfAdditionalDaysValidation'
+import { ParsedUrlQueryInput } from 'querystring'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
-import { User } from '../../../data/hmppsManageUsersClient'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import validateForm from './isPunishmentSuspendedValidation'
 
 type PageData = {
   error?: FormError
-  days?: number
+  suspended?: string
 }
 
 export enum PageRequestType {
   CREATION,
   EDIT,
-  MANUAL_EDIT,
 }
 
 class PageOptions {
@@ -28,13 +26,9 @@ class PageOptions {
   isEdit(): boolean {
     return this.pageType === PageRequestType.EDIT
   }
-
-  isManualEdit(): boolean {
-    return this.pageType === PageRequestType.MANUAL_EDIT
-  }
 }
 
-export default class NumberOfAdditionalDaysPage {
+export default class PunishmentSuspendedPage {
   pageOptions: PageOptions
 
   constructor(
@@ -48,12 +42,12 @@ export default class NumberOfAdditionalDaysPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, days } = pageData
+    const { error, suspended } = pageData
 
-    return res.render(`pages/numberOfAdditionalDays.njk`, {
+    return res.render(`pages/punishmentIsSuspended.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
-      days,
+      suspended,
     })
   }
 
@@ -67,9 +61,8 @@ export default class NumberOfAdditionalDaysPage {
 
     if (this.pageOptions.isEdit()) {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
-
       return this.renderView(req, res, {
-        days: sessionData.days,
+        suspended: sessionData.suspendedUntil ? 'yes' : 'no',
       })
     }
 
@@ -77,50 +70,42 @@ export default class NumberOfAdditionalDaysPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
     const { chargeNumber } = req.params
-    const { days } = req.body
-    const { punishmentType, privilegeType } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const { suspended } = req.body
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
 
-    const trimmedDays = days ? Number(String(days).trim()) : null
-
-    const isYOI = await this.getYoiInfo(chargeNumber, user)
     const error = validateForm({
-      days: trimmedDays,
-      punishmentType: type,
-      isYOI,
-      privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+      suspended,
     })
 
     if (error)
       return this.renderView(req, res, {
         error,
-        days: trimmedDays,
+        suspended,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req)
+    const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req, suspended)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-        query: { ...req.query, days: trimmedDays },
+        query: {
+          punishmentType,
+          privilegeType,
+          otherPrivilege,
+          stoppagePercentage,
+          days,
+        } as ParsedUrlQueryInput,
       })
     )
   }
 
-  private getRedirectUrl = (chargeNumber: string, req: Request) => {
+  getRedirectUrl = (chargeNumber: string, req: Request, suspended: string) => {
     if (this.pageOptions.isEdit()) {
-      return adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(chargeNumber, req.params.redisId)
+      if (suspended === 'yes')
+        return adjudicationUrls.punishmentSuspendedUntil.urls.edit(chargeNumber, req.params.redisId)
+      return adjudicationUrls.punishmentStartDate.urls.edit(chargeNumber, req.params.redisId)
     }
-    if (this.pageOptions.isManualEdit()) {
-      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(chargeNumber)
-    }
-    return adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.start(chargeNumber)
-  }
-
-  getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {
-    const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
-    const { reportedAdjudication } = adjudication
-    return reportedAdjudication.isYouthOffender
+    if (suspended === 'yes') return adjudicationUrls.punishmentSuspendedUntil.urls.start(chargeNumber)
+    return adjudicationUrls.punishmentStartDate.urls.start(chargeNumber)
   }
 }
