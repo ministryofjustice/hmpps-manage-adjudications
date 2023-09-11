@@ -85,6 +85,8 @@ import punishmentNumberOfDaysRoutes from './punishmentDates/numberOfDays'
 import punishmentSuspendedRoutes from './punishmentDates/isPunishmentSuspended'
 import punishmentSuspendedUntilDateRoutes from './punishmentDates/suspendedUntilDate'
 import punishmentStartDateChoiceRoutes from './punishmentDates/startDateChoice'
+import enterStartDateRoutes from './punishmentDates/enterStartDate'
+import autoPunishmentScheduleRoutes from './punishmentDates/autoPunishmentSchedule'
 import createOnBehalfOfRoutes from './createOnBehalfOf'
 
 import config from '../config'
@@ -377,6 +379,14 @@ export default function routes(
     router.use(
       adjudicationUrls.punishmentSuspendedUntil.root,
       punishmentSuspendedUntilDateRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    )
+    router.use(
+      adjudicationUrls.punishmentStartDate.root,
+      enterStartDateRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    )
+    router.use(
+      adjudicationUrls.punishmentAutomaticDateSchedule.root,
+      autoPunishmentScheduleRoutes({ userService, punishmentsService, reportedAdjudicationsService })
     )
   }
   router.use(
