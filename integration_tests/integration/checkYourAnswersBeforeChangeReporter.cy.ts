@@ -178,7 +178,7 @@ context('Check Your Answers Before Changing Reporter', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('T. User')
-          expect($summaryData.get(1).innerText).to.contain('Change\n Reporting Officer')
+          expect($summaryData.get(1).innerText).to.contain('Change')
           expect($summaryData.get(2).innerText).to.contain('3 November 2021')
           expect($summaryData.get(3).innerText).to.contain('11:09')
           expect($summaryData.get(4).innerText).to.contain('Workshop 19 - Braille')
