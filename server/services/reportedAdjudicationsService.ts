@@ -489,7 +489,7 @@ export default class ReportedAdjudicationsService {
   async getPrisonerReport(
     user: User,
     adjudication: DraftAdjudication & ReportedAdjudication,
-    newDraftAdjudicationId?: number
+    draftRequired?: boolean
   ): Promise<PrisonerReport> {
     const userId = adjudication.startedByUserId ? adjudication.startedByUserId : adjudication.createdByUserId
     const reporter = await this.hmppsManageUsersClient.getUserFromUsername(userId, user.token)
@@ -509,7 +509,7 @@ export default class ReportedAdjudicationsService {
 
     let changeReportingOfficerLink
     let changeReportingOfficerDataQa
-    if (newDraftAdjudicationId && !adjudication.createdOnBehalfOfOfficer) {
+    if (draftRequired && !adjudication.createdOnBehalfOfOfficer) {
       changeReportingOfficerLink = `${adjudicationUrls.createOnBehalfOf.urls.start(
         adjudication.chargeNumber
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(
