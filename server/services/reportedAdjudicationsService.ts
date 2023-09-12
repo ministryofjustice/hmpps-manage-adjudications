@@ -504,25 +504,13 @@ export default class ReportedAdjudicationsService {
 
     let reportingOfficer: string = getFormattedOfficerName(reporter.name)
     if (adjudication.createdOnBehalfOfOfficer) {
-      reportingOfficer += ` on behalf of ${adjudication.createdOnBehalfOfOfficer}`
-    }
-
-    let changeReportingOfficerLink = ''
-    const awaitingReviewOrReturned = [
-      ReportedAdjudicationStatus.AWAITING_REVIEW,
-      ReportedAdjudicationStatus.RETURNED,
-    ].includes(adjudication.status)
-    console.log('adjudication ' + JSON.stringify(adjudication))
-    if (!adjudication.createdOnBehalfOfOfficer) { // && awaitingReviewOrReturned) {
-      changeReportingOfficerLink = adjudicationUrls.createOnBehalfOf.urls.start(adjudication.id)
+      reportingOfficer = reportingOfficer.concat(` on behalf of ${adjudication.createdOnBehalfOfOfficer}`)
     }
 
     const incidentDetails = [
       {
         label: 'Reporting Officer',
         value: reportingOfficer,
-        changeLinkHref: changeReportingOfficerLink,
-        dataQa: 'reporting-officer-changeLink',
       },
       {
         label: 'Date of incident',

@@ -116,7 +116,7 @@ context('Create on behalf of', () => {
     cy.signIn()
   })
 
-  context('Happy path', () => {
+  describe('Happy path', () => {
     it('user should be able to create on behalf of', () => {
       cy.visit(adjudicationUrls.checkYourAnswers.urls.start(3456))
       const checkYourAnswersPage: CheckYourAnswers = Page.verifyOnPage(CheckYourAnswers)
@@ -132,11 +132,11 @@ context('Create on behalf of', () => {
       createOnBehalfOfReasonPage.submitButton().click()
 
       const checkCreateOnBehalfOfPage: CheckCreateOnBehalfOfPage = Page.verifyOnPage(CheckCreateOnBehalfOfPage)
+      cy.get('[data-qa="behalf-of-summary-table"]').contains(createdOnBehalfOfOfficer)
       checkCreateOnBehalfOfPage.reportingOfficerChangeLink().should('exist')
+      cy.get('[data-qa="behalf-of-summary-table"]').contains(createdOnBehalfOfReason)
       checkCreateOnBehalfOfPage.reasonChangeLink().should('exist')
       checkCreateOnBehalfOfPage.cancelLink().should('exist')
-      cy.get('[data-qa="behalf-of-summary-table"]').contains(createdOnBehalfOfOfficer)
-      cy.get('[data-qa="behalf-of-summary-table"]').contains(createdOnBehalfOfReason)
       checkCreateOnBehalfOfPage.submitButton().click()
       Page.verifyOnPage(CheckYourAnswers)
     })

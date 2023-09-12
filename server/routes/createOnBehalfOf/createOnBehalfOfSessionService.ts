@@ -29,6 +29,16 @@ export default class CreateOnBehalfOfSessionService {
     delete req.session.createdOnBehalfOf[draftId].createdOnBehalfOfReason
   }
 
+  setRedirectUrl(req: Request, draftId: number, redirectUrl: string): void {
+    this.setCreatedOnBehalfOfForDraftId(req, draftId)
+    req.session.createdOnBehalfOf[draftId].redirectUrl = redirectUrl
+  }
+
+  getRedirectUrl(req: Request, draftId: number): string {
+    this.setCreatedOnBehalfOfForDraftId(req, draftId)
+    return req.session.createdOnBehalfOf[draftId].redirectUrl
+  }
+
   private setCreatedOnBehalfOfForDraftId(req: Request, draftId: number): void {
     if (!req.session.createdOnBehalfOf) {
       req.session.createdOnBehalfOf = {}

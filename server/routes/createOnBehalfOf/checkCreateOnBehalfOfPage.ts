@@ -58,6 +58,6 @@ export default class CheckCreateOnBehalfOfPage {
     this.createOnBehalfOfSessionService.deleteCreatedOnBehalfOfOfficer(req, draftId)
     this.createOnBehalfOfSessionService.deleteCreatedOnBehalfOfReason(req, draftId)
 
-    return res.redirect(req.session.redirectUrl)
+    return res.redirect(this.createOnBehalfOfSessionService.getRedirectUrl(req, draftId))
   }
 }

@@ -174,6 +174,10 @@ describe('placeOnReportService', () => {
           {
             label: 'Reporting Officer',
             value: 'T. User',
+            changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.start(
+              10
+            )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(10)}`,
+            dataQa: 'reporting-officer-changeLink',
           },
           {
             label: 'Date of incident',
@@ -228,7 +232,10 @@ describe('placeOnReportService', () => {
           {
             label: 'Reporting Officer',
             value: 'T. User',
-            changeLinkHref: adjudicationUrls.createOnBehalfOf.urls.start(10),
+            changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.start(
+              10
+            )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(10)}`,
+            dataQa: 'reporting-officer-changeLink',
           },
           {
             label: 'Date of incident',
