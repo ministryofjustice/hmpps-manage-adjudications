@@ -275,6 +275,20 @@ export default class ManageAdjudicationsSystemTokensClient {
   }
 
   async setCreatedOnBehalfOf(
+    chargeNumber: string,
+    createdOnBehalfOfOfficer: string,
+    createdOnBehalfOfReason: string
+  ): Promise<DraftAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${chargeNumber}/created-on-behalf-of`,
+      data: {
+        createdOnBehalfOfOfficer,
+        createdOnBehalfOfReason,
+      },
+    })
+  }
+
+  async setDraftCreatedOnBehalfOf(
     draftId: number,
     createdOnBehalfOfOfficer: string,
     createdOnBehalfOfReason: string

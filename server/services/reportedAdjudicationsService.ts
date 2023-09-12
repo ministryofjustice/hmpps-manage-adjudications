@@ -486,7 +486,11 @@ export default class ReportedAdjudicationsService {
     return newDraftAdjudicationData.draftAdjudication.id
   }
 
-  async getPrisonerReport(user: User, adjudication: DraftAdjudication & ReportedAdjudication): Promise<PrisonerReport> {
+  async getPrisonerReport(
+    user: User,
+    adjudication: DraftAdjudication & ReportedAdjudication,
+    newDraftAdjudicationId?: number
+  ): Promise<PrisonerReport> {
     const userId = adjudication.startedByUserId ? adjudication.startedByUserId : adjudication.createdByUserId
     const reporter = await this.hmppsManageUsersClient.getUserFromUsername(userId, user.token)
 
@@ -503,10 +507,23 @@ export default class ReportedAdjudicationsService {
       this.locationService.getAgency(adjudication.originatingAgencyId, user),
     ])
 
+    let changeReportingOfficerLink
+    let changeReportingOfficerDataQa
+    if (newDraftAdjudicationId && !adjudication.createdOnBehalfOfOfficer) {
+      changeReportingOfficerLink = `${adjudicationUrls.createOnBehalfOf.urls.start(
+        adjudication.chargeNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(
+        adjudication.chargeNumber
+      )}&editSubmittedAdjudication=true`
+      changeReportingOfficerDataQa = 'reporting-officer-changeLink'
+    }
+
     const incidentDetails = [
       {
         label: 'Reporting Officer',
         value: formatReportingOfficer(reporter.name, adjudication),
+        changeLinkHref: changeReportingOfficerLink,
+        dataQa: changeReportingOfficerDataQa,
       },
       {
         label: 'Date of incident',

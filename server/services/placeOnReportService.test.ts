@@ -175,8 +175,8 @@ describe('placeOnReportService', () => {
             label: 'Reporting Officer',
             value: 'T. User',
             changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.start(
-              10
-            )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(10)}`,
+              '10'
+            )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(10)}&editSubmittedAdjudication=false`,
             dataQa: 'reporting-officer-changeLink',
           },
           {
@@ -233,8 +233,8 @@ describe('placeOnReportService', () => {
             label: 'Reporting Officer',
             value: 'T. User',
             changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.start(
-              10
-            )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(10)}`,
+              '10'
+            )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(10)}&editSubmittedAdjudication=false`,
             dataQa: 'reporting-officer-changeLink',
           },
           {

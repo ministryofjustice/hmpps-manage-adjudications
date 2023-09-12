@@ -121,6 +121,7 @@ export default defineConfig({
         stubGetHearingsGivenAgencyAndDate: adjudications.stubGetHearingsGivenAgencyAndDate,
         stubAmendPrisonerGender: adjudications.stubAmendPrisonerGender,
         stubSetCreatedOnBehalfOf: adjudications.stubSetCreatedOnBehalfOf,
+        stubSetDraftCreatedOnBehalfOf: adjudications.stubSetDraftCreatedOnBehalfOf,
         stubGetIssueDataDiscDate: adjudications.stubGetIssueDataFilteredOnDiscDate,
         stubGetIssueDataHearingDate: adjudications.stubGetIssueDataFilteredOnHearingDate,
         stubPutDateTimeOfIssue: adjudications.stubPutDateTimeOfIssue,

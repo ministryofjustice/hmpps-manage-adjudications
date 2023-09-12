@@ -185,7 +185,7 @@ export default class PlaceOnReportService {
     if (!draftAdjudication.createdOnBehalfOfOfficer) {
       changeReportingOfficerLink = `${adjudicationUrls.createOnBehalfOf.urls.start(
         draftId
-      )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(draftId)}`
+      )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(draftId)}&editSubmittedAdjudication=false`
       changeReportingOfficerDataQa = 'reporting-officer-changeLink'
     }
 
@@ -499,6 +499,17 @@ export default class PlaceOnReportService {
   }
 
   async setCreatedOnBehalfOf(
+    chargeNumber: string,
+    createdOnBehalfOfOfficer: string,
+    createdOnBehalfOfReason: string,
+    user: User
+  ) {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
+    return client.setCreatedOnBehalfOf(chargeNumber, createdOnBehalfOfOfficer, createdOnBehalfOfReason)
+  }
+
+  async setDraftCreatedOnBehalfOf(
     draftId: number,
     createdOnBehalfOfOfficer: string,
     createdOnBehalfOfReason: string,
@@ -506,7 +517,7 @@ export default class PlaceOnReportService {
   ) {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const client = new ManageAdjudicationsSystemTokensClient(token, user)
-    return client.setCreatedOnBehalfOf(draftId, createdOnBehalfOfOfficer, createdOnBehalfOfReason)
+    return client.setDraftCreatedOnBehalfOf(draftId, createdOnBehalfOfOfficer, createdOnBehalfOfReason)
   }
 
   setPrisonerGenderOnSession(req: Request, prisonerNumber: string, genderSelected: string) {

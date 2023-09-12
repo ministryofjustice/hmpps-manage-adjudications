@@ -72,4 +72,6 @@ export default class PrisonerReportPage extends Page {
   transferBannerParagraph = (): PageElement => cy.get('[data-qa="transferBanner-outcomePara"]')
 
   printLink = (): PageElement => cy.get('[data-qa="printLink"]')
+
+  reportingOfficerChangeLink = (): PageElement => cy.get('[data-qa="reporting-officer-changeLink"]')
 }

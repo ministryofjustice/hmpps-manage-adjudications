@@ -160,14 +160,14 @@ const adjudicationUrls = {
   createOnBehalfOf: {
     root: '/create-on-behalf-of',
     matchers: {
-      start: '/:draftId',
-      reason: '/:draftId/reason',
-      check: '/:draftId/check',
+      start: '/:id',
+      reason: '/:id/reason',
+      check: '/:id/check',
     },
     urls: {
-      start: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}`,
-      reason: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}/reason`,
-      check: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}/check`,
+      start: (id: number | string) => `${adjudicationUrls.createOnBehalfOf.root}/${id}`,
+      reason: (id: number | string) => `${adjudicationUrls.createOnBehalfOf.root}/${id}/reason`,
+      check: (id: number | string) => `${adjudicationUrls.createOnBehalfOf.root}/${id}/check`,
     },
   },
   incidentRole: {
