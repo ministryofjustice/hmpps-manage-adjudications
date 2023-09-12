@@ -96,12 +96,14 @@ describe('POST /create-on-behalf-of/confirm', () => {
         assignedLivingUnitDesc: '1-1-010',
       }),
     })
+
+    createOnBehalfOfSessionService.getRedirectUrl.mockReturnValueOnce(adjudicationUrls.checkYourAnswers.urls.start(100))
   })
 
-  it('should redirect to the incident details page when the form is submitted', () => {
+  it('should redirect to the configured redirect page when the form is submitted', () => {
     return request(app)
       .post(adjudicationUrls.createOnBehalfOf.urls.check(100))
-      .expect('Location', adjudicationUrls.incidentDetails.urls.edit('G5512GK', 100))
+      .expect('Location', adjudicationUrls.checkYourAnswers.urls.start(100))
       .expect(() => {
         expect(placeOnReportService.setCreatedOnBehalfOf).toHaveBeenCalledTimes(1)
       })

@@ -3,9 +3,9 @@ import { Request } from 'express'
 import {
   convertDateTimeStringToSubmittedDateTime,
   convertToTitleCase,
+  formatReportingOfficer,
   formatLocation,
   getDate,
-  getFormattedOfficerName,
   getTime,
   properCase,
 } from '../utils/utils'
@@ -180,12 +180,9 @@ export default class PlaceOnReportService {
 
     const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
 
-    let reportingOfficer: string = getFormattedOfficerName(reporter.name)
     let changeReportingOfficerLink
     let changeReportingOfficerDataQa
-    if (draftAdjudication.createdOnBehalfOfOfficer) {
-      reportingOfficer = reportingOfficer.concat(` on behalf of ${draftAdjudication.createdOnBehalfOfOfficer}`)
-    } else {
+    if (!draftAdjudication.createdOnBehalfOfOfficer) {
       changeReportingOfficerLink = `${adjudicationUrls.createOnBehalfOf.urls.start(
         draftId
       )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(draftId)}`
@@ -195,7 +192,7 @@ export default class PlaceOnReportService {
     const incidentDetails = [
       {
         label: 'Reporting Officer',
-        value: reportingOfficer,
+        value: formatReportingOfficer(reporter.name, draftAdjudication),
         changeLinkHref: changeReportingOfficerLink,
         dataQa: changeReportingOfficerDataQa,
       },

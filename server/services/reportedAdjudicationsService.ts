@@ -22,6 +22,7 @@ import {
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import {
   convertToTitleCase,
+  formatReportingOfficer,
   formatLocation,
   formatName,
   formatTimestampTo,
@@ -502,15 +503,10 @@ export default class ReportedAdjudicationsService {
       this.locationService.getAgency(adjudication.originatingAgencyId, user),
     ])
 
-    let reportingOfficer: string = getFormattedOfficerName(reporter.name)
-    if (adjudication.createdOnBehalfOfOfficer) {
-      reportingOfficer = reportingOfficer.concat(` on behalf of ${adjudication.createdOnBehalfOfOfficer}`)
-    }
-
     const incidentDetails = [
       {
         label: 'Reporting Officer',
-        value: reportingOfficer,
+        value: formatReportingOfficer(reporter.name, adjudication),
       },
       {
         label: 'Date of incident',
