@@ -81,9 +81,10 @@ describe('GET /dis7', () => {
         adjudicationsUrl: 'http://host.docker.internal:3000',
         adjudicationResultReportData: {
           chargeNumber: '1524493',
-          establishmentName: 'MDI',
           prisonerDisplayName: 'Smith, John',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
+          reportedDate: '21 December 2020',
           isYOI: true,
           canteenDaysMax: 21,
           facilitiesDaysMax: 21,
@@ -132,9 +133,10 @@ describe('GET /dis7', () => {
         adjudicationsUrl: 'http://host.docker.internal:3000',
         adjudicationResultReportData: {
           chargeNumber: '1524493',
-          establishmentName: 'MDI',
           prisonerDisplayName: 'Smith, John',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
+          reportedDate: '21 December 2020',
           isYOI: false,
           canteenDaysMax: 42,
           facilitiesDaysMax: 42,

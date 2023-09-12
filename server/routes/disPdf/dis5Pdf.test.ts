@@ -72,8 +72,8 @@ describe('GET /dis5', () => {
         adjudicationsUrl: 'http://host.docker.internal:3000',
         adjudicationHistoryForCurrentSentenceData: {
           chargeNumber: '1524493',
-          establishmentName: 'MDI',
           prisonerDisplayName: 'Smith, John',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
         },
       },
