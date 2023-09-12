@@ -1,0 +1,32 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro summaryListWithChangeLinks(array = [], missingValueText = 'Not entered', attributes = {}, classes='') %}
+  {% set rows = [] %}
+
+  {% for detail in array %}
+    {% if detail.html %}
+      {% set value = {html: detail.html | showDefault(missingValueText)} %}
+    {% else %}
+      {% set value = {text: detail.value | showDefault(missingValueText)} %}
+      {% set actions = { items: [{href: detail.changeLinkHref, text: "Change", visuallyHiddenText: detail.label, attributes: {"data-qa": "change-link"} }] } %}
+    {% endif %}
+
+    {% set rows = (rows.push(
+      {
+        key: {
+          text: detail.label
+        },
+        value: value,
+        actions: actions
+      }
+    ), rows) %}
+  {% endfor %}
+
+  {% if rows.length %}
+    {{ govukSummaryList({
+      rows: rows,
+      classes: classes,
+      attributes: attributes
+    }) }}
+  {% endif %}
+{% endmacro %}

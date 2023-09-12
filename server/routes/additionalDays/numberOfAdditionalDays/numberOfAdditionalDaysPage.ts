@@ -110,12 +110,12 @@ export default class NumberOfAdditionalDaysPage {
 
   private getRedirectUrl = (chargeNumber: string, req: Request) => {
     if (this.pageOptions.isEdit()) {
-      return adjudicationUrls.isPunishmentSuspended.urls.edit(chargeNumber, req.params.redisId)
+      return adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(chargeNumber, req.params.redisId)
     }
     if (this.pageOptions.isManualEdit()) {
       return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(chargeNumber)
     }
-    return adjudicationUrls.isPunishmentSuspended.urls.start(chargeNumber)
+    return adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.start(chargeNumber)
   }
 
   getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {

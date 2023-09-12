@@ -157,6 +157,19 @@ const adjudicationUrls = {
         `${adjudicationUrls.selectGender.root}/${prisonerNumber}/${draftId}/edit`,
     },
   },
+  createOnBehalfOf: {
+    root: '/create-on-behalf-of',
+    matchers: {
+      start: '/:draftId',
+      reason: '/:draftId/reason',
+      check: '/:draftId/check',
+    },
+    urls: {
+      start: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}`,
+      reason: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}/reason`,
+      check: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}/check`,
+    },
+  },
   incidentRole: {
     root: '/incident-role',
     matchers: {
@@ -663,6 +676,63 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentSchedule.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
+  punishmentNumberOfDays: {
+    root: '/punishment-number-of-days',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentNumberOfDays.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.punishmentNumberOfDays.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  punishmentIsSuspended: {
+    root: '/punishment-suspended',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentIsSuspended.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.punishmentIsSuspended.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  punishmentSuspendedUntil: {
+    root: '/punishment-suspended-until',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentSuspendedUntil.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.punishmentSuspendedUntil.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  punishmentStartDate: {
+    root: '/punishment-start-date',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentStartDate.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.punishmentStartDate.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  punishmentAutomaticDateSchedule: {
+    root: '/punishment-automatic-date-schedule',
+    matchers: {
+      start: '/:chargeNumber',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentAutomaticDateSchedule.root}/${chargeNumber}`,
+    },
+  },
   numberOfAdditionalDays: {
     root: '/number-additional-days',
     matchers: {
@@ -678,16 +748,16 @@ const adjudicationUrls = {
         `${adjudicationUrls.numberOfAdditionalDays.root}/${chargeNumber}/manualEdit`,
     },
   },
-  isPunishmentSuspended: {
-    root: '/punishment-suspended',
+  isPunishmentSuspendedAdditionalDays: {
+    root: '/punishment-suspended-additional-days',
     matchers: {
       start: '/:chargeNumber',
       edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.isPunishmentSuspended.root}/${chargeNumber}`,
+      start: (chargeNumber: string) => `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.root}/${chargeNumber}`,
       edit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.isPunishmentSuspended.root}/${chargeNumber}/edit/${redisId}`,
+        `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   isPunishmentConsecutive: {

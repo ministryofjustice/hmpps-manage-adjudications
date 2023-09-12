@@ -8,6 +8,7 @@ import { hasAnyRole } from '../../utils/utils'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { PrivilegeType, PunishmentDataWithSchedule, PunishmentType } from '../../data/PunishmentResult'
 import PunishmentsService from '../../services/punishmentsService'
+import config from '../../config'
 
 type PageData = {
   error?: FormError
@@ -154,7 +155,13 @@ export default class PunishmentPage {
     }
 
     if (this.pageOptions.isEdit()) {
+      if (config.automaticPunishmentDatesFlag === 'true') {
+        return adjudicationUrls.punishmentNumberOfDays.urls.edit(chargeNumber, req.params.redisId)
+      }
       return adjudicationUrls.punishmentSchedule.urls.edit(chargeNumber, req.params.redisId)
+    }
+    if (config.automaticPunishmentDatesFlag === 'true') {
+      return adjudicationUrls.punishmentNumberOfDays.urls.start(chargeNumber)
     }
     return adjudicationUrls.punishmentSchedule.urls.start(chargeNumber)
   }
