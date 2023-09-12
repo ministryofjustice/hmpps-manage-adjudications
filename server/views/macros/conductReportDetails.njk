@@ -1,32 +1,31 @@
 {% macro conductReportDetails(conductReportData) %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
         <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
             <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name of establishment</p>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-name-of-establishment'>
-                    {{ conductReportData.establishmentName }}
+                   data-qa='notice-of-being-placed-on-report-prisoner-display-name'>
+                    {{ conductReportData.prisonerDisplayName }}
                 </p>
             </div>
             <div class='adjudication-pdf-section-prisoner__item'>
                 <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-prisoner-number'>
+                   data-qa='notice-of-being-placed-on-report-prisoner-number'>
                     {{ conductReportData.prisonerNumber }}
                 </p>
             </div>
             <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prisoner’s full name</p>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Location</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-prisoner-full-name'>
-                    {{ conductReportData.prisonerDisplayName }}
+                   data-qa='notice-of-being-placed-on-report-prisoner-location-description'>
+                    {{ conductReportData.prisonerLocationDescription }}
                 </p>
             </div>
-        </div>
-
-        <div class='adjudication-pdf-section-signature-details'>
-            <div class='adjudication-pdf-section-signature-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Key worker</p>
+            <div class='adjudication-pdf-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Key worker</p>
                 <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
             </div>
         </div>

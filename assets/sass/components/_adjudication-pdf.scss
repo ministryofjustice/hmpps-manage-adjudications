@@ -17,21 +17,21 @@ div.adjudication-pdf {
     font-size: 12px;
     width: 60%;
   }
-  
+
   th {
     text-align: start;
     padding: 10px 0px;
   }
-  
+
   tr {
     border-bottom: 1px solid grey;
   }
-  
+
   td {
     padding: 10px 0px;
     width:50%;
   }
-  
+
 }
 
 .adjudication-pdf-input {
@@ -253,7 +253,7 @@ div.adjudication-pdf {
     font-size: 24px;
     font-weight: bold;
   }
-  
+
   .adjudication-pdf-section-header-inner {
     font-size: 16px;
   }
@@ -280,7 +280,7 @@ div.adjudication-pdf {
 
 .adjudication-pdf-section-finding-checkboxes {
   display: flex;
-  
+
   &__item {
       padding-right: govuk-spacing(3);
   }
