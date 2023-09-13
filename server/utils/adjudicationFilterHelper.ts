@@ -80,7 +80,7 @@ export const fillInAwardedPunishmentsAndDamagesUiFilterDefaults = (
 
 export const uiAwardedPunishmentsAndDamagesUiFilterFromBody = (req: Request): AwardedPunishmentsAndDamagesUiFilter => {
   return {
-    hearingDate: req.body.hearingDate as string,
+    hearingDate: req.body.hearingDate.date as string,
     locationId: req.body.locationId as string,
   }
 }

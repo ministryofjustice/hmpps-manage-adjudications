@@ -1,6 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
-import UserService from '../../../services/userService'
 
 import adjudicationUrls from '../../../utils/urlGenerator'
 import AwardedPunishmentsAndDamagesRoutes from './awardedPunishmentsAndDamages'
@@ -9,18 +8,15 @@ import LocationService from '../../../services/locationService'
 
 export default function awardedPunishmentsAndDamagesRoutes({
   reportedAdjudicationsService,
-  userService,
   locationService,
 }: {
   reportedAdjudicationsService: ReportedAdjudicationsService
-  userService: UserService
   locationService: LocationService
 }): Router {
   const router = express.Router()
 
   const awardedPunishmentsAndDamagesRoute = new AwardedPunishmentsAndDamagesRoutes(
     reportedAdjudicationsService,
-    userService,
     locationService
   )
 

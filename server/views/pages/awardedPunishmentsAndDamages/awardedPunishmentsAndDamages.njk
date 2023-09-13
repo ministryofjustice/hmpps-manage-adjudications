@@ -30,30 +30,26 @@
   {{ hearingsAndResidentalLocationFilter({filter: filter, locations: possibleLocations, clearUrl: clearUrl, csrfToken: csrfToken}) }}
 
   {% set rows = [] %}
-  {% for hearing in hearings %}
-    {% set hearingNumber = loop.index %}
+  {% for result in results %}
+    {% set resultNumber = loop.index %}
 
     {% set printLinkHtml %}
-      <a href="{{ adjudicationUrls.printPdf.urls.dis7(hearing.chargeNumber) }}" class="govuk-link" data-qa="print-report-link-{{ hearingNumber }}">Print<span class="govuk-visually-hidden"> DIS7 for {{ hearing.chargeNumber }}</span></a>
+      <a href="{{ adjudicationUrls.printPdf.urls.dis7(result.chargeNumber) }}" class="govuk-link" data-qa="print-report-link-{{ resultNumber }}">Print<span class="govuk-visually-hidden"> DIS7 for {{ result.chargeNumber }}</span></a>
     {% endset -%}
 
     {% set punishmentsLinkHtml %}
-      <a href="{{ adjudicationUrls.punishmentsAndDamages.urls.review(hearing.chargeNumber) }}" class="govuk-link" data-qa="view-punishments-link-{{ hearingNumber }}">View<span class="govuk-visually-hidden"> report for {{ hearing.chargeNumber }}</span></a>
+      <a href="{{ adjudicationUrls.punishmentsAndDamages.urls.review(result.chargeNumber) }}" class="govuk-link" data-qa="view-punishments-link-{{ resultNumber }}">View<span class="govuk-visually-hidden"> report for {{ result.chargeNumber }}</span></a>
     {% endset -%}
 
     {% set rows = (rows.push([
-      { text: hearing.chargeNumber },
-      { text: hearing.nameAndNumber },
-      { text: hearing.location },
-      { text: hearing.formattedDateTimeOfHearing,
-        attributes: {
-        "data-sort-value": hearing.dateTimeOfHearing
-      }
-      },
-      { text: hearing.status | reportedAdjudicationStatusDisplayName },
-      { text: hearing.caution | showDefault('-') },
-      { text: hearing.punishmentsAwarded | showDefault('-') },
-      { text: hearing.damages | showDefault('-') },
+      { text: result.chargeNumber },
+      { text: result.nameAndNumber },
+      { text: result.prisonerLocation },
+      { text: result.formattedDateTimeOfHearing },
+      { text: result.status | reportedAdjudicationStatusDisplayName },
+      { text: result.caution },
+      { text: result.punishmentCount | showDefault('-') },
+      { text: result.damagesOwedAmount | showDefault('-') },
       { html: printLinkHtml },
       { html: punishmentsLinkHtml }
     ]), rows) %}
@@ -83,7 +79,7 @@
       }) }}
     </div>
   {% else %}
-    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No awarded punishments</p>
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No scheduled hearings</p>
   {% endif %}
 
 {% endblock %}

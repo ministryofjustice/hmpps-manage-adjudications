@@ -8,10 +8,10 @@
         <div class="horizontal-form" id="awardedPunishmentsAndDamagesFilter">
             <div class="hearings-arrow arrow-left" id="hearing-arrow-left" data-qa="hearing-date-left-arrow"></div>
             {{ datePicker({
-                id: 'hearingDate',
+                id: 'hearingDate[date]',
                 label: 'Date of hearing',
                 labelClasses: 'govuk-!-font-weight-bold',
-                name: 'hearingDate',
+                name: 'hearingDate[date]',
                 date: params.filter.hearingDate,
                 attributes: {'data-disable-future-date':'false', 'data-qa': "hearing-date-picker" },
                 classes: 'govuk-input--width-10'

@@ -1,13 +1,12 @@
 import { Request, Response } from 'express'
-import { datePickerToApi } from '../../../utils/utils'
-import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { FormError } from '../../../@types/template'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import { ScheduledHearingEnhanced } from '../../../data/ReportedAdjudicationResult'
+import { AwardedPunishmentsAndDamages } from '../../../data/ReportedAdjudicationResult'
 import {
   AwardedPunishmentsAndDamagesUiFilter,
-  fillInAwardedPunishmentsAndDamagesUiFilterDefaults, uiAwardedPunishmentsAndDamagesUiFilterFromBody,
+  fillInAwardedPunishmentsAndDamagesUiFilterDefaults,
+  uiAwardedPunishmentsAndDamagesUiFilterFromBody,
   uiAwardedPunishmentsAndDamagesUiFilterFromRequest,
 } from '../../../utils/adjudicationFilterHelper'
 import LocationService from '../../../services/locationService'
@@ -16,20 +15,18 @@ import { PrisonLocation } from '../../../data/PrisonLocationResult'
 export default class AwardedPunishmentsAndDamagesRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService,
     private readonly locationService: LocationService
   ) {}
 
   private renderView = async (
-    req: Request,
     res: Response,
     filter: AwardedPunishmentsAndDamagesUiFilter,
     possibleLocations: PrisonLocation[],
-    results: ScheduledHearingEnhanced[],
+    results: AwardedPunishmentsAndDamages[],
     errors: FormError[]
   ): Promise<void> => {
     return res.render(`pages/awardedPunishmentsAndDamages/awardedPunishmentsAndDamages.njk`, {
-      hearings: results,
+      results,
       filter,
       possibleLocations,
       clearUrl: adjudicationUrls.awardedPunishmentsAndDamages.urls.start(),
@@ -48,9 +45,9 @@ export default class AwardedPunishmentsAndDamagesRoutes {
     )
     const possibleLocations = await this.locationService.getLocationsForUser(user)
     // const filter = awardedPunishmentsAndDamagesFilterFromUiFilter(uiFilter)
-    const formattedUiHearingDate = datePickerToApi(uiFilter.hearingDate)
-    const results = await this.reportedAdjudicationsService.getAllHearings(formattedUiHearingDate, user)
-    return this.renderView(req, res, uiFilter, possibleLocations, results, [])
+    // const formattedUiHearingDate = datePickerToApi(uiFilter.hearingDate)
+    const filteredResults = this.reportedAdjudicationsService.getAwardedPunishmentsAndDamages()
+    return this.renderView(res, uiFilter, possibleLocations, filteredResults, [])
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {

@@ -18,6 +18,7 @@ import {
   ReportedAdjudicationStatus,
   reportedAdjudicationStatusDisplayName,
   ScheduledHearing,
+  AwardedPunishmentsAndDamages,
 } from '../data/ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import {
@@ -969,5 +970,29 @@ export default class ReportedAdjudicationsService {
       transferBannerContent,
       originatingAgencyToAddOutcome,
     }
+  }
+
+  getAwardedPunishmentsAndDamages(/* filter: AwardedPunishmentsAndDamagesUiFilter, user: User */): AwardedPunishmentsAndDamages[] {
+    return [
+      {
+        chargeNumber: '12345',
+        nameAndNumber: 'Smith, James G7234VB',
+        prisonerLocation: 'A-2-001',
+        formattedDateTimeOfHearing: formatTimestampToDate('2022-11-23T17:00:00', 'D MMMM YYYY - HH:mm'),
+        status: ReportedAdjudicationStatus.CHARGE_PROVED,
+        caution: 'Yes',
+        punishmentCount: 3,
+        damagesOwedAmount: '£200',
+      },
+      {
+        chargeNumber: '12345',
+        nameAndNumber: 'Tovey, Peter G6123VU',
+        prisonerLocation: 'A-2-001',
+        formattedDateTimeOfHearing: formatTimestampToDate('2022-11-23T17:00:00', 'D MMMM YYYY - HH:mm'),
+        status: ReportedAdjudicationStatus.CHARGE_PROVED,
+        caution: 'No',
+        punishmentCount: 0,
+      },
+    ]
   }
 }
