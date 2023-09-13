@@ -1,25 +1,27 @@
 {% macro adjudicationHistoryForCurrentSentenceDetails(adjudicationHistoryForCurrentSentenceData) %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
         <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
             <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name of establishment</p>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-name-of-establishment'>
-                    {{ adjudicationHistoryForCurrentSentenceData.establishmentName }}
+                   data-qa='notice-of-being-placed-on-report-prisoner-display-name'>
+                    {{ adjudicationHistoryForCurrentSentenceData.prisonerDisplayName }}
                 </p>
             </div>
             <div class='adjudication-pdf-section-prisoner__item'>
                 <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-prisoner-number'>
+                   data-qa='notice-of-being-placed-on-report-prisoner-number'>
                     {{ adjudicationHistoryForCurrentSentenceData.prisonerNumber }}
                 </p>
             </div>
             <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prisoner’s full name</p>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Location</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-prisoner-full-name'>
-                    {{ adjudicationHistoryForCurrentSentenceData.prisonerDisplayName }}
+                   data-qa='notice-of-being-placed-on-report-prisoner-location-description'>
+                    {{ adjudicationHistoryForCurrentSentenceData.prisonerLocationDescription }}
                 </p>
             </div>
         </div>

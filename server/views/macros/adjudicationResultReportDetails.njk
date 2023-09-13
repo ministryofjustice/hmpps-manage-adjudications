@@ -1,35 +1,37 @@
 {% macro adjudicationResultReportDetails(adjudicationResultReportData) %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
         <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
             <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name of establishment</p>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-name-of-establishment'>
-                    {{ adjudicationResultReportData.establishmentName }}
+                   data-qa='notice-of-being-placed-on-report-prisoner-display-name'>
+                    {{ adjudicationResultReportData.prisonerDisplayName }}
                 </p>
             </div>
             <div class='adjudication-pdf-section-prisoner__item'>
                 <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-prisoner-number'>
+                   data-qa='notice-of-being-placed-on-report-prisoner-number'>
                     {{ adjudicationResultReportData.prisonerNumber }}
                 </p>
             </div>
             <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prisoner’s full name</p>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Location</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-prisoner-full-name'>
-                    {{ adjudicationResultReportData.prisonerDisplayName }}
+                   data-qa='notice-of-being-placed-on-report-prisoner-location-description'>
+                    {{ adjudicationResultReportData.prisonerLocationDescription }}
                 </p>
             </div>
-        </div>
-
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Date of charge (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+            <div class='adjudication-pdf-section-prisoner__item'>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Date of charge</p>
+                <p class='govuk-!-margin-bottom-0'
+                   data-qa='notice-of-being-placed-on-report-prisoner-reported-date'>
+                    {{ adjudicationResultReportData.reportedDate }}
+                </p>
             </div>
-            <div class='adjudication-pdf-section-sentence-details__item govuk-!-margin-top-8'>
+            <div class='adjudication-pdf-section-sentence-details__item'>
                 <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> <strong>Copy for prison record</strong></span> <br/>
                 <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> <strong>Prisoner copy</strong></span>
             </div>
