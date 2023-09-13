@@ -114,6 +114,14 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
       roles: [],
       enabled: true,
     },
+    {
+      id: 'awarded-punishments-and-damages',
+      heading: 'View awarded punishments and damages',
+      description: '',
+      href: adjudicationUrls.awardedPunishmentsAndDamages.root,
+      roles: [],
+      enabled: true,
+    },
   ]
 }
 
@@ -134,10 +142,12 @@ export default class HomepageRoutes {
     const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
     const reporterTasks = enabledTasks.filter(
-      task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS')
+      task =>
+        !task.roles.includes('ADJUDICATIONS_REVIEWER') && !task.heading.includes('DIS') &&
+        !task.heading.includes('View awarded punishments and damages')
     )
-    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task =>
-      task.heading.includes('DIS')
+    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(
+      task => task.heading.includes('DIS') || task.heading.includes('View awarded punishments and damages')
     )
 
     reviewerTasks.map(task => {

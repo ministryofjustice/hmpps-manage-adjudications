@@ -85,6 +85,7 @@ import punishmentNumberOfDaysRoutes from './punishmentDates/numberOfDays'
 import punishmentSuspendedRoutes from './punishmentDates/isPunishmentSuspended'
 import punishmentSuspendedUntilDateRoutes from './punishmentDates/suspendedUntilDate'
 import createOnBehalfOfRoutes from './createOnBehalfOf'
+import awardedPunishmentsAndDamagesRoutes from './punishments/awardedPunishmentsAndDamages'
 
 import config from '../config'
 
@@ -354,6 +355,11 @@ export default function routes(
   router.use(
     adjudicationUrls.reasonForChangePunishment.root,
     reasonForChangeRoutes({ punishmentsService, userService })
+  )
+
+  router.use(
+    adjudicationUrls.awardedPunishmentsAndDamages.root,
+    awardedPunishmentsAndDamagesRoutes({ reportedAdjudicationsService, userService, locationService })
   )
 
   router.use(

@@ -64,6 +64,43 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
   }
 }
 
+export type AwardedPunishmentsAndDamagesUiFilter = {
+  hearingDate: string
+  locationId: string
+}
+
+export const fillInAwardedPunishmentsAndDamagesUiFilterDefaults = (
+  awardedPunishmentsAndDamagesUiFilter: AwardedPunishmentsAndDamagesUiFilter
+): AwardedPunishmentsAndDamagesUiFilter => {
+  return {
+    hearingDate: awardedPunishmentsAndDamagesUiFilter.hearingDate || momentDateToDatePicker(moment()),
+    locationId: awardedPunishmentsAndDamagesUiFilter.locationId || null,
+  }
+}
+
+export const uiAwardedPunishmentsAndDamagesUiFilterFromBody = (req: Request): AwardedPunishmentsAndDamagesUiFilter => {
+  return {
+    hearingDate: req.body.hearingDate as string,
+    locationId: req.body.locationId as string,
+  }
+}
+
+export const uiAwardedPunishmentsAndDamagesUiFilterFromRequest = (
+  req: Request
+): AwardedPunishmentsAndDamagesUiFilter => {
+  return {
+    hearingDate: req.query.hearingDate as string,
+    locationId: req.query.locationId as string,
+  }
+}
+
+export const awardedPunishmentsAndDamagesFilterFromUiFilter = (filter: AwardedPunishmentsAndDamagesUiFilter) => {
+  return {
+    hearingDate: datePickerDateToMoment(filter.hearingDate),
+    locationId: (filter.locationId && Number(filter.locationId)) || null,
+  }
+}
+
 // When no 'to' date is provided we use today. When no 'from' date is provided we use 2 days ago. This should provide a
 // default time window that covers at a minimum the last 48hrs. For reference if the 'to' and 'from' date are today we
 // get results for all of today, thus if set the 'to' date 2 days ago we should also get the proceeding 2 days.

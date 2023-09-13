@@ -1,7 +1,12 @@
 import url from 'url'
 import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 import { ContinueReportUiFilter } from '../routes/continueReport/continueReportFilterHelper'
-import { DISUiFilter, PrintDISFormsUiFilter, UiFilter } from './adjudicationFilterHelper'
+import {
+  AwardedPunishmentsAndDamagesUiFilter,
+  DISUiFilter,
+  PrintDISFormsUiFilter,
+  UiFilter,
+} from './adjudicationFilterHelper'
 
 const adjudicationUrls = {
   offenceCodeSelection: {
@@ -815,6 +820,24 @@ const adjudicationUrls = {
     urls: {
       start: (chargeNumber: string) => `${adjudicationUrls.awardPunishments.root}/${chargeNumber}`,
       modified: (chargeNumber: string) => `${adjudicationUrls.awardPunishments.root}/${chargeNumber}/modified`,
+    },
+  },
+  awardedPunishmentsAndDamages: {
+    root: '/awarded-punishments-and-damages',
+    matchers: {
+      start: '/',
+      financial: '/financial',
+      additionalDays: '/additional-days',
+    },
+    urls: {
+      start: () => adjudicationUrls.awardedPunishmentsAndDamages.root,
+      filter: (filter: AwardedPunishmentsAndDamagesUiFilter) =>
+        url.format({
+          pathname: adjudicationUrls.awardedPunishmentsAndDamages.root,
+          query: { ...filter },
+        }),
+      financial: () => `${adjudicationUrls.awardedPunishmentsAndDamages.root}/financial`,
+      additionalDays: () => `${adjudicationUrls.awardedPunishmentsAndDamages.root}/additional-days`,
     },
   },
   reasonForChangePunishment: {
