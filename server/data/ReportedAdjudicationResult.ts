@@ -234,5 +234,8 @@ export type AwardedPunishmentsAndDamages = {
   status: ReportedAdjudicationStatus
   caution: string
   punishmentCount: number
+  financialPunishmentCount: number
   damagesOwedAmount?: string
+  additionalDays: number
+  prospectiveAdditionalDays: number
 }

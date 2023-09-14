@@ -1016,7 +1016,7 @@ export default class ReportedAdjudicationsService {
       ])
     )
 
-    const awardedPunishmentsAndDamages: AwardedPunishmentsAndDamages[] = adjudicationsForHearings.map(adj => {
+    let awardedPunishmentsAndDamages: AwardedPunishmentsAndDamages[] = adjudicationsForHearings.map(adj => {
       const adjudication = adj.reportedAdjudication
       const hearingForAdjudication = hearingForDateByChargeNumber.get(adjudication.chargeNumber)
 
@@ -1037,6 +1037,21 @@ export default class ReportedAdjudicationsService {
       if (sumDamagesOwed > 0) {
         damagesOwedAmount = '£'.concat(sumDamagesOwed.toString())
       }
+      const financialPunishmentTypes = [PunishmentType.DAMAGES_OWED, PunishmentType.EARNINGS]
+      const financialPunishmentCount = adjudication.punishments.filter(punishment =>
+        financialPunishmentTypes.includes(punishment.type)
+      ).length
+
+      let additionalDays = 0
+      let prospectiveAdditionalDays = 0
+      adjudication.punishments.forEach(punishment => {
+        if (punishment.type === PunishmentType.ADDITIONAL_DAYS) {
+          additionalDays += punishment.schedule.days
+        }
+        if (punishment.type === PunishmentType.PROSPECTIVE_DAYS) {
+          prospectiveAdditionalDays += punishment.schedule.days
+        }
+      })
 
       return {
         chargeNumber: adjudication.chargeNumber,
@@ -1049,18 +1064,34 @@ export default class ReportedAdjudicationsService {
         ),
         status: adjudication.status,
         caution,
+        financialPunishmentCount,
         punishmentCount: adjudication.punishments.length,
         damagesOwedAmount,
+        additionalDays,
+        prospectiveAdditionalDays,
       }
     })
 
     if (filter.locationId) {
       const location = possibleLocations.filter(loc => loc.locationId === filter.locationId)
       const { locationPrefix } = location[0]
-      return awardedPunishmentsAndDamages.filter(
+      awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(
         apad => this.getLocationPrefix(apad.prisonerLocation) === locationPrefix
       )
     }
+
+    const displayForAdjudicationStatuses = [
+      ReportedAdjudicationStatus.CHARGE_PROVED,
+      ReportedAdjudicationStatus.ADJOURNED,
+      ReportedAdjudicationStatus.REFER_POLICE,
+      ReportedAdjudicationStatus.REFER_GOV,
+      ReportedAdjudicationStatus.REFER_INAD,
+      ReportedAdjudicationStatus.DISMISSED,
+    ]
+
+    awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(result =>
+      displayForAdjudicationStatuses.includes(result.status)
+    )
 
     return awardedPunishmentsAndDamages
   }

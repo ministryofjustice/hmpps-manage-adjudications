@@ -62,22 +62,21 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /awarded-punishments-and-damages', () => {
+describe('GET /awarded-punishments-and-damages/financial', () => {
   describe('with results', () => {
     it('should load awarded punishments and damages - no filter', () => {
       return request(app)
-        .get(adjudicationUrls.awardedPunishmentsAndDamages.root)
+        .get(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('View awarded punishments and damages')
           expect(response.text).toContain('Smith, James G7234VB')
-          expect(response.text).toContain('Tovey, Peter G6123VU')
         })
     })
     it('should load awarded punishments and damages - with filter', () => {
       return request(app)
         .get(
-          adjudicationUrls.awardedPunishmentsAndDamages.urls.filter({
+          adjudicationUrls.awardedPunishmentsAndDamages.urls.financialFilter({
             hearingDate: '04/12/2022',
             locationId: '722174',
           })
@@ -86,7 +85,6 @@ describe('GET /awarded-punishments-and-damages', () => {
         .expect(response => {
           expect(response.text).toContain('View awarded punishments and damages')
           expect(response.text).toContain('Smith, James G7234VB')
-          expect(response.text).toContain('Tovey, Peter G6123VU')
         })
     })
   })
@@ -97,7 +95,7 @@ describe('GET /awarded-punishments-and-damages', () => {
     })
     it('shows default message', () => {
       return request(app)
-        .get(adjudicationUrls.awardedPunishmentsAndDamages.root)
+        .get(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('View awarded punishments and damages')
@@ -107,23 +105,23 @@ describe('GET /awarded-punishments-and-damages', () => {
   })
 })
 
-describe('POST /awarded-punishments-and-damages', () => {
+describe('POST /awarded-punishments-and-damages/financial', () => {
   it('should use correct filter parameters from form - without location', () => {
     return request(app)
-      .post(adjudicationUrls.awardedPunishmentsAndDamages.root)
+      .post(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
       .send({ hearingDate: { date: '04/12/2022' }, locationId: null })
       .expect(
         'Location',
-        `${adjudicationUrls.awardedPunishmentsAndDamages.root}?hearingDate=04%2F12%2F2022&locationId=`
+        `${adjudicationUrls.awardedPunishmentsAndDamages.urls.financial()}?hearingDate=04%2F12%2F2022&locationId=`
       )
   })
   it('should use correct filter parameters from form - with location', () => {
     return request(app)
-      .post(adjudicationUrls.awardedPunishmentsAndDamages.root)
+      .post(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
       .send({ hearingDate: { date: '04/12/2022' }, locationId: 722174 })
       .expect(
         'Location',
-        `${adjudicationUrls.awardedPunishmentsAndDamages.root}?hearingDate=04%2F12%2F2022&locationId=722174`
+        `${adjudicationUrls.awardedPunishmentsAndDamages.urls.financial()}?hearingDate=04%2F12%2F2022&locationId=722174`
       )
   })
 })
