@@ -7,7 +7,7 @@ import {
   ReportedAdjudicationStatus,
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
-import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
+import { datePickerDateToMoment, datePickerToApi, momentDateToDatePicker } from './utils'
 import { FormError } from '../@types/template'
 
 enum ErrorType {
@@ -61,6 +61,48 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
     toDate: req.query.toDate as string,
     status: req.query.status as ReportedAdjudicationStatus,
     transfersOnly: req.query.transfersOnly as unknown as boolean,
+  }
+}
+
+export type AwardedPunishmentsAndDamagesFilter = {
+  hearingDate: string
+  locationId: string | number
+}
+
+export type AwardedPunishmentsAndDamagesUiFilter = {
+  hearingDate: string
+  locationId: string
+}
+
+export const fillInAwardedPunishmentsAndDamagesFilterDefaults = (
+  awardedPunishmentsAndDamagesUiFilter: AwardedPunishmentsAndDamagesUiFilter
+): AwardedPunishmentsAndDamagesUiFilter => {
+  return {
+    hearingDate: awardedPunishmentsAndDamagesUiFilter.hearingDate || momentDateToDatePicker(moment()),
+    locationId: awardedPunishmentsAndDamagesUiFilter.locationId || null,
+  }
+}
+
+export const uiAwardedPunishmentsAndDamagesFilterFromBody = (req: Request): AwardedPunishmentsAndDamagesUiFilter => {
+  return {
+    hearingDate: req.body.hearingDate.date as string,
+    locationId: req.body.locationId as string,
+  }
+}
+
+export const uiAwardedPunishmentsAndDamagesFilterFromRequest = (req: Request): AwardedPunishmentsAndDamagesUiFilter => {
+  return {
+    hearingDate: req.query.hearingDate as string,
+    locationId: req.query.locationId as string,
+  }
+}
+
+export const awardedPunishmentsAndDamagesFilterFromUiFilter = (
+  filter: AwardedPunishmentsAndDamagesUiFilter
+): AwardedPunishmentsAndDamagesFilter => {
+  return {
+    hearingDate: datePickerToApi(filter.hearingDate),
+    locationId: (filter.locationId && Number(filter.locationId)) || null,
   }
 }
 

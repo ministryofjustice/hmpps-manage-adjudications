@@ -6,6 +6,7 @@ import ManageAdjudicationsSystemTokensClient, {
 } from '../data/manageAdjudicationsSystemTokensClient'
 import CuriousApiService from './curiousApiService'
 import {
+  AwardedPunishmentsAndDamages,
   FormattedDisIssue,
   IssueStatus,
   ReportedAdjudication,
@@ -31,7 +32,7 @@ import {
   getFormattedOfficerName,
   getTime,
 } from '../utils/utils'
-import { LocationId } from '../data/PrisonLocationResult'
+import { Location, LocationId } from '../data/PrisonLocationResult'
 import {
   DamageDetails,
   DraftAdjudication,
@@ -56,6 +57,8 @@ import {
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
+import { AwardedPunishmentsAndDamagesFilter } from '../utils/adjudicationFilterHelper'
+import { PunishmentType } from '../data/PunishmentResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -987,5 +990,78 @@ export default class ReportedAdjudicationsService {
       transferBannerContent,
       originatingAgencyToAddOutcome,
     }
+  }
+
+  async getAwardedPunishmentsAndDamages(
+    filter: AwardedPunishmentsAndDamagesFilter,
+    possibleLocations: Location[],
+    user: User
+  ): Promise<AwardedPunishmentsAndDamages[]> {
+    const hearingForDateByChargeNumber = new Map(
+      (await this.getAllHearings(filter.hearingDate, user)).map(hearing => [hearing.chargeNumber, hearing])
+    )
+
+    const adjudicationsForHearings = await Promise.all(
+      Array.from(hearingForDateByChargeNumber.keys()).flatMap(chargeNumber => {
+        return this.getReportedAdjudicationDetails(chargeNumber, user)
+      })
+    )
+
+    const prisonerNumbers = adjudicationsForHearings.map(_ => _.reportedAdjudication.prisonerNumber)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const prisonerDetails = new Map(
+      (await new PrisonApiClient(token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
+        prisonerDetail.offenderNo,
+        prisonerDetail,
+      ])
+    )
+
+    const awardedPunishmentsAndDamages: AwardedPunishmentsAndDamages[] = adjudicationsForHearings.map(adj => {
+      const adjudication = adj.reportedAdjudication
+      const hearingForAdjudication = hearingForDateByChargeNumber.get(adjudication.chargeNumber)
+
+      let caution = 'No'
+      adjudication.punishments.forEach(punishment => {
+        if (punishment.type === PunishmentType.CAUTION) {
+          caution = 'Yes'
+        }
+      })
+
+      let damagesOwedAmount
+      let sumDamagesOwed = 0
+      adjudication.punishments.forEach(punishment => {
+        if (punishment.damagesOwedAmount) {
+          sumDamagesOwed += punishment.damagesOwedAmount
+        }
+      })
+      if (sumDamagesOwed > 0) {
+        damagesOwedAmount = '£'.concat(sumDamagesOwed.toString())
+      }
+
+      return {
+        chargeNumber: adjudication.chargeNumber,
+        nameAndNumber: hearingForAdjudication.nameAndNumber,
+        prisonerLocation:
+          formatLocation(prisonerDetails.get(adjudication.prisonerNumber)?.assignedLivingUnitDesc) || 'Unknown',
+        formattedDateTimeOfHearing: formatTimestampToDate(
+          hearingForAdjudication.dateTimeOfHearing,
+          'D MMMM YYYY - HH:mm'
+        ),
+        status: adjudication.status,
+        caution,
+        punishmentCount: adjudication.punishments.length,
+        damagesOwedAmount,
+      }
+    })
+
+    if (filter.locationId) {
+      const location = possibleLocations.filter(loc => loc.locationId === filter.locationId)
+      const { locationPrefix } = location[0]
+      return awardedPunishmentsAndDamages.filter(
+        apad => this.getLocationPrefix(apad.prisonerLocation) === locationPrefix
+      )
+    }
+
+    return awardedPunishmentsAndDamages
   }
 }

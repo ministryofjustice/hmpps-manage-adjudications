@@ -225,3 +225,14 @@ export type FormattedDisIssue = {
 }
 
 export const allIssueStatuses = [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED]
+
+export type AwardedPunishmentsAndDamages = {
+  chargeNumber: string
+  nameAndNumber: string
+  prisonerLocation: string
+  formattedDateTimeOfHearing: string
+  status: ReportedAdjudicationStatus
+  caution: string
+  punishmentCount: number
+  damagesOwedAmount?: string
+}
