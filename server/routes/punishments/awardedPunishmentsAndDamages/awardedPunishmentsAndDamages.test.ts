@@ -57,37 +57,37 @@ afterEach(() => {
 })
 
 describe('GET /awarded-punishments-and-damages', () => {
-  // describe('with results', () => {
-  //   it('should load awarded punishments and damages - no filter', () => {
-  //     return request(app)
-  //       .get(adjudicationUrls.awardedPunishmentsAndDamages.root)
-  //       .expect('Content-Type', /html/)
-  //       .expect(response => {
-  //         expect(response.text).toContain('View awarded punishments and damages')
-  //         expect(response.text).toContain('Smith, James - G7234VB')
-  //         expect(response.text).toContain('Tovey, Peter - G6123VU')
-  //       })
-  //   })
-  //   it('should load awarded punishments and damages - with filter', () => {
-  //     return request(app)
-  //       .get(
-  //         adjudicationUrls.awardedPunishmentsAndDamages.urls.filter({
-  //           hearingDate: '04/12/2022',
-  //           locationId: '722174',
-  //         })
-  //       )
-  //       .expect('Content-Type', /html/)
-  //       .expect(response => {
-  //         expect(response.text).toContain('View awarded punishments and damages')
-  //         expect(response.text).toContain('Smith, James - G7234VB')
-  //         expect(response.text).toContain('Tovey, Peter - G6123VU')
-  //       })
-  //   })
-  // })
+  describe('with results', () => {
+    it('should load awarded punishments and damages - no filter', () => {
+      return request(app)
+        .get(adjudicationUrls.awardedPunishmentsAndDamages.root)
+        .expect('Content-Type', /html/)
+        .expect(response => {
+          expect(response.text).toContain('View awarded punishments and damages')
+          expect(response.text).toContain('Smith, James G7234VB')
+          expect(response.text).toContain('Tovey, Peter G6123VU')
+        })
+    })
+    it('should load awarded punishments and damages - with filter', () => {
+      return request(app)
+        .get(
+          adjudicationUrls.awardedPunishmentsAndDamages.urls.filter({
+            hearingDate: '04/12/2022',
+            locationId: '722174',
+          })
+        )
+        .expect('Content-Type', /html/)
+        .expect(response => {
+          expect(response.text).toContain('View awarded punishments and damages')
+          expect(response.text).toContain('Smith, James G7234VB')
+          expect(response.text).toContain('Tovey, Peter G6123VU')
+        })
+    })
+  })
 
   describe('without results', () => {
     beforeEach(() => {
-      reportedAdjudicationsService.getAwardedPunishmentsAndDamages.mockResolvedValue(null as never)
+      reportedAdjudicationsService.getAwardedPunishmentsAndDamages.mockResolvedValue([])
     })
     it('shows default message', () => {
       return request(app)

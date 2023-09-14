@@ -4,6 +4,7 @@ import { FormError } from '../../../@types/template'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import { AwardedPunishmentsAndDamages, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import {
+  awardedPunishmentsAndDamagesFilterFromUiFilter,
   AwardedPunishmentsAndDamagesUiFilter,
   fillInAwardedPunishmentsAndDamagesFilterDefaults,
   uiAwardedPunishmentsAndDamagesFilterFromBody,
@@ -43,10 +44,13 @@ export default class AwardedPunishmentsAndDamagesRoutes {
     const uiFilter = fillInAwardedPunishmentsAndDamagesFilterDefaults(
       uiAwardedPunishmentsAndDamagesFilterFromRequest(req)
     )
+    const filter = awardedPunishmentsAndDamagesFilterFromUiFilter(uiFilter)
     const possibleLocations = await this.locationService.getLocationsForUser(user)
-    // const filter = awardedPunishmentsAndDamagesFilterFromUiFilter(uiFilter)
-    // const formattedUiHearingDate = datePickerToApi(uiFilter.hearingDate)
-    const results = this.reportedAdjudicationsService.getAwardedPunishmentsAndDamages()
+    const results = await this.reportedAdjudicationsService.getAwardedPunishmentsAndDamages(
+      filter,
+      possibleLocations,
+      user
+    )
 
     const displayForAdjudicationStatuses = [
       ReportedAdjudicationStatus.CHARGE_PROVED,
@@ -57,9 +61,7 @@ export default class AwardedPunishmentsAndDamagesRoutes {
       ReportedAdjudicationStatus.DISMISSED,
     ]
 
-    const filteredResults = results.filter(result =>
-      displayForAdjudicationStatuses.includes(result.status)
-    )
+    const filteredResults = results.filter(result => displayForAdjudicationStatuses.includes(result.status))
     return this.renderView(res, uiFilter, possibleLocations, filteredResults, [])
   }
 

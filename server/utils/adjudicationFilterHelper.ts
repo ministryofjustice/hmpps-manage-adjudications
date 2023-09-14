@@ -7,7 +7,7 @@ import {
   ReportedAdjudicationStatus,
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
-import { datePickerDateToMoment, momentDateToDatePicker } from './utils'
+import { datePickerDateToMoment, datePickerToApi, momentDateToDatePicker } from './utils'
 import { FormError } from '../@types/template'
 
 enum ErrorType {
@@ -64,6 +64,11 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
   }
 }
 
+export type AwardedPunishmentsAndDamagesFilter = {
+  hearingDate: string
+  locationId: string | number
+}
+
 export type AwardedPunishmentsAndDamagesUiFilter = {
   hearingDate: string
   locationId: string
@@ -92,9 +97,11 @@ export const uiAwardedPunishmentsAndDamagesFilterFromRequest = (req: Request): A
   }
 }
 
-export const awardedPunishmentsAndDamagesFilterFromUiFilter = (filter: AwardedPunishmentsAndDamagesUiFilter) => {
+export const awardedPunishmentsAndDamagesFilterFromUiFilter = (
+  filter: AwardedPunishmentsAndDamagesUiFilter
+): AwardedPunishmentsAndDamagesFilter => {
   return {
-    hearingDate: datePickerDateToMoment(filter.hearingDate),
+    hearingDate: datePickerToApi(filter.hearingDate),
     locationId: (filter.locationId && Number(filter.locationId)) || null,
   }
 }
