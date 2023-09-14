@@ -69,7 +69,7 @@ export type AwardedPunishmentsAndDamagesUiFilter = {
   locationId: string
 }
 
-export const fillInAwardedPunishmentsAndDamagesUiFilterDefaults = (
+export const fillInAwardedPunishmentsAndDamagesFilterDefaults = (
   awardedPunishmentsAndDamagesUiFilter: AwardedPunishmentsAndDamagesUiFilter
 ): AwardedPunishmentsAndDamagesUiFilter => {
   return {
@@ -78,16 +78,14 @@ export const fillInAwardedPunishmentsAndDamagesUiFilterDefaults = (
   }
 }
 
-export const uiAwardedPunishmentsAndDamagesUiFilterFromBody = (req: Request): AwardedPunishmentsAndDamagesUiFilter => {
+export const uiAwardedPunishmentsAndDamagesFilterFromBody = (req: Request): AwardedPunishmentsAndDamagesUiFilter => {
   return {
     hearingDate: req.body.hearingDate.date as string,
     locationId: req.body.locationId as string,
   }
 }
 
-export const uiAwardedPunishmentsAndDamagesUiFilterFromRequest = (
-  req: Request
-): AwardedPunishmentsAndDamagesUiFilter => {
+export const uiAwardedPunishmentsAndDamagesFilterFromRequest = (req: Request): AwardedPunishmentsAndDamagesUiFilter => {
   return {
     hearingDate: req.query.hearingDate as string,
     locationId: req.query.locationId as string,

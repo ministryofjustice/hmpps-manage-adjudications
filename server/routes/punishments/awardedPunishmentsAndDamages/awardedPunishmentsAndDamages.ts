@@ -2,12 +2,12 @@ import { Request, Response } from 'express'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { FormError } from '../../../@types/template'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import { AwardedPunishmentsAndDamages } from '../../../data/ReportedAdjudicationResult'
+import { AwardedPunishmentsAndDamages, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import {
   AwardedPunishmentsAndDamagesUiFilter,
-  fillInAwardedPunishmentsAndDamagesUiFilterDefaults,
-  uiAwardedPunishmentsAndDamagesUiFilterFromBody,
-  uiAwardedPunishmentsAndDamagesUiFilterFromRequest,
+  fillInAwardedPunishmentsAndDamagesFilterDefaults,
+  uiAwardedPunishmentsAndDamagesFilterFromBody,
+  uiAwardedPunishmentsAndDamagesFilterFromRequest,
 } from '../../../utils/adjudicationFilterHelper'
 import LocationService from '../../../services/locationService'
 import { PrisonLocation } from '../../../data/PrisonLocationResult'
@@ -32,7 +32,7 @@ export default class AwardedPunishmentsAndDamagesRoutes {
       clearUrl: adjudicationUrls.awardedPunishmentsAndDamages.urls.start(),
       allAwardedPunishmentsAndDamagesHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.start(),
       financialAwardedPunishmentsAndDamagesHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.financial(),
-      additionalDaysAwardedPunishmentsHrefHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays(),
+      additionalDaysAwardedPunishmentsHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays(),
       activeTab: 'allAwardedPunishmentsAndDamages',
       errors,
     })
@@ -40,18 +40,31 @@ export default class AwardedPunishmentsAndDamagesRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const uiFilter = fillInAwardedPunishmentsAndDamagesUiFilterDefaults(
-      uiAwardedPunishmentsAndDamagesUiFilterFromRequest(req)
+    const uiFilter = fillInAwardedPunishmentsAndDamagesFilterDefaults(
+      uiAwardedPunishmentsAndDamagesFilterFromRequest(req)
     )
     const possibleLocations = await this.locationService.getLocationsForUser(user)
     // const filter = awardedPunishmentsAndDamagesFilterFromUiFilter(uiFilter)
     // const formattedUiHearingDate = datePickerToApi(uiFilter.hearingDate)
-    const filteredResults = this.reportedAdjudicationsService.getAwardedPunishmentsAndDamages()
+    const results = this.reportedAdjudicationsService.getAwardedPunishmentsAndDamages()
+
+    const displayForAdjudicationStatuses = [
+      ReportedAdjudicationStatus.CHARGE_PROVED,
+      ReportedAdjudicationStatus.ADJOURNED,
+      ReportedAdjudicationStatus.REFER_POLICE,
+      ReportedAdjudicationStatus.REFER_GOV,
+      ReportedAdjudicationStatus.REFER_INAD,
+      ReportedAdjudicationStatus.DISMISSED,
+    ]
+
+    const filteredResults = results.filter(result =>
+      displayForAdjudicationStatuses.includes(result.status)
+    )
     return this.renderView(res, uiFilter, possibleLocations, filteredResults, [])
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const uiFilter = uiAwardedPunishmentsAndDamagesUiFilterFromBody(req)
+    const uiFilter = uiAwardedPunishmentsAndDamagesFilterFromBody(req)
     return res.redirect(adjudicationUrls.awardedPunishmentsAndDamages.urls.filter(uiFilter))
   }
 }

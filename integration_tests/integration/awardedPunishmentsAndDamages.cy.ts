@@ -40,7 +40,6 @@ context('View awarded punishments and damages', () => {
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       AwardedPunishmentsAndDamagesPage
     )
-
     awardedPunishmentsAndDamagesPage
       .resultsTable()
       .find('th')
@@ -104,16 +103,14 @@ context('View awarded punishments and damages', () => {
   it('should clear the filter when the link is clicked', () => {
     cy.visit(
       adjudicationUrls.awardedPunishmentsAndDamages.urls.filter({
-        hearingDate: '04/12/2022',
-        locationId: '722174',
+        hearingDate: '06/11/2025',
+        locationId: '27102',
       })
     )
-
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       AwardedPunishmentsAndDamagesPage
     )
     awardedPunishmentsAndDamagesPage.clearLink().click()
-
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.start())
       expect(loc.search).to.eq('')

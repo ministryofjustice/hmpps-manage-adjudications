@@ -1,7 +1,7 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
-{% macro awardedPunishmentsAndDamagesTabHeader(activeTab, allAwardedPunishmentsAndDamagesHref, financialAwardedPunishmentsAndDamagesHref, additionalDaysAwardedPunishmentsHrefHref) %}
+{% macro awardedPunishmentsAndDamagesTabHeader(activeTab, allAwardedPunishmentsAndDamagesHref, financialAwardedPunishmentsAndDamagesHref, additionalDaysAwardedPunishmentsHref) %}
   {% set items = [{
       text: 'All',
       href: allAwardedPunishmentsAndDamagesHref,
@@ -14,7 +14,7 @@
       active: activeTab === 'financialAwardedPunishmentsAndDamages'
     }, {
       text: 'Additional days',
-      href: additionalDaysAwardedPunishmentsHrefHref,
+      href: additionalDaysAwardedPunishmentsHref,
       attributes: { 'data-qa': 'additionalDaysAwardedPunishmentsTab' },
       active: activeTab === 'additionalDaysAwardedPunishments'
     }]

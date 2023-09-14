@@ -141,14 +141,14 @@ export default class HomepageRoutes {
 
     const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
+
+    const disRelatedTasksPredicate = (task: { heading: string | string[] }) =>
+      task.heading.includes('DIS') || task.heading.includes('View awarded punishments and damages')
     const reporterTasks = enabledTasks.filter(
-      task =>
-        !task.roles.includes('ADJUDICATIONS_REVIEWER') &&
-        !task.heading.includes('DIS') &&
-        !task.heading.includes('View awarded punishments and damages')
+      task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !disRelatedTasksPredicate(task)
     )
     const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(
-      task => task.heading.includes('DIS') || task.heading.includes('View awarded punishments and damages')
+      disRelatedTasksPredicate
     )
 
     reviewerTasks.map(task => {
