@@ -1010,7 +1010,12 @@ export default class ReportedAdjudicationsService {
       })
 
       let damagesOwedAmount
-      const sumDamagesOwed = adjudication.punishments.reduce((sum, punishment) => sum + punishment.damagesOwedAmount, 0)
+      let sumDamagesOwed = 0
+      adjudication.punishments.forEach(punishment => {
+        if (punishment.damagesOwedAmount) {
+          sumDamagesOwed += punishment.damagesOwedAmount
+        }
+      })
       if (sumDamagesOwed > 0) {
         damagesOwedAmount = '£'.concat(sumDamagesOwed.toString())
       }

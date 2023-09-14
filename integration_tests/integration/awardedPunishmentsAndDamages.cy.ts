@@ -22,18 +22,41 @@ context('View awarded punishments and damages', () => {
         hearings: [
           {
             ...testData.singleHearing({
-              dateTimeOfHearing: '2022-11-23T17:00:00',
+              dateTimeOfHearing: '2023-08-26T10:00:00',
               id: 1,
             }),
-            dateTimeOfDiscovery: '2023-11-03T14:00:00',
+            dateTimeOfHearing: '2023-08-26T10:00:00',
             chargeNumber: '12345',
+            prisonerNumber: 'G6345BY',
+            status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          },
+          {
+            ...testData.singleHearing({
+              dateTimeOfHearing: '2023-08-26T10:00:00',
+              id: 1,
+            }),
+            dateTimeOfDiscovery: '2023-11-03T10:00:00',
+            chargeNumber: '12346',
+            prisonerNumber: 'P3785CP',
+            status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          },
+          {
+            ...testData.singleHearing({
+              dateTimeOfHearing: '2023-08-26T10:50:00',
+              id: 1,
+            }),
+            dateTimeOfHearing: '2023-08-26T10:50:00',
+            chargeNumber: '12347',
             prisonerNumber: 'G6345BY',
             status: ReportedAdjudicationStatus.CHARGE_PROVED,
           },
         ],
       },
     })
-    cy.task('stubGetBatchPrisonerDetails', [testData.simplePrisoner('G6345BY', 'JAMES', 'SMITH', '4-2-001')])
+    cy.task('stubGetBatchPrisonerDetails', [
+      testData.simplePrisoner('G6345BY', 'DAVID', 'SMITH', 'A-2-001'),
+      testData.simplePrisoner('P3785CP', 'TONY', 'RAY', 'A-2-001'),
+    ])
     cy.task('stubGetReportedAdjudication', {
       id: 12345,
       response: {
@@ -65,6 +88,84 @@ context('View awarded punishments and damages', () => {
                 days: 0,
               },
               damagesOwedAmount: 200,
+            },
+            {
+              id: 2,
+              redisId: 'xyz',
+              type: PunishmentType.PRIVILEGE,
+              schedule: {
+                days: 0,
+              },
+            },
+            {
+              id: 3,
+              redisId: 'xyz',
+              type: PunishmentType.PRIVILEGE,
+              schedule: {
+                days: 0,
+              },
+            },
+          ],
+          punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 12346,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '12346',
+          status: ReportedAdjudicationStatus.DISMISSED,
+          prisonerNumber: 'P3785CP',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                }),
+              },
+            },
+          ],
+          punishments: [],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 12347,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '12347',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6345BY',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                }),
+              },
+            },
+          ],
+          punishments: [
+            {
+              id: 1,
+              redisId: 'xyz',
+              type: PunishmentType.CAUTION,
+              schedule: {
+                days: 0,
+              },
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -121,15 +222,37 @@ context('View awarded punishments and damages', () => {
       .find('td')
       .then($data => {
         expect($data.get(0).innerText).to.contain('12345')
-        expect($data.get(1).innerText).to.contain('Smith, James - G6345BY')
-        expect($data.get(2).innerText).to.contain('4-2-001')
-        expect($data.get(3).innerText).to.contain('23 November 2022 - 17:00')
+        expect($data.get(1).innerText).to.contain('Smith, David - G6345BY')
+        expect($data.get(2).innerText).to.contain('A-2-001')
+        expect($data.get(3).innerText).to.contain('26 August 2023 - 10:00')
         expect($data.get(4).innerText).to.contain('Charge proved')
         expect($data.get(5).innerText).to.contain('No')
-        expect($data.get(6).innerText).to.contain('1')
+        expect($data.get(6).innerText).to.contain('3')
         expect($data.get(7).innerText).to.contain('£200')
         expect($data.get(8).innerText).to.contain('Print')
         expect($data.get(9).innerText).to.contain('View')
+
+        expect($data.get(10).innerText).to.contain('12346')
+        expect($data.get(11).innerText).to.contain('Ray, Tony - P3785CP')
+        expect($data.get(12).innerText).to.contain('A-2-001')
+        expect($data.get(13).innerText).to.contain('26 August 2023 - 10:00')
+        expect($data.get(14).innerText).to.contain('Dismissed')
+        expect($data.get(15).innerText).to.contain('No')
+        expect($data.get(16).innerText).to.contain('0')
+        expect($data.get(17).innerText).to.contain('-')
+        expect($data.get(18).innerText).to.contain('Print')
+        expect($data.get(19).innerText).to.contain('View')
+
+        expect($data.get(20).innerText).to.contain('12347')
+        expect($data.get(21).innerText).to.contain('Smith, David - G6345BY')
+        expect($data.get(22).innerText).to.contain('A-2-001')
+        expect($data.get(23).innerText).to.contain('26 August 2023 - 10:50')
+        expect($data.get(24).innerText).to.contain('Charge proved')
+        expect($data.get(25).innerText).to.contain('Yes')
+        expect($data.get(26).innerText).to.contain('1')
+        expect($data.get(27).innerText).to.contain('-')
+        expect($data.get(28).innerText).to.contain('Print')
+        expect($data.get(29).innerText).to.contain('View')
       })
 
     awardedPunishmentsAndDamagesPage
