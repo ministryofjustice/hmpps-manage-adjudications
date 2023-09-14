@@ -238,7 +238,7 @@ export default function routes(
 
   router.use(
     adjudicationUrls.createOnBehalfOf.root,
-    createOnBehalfOfRoutes({ decisionTreeService, placeOnReportService, createOnBehalfOfSessionService })
+    createOnBehalfOfRoutes({ placeOnReportService, createOnBehalfOfSessionService })
   )
 
   router.use(

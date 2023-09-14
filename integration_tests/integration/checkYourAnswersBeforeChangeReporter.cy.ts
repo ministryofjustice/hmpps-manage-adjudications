@@ -60,7 +60,7 @@ const completeReportedAdjudicationResponse = (
   }
 }
 
-context('Check Your Answers', () => {
+context('Check Your Answers Before Changing Reporter', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -178,9 +178,10 @@ context('Check Your Answers', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('T. User')
-          expect($summaryData.get(1).innerText).to.contain('3 November 2021')
-          expect($summaryData.get(2).innerText).to.contain('11:09')
-          expect($summaryData.get(3).innerText).to.contain('Workshop 19 - Braille')
+          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(2).innerText).to.contain('3 November 2021')
+          expect($summaryData.get(3).innerText).to.contain('11:09')
+          expect($summaryData.get(4).innerText).to.contain('Workshop 19 - Braille')
         })
     })
     it('should contain the correct incident statement', () => {

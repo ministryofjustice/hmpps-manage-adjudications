@@ -1,7 +1,6 @@
 import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import adjudicationUrls from '../../utils/urlGenerator'
-import DecisionTreeService from '../../services/decisionTreeService'
 import CheckCreateOnBehalfOfRoutes from './checkCreateOnBehalfOf'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import CreateOnBehalfOfRoutes from './createOnBehalfOf'
@@ -9,23 +8,17 @@ import CreateOnBehalfOfReasonRoutes from './createOnBehalfOfReason'
 import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'
 
 export default function createOnBehalfOfRoutes({
-  decisionTreeService,
   placeOnReportService,
   createOnBehalfOfSessionService,
 }: {
-  decisionTreeService: DecisionTreeService
   placeOnReportService: PlaceOnReportService
   createOnBehalfOfSessionService: CreateOnBehalfOfSessionService
 }): Router {
   const router = express.Router()
 
-  const createOnBehalfOfRoute = new CreateOnBehalfOfRoutes(decisionTreeService, createOnBehalfOfSessionService)
-  const createOnBehalfOfReasonRoute = new CreateOnBehalfOfReasonRoutes(
-    decisionTreeService,
-    createOnBehalfOfSessionService
-  )
+  const createOnBehalfOfRoute = new CreateOnBehalfOfRoutes(createOnBehalfOfSessionService)
+  const createOnBehalfOfReasonRoute = new CreateOnBehalfOfReasonRoutes(createOnBehalfOfSessionService)
   const checkCreateOnBehalfOfRoute = new CheckCreateOnBehalfOfRoutes(
-    decisionTreeService,
     placeOnReportService,
     createOnBehalfOfSessionService
   )

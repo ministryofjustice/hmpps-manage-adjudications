@@ -1,4 +1,5 @@
 {% from "./summaryList.njk" import summaryList %}
+{% from "./summaryListWithChangeLinks.njk" import summaryListWithChangeLinks %}
 {% from "./offenceQAndASummaryList.njk" import offenceQAndASummaryList %}
 {% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 {% from "../macros/evidenceTable.njk" import evidenceTable %}
@@ -18,7 +19,7 @@
     {% endif %}
   </div>
   <div class="adjudicationsSummary">
-    {{ summaryList(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }) }}
+    {{ summaryListWithChangeLinks(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }) }}
   </div>
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">

@@ -8,7 +8,12 @@
       {% set value = {html: detail.html | showDefault(missingValueText)} %}
     {% else %}
       {% set value = {text: detail.value | showDefault(missingValueText)} %}
-      {% set actions = { items: [{href: detail.changeLinkHref, text: "Change", visuallyHiddenText: detail.label, attributes: {"data-qa": "change-link"} }] } %}
+    {% endif %}
+
+    {% if detail.changeLinkHref %}
+      {% set actions = { items: [{href: detail.changeLinkHref, text: "Change", visuallyHiddenText: detail.label, attributes: {"data-qa": detail.dataQa} }] } %}
+    {% else %}
+      {% set actions = '' %}
     {% endif %}
 
     {% set rows = (rows.push(

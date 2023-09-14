@@ -1,16 +1,12 @@
 import { Request, Response } from 'express'
-import DecisionTreeService from '../../services/decisionTreeService'
 import CreateOnBehalfOfPage from './createOnBehalfOfPage'
 import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'
 
 export default class CreateOnBehalfOfRoutes {
   page: CreateOnBehalfOfPage
 
-  constructor(
-    decisionTreeService: DecisionTreeService,
-    createOnBehalfOfSessionService: CreateOnBehalfOfSessionService
-  ) {
-    this.page = new CreateOnBehalfOfPage(decisionTreeService, createOnBehalfOfSessionService)
+  constructor(createOnBehalfOfSessionService: CreateOnBehalfOfSessionService) {
+    this.page = new CreateOnBehalfOfPage(createOnBehalfOfSessionService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
