@@ -2,9 +2,9 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "../macros/datePicker.njk" import datePicker %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "../macros/autoPunishmentScheduleSummary.njk" import autoPunishmentScheduleSummary %}
 
 {% set title = "Punishment schedule" %}
 {% block pageTitle %}
@@ -23,26 +23,25 @@
     }) }}
   {% endif %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
-  <div>
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-        <p>type: {{ type }}</p>
-        <p>start: {{ startDate }}</p>
-        <p>days: {{ days }}</p>
-        <p>end: {{ endDate }}</p>
-     
-      <div class="govuk-button-group">
-        {{ govukButton({
+        <h2 class="govuk-heading-m">{{ type | convertPunishmentType }}</h2>
+        {{ autoPunishmentScheduleSummary(startDate, days, endDate, chargeNumber, redisId) }}
+        <div class="govuk-button-group">
+          {{ govukButton({
           text: 'Continue',
           type: "submit",
           preventDoubleClick: true,
           classes: "govuk-button--submit govuk-!-margin-right-3",
           attributes: { "data-qa": "submit" }
-        }) }}
-        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award punishments and add money for damages'</a>
-      </div>
+          }) }}
+          <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award punishments and add money for damages'</a>
+        </div>
 
-    </form>
+      </form>
+    </div>
   </div>
 {% endblock %}

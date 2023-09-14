@@ -185,6 +185,16 @@ export const convertOicHearingType = (hearingType: string): string => {
   return 'Independent Adjudicator'
 }
 
+export const calculatePunishmentEndDate = (
+  startDate: string,
+  numberOfDaysOfPunishment: number,
+  format = 'D MMMM YYYY'
+) => {
+  return moment(datePickerDateToMoment(startDate))
+    .add(numberOfDaysOfPunishment - 1, 'days')
+    .format(format)
+}
+
 export default {
   numberRange,
   convertToTitleCase,

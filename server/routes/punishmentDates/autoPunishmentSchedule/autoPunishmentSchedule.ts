@@ -1,18 +1,21 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import moment from 'moment'
 import UserService from '../../../services/userService'
-import { hasAnyRole, datePickerDateToMoment, momentDateToDatePicker } from '../../../utils/utils'
+import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import { PunishmentType } from '../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 type PageData = {
   startDate?: string
   endDate?: string
   days?: number
   type?: PunishmentType
+  privilegeType?: PrivilegeType
+  otherPrivilege?: string
+  stoppagePercentage?: number
+  redisId?: number
 }
 
 export default class AutoPunishmentSchedulePage {
@@ -24,43 +27,48 @@ export default class AutoPunishmentSchedulePage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { startDate, endDate, days, type } = pageData
+    const { startDate, endDate, days, type, privilegeType, otherPrivilege, stoppagePercentage, redisId } = pageData
 
     return res.render(`pages/autoPunishmentSchedule.njk`, {
+      chargeNumber,
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       startDate,
       endDate,
       type,
       days,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      redisId,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const { chargeNumber } = req.params
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    const { startDate, days, punishmentType } = req.query
-    const type = PunishmentType[punishmentType as string]
-    const startDateString = startDate.toString()
-    const numberOfDaysOfPunishment = Number(days)
+    const { chargeNumber } = req.params
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const endDate = moment(datePickerDateToMoment(startDateString)).add(numberOfDaysOfPunishment, 'days')
+    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
+    const lastAddedPunishment = sessionPunishments[sessionPunishments.length - 1]
 
     return this.renderView(req, res, {
-      startDate: startDateString,
-      endDate: momentDateToDatePicker(endDate),
-      days: numberOfDaysOfPunishment,
-      type,
+      startDate: lastAddedPunishment.startDate,
+      endDate: lastAddedPunishment.endDate,
+      days: lastAddedPunishment.days,
+      type: lastAddedPunishment.type,
+      privilegeType: lastAddedPunishment.privilegeType,
+      otherPrivilege: lastAddedPunishment.otherPrivilege,
+      stoppagePercentage: lastAddedPunishment.stoppagePercentage,
+      redisId: lastAddedPunishment.redisId,
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days, startDate } = req.query
 
-    // create punishment data and save to session here, redirect to award punishments?
+    res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

@@ -4,11 +4,12 @@ import { Request, Response } from 'express'
 import { ParsedUrlQueryInput } from 'querystring'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
-import { hasAnyRole, apiDateToDatePicker } from '../../../utils/utils'
+import { hasAnyRole, apiDateToDatePicker, datePickerToApi, calculatePunishmentEndDate } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import validateForm from './enterStartDateValidation'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -73,6 +74,7 @@ export default class SuspendedUntilDatePage {
     const { chargeNumber } = req.params
     const { startDate } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
+    const type = PunishmentType[punishmentType as string]
 
     const error = validateForm({
       startDate,
@@ -84,18 +86,40 @@ export default class SuspendedUntilDatePage {
         startDate,
       })
 
-    return res.redirect(
-      url.format({
-        pathname: adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(chargeNumber),
-        query: {
-          punishmentType,
-          privilegeType,
-          otherPrivilege,
-          stoppagePercentage,
-          days,
-          startDate,
-        } as ParsedUrlQueryInput,
-      })
-    )
+    const numberOfDays = Number(days)
+
+    try {
+      const punishmentData = {
+        type,
+        privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+        otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
+        stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
+        days: numberOfDays,
+        startDate: datePickerToApi(startDate),
+        endDate: calculatePunishmentEndDate(startDate, numberOfDays, 'YYYY-MM-DD'),
+      }
+      if (this.pageOptions.isEdit()) {
+        await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
+      } else {
+        await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
+      }
+    } catch (postError) {
+      res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
+      throw postError
+    }
+
+    const nextPage = url.format({
+      pathname: adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(chargeNumber),
+      query: {
+        punishmentType,
+        privilegeType,
+        otherPrivilege,
+        stoppagePercentage,
+        days,
+        startDate,
+      } as ParsedUrlQueryInput,
+    })
+
+    return res.redirect(nextPage)
   }
 }

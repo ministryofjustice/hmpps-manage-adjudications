@@ -4,12 +4,13 @@ import { Request, Response } from 'express'
 import { ParsedUrlQueryInput } from 'querystring'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
-import { formatTimestampToDate, hasAnyRole } from '../../../utils/utils'
+import { calculatePunishmentEndDate, datePickerToApi, formatTimestampToDate, hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import validateForm from './startDateChoiceValidation'
 import { User } from '../../../data/hmppsManageUsersClient'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -81,6 +82,7 @@ export default class PunishmentStartDateChoicePage {
     const { immediate } = req.body
     const { user } = res.locals
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
+    const type = PunishmentType[punishmentType as string]
 
     const error = validateForm({
       immediate,
@@ -96,6 +98,27 @@ export default class PunishmentStartDateChoicePage {
     if (immediate === 'true') {
       const lastHearingDateTime = await this.getLastHearingDate(chargeNumber, user)
       lastHearingDate = formatTimestampToDate(lastHearingDateTime)
+      const startDate = datePickerToApi(lastHearingDate)
+      const numberOfDays = Number(days)
+      try {
+        const punishmentData = {
+          type,
+          privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+          otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
+          stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
+          days: numberOfDays,
+          startDate,
+          endDate: calculatePunishmentEndDate(startDate, numberOfDays, 'YYYY-MM-DD'),
+        }
+        if (this.pageOptions.isEdit()) {
+          await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
+        } else {
+          await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
+        }
+      } catch (postError) {
+        res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
+        throw postError
+      }
     }
 
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req, immediate)
