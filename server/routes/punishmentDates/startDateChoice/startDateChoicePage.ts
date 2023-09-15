@@ -108,7 +108,7 @@ export default class PunishmentStartDateChoicePage {
           stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
           days: numberOfDays,
           startDate,
-          endDate: calculatePunishmentEndDate(startDate, numberOfDays, 'YYYY-MM-DD'),
+          endDate: calculatePunishmentEndDate(lastHearingDate, numberOfDays, 'YYYY-MM-DD'),
         }
         if (this.pageOptions.isEdit()) {
           await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)

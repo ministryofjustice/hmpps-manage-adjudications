@@ -75,6 +75,7 @@ export default class SuspendedUntilDatePage {
     const { startDate } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
     const type = PunishmentType[punishmentType as string]
+    const numberOfDays = Number(days)
 
     const error = validateForm({
       startDate,
@@ -85,8 +86,6 @@ export default class SuspendedUntilDatePage {
         error,
         startDate,
       })
-
-    const numberOfDays = Number(days)
 
     try {
       const punishmentData = {

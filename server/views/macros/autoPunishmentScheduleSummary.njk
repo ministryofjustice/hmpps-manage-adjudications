@@ -1,11 +1,10 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro autoPunishmentScheduleSummary(startDate, days, endDate, chargeNumber, redisId) %}
-
+{% macro autoPunishmentScheduleSummary(startDate, days, endDate, chargeNumber, redisId, startDateChangeHref) %}
 {% set startDateChangeLink = {
   items: [
           {
-            href: adjudicationUrls.punishmentStartDate.urls.edit(chargeNumber, redisId),
+            href: startDateChangeHref,
             text: "Change",
             visuallyHiddenText: ' punishment start date',
             attributes: {"data-qa": "change-link" }
@@ -25,7 +24,7 @@
     } %}
 
   {{ govukSummaryList({
-  rows: [
+    rows: [
     {
       key: {
         text: "Start date"

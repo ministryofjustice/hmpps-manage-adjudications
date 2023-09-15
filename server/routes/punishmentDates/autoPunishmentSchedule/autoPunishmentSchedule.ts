@@ -1,5 +1,7 @@
 /* eslint-disable max-classes-per-file */
+import url from 'url'
 import { Request, Response } from 'express'
+import { ParsedUrlQueryInput } from 'querystring'
 import UserService from '../../../services/userService'
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
@@ -15,7 +17,7 @@ type PageData = {
   privilegeType?: PrivilegeType
   otherPrivilege?: string
   stoppagePercentage?: number
-  redisId?: number
+  redisId?: string
 }
 
 export default class AutoPunishmentSchedulePage {
@@ -29,9 +31,21 @@ export default class AutoPunishmentSchedulePage {
     const { chargeNumber } = req.params
     const { startDate, endDate, days, type, privilegeType, otherPrivilege, stoppagePercentage, redisId } = pageData
 
+    const startDateChangeHref = url.format({
+      pathname: adjudicationUrls.punishmentStartDate.urls.edit(chargeNumber, redisId),
+      query: {
+        punishmentType: type,
+        privilegeType,
+        otherPrivilege,
+        stoppagePercentage,
+        days,
+      } as ParsedUrlQueryInput,
+    })
+
     return res.render(`pages/autoPunishmentSchedule.njk`, {
       chargeNumber,
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
+      startDateChangeHref,
       startDate,
       endDate,
       type,
