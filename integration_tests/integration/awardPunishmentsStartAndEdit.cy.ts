@@ -276,6 +276,45 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSchedulePage.submitButton().click()
     })
 
+    it('create and edit punishments - PRIVILEGE - GYM', () => {
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
+      const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+
+      awardPunishmentsPage.newPunishment().click()
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
+      punishmentPage.privilege().find('input[value="GYM"]').check()
+
+      punishmentPage.submitButton().click()
+
+      const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
+      punishmentSchedulePage.days().type('10')
+      punishmentSchedulePage.suspended().find('input[value="yes"]').check()
+      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+
+      punishmentSchedulePage.submitButton().click()
+
+      awardPunishmentsPage.editPunishment().first().click()
+
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').should('be.checked')
+      punishmentPage.privilege().find('input[value="GYM"]').should('be.checked')
+      punishmentPage.submitButton().click()
+
+      punishmentSchedulePage.days().should('have.value', '10')
+      punishmentSchedulePage.suspended().find('input[value="yes"]').should('be.checked')
+      punishmentSchedulePage.suspendedUntil().should('have.value', '10/10/2030')
+
+      punishmentSchedulePage.submitButton().click()
+      Page.verifyOnPage(AwardPunishmentsPage)
+      awardPunishmentsPage
+        .punishmentsTable()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Loss of gym')
+        })
+    })
+
     it('create and edit punishments - PRIVILEGE - OTHER', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)

@@ -20,6 +20,7 @@ export enum PrivilegeType {
   MONEY = 'MONEY',
   TV = 'TV',
   ASSOCIATION = 'ASSOCIATION',
+  GYM = 'GYM',
   OTHER = 'OTHER',
 }
 
@@ -107,6 +108,8 @@ export function convertPrivilegeType(privilege: PrivilegeType) {
       return 'money'
     case PrivilegeType.TV:
       return 'TV'
+    case PrivilegeType.GYM:
+      return 'gym'
     default:
       return null
   }
