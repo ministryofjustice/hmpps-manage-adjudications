@@ -837,7 +837,17 @@ const adjudicationUrls = {
           query: { ...filter },
         }),
       financial: () => `${adjudicationUrls.awardedPunishmentsAndDamages.root}/financial`,
+      financialFilter: (filter: AwardedPunishmentsAndDamagesUiFilter) =>
+        url.format({
+          pathname: `${adjudicationUrls.awardedPunishmentsAndDamages.root}/financial`,
+          query: { ...filter },
+        }),
       additionalDays: () => `${adjudicationUrls.awardedPunishmentsAndDamages.root}/additional-days`,
+      additionalDaysFilter: (filter: AwardedPunishmentsAndDamagesUiFilter) =>
+        url.format({
+          pathname: `${adjudicationUrls.awardedPunishmentsAndDamages.root}/additional-days`,
+          query: { ...filter },
+        }),
     },
   },
   reasonForChangePunishment: {

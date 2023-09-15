@@ -13,6 +13,8 @@ export default class Home extends Page {
 
   additionalDaysAwardedPunishmentsTab = (): PageElement => cy.get('[data-qa="additionalDaysAwardedPunishmentsTab"]')
 
+  financialGuidanceMessage = (): PageElement => cy.get('[data-qa="financial-guidance"]')
+
   leftArrow = (): PageElement => cy.get('[data-qa="hearing-date-left-arrow"]')
 
   rightArrow = (): PageElement => cy.get('[data-qa="hearing-date-right-arrow"]')
@@ -28,8 +30,6 @@ export default class Home extends Page {
   applyButton = (): PageElement => cy.get('[data-qa="awarded-punishments-and-damages-filter-apply"]')
 
   clearLink = (): PageElement => cy.get('[data-qa="clear-filter"]')
-
-  viewReportLink = (resultNumber: number): PageElement => cy.get(`[data-qa="print-report-link-${resultNumber}"]`)
 
   viewPunishmentsLink = (resultNumber: number): PageElement =>
     cy.get(`[data-qa="view-punishments-link-${resultNumber}"]`)

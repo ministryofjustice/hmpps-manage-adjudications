@@ -29,8 +29,6 @@ export default class Home extends Page {
 
   clearLink = (): PageElement => cy.get('[data-qa="clear-filter"]')
 
-  viewReportLink = (resultNumber: number): PageElement => cy.get(`[data-qa="print-report-link-${resultNumber}"]`)
-
   viewPunishmentsLink = (resultNumber: number): PageElement =>
     cy.get(`[data-qa="view-punishments-link-${resultNumber}"]`)
 

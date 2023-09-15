@@ -13,7 +13,7 @@ import {
 import LocationService from '../../../services/locationService'
 import { PrisonLocation } from '../../../data/PrisonLocationResult'
 
-export default class AwardedPunishmentsAndDamagesRoutes {
+export default class FinancialAwardedPunishmentsAndDamagesRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly locationService: LocationService
@@ -26,15 +26,15 @@ export default class AwardedPunishmentsAndDamagesRoutes {
     results: AwardedPunishmentsAndDamages[],
     errors: FormError[]
   ): Promise<void> => {
-    return res.render(`pages/awardedPunishmentsAndDamages/awardedPunishmentsAndDamages.njk`, {
+    return res.render(`pages/awardedPunishmentsAndDamages/financialAwardedPunishmentsAndDamages.njk`, {
       results,
       filter,
       possibleLocations,
-      clearUrl: adjudicationUrls.awardedPunishmentsAndDamages.urls.start(),
+      clearUrl: adjudicationUrls.awardedPunishmentsAndDamages.urls.financial(),
       allAwardedPunishmentsAndDamagesHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.start(),
       financialAwardedPunishmentsAndDamagesHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.financial(),
       additionalDaysAwardedPunishmentsHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays(),
-      activeTab: 'allAwardedPunishmentsAndDamages',
+      activeTab: 'financialAwardedPunishmentsAndDamages',
       errors,
     })
   }
@@ -51,12 +51,13 @@ export default class AwardedPunishmentsAndDamagesRoutes {
       possibleLocations,
       user
     )
+    const filteredResults = results.filter(result => result.financialPunishmentCount > 0)
 
-    return this.renderView(res, uiFilter, possibleLocations, results, [])
+    return this.renderView(res, uiFilter, possibleLocations, filteredResults, [])
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const uiFilter = uiAwardedPunishmentsAndDamagesFilterFromBody(req)
-    return res.redirect(adjudicationUrls.awardedPunishmentsAndDamages.urls.filter(uiFilter))
+    return res.redirect(adjudicationUrls.awardedPunishmentsAndDamages.urls.financialFilter(uiFilter))
   }
 }

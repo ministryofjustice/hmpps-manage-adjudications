@@ -1007,7 +1007,9 @@ export default class ReportedAdjudicationsService {
       })
     )
 
-    const prisonerNumbers = adjudicationsForHearings.map(_ => _.reportedAdjudication.prisonerNumber)
+    const prisonerNumbers = adjudicationsForHearings.map(
+      reportedAdjudicationResult => reportedAdjudicationResult.reportedAdjudication.prisonerNumber
+    )
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const prisonerDetails = new Map(
       (await new PrisonApiClient(token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
@@ -1016,52 +1018,98 @@ export default class ReportedAdjudicationsService {
       ])
     )
 
-    const awardedPunishmentsAndDamages: AwardedPunishmentsAndDamages[] = adjudicationsForHearings.map(adj => {
-      const adjudication = adj.reportedAdjudication
-      const hearingForAdjudication = hearingForDateByChargeNumber.get(adjudication.chargeNumber)
-
-      let caution = 'No'
-      adjudication.punishments.forEach(punishment => {
-        if (punishment.type === PunishmentType.CAUTION) {
-          caution = 'Yes'
-        }
-      })
-
-      let damagesOwedAmount
-      let sumDamagesOwed = 0
-      adjudication.punishments.forEach(punishment => {
-        if (punishment.damagesOwedAmount) {
-          sumDamagesOwed += punishment.damagesOwedAmount
-        }
-      })
-      if (sumDamagesOwed > 0) {
-        damagesOwedAmount = '£'.concat(sumDamagesOwed.toString())
-      }
-
-      return {
-        chargeNumber: adjudication.chargeNumber,
-        nameAndNumber: hearingForAdjudication.nameAndNumber,
-        prisonerLocation:
-          formatLocation(prisonerDetails.get(adjudication.prisonerNumber)?.assignedLivingUnitDesc) || 'Unknown',
-        formattedDateTimeOfHearing: formatTimestampToDate(
-          hearingForAdjudication.dateTimeOfHearing,
-          'D MMMM YYYY - HH:mm'
-        ),
-        status: adjudication.status,
-        caution,
-        punishmentCount: adjudication.punishments.length,
-        damagesOwedAmount,
-      }
-    })
+    let awardedPunishmentsAndDamages: AwardedPunishmentsAndDamages[] = adjudicationsForHearings.map(
+      reportedAdjudicationResult =>
+        this.buildAwardedPunishmentsAndDamages(
+          reportedAdjudicationResult,
+          hearingForDateByChargeNumber,
+          prisonerDetails
+        )
+    )
 
     if (filter.locationId) {
       const location = possibleLocations.filter(loc => loc.locationId === filter.locationId)
       const { locationPrefix } = location[0]
-      return awardedPunishmentsAndDamages.filter(
+      awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(
         apad => this.getLocationPrefix(apad.prisonerLocation) === locationPrefix
       )
     }
 
+    const displayForAdjudicationStatuses = [
+      ReportedAdjudicationStatus.CHARGE_PROVED,
+      ReportedAdjudicationStatus.ADJOURNED,
+      ReportedAdjudicationStatus.REFER_POLICE,
+      ReportedAdjudicationStatus.REFER_GOV,
+      ReportedAdjudicationStatus.REFER_INAD,
+      ReportedAdjudicationStatus.DISMISSED,
+    ]
+
+    awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(result =>
+      displayForAdjudicationStatuses.includes(result.status)
+    )
+
     return awardedPunishmentsAndDamages
+  }
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  private buildAwardedPunishmentsAndDamages(
+    adj: ReportedAdjudicationResult,
+    hearingForDateByChargeNumber: Map<string, any>,
+    prisonerDetails: Map<string, PrisonerSimpleResult>
+  ): AwardedPunishmentsAndDamages {
+    const adjudication = adj.reportedAdjudication
+    const hearingForAdjudication = hearingForDateByChargeNumber.get(adjudication.chargeNumber)
+
+    let caution = 'No'
+    adjudication.punishments.forEach(punishment => {
+      if (punishment.type === PunishmentType.CAUTION) {
+        caution = 'Yes'
+      }
+    })
+
+    let damagesOwedAmount
+    let sumDamagesOwed = 0
+    adjudication.punishments.forEach(punishment => {
+      if (punishment.damagesOwedAmount) {
+        sumDamagesOwed += punishment.damagesOwedAmount
+      }
+    })
+    if (sumDamagesOwed > 0) {
+      damagesOwedAmount = '£'.concat(sumDamagesOwed.toString())
+    }
+
+    const financialPunishmentTypes = [PunishmentType.DAMAGES_OWED, PunishmentType.EARNINGS]
+    const financialPunishmentCount = adjudication.punishments.filter(punishment =>
+      financialPunishmentTypes.includes(punishment.type)
+    ).length
+
+    let additionalDays = 0
+    let prospectiveAdditionalDays = 0
+    adjudication.punishments.forEach(punishment => {
+      if (punishment.type === PunishmentType.ADDITIONAL_DAYS) {
+        additionalDays += punishment.schedule.days
+      }
+      if (punishment.type === PunishmentType.PROSPECTIVE_DAYS) {
+        prospectiveAdditionalDays += punishment.schedule.days
+      }
+    })
+
+    return {
+      chargeNumber: adjudication.chargeNumber,
+      nameAndNumber: hearingForAdjudication.nameAndNumber,
+      prisonerLocation:
+        formatLocation(prisonerDetails.get(adjudication.prisonerNumber)?.assignedLivingUnitDesc) || 'Unknown',
+      formattedDateTimeOfHearing: formatTimestampToDate(
+        hearingForAdjudication.dateTimeOfHearing,
+        'D MMMM YYYY - HH:mm'
+      ),
+      status: adjudication.status,
+      caution,
+      financialPunishmentCount,
+      punishmentCount: adjudication.punishments.length,
+      damagesOwedAmount,
+      additionalDays,
+      prospectiveAdditionalDays,
+    }
   }
 }

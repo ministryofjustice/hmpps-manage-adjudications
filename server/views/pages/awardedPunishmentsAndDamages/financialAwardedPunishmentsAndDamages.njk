@@ -1,0 +1,83 @@
+{% extends "../../partials/layout.njk" %}
+{% from "../../partials/breadCrumb.njk" import breadcrumb %}
+{% from "../../macros/hearingsAndResidentalLocationFilter.njk" import hearingsAndResidentalLocationFilter %}
+{% from '../../macros/awardedPunishmentsAndDamagesTabHeader.njk' import awardedPunishmentsAndDamagesTabHeader %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "View awarded punishments and damages" %}
+
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  {{ awardedPunishmentsAndDamagesTabHeader(activeTab, allAwardedPunishmentsAndDamagesHref, financialAwardedPunishmentsAndDamagesHref, additionalDaysAwardedPunishmentsHref) }}
+
+  <p class="govuk-!-padding-top-2 govuk-!-padding-bottom-2" data-qa="financial-guidance">Financial punishments include recovery of money for damages and stoppage of earnings.</p>
+
+  {{ hearingsAndResidentalLocationFilter({filter: filter, locations: possibleLocations, clearUrl: clearUrl, csrfToken: csrfToken}) }}
+
+  {% set rows = [] %}
+  {% for result in results %}
+    {% set resultNumber = loop.index %}
+
+    {% set punishmentsLinkHtml %}
+      <a href="{{ adjudicationUrls.punishmentsAndDamages.urls.review(result.chargeNumber) }}" class="govuk-link" data-qa="view-punishments-link-{{ resultNumber }}">View<span class="govuk-visually-hidden"> report for {{ result.chargeNumber }}</span></a>
+    {% endset -%}
+
+    {% set rows = (rows.push([
+      { text: result.chargeNumber },
+      { text: result.nameAndNumber },
+      { text: result.prisonerLocation },
+      { text: result.formattedDateTimeOfHearing },
+      { text: result.status | reportedAdjudicationStatusDisplayName },
+      { text: result.financialPunishmentCount | showDefault('-') },
+      { text: result.damagesOwedAmount | showDefault('-') },
+      { html: punishmentsLinkHtml }
+    ]), rows) %}
+  {% endfor %}
+
+  {% if rows | length %}
+    <div class="results-table">
+      {{ govukTable({
+        head: [
+          { text: "Charge number" },
+          { text: "Name and prison number",
+            attributes: {
+            "aria-sort": "none"
+          }
+          },
+          { text: "Location" },
+          { text: 'Hearing date and time' },
+          { text: "Status" },
+          { text: "Financial punishments" },
+          { text: "Damages" },
+          { text: "" }
+        ],
+        rows: rows,
+        attributes: { "data-qa": "awarded-punishments-and-damages-results-table", "data-module": "moj-sortable-table" }
+      }) }}
+    </div>
+  {% else %}
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No scheduled hearings</p>
+  {% endif %}
+
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/assets/js/hearingDateShift.js"></script>
+{% endblock %}

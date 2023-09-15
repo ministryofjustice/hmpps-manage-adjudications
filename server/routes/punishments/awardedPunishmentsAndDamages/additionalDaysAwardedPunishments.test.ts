@@ -36,7 +36,7 @@ beforeEach(() => {
       punishmentCount: 3,
       financialPunishmentCount: 3,
       damagesOwedAmount: '£200',
-      additionalDays: 0,
+      additionalDays: 1,
       prospectiveAdditionalDays: 0,
     },
     {
@@ -49,7 +49,7 @@ beforeEach(() => {
       financialPunishmentCount: 0,
       punishmentCount: 0,
       additionalDays: 0,
-      prospectiveAdditionalDays: 0,
+      prospectiveAdditionalDays: 1,
     },
   ]
   reportedAdjudicationsService.getAwardedPunishmentsAndDamages.mockResolvedValue(awardedPunishmentsAndDamages as never)
@@ -62,11 +62,11 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /awarded-punishments-and-damages', () => {
+describe('GET /awarded-punishments-and-damages/additional-days', () => {
   describe('with results', () => {
     it('should load awarded punishments and damages - no filter', () => {
       return request(app)
-        .get(adjudicationUrls.awardedPunishmentsAndDamages.root)
+        .get(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('View awarded punishments and damages')
@@ -77,7 +77,7 @@ describe('GET /awarded-punishments-and-damages', () => {
     it('should load awarded punishments and damages - with filter', () => {
       return request(app)
         .get(
-          adjudicationUrls.awardedPunishmentsAndDamages.urls.filter({
+          adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDaysFilter({
             hearingDate: '04/12/2022',
             locationId: '722174',
           })
@@ -97,7 +97,7 @@ describe('GET /awarded-punishments-and-damages', () => {
     })
     it('shows default message', () => {
       return request(app)
-        .get(adjudicationUrls.awardedPunishmentsAndDamages.root)
+        .get(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('View awarded punishments and damages')
@@ -107,23 +107,23 @@ describe('GET /awarded-punishments-and-damages', () => {
   })
 })
 
-describe('POST /awarded-punishments-and-damages', () => {
+describe('POST /awarded-punishments-and-damages/additional-days', () => {
   it('should use correct filter parameters from form - without location', () => {
     return request(app)
-      .post(adjudicationUrls.awardedPunishmentsAndDamages.root)
+      .post(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
       .send({ hearingDate: { date: '04/12/2022' }, locationId: null })
       .expect(
         'Location',
-        `${adjudicationUrls.awardedPunishmentsAndDamages.root}?hearingDate=04%2F12%2F2022&locationId=`
+        `${adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays()}?hearingDate=04%2F12%2F2022&locationId=`
       )
   })
   it('should use correct filter parameters from form - with location', () => {
     return request(app)
-      .post(adjudicationUrls.awardedPunishmentsAndDamages.root)
+      .post(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
       .send({ hearingDate: { date: '04/12/2022' }, locationId: 722174 })
       .expect(
         'Location',
-        `${adjudicationUrls.awardedPunishmentsAndDamages.root}?hearingDate=04%2F12%2F2022&locationId=722174`
+        `${adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays()}?hearingDate=04%2F12%2F2022&locationId=722174`
       )
   })
 })
