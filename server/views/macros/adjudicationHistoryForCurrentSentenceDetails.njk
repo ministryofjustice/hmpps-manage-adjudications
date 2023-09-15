@@ -29,11 +29,10 @@
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
 
         <h2>Date of alleged offence</h2>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-        </div>
+        <p class='govuk-!-margin-bottom-0'
+           data-qa='notice-of-being-placed-on-report-incident-date'>
+            {{ adjudicationHistoryForCurrentSentenceData.incidentDate }}
+        </p>
 
         <h2>Details of prisoner</h2>
         <div class='adjudication-pdf-section-sentence-details'>

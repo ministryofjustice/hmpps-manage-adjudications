@@ -1,5 +1,5 @@
 import { ConfirmedOnReportData } from './ConfirmedOnReportData'
-import { convertToTitleCase } from '../utils/utils'
+import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
 
 export default class adjudicationHistoryForCurrentSentenceData {
   chargeNumber: string
@@ -10,6 +10,8 @@ export default class adjudicationHistoryForCurrentSentenceData {
 
   prisonerLocationDescription: string
 
+  incidentDate: string
+
   constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData) {
     this.chargeNumber = chargeNumber
     this.prisonerDisplayName = convertToTitleCase(
@@ -19,5 +21,6 @@ export default class adjudicationHistoryForCurrentSentenceData {
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${
       confirmedOnReportData.prisonerLivingUnitName || 'Unknown'
     }`
+    this.incidentDate = formatTimestampTo(confirmedOnReportData.incidentDate, 'dddd, D MMMM YYYY')
   }
 }

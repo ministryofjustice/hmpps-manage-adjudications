@@ -148,7 +148,7 @@ div.adjudication-pdf {
     padding-right: govuk-spacing(3);
     width: 20%;
     &:last-child {
-      width: 60%;
+      width: 40%;
     }
   }
 }
@@ -181,6 +181,26 @@ div.adjudication-pdf {
   &__item {
     width: 33%;
     padding-right: govuk-spacing(4);
+  }
+}
+
+.adjudication-pdf-section-sentence-details-three-items-tick-boxes {
+  display: flex;
+
+  &__item {
+    &:nth-child(1) {
+      width: 35%;
+      padding-right: govuk-spacing(3);
+    }
+
+    &:nth-child(2) {
+      width: 8%;
+      padding-right: govuk-spacing(2);
+    }
+
+    &:nth-child(3) {
+      width: 12%;
+    }
   }
 }
 
@@ -268,12 +288,12 @@ div.adjudication-pdf {
 
   &__item {
     &:nth-child(1) {
-      width: 66%;
+      width: 55%;
       padding-right: govuk-spacing(3);
     }
 
     &:nth-child(2) {
-      width: 33%;
+      width: 45%;
     }
   }
 }
