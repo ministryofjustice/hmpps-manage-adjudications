@@ -1,4 +1,5 @@
 import Page, { PageElement } from './page'
+import { forceDateInput } from '../componentDrivers/dateInput'
 
 export default class Home extends Page {
   constructor() {
@@ -12,11 +13,17 @@ export default class Home extends Page {
 
   additionalDaysAwardedPunishmentsTab = (): PageElement => cy.get('[data-qa="additionalDaysAwardedPunishmentsTab"]')
 
+  financialGuidanceMessage = (): PageElement => cy.get('[data-qa="financial-guidance"]')
+
   leftArrow = (): PageElement => cy.get('[data-qa="hearing-date-left-arrow"]')
 
   rightArrow = (): PageElement => cy.get('[data-qa="hearing-date-right-arrow"]')
 
   datePicker = (): PageElement => cy.get('[data-qa="hearing-date-picker"]')
+
+  // This bypasses the date picker and manually forces the date field.
+  forceHearingDate = (day: number, month: number, year: number): PageElement =>
+    forceDateInput(day, month, year, '[data-qa="hearing-date-picker"]')
 
   selectLocation = () => cy.get('#locationId')
 

@@ -19,11 +19,11 @@ export default class Home extends Page {
 
   datePicker = (): PageElement => cy.get('[data-qa="hearing-date-picker"]')
 
-  selectLocation = () => cy.get('#locationId')
-
   // This bypasses the date picker and manually forces the date field.
   forceHearingDate = (day: number, month: number, year: number): PageElement =>
     forceDateInput(day, month, year, '[data-qa="hearing-date-picker"]')
+
+  selectLocation = () => cy.get('#locationId')
 
   applyButton = (): PageElement => cy.get('[data-qa="awarded-punishments-and-damages-filter-apply"]')
 

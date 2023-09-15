@@ -89,15 +89,16 @@ context('View awarded punishments and damages', () => {
               schedule: {
                 days: 0,
               },
-              damagesOwedAmount: 200,
+              damagesOwedAmount: 100,
             },
             {
               id: 2,
               redisId: 'xyz',
-              type: PunishmentType.PRIVILEGE,
+              type: PunishmentType.DAMAGES_OWED,
               schedule: {
                 days: 0,
               },
+              damagesOwedAmount: 100,
             },
             {
               id: 3,
@@ -265,6 +266,24 @@ context('View awarded punishments and damages', () => {
       .viewPunishmentsLink(1)
       .should('have.attr', 'href')
       .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12345')}`)
+
+    awardedPunishmentsAndDamagesPage
+      .viewReportLink(2)
+      .should('have.attr', 'href')
+      .and('include', `${adjudicationUrls.printPdf.urls.dis7('12346')}`)
+    awardedPunishmentsAndDamagesPage
+      .viewPunishmentsLink(2)
+      .should('have.attr', 'href')
+      .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12346')}`)
+
+    awardedPunishmentsAndDamagesPage
+      .viewReportLink(3)
+      .should('have.attr', 'href')
+      .and('include', `${adjudicationUrls.printPdf.urls.dis7('12347')}`)
+    awardedPunishmentsAndDamagesPage
+      .viewPunishmentsLink(3)
+      .should('have.attr', 'href')
+      .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12347')}`)
   })
 
   it('should show the no hearings message if there are no scheduled hearings on that day', () => {
@@ -300,7 +319,7 @@ context('View awarded punishments and damages', () => {
   it('should clear the filter when the link is clicked', () => {
     cy.visit(
       adjudicationUrls.awardedPunishmentsAndDamages.urls.filter({
-        hearingDate: '14/09/2023',
+        hearingDate: moment().format('DD/MM/YYYY'),
         locationId: '27102',
       })
     )
@@ -382,7 +401,16 @@ context('View awarded punishments and damages - Financial', () => {
               schedule: {
                 days: 0,
               },
-              damagesOwedAmount: 200,
+              damagesOwedAmount: 100,
+            },
+            {
+              id: 2,
+              redisId: 'xyz',
+              type: PunishmentType.DAMAGES_OWED,
+              schedule: {
+                days: 0,
+              },
+              damagesOwedAmount: 100,
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -436,14 +464,15 @@ context('View awarded punishments and damages - Financial', () => {
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       AwardedPunishmentsAndDamagesPage
     )
-    awardedPunishmentsAndDamagesPage.allAwardedPunishmentsAndDamagesTab().should('exist')
     awardedPunishmentsAndDamagesPage.financialAwardedPunishmentsAndDamagesTab().click()
+
     const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       FinancialAwardedPunishmentsAndDamagesPage
     )
     financialAwardedPunishmentsAndDamagesPage.allAwardedPunishmentsAndDamagesTab().should('exist')
     financialAwardedPunishmentsAndDamagesPage.financialAwardedPunishmentsAndDamagesTab().should('exist')
     financialAwardedPunishmentsAndDamagesPage.additionalDaysAwardedPunishmentsTab().should('exist')
+    financialAwardedPunishmentsAndDamagesPage.financialGuidanceMessage().should('exist')
     financialAwardedPunishmentsAndDamagesPage.datePicker().should('exist')
     financialAwardedPunishmentsAndDamagesPage.selectLocation().should('exist')
     financialAwardedPunishmentsAndDamagesPage.leftArrow().should('exist')
@@ -483,7 +512,7 @@ context('View awarded punishments and damages - Financial', () => {
         expect($data.get(2).innerText).to.contain('A-2-001')
         expect($data.get(3).innerText).to.contain('26 August 2023 - 10:00')
         expect($data.get(4).innerText).to.contain('Charge proved')
-        expect($data.get(5).innerText).to.contain('1')
+        expect($data.get(5).innerText).to.contain('2')
         expect($data.get(6).innerText).to.contain('£200')
         expect($data.get(7).innerText).to.contain('View')
 
@@ -501,6 +530,11 @@ context('View awarded punishments and damages - Financial', () => {
       .viewPunishmentsLink(1)
       .should('have.attr', 'href')
       .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12345')}`)
+
+    financialAwardedPunishmentsAndDamagesPage
+      .viewPunishmentsLink(2)
+      .should('have.attr', 'href')
+      .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12346')}`)
   })
 
   it('should show the no hearings message if there are no scheduled hearings on that day', () => {
@@ -512,11 +546,42 @@ context('View awarded punishments and damages - Financial', () => {
     })
 
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
-
     const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       FinancialAwardedPunishmentsAndDamagesPage
     )
     financialAwardedPunishmentsAndDamagesPage.noResultsMessage().should('exist')
+  })
+
+  it('should accept user-chosen filtering', () => {
+    cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
+    const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
+      FinancialAwardedPunishmentsAndDamagesPage
+    )
+    financialAwardedPunishmentsAndDamagesPage.forceHearingDate(26, 8, 2023)
+    financialAwardedPunishmentsAndDamagesPage.selectLocation().select('Segregation MPU')
+    financialAwardedPunishmentsAndDamagesPage.applyButton().click()
+
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
+      expect(loc.search).to.eq('?hearingDate=26%2F08%2F2023&locationId=27102')
+    })
+  })
+
+  it('should clear the filter when the link is clicked', () => {
+    cy.visit(
+      adjudicationUrls.awardedPunishmentsAndDamages.urls.financialFilter({
+        hearingDate: moment().format('DD/MM/YYYY'),
+        locationId: '27102',
+      })
+    )
+    const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
+      FinancialAwardedPunishmentsAndDamagesPage
+    )
+    financialAwardedPunishmentsAndDamagesPage.clearLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
+      expect(loc.search).to.eq('')
+    })
   })
 })
 
@@ -587,7 +652,6 @@ context('View awarded punishments and damages - Additional days', () => {
               schedule: {
                 days: 14,
               },
-              damagesOwedAmount: 200,
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -641,8 +705,8 @@ context('View awarded punishments and damages - Additional days', () => {
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       AwardedPunishmentsAndDamagesPage
     )
-    awardedPunishmentsAndDamagesPage.allAwardedPunishmentsAndDamagesTab().should('exist')
     awardedPunishmentsAndDamagesPage.additionalDaysAwardedPunishmentsTab().click()
+
     const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
       AdditionalDaysAwardedPunishmentsPage
     )
@@ -706,6 +770,11 @@ context('View awarded punishments and damages - Additional days', () => {
       .viewPunishmentsLink(1)
       .should('have.attr', 'href')
       .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12345')}`)
+
+    additionalDaysAwardedPunishmentsPage
+      .viewPunishmentsLink(2)
+      .should('have.attr', 'href')
+      .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12346')}`)
   })
 
   it('should show the no hearings message if there are no scheduled hearings on that day', () => {
@@ -721,5 +790,37 @@ context('View awarded punishments and damages - Additional days', () => {
       AdditionalDaysAwardedPunishmentsPage
     )
     additionalDaysAwardedPunishmentsPage.noResultsMessage().should('exist')
+  })
+
+  it('should accept user-chosen filtering', () => {
+    cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
+    const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
+      AdditionalDaysAwardedPunishmentsPage
+    )
+    additionalDaysAwardedPunishmentsPage.forceHearingDate(26, 8, 2023)
+    additionalDaysAwardedPunishmentsPage.selectLocation().select('Segregation MPU')
+    additionalDaysAwardedPunishmentsPage.applyButton().click()
+
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
+      expect(loc.search).to.eq('?hearingDate=26%2F08%2F2023&locationId=27102')
+    })
+  })
+
+  it('should clear the filter when the link is clicked', () => {
+    cy.visit(
+      adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDaysFilter({
+        hearingDate: moment().format('DD/MM/YYYY'),
+        locationId: '27102',
+      })
+    )
+    const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
+      AdditionalDaysAwardedPunishmentsPage
+    )
+    additionalDaysAwardedPunishmentsPage.clearLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
+      expect(loc.search).to.eq('')
+    })
   })
 })
