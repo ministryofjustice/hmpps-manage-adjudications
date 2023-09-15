@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { SubmittedDateTime } from '../@types/template'
-import { EvidenceCode, EvidenceDetails } from '../data/DraftAdjudicationResult'
+import { DraftAdjudication, EvidenceCode, EvidenceDetails } from '../data/DraftAdjudicationResult'
+import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 
 const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
 
@@ -195,6 +196,17 @@ export const calculatePunishmentEndDate = (
     .format(format)
 }
 
+export const formatReportingOfficer = (
+  reporterName: string,
+  adjudication: DraftAdjudication | ReportedAdjudication
+): string => {
+  let reportingOfficer: string = getFormattedOfficerName(reporterName)
+  if (adjudication.createdOnBehalfOfOfficer) {
+    reportingOfficer = reportingOfficer.concat(` on behalf of ${adjudication.createdOnBehalfOfOfficer}`)
+  }
+  return reportingOfficer
+}
+
 export default {
   numberRange,
   convertToTitleCase,
@@ -208,4 +220,5 @@ export default {
   calculateAge,
   convertNameForPlaceholder,
   getEvidenceCategory,
+  formatReportingOfficer,
 }

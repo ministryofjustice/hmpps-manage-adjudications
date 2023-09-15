@@ -1,14 +1,16 @@
 import { ConfirmedOnReportData } from './ConfirmedOnReportData'
-import { convertToTitleCase } from '../utils/utils'
+import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
 
 export default class adjudicationResultReportData {
   chargeNumber: string
 
-  establishmentName: string
-
   prisonerDisplayName: string
 
   prisonerNumber: string
+
+  prisonerLocationDescription: string
+
+  reportedDate: string
 
   isYOI: boolean
 
@@ -38,11 +40,14 @@ export default class adjudicationResultReportData {
 
   constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData, isYOI: boolean) {
     this.chargeNumber = chargeNumber
-    this.establishmentName = confirmedOnReportData.prisonName
     this.prisonerDisplayName = convertToTitleCase(
       `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
     )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
+    this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${
+      confirmedOnReportData.prisonerLivingUnitName || 'Unknown'
+    }`
+    this.reportedDate = formatTimestampTo(confirmedOnReportData.createdDateTime, 'D MMMM YYYY')
     this.isYOI = isYOI
     this.canteenDaysMax = isYOI ? 21 : 42
     this.facilitiesDaysMax = isYOI ? 21 : 42

@@ -1,5 +1,5 @@
 {% macro prepareAndRecordAnAdjudicationHearingDetails(prepareAndRecordAnAdjudicationHearingData) %}
-  <section class="page-break-before-always">
+<div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
     <h2 class='adjudication-pdf-section-header'>Section 2 - Details of hearing</h2>
     <div class="restricted-width">
     <p>
@@ -161,13 +161,13 @@
           <span> Not guilty</span>
         </div>
       </div>
-    </section>
+    </div>
 
     <section class="page-break-before-always">
       <h3 class='adjudication-pdf-section-header-inner'>Record of the hearing</h3>
       <p>Record:</p>
       <ul>
-        <li>all evidence given, including physical evidance such as CCTV and body-worn video camera 
+        <li>all evidence given, including physical evidence such as CCTV and body-worn video camera
 evidence</li>
         <li>any damage impact assessments</li>
         <li>reasons for decisions made during the course of the hearing, such as adjournments</li>
@@ -209,8 +209,8 @@ evidence</li>
       </div>
     </section>
     <section>
-      <h3 class='adjudication-pdf-section-header-inner'>To be completed if the charge is proved beyond reasonable doubt</h3>
-      <h3 class='adjudication-pdf-section-header-inner'>Mitigation</h3>
+      <h2 class='adjudication-pdf-section-header-inner'>To be completed if the charge is proved beyond reasonable doubt</h2>
+      <h3 class='adjudication-pdf-section-subheader-inner'>Mitigation</h3>
       <p>Ask the prisoner if there are reasons why a lesser punishment than normal should be given for this offence, which have not been mentioned before.</p>
 
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
@@ -246,7 +246,7 @@ evidence</li>
 
     <section>
       <div class="break-inside-avoid">
-      <h3 class='adjudication-pdf-section-header-inner'>Adjudication report</h3>
+      <h3 class='adjudication-pdf-section-subheader-inner'>Adjudication report</h3>
       <p>Read out the DIS5 ‘Sentence and adjudication history’.</p>
       </div>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
@@ -259,14 +259,14 @@ evidence</li>
         </div>
       </div>
 
-      <div class='govuk-!-margin-top-3 break-inside-avoid'>
-        <p class='govuk-!-margin-top-3'>If Yes, enter their comments and/or questions.</p>
+      <div class='break-inside-avoid'>
+        <p>If Yes, enter their comments and/or questions.</p>
         <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
       </div>
     </section>
 
     <section>
-      <h3 class='adjudication-pdf-section-header-inner'>Conduct report</h3>
+      <h3 class='adjudication-pdf-section-subheader-inner'>Conduct report</h3>
       <p class="restricted-width">Read out the DIS6 ‘Conduct report’ on the prisoner’s behaviour during their current sentence. Any safer custody terms must be entered on the prisoner’s record and P-NOMIS, and appropriate action must be taken.</p>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner wish to comment on this report, or do they have any questions they wish to ask about it?</p>
@@ -280,8 +280,8 @@ evidence</li>
     </section>
 
     <section>
-      <h3 class='adjudication-pdf-section-header-inner'>Punishment</h3>
-      <h3 class='adjudication-pdf-section-header-inner'>Punishment guidelines</h3>
+      <h2 class='adjudication-pdf-section-header-inner'>Punishment</h2>
+      <h3 class='adjudication-pdf-section-subheader-inner'>Punishment guidelines</h3>
       <p class="restricted-width">Consider punishment, including any possible not punitive compensation requirement for recovery of monies for damages to prison property, Take account of PSI 05/2018 Annex A para 2.64 and Annex C, including whether the prisoner is on an open ACCT or had an ACCT closed within 3 months of the charge being laid.</p>
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
         <p class='govuk-!-margin-top-3 restricted-width'>If so, consider whether there are any risk factors that should be considered when imposing a punishment. Record any relevant points.</p>
@@ -290,15 +290,15 @@ evidence</li>
     </section>
 
     <section>
-      <h3 class='adjudication-pdf-section-header-inner'>For governor/director only</h3>
+      <h3 class='adjudication-pdf-section-subheader-inner'>For governor/director only</h3>
       <div class="restricted-width">
       <p>Consider whether additional days may be an appropriate punishment, and if so refer the case to the independent adjudicator.</p>
-      <h3 class='adjudication-pdf-section-header-inner'>Cellular confinement</h3>
+      <h3 class='adjudication-pdf-section-subheader-inner'>Cellular confinement</h3>
       <p>If considering cellular confinement (CC), confirm Initial Segregation Health Screen (ISHS) recording fitness for this punishment has been completed before a decision on punishment is made, and take the recommendation into account.</p>
       <p>If the ISHS has not been completed, adjourn and ensure it’s completed within 2 hours of the hearing being completed. Record the outcome of the assessment. <span class="govuk-!-font-weight-bold">Attach the ISHS to this record.</span></p>
       <p>If imposing suspended cellular confinement, ensure a further ISHS is completed before any punishment is activated.</p>
       </div>
-      <h3 class='adjudication-pdf-section-header-inner'>Punishment decision</h3>
+      <h3 class='adjudication-pdf-section-subheader-inner'>Punishment decision</h3>
       <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
     </section>
 
@@ -357,5 +357,6 @@ evidence</li>
         </div>
       </div>
     </section>
+</div>
 
   {% endmacro %}

@@ -67,6 +67,8 @@ export default class TestData {
     dateTimeOfIssue = null,
     createdByUserId = 'USER1',
     originatingAgencyId = 'MDI',
+    createdOnBehalfOfOfficer = null,
+    createdOnBehalfOfReason = null,
     otherData,
     disIssueHistory = [],
   }: {
@@ -94,6 +96,8 @@ export default class TestData {
     dateTimeOfIssue?: string
     createdByUserId?: string
     originatingAgencyId?: string
+    createdOnBehalfOfOfficer?: string
+    createdOnBehalfOfReason?: string
     otherData?: any
     disIssueHistory?: DisIssue[]
   }) => {
@@ -128,6 +132,8 @@ export default class TestData {
       issuingOfficer,
       dateTimeOfIssue,
       originatingAgencyId,
+      createdOnBehalfOfOfficer,
+      createdOnBehalfOfReason,
       ...otherData,
       disIssueHistory,
     }

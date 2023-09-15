@@ -39,7 +39,7 @@
         name: 'privilegeType',
         fieldset: {
         legend: {
-        isPageHeading: false 
+        isPageHeading: false
         }
         },
         attributes: { "data-qa": "privilege-radio-buttons" },
@@ -48,7 +48,7 @@
         {
         value: "CANTEEN",
         text: "Canteen",
-        checked: privilegeType == 'CANTEEN' 
+        checked: privilegeType == 'CANTEEN'
         },
         {
         value: "FACILITIES",
@@ -70,13 +70,18 @@
         text: "Association",
         checked: privilegeType == 'ASSOCIATION'
         },
+      {
+        value: "GYM",
+        text: "Gym",
+        checked: privilegeType == 'GYM'
+      },
         {
         value: "OTHER",
         text: "Other",
         checked: privilegeType == 'OTHER',
-        conditional: { html: otherPrivilegeHtml }      
+        conditional: { html: otherPrivilegeHtml }
         }
-        ] }) 
+        ] })
       }}
   {% endset -%}
 
@@ -171,6 +176,6 @@
     name: 'punishmentType',
     attributes: { "data-qa": "punishment-radio-buttons" },
     errorMessage: "punishmentType" | findError(errors),
-    items: radioButtonItems  }) 
+    items: radioButtonItems  })
   }}
 {% endmacro %}

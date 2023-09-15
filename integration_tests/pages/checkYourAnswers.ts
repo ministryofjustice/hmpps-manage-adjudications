@@ -9,6 +9,8 @@ export default class CheckYourAnswersPage extends Page {
 
   incidentDetailsSummary = (): PageElement => cy.get('[data-qa="details-summary-table"]')
 
+  reportingOfficerChangeLink = (): PageElement => cy.get('[data-qa="reporting-officer-changeLink"]')
+
   offenceDetailsSummary = (): PageElement => cy.get('[data-qa="offence-summary-table"]')
 
   damageSummary = (): PageElement => cy.get('[data-qa="damages-table"]')

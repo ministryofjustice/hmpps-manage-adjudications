@@ -6,6 +6,7 @@ import ManageAdjudicationsSystemTokensClient, {
 } from '../data/manageAdjudicationsSystemTokensClient'
 import CuriousApiService from './curiousApiService'
 import {
+  AwardedPunishmentsAndDamages,
   FormattedDisIssue,
   IssueStatus,
   ReportedAdjudication,
@@ -22,6 +23,7 @@ import {
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import {
   convertToTitleCase,
+  formatReportingOfficer,
   formatLocation,
   formatName,
   formatTimestampTo,
@@ -30,7 +32,7 @@ import {
   getFormattedOfficerName,
   getTime,
 } from '../utils/utils'
-import { LocationId } from '../data/PrisonLocationResult'
+import { Location, LocationId } from '../data/PrisonLocationResult'
 import {
   DamageDetails,
   DraftAdjudication,
@@ -55,6 +57,8 @@ import {
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
+import { AwardedPunishmentsAndDamagesFilter } from '../utils/adjudicationFilterHelper'
+import { PunishmentType } from '../data/PunishmentResult'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -485,7 +489,11 @@ export default class ReportedAdjudicationsService {
     return newDraftAdjudicationData.draftAdjudication.id
   }
 
-  async getPrisonerReport(user: User, adjudication: DraftAdjudication & ReportedAdjudication): Promise<PrisonerReport> {
+  async getPrisonerReport(
+    user: User,
+    adjudication: DraftAdjudication & ReportedAdjudication,
+    draftRequired?: boolean
+  ): Promise<PrisonerReport> {
     const userId = adjudication.startedByUserId ? adjudication.startedByUserId : adjudication.createdByUserId
     const reporter = await this.hmppsManageUsersClient.getUserFromUsername(userId, user.token)
 
@@ -502,10 +510,23 @@ export default class ReportedAdjudicationsService {
       this.locationService.getAgency(adjudication.originatingAgencyId, user),
     ])
 
+    let changeReportingOfficerLink
+    let changeReportingOfficerDataQa
+    if (draftRequired && !adjudication.createdOnBehalfOfOfficer) {
+      changeReportingOfficerLink = `${adjudicationUrls.createOnBehalfOf.urls.start(
+        adjudication.chargeNumber
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.review(
+        adjudication.chargeNumber
+      )}&editSubmittedAdjudication=true`
+      changeReportingOfficerDataQa = 'reporting-officer-changeLink'
+    }
+
     const incidentDetails = [
       {
         label: 'Reporting Officer',
-        value: getFormattedOfficerName(reporter.name),
+        value: formatReportingOfficer(reporter.name, adjudication),
+        changeLinkHref: changeReportingOfficerLink,
+        dataQa: changeReportingOfficerDataQa,
       },
       {
         label: 'Date of incident',
@@ -968,6 +989,127 @@ export default class ReportedAdjudicationsService {
     return {
       transferBannerContent,
       originatingAgencyToAddOutcome,
+    }
+  }
+
+  async getAwardedPunishmentsAndDamages(
+    filter: AwardedPunishmentsAndDamagesFilter,
+    possibleLocations: Location[],
+    user: User
+  ): Promise<AwardedPunishmentsAndDamages[]> {
+    const hearingForDateByChargeNumber = new Map(
+      (await this.getAllHearings(filter.hearingDate, user)).map(hearing => [hearing.chargeNumber, hearing])
+    )
+
+    const adjudicationsForHearings = await Promise.all(
+      Array.from(hearingForDateByChargeNumber.keys()).flatMap(chargeNumber => {
+        return this.getReportedAdjudicationDetails(chargeNumber, user)
+      })
+    )
+
+    const prisonerNumbers = adjudicationsForHearings.map(
+      reportedAdjudicationResult => reportedAdjudicationResult.reportedAdjudication.prisonerNumber
+    )
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const prisonerDetails = new Map(
+      (await new PrisonApiClient(token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
+        prisonerDetail.offenderNo,
+        prisonerDetail,
+      ])
+    )
+
+    let awardedPunishmentsAndDamages: AwardedPunishmentsAndDamages[] = adjudicationsForHearings.map(
+      reportedAdjudicationResult =>
+        this.buildAwardedPunishmentsAndDamages(
+          reportedAdjudicationResult,
+          hearingForDateByChargeNumber,
+          prisonerDetails
+        )
+    )
+
+    if (filter.locationId) {
+      const location = possibleLocations.filter(loc => loc.locationId === filter.locationId)
+      const { locationPrefix } = location[0]
+      awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(
+        apad => this.getLocationPrefix(apad.prisonerLocation) === locationPrefix
+      )
+    }
+
+    const displayForAdjudicationStatuses = [
+      ReportedAdjudicationStatus.CHARGE_PROVED,
+      ReportedAdjudicationStatus.ADJOURNED,
+      ReportedAdjudicationStatus.REFER_POLICE,
+      ReportedAdjudicationStatus.REFER_GOV,
+      ReportedAdjudicationStatus.REFER_INAD,
+      ReportedAdjudicationStatus.DISMISSED,
+    ]
+
+    awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(result =>
+      displayForAdjudicationStatuses.includes(result.status)
+    )
+
+    return awardedPunishmentsAndDamages
+  }
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  private buildAwardedPunishmentsAndDamages(
+    adj: ReportedAdjudicationResult,
+    hearingForDateByChargeNumber: Map<string, any>,
+    prisonerDetails: Map<string, PrisonerSimpleResult>
+  ): AwardedPunishmentsAndDamages {
+    const adjudication = adj.reportedAdjudication
+    const hearingForAdjudication = hearingForDateByChargeNumber.get(adjudication.chargeNumber)
+
+    let caution = 'No'
+    adjudication.punishments.forEach(punishment => {
+      if (punishment.type === PunishmentType.CAUTION) {
+        caution = 'Yes'
+      }
+    })
+
+    let damagesOwedAmount
+    let sumDamagesOwed = 0
+    adjudication.punishments.forEach(punishment => {
+      if (punishment.damagesOwedAmount) {
+        sumDamagesOwed += punishment.damagesOwedAmount
+      }
+    })
+    if (sumDamagesOwed > 0) {
+      damagesOwedAmount = '£'.concat(sumDamagesOwed.toString())
+    }
+
+    const financialPunishmentTypes = [PunishmentType.DAMAGES_OWED, PunishmentType.EARNINGS]
+    const financialPunishmentCount = adjudication.punishments.filter(punishment =>
+      financialPunishmentTypes.includes(punishment.type)
+    ).length
+
+    let additionalDays = 0
+    let prospectiveAdditionalDays = 0
+    adjudication.punishments.forEach(punishment => {
+      if (punishment.type === PunishmentType.ADDITIONAL_DAYS) {
+        additionalDays += punishment.schedule.days
+      }
+      if (punishment.type === PunishmentType.PROSPECTIVE_DAYS) {
+        prospectiveAdditionalDays += punishment.schedule.days
+      }
+    })
+
+    return {
+      chargeNumber: adjudication.chargeNumber,
+      nameAndNumber: hearingForAdjudication.nameAndNumber,
+      prisonerLocation:
+        formatLocation(prisonerDetails.get(adjudication.prisonerNumber)?.assignedLivingUnitDesc) || 'Unknown',
+      formattedDateTimeOfHearing: formatTimestampToDate(
+        hearingForAdjudication.dateTimeOfHearing,
+        'D MMMM YYYY - HH:mm'
+      ),
+      status: adjudication.status,
+      caution,
+      financialPunishmentCount,
+      punishmentCount: adjudication.punishments.length,
+      damagesOwedAmount,
+      additionalDays,
+      prospectiveAdditionalDays,
     }
   }
 }

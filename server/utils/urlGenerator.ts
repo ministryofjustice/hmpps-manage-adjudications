@@ -1,7 +1,12 @@
 import url from 'url'
 import { OffenceData } from '../routes/offenceCodeDecisions/offenceData'
 import { ContinueReportUiFilter } from '../routes/continueReport/continueReportFilterHelper'
-import { DISUiFilter, PrintDISFormsUiFilter, UiFilter } from './adjudicationFilterHelper'
+import {
+  AwardedPunishmentsAndDamagesUiFilter,
+  DISUiFilter,
+  PrintDISFormsUiFilter,
+  UiFilter,
+} from './adjudicationFilterHelper'
 
 const adjudicationUrls = {
   offenceCodeSelection: {
@@ -160,14 +165,14 @@ const adjudicationUrls = {
   createOnBehalfOf: {
     root: '/create-on-behalf-of',
     matchers: {
-      start: '/:draftId',
-      reason: '/:draftId/reason',
-      check: '/:draftId/check',
+      start: '/:id',
+      reason: '/:id/reason',
+      check: '/:id/check',
     },
     urls: {
-      start: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}`,
-      reason: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}/reason`,
-      check: (draftId: number) => `${adjudicationUrls.createOnBehalfOf.root}/${draftId}/check`,
+      start: (id: number | string) => `${adjudicationUrls.createOnBehalfOf.root}/${id}`,
+      reason: (id: number | string) => `${adjudicationUrls.createOnBehalfOf.root}/${id}/reason`,
+      check: (id: number | string) => `${adjudicationUrls.createOnBehalfOf.root}/${id}/check`,
     },
   },
   incidentRole: {
@@ -827,6 +832,34 @@ const adjudicationUrls = {
     urls: {
       start: (chargeNumber: string) => `${adjudicationUrls.awardPunishments.root}/${chargeNumber}`,
       modified: (chargeNumber: string) => `${adjudicationUrls.awardPunishments.root}/${chargeNumber}/modified`,
+    },
+  },
+  awardedPunishmentsAndDamages: {
+    root: '/awarded-punishments-and-damages',
+    matchers: {
+      start: '/',
+      financial: '/financial',
+      additionalDays: '/additional-days',
+    },
+    urls: {
+      start: () => adjudicationUrls.awardedPunishmentsAndDamages.root,
+      filter: (filter: AwardedPunishmentsAndDamagesUiFilter) =>
+        url.format({
+          pathname: adjudicationUrls.awardedPunishmentsAndDamages.root,
+          query: { ...filter },
+        }),
+      financial: () => `${adjudicationUrls.awardedPunishmentsAndDamages.root}/financial`,
+      financialFilter: (filter: AwardedPunishmentsAndDamagesUiFilter) =>
+        url.format({
+          pathname: `${adjudicationUrls.awardedPunishmentsAndDamages.root}/financial`,
+          query: { ...filter },
+        }),
+      additionalDays: () => `${adjudicationUrls.awardedPunishmentsAndDamages.root}/additional-days`,
+      additionalDaysFilter: (filter: AwardedPunishmentsAndDamagesUiFilter) =>
+        url.format({
+          pathname: `${adjudicationUrls.awardedPunishmentsAndDamages.root}/additional-days`,
+          query: { ...filter },
+        }),
     },
   },
   reasonForChangePunishment: {

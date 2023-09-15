@@ -1,25 +1,27 @@
 {% macro adjudicationHistoryForCurrentSentenceDetails(adjudicationHistoryForCurrentSentenceData) %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
         <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
             <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name of establishment</p>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-name-of-establishment'>
-                    {{ adjudicationHistoryForCurrentSentenceData.establishmentName }}
+                   data-qa='notice-of-being-placed-on-report-prisoner-display-name'>
+                    {{ adjudicationHistoryForCurrentSentenceData.prisonerDisplayName }}
                 </p>
             </div>
             <div class='adjudication-pdf-section-prisoner__item'>
                 <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-prisoner-number'>
+                   data-qa='notice-of-being-placed-on-report-prisoner-number'>
                     {{ adjudicationHistoryForCurrentSentenceData.prisonerNumber }}
                 </p>
             </div>
             <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prisoner’s full name</p>
+                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Location</p>
                 <p class='govuk-!-margin-bottom-0'
-                   data-qa='adjudication-history-for-current-sentence-prisoner-full-name'>
-                    {{ adjudicationHistoryForCurrentSentenceData.prisonerDisplayName }}
+                   data-qa='notice-of-being-placed-on-report-prisoner-location-description'>
+                    {{ adjudicationHistoryForCurrentSentenceData.prisonerLocationDescription }}
                 </p>
             </div>
         </div>
@@ -27,11 +29,10 @@
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
 
         <h2>Date of alleged offence</h2>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-        </div>
+        <p class='govuk-!-margin-bottom-0'
+           data-qa='notice-of-being-placed-on-report-incident-date'>
+            {{ adjudicationHistoryForCurrentSentenceData.incidentDate }}
+        </p>
 
         <h2>Details of prisoner</h2>
         <div class='adjudication-pdf-section-sentence-details'>
@@ -72,6 +73,13 @@
             </div>
             <div class='adjudication-pdf-section-sentence-details__item'>
                 <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Does this prisoner have a CSIP (Challenge Support Intervention Plan) alert?</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> Yes</span>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> No</span>
+            </div>
+        </div>
+        <div class='adjudication-pdf-section-sentence-details'>
+            <div class='adjudication-pdf-section-sentence-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Is the prisoner subject to any additional criminal harassment court orders or civil court orders restricting their contacts or behaviour?</p>
                 <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> Yes</span>
                 <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> No</span>
             </div>

@@ -580,7 +580,22 @@ const stubAmendPrisonerGender = ({ draftId, response }): SuperAgentRequest =>
     },
   })
 
-const stubSetCreatedOnBehalfOf = ({ draftId, response }): SuperAgentRequest =>
+const stubSetCreatedOnBehalfOf = ({ chargeNumber, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'PUT',
+      url: `/adjudications/reported-adjudications/${chargeNumber}/created-on-behalf-of`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
+const stubSetDraftCreatedOnBehalfOf = ({ draftId, response }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'PUT',
@@ -1094,6 +1109,7 @@ export default {
   stubGetHearingsGivenAgencyAndDate,
   stubAmendPrisonerGender,
   stubSetCreatedOnBehalfOf,
+  stubSetDraftCreatedOnBehalfOf,
   stubGetIssueDataFilteredOnDiscDate,
   stubGetIssueDataFilteredOnHearingDate,
   stubPutDateTimeOfIssue,

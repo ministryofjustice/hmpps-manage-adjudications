@@ -72,9 +72,10 @@ describe('GET /dis5', () => {
         adjudicationsUrl: 'http://host.docker.internal:3000',
         adjudicationHistoryForCurrentSentenceData: {
           chargeNumber: '1524493',
-          establishmentName: 'MDI',
           prisonerDisplayName: 'Smith, John',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
+          incidentDate: 'Monday, 21 December 2020',
         },
       },
       'pages/adjudicationHistoryForCurrentSentenceHeader',
@@ -83,7 +84,7 @@ describe('GET /dis5', () => {
       {},
       {
         filename: 'adjudication-history-for-current-sentence-1524493.pdf',
-        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '0.9' },
+        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '1.0' },
       }
     )
   })

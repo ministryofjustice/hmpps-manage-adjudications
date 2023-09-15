@@ -88,6 +88,7 @@ import punishmentStartDateChoiceRoutes from './punishmentDates/startDateChoice'
 import enterStartDateRoutes from './punishmentDates/enterStartDate'
 import autoPunishmentScheduleRoutes from './punishmentDates/autoPunishmentSchedule'
 import createOnBehalfOfRoutes from './createOnBehalfOf'
+import awardedPunishmentsAndDamagesRoutes from './punishments/awardedPunishmentsAndDamages'
 
 import config from '../config'
 
@@ -241,7 +242,7 @@ export default function routes(
 
   router.use(
     adjudicationUrls.createOnBehalfOf.root,
-    createOnBehalfOfRoutes({ decisionTreeService, placeOnReportService, createOnBehalfOfSessionService })
+    createOnBehalfOfRoutes({ placeOnReportService, createOnBehalfOfSessionService })
   )
 
   router.use(
@@ -357,6 +358,11 @@ export default function routes(
   router.use(
     adjudicationUrls.reasonForChangePunishment.root,
     reasonForChangeRoutes({ punishmentsService, userService })
+  )
+
+  router.use(
+    adjudicationUrls.awardedPunishmentsAndDamages.root,
+    awardedPunishmentsAndDamagesRoutes({ reportedAdjudicationsService, locationService })
   )
 
   router.use(

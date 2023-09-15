@@ -81,9 +81,10 @@ describe('GET /dis7', () => {
         adjudicationsUrl: 'http://host.docker.internal:3000',
         adjudicationResultReportData: {
           chargeNumber: '1524493',
-          establishmentName: 'MDI',
           prisonerDisplayName: 'Smith, John',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
+          reportedDate: '21 December 2020',
           isYOI: true,
           canteenDaysMax: 21,
           facilitiesDaysMax: 21,
@@ -105,7 +106,7 @@ describe('GET /dis7', () => {
       {},
       {
         filename: 'adjudication-result-1524493.pdf',
-        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '0.9' },
+        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '1.0' },
       }
     )
   })
@@ -132,9 +133,10 @@ describe('GET /dis7', () => {
         adjudicationsUrl: 'http://host.docker.internal:3000',
         adjudicationResultReportData: {
           chargeNumber: '1524493',
-          establishmentName: 'MDI',
           prisonerDisplayName: 'Smith, John',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
+          reportedDate: '21 December 2020',
           isYOI: false,
           canteenDaysMax: 42,
           facilitiesDaysMax: 42,
@@ -156,7 +158,7 @@ describe('GET /dis7', () => {
       {},
       {
         filename: 'adjudication-result-1524493.pdf',
-        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '0.9' },
+        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '1.0' },
       }
     )
   })
