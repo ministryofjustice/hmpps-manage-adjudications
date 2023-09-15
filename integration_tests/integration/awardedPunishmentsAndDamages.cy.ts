@@ -11,6 +11,9 @@ import { HearingOutcomeCode, OutcomeCode } from '../../server/data/HearingAndOut
 import { PunishmentType } from '../../server/data/PunishmentResult'
 
 const testData = new TestData()
+const today = moment()
+// why month is zero based is beyond me :)
+const month = today.month() + 1
 
 context('View awarded punishments and damages', () => {
   beforeEach(() => {
@@ -19,7 +22,7 @@ context('View awarded punishments and damages', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetUsersLocations', testData.residentialLocations())
     cy.task('stubGetHearingsGivenAgencyAndDate', {
-      hearingDate: moment().format('YYYY-MM-DD'),
+      hearingDate: today.format('YYYY-MM-DD'),
       response: {
         hearings: [
           {
@@ -52,11 +55,21 @@ context('View awarded punishments and damages', () => {
             prisonerNumber: 'G6345BY',
             status: ReportedAdjudicationStatus.CHARGE_PROVED,
           },
+          {
+            ...testData.singleHearing({
+              dateTimeOfHearing: '2023-08-26T10:50:00',
+              id: 1,
+            }),
+            dateTimeOfHearing: '2023-08-26T10:50:00',
+            chargeNumber: '12348',
+            prisonerNumber: 'G6345BY',
+            status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          },
         ],
       },
     })
     cy.task('stubGetBatchPrisonerDetails', [
-      testData.simplePrisoner('G6345BY', 'DAVID', 'SMITH', 'A-2-001'),
+      testData.simplePrisoner('G6345BY', 'DAVID', 'SMITH', 'MDI-1-001'),
       testData.simplePrisoner('P3785CP', 'TONY', 'RAY', 'A-2-001'),
     ])
     cy.task('stubGetReportedAdjudication', {
@@ -175,6 +188,19 @@ context('View awarded punishments and damages', () => {
         }),
       },
     })
+    // this one should be filtered out because it is not of the correct status
+    cy.task('stubGetReportedAdjudication', {
+      id: 12348,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '12347',
+          status: ReportedAdjudicationStatus.ACCEPTED,
+          prisonerNumber: 'G6345BY',
+          outcomes: [],
+          punishments: [],
+        }),
+      },
+    })
 
     cy.signIn()
   })
@@ -226,7 +252,7 @@ context('View awarded punishments and damages', () => {
       .then($data => {
         expect($data.get(0).innerText).to.contain('12345')
         expect($data.get(1).innerText).to.contain('Smith, David - G6345BY')
-        expect($data.get(2).innerText).to.contain('A-2-001')
+        expect($data.get(2).innerText).to.contain('MDI-1-001')
         expect($data.get(3).innerText).to.contain('26 August 2023 - 10:00')
         expect($data.get(4).innerText).to.contain('Charge proved')
         expect($data.get(5).innerText).to.contain('No')
@@ -248,7 +274,7 @@ context('View awarded punishments and damages', () => {
 
         expect($data.get(20).innerText).to.contain('12347')
         expect($data.get(21).innerText).to.contain('Smith, David - G6345BY')
-        expect($data.get(22).innerText).to.contain('A-2-001')
+        expect($data.get(22).innerText).to.contain('MDI-1-001')
         expect($data.get(23).innerText).to.contain('26 August 2023 - 10:50')
         expect($data.get(24).innerText).to.contain('Charge proved')
         expect($data.get(25).innerText).to.contain('Yes')
@@ -288,7 +314,7 @@ context('View awarded punishments and damages', () => {
 
   it('should show the no hearings message if there are no scheduled hearings on that day', () => {
     cy.task('stubGetHearingsGivenAgencyAndDate', {
-      hearingDate: moment().format('YYYY-MM-DD'),
+      hearingDate: today.format('YYYY-MM-DD'),
       response: {
         hearings: [],
       },
@@ -306,20 +332,24 @@ context('View awarded punishments and damages', () => {
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       AwardedPunishmentsAndDamagesPage
     )
-    awardedPunishmentsAndDamagesPage.forceHearingDate(6, 11, 2025)
-    awardedPunishmentsAndDamagesPage.selectLocation().select('Segregation MPU')
+    awardedPunishmentsAndDamagesPage.forceHearingDate(today.date(), month, today.year())
+    awardedPunishmentsAndDamagesPage.selectLocation().select('Houseblock 1')
     awardedPunishmentsAndDamagesPage.applyButton().click()
 
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.start())
-      expect(loc.search).to.eq('?hearingDate=06%2F11%2F2025&locationId=27102')
+      expect(loc.search).to.eq(
+        `?hearingDate=${today.date()}%2F${`${month}`.padStart(2, '0')}%2F${today.year()}&locationId=25538`
+      )
     })
+    // P3785CP should be filtered out based on the locationId
+    awardedPunishmentsAndDamagesPage.resultsTable().find('tr').should('have.length', 3)
   })
 
   it('should clear the filter when the link is clicked', () => {
     cy.visit(
       adjudicationUrls.awardedPunishmentsAndDamages.urls.filter({
-        hearingDate: moment().format('DD/MM/YYYY'),
+        hearingDate: today.format('DD/MM/YYYY'),
         locationId: '27102',
       })
     )
@@ -341,7 +371,7 @@ context('View awarded punishments and damages - Financial', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetUsersLocations', testData.residentialLocations())
     cy.task('stubGetHearingsGivenAgencyAndDate', {
-      hearingDate: moment().format('YYYY-MM-DD'),
+      hearingDate: today.format('YYYY-MM-DD'),
       response: {
         hearings: [
           {
@@ -368,7 +398,7 @@ context('View awarded punishments and damages - Financial', () => {
       },
     })
     cy.task('stubGetBatchPrisonerDetails', [
-      testData.simplePrisoner('G6345BY', 'DAVID', 'SMITH', 'A-2-001'),
+      testData.simplePrisoner('G6345BY', 'DAVID', 'SMITH', 'MDI-1-001'),
       testData.simplePrisoner('P3785CP', 'TONY', 'RAY', 'A-2-001'),
     ])
     cy.task('stubGetReportedAdjudication', {
@@ -406,7 +436,7 @@ context('View awarded punishments and damages - Financial', () => {
             {
               id: 2,
               redisId: 'xyz',
-              type: PunishmentType.DAMAGES_OWED,
+              type: PunishmentType.EARNINGS,
               schedule: {
                 days: 0,
               },
@@ -509,7 +539,7 @@ context('View awarded punishments and damages - Financial', () => {
       .then($data => {
         expect($data.get(0).innerText).to.contain('12345')
         expect($data.get(1).innerText).to.contain('Smith, David - G6345BY')
-        expect($data.get(2).innerText).to.contain('A-2-001')
+        expect($data.get(2).innerText).to.contain('MDI-1-001')
         expect($data.get(3).innerText).to.contain('26 August 2023 - 10:00')
         expect($data.get(4).innerText).to.contain('Charge proved')
         expect($data.get(5).innerText).to.contain('2')
@@ -539,7 +569,7 @@ context('View awarded punishments and damages - Financial', () => {
 
   it('should show the no hearings message if there are no scheduled hearings on that day', () => {
     cy.task('stubGetHearingsGivenAgencyAndDate', {
-      hearingDate: moment().format('YYYY-MM-DD'),
+      hearingDate: today.format('YYYY-MM-DD'),
       response: {
         hearings: [],
       },
@@ -557,20 +587,24 @@ context('View awarded punishments and damages - Financial', () => {
     const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       FinancialAwardedPunishmentsAndDamagesPage
     )
-    financialAwardedPunishmentsAndDamagesPage.forceHearingDate(26, 8, 2023)
-    financialAwardedPunishmentsAndDamagesPage.selectLocation().select('Segregation MPU')
+    financialAwardedPunishmentsAndDamagesPage.forceHearingDate(today.date(), month, today.year())
+    financialAwardedPunishmentsAndDamagesPage.selectLocation().select('Houseblock 1')
     financialAwardedPunishmentsAndDamagesPage.applyButton().click()
 
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
-      expect(loc.search).to.eq('?hearingDate=26%2F08%2F2023&locationId=27102')
+      expect(loc.search).to.eq(
+        `?hearingDate=${today.date()}%2F${`${month}`.padStart(2, '0')}%2F${today.year()}&locationId=25538`
+      )
     })
+    // P3785CP should be filtered out based on the locationId
+    financialAwardedPunishmentsAndDamagesPage.resultsTable().find('tr').should('have.length', 2)
   })
 
   it('should clear the filter when the link is clicked', () => {
     cy.visit(
       adjudicationUrls.awardedPunishmentsAndDamages.urls.financialFilter({
-        hearingDate: moment().format('DD/MM/YYYY'),
+        hearingDate: today.format('DD/MM/YYYY'),
         locationId: '27102',
       })
     )
@@ -592,7 +626,7 @@ context('View awarded punishments and damages - Additional days', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetUsersLocations', testData.residentialLocations())
     cy.task('stubGetHearingsGivenAgencyAndDate', {
-      hearingDate: moment().format('YYYY-MM-DD'),
+      hearingDate: today.format('YYYY-MM-DD'),
       response: {
         hearings: [
           {
@@ -619,7 +653,7 @@ context('View awarded punishments and damages - Additional days', () => {
       },
     })
     cy.task('stubGetBatchPrisonerDetails', [
-      testData.simplePrisoner('G6345BY', 'DAVID', 'SMITH', 'A-2-001'),
+      testData.simplePrisoner('G6345BY', 'DAVID', 'SMITH', 'MDI-1-001'),
       testData.simplePrisoner('P3785CP', 'TONY', 'RAY', 'A-2-001'),
     ])
     cy.task('stubGetReportedAdjudication', {
@@ -749,7 +783,7 @@ context('View awarded punishments and damages - Additional days', () => {
       .then($data => {
         expect($data.get(0).innerText).to.contain('12345')
         expect($data.get(1).innerText).to.contain('Smith, David - G6345BY')
-        expect($data.get(2).innerText).to.contain('A-2-001')
+        expect($data.get(2).innerText).to.contain('MDI-1-001')
         expect($data.get(3).innerText).to.contain('26 August 2023 - 10:00')
         expect($data.get(4).innerText).to.contain('Charge proved')
         expect($data.get(5).innerText).to.contain('14')
@@ -779,7 +813,7 @@ context('View awarded punishments and damages - Additional days', () => {
 
   it('should show the no hearings message if there are no scheduled hearings on that day', () => {
     cy.task('stubGetHearingsGivenAgencyAndDate', {
-      hearingDate: moment().format('YYYY-MM-DD'),
+      hearingDate: today.format('YYYY-MM-DD'),
       response: {
         hearings: [],
       },
@@ -797,20 +831,24 @@ context('View awarded punishments and damages - Additional days', () => {
     const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
       AdditionalDaysAwardedPunishmentsPage
     )
-    additionalDaysAwardedPunishmentsPage.forceHearingDate(26, 8, 2023)
-    additionalDaysAwardedPunishmentsPage.selectLocation().select('Segregation MPU')
+    additionalDaysAwardedPunishmentsPage.forceHearingDate(today.date(), month, today.year())
+    additionalDaysAwardedPunishmentsPage.selectLocation().select('Houseblock 1')
     additionalDaysAwardedPunishmentsPage.applyButton().click()
 
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
-      expect(loc.search).to.eq('?hearingDate=26%2F08%2F2023&locationId=27102')
+      expect(loc.search).to.eq(
+        `?hearingDate=${today.date()}%2F${`${month}`.padStart(2, '0')}%2F${today.year()}&locationId=25538`
+      )
     })
+    // P3785CP should be filtered out based on the locationId
+    additionalDaysAwardedPunishmentsPage.resultsTable().find('tr').should('have.length', 2)
   })
 
   it('should clear the filter when the link is clicked', () => {
     cy.visit(
       adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDaysFilter({
-        hearingDate: moment().format('DD/MM/YYYY'),
+        hearingDate: today.format('DD/MM/YYYY'),
         locationId: '27102',
       })
     )

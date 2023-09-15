@@ -1007,7 +1007,9 @@ export default class ReportedAdjudicationsService {
       })
     )
 
-    const prisonerNumbers = adjudicationsForHearings.map(_ => _.reportedAdjudication.prisonerNumber)
+    const prisonerNumbers = adjudicationsForHearings.map(
+      reportedAdjudicationResult => reportedAdjudicationResult.reportedAdjudication.prisonerNumber
+    )
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const prisonerDetails = new Map(
       (await new PrisonApiClient(token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
