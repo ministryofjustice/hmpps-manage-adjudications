@@ -1,11 +1,11 @@
 import Page, { PageElement } from './page'
 
-export default class PunishmentStartDateChoicePage extends Page {
+export default class PunishmentStartDatePage extends Page {
   constructor() {
-    super('When will this punishment start?')
+    super('Enter the date the punishment will start')
   }
 
-  radioButtons = (): PageElement => cy.get('[data-qa="radio-buttons"]')
+  datepicker = (): PageElement => cy.get('[data-qa="punishment-start-date-picker"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="submit"]')
 
