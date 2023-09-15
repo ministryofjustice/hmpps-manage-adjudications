@@ -66,8 +66,10 @@ export default class AutoPunishmentSchedulePage {
     }
 
     const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
-    const lastAddedPunishment = sessionPunishments[sessionPunishments.length - 1]
-
+    const lastAddedPunishment = sessionPunishments[sessionPunishments.length - 1] || {}
+    if (!lastAddedPunishment) {
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    }
     return this.renderView(req, res, {
       startDate: lastAddedPunishment.startDate,
       endDate: lastAddedPunishment.endDate,
@@ -78,11 +80,5 @@ export default class AutoPunishmentSchedulePage {
       stoppagePercentage: lastAddedPunishment.stoppagePercentage,
       redisId: lastAddedPunishment.redisId,
     })
-  }
-
-  submit = async (req: Request, res: Response): Promise<void> => {
-    const { chargeNumber } = req.params
-
-    res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

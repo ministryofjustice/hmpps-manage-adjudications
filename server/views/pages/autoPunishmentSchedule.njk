@@ -30,10 +30,12 @@
 
         <h2 class="govuk-heading-m">{{ type | convertPunishmentType(stoppagePercentage, privilegeType, otherPrivilege) }}</h2>
         {{ autoPunishmentScheduleSummary(startDate, days, endDate, chargeNumber, redisId, startDateChangeHref) }}
+
         <div class="govuk-button-group">
           {{ govukButton({
           text: 'Continue',
-          type: "submit",
+          element: "a",
+          href: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
           preventDoubleClick: true,
           classes: "govuk-button--submit govuk-!-margin-right-3",
           attributes: { "data-qa": "submit" }

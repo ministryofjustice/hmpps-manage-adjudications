@@ -26,10 +26,8 @@ export default function AutoPunishmentScheduleRoutes({
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.punishmentAutomaticDateSchedule.matchers.start, autoPunishmentScheduleRoute.view)
-  post(adjudicationUrls.punishmentAutomaticDateSchedule.matchers.start, autoPunishmentScheduleRoute.submit)
 
   return router
 }

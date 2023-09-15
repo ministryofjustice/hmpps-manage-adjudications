@@ -27,6 +27,14 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   config.automaticPunishmentDatesFlag = 'true'
+  punishmentsService.getSessionPunishment.mockResolvedValue({
+    type: PunishmentType.PRIVILEGE,
+    PrivilegeType: PrivilegeType.OTHER,
+    otherPrivilege: 'nintendo switch',
+    days: 10,
+    startDate: '4/4/2023',
+    endDate: '14/4/2023',
+  })
 })
 
 afterEach(() => {
@@ -41,8 +49,9 @@ describe('GET', () => {
   it('should load the `Page not found` page', () => {
     return request(app)
       .get(
-        `${adjudicationUrls.punishmentStartDate.urls.start(
-          '100'
+        `${adjudicationUrls.punishmentStartDate.urls.edit(
+          '100',
+          'xyz'
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
       )
       .expect('Content-Type', /html/)
@@ -56,8 +65,9 @@ describe('GET', () => {
   it('should load the page', () => {
     return request(app)
       .get(
-        `${adjudicationUrls.punishmentStartDate.urls.start(
-          '100'
+        `${adjudicationUrls.punishmentStartDate.urls.edit(
+          '100',
+          'xyz'
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
       )
       .expect('Content-Type', /html/)
@@ -71,8 +81,9 @@ describe('POST ', () => {
   it('redirects to the punishment schedule page and saves to session', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.punishmentStartDate.urls.start(
-          '100'
+        `${adjudicationUrls.punishmentStartDate.urls.edit(
+          '100',
+          'xyz'
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
       )
       .send({
@@ -86,7 +97,7 @@ describe('POST ', () => {
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6&startDate=13%2F12%2F2023`
       )
       .then(() =>
-        expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
+        expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
           {
             type: PunishmentType.PRIVILEGE,
@@ -97,7 +108,8 @@ describe('POST ', () => {
             endDate: '2023-12-18',
             stoppagePercentage: null,
           },
-          '100'
+          '100',
+          'xyz'
         )
       )
   })
