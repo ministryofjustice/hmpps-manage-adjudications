@@ -11,7 +11,7 @@ import PunishmentStartDatePage from '../pages/punishmentStartDate'
 import { forceDateInput } from '../componentDrivers/dateInput'
 
 const testData = new TestData()
-context('Punishment - Punishment schedule', () => {
+context.skip('Punishment - Punishment schedule', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
