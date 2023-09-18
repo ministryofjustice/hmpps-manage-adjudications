@@ -717,6 +717,18 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentSuspendedUntil.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
+  whenWillPunishmentStart: {
+    root: '/when-will-punishment-start',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.whenWillPunishmentStart.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.whenWillPunishmentStart.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
   punishmentStartDate: {
     root: '/punishment-start-date',
     matchers: {

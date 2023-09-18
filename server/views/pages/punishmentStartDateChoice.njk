@@ -1,0 +1,63 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set title = "When will this punishment start?" %}
+{% set firstRadioText = "Immediately on the day of the last hearing: " + lastHearingDate | formatTimestampTo('D MMMM YYYY') if lastHearingDate else "Immediately on the day of the last hearing" %}
+
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div>
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+      {{ govukRadios({
+        idPrefix: 'immediate',
+        id: 'immediate',
+        name: 'immediate',
+        attributes: { "data-qa": "radio-buttons" },
+        errorMessage: "immediate" | findError(errors),
+        items: [
+          {
+            value: "true",
+            text: firstRadioText,
+            checked: immediate == 'true'
+          },
+          {
+            value: "false",
+            text: "Another date",
+            checked: immediate == 'false'
+          }
+        ] })
+      }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: 'Continue',
+          type: "submit",
+          preventDoubleClick: true,
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "submit" }
+        }) }}
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award punishments and add money for damages'</a>
+      </div>
+
+    </form>
+  </div>
+{% endblock %}

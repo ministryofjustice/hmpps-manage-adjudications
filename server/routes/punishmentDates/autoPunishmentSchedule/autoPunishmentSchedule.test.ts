@@ -6,6 +6,7 @@ import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import config from '../../../config'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
@@ -26,6 +27,21 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   config.automaticPunishmentDatesFlag = 'true'
+  punishmentsService.getAllSessionPunishments.mockResolvedValue([
+    {
+      type: PunishmentType.DAMAGES_OWED,
+      days: 0,
+      amount: 50,
+    },
+    {
+      type: PunishmentType.PRIVILEGE,
+      PrivilegeType: PrivilegeType.OTHER,
+      otherPrivilege: 'nintendo switch',
+      days: 10,
+      startDate: '2023-04-10',
+      endDate: '2023-04-19',
+    },
+  ])
 })
 
 afterEach(() => {
@@ -39,11 +55,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(
-        `${adjudicationUrls.punishmentIsSuspended.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
-      )
+      .get(adjudicationUrls.punishmentAutomaticDateSchedule.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -54,53 +66,13 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the page', () => {
     return request(app)
-      .get(
-        `${adjudicationUrls.punishmentIsSuspended.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
-      )
+      .get(adjudicationUrls.punishmentAutomaticDateSchedule.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Is this punishment suspended?')
+        expect(res.text).toContain('Punishment schedule')
+        expect(res.text).toContain('10 Apr 2023')
+        expect(res.text).toContain('10')
+        expect(res.text).toContain('19 Apr 2023')
       })
-  })
-})
-
-describe('POST ', () => {
-  it('redirects to the start date page if the user selects no', () => {
-    return request(app)
-      .post(
-        `${adjudicationUrls.punishmentIsSuspended.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
-      )
-      .send({
-        suspended: 'no',
-      })
-      .expect(302)
-      .expect(
-        'Location',
-        `${adjudicationUrls.whenWillPunishmentStart.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
-      )
-  })
-  it('redirects to the suspended until date page if the user selects yes', () => {
-    return request(app)
-      .post(
-        `${adjudicationUrls.punishmentIsSuspended.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
-      )
-      .send({
-        suspended: 'yes',
-      })
-      .expect(302)
-      .expect(
-        'Location',
-        `${adjudicationUrls.punishmentSuspendedUntil.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
-      )
   })
 })

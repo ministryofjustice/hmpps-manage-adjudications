@@ -1,0 +1,49 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "../macros/autoPunishmentScheduleSummary.njk" import autoPunishmentScheduleSummary %}
+
+{% set title = "Punishment schedule" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+        <h2 class="govuk-heading-m" data-qa="punishment-name">{{ type | convertPunishmentType(stoppagePercentage, privilegeType, otherPrivilege) }}</h2>
+        {{ autoPunishmentScheduleSummary(startDate, days, endDate, chargeNumber, redisId, startDateChangeHref) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+          text: 'Continue',
+          element: "a",
+          href: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
+          preventDoubleClick: true,
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "submit" }
+          }) }}
+          <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award punishments and add money for damages'</a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+{% endblock %}
