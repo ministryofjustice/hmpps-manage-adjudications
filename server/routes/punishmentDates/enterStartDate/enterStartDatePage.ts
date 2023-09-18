@@ -29,7 +29,7 @@ class PageOptions {
   }
 }
 
-export default class SuspendedUntilDatePage {
+export default class PunishmentStartDatePage {
   pageOptions: PageOptions
 
   constructor(
