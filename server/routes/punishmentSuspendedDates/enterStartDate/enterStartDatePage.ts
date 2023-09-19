@@ -1,11 +1,9 @@
 /* eslint-disable max-classes-per-file */
-import url from 'url'
 import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from 'express'
-import { ParsedUrlQueryInput } from 'querystring'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
-import { hasAnyRole, apiDateToDatePicker, datePickerToApi, calculatePunishmentEndDate } from '../../../utils/utils'
+import { hasAnyRole, datePickerToApi, calculatePunishmentEndDate } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
