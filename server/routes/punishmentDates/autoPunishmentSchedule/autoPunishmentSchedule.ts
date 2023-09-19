@@ -46,6 +46,7 @@ export default class AutoPunishmentSchedulePage {
       chargeNumber,
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       startDateChangeHref,
+      daysChangeHref: adjudicationUrls.punishmentNumberOfDays.urls.edit(chargeNumber, redisId),
       startDate,
       endDate,
       type,

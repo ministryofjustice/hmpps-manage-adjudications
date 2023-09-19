@@ -13,7 +13,7 @@ export default class EnterStartDateRoute {
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.page = new EnterStartDatePage(
-      PageRequestType.EXISTING,
+      PageRequestType.EDIT,
       userService,
       punishmentsService,
       reportedAdjudicationsService

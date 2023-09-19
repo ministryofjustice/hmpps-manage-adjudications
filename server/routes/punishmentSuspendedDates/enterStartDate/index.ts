@@ -2,6 +2,7 @@ import express, { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import EnterStartDateRoute from './enterStartDate'
+import EnterStartDateEditRoute from './enterStartDateEdit'
 
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
@@ -20,12 +21,19 @@ export default function SuspendedPunishmentEnterStartDateRoutes({
   const router = express.Router()
 
   const enterStartDateRoute = new EnterStartDateRoute(userService, punishmentsService, reportedAdjudicationsService)
+  const enterStartDateEditRoute = new EnterStartDateEditRoute(
+    userService,
+    punishmentsService,
+    reportedAdjudicationsService
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   get(adjudicationUrls.suspendedPunishmentStartDate.matchers.existingPunishment, enterStartDateRoute.view)
   post(adjudicationUrls.suspendedPunishmentStartDate.matchers.existingPunishment, enterStartDateRoute.submit)
+  get(adjudicationUrls.suspendedPunishmentStartDate.matchers.edit, enterStartDateEditRoute.view)
+  post(adjudicationUrls.suspendedPunishmentStartDate.matchers.edit, enterStartDateEditRoute.submit)
 
   return router
 }

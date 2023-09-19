@@ -24,12 +24,30 @@ type PageData = {
   days?: number
 }
 
+export enum PageRequestType {
+  EXISTING,
+  EDIT,
+}
+
+class PageOptions {
+  constructor(private readonly pageType: PageRequestType) {}
+
+  isEdit(): boolean {
+    return this.pageType === PageRequestType.EDIT
+  }
+}
+
 export default class SuspendedPunishmentNumberOfDaysPage {
+  pageOptions: PageOptions
+
   constructor(
+    pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService
-  ) {}
+  ) {
+    this.pageOptions = new PageOptions(pageType)
+  }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
@@ -92,7 +110,16 @@ export default class SuspendedPunishmentNumberOfDaysPage {
           const { punishment } = punishmentToUpdate[0]
           const activatedFromChargeNumber = punishmentToUpdate[0].chargeNumber
           const updatedPunishment = this.updatePunishment(punishment, days, activatedFromChargeNumber)
-          await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
+          if (this.pageOptions.isEdit()) {
+            await this.punishmentsService.updateSessionPunishment(
+              req,
+              updatedPunishment,
+              chargeNumber,
+              req.params.redisId
+            )
+          } else {
+            await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
+          }
         }
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.activateSuspendedPunishments.urls.start(chargeNumber)

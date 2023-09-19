@@ -93,7 +93,6 @@ export default class PunishmentSuspendedStartDateChoicePage {
     if (immediate === 'true') {
       const lastHearingDateTime = await this.getLastHearingDate(chargeNumber, user)
       lastHearingDate = formatTimestampToDate(lastHearingDateTime)
-      const startDate = datePickerToApi(lastHearingDate)
       const numberOfDays = Number(days)
       try {
         const { suspendedPunishments } = await this.punishmentsService.getSuspendedPunishmentDetails(chargeNumber, user)
@@ -107,7 +106,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
           const updatedPunishment = this.updatePunishment(
             punishment,
             numberOfDays,
-            startDate,
+            lastHearingDate,
             activatedFromChargeNumber
           )
           await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)

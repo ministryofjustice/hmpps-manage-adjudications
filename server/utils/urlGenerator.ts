@@ -933,10 +933,13 @@ const adjudicationUrls = {
     root: '/suspended-punishment-number-days',
     matchers: {
       existingPunishment: '/:chargeNumber/existing',
+      edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
       existing: (chargeNumber: string) =>
         `${adjudicationUrls.suspendedPunishmentNumberOfDays.root}/${chargeNumber}/existing`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.suspendedPunishmentNumberOfDays.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   suspendedPunishmentStartDateChoice: {
@@ -953,10 +956,13 @@ const adjudicationUrls = {
     root: '/suspended-punishment-start-date',
     matchers: {
       existingPunishment: '/:chargeNumber/existing',
+      edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
       existing: (chargeNumber: string) =>
         `${adjudicationUrls.suspendedPunishmentStartDate.root}/${chargeNumber}/existing`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.suspendedPunishmentStartDate.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   suspendedPunishmentAutoDates: {

@@ -28,8 +28,8 @@ export default function SuspendedPunishmentStartDateChoiceRoutes({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.whenWillPunishmentStart.matchers.start, startDateChoiceRoute.view)
-  post(adjudicationUrls.whenWillPunishmentStart.matchers.start, startDateChoiceRoute.submit)
+  get(adjudicationUrls.suspendedPunishmentStartDateChoice.matchers.existingPunishment, startDateChoiceRoute.view)
+  post(adjudicationUrls.suspendedPunishmentStartDateChoice.matchers.existingPunishment, startDateChoiceRoute.submit)
 
   return router
 }

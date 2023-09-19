@@ -1,19 +1,19 @@
 import { Request, Response } from 'express'
-import EnterStartDatePage, { PageRequestType } from './enterStartDatePage'
+import SuspendedPunishmentNumberOfDaysPage, { PageRequestType } from './numberOfDaysPage'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 
-export default class EnterStartDateRoute {
-  page: EnterStartDatePage
+export default class SuspendedPunishmentNumberOfDaysEditRoute {
+  page: SuspendedPunishmentNumberOfDaysPage
 
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
-    this.page = new EnterStartDatePage(
-      PageRequestType.EXISTING,
+    this.page = new SuspendedPunishmentNumberOfDaysPage(
+      PageRequestType.EDIT,
       userService,
       punishmentsService,
       reportedAdjudicationsService
