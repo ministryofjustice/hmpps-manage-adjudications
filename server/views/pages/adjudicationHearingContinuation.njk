@@ -1,0 +1,7 @@
+{% extends "../partials/pdfLayout.njk" %}
+{% from "../macros/adjudicationHearingContinuationDetails.njk" import adjudicationHearingContinuationDetails %}
+{% block content %}
+    <div class='adjudication-pdf'>
+        {{ adjudicationHearingContinuationDetails(adjudicationHearingContinuationData) }}
+    </div>
+{% endblock %}
