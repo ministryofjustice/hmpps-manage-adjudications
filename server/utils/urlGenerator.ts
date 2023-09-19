@@ -337,6 +337,7 @@ const adjudicationUrls = {
     matchers: {
       dis12: '/:chargeNumber/dis12/pdf',
       dis3: '/:chargeNumber/dis3/pdf',
+      dis4: '/:chargeNumber/dis4/pdf',
       dis5: '/:chargeNumber/dis5/pdf',
       dis6: '/:chargeNumber/dis6/pdf',
       dis7: '/:chargeNumber/dis7/pdf',
@@ -344,6 +345,7 @@ const adjudicationUrls = {
     urls: {
       dis12: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis12/pdf`,
       dis3: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis3/pdf`,
+      dis4: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis4/pdf`,
       dis5: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis5/pdf`,
       dis6: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis6/pdf`,
       dis7: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis7/pdf`,

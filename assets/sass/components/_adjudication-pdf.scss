@@ -326,6 +326,19 @@ div.adjudication-pdf {
   }
 }
 
+.adjudication-pdf-section-hearing-record {
+  width: 99.5%;
+  height: 565px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+
+  .adjudication-pdf-hearing-record {
+    height: 30px;
+    width: 60px;
+  }
+}
+
 .adjudication-pdf-section-signature-boxes {
   width: 100%;
   display: flex;
@@ -342,6 +355,26 @@ div.adjudication-pdf {
 
   .adjudication-pdf-signature-box {
     height: 100px;
+    width: 100%;
+  }
+}
+
+.adjudication-pdf-section-signature-boxes-mid-size {
+  width: 100%;
+  display: flex;
+  align-items: space-between;
+
+  &__item {
+    &:first-child {
+      width: 45%;
+    }
+    &:last-child {
+      width:55%;
+    }
+  }
+
+  .adjudication-pdf-signature-box-mid-size {
+    height: 55px;
     width: 100%;
   }
 }

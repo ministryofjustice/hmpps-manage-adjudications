@@ -68,12 +68,30 @@ context('Navigated to forms tab', () => {
     it('should contain the required page elements', () => {
       cy.visit(adjudicationUrls.forms.urls.review('100'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
-      formsTabPage.printLink('12')
-      formsTabPage.printLink('3')
-      // formsTabPage.printLink('4')
-      formsTabPage.printLink('5')
-      formsTabPage.printLink('6')
-      formsTabPage.printLink('7')
+      formsTabPage
+        .printLink('12')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis12('100')}`)
+      formsTabPage
+        .printLink('3')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis3('100')}`)
+      formsTabPage
+        .printLink('4')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis4('100')}`)
+      formsTabPage
+        .printLink('5')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis5('100')}`)
+      formsTabPage
+        .printLink('6')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis6('100')}`)
+      formsTabPage
+        .printLink('7')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis7('100')}`)
       formsTabPage.noResultsMessage().should('exist')
       formsTabPage.addIssueButton().should('exist')
     })
@@ -90,8 +108,8 @@ context('Navigated to forms tab', () => {
       cy.visit(adjudicationUrls.forms.urls.review('100'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
       formsTabPage.printLink('12')
-      // formsTabPage.printLink('3')
-      // formsTabPage.printLink('4')
+      formsTabPage.printLink('3')
+      formsTabPage.printLink('4')
       formsTabPage.printLink('5')
       formsTabPage.printLink('6')
       formsTabPage.printLink('7')
