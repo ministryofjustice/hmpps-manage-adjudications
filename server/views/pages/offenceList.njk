@@ -1,0 +1,74 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% from "../macros/staffSearchOffenceCodeDecisionInput.njk" import staffSearchOffenceCodeDecisionInput %}
+{% from "../macros/officerSearchOffenceCodeDecisionInput.njk" import officerSearchOffenceCodeDecisionInput %}
+{% from "../macros/prisonerSearchOffenceCodeDecisionInput.njk" import prisonerSearchOffenceCodeDecisionInput %}
+{% from "../macros/otherPersonOffenceCodeDecisionInput.njk" import otherPersonOffenceCodeDecisionInput %}
+{% from "../macros/prisonerOutsideEstablishmentOffenceCodeDecisionInput.njk" import prisonerOutsideEstablishmentOffenceCodeDecisionInput %}
+
+{% set title = "Which paragraph did David Smith break?" %}
+
+{% block beforeContent %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+    {% set items = [] %}
+
+    {% for question in questions %}
+      {% set items = (items.push({
+        attributes: { offenceCode: question.offenceCode },
+        value: question.offenceCode,
+        text: question.paragraphDescription,
+        conditional: {
+          html: decisionHtml
+        },
+        checked: decisionForm.selectedAnswerId == answer.id
+      }), items) %}
+    {% endfor %}
+
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-code-decision-form">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        {{ govukRadios({
+            idPrefix: 'selectedAnswerId',
+            name: 'selectedAnswerId',
+            id: 'selectedAnswerId',
+            attributes: { "data-qa": "radio-buttons" },
+            items: items,
+            errorMessage: "selectedAnswerId" | findError(errors)
+        }) }}
+
+        {{ govukButton({
+            text: 'Continue',
+            type: "submit",
+            preventDoubleClick: true,
+            name: "decisionFormSubmit",
+            classes: "govuk-button--submit govuk-!-margin-right-2",
+            attributes: { "data-qa": "offence-code-decision-continue" }
+        }) }}
+
+
+        {{ govukButton({
+            text: 'Cancel',
+            classes: "govuk-button--secondary",
+            type: "submit",
+            name: "decisionFormCancel",
+            value: "decisionFormCancel",
+            attributes: { "data-qa": "offence-code-decision-cancel" }
+        }) }}
+
+    </form>
+{% endblock %}

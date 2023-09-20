@@ -9,6 +9,7 @@ import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PrisonerSearchService from '../../services/prisonerSearchService'
+import OffenceListRoute from './offenceList'
 
 export default function offenceCodeDecisionsRoutes({
   placeOnReportService,
@@ -31,6 +32,13 @@ export default function offenceCodeDecisionsRoutes({
   })
 
   const offenceCodeDecisionsAloEditRoute = new OffenceCodeDecisionsAloEditRoutes({
+    placeOnReportService,
+    userService,
+    decisionTreeService,
+    prisonerSearchService,
+  })
+
+  const offenceListRoute = new OffenceListRoute({
     placeOnReportService,
     userService,
     decisionTreeService,
@@ -72,5 +80,9 @@ export default function offenceCodeDecisionsRoutes({
       offenceCodeDecisionsAloEditRoute.redirectToStart
     )
   })
+
+  get(adjudicationUrls.offenceCodeSelection.matchers.list, offenceListRoute.view)
+  post(adjudicationUrls.offenceCodeSelection.matchers.list, offenceListRoute.submit)
+
   return router
 }

@@ -12,7 +12,12 @@ export default class Question {
 
   private readonly questionTitle: Title
 
-  constructor(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
+  private readonly firstOffenceListQuestion: boolean
+
+  constructor(
+    title: Title | string | (readonly (readonly [IncidentRole, string])[] | null),
+    firstOffenceListQuestion: boolean
+  ) {
     if (title instanceof Title) {
       this.questionTitle = title
     } else if (typeof title === 'string') {
@@ -20,6 +25,7 @@ export default class Question {
     } else {
       this.questionTitle = new Title(title)
     }
+    this.firstOffenceListQuestion = firstOffenceListQuestion
   }
 
   // The id is 1 when this is the top most question otherwise it is that of the parent answer.
@@ -40,6 +46,10 @@ export default class Question {
 
   getTitle() {
     return this.questionTitle
+  }
+
+  getFirstOffenceListQuestion() {
+    return this.firstOffenceListQuestion
   }
 
   getChildAnswers() {

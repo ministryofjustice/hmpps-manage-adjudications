@@ -23,6 +23,10 @@ export type OffenceRule = {
   paragraphNumber: string
 }
 
+export interface OffenceRuleWithCode extends OffenceRule {
+  offenceCode: number
+}
+
 export type OffenceDetails = {
   offenceCode: number
   offenceRule?: OffenceRule

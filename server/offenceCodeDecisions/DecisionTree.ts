@@ -19,7 +19,7 @@ export default question([
           [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to assault?`],
           [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,],
           [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to assault?`],
-        ])
+        ], true)
           .child(answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER)
             .child(question('Was the incident a racially aggravated assault?')
               .child(answer('Yes').offenceCode(1001))
@@ -46,7 +46,7 @@ export default question([
         [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to fight with?`],
         [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to fight with?`,],
         [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to fight with?`],
-      ])
+      ], true)
         .child(answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER).offenceCode(4001))
         .child(answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.OFFICER).offenceCode(4002))
         .child(answer(['A member of staff who is not a prison officer', `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.STAFF).offenceCode(4003))
@@ -58,20 +58,20 @@ export default question([
         [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to endanger?`],
         [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to endanger?`,],
         [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to endanger?`],
-      ])
+      ], true)
         .child(answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER).offenceCode(5001))
         .child(answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.OFFICER).offenceCode(5002))
         .child(answer(['A member of staff who is not a prison officer', `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.STAFF).offenceCode(5003))
         .child(answer(['A prisoner who’s left this establishment', `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`]).type(Type.PRISONER_OUTSIDE_ESTABLISHMENT).offenceCode(5004))
         .child(answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON).offenceCode(5005))))))
   .child(answer('Escape or failure to comply with temporary release conditions')
-    .child(question('What did the incident involve?')
+    .child(question('What did the incident involve?', true)
       .child(answer('Escaping').offenceCode(7001))
       .child(answer('Absconding from either prison or legal custody').offenceCode(7002))
       .child(answer('Failing to comply with any conditions of a temporary release').offenceCode(8001))
       .child(answer('Failing to return from their temporary release').offenceCode(8002))))
   .child(answer('Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)')
-    .child(question('What did the incident involve?')
+    .child(question('What did the incident involve?', true)
       .child(answer('Possession of an unauthorised article')
         .child(question('What happened?')
           .child(answer('Has an unauthorised article in their possession')
@@ -98,7 +98,7 @@ export default question([
           .child(answer('Consumes any alcoholic drink').offenceCode(10001))
           .child(answer('Consumes any alcoholic drink other than that provided to them under rule 25(1)').offenceCode(11001))))))
   .child(answer('Sets fire to, or damages, the prison or any property')
-    .child(question('What did the incident involve?')
+    .child(question('What did the incident involve?', true)
       .child(answer('Sets fire to any part of the prison or any property').offenceCode(16001))
       .child(answer('Destroys part of the prison or someone else’s property')
         .child(question('Was the incident racially aggravated?')
@@ -113,7 +113,7 @@ export default question([
           [Role.ATTEMPTED, `Who was ${Text.PRISONER_FULL_NAME} attempting to be disrespectful to?`],
           [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to be disrespectful to?`],
           [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist another prisoner to be disrespectful to?`],
-        ])
+        ], true)
           .child(answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.OFFICER).offenceCode(19001))
           .child(answer(['A member of staff who is not a prison officer', `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.STAFF).offenceCode(19002))
           .child(answer(['Another person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON).offenceCode(19003))))
@@ -122,7 +122,7 @@ export default question([
           .child(answer('Yes').offenceCode(20001))
           .child(answer('No').offenceCode(20002))))))
   .child(answer('Disobeys any lawful order, or failure to comply with any rule or regulation')
-    .child(question('What did the incident involve?')
+    .child(question('What did the incident involve?', true)
       .child(answer('Disobeying any lawful order').offenceCode(22001))
       .child(answer('Failure to comply with any rule or regulation').offenceCode(23101))))
   .child(answer('Detains another person')
@@ -131,21 +131,21 @@ export default question([
       [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to detain?`],
       [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to detain?`],
       [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to detain?`],
-    ])
+    ], true)
       .child(answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER).offenceCode(2001))
       .child(answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.OFFICER).offenceCode(2002))
       .child(answer(['A member of staff who is not a prison officer', `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.STAFF).offenceCode(2003))
       .child(answer(['A prisoner who’s left this establishment', `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`]).type(Type.PRISONER_OUTSIDE_ESTABLISHMENT).offenceCode(2021))
       .child(answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`]).type(Type.OTHER_PERSON).offenceCode(2004))))
   .child(answer('Stopping someone who is not a prisoner from doing their job')
-    .child(question('What did the incident involve?')
+    .child(question('What did the incident involve?', true)
       .child(answer('Denying someone access to any part of the prison').offenceCode(3001))
       .child(answer('Obstructing a member of staff from doing their job').offenceCode(6001))
       .child(answer('Stopping someone carrying out a drug test').child(question('What happened?')
         .child(answer('Tampering with or falsifying a drug testing sample').offenceCode(23201))
         .child(answer('Refuses to provide a sample for drug testing').offenceCode(23202))))))
   .child(answer('Being absent without authorisation, being in an unauthorised place, or failing to work correctly')
-    .child(question('What did the incident involve?')
+    .child(question('What did the incident involve?', true)
       .child(answer('Being absent without authorisation').offenceCode(18001))
       .child(answer('Being in an unauthorised place').offenceCode(18002))
       .child(answer('Failing to work correctly').offenceCode(21001))))
