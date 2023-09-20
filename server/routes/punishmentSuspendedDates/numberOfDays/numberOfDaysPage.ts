@@ -80,8 +80,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
     const { chargeNumber } = req.params
     const { user } = res.locals
     const { days } = req.body
-    const { punishmentNumberToActivate, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNo } =
-      req.query
+    const { punishmentNumberToActivate, punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.query
     const type = PunishmentType[punishmentType as string]
     const trimmedDays = days ? Number(String(days).trim()) : null
     const isYOI = await this.getYoiInfo(chargeNumber, user)
@@ -138,7 +137,6 @@ export default class SuspendedPunishmentNumberOfDaysPage {
           stoppagePercentage,
           days: trimmedDays,
           punishmentNumberToActivate,
-          reportNo,
         } as ParsedUrlQueryInput,
       })
     )
@@ -152,6 +150,9 @@ export default class SuspendedPunishmentNumberOfDaysPage {
 
   getRedirectUrl = (req: Request, isTypeAdditionalDays: boolean, chargeNumber: string) => {
     if (isTypeAdditionalDays) return adjudicationUrls.awardPunishments.urls.modified(chargeNumber)
+    if (this.pageOptions.isEdit()) {
+      return adjudicationUrls.suspendedPunishmentStartDateChoice.urls.edit(chargeNumber, req.params.redisId)
+    }
     return adjudicationUrls.suspendedPunishmentStartDateChoice.urls.existing(chargeNumber)
   }
 

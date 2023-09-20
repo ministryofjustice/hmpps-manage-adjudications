@@ -4,7 +4,7 @@ import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 
-export default class PunishmentSuspendedStartDateChoiceRoute {
+export default class PunishmentSuspendedStartDateChoiceEditRoute {
   page: PunishmentSuspendedStartDateChoicePage
 
   constructor(
@@ -13,7 +13,7 @@ export default class PunishmentSuspendedStartDateChoiceRoute {
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService
   ) {
     this.page = new PunishmentSuspendedStartDateChoicePage(
-      PageRequestType.EXISTING,
+      PageRequestType.EDIT,
       userService,
       punishmentsService,
       reportedAdjudicationsService

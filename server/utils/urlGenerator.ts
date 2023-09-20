@@ -946,10 +946,13 @@ const adjudicationUrls = {
     root: '/suspended-punishment-date-choice',
     matchers: {
       existingPunishment: '/:chargeNumber/existing',
+      edit: '/:chargeNumber/edit/:redisId',
     },
     urls: {
       existing: (chargeNumber: string) =>
         `${adjudicationUrls.suspendedPunishmentStartDateChoice.root}/${chargeNumber}/existing`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.suspendedPunishmentStartDateChoice.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
   suspendedPunishmentStartDate: {

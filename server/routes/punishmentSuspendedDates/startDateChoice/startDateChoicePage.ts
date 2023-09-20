@@ -25,12 +25,30 @@ type PageData = {
   lastHearingDate?: string
 }
 
+export enum PageRequestType {
+  EXISTING,
+  EDIT,
+}
+
+class PageOptions {
+  constructor(private readonly pageType: PageRequestType) {}
+
+  isEdit(): boolean {
+    return this.pageType === PageRequestType.EDIT
+  }
+}
+
 export default class PunishmentSuspendedStartDateChoicePage {
+  pageOptions: PageOptions
+
   constructor(
+    pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService
-  ) {}
+  ) {
+    this.pageOptions = new PageOptions(pageType)
+  }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
@@ -62,19 +80,11 @@ export default class PunishmentSuspendedStartDateChoicePage {
     const { chargeNumber } = req.params
     const { immediate } = req.body
     const { user } = res.locals
-    const {
-      punishmentNumberToActivate,
-      punishmentType,
-      privilegeType,
-      otherPrivilege,
-      stoppagePercentage,
-      days,
-      reportNo,
-    } = req.query
+    const { punishmentNumberToActivate, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } =
+      req.query
     const suspendedPunishmentIdToActivate = Number(punishmentNumberToActivate)
 
     const isYOI = await this.getYoiInfo(chargeNumber, user)
-
     const error = validateForm({
       immediate,
       isYOI,
@@ -90,6 +100,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
       })
 
     let lastHearingDate = null
+
     if (immediate === 'true') {
       const lastHearingDateTime = await this.getLastHearingDate(chargeNumber, user)
       lastHearingDate = formatTimestampToDate(lastHearingDateTime)
@@ -109,7 +120,16 @@ export default class PunishmentSuspendedStartDateChoicePage {
             lastHearingDate,
             activatedFromChargeNumber
           )
-          await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
+          if (this.pageOptions.isEdit()) {
+            await this.punishmentsService.updateSessionPunishment(
+              req,
+              updatedPunishment,
+              chargeNumber,
+              req.params.redisId
+            )
+          } else {
+            await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
+          }
         }
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
@@ -128,14 +148,19 @@ export default class PunishmentSuspendedStartDateChoicePage {
           days,
           startDate: lastHearingDate,
           punishmentNumberToActivate,
-          reportNo,
         } as ParsedUrlQueryInput,
       })
     )
   }
 
   getRedirectUrl = (chargeNumber: string, req: Request, immediate: string) => {
-    if (immediate === 'true') return adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(chargeNumber)
+    if (immediate === 'true') {
+      return adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(chargeNumber)
+    }
+    if (this.pageOptions.isEdit()) {
+      return adjudicationUrls.suspendedPunishmentStartDate.urls.edit(chargeNumber, req.params.redisId)
+    }
+
     return adjudicationUrls.suspendedPunishmentStartDate.urls.existing(chargeNumber)
   }
 
