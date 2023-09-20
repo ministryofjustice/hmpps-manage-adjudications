@@ -172,6 +172,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
         endDate: null as never,
       },
     }
+
     return flattenPunishment(activePunishment)
   }
 }
