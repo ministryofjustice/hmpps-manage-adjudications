@@ -20,7 +20,7 @@ type PageData = {
   redisId?: string
 }
 
-export default class AutoPunishmentSchedulePage {
+export default class AutoPunishmentSuspendedSchedulePage {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
@@ -30,15 +30,29 @@ export default class AutoPunishmentSchedulePage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
     const { startDate, endDate, days, type, privilegeType, otherPrivilege, stoppagePercentage, redisId } = pageData
+    const { punishmentNumberToActivate } = req.query
 
     const startDateChangeHref = url.format({
-      pathname: adjudicationUrls.punishmentStartDate.urls.edit(chargeNumber, redisId),
+      pathname: adjudicationUrls.suspendedPunishmentStartDate.urls.edit(chargeNumber, redisId),
       query: {
         punishmentType: type,
         privilegeType,
         otherPrivilege,
         stoppagePercentage,
         days,
+        punishmentNumberToActivate,
+      } as ParsedUrlQueryInput,
+    })
+
+    const daysChangeHref = url.format({
+      pathname: adjudicationUrls.suspendedPunishmentNumberOfDays.urls.edit(chargeNumber, redisId),
+      query: {
+        punishmentType: type,
+        privilegeType,
+        otherPrivilege,
+        stoppagePercentage,
+        days,
+        punishmentNumberToActivate,
       } as ParsedUrlQueryInput,
     })
 
@@ -46,7 +60,7 @@ export default class AutoPunishmentSchedulePage {
       chargeNumber,
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       startDateChangeHref,
-      daysChangeHref: adjudicationUrls.punishmentNumberOfDays.urls.edit(chargeNumber, redisId),
+      daysChangeHref,
       startDate,
       endDate,
       type,

@@ -7,6 +7,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import PunishmentsService from '../../../services/punishmentsService'
 import { PunishmentDataWithSchedule } from '../../../data/PunishmentResult'
+import config from '../../../config'
 
 export default class ActivateSuspendedPunishmentsPage {
   constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {}
@@ -63,11 +64,19 @@ export default class ActivateSuspendedPunishmentsPage {
     const punishmentType = punishmentToActivate[0].punishment.type
     const { days } = punishmentToActivate[0].punishment.schedule
 
+    const redirectUrl = this.getRedirectUrl(chargeNumber)
     return res.redirect(
       url.format({
-        pathname: adjudicationUrls.suspendedPunishmentSchedule.urls.existing(chargeNumber),
+        pathname: redirectUrl,
         query: { punishmentNumberToActivate, punishmentType, days },
       })
     )
+  }
+
+  getRedirectUrl = (chargeNumber: string) => {
+    if (config.automaticPunishmentDatesFlag === 'true') {
+      return adjudicationUrls.suspendedPunishmentNumberOfDays.urls.existing(chargeNumber)
+    }
+    return adjudicationUrls.suspendedPunishmentSchedule.urls.existing(chargeNumber)
   }
 }

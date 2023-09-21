@@ -931,6 +931,55 @@ const adjudicationUrls = {
       manual: (chargeNumber: string) => `${adjudicationUrls.suspendedPunishmentSchedule.root}/${chargeNumber}/manual`,
     },
   },
+  suspendedPunishmentNumberOfDays: {
+    root: '/suspended-punishment-number-days',
+    matchers: {
+      existingPunishment: '/:chargeNumber/existing',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      existing: (chargeNumber: string) =>
+        `${adjudicationUrls.suspendedPunishmentNumberOfDays.root}/${chargeNumber}/existing`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.suspendedPunishmentNumberOfDays.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  suspendedPunishmentStartDateChoice: {
+    root: '/suspended-punishment-date-choice',
+    matchers: {
+      existingPunishment: '/:chargeNumber/existing',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      existing: (chargeNumber: string) =>
+        `${adjudicationUrls.suspendedPunishmentStartDateChoice.root}/${chargeNumber}/existing`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.suspendedPunishmentStartDateChoice.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  suspendedPunishmentStartDate: {
+    root: '/suspended-punishment-start-date',
+    matchers: {
+      existingPunishment: '/:chargeNumber/existing',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      existing: (chargeNumber: string) =>
+        `${adjudicationUrls.suspendedPunishmentStartDate.root}/${chargeNumber}/existing`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.suspendedPunishmentStartDate.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  suspendedPunishmentAutoDates: {
+    root: '/suspended-punishment-schedule-check',
+    matchers: {
+      existingPunishment: '/:chargeNumber/existing',
+    },
+    urls: {
+      existing: (chargeNumber: string) =>
+        `${adjudicationUrls.suspendedPunishmentAutoDates.root}/${chargeNumber}/existing`,
+    },
+  },
   reviewerEditOffenceWarning: {
     root: '/edit-offence-warning',
     matchers: {

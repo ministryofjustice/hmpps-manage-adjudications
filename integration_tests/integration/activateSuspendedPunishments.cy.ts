@@ -26,7 +26,7 @@ context('acivate suspended punishments page', () => {
       reportNumber: 100,
       response: [
         {
-          reportNumber: 100,
+          chargeNumber: 100,
           punishment: {
             id: 71,
             type: PunishmentType.PRIVILEGE,
@@ -40,7 +40,7 @@ context('acivate suspended punishments page', () => {
           },
         },
         {
-          reportNumber: 101,
+          chargeNumber: 101,
           punishment: {
             id: 72,
             type: PunishmentType.PRIVILEGE,
