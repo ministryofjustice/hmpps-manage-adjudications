@@ -12,16 +12,9 @@ context('Home page', () => {
     cy.signIn()
   })
 
-  it('should see the feedback banner', () => {
-    cy.visit(adjudicationUrls.homepage.root)
-    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
-    homepage.feedbackBanner().should('exist')
-  })
-
   it('should only see some tiles without the reviewer role', () => {
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
-    homepage.feedbackBanner().should('exist')
     homepage.startANewReportLink().should('exist')
     homepage.continueAReportLink().should('exist')
     homepage.viewYourCompletedReportsLink().should('exist')
@@ -37,7 +30,6 @@ context('Home page', () => {
     cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
-    homepage.feedbackBanner().should('exist')
     homepage.startANewReportLink().should('exist')
     homepage.continueAReportLink().should('exist')
     homepage.viewYourCompletedReportsLink().should('exist')
