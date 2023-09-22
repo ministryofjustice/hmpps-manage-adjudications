@@ -16,10 +16,13 @@ import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+
 import logger from '../logger'
 import { Services } from './services'
 import { pdfRenderer } from './utils/pdfRenderer'
 import maintenancePageRouter from './routes/maintenancePageRouter'
+import setUpEnvironmentName from './middleware/setUpEnvironmentName'
+import getFrontendComponents from './middleware/fetchFrontendComponentMiddleware'
 
 export default function createApp(services: Services): express.Application {
   // We do not want the server to exit, partly because any log information will be lost.
@@ -41,10 +44,12 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
+  setUpEnvironmentName(app)
   nunjucksSetup(app, services.applicationInfo)
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
   app.use(authorisationMiddleware())
+  app.use('*', getFrontendComponents(services))
 
   if (config.maintenanceModeFlag === 'true') {
     app.use('/', maintenanceRoutes(maintenancePageRouter(services.userService)))

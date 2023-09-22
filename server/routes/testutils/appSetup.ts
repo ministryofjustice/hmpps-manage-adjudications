@@ -24,6 +24,7 @@ import PunishmentsService from '../../services/punishmentsService'
 import type { ApplicationInfo } from '../../applicationInfo'
 import ChartApiService from '../../services/chartApiService'
 import CreateOnBehalfOfSessionService from '../createOnBehalfOf/createOnBehalfOfSessionService'
+import FrontendComponentService from '../../services/frontendComponentService'
 
 const testAppInfo: ApplicationInfo = {
   applicationName: 'test',
@@ -130,6 +131,7 @@ export default function appWithAllRoutes(
       applicationInfo: {} as ApplicationInfo,
       chartApiService: {} as ChartApiService,
       createOnBehalfOfSessionService: {} as CreateOnBehalfOfSessionService,
+      frontendComponentService: {} as FrontendComponentService,
       ...overrides,
     }),
     production,

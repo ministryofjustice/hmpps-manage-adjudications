@@ -12,3 +12,9 @@ export type SubmittedDateTime = {
   date?: string
   time?: SubmittedTime
 }
+
+export default interface FrontendComponent {
+  html: string
+  css: string[]
+  javascript: string[]
+}

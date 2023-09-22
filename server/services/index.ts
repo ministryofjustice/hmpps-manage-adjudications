@@ -18,9 +18,12 @@ import PunishmentsService from './punishmentsService'
 import ChartApiService from './chartApiService'
 import HmppsManageUsersClient from '../data/hmppsManageUsersClient'
 import CreateOnBehalfOfSessionService from '../routes/createOnBehalfOf/createOnBehalfOfSessionService'
+import FrontendComponentService from './frontendComponentService'
+import FrontendComponentApiClient from '../data/frontendComponentApiClient'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const hmppsManageUsersClient = new HmppsManageUsersClient()
+const frontendComponentApiClient = new FrontendComponentApiClient()
 const userService = new UserService(hmppsAuthClient, hmppsManageUsersClient)
 const placeOnReportService = new PlaceOnReportService(hmppsAuthClient, hmppsManageUsersClient)
 const curiousApiService = new CuriousApiService()
@@ -46,6 +49,7 @@ const hearingsService = new HearingsService(hmppsAuthClient)
 const outcomesService = new OutcomesService()
 const punishmentsService = new PunishmentsService(hmppsAuthClient, hmppsManageUsersClient)
 const createOnBehalfOfSessionService = new CreateOnBehalfOfSessionService()
+const frontendComponentService = new FrontendComponentService(frontendComponentApiClient)
 const { applicationInfo } = dataAccess()
 
 export const services = {
@@ -64,6 +68,7 @@ export const services = {
   applicationInfo,
   chartApiService,
   createOnBehalfOfSessionService,
+  frontendComponentService,
 }
 
 export type Services = typeof services
