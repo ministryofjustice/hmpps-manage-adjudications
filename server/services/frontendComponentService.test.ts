@@ -4,7 +4,7 @@ import FrontendComponentService from './frontendComponentService'
 
 const getComponent = jest.fn()
 
-jest.mock('../data/FrontendComponentApiClient', () => {
+jest.mock('../data/frontendComponentApiClient', () => {
   return jest.fn().mockImplementation(() => {
     return { getComponent }
   })
