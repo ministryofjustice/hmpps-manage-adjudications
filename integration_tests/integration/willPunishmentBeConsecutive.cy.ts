@@ -43,18 +43,6 @@ context('Will this punishment be consecutive to another one?', () => {
       willPunishmentBeConsectivePage.cancelButton().should('exist')
       willPunishmentBeConsectivePage.consecutive().should('exist')
     })
-    it('has the name of the prisoner in the title', () => {
-      cy.visit(adjudicationUrls.isPunishmentConsecutive.urls.start('100'))
-      cy.get('h1').contains('John Smith')
-    })
-    it('displays default instead of the name of the prisoner in the title if name not available', () => {
-      cy.task('stubGetPrisonerDetails', {
-        prisonerNumber: 'G6415GD',
-        response: {},
-      })
-      cy.visit(adjudicationUrls.isPunishmentConsecutive.urls.start('100'))
-      cy.get('h1').contains('this prisoner')
-    })
     it('cancel link goes back to punishments page', () => {
       cy.visit(adjudicationUrls.isPunishmentConsecutive.urls.start('100'))
       const willPunishmentBeConsectivePage = Page.verifyOnPage(WillPunishmentBeConsectivePage)

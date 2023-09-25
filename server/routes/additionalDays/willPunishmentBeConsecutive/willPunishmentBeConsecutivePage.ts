@@ -41,15 +41,11 @@ export default class WillPunishmentBeConsecutivePage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { user } = res.locals
     const { error, consecutive } = pageData
-
-    const prisoner = await this.punishmentsService.getPrisonerDetails(chargeNumber, user)
 
     return res.render(`pages/willPunishmentBeConsecutive.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
-      prisonerName: prisoner.friendlyName || 'this prisoner',
       consecutive,
     })
   }
