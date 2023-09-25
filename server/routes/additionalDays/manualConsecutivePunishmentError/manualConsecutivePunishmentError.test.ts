@@ -52,7 +52,9 @@ describe('GET charge number validation page - correct title', () => {
       .get(`${adjudicationUrls.manualConsecutivePunishmentError.urls.start('100')}?chargeNumber=1234567`)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Charge number 1234567 is not linked to a punishment of added days for John Smith')
+        expect(res.text).toContain(
+          'Charge number 1234567 is not linked to a punishment of added days for this prisoner'
+        )
       })
   })
 })

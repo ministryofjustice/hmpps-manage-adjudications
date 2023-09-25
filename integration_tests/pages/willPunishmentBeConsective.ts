@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class WillPunishmentBeConsecutivePage extends Page {
   constructor() {
-    super('Will this punishment be consecutive to another one given to')
+    super('Will this punishment be consecutive to another one?')
   }
 
   consecutive = (): PageElement => cy.get('[data-qa="consecutive-radio-buttons"]')

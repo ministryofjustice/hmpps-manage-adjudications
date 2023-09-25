@@ -4,7 +4,7 @@ import TestData from '../../server/routes/testutils/testData'
 import WillPunishmentBeConsectivePage from '../pages/willPunishmentBeConsective'
 
 const testData = new TestData()
-context('Will this punishment be consecutive to another one given to the prisoner?', () => {
+context('Will this punishment be consecutive to another one?', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

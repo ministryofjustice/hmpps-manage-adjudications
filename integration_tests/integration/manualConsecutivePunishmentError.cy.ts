@@ -48,7 +48,7 @@ context('Consecutive punishment charge number error', () => {
       const manualEntryConsecutivePunishmentErrorPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentErrorPage)
       manualEntryConsecutivePunishmentErrorPage
         .h1()
-        .contains('Charge number 1234567 is not linked to a punishment of added days for John Smith')
+        .contains('Charge number 1234567 is not linked to a punishment of added days for this prisoner')
       manualEntryConsecutivePunishmentErrorPage
         .info()
         .contains('You cannot make the punishment of added days consecutive to charge number 1234567.')
