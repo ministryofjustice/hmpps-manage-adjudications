@@ -59,7 +59,7 @@ describe('GET', () => {
       .get(adjudicationUrls.isPunishmentConsecutive.urls.edit('100', uuidv4()))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Will this punishment be consecutive to another one given to John Smith')
+        expect(res.text).toContain('Will this punishment be consecutive to another one?')
       })
   })
 })

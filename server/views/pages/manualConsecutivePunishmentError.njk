@@ -2,8 +2,7 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set title %} Charge number {{ chargeNumber }} is not linked to a punishment of added days for {{ prisonerName }}
-{% endset %}
+{% set title %} Charge number {{ chargeNumber }} is not linked to a punishment of added days for this prisoner{% endset %}
 
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
