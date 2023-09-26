@@ -5,7 +5,7 @@ export default class Home extends Page {
     super('Adjudications')
   }
 
-  signInName = (): PageElement => cy.get('[data-qa="sign-in-name"]')
+  signInName = (): PageElement => cy.get('[data-qa="header-user-name"]')
 
   activeLocation = (): PageElement => cy.get('[data-qa="active-location"]')
 

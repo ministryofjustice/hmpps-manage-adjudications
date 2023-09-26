@@ -19,7 +19,6 @@ context('Sign in', () => {
     cy.signIn()
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.signInName().contains('J. Smith')
-    homepage.activeLocation().contains('Moorland')
   })
 
   it('User can log out', () => {

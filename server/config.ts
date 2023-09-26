@@ -13,11 +13,11 @@ function get<T>(name: string, fallback: T, options = { requireInProduction: fals
 const requiredInProduction = { requireInProduction: true }
 
 export class AgentConfig {
-  maxSockets: 100
+  timeout: number
 
-  maxFreeSockets: 10
-
-  freeSocketTimeout: 30000
+  constructor(timeout = 8000) {
+    this.timeout = timeout
+  }
 }
 
 export interface ApiConfig {
@@ -125,6 +125,14 @@ export default {
       agent: new AgentConfig(),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
+    frontendComponents: {
+      url: get('FRONTEND_COMPONENT_API_URL', 'http://localhost:8082', requiredInProduction),
+      timeout: {
+        response: Number(get('FRONTEND_COMPONENT_API_TIMEOUT_RESPONSE', 50000)),
+        deadline: Number(get('FRONTEND_COMPONENT_API_TIMEOUT_DEADLINE', 50000)),
+      },
+      agent: new AgentConfig(Number(get('FRONTEND_COMPONENT_API_TIMEOUT_RESPONSE', 5000))),
+    },
   },
   analytics: {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
@@ -135,4 +143,5 @@ export default {
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
   formsTabFlag: get('FORMS_TAB_FLAG', false, requiredInProduction),
   automaticPunishmentDatesFlag: get('AUTOMATIC_PUNISHMENT_DATES_FLAG', false, requiredInProduction),
+  environmentName: get('ENVIRONMENT_NAME', ''),
 }

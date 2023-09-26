@@ -13,7 +13,7 @@ export default abstract class Page {
     cy.get('h1').should('contain', this.title)
   }
 
-  signOut = (): PageElement => cy.get('[data-qa=sign-out]')
+  signOut = (): PageElement => cy.get('[data-qa="signOut"]')
 
   feedbackBanner = (): PageElement => cy.get('[data-qa="feedback-banner"]')
 }
