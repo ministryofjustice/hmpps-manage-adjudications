@@ -3,7 +3,6 @@ import { OffenceDetails } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
   ReportedAdjudication,
-  ScheduledHearingList,
   ReportedAdjudicationStatus,
   ReportedAdjudicationFilter,
   allStatuses,
@@ -156,12 +155,6 @@ export default class ManageAdjudicationsUserTokensClient {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/hearing/v2`,
       data: hearingDetails,
-    })
-  }
-
-  async getHearingsGivenAgencyAndDate(chosenHearingDate: string): Promise<ScheduledHearingList> {
-    return this.restClient.get({
-      path: `/reported-adjudications/hearings?hearingDate=${chosenHearingDate}`,
     })
   }
 

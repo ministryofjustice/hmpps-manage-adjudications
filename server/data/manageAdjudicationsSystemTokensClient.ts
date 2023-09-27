@@ -23,6 +23,7 @@ import {
   allIssueStatuses,
   ReportedAdjudicationFilter,
   allStatuses,
+  ScheduledHearingList,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -318,6 +319,12 @@ export default class ManageAdjudicationsSystemTokensClient {
   async getAgencyReportCounts(): Promise<AgencyReportCounts> {
     return this.restClient.get({
       path: `/reported-adjudications/report-counts`,
+    })
+  }
+
+  async getHearingsGivenAgencyAndDate(chosenHearingDate: string): Promise<ScheduledHearingList> {
+    return this.restClient.get({
+      path: `/reported-adjudications/hearings?hearingDate=${chosenHearingDate}`,
     })
   }
 }

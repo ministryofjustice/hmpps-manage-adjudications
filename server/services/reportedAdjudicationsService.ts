@@ -686,7 +686,10 @@ export default class ReportedAdjudicationsService {
   }
 
   async getAllHearings(chosenHearingDate: string, user: User) {
-    const results = await new ManageAdjudicationsUserTokensClient(user).getHearingsGivenAgencyAndDate(chosenHearingDate)
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const results = await new ManageAdjudicationsSystemTokensClient(token, user).getHearingsGivenAgencyAndDate(
+      chosenHearingDate
+    )
 
     const { hearings } = results
 
