@@ -1045,6 +1045,7 @@ export default class ReportedAdjudicationsService {
       ReportedAdjudicationStatus.REFER_GOV,
       ReportedAdjudicationStatus.REFER_INAD,
       ReportedAdjudicationStatus.DISMISSED,
+      ReportedAdjudicationStatus.QUASHED,
     ]
 
     awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(result =>
