@@ -51,8 +51,12 @@ export default class NextStepsPolicePage {
         return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
       }
 
-      if (nextStepChosen === 'schedule_hearing')
+      if (nextStepChosen === 'schedule_hearing') {
         return res.redirect(adjudicationUrls.scheduleHearing.urls.start(chargeNumber))
+      }
+      if (nextStepChosen === 'refer_gov') {
+        return res.redirect(adjudicationUrls.govReasonForReferral.urls.start(chargeNumber))
+      }
       return res.redirect(adjudicationUrls.reasonForNotProceeding.urls.start(chargeNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
