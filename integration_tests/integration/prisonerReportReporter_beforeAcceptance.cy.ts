@@ -240,7 +240,7 @@ context('Prisoner report - reporter view', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('T. User')
-          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(1).innerText).to.contain("Report on someone's behalf")
           expect($summaryData.get(2).innerText).to.contain('9 December 2021')
           expect($summaryData.get(3).innerText).to.contain('10:30')
           expect($summaryData.get(4).innerText).to.contain('Houseblock 1')
@@ -395,7 +395,7 @@ context('Prisoner report - reporter view', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('T. User')
-          expect($summaryData.get(1).innerText).to.contain('Change')
+          expect($summaryData.get(1).innerText).to.contain("Report on someone's behalf")
           expect($summaryData.get(2).innerText).to.contain('9 December 2021')
           expect($summaryData.get(3).innerText).to.contain('10:30')
           expect($summaryData.get(4).innerText).to.contain('Houseblock 1')
