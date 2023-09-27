@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro summaryListWithChangeLinks(array = [], missingValueText = 'Not entered', attributes = {}, classes='') %}
+{% macro summaryListWithChangeLinks(array = [], missingValueText = 'Not entered', attributes = {}, classes='', changeLinkText='Change') %}
   {% set rows = [] %}
 
   {% for detail in array %}
@@ -11,7 +11,7 @@
     {% endif %}
 
     {% if detail.changeLinkHref %}
-      {% set actions = { items: [{href: detail.changeLinkHref, text: "Change", visuallyHiddenText: detail.label, attributes: {"data-qa": detail.dataQa} }] } %}
+      {% set actions = { items: [{href: detail.changeLinkHref, text: changeLinkText, visuallyHiddenText: detail.label, attributes: {"data-qa": detail.dataQa} }] } %}
     {% else %}
       {% set actions = '' %}
     {% endif %}
