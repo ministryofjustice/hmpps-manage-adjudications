@@ -81,7 +81,7 @@
   <script src="/assets/govukFrontendInit.js"></script>
   <script src="/assets/moj/all.js"></script>
   <script src="/assets/mojFrontendInit.js"></script>
-  {% if feComponents.jsInclude %}
+  {% if feComponents.jsIncludes %}
     {% for js in feComponents.jsIncludes %}
       <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
     {% endfor %}
