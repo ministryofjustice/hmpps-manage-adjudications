@@ -149,7 +149,7 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
       })
     })
 
@@ -162,7 +162,7 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
       })
     })
 
@@ -176,7 +176,7 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
       })
     })
 
@@ -191,7 +191,7 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentSchedule.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
       })
     })
   })

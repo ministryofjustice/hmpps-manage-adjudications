@@ -56,7 +56,7 @@ const susPun = [
 ]
 
 const testData = new TestData()
-context.skip('Suspended punishment schedule', () => {
+context('Suspended punishment schedule', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -162,6 +162,29 @@ context.skip('Suspended punishment schedule', () => {
     cy.signIn()
   })
   describe('Suspended punishment automatic punishment date flows', () => {
+    it('should contain the required page elements', () => {
+      cy.visit(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
+      const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)
+      activateSuspendedPunishmentsPage.subheading().should('exist')
+      activateSuspendedPunishmentsPage.subheading().contains('John Smith’s suspended punishments')
+      activateSuspendedPunishmentsPage.suspendedPunishmentsTable().should('exist')
+      activateSuspendedPunishmentsPage.enterManuallyLink().should('exist')
+      activateSuspendedPunishmentsPage.cancelLink().should('exist')
+    })
+    it('goes back to award punishments page if return link clicked', () => {
+      cy.visit(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
+      const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)
+      activateSuspendedPunishmentsPage.cancelLink().click()
+      cy.location().should(loc => expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100')))
+    })
+    it('goes to manually add suspended punishment page if link is clicked', () => {
+      cy.visit(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
+      const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)
+      activateSuspendedPunishmentsPage.enterManuallyLink().click()
+      cy.location().should(loc =>
+        expect(loc.pathname).to.eq(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
+      )
+    })
     it('Suspended punishment starts immediately', () => {
       cy.visit(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
       const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)

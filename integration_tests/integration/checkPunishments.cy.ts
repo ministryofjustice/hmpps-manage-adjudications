@@ -4,8 +4,16 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckPunishments from '../pages/checkPunishments'
 import ReasonForChangePunishmentPage from '../pages/reasonForChangePunishment'
 import Page from '../pages/page'
-import { forceDateInputWithDate } from '../componentDrivers/dateInput'
+import { forceDateInput, forceDateInputWithDate } from '../componentDrivers/dateInput'
 import { PunishmentType } from '../../server/data/PunishmentResult'
+import PunishmentPage from '../pages/punishment'
+import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
+import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
+import PunishmentStartDateChoicePage from '../pages/punishmentStartDateChoice'
+import PunishmentSuspendedUntilPage from '../pages/punishmentSuspendedUntil'
+import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDates'
+import AwardPunishmentsPage from '../pages/awardPunishments'
+import PunishmentStartDatePage from '../pages/punishmentStartDate'
 
 const testData = new TestData()
 
@@ -177,13 +185,23 @@ context('Check punishments', () => {
     it('should show the data in the session when punishments are present', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start('123'))
       cy.get('[data-qa="add-new-punishment-button"]').click()
-      cy.get('#punishmentType-5').click()
-      cy.get('[data-qa="punishment-submit"]').click()
-      cy.get('#days').type('5')
-      cy.get('#suspended').click()
-      const date = new Date('2023-04-13')
-      forceDateInputWithDate(date, '[data-qa="suspended-until-date-picker"]')
-      cy.get('[data-qa="punishment-schedule-submit"]').click()
+
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
+      punishmentPage.submitButton().click()
+
+      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
+      punishmentNumberOfDaysPage.days().type('5')
+      punishmentNumberOfDaysPage.submitButton().click()
+
+      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
+      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
+      punishmentSuspendedPage.submitButton().click()
+
+      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
+      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+      punishmentSuspendedUntilPage.submitButton().click()
+
       cy.get('[data-qa="punishments-table"]')
         .find('td')
         .then($summaryData => {
@@ -191,20 +209,31 @@ context('Check punishments', () => {
           expect($summaryData.get(1).innerText).to.contain('-')
           expect($summaryData.get(2).innerText).to.contain('-')
           expect($summaryData.get(3).innerText).to.contain('5')
-          expect($summaryData.get(4).innerText).to.contain('13 Apr 2023')
+          expect($summaryData.get(4).innerText).to.contain('10 Oct 2030')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
       cy.get('[data-qa="add-new-punishment-button"]').click()
-      cy.get('#punishmentType-3').click()
+
+      punishmentPage.punishment().find('input[value="EARNINGS"]').check()
       cy.get('#stoppagePercentage').type('25')
-      cy.get('[data-qa="punishment-submit"]').click()
-      cy.get('#days').type('2')
-      cy.get('#suspended-2').click()
-      const date2 = new Date('2023-04-15')
-      forceDateInputWithDate(date, '[data-qa="start-date-picker"]')
-      forceDateInputWithDate(date2, '[data-qa="end-date-picker"]')
-      cy.get('[data-qa="punishment-schedule-submit"]').click()
-      cy.get('[data-qa="punishments-continue').click()
+      punishmentPage.submitButton().click()
+
+      punishmentNumberOfDaysPage.days().type('2')
+      punishmentNumberOfDaysPage.submitButton().click()
+
+      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
+      punishmentSuspendedPage.submitButton().click()
+
+      const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
+      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
+      punishmentStartDateChoicePage.submitButton().click()
+
+      const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
+      punishmentAutomaticEndDatesPage.submitButton().click()
+
+      const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+      awardPunishmentsPage.continue().click()
+
       const checkPunishmentsPage: CheckPunishments = Page.verifyOnPage(CheckPunishments)
       checkPunishmentsPage.punishmentsTable().should('exist')
       checkPunishmentsPage
@@ -215,11 +244,11 @@ context('Check punishments', () => {
           expect($summaryData.get(1).innerText).to.contain('-')
           expect($summaryData.get(2).innerText).to.contain('-')
           expect($summaryData.get(3).innerText).to.contain('5')
-          expect($summaryData.get(4).innerText).to.contain('13 Apr 2023')
+          expect($summaryData.get(4).innerText).to.contain('10 Oct 2030')
           expect($summaryData.get(5).innerText).to.contain('-')
           expect($summaryData.get(8).innerText).to.contain('Stoppage of earnings: 25%')
-          expect($summaryData.get(9).innerText).to.contain('13 Apr 2023')
-          expect($summaryData.get(10).innerText).to.contain('15 Apr 2023')
+          expect($summaryData.get(9).innerText).to.contain('23 Nov 2024')
+          expect($summaryData.get(10).innerText).to.contain('24 Nov 2024')
           expect($summaryData.get(11).innerText).to.contain('2')
           expect($summaryData.get(12).innerText).to.contain('-')
           expect($summaryData.get(13).innerText).to.contain('-')
@@ -235,13 +264,26 @@ context('Check punishments', () => {
       cy.get('#punishmentType-3').click()
       cy.get('#stoppagePercentage').type('25')
       cy.get('[data-qa="punishment-submit"]').click()
-      cy.get('#days').type('2')
-      cy.get('#suspended-2').click()
-      const date = new Date('2023-04-13')
-      const date2 = new Date('2023-04-15')
-      forceDateInputWithDate(date, '[data-qa="start-date-picker"]')
-      forceDateInputWithDate(date2, '[data-qa="end-date-picker"]')
-      cy.get('[data-qa="punishment-schedule-submit"]').click()
+
+      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
+      punishmentNumberOfDaysPage.days().type('2')
+      punishmentNumberOfDaysPage.submitButton().click()
+
+      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
+      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
+      punishmentSuspendedPage.submitButton().click()
+
+      const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
+      punishmentStartDateChoicePage.radioButtons().find('input[value="false"]').check()
+      punishmentStartDateChoicePage.submitButton().click()
+
+      const punishmentStartDatePage = Page.verifyOnPage(PunishmentStartDatePage)
+      forceDateInput(10, 10, 2030, '[data-qa="punishment-start-date-picker"]')
+      punishmentStartDatePage.submitButton().click()
+
+      const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
+      punishmentAutomaticEndDatesPage.submitButton().click()
+
       cy.get('[data-qa="punishments-continue').click()
       const reasonForChangePunishmentPage: ReasonForChangePunishmentPage =
         Page.verifyOnPage(ReasonForChangePunishmentPage)
@@ -261,8 +303,8 @@ context('Check punishments', () => {
           expect($summaryData.get(4).innerText).to.contain('13 Apr 2023')
           expect($summaryData.get(5).innerText).to.contain('-')
           expect($summaryData.get(8).innerText).to.contain('Stoppage of earnings: 25%')
-          expect($summaryData.get(9).innerText).to.contain('13 Apr 2023')
-          expect($summaryData.get(10).innerText).to.contain('15 Apr 2023')
+          expect($summaryData.get(9).innerText).to.contain('10 Oct 2030')
+          expect($summaryData.get(10).innerText).to.contain('11 Oct 2030')
           expect($summaryData.get(11).innerText).to.contain('2')
           expect($summaryData.get(12).innerText).to.contain('-')
           expect($summaryData.get(13).innerText).to.contain('-')

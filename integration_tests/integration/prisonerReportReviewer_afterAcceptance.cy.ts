@@ -461,7 +461,7 @@ context('Prisoner report - reviewer view', () => {
     })
   })
   describe('report MIGRATED', () => {
-    it.only('should contain the correct offence details', () => {
+    it('should contain the correct offence details', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review('456791-1'))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 

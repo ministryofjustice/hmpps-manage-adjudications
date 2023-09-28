@@ -5,7 +5,7 @@ import PunishmentSuspendedUntilPage from '../pages/punishmentSuspendedUntil'
 import { forceDateInput } from '../componentDrivers/dateInput'
 
 const testData = new TestData()
-context.skip('Punishment - when is it suspended until?', () => {
+context('Punishment - when is it suspended until?', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
