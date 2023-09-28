@@ -69,6 +69,8 @@ import awardPunishmentsRoutes from './punishments/awardPunishments'
 import PunishmentScheduleRoutes from './punishmentSchedule'
 import numberOfAdditionalDaysRoutes from './additionalDays/numberOfAdditionalDays'
 import willPunishmentBeSuspendedRoutes from './additionalDays/willPunishmentBeSuspended'
+import willPunishmentBeSuspendedRoutesV1 from './additionalDays/willPunishmentBeSuspended_v1'
+import punishmentSuspendedUntilAdditionalDays from './additionalDays/suspendedUntilDate'
 import checkPunishmentRoutes from './punishments/checkPunishments'
 import activateSuspendedPunishmentsRoutes from './punishments/activateSuspendedPunishments'
 import suspendedPunishmentScheduleRoutes from './suspendedPunishmentSchedule'
@@ -323,10 +325,18 @@ export default function routes(
     adjudicationUrls.numberOfAdditionalDays.root,
     numberOfAdditionalDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService })
   )
+
+  router.use(
+    adjudicationUrls.isPunishmentSuspendedAdditionalDays_v1.root,
+    willPunishmentBeSuspendedRoutesV1({ userService, punishmentsService })
+  )
+
+  // this one will need deleting after flag removed (below)
   router.use(
     adjudicationUrls.isPunishmentSuspendedAdditionalDays.root,
     willPunishmentBeSuspendedRoutes({ userService, punishmentsService })
   )
+
   router.use(
     adjudicationUrls.isPunishmentConsecutive.root,
     willPunishmentBeConsecutiveRoutes({ userService, punishmentsService })
@@ -429,6 +439,14 @@ export default function routes(
     router.use(
       adjudicationUrls.suspendedPunishmentAutoDates.root,
       autoPunishmentSuspendedScheduleRoutes({
+        userService,
+        punishmentsService,
+        reportedAdjudicationsService,
+      })
+    )
+    router.use(
+      adjudicationUrls.punishmentSuspendedUntilAdditionalDays.root,
+      punishmentSuspendedUntilAdditionalDays({
         userService,
         punishmentsService,
         reportedAdjudicationsService,
