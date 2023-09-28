@@ -46,8 +46,15 @@
 
   {% if referralDetails %}
     {% set prosecute = referralDetails.code == ReferralOutcomeCode.PROSECUTION %}
-    {% set nextStep = 'Not proceed with the charge' if referralDetails.code == ReferralOutcomeCode.NOT_PROCEED else 
-      'Schedule a hearing' %}
+
+    {% if referralDetails.code == ReferralOutcomeCode.NOT_PROCEED %}
+      {% set nextStep = 'Not proceed with the charge' %}
+    {% elif referralDetails.code == ReferralOutcomeCode.SCHEDULE_HEARING %}
+      {% set nextStep = 'Schedule a hearing' %}
+    {% else %}
+      {% set nextStep = 'Refer this case to the governor' %}
+    {% endif %}
+
     {% set notProceeding = referralDetails.code == ReferralOutcomeCode.NOT_PROCEED %}
     {% set rows = (rows.push({
       key: {
