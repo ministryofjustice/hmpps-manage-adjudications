@@ -10,6 +10,7 @@ import PunishmentsService from '../../../services/punishmentsService'
 import { User } from '../../../data/hmppsManageUsersClient'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import config from '../../../config'
 
 type PageData = {
   error?: FormError
@@ -109,6 +110,15 @@ export default class NumberOfAdditionalDaysPage {
   }
 
   private getRedirectUrl = (chargeNumber: string, req: Request) => {
+    if (config.automaticPunishmentDatesFlag === 'true') {
+      if (this.pageOptions.isEdit()) {
+        return adjudicationUrls.isPunishmentSuspendedAdditionalDays_v1.urls.edit(chargeNumber, req.params.redisId)
+      }
+      if (this.pageOptions.isManualEdit()) {
+        return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(chargeNumber)
+      }
+      return adjudicationUrls.isPunishmentSuspendedAdditionalDays_v1.urls.start(chargeNumber)
+    }
     if (this.pageOptions.isEdit()) {
       return adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(chargeNumber, req.params.redisId)
     }
