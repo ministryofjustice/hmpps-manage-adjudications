@@ -3,7 +3,7 @@ import { FormError } from '../../@types/template'
 export const errors: { [key: string]: FormError } = {
   MISSING_CREATED_ON_BEHALF_OF: {
     href: '#createdOnBehalfOfOfficer',
-    text: 'Enter the new reporting officers name',
+    text: 'Enter the new reporting officer’s name',
   },
 }
 
