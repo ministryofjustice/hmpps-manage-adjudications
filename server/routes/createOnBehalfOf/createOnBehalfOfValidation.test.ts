@@ -8,7 +8,7 @@ describe('validateForm', () => {
   it('shows error when no officer provided', () => {
     expect(validateForm(null)).toStrictEqual({
       href: '#createdOnBehalfOfOfficer',
-      text: 'Enter the new reporting officers name',
+      text: 'Enter the new reporting officer’s name',
     })
   })
 })

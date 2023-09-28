@@ -26,7 +26,7 @@ describe('GET /create-on-behalf-of', () => {
       .get(adjudicationUrls.createOnBehalfOf.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Enter the new reporting officers name')
+        expect(res.text).toContain('Enter the new reporting officer’s name')
         expect(res.text).toContain('Return to report 100')
       })
   })
@@ -49,7 +49,7 @@ describe('POST /create-on-behalf-of', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('There is a problem')
-        expect(res.text).toContain('Enter the new reporting officers name')
+        expect(res.text).toContain('Enter the new reporting officer’s name')
       })
   })
 })
