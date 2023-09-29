@@ -95,7 +95,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       username,
       agencyId,
       'Adjudication reports by protected or responsivity characteristic - last 30 days',
-      'Use this chart to see adjudications by this characteristic and compare them to prison numbers. Are there any imbalances you might want to explore further?',
+      'Use this chart to see adjudication reports by this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       await this.chartApiService.getChart(username, agencyId, '2b'),
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
@@ -124,7 +124,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       username,
       agencyId,
       'Adjudication offence type by protected or responsivity characteristic - last 30 days',
-      'Select an offence type to explore differences within this characteristic. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      'Select an offence type to explore differences within this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       chartDetails2d,
       {
@@ -156,7 +156,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       username,
       agencyId,
       'Punishment by protected or responsivity characteristic - last 30 days',
-      'Select a punishment type to explore differences within this. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      'Select a punishment type to explore differences within this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       chartDetails2e,
       {
@@ -192,7 +192,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       username,
       agencyId,
       'Plea by protected or responsivity characteristic - last 30 days',
-      'Select a plea to explore differences within this characteristic. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      'Select a plea to explore differences within this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       chartDetails2f,
       {
@@ -224,7 +224,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       username,
       agencyId,
       'Finding by protected or responsivity characteristic - last 30 days',
-      'Select a finding to explore differences within this characteristic. Compared to overall prison numbers, are there any insights or concerns you want to explore or monitor?',
+      'Select a finding to explore differences within this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       chartDetails2g,
       {

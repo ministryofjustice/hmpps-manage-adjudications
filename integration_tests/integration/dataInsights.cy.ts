@@ -264,55 +264,97 @@ context('Adjudication data', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
+    page.checkLastModifiedDate(fullLastModifiedDate)
     page.checkChartTitle('Adjudication reports created - over 24 months')
     page.checkChartTitle('Adjudication reports referred to independent adjudicator - over 24 months')
     page.checkChartTitle('Number of people placed on report in the past 30 days')
     page.checkChartTitle('Adjudication reports by location of adjudication incident - last 30 days')
     page.checkChartTitle('Adjudication reports by residential location of prisoner - last 30 days')
-    page.checkLastModifiedDate(fullLastModifiedDate)
   })
 
   it('should contain the required page elements /data-insights/protected-and-responsivity-characteristics', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
+    checkPcElements(page)
+  })
+
+  it('should navigate to /data-insights/protected-and-responsivity-characteristics/age', () => {
+    cy.visit(adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics())
+    const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    page.checkOnPage()
+    page.selectCharacteristic().select('Age')
+    page.showResultsButton().click()
+    page.checkOnPage()
+
+    checkPcElements(page)
+    page.ageReadEvidenceLink().should('exist')
+  })
+
+  it('should navigate to /data-insights/protected-and-responsivity-characteristics/learning-disability', () => {
+    cy.visit(adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics())
+    const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    page.checkOnPage()
+    page.selectCharacteristic().select('Learning disability')
+    page.showResultsButton().click()
+    page.checkOnPage()
+
+    checkPcElements(page)
+    page.learningDisabilityReadEvidenceLink().should('exist')
+  })
+
+  it('should navigate to /data-insights/protected-and-responsivity-characteristics/maturity', () => {
+    cy.visit(adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics())
+    const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
+    page.checkOnPage()
+    page.selectCharacteristic().select('Maturity')
+    page.showResultsButton().click()
+    page.checkOnPage()
+
+    checkPcElements(page)
+    page.maturityReadEvidenceLink().should('exist')
+  })
+
+  function checkPcElements(page: DataInsightsPage) {
+    page.checkLastModifiedDate(fullLastModifiedDate)
+    page.selectCharacteristic().should('exist')
+    page.showResultsButton().should('exist')
     page.checkChartTitle('Overview of prisoners in the establishment - last 30 days')
     page.checkChartTitle('Adjudication reports by protected or responsivity characteristic - last 30 days')
     page.checkChartTitle('Adjudication offence type by protected or responsivity characteristic - last 30 days')
     page.checkChartTitle('Punishment by protected or responsivity characteristic - last 30 days')
     page.checkChartTitle('Plea by protected or responsivity characteristic - last 30 days')
     page.checkChartTitle('Finding by protected or responsivity characteristic - last 30 days')
-    page.checkLastModifiedDate(fullLastModifiedDate)
-  })
+  }
 
   it('should contain the required page elements /data-insights/offence-type', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.offenceType())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
+    page.checkLastModifiedDate(fullLastModifiedDate)
     page.checkChartTitle('Adjudication offence types - current month and previous 12 months')
     page.checkChartTitle('Adjudication offence type by location - last 30 days')
-    page.checkLastModifiedDate(fullLastModifiedDate)
   })
 
   it('should contain the required page elements /data-insights/punishments', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.punishments())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
+    page.checkLastModifiedDate(fullLastModifiedDate)
     page.checkChartTitle('Punishments given – current month and previous 12 months')
     page.checkChartTitle('Most commonly used punishment last month')
     page.checkChartTitle('Punishments given for each adjudication offence type - current month and previous 12 months')
     page.checkChartTitle('Suspended and activated punishments - current month and last 12 months')
-    page.checkLastModifiedDate(fullLastModifiedDate)
   })
 
   it('should contain the required page elements /data-insights/pleas-and-findings', () => {
     cy.visit(adjudicationUrls.dataInsights.urls.pleasAndFindings())
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
+    page.checkLastModifiedDate(fullLastModifiedDate)
     page.checkChartTitle('Pleas given - current month and previous 12 months')
     page.checkChartTitle('Findings - current month and previous 12 months')
-    // page.checkChartTitle('Adjudications resolved with more than one hearing - current month and previous 12 months')
-    page.checkLastModifiedDate(fullLastModifiedDate)
+    page.checkChartTitle('Adjudications resolved with more than one hearing - current month and previous 12 months')
   })
 })
 
