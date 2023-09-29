@@ -11,7 +11,7 @@ import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResul
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
-context.skip('Add additional days punishments', () => {
+context('Add additional days punishments', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

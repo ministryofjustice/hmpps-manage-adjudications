@@ -4,7 +4,7 @@ import TestData from '../../server/routes/testutils/testData'
 import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
 
 const testData = new TestData()
-context.skip('Punishment - is it suspended?', () => {
+context('Punishment - is it suspended?', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -63,7 +63,7 @@ context.skip('Punishment - is it suspended?', () => {
       punishmentIsSuspendedPage.suspended().find('input[value="no"]').check()
       punishmentIsSuspendedPage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentStartDate.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.whenWillPunishmentStart.urls.start('100'))
       })
     })
   })

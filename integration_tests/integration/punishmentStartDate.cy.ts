@@ -6,7 +6,7 @@ import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicati
 import { forceDateInput } from '../componentDrivers/dateInput'
 
 const testData = new TestData()
-context.skip('Punishment - Enter the date the punishment will start', () => {
+context('Punishment - Enter the date the punishment will start', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

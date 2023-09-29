@@ -5,7 +5,7 @@ import PunishmentStartDateChoicePage from '../pages/punishmentStartDateChoice'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 
 const testData = new TestData()
-context.skip('Punishment - when will the punishment start?', () => {
+context('Punishment - when will the punishment start?', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

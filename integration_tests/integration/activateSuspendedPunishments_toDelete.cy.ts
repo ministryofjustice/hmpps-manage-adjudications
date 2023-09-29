@@ -123,7 +123,7 @@ context('acivate suspended punishments page', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       )
     })
-    it('goes to the suspended punishment schedule page if the activate button is clicked', () => {
+    it.skip('goes to the suspended punishment schedule page if the activate button is clicked', () => {
       cy.visit(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
       const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)
       activateSuspendedPunishmentsPage.activatePunishmentButton().first().click()

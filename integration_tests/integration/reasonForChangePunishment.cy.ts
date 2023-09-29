@@ -2,9 +2,12 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import ReasonForChangePunishmentPage from '../pages/reasonForChangePunishment'
-import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import { PunishmentType } from '../../server/data/PunishmentResult'
+import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
+import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
+import PunishmentStartDateChoicePage from '../pages/punishmentStartDateChoice'
+import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDates'
 
 const testData = new TestData()
 context('What is the reason for this change', () => {
@@ -73,13 +76,22 @@ context('What is the reason for this change', () => {
       cy.get('#punishmentType-4').click()
       cy.get('#stoppagePercentage').type('25')
       cy.get('[data-qa="punishment-submit"]').click()
-      cy.get('#days').type('2')
-      cy.get('#suspended-2').click()
-      const date = new Date('2023-04-13')
-      const date2 = new Date('2023-04-15')
-      forceDateInputWithDate(date, '[data-qa="start-date-picker"]')
-      forceDateInputWithDate(date2, '[data-qa="end-date-picker"]')
-      cy.get('[data-qa="punishment-schedule-submit"]').click()
+
+      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
+      punishmentNumberOfDaysPage.days().type('10')
+      punishmentNumberOfDaysPage.submitButton().click()
+
+      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
+      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
+      punishmentSuspendedPage.submitButton().click()
+
+      const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
+      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
+      punishmentStartDateChoicePage.submitButton().click()
+
+      const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
+      punishmentAutomaticEndDatesPage.submitButton().click()
+
       cy.get('[data-qa="punishments-continue').click()
 
       const reasonForChangePunishmentPage = Page.verifyOnPage(ReasonForChangePunishmentPage)
