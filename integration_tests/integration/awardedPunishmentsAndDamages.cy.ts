@@ -339,7 +339,10 @@ context('View awarded punishments and damages', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.start())
       expect(loc.search).to.eq(
-        `?hearingDate=${today.date()}%2F${`${month}`.padStart(2, '0')}%2F${today.year()}&locationId=25538`
+        `?hearingDate=${`${today.date()}`.padStart(2, '0')}%2F${`${month}`.padStart(
+          2,
+          '0'
+        )}%2F${today.year()}&locationId=25538`
       )
     })
     // P3785CP should be filtered out based on the locationId
@@ -594,7 +597,10 @@ context('View awarded punishments and damages - Financial', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
       expect(loc.search).to.eq(
-        `?hearingDate=${today.date()}%2F${`${month}`.padStart(2, '0')}%2F${today.year()}&locationId=25538`
+        `?hearingDate=${`${today.date()}`.padStart(2, '0')}%2F${`${month}`.padStart(
+          2,
+          '0'
+        )}%2F${today.year()}&locationId=25538`
       )
     })
     // P3785CP should be filtered out based on the locationId
@@ -838,7 +844,10 @@ context('View awarded punishments and damages - Additional days', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
       expect(loc.search).to.eq(
-        `?hearingDate=${today.date()}%2F${`${month}`.padStart(2, '0')}%2F${today.year()}&locationId=25538`
+        `?hearingDate=${`${today.date()}`.padStart(2, '0')}%2F${`${month}`.padStart(
+          2,
+          '0'
+        )}%2F${today.year()}&locationId=25538`
       )
     })
     // P3785CP should be filtered out based on the locationId

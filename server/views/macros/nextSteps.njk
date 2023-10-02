@@ -1,7 +1,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% macro nextSteps(adjudicatorType) %}
-  {% if adjudicatorType == 'GOV' %}
+{% macro nextSteps(allowReferToGov) %}
+  {% if allowReferToGov === false %}
     {% set items = [
       {
         value: "schedule_hearing",
