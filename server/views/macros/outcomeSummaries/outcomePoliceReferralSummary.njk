@@ -17,7 +17,8 @@
     {% set dataQa = 'change-link-outcome-reason-for-referral' %}
   {% endif %}
 
-  {% set reasonForReferralChangeLinkAvailable = false if outcome.referralOutcome or readOnly else changeLinksAvailable %}
+  {% set reasonForReferralChangeLinkAvailable = false if outcome.referralOutcome or readOnly else 
+    changeLinksAvailable %}
 
   {% if reasonForReferralChangeLinkAvailable %}
     {% set reasonForReferralChangeLink = {
@@ -47,13 +48,8 @@
   {% if referralDetails %}
     {% set prosecute = referralDetails.code == ReferralOutcomeCode.PROSECUTION %}
 
-    {% if referralDetails.code == ReferralOutcomeCode.NOT_PROCEED %}
-      {% set nextStep = 'Not proceed with the charge' %}
-    {% elif referralDetails.code == ReferralOutcomeCode.SCHEDULE_HEARING %}
-      {% set nextStep = 'Schedule a hearing' %}
-    {% else %}
-      {% set nextStep = 'Refer this case to the governor' %}
-    {% endif %}
+    {% set nextStep = 'Not proceed with the charge' if referralDetails.code == ReferralOutcomeCode.NOT_PROCEED else 
+      'Schedule a hearing' %}
 
     {% set notProceeding = referralDetails.code == ReferralOutcomeCode.NOT_PROCEED %}
     {% set rows = (rows.push({
