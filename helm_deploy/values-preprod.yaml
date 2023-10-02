@@ -26,7 +26,6 @@ generic-service:
     ENVIRONMENT_NAME: 'PRE-PRODUCTION'
     V2_ENDPOINTS_FLAG: true
     FORMS_TAB_FLAG: true
-    AUTOMATIC_PUNISHMENT_DATES_FLAG: true
 
   allowlist:
     global-protect: "35.176.93.186/32"

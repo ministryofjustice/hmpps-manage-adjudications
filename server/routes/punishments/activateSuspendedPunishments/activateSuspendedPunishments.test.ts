@@ -120,7 +120,7 @@ describe('POST', () => {
       })
       .expect(
         'Location',
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.existing(
+        `${adjudicationUrls.suspendedPunishmentNumberOfDays.urls.existing(
           '100'
         )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE&days=5`
       )

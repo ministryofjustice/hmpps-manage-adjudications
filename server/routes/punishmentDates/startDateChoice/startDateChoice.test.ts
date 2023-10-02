@@ -26,7 +26,6 @@ let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
-  config.automaticPunishmentDatesFlag = 'true'
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({

@@ -23,10 +23,10 @@ export default function willPunishmentBeSuspendedRoutesV1({
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.isPunishmentSuspendedAdditionalDays_v1.matchers.start, willPunishmentBeSuspendedRoute.view)
-  post(adjudicationUrls.isPunishmentSuspendedAdditionalDays_v1.matchers.start, willPunishmentBeSuspendedRoute.submit)
-  get(adjudicationUrls.isPunishmentSuspendedAdditionalDays_v1.matchers.edit, willPunishmentBeSuspendedEditRoute.view)
-  post(adjudicationUrls.isPunishmentSuspendedAdditionalDays_v1.matchers.edit, willPunishmentBeSuspendedEditRoute.submit)
+  get(adjudicationUrls.isPunishmentSuspendedAdditionalDays.matchers.start, willPunishmentBeSuspendedRoute.view)
+  post(adjudicationUrls.isPunishmentSuspendedAdditionalDays.matchers.start, willPunishmentBeSuspendedRoute.submit)
+  get(adjudicationUrls.isPunishmentSuspendedAdditionalDays.matchers.edit, willPunishmentBeSuspendedEditRoute.view)
+  post(adjudicationUrls.isPunishmentSuspendedAdditionalDays.matchers.edit, willPunishmentBeSuspendedEditRoute.submit)
 
   return router
 }

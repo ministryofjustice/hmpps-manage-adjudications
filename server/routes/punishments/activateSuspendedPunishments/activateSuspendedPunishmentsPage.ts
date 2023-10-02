@@ -74,9 +74,6 @@ export default class ActivateSuspendedPunishmentsPage {
   }
 
   getRedirectUrl = (chargeNumber: string) => {
-    if (config.automaticPunishmentDatesFlag === 'true') {
-      return adjudicationUrls.suspendedPunishmentNumberOfDays.urls.existing(chargeNumber)
-    }
-    return adjudicationUrls.suspendedPunishmentSchedule.urls.existing(chargeNumber)
+    return adjudicationUrls.suspendedPunishmentNumberOfDays.urls.existing(chargeNumber)
   }
 }

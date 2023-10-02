@@ -80,7 +80,6 @@ beforeEach(() => {
       },
     ],
   })
-  config.automaticPunishmentDatesFlag = 'true'
 })
 
 afterEach(() => {

@@ -34,8 +34,6 @@ beforeEach(() => {
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
     }),
   })
-
-  config.automaticPunishmentDatesFlag = 'true'
 })
 
 afterEach(() => {
