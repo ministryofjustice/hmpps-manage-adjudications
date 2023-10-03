@@ -36,7 +36,7 @@
     {% set resultNumber = loop.index %}
 
     {% set punishmentsLinkHtml %}
-      <a href="{{ adjudicationUrls.punishmentsAndDamages.urls.review(result.chargeNumber) }}" class="govuk-link" data-qa="view-punishments-link-{{ resultNumber }}">View<span class="govuk-visually-hidden"> report for {{ result.chargeNumber }}</span></a>
+      <a href="{{ adjudicationUrls.punishmentsAndDamages.urls.review(result.chargeNumber) }}" class="govuk-link" data-qa="view-punishments-link-{{ resultNumber }}">View punishments<span class="govuk-visually-hidden"> for {{ result.chargeNumber }}</span></a>
     {% endset -%}
 
     {% set rows = (rows.push([
