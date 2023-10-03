@@ -27,7 +27,7 @@
     <h1 class="govuk-heading-l">{{ title }}</h1>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      <p class="govuk-body" data-qa="hint-para">This is the date and time that you gave the DIS 1/2 to the prisoner. <br>If someone else did this, they must log on to DPS and complete this themselves.</p>
+      <p class="govuk-body" data-qa="hint-para">This is the date and time you gave the notice of being placed on report (DIS 1 and 2) to the prisoner. <br><br>If someone else did this, they must sign in and complete this themselves.</p>
 
       {{
         dateTimePicker({

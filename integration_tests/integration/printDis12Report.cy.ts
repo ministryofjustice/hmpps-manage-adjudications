@@ -5,7 +5,7 @@ import PrintReport from '../pages/printReport'
 
 const testData = new TestData()
 
-context('Print a copy of this report', () => {
+context('Print notice of being placed on report (DIS 1 and 2)', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -94,8 +94,10 @@ context('Print a copy of this report', () => {
 
   it('should contain the required page elements', () => {
     cy.visit(adjudicationUrls.printReport.urls.dis12('1524242'))
-    Page.verifyOnPage(PrintReport)
-    cy.contains('John Smith must be given a copy of this report by 10:00 on Tuesday, 8 December 2020.')
+    const printReportPage = Page.verifyOnPage(PrintReport);
+    printReportPage.printLink('12')
+    printReportPage.printLink('1')
+    cy.contains('John Smith must be given a notice of being placed on report by 10:00 on Tuesday, 8 December 2020.')
     cy.contains('John Smith’s preferred language is:')
     cy.contains('French')
     cy.contains('They have other languages of:')
