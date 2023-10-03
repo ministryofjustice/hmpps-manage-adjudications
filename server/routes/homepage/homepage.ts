@@ -100,16 +100,17 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     },
     {
       id: 'print-completed-dis-forms',
-      heading: 'Print completed DIS 1/2 forms',
-      description: '',
+      heading: 'Print notice of being placed on report',
+      description:
+        'Print the notice of being placed on report and adjudications process guidance (DIS 1 and 2) for a prisoner.',
       href: adjudicationUrls.printCompletedDisForms.root,
       roles: [],
       enabled: true,
     },
     {
       id: 'confirm-dis-has-been-issued',
-      heading: 'Confirm DIS 1/2 has been issued to the prisoner',
-      description: '',
+      heading: 'Confirm notice of being placed on report was issued',
+      description: 'Enter when a prisoner was given the notice of being placed on report (DIS 1).',
       href: adjudicationUrls.confirmDISFormsIssued.root,
       roles: [],
       enabled: true,
@@ -142,8 +143,8 @@ export default class HomepageRoutes {
     const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
 
-    const disRelatedTasksPredicate = (task: { heading: string | string[] }) =>
-      task.heading.includes('DIS') || task.heading.includes('View awarded punishments and damages')
+    const disRelatedTasksPredicate = (task: TaskType) =>
+      task.description?.includes('DIS') || task.heading.includes('View awarded punishments and damages')
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !disRelatedTasksPredicate(task)
     )

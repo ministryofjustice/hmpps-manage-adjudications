@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class ConfirmDISFormsIssuedPage extends Page {
   constructor() {
-    super('Confirm DIS 1/2 has been issued to prisoner')
+    super('Confirm notice of being placed on report was issued')
   }
 
   noResultsMessage = (): PageElement => cy.get('[data-qa="no-results-message"]')

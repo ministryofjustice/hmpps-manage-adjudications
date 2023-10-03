@@ -51,19 +51,19 @@ afterEach(() => {
 
 describe('GET /issue-DIS1-2', () => {
   describe('with results', () => {
-    it('should load confirm DIS 1/2 has been issued to prisoner page - no filter', () => {
+    it('should load confirm notice of being placed on report was issued page - no filter', () => {
       return request(app)
         .get(adjudicationUrls.confirmDISFormsIssued.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Confirm DIS 1/2 has been issued to prisoner')
+          expect(response.text).toContain('Confirm notice of being placed on report was issued')
           expect(response.text).toContain('Smith, James - G7234VB')
           expect(response.text).toContain('Tovey, Peter - G6123VU')
           expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
           expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
         })
     })
-    it('should load confirm DIS 1/2 has been issued to prisoner page - with filter', () => {
+    it('should load confirm notice of being placed on report was issued page - with filter', () => {
       return request(app)
         .get(
           adjudicationUrls.confirmDISFormsIssued.urls.filter({
@@ -74,7 +74,7 @@ describe('GET /issue-DIS1-2', () => {
         )
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Confirm DIS 1/2 has been issued to prisoner')
+          expect(response.text).toContain('Confirm notice of being placed on report was issued')
           expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
           expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(1)
         })
@@ -89,7 +89,7 @@ describe('GET /issue-DIS1-2', () => {
         .get(adjudicationUrls.confirmDISFormsIssued.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Confirm DIS 1/2 has been issued to prisoner')
+          expect(response.text).toContain('Confirm notice of being placed on report was issued')
           expect(response.text).toContain('No completed reports')
           expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
           expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
