@@ -40,7 +40,7 @@ context('Home page', () => {
     homepage.printCompletedDisFormsLink().should('exist')
     homepage.confirmDisHasBeenIssuedLink().should('exist')
     homepage.reviewReportsLink().should('contain.text', 'Review reports (2)')
-    homepage.transferReportsLink().should('contain.text', 'View reports from transfers in (1)')
+    homepage.transferReportsLink().should('contain.text', 'Reports from transfers in (1)')
   })
 
   it('should link to the correct location - view all reports (main link)', () => {
