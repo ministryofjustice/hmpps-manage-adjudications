@@ -71,7 +71,7 @@ context('All Completed Reports', () => {
         expect($data.get(4).innerText).to.equal('-')
         // test hearings link is not populated
         expect($data.get(5).innerText).to.equal('')
-        expect($data.get(6).innerText).to.contain('View')
+        expect($data.get(6).innerText).to.contain('View report')
       })
   })
 
@@ -117,7 +117,7 @@ context('All Completed Reports', () => {
         expect($data.get(4).innerText).to.equal('-')
         // test hearings link is not populated
         expect($data.get(5).innerText).to.equal('')
-        expect($data.get(6).innerText).to.contain('View')
+        expect($data.get(6).innerText).to.contain('View report')
       })
   })
 
@@ -281,7 +281,7 @@ context('All Completed Reports', () => {
         expect($data.get(4).innerText).to.equal('-')
         expect($data.get(5).innerHTML).to.contain('/hearing-details/21/review')
         expect($data.get(6).innerHTML).to.contain('/prisoner-report/21/review')
-        expect($data.get(6).innerText).to.contain('View')
+        expect($data.get(6).innerText).to.contain('View report')
       })
   })
 
@@ -366,7 +366,7 @@ context('All Completed Reports', () => {
         expect($data.get(4).innerText).to.contain('30 November 2023 - 10:00')
         expect($data.get(5).innerHTML).to.contain('/hearing-details/21/review')
         expect($data.get(6).innerHTML).to.contain('/prisoner-report/21/review')
-        expect($data.get(6).innerText).to.contain('View')
+        expect($data.get(6).innerText).to.contain('View report')
       })
   })
 
@@ -429,7 +429,7 @@ context('All Completed Reports', () => {
         expect($data.get(4).innerText).to.contain('23 November 2022 - 17:00')
         expect($data.get(5).innerHTML).to.contain('/hearing-details/1/review')
         expect($data.get(6).innerHTML).to.contain('/prisoner-report/1/review')
-        expect($data.get(6).innerText).to.contain('View')
+        expect($data.get(6).innerText).to.contain('View report')
         expect($data.get(7).innerText).to.contain('2')
         expect($data.get(8).innerText).to.contain('15 November 2345 - 11:30')
         expect($data.get(9).innerText).to.contain('Potter, Harry - A1234AA')
@@ -437,7 +437,7 @@ context('All Completed Reports', () => {
         expect($data.get(11).innerText).to.equal('-')
         expect($data.get(12).innerHTML).to.contain('/hearing-details/2/review')
         expect($data.get(13).innerHTML).to.contain('/prisoner-report/2/review')
-        expect($data.get(13).innerText).to.contain('View')
+        expect($data.get(13).innerText).to.contain('View report')
       })
   })
 
