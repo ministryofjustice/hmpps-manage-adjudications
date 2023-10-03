@@ -93,7 +93,7 @@ context('Transferred Reports', () => {
         expect($data.get(2).innerText).to.contain('Potter, Harry - A1234AA')
         expect($data.get(3).innerText).to.contain('Unscheduled')
         expect($data.get(4).innerText).to.equal('-')
-        expect($data.get(6).innerText).to.contain('View')
+        expect($data.get(6).innerText).to.contain('View report')
       })
   })
 

@@ -3,7 +3,7 @@ import { forceDateInput } from '../componentDrivers/dateInput'
 
 export default class Home extends Page {
   constructor() {
-    super('View awarded punishments and damages')
+    super('Awarded punishments and damages')
   }
 
   allAwardedPunishmentsAndDamagesTab = (): PageElement => cy.get('[data-qa="allAwardedPunishmentsAndDamagesTab"]')

@@ -15,7 +15,7 @@ const today = moment()
 // why month is zero based is beyond me :)
 const month = today.month() + 1
 
-context('View awarded punishments and damages', () => {
+context('Awarded punishments and damages', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -258,8 +258,8 @@ context('View awarded punishments and damages', () => {
         expect($data.get(5).innerText).to.contain('No')
         expect($data.get(6).innerText).to.contain('3')
         expect($data.get(7).innerText).to.contain('£200')
-        expect($data.get(8).innerText).to.contain('Print')
-        expect($data.get(9).innerText).to.contain('View')
+        expect($data.get(8).innerText).to.contain('Print DIS7')
+        expect($data.get(9).innerText).to.contain('View punishments')
 
         expect($data.get(10).innerText).to.contain('12346')
         expect($data.get(11).innerText).to.contain('Ray, Tony - P3785CP')
@@ -269,8 +269,8 @@ context('View awarded punishments and damages', () => {
         expect($data.get(15).innerText).to.contain('No')
         expect($data.get(16).innerText).to.contain('0')
         expect($data.get(17).innerText).to.contain('-')
-        expect($data.get(18).innerText).to.contain('Print')
-        expect($data.get(19).innerText).to.contain('View')
+        expect($data.get(18).innerText).to.contain('Print DIS7')
+        expect($data.get(19).innerText).to.contain('View punishments')
 
         expect($data.get(20).innerText).to.contain('12347')
         expect($data.get(21).innerText).to.contain('Smith, David - G6345BY')
@@ -280,8 +280,8 @@ context('View awarded punishments and damages', () => {
         expect($data.get(25).innerText).to.contain('Yes')
         expect($data.get(26).innerText).to.contain('1')
         expect($data.get(27).innerText).to.contain('-')
-        expect($data.get(28).innerText).to.contain('Print')
-        expect($data.get(29).innerText).to.contain('View')
+        expect($data.get(28).innerText).to.contain('Print DIS7')
+        expect($data.get(29).innerText).to.contain('View punishments')
       })
 
     awardedPunishmentsAndDamagesPage
@@ -367,7 +367,7 @@ context('View awarded punishments and damages', () => {
   })
 })
 
-context('View awarded punishments and damages - Financial', () => {
+context('Awarded punishments and damages - Financial', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -547,7 +547,7 @@ context('View awarded punishments and damages - Financial', () => {
         expect($data.get(4).innerText).to.contain('Charge proved')
         expect($data.get(5).innerText).to.contain('2')
         expect($data.get(6).innerText).to.contain('£200')
-        expect($data.get(7).innerText).to.contain('View')
+        expect($data.get(7).innerText).to.contain('View punishments')
 
         expect($data.get(8).innerText).to.contain('12346')
         expect($data.get(9).innerText).to.contain('Ray, Tony - P3785CP')
@@ -556,7 +556,7 @@ context('View awarded punishments and damages - Financial', () => {
         expect($data.get(12).innerText).to.contain('Charge proved')
         expect($data.get(13).innerText).to.contain('1')
         expect($data.get(14).innerText).to.contain('-')
-        expect($data.get(15).innerText).to.contain('View')
+        expect($data.get(15).innerText).to.contain('View punishments')
       })
 
     financialAwardedPunishmentsAndDamagesPage
@@ -625,7 +625,7 @@ context('View awarded punishments and damages - Financial', () => {
   })
 })
 
-context('View awarded punishments and damages - Additional days', () => {
+context('Awarded punishments and damages - Additional days', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -794,7 +794,7 @@ context('View awarded punishments and damages - Additional days', () => {
         expect($data.get(4).innerText).to.contain('Charge proved')
         expect($data.get(5).innerText).to.contain('14')
         expect($data.get(6).innerText).to.contain('0')
-        expect($data.get(7).innerText).to.contain('View')
+        expect($data.get(7).innerText).to.contain('View punishments')
 
         expect($data.get(8).innerText).to.contain('12346')
         expect($data.get(9).innerText).to.contain('Ray, Tony - P3785CP')
@@ -803,7 +803,7 @@ context('View awarded punishments and damages - Additional days', () => {
         expect($data.get(12).innerText).to.contain('Charge proved')
         expect($data.get(13).innerText).to.contain('0')
         expect($data.get(14).innerText).to.contain('7')
-        expect($data.get(15).innerText).to.contain('View')
+        expect($data.get(15).innerText).to.contain('View punishments')
       })
 
     additionalDaysAwardedPunishmentsPage

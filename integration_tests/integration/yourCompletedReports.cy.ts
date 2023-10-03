@@ -120,7 +120,7 @@ context('Your Completed Reports', () => {
         expect($data.get(1).innerText).to.contain('1 January 2022 - 11:30')
         expect($data.get(2).innerText).to.contain('Moriarty, James - A1234AA')
         expect($data.get(3).innerText).to.contain('Unscheduled')
-        expect($data.get(4).innerText).to.contain('View')
+        expect($data.get(4).innerText).to.contain('View report')
       })
   })
 
@@ -164,7 +164,7 @@ context('Your Completed Reports', () => {
         expect($data.get(1).innerText).to.contain('1 January 2022 - 11:30')
         expect($data.get(2).innerText).to.contain('Unknown - A1234AA')
         expect($data.get(3).innerText).to.contain('Unscheduled')
-        expect($data.get(4).innerText).to.contain('View')
+        expect($data.get(4).innerText).to.contain('View report')
       })
   })
 

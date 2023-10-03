@@ -34,7 +34,7 @@
     {% set hearingNumber = loop.index %}
 
     {% set viewReportlLinkHtml %}
-    <a href="{{ adjudicationUrls.prisonerReport.urls.review(hearing.chargeNumber) }}" class="govuk-link" data-qa="view-report-link-{{ hearingNumber }}">View<span class="govuk-visually-hidden"> report for {{ hearing.friendlyName }}</span></a>
+    <a href="{{ adjudicationUrls.prisonerReport.urls.review(hearing.chargeNumber) }}" class="govuk-link" data-qa="view-report-link-{{ hearingNumber }}">View report<span class="govuk-visually-hidden"> for {{ hearing.friendlyName }}</span></a>
     {% endset -%}
 
     {% set viewHearinglLinkHtml %}

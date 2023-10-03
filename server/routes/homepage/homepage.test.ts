@@ -48,7 +48,7 @@ describe('GET /place-a-prisoner-on-report', () => {
       .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).not.toContain('View reports from Moorland (HMP & YOI)')
+        expect(res.text).not.toContain('Reports from Moorland (HMP & YOI)')
       })
   })
   it('the review tile should be visible with the correct role', () => {
@@ -57,7 +57,7 @@ describe('GET /place-a-prisoner-on-report', () => {
       .get(adjudicationUrls.homepage.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('View reports from Moorland (HMP & YOI)')
+        expect(res.text).toContain('Reports from Moorland (HMP & YOI)')
       })
   })
 })

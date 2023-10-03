@@ -2,9 +2,9 @@
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 
 {% macro adjudicationTabHeaderAll(activeCaseloadName, activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref, viewTransferredReportsHref, transferReportCount) %}
-  {% set activeCaseloadNameText %}View reports from {{activeCaseloadName}}{% endset %}
+  {% set activeCaseloadNameText %}Reports from {{activeCaseloadName}}{% endset %}
   {% set items = [{
-      text: 'View all hearings',
+      text: 'Hearings',
       href: viewScheduledHearingsHref,
       attributes: { 'data-qa': 'viewScheduledHearingsTab' },
       active: activeTab === 'viewScheduledHearings'
@@ -14,11 +14,11 @@
       attributes: { 'data-qa': 'viewAllCompletedReportsTab' },
       active: activeTab === 'viewCompletedReports'
     }, {
-      text: 'View reports from transfers in',
+      text: 'Reports from transfers in',
       href: viewTransferredReportsHref,
       attributes: { 'data-qa': 'viewTransferredReportsTab' },
       active: activeTab === 'viewTransferredReports'
-    }] 
+    }]
   %}
 
   <div class="govuk-!-margin-top-5">
