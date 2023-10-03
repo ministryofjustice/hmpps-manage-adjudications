@@ -29,6 +29,7 @@ export default class Dis12Pdf {
     )
 
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
+      true,
       chargeNumber,
       adjudicationDetails,
       offences
@@ -41,7 +42,7 @@ export default class Dis12Pdf {
       `pages/noticeOfBeingPlacedOnReportFooter`,
       {},
       {
-        filename: `adjudication-report-${chargeNumber}`,
+        filename: `notice-of-being-placed-on-report-${chargeNumber}.pdf`,
         pdfMargins,
       }
     )

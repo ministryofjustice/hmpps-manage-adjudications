@@ -3,6 +3,8 @@ import { convertToTitleCase, formatTimestampTo, formatTimestampToDate, formatTim
 import { IncidentAndOffences } from '../services/decisionTreeService'
 
 export default class noticeOfBeingPlacedOnReportData {
+  isPrisonerCopy: boolean
+
   chargeNumber: string
 
   statement: string
@@ -35,7 +37,13 @@ export default class noticeOfBeingPlacedOnReportData {
 
   isYouthOffender: boolean
 
-  constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData, offences: IncidentAndOffences) {
+  constructor(
+    isPrisonerCopy: boolean,
+    chargeNumber: string,
+    confirmedOnReportData: ConfirmedOnReportData,
+    offences: IncidentAndOffences
+  ) {
+    this.isPrisonerCopy = isPrisonerCopy
     this.chargeNumber = chargeNumber
     this.statement = confirmedOnReportData.statement
     this.prisonerDisplayName = convertToTitleCase(
