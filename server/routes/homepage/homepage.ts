@@ -42,7 +42,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     },
     {
       id: 'view-your-completed-reports',
-      heading: 'View your completed reports',
+      heading: 'Your completed reports',
       description:
         'View your completed reports. You can also make changes to a report for up to 48 hours, unless the report has been accepted by the reviewer.',
       href: adjudicationUrls.yourCompletedReports.root,
@@ -51,7 +51,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     },
     {
       id: 'view-all-reports',
-      heading: `View reports from ${activeCaseloadName}`,
+      heading: `Reports from ${activeCaseloadName}`,
       href: adjudicationUrls.allCompletedReports.root,
       links: [
         {
@@ -65,7 +65,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
           id: 'review-reports',
         },
         {
-          text: `View reports from transfers in (${transferReviewTotal})`,
+          text: `Reports from transfers in (${transferReviewTotal})`,
           href: adjudicationUrls.allTransferredReports.urls.filter({
             fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
             toDate: momentDateToDatePicker(moment()),
@@ -85,7 +85,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     },
     {
       id: 'view-scheduled-hearings',
-      heading: 'View all hearings',
+      heading: 'Hearings',
       href: adjudicationUrls.viewScheduledHearings.root,
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
@@ -116,7 +116,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     },
     {
       id: 'awarded-punishments-and-damages',
-      heading: 'View awarded punishments and damages',
+      heading: 'Awarded punishments and damages',
       description: '',
       href: adjudicationUrls.awardedPunishmentsAndDamages.root,
       roles: [],
@@ -143,7 +143,7 @@ export default class HomepageRoutes {
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
 
     const disRelatedTasksPredicate = (task: { heading: string | string[] }) =>
-      task.heading.includes('DIS') || task.heading.includes('View awarded punishments and damages')
+      task.heading.includes('DIS') || task.heading.includes('Awarded punishments and damages')
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !disRelatedTasksPredicate(task)
     )

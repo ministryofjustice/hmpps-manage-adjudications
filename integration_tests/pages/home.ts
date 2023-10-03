@@ -11,15 +11,15 @@ export default class Home extends Page {
 
   sectionBreak = (): PageElement => cy.get('[data-qa="section-break"]')
 
-  viewScheduledHearingsCard = (): PageElement => cy.get('a').contains('View all hearings')
+  viewScheduledHearingsCard = (): PageElement => cy.get('a').contains('Hearings')
 
   startANewReportLink = (): PageElement => cy.get('a').contains('Start a new report')
 
   continueAReportLink = (): PageElement => cy.get('a').contains('Continue a report')
 
-  viewYourCompletedReportsLink = (): PageElement => cy.get('a').contains('View your completed reports')
+  viewYourCompletedReportsLink = (): PageElement => cy.get('a').contains('Your completed reports')
 
-  viewAllReportsCard = (caseload: string): PageElement => cy.get('a').contains(`View reports from ${caseload}`)
+  viewAllReportsCard = (caseload: string): PageElement => cy.get('a').contains(`Reports from ${caseload}`)
 
   viewTransferReportsCard = (): PageElement => cy.get('a').contains('View all reports')
 

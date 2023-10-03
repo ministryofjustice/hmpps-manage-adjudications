@@ -15,7 +15,7 @@ const today = moment()
 // why month is zero based is beyond me :)
 const month = today.month() + 1
 
-context('View awarded punishments and damages', () => {
+context('Awarded punishments and damages', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -367,7 +367,7 @@ context('View awarded punishments and damages', () => {
   })
 })
 
-context('View awarded punishments and damages - Financial', () => {
+context('Awarded punishments and damages - Financial', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -625,7 +625,7 @@ context('View awarded punishments and damages - Financial', () => {
   })
 })
 
-context('View awarded punishments and damages - Additional days', () => {
+context('Awarded punishments and damages - Additional days', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

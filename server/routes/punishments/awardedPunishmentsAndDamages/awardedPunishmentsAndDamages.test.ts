@@ -69,7 +69,7 @@ describe('GET /awarded-punishments-and-damages', () => {
         .get(adjudicationUrls.awardedPunishmentsAndDamages.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('View awarded punishments and damages')
+          expect(response.text).toContain('Awarded punishments and damages')
           expect(response.text).toContain('Smith, James G7234VB')
           expect(response.text).toContain('Tovey, Peter G6123VU')
         })
@@ -84,7 +84,7 @@ describe('GET /awarded-punishments-and-damages', () => {
         )
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('View awarded punishments and damages')
+          expect(response.text).toContain('Awarded punishments and damages')
           expect(response.text).toContain('Smith, James G7234VB')
           expect(response.text).toContain('Tovey, Peter G6123VU')
         })
@@ -100,7 +100,7 @@ describe('GET /awarded-punishments-and-damages', () => {
         .get(adjudicationUrls.awardedPunishmentsAndDamages.root)
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('View awarded punishments and damages')
+          expect(response.text).toContain('Awarded punishments and damages')
           expect(response.text).toContain('No scheduled hearings')
         })
     })
