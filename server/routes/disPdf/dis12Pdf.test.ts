@@ -51,15 +51,14 @@ const reportedAdjudication: ReportedAdjudication = testData.reportedAdjudication
   status: ReportedAdjudicationStatus.SCHEDULED,
   hearings: [
     testData.singleHearing({
-      dateTimeOfHearing: '2023-09-02T10:50:00.000Z',
-
+      dateTimeOfHearing: '2023-09-02T10:50:00.000',
       outcome: testData.hearingOutcome({
         code: HearingOutcomeCode.ADJOURN,
         optionalItems: { details: 'adjourned details', reason: 'LEGAL_ADVICE', plea: 'NOT_ASKED' },
       }),
     }),
     testData.singleHearing({
-      dateTimeOfHearing: '2023-09-03T12:00:00.000Z',
+      dateTimeOfHearing: '2023-09-03T12:00:00.000',
       oicHearingType: OicHearingType.INAD_ADULT,
     }),
   ],
@@ -130,7 +129,7 @@ describe('GET /all-completed-reports', () => {
           isPrisonerCopy: true,
           isYouthOffender: false,
           nextHearingDate: 'Sunday 3 September',
-          nextHearingTime: '13:00',
+          nextHearingTime: '12:00',
           incidentTime: '07:21',
           offences: {
             incidentRule: undefined,
