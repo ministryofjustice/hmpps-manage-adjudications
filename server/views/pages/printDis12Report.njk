@@ -31,11 +31,11 @@
         }) }}
         {{ onReportInfo(prisonerFirstAndLastName, expirationTime, expirationDay, showPrisonerPreferredLanguage, prisonerPreferredLanguage, showPrisonerOtherLanguages, prisonerOtherLanguages, showPrisonerNeurodiversities, prisonerNeurodiversities) }}
 
-        {{ printLink('Print notice of being placed on report (DIS 1 and 2) for ' + prisonerFirstAndLastName, adjudicationUrls.printPdf.urls.dis12(chargeNumber), "left", "govuk-!-padding-right-0", "_blank", "printDis12") }}
+        {{ printLink('Print notice of being placed on report (DIS 1 and 2) for ' + prisonerFirstAndLastName, prisonerReportHref, "left", "govuk-!-padding-right-0", "_blank", "printDis12") }}
         <p class="govuk-body">After issuing the report, sign back in and confirm the date and time it was issued.</p>
 
         <h2 class="govuk-heading-m">Print the copy for the adjudication hearing</h2>
-        {{ printLink('Print notice of being placed on report for the adjudication hearing (DIS 1 only)', adjudicationUrls.printPdf.urls.dis12(chargeNumber), "left", "govuk-!-padding-right-0", "_blank", "printDis1") }}
+        {{ printLink('Print notice of being placed on report for the adjudication hearing (DIS 1 only)', staffReportHref, "left", "govuk-!-padding-right-0", "_blank", "printDis1") }}
       </div>
 
       <div class="govuk-!-margin-top-6">

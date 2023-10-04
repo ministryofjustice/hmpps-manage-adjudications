@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { formatName, formatTimestampToDate, formatTimestampToTime } from '../../utils/utils'
+import adjudicationUrls from '../../utils/urlGenerator'
 
 export default class PrintDis12ReportRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -23,6 +24,8 @@ export default class PrintDis12ReportRoutes {
       prisonerOtherLanguages: adjudicationDetails.prisonerOtherLanguages,
       showPrisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities?.length > 0,
       prisonerNeurodiversities: adjudicationDetails.prisonerNeurodiversities,
+      prisonerReportHref: `${adjudicationUrls.printPdf.urls.dis12(chargeNumber)}?copy=prisoner`,
+      staffReportHref: `${adjudicationUrls.printPdf.urls.dis12(chargeNumber)}?copy=staff`,
       exitUrl: referrer,
     })
   }
