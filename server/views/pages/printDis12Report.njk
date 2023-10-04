@@ -1,13 +1,20 @@
 {% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../macros/printLink.njk" import printLink %}
 {% from "../macros/onReport.njk" import onReportInfo %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
 {% set title = "Print notice of being placed on report (DIS 1 and 2)" %}
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
 {% block content %}
   <div>
     <div class='no-print'>
@@ -27,11 +34,11 @@
         {{ printLink('Print notice of being placed on report (DIS 1 and 2) for ' + prisonerFirstAndLastName, adjudicationUrls.printPdf.urls.dis12(chargeNumber), "left", "govuk-!-padding-right-0", "_blank", "printDis12") }}
         <p class="govuk-body">After issuing the report, sign back in and confirm the date and time it was issued.</p>
 
-        <h2 class="govuk-heading-m">Print the copy for adjudication hearing</h2>
+        <h2 class="govuk-heading-m">Print the copy for the adjudication hearing</h2>
         {{ printLink('Print notice of being placed on report for the adjudication hearing (DIS 1 only)', adjudicationUrls.printPdf.urls.dis12(chargeNumber), "left", "govuk-!-padding-right-0", "_blank", "printDis1") }}
       </div>
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-      <div class="govuk-!-margin-top-5">
+
+      <div class="govuk-!-margin-top-6">
         {{ govukButton({
           text: 'Exit',
           element: 'a',
