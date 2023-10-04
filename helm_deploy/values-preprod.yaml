@@ -17,7 +17,7 @@ generic-service:
     CURIOUS_API_URL: https://preprodservices.sequation.net/sequation-virtual-campus2-api
     PRISON_API_URL: https://api-preprod.prison.service.justice.gov.uk
     SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
-    PRISONER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
+    PRISONER_SEARCH_API_URL: https://prisoner-search-preprod.prison.service.justice.gov.uk
     DATA_INSIGHTS_API_URL: https://adjudications-insights-api-preprod.hmpps.service.justice.gov.uk
     ADJUDICATIONS_URL: http://hmpps-manage-adjudications
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
