@@ -94,7 +94,7 @@ context('Print notice of being placed on report (DIS 1 and 2)', () => {
 
   it('should contain the required page elements', () => {
     cy.visit(adjudicationUrls.printReport.urls.dis12('1524242'))
-    const printReportPage = Page.verifyOnPage(PrintReport);
+    const printReportPage = Page.verifyOnPage(PrintReport)
     printReportPage.printLink('12')
     printReportPage.printLink('1')
     cy.contains('John Smith must be given a notice of being placed on report by 10:00 on Tuesday, 8 December 2020.')
