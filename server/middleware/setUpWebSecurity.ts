@@ -37,6 +37,7 @@ export default function setUpWebSecurity(): Router {
   ]
   const fontSrc = ["'self'"]
   const imgSrc = ["'self'", '*.googletagmanager.com', '*.google-analytics.com', 'code.jquery.com', 'data:']
+  const formAction = [`'self' ${config.digitalPrisonServiceUrl}`]
 
   if (config.apis.frontendComponents.url) {
     scriptSrc.push(config.apis.frontendComponents.url)
@@ -55,6 +56,7 @@ export default function setUpWebSecurity(): Router {
           styleSrc,
           fontSrc,
           imgSrc,
+          formAction,
         },
       },
       // When we updated Helmet past v6, these policies were set to true as default,
