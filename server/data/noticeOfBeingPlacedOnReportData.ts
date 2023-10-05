@@ -13,8 +13,6 @@ export default class noticeOfBeingPlacedOnReportData {
 
   prisonerNumber: string
 
-  adjournedHearingDate: string
-
   nextHearingDate: string
 
   nextHearingTime: string
@@ -48,7 +46,6 @@ export default class noticeOfBeingPlacedOnReportData {
     chargeNumber: string,
     confirmedOnReportData: ConfirmedOnReportData,
     offences: IncidentAndOffences,
-    adjournedHearingDateTime: string,
     nextHearingDateTime: string
   ) {
     this.isPrisonerCopy = isPrisonerCopy
@@ -61,9 +58,6 @@ export default class noticeOfBeingPlacedOnReportData {
       `${confirmedOnReportData.prisonerFirstName} ${confirmedOnReportData.prisonerLastName}`
     )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
-    if (adjournedHearingDateTime !== null) {
-      this.adjournedHearingDate = formatTimestampTo(adjournedHearingDateTime, 'D MMMM')
-    }
     if (nextHearingDateTime !== null) {
       this.nextHearingDate = formatTimestampTo(nextHearingDateTime, 'dddd D MMMM')
       this.nextHearingTime = formatTimestampTo(nextHearingDateTime, 'HH:mm')

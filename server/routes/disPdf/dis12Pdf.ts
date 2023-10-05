@@ -31,13 +31,10 @@ export default class Dis12Pdf {
     )
 
     const isPrisonerCopy = copy === 'prisoner'
-    const latestAdjournedHearing = reportedAdjudication.hearings?.filter(hearing => hearing.outcome?.reason)[0]
     const scheduledHearings =
       reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED && reportedAdjudication.hearings.length >= 2
-    let adjournedHearingDateTime
     let nextHearingDateTime
-    if (isPrisonerCopy && latestAdjournedHearing !== null && scheduledHearings) {
-      adjournedHearingDateTime = latestAdjournedHearing.dateTimeOfHearing
+    if (isPrisonerCopy && scheduledHearings) {
       nextHearingDateTime = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
     }
 
@@ -46,7 +43,6 @@ export default class Dis12Pdf {
       chargeNumber,
       adjudicationDetails,
       offences,
-      adjournedHearingDateTime,
       nextHearingDateTime
     )
     res.renderPdf(

@@ -120,7 +120,6 @@ describe('GET /all-completed-reports', () => {
       {
         adjudicationsUrl: 'http://host.docker.internal:3000',
         noticeOfBeingPlacedOnReportData: {
-          adjournedHearingDate: '2 September',
           chargeNumber: '1524493',
           expirationDay: 'Wednesday, 23 December 2020',
           expirationTime: '07:21',
@@ -130,6 +129,80 @@ describe('GET /all-completed-reports', () => {
           isYouthOffender: false,
           nextHearingDate: 'Sunday 3 September',
           nextHearingTime: '12:00',
+          incidentTime: '07:21',
+          offences: {
+            incidentRule: undefined,
+            offenceRule: {
+              paragraphDescription: 'Commits any assault',
+              paragraphNumber: '1',
+            },
+            questionsAndAnswers: [
+              {
+                answer: 'An answer',
+                question: 'A question',
+              },
+            ],
+          },
+          prisonerDisplayName: 'Smith, John',
+          prisonerFriendlyName: 'John Smith',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
+          prisonerNumber: 'H5123BY',
+          reportedDate: '21 December 2020',
+          reportedTime: '10:45',
+          reportingOfficer: 'An Officer',
+          statement: 'A statement',
+        },
+      },
+      'pages/noticeOfBeingPlacedOnReportHeader',
+      { chargeNumber: '1524493' },
+      'pages/noticeOfBeingPlacedOnReportFooter',
+      {},
+      {
+        filename: 'notice-of-being-placed-on-report-1524493.pdf',
+        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '1.0' },
+      }
+    )
+  })
+
+  it('should render a PDF view of an adjudication for prisoners - no adjournments', async () => {
+    const reportedAdjudicationWithoutHearing = testData.reportedAdjudication({
+      chargeNumber: '1524493',
+      prisonerNumber: 'G6415GD',
+      locationId: 197682,
+      dateTimeOfIncident: '2021-12-09T10:30:00',
+      offenceDetails: { offenceCode: 1, offenceRule },
+    })
+    reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
+      reportedAdjudication: reportedAdjudicationWithoutHearing,
+    })
+
+    const res: Response = {
+      render: jest.fn(),
+      renderPdf: jest.fn(),
+      redirect: jest.fn(),
+      locals: {},
+    } as unknown as Response
+
+    const req: Request = {
+      params: { chargeNumber: reportedAdjudicationWithoutHearing.chargeNumber },
+      query: { copy: 'prisoner' },
+    } as unknown as Request
+    await new Dis12Pdf(reportedAdjudicationsService, decisionTreeService).renderPdf(req, res)
+    expect(res.renderPdf).toHaveBeenCalled()
+    expect(res.renderPdf).toHaveBeenCalledWith(
+      'pages/noticeOfBeingPlacedOnReport',
+      {
+        adjudicationsUrl: 'http://host.docker.internal:3000',
+        noticeOfBeingPlacedOnReportData: {
+          chargeNumber: '1524493',
+          expirationDay: 'Wednesday, 23 December 2020',
+          expirationTime: '07:21',
+          incidentDate: 'Monday, 21 December 2020',
+          incidentLocationDescription: 'Moorland (HMP & YOI) - Adj',
+          isPrisonerCopy: true,
+          isYouthOffender: false,
+          nextHearingDate: undefined,
+          nextHearingTime: undefined,
           incidentTime: '07:21',
           offences: {
             incidentRule: undefined,
