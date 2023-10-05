@@ -42,7 +42,7 @@ export default class WillPunishmentBeSuspendedPage {
     const { chargeNumber } = req.params
     const { error, suspended } = pageData
 
-    return res.render(`pages/willPunishmentBeSuspended_v1.njk`, {
+    return res.render(`pages/willPunishmentBeSuspended.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       suspended,

@@ -68,7 +68,7 @@ import PunishmentRoutes from './punishment'
 import awardPunishmentsRoutes from './punishments/awardPunishments'
 import PunishmentScheduleRoutes from './punishmentSchedule'
 import numberOfAdditionalDaysRoutes from './additionalDays/numberOfAdditionalDays'
-import willPunishmentBeSuspendedRoutesV1 from './additionalDays/willPunishmentBeSuspended_v1'
+import willPunishmentBeSuspendedRoutes from './additionalDays/willPunishmentBeSuspended'
 import punishmentSuspendedUntilAdditionalDays from './additionalDays/suspendedUntilDate'
 import checkPunishmentRoutes from './punishments/checkPunishments'
 import activateSuspendedPunishmentsRoutes from './punishments/activateSuspendedPunishments'
@@ -94,8 +94,6 @@ import suspendedPunishmentStartDateChoiceRoutes from './punishmentSuspendedDates
 import suspendedPunishmentNumberOfDaysRoutes from './punishmentSuspendedDates/numberOfDays'
 import suspendedPunishmentEnterStartDateRoutes from './punishmentSuspendedDates/enterStartDate'
 import autoPunishmentSuspendedScheduleRoutes from './punishmentSuspendedDates/autoPunishmentSchedule'
-
-import config from '../config'
 
 export default function routes(
   router: Router,
@@ -327,7 +325,7 @@ export default function routes(
 
   router.use(
     adjudicationUrls.isPunishmentSuspendedAdditionalDays.root,
-    willPunishmentBeSuspendedRoutesV1({ userService, punishmentsService })
+    willPunishmentBeSuspendedRoutes({ userService, punishmentsService })
   )
 
   router.use(

@@ -14,20 +14,6 @@
   {{ breadcrumb() }}
 {% endblock %}
 
-{% set suspendedUntilHtml %}
-<h2 class="govuk-heading-s">When will it be suspended until?</h2>
-{{
-  datePicker({
-    id: 'suspendedUntil',
-    label: 'Suspended until',
-    name: 'suspendedUntil',
-    date: suspendedUntil,
-    attributes: {'data-disable-future-date':'false', 'data-qa': "suspended-until-date-picker" },
-    classes: 'govuk-input--width-10'
-  })
-  }}
-{% endset -%}
-
 {% block content %}
   {% if errors | length %}
     {{ govukErrorSummary({
@@ -51,8 +37,7 @@
           {
             value: "yes",
             text: "Yes",
-            checked: suspended == 'yes',
-            conditional: { html: suspendedUntilHtml }
+            checked: suspended == 'yes'
           },
           {
             value: "no",

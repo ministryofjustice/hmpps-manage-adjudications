@@ -24,7 +24,6 @@ generic-service:
     FRONTEND_COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
     MAINTENANCE_MODE: false
     ENVIRONMENT_NAME: 'DEV'
-    V2_ENDPOINTS_FLAG: true
     FORMS_TAB_FLAG: true
 
   allowlist: null

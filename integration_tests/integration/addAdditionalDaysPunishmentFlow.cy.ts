@@ -80,7 +80,7 @@ context('Add additional days punishments', () => {
       numberOfAdditionalDaysPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.isPunishmentSuspendedAdditionalDaysls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.start('100'))
       })
 
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
