@@ -3,6 +3,8 @@ import { convertToTitleCase, formatTimestampTo, formatTimestampToDate, formatTim
 import { IncidentAndOffences } from '../services/decisionTreeService'
 
 export default class noticeOfBeingPlacedOnReportData {
+  isPrisonerCopy: boolean
+
   chargeNumber: string
 
   statement: string
@@ -10,6 +12,10 @@ export default class noticeOfBeingPlacedOnReportData {
   prisonerDisplayName: string
 
   prisonerNumber: string
+
+  nextHearingDate: string
+
+  nextHearingTime: string
 
   reportingOfficer: string
 
@@ -35,7 +41,14 @@ export default class noticeOfBeingPlacedOnReportData {
 
   isYouthOffender: boolean
 
-  constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData, offences: IncidentAndOffences) {
+  constructor(
+    isPrisonerCopy: boolean,
+    chargeNumber: string,
+    confirmedOnReportData: ConfirmedOnReportData,
+    offences: IncidentAndOffences,
+    nextHearingDateTime: string
+  ) {
+    this.isPrisonerCopy = isPrisonerCopy
     this.chargeNumber = chargeNumber
     this.statement = confirmedOnReportData.statement
     this.prisonerDisplayName = convertToTitleCase(
@@ -45,6 +58,10 @@ export default class noticeOfBeingPlacedOnReportData {
       `${confirmedOnReportData.prisonerFirstName} ${confirmedOnReportData.prisonerLastName}`
     )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
+    if (nextHearingDateTime !== null) {
+      this.nextHearingDate = formatTimestampTo(nextHearingDateTime, 'dddd D MMMM')
+      this.nextHearingTime = formatTimestampTo(nextHearingDateTime, 'HH:mm')
+    }
     this.reportingOfficer = convertToTitleCase(confirmedOnReportData.reportingOfficer)
     this.incidentLocationDescription = `${confirmedOnReportData.incidentAgencyName} - ${confirmedOnReportData.incidentLocationName}`
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${

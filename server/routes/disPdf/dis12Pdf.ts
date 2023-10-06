@@ -4,6 +4,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import NoticeOfBeingPlacedOnReportData from '../../data/noticeOfBeingPlacedOnReportData'
 import config from '../../config'
 import DecisionTreeService from '../../services/decisionTreeService'
+import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 
 export default class Dis12Pdf {
   constructor(
@@ -13,6 +14,7 @@ export default class Dis12Pdf {
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
+    const { copy } = req.query
     const { user } = res.locals
     const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
     const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
@@ -28,10 +30,20 @@ export default class Dis12Pdf {
       true
     )
 
+    const isPrisonerCopy = copy === 'prisoner'
+    const scheduledHearings =
+      reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED && reportedAdjudication.hearings.length >= 2
+    let nextHearingDateTime
+    if (isPrisonerCopy && scheduledHearings) {
+      nextHearingDateTime = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
+    }
+
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
+      isPrisonerCopy,
       chargeNumber,
       adjudicationDetails,
-      offences
+      offences,
+      nextHearingDateTime
     )
     res.renderPdf(
       `pages/noticeOfBeingPlacedOnReport`,
@@ -41,7 +53,7 @@ export default class Dis12Pdf {
       `pages/noticeOfBeingPlacedOnReportFooter`,
       {},
       {
-        filename: `adjudication-report-${chargeNumber}`,
+        filename: `notice-of-being-placed-on-report-${chargeNumber}.pdf`,
         pdfMargins,
       }
     )

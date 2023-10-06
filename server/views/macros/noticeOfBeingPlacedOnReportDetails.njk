@@ -1,13 +1,15 @@
 {% macro noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) %}
 {% set offences = noticeOfBeingPlacedOnReportData.offences %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
-        <div>
-            <p>A copy of this report should be given to {{ noticeOfBeingPlacedOnReportData.prisonerFriendlyName }} by
-                {{ noticeOfBeingPlacedOnReportData.expirationTime }} on
-                {{ noticeOfBeingPlacedOnReportData.expirationDay }}.</br>
-                This is because the prisoner must have the report within 48 hours of the alleged offence being discovered.
-            </p>
-        </div>
+        {% if not noticeOfBeingPlacedOnReportData.nextHearingTime %}
+            <div>
+                <p>A copy of this report should be given to {{ noticeOfBeingPlacedOnReportData.prisonerFriendlyName }} by
+                    {{ noticeOfBeingPlacedOnReportData.expirationTime }} on
+                    {{ noticeOfBeingPlacedOnReportData.expirationDay }}.</br>
+                    This is because the prisoner must have the report within 48 hours of the alleged offence being discovered.
+                </p>
+            </div>
+        {% endif %}
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
             <div class='adjudication-pdf-section-prisoner__item'>
@@ -32,10 +34,18 @@
                 </p>
             </div>
         </div>
+
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-        <p class='govuk-!-margin-bottom-1'>You need to attend an adjudication hearing and you will be told when this
-            will be. 
-        </p>
+        {% if noticeOfBeingPlacedOnReportData.nextHearingTime %}
+            <p class='govuk-!-margin-bottom-1'>You need to go to a hearing at <span><strong>{{ noticeOfBeingPlacedOnReportData.nextHearingTime }} on {{ noticeOfBeingPlacedOnReportData.nextHearingDate }}</strong></span>.</p>
+            <p class='govuk-!-margin-bottom-1'>This is the next hearing for this charge, after a previous hearing was put on hold, or ‘adjourned’.</p>
+            <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+        {% else %}
+            <p class='govuk-!-margin-bottom-1'>You need to attend an adjudication hearing and you will be told when this
+                will be.
+            </p>
+        {% endif %}
+
         <p class='govuk-!-font-weight-bold govuk-!-margin-bottom-1'>It is alleged that an incident happened:</p>
         <ul class='govuk-list govuk-list--bullet'>
             <li class='govuk-!-margin-bottom-1' data-qa='notice-of-being-placed-on-report-incident-date'>
