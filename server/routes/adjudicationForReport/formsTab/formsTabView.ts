@@ -49,6 +49,7 @@ export default class FormsTabRoute {
       hearingsHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
       formsHref: adjudicationUrls.forms.urls.review(chargeNumber),
+      noticeOfBeingPlacedOnReportHref: `${adjudicationUrls.printPdf.urls.dis12(chargeNumber)}?copy=prisoner`,
     })
   }
 }

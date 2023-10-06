@@ -50,7 +50,7 @@ describe('GET /print-report', () => {
       .get(adjudicationUrls.printReport.urls.dis12('123'))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Print this report')
+        expect(res.text).toContain('Print notice of being placed on report (DIS 1 and 2)')
         expect(res.text).toContain('123')
         expect(res.text).toContain('John Smith’s preferred language is')
         expect(res.text).toContain('They have other languages of')
