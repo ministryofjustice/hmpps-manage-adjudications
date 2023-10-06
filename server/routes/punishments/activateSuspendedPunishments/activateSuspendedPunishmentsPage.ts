@@ -7,7 +7,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import PunishmentsService from '../../../services/punishmentsService'
 import { PunishmentDataWithSchedule } from '../../../data/PunishmentResult'
-import config from '../../../config'
 
 export default class ActivateSuspendedPunishmentsPage {
   constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {}
