@@ -5,7 +5,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import config from '../../../config'
 import TestData from '../../testutils/testData'
 
 jest.mock('../../../services/userService')
@@ -34,8 +33,6 @@ beforeEach(() => {
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
     }),
   })
-
-  config.automaticPunishmentDatesFlag = 'true'
 })
 
 afterEach(() => {

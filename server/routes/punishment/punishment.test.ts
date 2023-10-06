@@ -74,7 +74,7 @@ describe('POST /punishment', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.punishmentSchedule.urls.start(
+        `${adjudicationUrls.punishmentNumberOfDays.urls.start(
           '100'
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
       )

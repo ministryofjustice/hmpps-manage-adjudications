@@ -68,21 +68,12 @@ describe('POST punishment-suspended page', () => {
         suspended: 'yes',
         suspendedUntil: '14/4/2024',
       })
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
-      .then(() =>
-        expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(
-          expect.anything(),
-          {
-            type: PunishmentType.ADDITIONAL_DAYS,
-            privilegeType: null,
-            otherPrivilege: null,
-            days: 5,
-            stoppagePercentage: null,
-            suspendedUntil: '2024-04-14',
-          },
+      .expect(
+        'Location',
+        `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.edit(
           '100',
           'XYZ'
-        )
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=5`
       )
   })
   it('should redirect - not suspended', () => {
@@ -102,7 +93,7 @@ describe('POST punishment-suspended page', () => {
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
           '100',
           'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=6&suspendedUntil=`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=6`
       )
   })
 })

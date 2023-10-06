@@ -5,7 +5,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import config from '../../../config'
 import { PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
@@ -31,7 +30,6 @@ beforeEach(() => {
     days: 10,
     suspendedUntil: '4/4/2023',
   })
-  config.automaticPunishmentDatesFlag = 'true'
 })
 
 afterEach(() => {

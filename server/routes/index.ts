@@ -69,7 +69,6 @@ import awardPunishmentsRoutes from './punishments/awardPunishments'
 import PunishmentScheduleRoutes from './punishmentSchedule'
 import numberOfAdditionalDaysRoutes from './additionalDays/numberOfAdditionalDays'
 import willPunishmentBeSuspendedRoutes from './additionalDays/willPunishmentBeSuspended'
-import willPunishmentBeSuspendedRoutesV1 from './additionalDays/willPunishmentBeSuspended_v1'
 import punishmentSuspendedUntilAdditionalDays from './additionalDays/suspendedUntilDate'
 import checkPunishmentRoutes from './punishments/checkPunishments'
 import activateSuspendedPunishmentsRoutes from './punishments/activateSuspendedPunishments'
@@ -95,8 +94,6 @@ import suspendedPunishmentStartDateChoiceRoutes from './punishmentSuspendedDates
 import suspendedPunishmentNumberOfDaysRoutes from './punishmentSuspendedDates/numberOfDays'
 import suspendedPunishmentEnterStartDateRoutes from './punishmentSuspendedDates/enterStartDate'
 import autoPunishmentSuspendedScheduleRoutes from './punishmentSuspendedDates/autoPunishmentSchedule'
-
-import config from '../config'
 
 export default function routes(
   router: Router,
@@ -327,12 +324,6 @@ export default function routes(
   )
 
   router.use(
-    adjudicationUrls.isPunishmentSuspendedAdditionalDays_v1.root,
-    willPunishmentBeSuspendedRoutesV1({ userService, punishmentsService })
-  )
-
-  // this one will need deleting after flag removed (below)
-  router.use(
     adjudicationUrls.isPunishmentSuspendedAdditionalDays.root,
     willPunishmentBeSuspendedRoutes({ userService, punishmentsService })
   )
@@ -387,72 +378,70 @@ export default function routes(
 
   router.use(adjudicationUrls.isPrisonerStillInEstablishment.root, isPrisonerStillInEstablishmentRoutes())
 
-  if (config.automaticPunishmentDatesFlag === 'true') {
-    router.use(
-      adjudicationUrls.punishmentNumberOfDays.root,
-      punishmentNumberOfDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService })
-    )
-    router.use(
-      adjudicationUrls.punishmentIsSuspended.root,
-      punishmentSuspendedRoutes({ userService, punishmentsService, reportedAdjudicationsService })
-    )
-    router.use(
-      adjudicationUrls.punishmentSuspendedUntil.root,
-      punishmentSuspendedUntilDateRoutes({ userService, punishmentsService, reportedAdjudicationsService })
-    )
-    router.use(
-      adjudicationUrls.punishmentStartDate.root,
-      enterStartDateRoutes({ userService, punishmentsService, reportedAdjudicationsService })
-    )
-    router.use(
-      adjudicationUrls.punishmentAutomaticDateSchedule.root,
-      autoPunishmentScheduleRoutes({ userService, punishmentsService, reportedAdjudicationsService })
-    )
-    router.use(
-      adjudicationUrls.whenWillPunishmentStart.root,
-      punishmentStartDateChoiceRoutes({ userService, punishmentsService, reportedAdjudicationsService })
-    )
-    router.use(
-      adjudicationUrls.suspendedPunishmentNumberOfDays.root,
-      suspendedPunishmentNumberOfDaysRoutes({
-        userService,
-        punishmentsService,
-        reportedAdjudicationsService,
-      })
-    )
-    router.use(
-      adjudicationUrls.suspendedPunishmentStartDateChoice.root,
-      suspendedPunishmentStartDateChoiceRoutes({
-        userService,
-        punishmentsService,
-        reportedAdjudicationsService,
-      })
-    )
-    router.use(
-      adjudicationUrls.suspendedPunishmentStartDate.root,
-      suspendedPunishmentEnterStartDateRoutes({
-        userService,
-        punishmentsService,
-        reportedAdjudicationsService,
-      })
-    )
-    router.use(
-      adjudicationUrls.suspendedPunishmentAutoDates.root,
-      autoPunishmentSuspendedScheduleRoutes({
-        userService,
-        punishmentsService,
-        reportedAdjudicationsService,
-      })
-    )
-    router.use(
-      adjudicationUrls.punishmentSuspendedUntilAdditionalDays.root,
-      punishmentSuspendedUntilAdditionalDays({
-        userService,
-        punishmentsService,
-        reportedAdjudicationsService,
-      })
-    )
-  }
+  router.use(
+    adjudicationUrls.punishmentNumberOfDays.root,
+    punishmentNumberOfDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+  )
+  router.use(
+    adjudicationUrls.punishmentIsSuspended.root,
+    punishmentSuspendedRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+  )
+  router.use(
+    adjudicationUrls.punishmentSuspendedUntil.root,
+    punishmentSuspendedUntilDateRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+  )
+  router.use(
+    adjudicationUrls.punishmentStartDate.root,
+    enterStartDateRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+  )
+  router.use(
+    adjudicationUrls.punishmentAutomaticDateSchedule.root,
+    autoPunishmentScheduleRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+  )
+  router.use(
+    adjudicationUrls.whenWillPunishmentStart.root,
+    punishmentStartDateChoiceRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+  )
+  router.use(
+    adjudicationUrls.suspendedPunishmentNumberOfDays.root,
+    suspendedPunishmentNumberOfDaysRoutes({
+      userService,
+      punishmentsService,
+      reportedAdjudicationsService,
+    })
+  )
+  router.use(
+    adjudicationUrls.suspendedPunishmentStartDateChoice.root,
+    suspendedPunishmentStartDateChoiceRoutes({
+      userService,
+      punishmentsService,
+      reportedAdjudicationsService,
+    })
+  )
+  router.use(
+    adjudicationUrls.suspendedPunishmentStartDate.root,
+    suspendedPunishmentEnterStartDateRoutes({
+      userService,
+      punishmentsService,
+      reportedAdjudicationsService,
+    })
+  )
+  router.use(
+    adjudicationUrls.suspendedPunishmentAutoDates.root,
+    autoPunishmentSuspendedScheduleRoutes({
+      userService,
+      punishmentsService,
+      reportedAdjudicationsService,
+    })
+  )
+  router.use(
+    adjudicationUrls.punishmentSuspendedUntilAdditionalDays.root,
+    punishmentSuspendedUntilAdditionalDays({
+      userService,
+      punishmentsService,
+      reportedAdjudicationsService,
+    })
+  )
 
   return router
 }

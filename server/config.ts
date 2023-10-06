@@ -142,6 +142,5 @@ export default {
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
   formsTabFlag: get('FORMS_TAB_FLAG', false, requiredInProduction),
-  automaticPunishmentDatesFlag: get('AUTOMATIC_PUNISHMENT_DATES_FLAG', false, requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
 }

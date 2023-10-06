@@ -8,7 +8,7 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 
-export default function willPunishmentBeSuspendedRoutes({
+export default function willPunishmentBeSuspendedRoutesV1({
   userService,
   punishmentsService,
 }: {

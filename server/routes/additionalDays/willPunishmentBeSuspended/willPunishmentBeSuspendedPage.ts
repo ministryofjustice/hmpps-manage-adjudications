@@ -1,18 +1,17 @@
 /* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
+import { ParsedUrlQueryInput } from 'querystring'
 import validateForm from './willPunishmentBeSuspendedValidation'
 import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
-import { apiDateToDatePicker, datePickerToApi, hasAnyRole } from '../../../utils/utils'
+import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
-import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
   suspended?: string
-  suspendedUntil?: string
 }
 
 export enum PageRequestType {
@@ -41,13 +40,12 @@ export default class WillPunishmentBeSuspendedPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, suspended, suspendedUntil } = pageData
+    const { error, suspended } = pageData
 
     return res.render(`pages/willPunishmentBeSuspended.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       suspended,
-      suspendedUntil,
     })
   }
 
@@ -63,7 +61,6 @@ export default class WillPunishmentBeSuspendedPage {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
       return this.renderView(req, res, {
         suspended: sessionData.suspendedUntil ? 'yes' : 'no',
-        suspendedUntil: sessionData.suspendedUntil && apiDateToDatePicker(sessionData.suspendedUntil),
       })
     }
 
@@ -72,57 +69,48 @@ export default class WillPunishmentBeSuspendedPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
-    const { suspended, suspendedUntil } = req.body
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const { suspended } = req.body
 
     const error = validateForm({
       suspended,
-      suspendedUntil,
     })
 
     if (error)
       return this.renderView(req, res, {
         error,
         suspended,
-        suspendedUntil,
       })
 
     if (suspended === 'no') {
-      const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req)
+      const redirectUrlPrefixForNo = this.getRedirectUrlForNo(chargeNumber, req)
       return res.redirect(
         url.format({
-          pathname: redirectUrlPrefix,
-          query: { ...req.query, suspendedUntil },
+          pathname: redirectUrlPrefixForNo,
+          query: req.query as ParsedUrlQueryInput,
         })
       )
     }
-    try {
-      const punishmentData = {
-        type,
-        privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
-        otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
-        stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
-        days: Number(days),
-        suspendedUntil: suspendedUntil ? datePickerToApi(suspendedUntil) : null,
-      }
 
-      if (this.pageOptions.isEdit()) {
-        await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
-      } else {
-        await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
-      }
-    } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.awardPunishments.urls.modified(chargeNumber)
-      throw postError
-    }
-    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    const redirectUrlPrefixForYes = this.getRedirectUrlForYes(chargeNumber, req)
+    return res.redirect(
+      url.format({
+        pathname: redirectUrlPrefixForYes,
+        query: req.query as ParsedUrlQueryInput,
+      })
+    )
   }
 
-  private getRedirectUrl = (chargeNumber: string, req: Request) => {
+  private getRedirectUrlForNo = (chargeNumber: string, req: Request) => {
     if (this.pageOptions.isEdit()) {
       return adjudicationUrls.isPunishmentConsecutive.urls.edit(chargeNumber, req.params.redisId)
     }
     return adjudicationUrls.isPunishmentConsecutive.urls.start(chargeNumber)
+  }
+
+  private getRedirectUrlForYes = (chargeNumber: string, req: Request) => {
+    if (this.pageOptions.isEdit()) {
+      return adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.edit(chargeNumber, req.params.redisId)
+    }
+    return adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.start(chargeNumber)
   }
 }

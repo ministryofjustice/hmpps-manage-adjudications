@@ -5,7 +5,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import config from '../../../config'
 import TestData from '../../testutils/testData'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
@@ -27,7 +26,6 @@ let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
-  config.automaticPunishmentDatesFlag = 'true'
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({

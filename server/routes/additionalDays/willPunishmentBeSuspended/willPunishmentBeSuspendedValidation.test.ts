@@ -5,7 +5,6 @@ describe('validateForm', () => {
     expect(
       validateForm({
         suspended: 'yes',
-        suspendedUntil: '3/4/2023',
       })
     ).toBeNull()
   })
@@ -24,16 +23,6 @@ describe('validateForm', () => {
     ).toEqual({
       href: '#suspended',
       text: 'Select yes if this punishment is to be suspended',
-    })
-  })
-  it('shows error when suspended date not set', () => {
-    expect(
-      validateForm({
-        suspended: 'yes',
-      })
-    ).toEqual({
-      href: '#suspendedUntil',
-      text: 'Enter the date the punishment is suspended until',
     })
   })
 })

@@ -5,7 +5,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import config from '../../../config'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
@@ -26,7 +25,6 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  config.automaticPunishmentDatesFlag = 'true'
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.PRIVILEGE,
     PrivilegeType: PrivilegeType.OTHER,

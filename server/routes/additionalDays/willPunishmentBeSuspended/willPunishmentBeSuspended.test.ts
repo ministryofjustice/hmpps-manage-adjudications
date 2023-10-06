@@ -4,7 +4,6 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
-import { PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
@@ -62,20 +61,11 @@ describe('POST punishment-suspended page', () => {
         suspendedUntil: '13/4/2024',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
-      .then(() =>
-        expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
-          expect.anything(),
-          {
-            type: PunishmentType.ADDITIONAL_DAYS,
-            privilegeType: null,
-            otherPrivilege: null,
-            days: 5,
-            stoppagePercentage: null,
-            suspendedUntil: '2024-04-13',
-          },
+      .expect(
+        'Location',
+        `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.start(
           '100'
-        )
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=5`
       )
   })
   it('should redirect - not suspended', () => {
@@ -93,7 +83,7 @@ describe('POST punishment-suspended page', () => {
         'Location',
         `${adjudicationUrls.isPunishmentConsecutive.urls.start(
           '100'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=5&suspendedUntil=`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=5`
       )
   })
 })
