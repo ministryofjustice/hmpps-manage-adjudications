@@ -36,7 +36,7 @@
   {% for report in reports %}
     {% set index = loop.index %}
     {% set printLink %}
-      <a href="{{ adjudicationUrls.printReport.urls.dis12(report.chargeNumber) }}?referrer={{ adjudicationUrls.printCompletedDisForms.urls.start() }}" class="govuk-link no-print" data-qa="print-DIS1/2-{{ report.chargeNumber }}">Print notice of report <span class="govuk-visually-hidden">for {{ report.friendlyName | possessive }} adjudication report</span>
+      <a href="{{ adjudicationUrls.printReport.urls.dis12(report.chargeNumber) }}?referrer={{ adjudicationUrls.printCompletedDisForms.urls.start() }}" class="govuk-link no-print" data-qa="print-DIS1/2-{{ report.chargeNumber }}">Print notice of report <span class="govuk-visually-hidden">for {{ report.friendlyName | possessive }}</span>
       </a>
     {% endset -%}
     {% set rows = (rows.push([
