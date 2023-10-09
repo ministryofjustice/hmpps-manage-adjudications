@@ -932,15 +932,13 @@ const adjudicationUrls = {
       start: (chargeNumber: string) => `${adjudicationUrls.manuallyActivateSuspendedPunishment.root}/${chargeNumber}`,
     },
   },
+  // this is the page that needs removing when we introduce the auto punishment date flow to manually adding a suspended punishment (below)
   suspendedPunishmentSchedule: {
     root: '/suspended-punishment-schedule',
     matchers: {
-      existingPunishment: '/:chargeNumber/existing',
       manualPunishment: '/:chargeNumber/manual',
     },
     urls: {
-      existing: (chargeNumber: string) =>
-        `${adjudicationUrls.suspendedPunishmentSchedule.root}/${chargeNumber}/existing`,
       manual: (chargeNumber: string) => `${adjudicationUrls.suspendedPunishmentSchedule.root}/${chargeNumber}/manual`,
     },
   },

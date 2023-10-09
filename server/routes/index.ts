@@ -71,7 +71,7 @@ import willPunishmentBeSuspendedRoutes from './punishmentsForReport/additionalDa
 import punishmentSuspendedUntilAdditionalDays from './punishmentsForReport/additionalDays/suspendedUntilDate'
 import checkPunishmentRoutes from './punishmentsForReport/punishments/checkPunishments'
 import activateSuspendedPunishmentsRoutes from './punishmentsForReport/punishments/activateSuspendedPunishments'
-import suspendedPunishmentScheduleRoutes from './punishmentsForReport/suspendedPunishmentSchedule'
+import suspendedPunishmentScheduleRoutes from './punishmentsForReport/suspendedPunishmentSchedule_toDeleteWhenNewFlowCreated'
 import manuallyActivateSuspendedPunishmentsRoutes from './punishmentsForReport/punishments/manuallyActivateSuspendedPunishments'
 import reviewerEditOffenceWarningRoute from './reviewerEditOffenceWarning'
 import isPrisonerStillInEstablishmentRoutes from './isPrisonerStillInEstablishment'
