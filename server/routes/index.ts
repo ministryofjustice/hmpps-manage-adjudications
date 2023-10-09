@@ -66,7 +66,6 @@ import punishmentsAndDamagesRoutes from './adjudicationForReport/punishmentsTab'
 import PunishmentCommentRoutes from './punishmentsForReport/punishmentComment'
 import PunishmentRoutes from './punishmentsForReport/punishment'
 import awardPunishmentsRoutes from './punishmentsForReport/punishments/awardPunishments'
-import PunishmentScheduleRoutes from './punishmentsForReport/punishmentSchedule'
 import numberOfAdditionalDaysRoutes from './punishmentsForReport/additionalDays/numberOfAdditionalDays'
 import willPunishmentBeSuspendedRoutes from './punishmentsForReport/additionalDays/willPunishmentBeSuspended'
 import punishmentSuspendedUntilAdditionalDays from './punishmentsForReport/additionalDays/suspendedUntilDate'
@@ -313,10 +312,6 @@ export default function routes(
   )
   router.use(adjudicationUrls.punishmentComment.root, PunishmentCommentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
-  router.use(
-    adjudicationUrls.punishmentSchedule.root,
-    PunishmentScheduleRoutes({ userService, punishmentsService, reportedAdjudicationsService })
-  )
 
   router.use(
     adjudicationUrls.numberOfAdditionalDays.root,
