@@ -671,18 +671,6 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishment.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
-  punishmentSchedule: {
-    root: '/punishment-schedule',
-    matchers: {
-      start: '/:chargeNumber',
-      edit: '/:chargeNumber/edit/:redisId',
-    },
-    urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.punishmentSchedule.root}/${chargeNumber}`,
-      edit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.punishmentSchedule.root}/${chargeNumber}/edit/${redisId}`,
-    },
-  },
   punishmentNumberOfDays: {
     root: '/punishment-number-of-days',
     matchers: {
