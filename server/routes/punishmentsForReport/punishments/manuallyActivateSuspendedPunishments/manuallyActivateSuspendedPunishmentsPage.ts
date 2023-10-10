@@ -84,7 +84,7 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
     if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) {
       return adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(chargeNumber)
     }
-    return adjudicationUrls.suspendedPunishmentSchedule.urls.manual(chargeNumber)
+    return adjudicationUrls.suspendedPunishmentNumberOfDays.urls.manual(chargeNumber)
   }
 
   validateInputs = (

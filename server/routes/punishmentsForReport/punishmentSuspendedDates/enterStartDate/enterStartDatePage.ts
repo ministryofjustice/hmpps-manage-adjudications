@@ -25,6 +25,8 @@ type PageData = {
 export enum PageRequestType {
   EXISTING,
   EDIT,
+  MANUAL,
+  MANUAL_EDIT,
 }
 
 class PageOptions {
@@ -32,6 +34,14 @@ class PageOptions {
 
   isEdit(): boolean {
     return this.pageType === PageRequestType.EDIT
+  }
+
+  isManual(): boolean {
+    return this.pageType === PageRequestType.MANUAL
+  }
+
+  isManualEdit(): boolean {
+    return this.pageType === PageRequestType.MANUAL_EDIT
   }
 }
 
@@ -72,7 +82,15 @@ export default class PunishmentSuspendedStartDatePage {
     const { chargeNumber } = req.params
     const { user } = res.locals
     const { startDate } = req.body
-    const { punishmentType, privilegeType, days, punishmentNumberToActivate } = req.query
+    const {
+      punishmentType,
+      privilegeType,
+      days,
+      punishmentNumberToActivate,
+      otherPrivilege,
+      stoppagePercentage,
+      reportNo,
+    } = req.query
 
     const type = PunishmentType[punishmentType as string]
     const numberOfDays = Number(days)
@@ -95,32 +113,56 @@ export default class PunishmentSuspendedStartDatePage {
       })
 
     try {
-      const { suspendedPunishments } = await this.punishmentsService.getSuspendedPunishmentDetails(chargeNumber, user)
-      const punishmentToUpdate = suspendedPunishments.filter(susPun => {
-        return susPun.punishment.id === suspendedPunishmentIdToActivate
-      })
+      if (this.pageOptions.isManual()) {
+        const manuallyCreatedSuspendedPunishment = {
+          type,
+          privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+          otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
+          stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
+          days: numberOfDays,
+          startDate: startDate ? datePickerToApi(startDate) : null,
+          endDate: calculatePunishmentEndDate(startDate, numberOfDays, 'YYYY-MM-DD'),
+          activatedFrom: reportNo ? String(reportNo) : null,
+        }
+        await this.punishmentsService.addSessionPunishment(req, manuallyCreatedSuspendedPunishment, chargeNumber)
+      } else {
+        const { suspendedPunishments } = await this.punishmentsService.getSuspendedPunishmentDetails(chargeNumber, user)
+        const punishmentToUpdate = suspendedPunishments.filter(susPun => {
+          return susPun.punishment.id === suspendedPunishmentIdToActivate
+        })
 
-      if (punishmentToUpdate.length) {
-        const { punishment } = punishmentToUpdate[0]
-        const activatedFromChargeNumber = punishmentToUpdate[0].chargeNumber
-        const updatedPunishment = this.updatePunishment(punishment, numberOfDays, startDate, activatedFromChargeNumber)
-        if (this.pageOptions.isEdit()) {
-          await this.punishmentsService.updateSessionPunishment(
-            req,
-            updatedPunishment,
-            chargeNumber,
-            req.params.redisId
+        if (punishmentToUpdate.length) {
+          const { punishment } = punishmentToUpdate[0]
+          const activatedFromChargeNumber = punishmentToUpdate[0].chargeNumber
+          const updatedPunishment = this.updatePunishment(
+            punishment,
+            numberOfDays,
+            startDate,
+            activatedFromChargeNumber
           )
-        } else {
-          await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
+          if (this.pageOptions.isEdit()) {
+            await this.punishmentsService.updateSessionPunishment(
+              req,
+              updatedPunishment,
+              chargeNumber,
+              req.params.redisId
+            )
+          } else {
+            await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
+          }
         }
       }
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
       throw postError
     }
+    const redirectUrl = this.getRedirectUrl(chargeNumber)
+    return res.redirect(redirectUrl)
+  }
 
-    return res.redirect(adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(chargeNumber))
+  getRedirectUrl = (chargeNumber: string) => {
+    if (this.pageOptions.isManual()) return adjudicationUrls.suspendedPunishmentAutoDates.urls.manual(chargeNumber)
+    return adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(chargeNumber)
   }
 
   getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {

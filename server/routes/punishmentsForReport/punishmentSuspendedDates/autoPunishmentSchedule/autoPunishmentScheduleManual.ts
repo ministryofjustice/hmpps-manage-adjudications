@@ -7,7 +7,7 @@ export default class AutoPunishmentScheduleRoute {
   page: AutoPunishmentSchedulePage
 
   constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
-    this.page = new AutoPunishmentSchedulePage(PageRequestType.EXISTING, userService, punishmentsService)
+    this.page = new AutoPunishmentSchedulePage(PageRequestType.MANUAL, userService, punishmentsService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

@@ -40,7 +40,7 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET suspended punishment schedule', () => {
+describe.skip('GET suspended punishment schedule', () => {
   beforeEach(() => {
     app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
