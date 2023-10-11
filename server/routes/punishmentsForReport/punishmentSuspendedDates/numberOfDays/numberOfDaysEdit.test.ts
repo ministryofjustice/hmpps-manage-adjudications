@@ -93,7 +93,7 @@ describe('POST ', () => {
         `${adjudicationUrls.suspendedPunishmentStartDateChoice.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=2&punishmentNumberToActivate=514`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=2&punishmentNumberToActivate=514&reportNo=`
       )
   })
 })

@@ -71,7 +71,6 @@ import willPunishmentBeSuspendedRoutes from './punishmentsForReport/additionalDa
 import punishmentSuspendedUntilAdditionalDays from './punishmentsForReport/additionalDays/suspendedUntilDate'
 import checkPunishmentRoutes from './punishmentsForReport/punishments/checkPunishments'
 import activateSuspendedPunishmentsRoutes from './punishmentsForReport/punishments/activateSuspendedPunishments'
-import suspendedPunishmentScheduleRoutes from './punishmentsForReport/suspendedPunishmentSchedule_toDeleteWhenNewFlowCreated'
 import manuallyActivateSuspendedPunishmentsRoutes from './punishmentsForReport/punishments/manuallyActivateSuspendedPunishments'
 import reviewerEditOffenceWarningRoute from './reviewerEditOffenceWarning'
 import isPrisonerStillInEstablishmentRoutes from './isPrisonerStillInEstablishment'
@@ -346,10 +345,7 @@ export default function routes(
     adjudicationUrls.activateSuspendedPunishments.root,
     activateSuspendedPunishmentsRoutes({ punishmentsService, userService })
   )
-  router.use(
-    adjudicationUrls.suspendedPunishmentSchedule.root,
-    suspendedPunishmentScheduleRoutes({ punishmentsService, userService, reportedAdjudicationsService })
-  )
+
   router.use(
     adjudicationUrls.manuallyActivateSuspendedPunishment.root,
     manuallyActivateSuspendedPunishmentsRoutes({ punishmentsService, userService })
@@ -426,7 +422,6 @@ export default function routes(
     autoPunishmentSuspendedScheduleRoutes({
       userService,
       punishmentsService,
-      reportedAdjudicationsService,
     })
   )
   router.use(

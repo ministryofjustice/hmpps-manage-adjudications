@@ -62,7 +62,7 @@ describe('POST', () => {
       })
       .expect(
         'Location',
-        `${adjudicationUrls.suspendedPunishmentSchedule.urls.manual(
+        `${adjudicationUrls.suspendedPunishmentNumberOfDays.urls.manual(
           '100'
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=chocolate&stoppagePercentage=&reportNo=123456`
       )

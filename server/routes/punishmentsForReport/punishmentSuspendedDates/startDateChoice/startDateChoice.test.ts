@@ -128,7 +128,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(
           '100'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72`
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&reportNo=`
       )
   })
   it('redirects to the enter start date page if user does not select another date', () => {
@@ -146,7 +146,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentStartDate.urls.existing(
           '100'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=&punishmentNumberToActivate=72`
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=&punishmentNumberToActivate=72&reportNo=`
       )
   })
 })

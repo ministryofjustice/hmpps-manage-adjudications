@@ -44,7 +44,7 @@ context('Consecutive punishment charge number error', () => {
       manualEntryConsecutivePunishmentErrorPage.button().should('exist')
     })
     it('should contain the info in the title and paragraph', () => {
-      cy.visit(`${adjudicationUrls.manualConsecutivePunishmentError.urls.start('100')}?chargeNumber=1234567`)
+      cy.visit(`${adjudicationUrls.manualConsecutivePunishmentError.urls.start('100')}?consecutiveChargeNumber=1234567`)
       const manualEntryConsecutivePunishmentErrorPage = Page.verifyOnPage(ManualEntryConsecutivePunishmentErrorPage)
       manualEntryConsecutivePunishmentErrorPage
         .h1()
@@ -57,7 +57,7 @@ context('Consecutive punishment charge number error', () => {
       cy.visit(
         `${adjudicationUrls.manualConsecutivePunishmentError.urls.start(
           '100'
-        )}?chargeNumber=1234567&redirectUrl=${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(
+        )}?consecutiveChargeNumber=1234567&redirectUrl=${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(
           '100'
         )}?punishmentType=ADDITIONAL_DAYS`
       )
