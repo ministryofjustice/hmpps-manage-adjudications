@@ -32,12 +32,20 @@ export enum PageRequestType {
 class PageOptions {
   constructor(private readonly pageType: PageRequestType) {}
 
+  isExistingOrExistingEdit(): boolean {
+    return this.pageType === PageRequestType.EXISTING || this.pageType === PageRequestType.EDIT
+  }
+
   isEdit(): boolean {
     return this.pageType === PageRequestType.EDIT
   }
 
   isManual(): boolean {
     return this.pageType === PageRequestType.MANUAL
+  }
+
+  isManualOrManualEdit(): boolean {
+    return this.pageType === PageRequestType.MANUAL || this.pageType === PageRequestType.MANUAL_EDIT
   }
 
   isManualEdit(): boolean {
@@ -113,7 +121,7 @@ export default class PunishmentSuspendedStartDatePage {
       })
 
     try {
-      if (this.pageOptions.isManual()) {
+      if (this.pageOptions.isManualOrManualEdit()) {
         const manuallyCreatedSuspendedPunishment = {
           type,
           privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
@@ -124,8 +132,19 @@ export default class PunishmentSuspendedStartDatePage {
           endDate: calculatePunishmentEndDate(startDate, numberOfDays, 'YYYY-MM-DD'),
           activatedFrom: reportNo ? String(reportNo) : null,
         }
-        await this.punishmentsService.addSessionPunishment(req, manuallyCreatedSuspendedPunishment, chargeNumber)
-      } else {
+        if (this.pageOptions.isManualEdit()) {
+          await this.punishmentsService.updateSessionPunishment(
+            req,
+            manuallyCreatedSuspendedPunishment,
+            chargeNumber,
+            req.params.redisId
+          )
+        } else {
+          await this.punishmentsService.addSessionPunishment(req, manuallyCreatedSuspendedPunishment, chargeNumber)
+        }
+      }
+
+      if (this.pageOptions.isExistingOrExistingEdit()) {
         const { suspendedPunishments } = await this.punishmentsService.getSuspendedPunishmentDetails(chargeNumber, user)
         const punishmentToUpdate = suspendedPunishments.filter(susPun => {
           return susPun.punishment.id === suspendedPunishmentIdToActivate
@@ -161,7 +180,8 @@ export default class PunishmentSuspendedStartDatePage {
   }
 
   getRedirectUrl = (chargeNumber: string) => {
-    if (this.pageOptions.isManual()) return adjudicationUrls.suspendedPunishmentAutoDates.urls.manual(chargeNumber)
+    if (this.pageOptions.isManualOrManualEdit())
+      return adjudicationUrls.suspendedPunishmentAutoDates.urls.manual(chargeNumber)
     return adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(chargeNumber)
   }
 

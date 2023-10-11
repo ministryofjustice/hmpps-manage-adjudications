@@ -17,11 +17,11 @@ export default class ManualConsecutivePunishmentErrorPage {
     }
 
     const prisoner = await this.punishmentsService.getPrisonerDetails(chargeId, user)
-    const { redirectUrl, chargeNumber } = req.query
+    const { redirectUrl, consecutiveChargeNumber } = req.query
 
     return res.render(`pages/manualConsecutivePunishmentError.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeId),
-      chargeNumber,
+      consecutiveChargeNumber,
       prisonerName: prisoner.friendlyName || 'this prisoner',
       buttonHref: redirectUrl,
     })
