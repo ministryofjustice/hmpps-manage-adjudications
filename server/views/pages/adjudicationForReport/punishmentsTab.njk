@@ -23,17 +23,17 @@
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
 
-  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
+  {{ adjudicationTabHeaderSingular(chargeNumber, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
 
   {% if chargeProved %}
 
     {% if filteredPunishments.damages | length %}
-      {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, reportNo, true) }}
+      {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, chargeNumber, true) }}
     {% endif %}
 
     {% if filteredPunishments.otherPunishments | length %}
       <h2 class="govuk-heading-m">Punishments</h2>
-      {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
+      {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, chargeNumber, true, consecutiveReportLinkAvailable) }}
 
       {% if not readOnly %}
         <div>
@@ -41,7 +41,7 @@
             {{ govukButton({
               text: 'Change punishments',
               element: "a",
-              href: adjudicationUrls.awardPunishments.urls.start(reportNo),
+              href: adjudicationUrls.awardPunishments.urls.start(chargeNumber),
               classes: "govuk-button--secondary govuk-!-margin-right-3",
               attributes: { "data-qa": "change-punishments" }
             }) }}
@@ -50,7 +50,7 @@
           {{ govukButton({
             text: 'Report a quashed guilty finding',
             element: "a",
-            href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(reportNo),
+            href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.start(chargeNumber),
             classes: "govuk-button--secondary govuk-!-margin-right-3",
             attributes: { "data-qa": "report-quashed-guilty-finding" }
           }) }}
@@ -67,7 +67,7 @@
         {{ govukButton({
           text: 'Award punishments',
           element: "a",
-          href: adjudicationUrls.awardPunishments.urls.start(reportNo),
+          href: adjudicationUrls.awardPunishments.urls.start(chargeNumber),
           classes: "govuk-button--submit govuk-!-margin-right-3",
           attributes: { "data-qa": "award-punishments" }
         }) }}
@@ -84,7 +84,7 @@
           "data-qa": "quashed-warning"
         }
       }) }}
-    {{ awardPunishmentsTable(punishments, null, reportNo, true, consecutiveReportLinkAvailable) }}
+    {{ awardPunishmentsTable(punishments, null, chargeNumber, true, consecutiveReportLinkAvailable) }}
   {% else %}
     <div data-qa="no-punishments">
       <p class="govuk-body govuk-!-margin-top-5">There are no punishments added.</p>
@@ -106,7 +106,7 @@
           {{ govukButton({
             text: 'Add comment',
             element: "a",
-            href: adjudicationUrls.punishmentComment.urls.add(reportNo),
+            href: adjudicationUrls.punishmentComment.urls.add(chargeNumber),
             classes: "govuk-button--secondary",
             attributes: { "data-qa": "add-punishment-comment" }
           }) }}

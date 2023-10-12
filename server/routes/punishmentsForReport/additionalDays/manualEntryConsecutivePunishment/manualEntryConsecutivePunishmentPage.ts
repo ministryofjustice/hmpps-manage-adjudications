@@ -73,7 +73,14 @@ export default class ManualEntryConsecutivePunishmentPage {
     const { chargeNumber } = req.params
     const { user } = res.locals
     const { consecutiveChargeNumber } = req.body
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days, reportNo } = req.query
+    const {
+      punishmentType,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      days,
+      chargeNumberForSuspendedPunishment,
+    } = req.query
     const type = PunishmentType[punishmentType as string]
 
     const trimmedConsecutiveChargeNumber = consecutiveChargeNumber ? String(consecutiveChargeNumber).trim() : null
@@ -119,7 +126,7 @@ export default class ManualEntryConsecutivePunishmentPage {
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         days: Number(days),
         consecutiveChargeNumber: trimmedConsecutiveChargeNumber,
-        activatedFrom: reportNo && String(reportNo),
+        activatedFrom: chargeNumberForSuspendedPunishment && String(chargeNumberForSuspendedPunishment),
       }
 
       if (this.pageOptions.isEdit()) {

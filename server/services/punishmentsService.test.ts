@@ -136,7 +136,7 @@ describe('PunishmentsService', () => {
     it('returns expected object', async () => {
       const punishments = [
         {
-          reportNumber: 1525601,
+          chargeNumber: 1525601,
           punishment: {
             id: 73,
             type: 'PRIVILEGE',
@@ -145,7 +145,7 @@ describe('PunishmentsService', () => {
           },
         },
         {
-          reportNumber: 1525601,
+          chargeNumber: 1525601,
           punishment: { days: 2, suspendedUntil: '2023-05-31' },
         },
       ]

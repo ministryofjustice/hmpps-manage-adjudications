@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro outcomeInAdReferralSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false, nextOutcomeItem = null) %}
+{% macro outcomeInAdReferralSummary(chargeNumber, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false, nextOutcomeItem = null) %}
   {% set outcomeDetails = outcome.outcome %}
   {% set referralDetails = outcome.referralOutcome %}
 
@@ -11,7 +11,7 @@
     {% set reasonForReferralChangeLink = {
       items: [
         {
-          href: adjudicationUrls.hearingReasonForReferral.urls.edit(reportNo), 
+          href: adjudicationUrls.hearingReasonForReferral.urls.edit(chargeNumber), 
           text: "Change",
           visuallyHiddenText: ' reason for referral',
           attributes: {"data-qa": "change-link-hearing-outcome-reason-for-referral" }
@@ -81,7 +81,7 @@
     {% set reasonForReferralChangeLink = {
       items: [
         {
-          href: adjudicationUrls.govReasonForReferral.urls.edit(reportNo), 
+          href: adjudicationUrls.govReasonForReferral.urls.edit(chargeNumber), 
           text: "Change",
           visuallyHiddenText: ' reason for governor referral',
           attributes: {"data-qa": "change-link-hearing-outcome-reason-for-referral" }

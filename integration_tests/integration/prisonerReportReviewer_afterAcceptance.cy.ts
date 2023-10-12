@@ -174,7 +174,7 @@ context('Prisoner report - reviewer view', () => {
       prisonerReportPage.incidentDetailsSummary().should('exist')
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
-      prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.chargeNumber().should('exist')
       prisonerReportPage.printLink().should('exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.returnLink().contains('Return to all completed reports')
@@ -276,7 +276,7 @@ context('Prisoner report - reviewer view', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(456789))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-      prisonerReportPage.reportNumber().should('contain.text', '456789')
+      prisonerReportPage.chargeNumber().should('contain.text', '456789')
     })
     it('should only show the damages, evidence and witnesses change links', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(456789))
@@ -322,7 +322,7 @@ context('Prisoner report - reviewer view', () => {
       prisonerReportPage.incidentDetailsSummary().should('exist')
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
-      prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.chargeNumber().should('exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.returnLink().contains('Return to all completed reports')
       prisonerReportPage.damageSummary().should('exist')
@@ -423,7 +423,7 @@ context('Prisoner report - reviewer view', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(456791))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
 
-      prisonerReportPage.reportNumber().should('contain.text', '456791')
+      prisonerReportPage.chargeNumber().should('contain.text', '456791')
     })
     it('should only show the damages, evidence and witnesses change links', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(456791))

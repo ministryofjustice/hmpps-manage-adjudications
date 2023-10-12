@@ -129,7 +129,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(
           '100'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&reportNo=`
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
       )
       .then(() => {
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalled()
@@ -152,7 +152,7 @@ describe('POST ', () => {
         `${adjudicationUrls.suspendedPunishmentStartDate.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=&punishmentNumberToActivate=72&reportNo=`
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
       )
   })
 })

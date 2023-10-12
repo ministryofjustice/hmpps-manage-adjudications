@@ -21,7 +21,7 @@
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
 
-  {{ adjudicationTabHeaderSingular(reportNo, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'hearings', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
+  {{ adjudicationTabHeaderSingular(chargeNumber, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'hearings', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
 
   {% if schedulingNotAvailable %}
     {% include "../../partials/hearingDetailsVariations/emptyState.njk" %}
@@ -39,13 +39,13 @@
         {% set changeLinksAvailable = true if loop.last else false %}
         {% if item.hearing %}
           {% set hearingNumber = hearingNumber + 1 %}
-          {{ hearingTable(hearingNumber, item.hearing, item.outcome, readOnly, reportNo, changeLinksAvailable, reviewStatus) }}
+          {{ hearingTable(hearingNumber, item.hearing, item.outcome, readOnly, chargeNumber, changeLinksAvailable, reviewStatus) }}
           {% if item.outcome and item.hearing.outcome.code != HearingOutcomeCode.COMPLETE %}
-            {{ outcomeTable(item, readOnly, reportNo, true, changeLinksAvailable, history[loop.index0+1]) }}
+            {{ outcomeTable(item, readOnly, chargeNumber, true, changeLinksAvailable, history[loop.index0+1]) }}
           {% endif %}
         {% else %}
           {# Tables not attached to a hearing #}
-          {{ outcomeTable(item, readOnly, reportNo, false, changeLinksAvailable) }}
+          {{ outcomeTable(item, readOnly, chargeNumber, false, changeLinksAvailable) }}
         {% endif %}
       {% endfor %}
 

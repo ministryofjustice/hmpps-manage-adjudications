@@ -97,7 +97,7 @@ export default class PunishmentSuspendedStartDatePage {
       punishmentNumberToActivate,
       otherPrivilege,
       stoppagePercentage,
-      reportNo,
+      chargeNumberForSuspendedPunishment,
     } = req.query
 
     const type = PunishmentType[punishmentType as string]
@@ -130,7 +130,7 @@ export default class PunishmentSuspendedStartDatePage {
           days: numberOfDays,
           startDate: startDate ? datePickerToApi(startDate) : null,
           endDate: calculatePunishmentEndDate(startDate, numberOfDays, 'YYYY-MM-DD'),
-          activatedFrom: reportNo ? String(reportNo) : null,
+          activatedFrom: chargeNumberForSuspendedPunishment ? String(chargeNumberForSuspendedPunishment) : null,
         }
         if (this.pageOptions.isManualEdit()) {
           await this.punishmentsService.updateSessionPunishment(

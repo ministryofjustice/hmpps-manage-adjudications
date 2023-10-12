@@ -5,7 +5,7 @@ export default class ManuallyActivateSuspendedPunishmentPage extends Page {
     super('Manually activate an existing suspended punishment')
   }
 
-  reportNumber = (): PageElement => cy.get('[data-qa="reportNumber"]')
+  chargeNumberForSuspendedPunishment = (): PageElement => cy.get('[data-qa="chargeNumberForSuspendedPunishment"]')
 
   punishment = (): PageElement => cy.get('[data-qa="punishment-radio-buttons"]')
 

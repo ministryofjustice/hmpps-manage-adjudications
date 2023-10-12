@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro outcomeNotProceedSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false) %}
+{% macro outcomeNotProceedSummary(chargeNumber, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false) %}
 
   {% set reasonForOutcomeChangeLinkAvailable = false if readOnly else changeLinksAvailable %}
 
@@ -8,7 +8,7 @@
     {% set reasonChangeLink = {
     items: [
       {
-        href: adjudicationUrls.reasonForNotProceeding.urls.edit(reportNo), 
+        href: adjudicationUrls.reasonForNotProceeding.urls.edit(chargeNumber), 
         text: "Change",
         visuallyHiddenText: ' reason',
         attributes: {"data-qa": "change-link-outcome-reason" }

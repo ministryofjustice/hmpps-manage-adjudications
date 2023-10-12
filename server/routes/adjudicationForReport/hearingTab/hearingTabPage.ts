@@ -94,7 +94,7 @@ export default class HearingTabPage {
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
-      reportNo: reportedAdjudication.chargeNumber,
+      chargeNumber: reportedAdjudication.chargeNumber,
       reviewStatus: reportedAdjudication.status,
       schedulingNotAvailable: getSchedulingUnavailableStatuses(reportedAdjudication),
       isAccepted: reportedAdjudication.status === ReportedAdjudicationStatus.ACCEPTED,

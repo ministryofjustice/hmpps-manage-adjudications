@@ -17,7 +17,7 @@ type PageData = {
   otherPrivilege?: string
   stoppagePercentage?: number
   redisId?: string
-  reportNo?: string
+  chargeNumberForSuspendedPunishment?: string
 }
 
 export enum PageRequestType {
@@ -46,8 +46,17 @@ export default class AutoPunishmentSuspendedSchedulePage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { startDate, endDate, days, type, privilegeType, otherPrivilege, stoppagePercentage, redisId, reportNo } =
-      pageData
+    const {
+      startDate,
+      endDate,
+      days,
+      type,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      redisId,
+      chargeNumberForSuspendedPunishment,
+    } = pageData
     const { punishmentNumberToActivate } = req.query
 
     const startDateChangePath = this.getPathnameForStartDateEdit(chargeNumber, redisId)
@@ -62,7 +71,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
         stoppagePercentage,
         days,
         punishmentNumberToActivate,
-        reportNo,
+        chargeNumberForSuspendedPunishment,
       } as ParsedUrlQueryInput,
     })
 
@@ -75,7 +84,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
         stoppagePercentage,
         days,
         punishmentNumberToActivate,
-        reportNo,
+        chargeNumberForSuspendedPunishment,
       } as ParsedUrlQueryInput,
     })
 
@@ -117,7 +126,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
       otherPrivilege: lastAddedPunishment.otherPrivilege,
       stoppagePercentage: lastAddedPunishment.stoppagePercentage,
       redisId: lastAddedPunishment.redisId,
-      reportNo: lastAddedPunishment.activatedFrom,
+      chargeNumberForSuspendedPunishment: lastAddedPunishment.activatedFrom,
     })
   }
 

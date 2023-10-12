@@ -42,7 +42,7 @@ export default class FormsTabRoute {
 
     return res.render(`pages/adjudicationForReport/formsTab`, {
       prisoner,
-      reportNo: reportedAdjudication.chargeNumber,
+      chargeNumber: reportedAdjudication.chargeNumber,
       reviewStatus: reportedAdjudication.status,
       reports: results,
       reportHref: adjudicationUrls.prisonerReport.urls.review(chargeNumber),
