@@ -35,7 +35,7 @@ context('which punishment will it be consecutive to page', () => {
       chargeNumber: '100',
       response: [
         {
-          reportNumber: 90,
+          chargeNumber: 90,
           chargeProvedDate: '2023-06-21',
           punishment: {
             id: 70,
@@ -46,7 +46,7 @@ context('which punishment will it be consecutive to page', () => {
           },
         },
         {
-          reportNumber: 95,
+          chargeNumber: 95,
           chargeProvedDate: '2023-06-15',
           punishment: {
             type: PunishmentType.ADDITIONAL_DAYS,
