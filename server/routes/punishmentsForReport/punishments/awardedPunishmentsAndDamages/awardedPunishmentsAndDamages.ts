@@ -1,4 +1,6 @@
+import url from 'url'
 import { Request, Response } from 'express'
+import { ParsedUrlQuery } from 'querystring'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
@@ -20,20 +22,34 @@ export default class AwardedPunishmentsAndDamagesRoutes {
   ) {}
 
   private renderView = async (
+    req: Request,
     res: Response,
     filter: AwardedPunishmentsAndDamagesUiFilter,
     possibleLocations: PrisonLocation[],
     results: AwardedPunishmentsAndDamages[],
     errors: FormError[]
   ): Promise<void> => {
+    const allAwardedPunishmentsAndDamagesHref = url.format({
+      pathname: adjudicationUrls.awardedPunishmentsAndDamages.urls.start(),
+      query: { ...(req.query as ParsedUrlQuery) },
+    })
+    const financialAwardedPunishmentsAndDamagesHref = url.format({
+      pathname: adjudicationUrls.awardedPunishmentsAndDamages.urls.financial(),
+      query: { ...(req.query as ParsedUrlQuery) },
+    })
+    const additionalDaysAwardedPunishmentsHref = url.format({
+      pathname: adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays(),
+      query: { ...(req.query as ParsedUrlQuery) },
+    })
+
     return res.render(`pages/awardedPunishmentsAndDamages/awardedPunishmentsAndDamages.njk`, {
       results,
       filter,
       possibleLocations,
       clearUrl: adjudicationUrls.awardedPunishmentsAndDamages.urls.start(),
-      allAwardedPunishmentsAndDamagesHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.start(),
-      financialAwardedPunishmentsAndDamagesHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.financial(),
-      additionalDaysAwardedPunishmentsHref: adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays(),
+      allAwardedPunishmentsAndDamagesHref,
+      financialAwardedPunishmentsAndDamagesHref,
+      additionalDaysAwardedPunishmentsHref,
       activeTab: 'allAwardedPunishmentsAndDamages',
       errors,
     })
@@ -52,7 +68,7 @@ export default class AwardedPunishmentsAndDamagesRoutes {
       user
     )
 
-    return this.renderView(res, uiFilter, possibleLocations, results, [])
+    return this.renderView(req, res, uiFilter, possibleLocations, results, [])
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
