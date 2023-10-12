@@ -42,11 +42,22 @@ export default class AutoPunishmentSchedulePage {
       } as ParsedUrlQueryInput,
     })
 
+    const daysChangeHref = url.format({
+      pathname: adjudicationUrls.punishmentNumberOfDays.urls.edit(chargeNumber, redisId),
+      query: {
+        punishmentType: type,
+        privilegeType,
+        otherPrivilege,
+        stoppagePercentage,
+        days,
+      } as ParsedUrlQueryInput,
+    })
+
     return res.render(`pages/autoPunishmentSchedule.njk`, {
       chargeNumber,
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       startDateChangeHref,
-      daysChangeHref: adjudicationUrls.punishmentNumberOfDays.urls.edit(chargeNumber, redisId),
+      daysChangeHref,
       startDate,
       endDate,
       type,
