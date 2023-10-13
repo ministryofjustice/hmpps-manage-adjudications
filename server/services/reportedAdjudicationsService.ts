@@ -933,8 +933,9 @@ export default class ReportedAdjudicationsService {
     overrideAgencyId: string,
     user: User
   ): Promise<OffenderBannerInfo> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const [movementInfo, prisoner] = await Promise.all([
-      new PrisonApiClient(user.token).getMovementByOffender(prisonerNo),
+      new PrisonApiClient(token).getMovementByOffender(prisonerNo),
       new PrisonApiClient(user.token).getPrisonerDetails(prisonerNo),
     ])
     const moveToOverrideAgencyIdList = movementInfo.filter(prisonerMove => prisonerMove.toAgency === overrideAgencyId)
@@ -958,7 +959,7 @@ export default class ReportedAdjudicationsService {
     // Prisoner has been transferred and current user is in the agency where the adjudication was first reported
     if (user.activeCaseLoadId === originatingAgencyId) {
       try {
-        const movementData = await this.getPrisonerLatestADMMovement(prisonerNumber, 'LEI', user)
+        const movementData = await this.getPrisonerLatestADMMovement(prisonerNumber, overrideAgencyId, user)
         const { movementDate, prisonerName, toAgencyDescription } = movementData
         return movementData
           ? `${prisonerName} was transferred to ${toAgencyDescription} on ${movementDate}`
