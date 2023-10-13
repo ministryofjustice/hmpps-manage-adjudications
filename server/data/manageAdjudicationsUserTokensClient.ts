@@ -301,9 +301,9 @@ export default class ManageAdjudicationsUserTokensClient {
     })
   }
 
-  async getSuspendedPunishments(prisonerNumber: string, reportNumber: string): Promise<SuspendedPunishmentResult[]> {
+  async getSuspendedPunishments(prisonerNumber: string, chargeNumber: string): Promise<SuspendedPunishmentResult[]> {
     return this.restClient.get({
-      path: `/reported-adjudications/punishments/${prisonerNumber}/suspended?reportNumber=${reportNumber}`,
+      path: `/reported-adjudications/punishments/${prisonerNumber}/suspended/v2?chargeNumber=${chargeNumber}`,
     })
   }
 

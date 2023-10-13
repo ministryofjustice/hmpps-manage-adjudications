@@ -1,19 +1,19 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro outcomePoliceReferralSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false, attachedToHearing = null, readOnly = false) %}
+{% macro outcomePoliceReferralSummary(chargeNumber, outcome = {}, attributes = {}, changeLinksAvailable = false, attachedToHearing = null, readOnly = false) %}
   {% set outcomeDetails = outcome.outcome %}
   {% set referralDetails = outcome.referralOutcome %}
   {% if attachedToHearing %}
     {% set changeLinkHref = adjudicationUrls
       .hearingReasonForReferral
       .urls
-      .edit(reportNo) %}
+      .edit(chargeNumber) %}
     {% set dataQa = 'change-link-hearing-outcome-reason-for-referral' %}
   {% else %}
     {% set changeLinkHref = adjudicationUrls
       .reasonForReferral
       .urls
-      .edit(reportNo) %}
+      .edit(chargeNumber) %}
     {% set dataQa = 'change-link-outcome-reason-for-referral' %}
   {% endif %}
 

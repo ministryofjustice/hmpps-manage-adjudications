@@ -1,11 +1,11 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% macro outcomeQuashedSummary(reportNo, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false) %}
+{% macro outcomeQuashedSummary(chargeNumber, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false) %}
   {% set quashReasonChangeLinkAvailable = false if readOnly else changeLinksAvailable %}
   {% if quashReasonChangeLinkAvailable %}
     {% set changeLink = {
       items: [
         {
-          href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.edit(reportNo), 
+          href: adjudicationUrls.reportAQuashedGuiltyFinding.urls.edit(chargeNumber), 
           text: "Change",
           visuallyHiddenText: ' reason for quashing a guilty finding',
           attributes: {"data-qa": "change-link-quash-guilty-finding" }

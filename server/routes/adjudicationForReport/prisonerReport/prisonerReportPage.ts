@@ -178,7 +178,7 @@ export default class prisonerReportRoutes {
     const userRoles = await this.userService.getUserRoles(user.token)
     const showFormsTab = config.formsTabFlag === 'true' && hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
 
-    const hideReportNumberAndPrintForAdjudicationStatuses = [
+    const hideChargeNumberAndPrintForAdjudicationStatuses = [
       ReportedAdjudicationStatus.AWAITING_REVIEW,
       ReportedAdjudicationStatus.REJECTED,
       ReportedAdjudicationStatus.RETURNED,
@@ -189,7 +189,7 @@ export default class prisonerReportRoutes {
       prisoner,
       prisonerReportData,
       reviewData,
-      reportNo: reportedAdjudication.chargeNumber,
+      chargeNumber: reportedAdjudication.chargeNumber,
       draftChargeNumber: draftRequired ? draftAdjudication.id : null,
       offence,
       ...prisonerReportVariables,
@@ -200,7 +200,7 @@ export default class prisonerReportRoutes {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
-      showReportNumberAndPrint: !hideReportNumberAndPrintForAdjudicationStatuses,
+      showChargeNumberAndPrint: !hideChargeNumberAndPrintForAdjudicationStatuses,
       showFormsTab,
     })
   }

@@ -180,7 +180,7 @@ context('Prisoner report - reporter view', () => {
       prisonerReportPage.incidentDetailsSummary().should('exist')
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
-      prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.chargeNumber().should('exist')
       prisonerReportPage.printLink().should('exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.damageSummary().should('exist')
@@ -278,7 +278,7 @@ context('Prisoner report - reporter view', () => {
     it('should contain the correct report number', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(1524494))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reportNumber().should('contain.text', '1524494')
+      prisonerReportPage.chargeNumber().should('contain.text', '1524494')
     })
     it('should not contain the review panel', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(1524494))
@@ -326,7 +326,7 @@ context('Prisoner report - reporter view', () => {
       prisonerReportPage.incidentDetailsSummary().should('exist')
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
-      prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.chargeNumber().should('exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.damageSummary().should('exist')
       prisonerReportPage.hearingsTab().should('exist')
@@ -423,7 +423,7 @@ context('Prisoner report - reporter view', () => {
     it('should contain the correct report number', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(1524493))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reportNumber().should('contain.text', '1524493')
+      prisonerReportPage.chargeNumber().should('contain.text', '1524493')
     })
     it('should not contain the review panel', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.report(1524493))

@@ -90,8 +90,14 @@ export default class SuspendedPunishmentNumberOfDaysPage {
     const { chargeNumber } = req.params
     const { user } = res.locals
     const { days } = req.body
-    const { punishmentNumberToActivate, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNo } =
-      req.query
+    const {
+      punishmentNumberToActivate,
+      punishmentType,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      chargeNumberForSuspendedPunishment,
+    } = req.query
     const type = PunishmentType[punishmentType as string]
     const trimmedDays = days ? Number(String(days).trim()) : null
     const isYOI = await this.getYoiInfo(chargeNumber, user)
@@ -148,7 +154,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
           stoppagePercentage,
           days: trimmedDays,
           punishmentNumberToActivate,
-          reportNo,
+          chargeNumberForSuspendedPunishment,
         } as ParsedUrlQueryInput,
       })
     )

@@ -123,12 +123,12 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
     })
     cy.task('stubGetSuspendedPunishments', {
       prisonerNumber: 'G6415GD',
-      reportNumber: 100,
+      chargeNumber: 100,
       response: susPun,
     })
     cy.task('stubGetSuspendedPunishments', {
       prisonerNumber: 'G6415GD',
-      reportNumber: 101,
+      chargeNumber: 101,
       response: susPun,
     })
     cy.task('stubGetReportedAdjudication', {

@@ -105,7 +105,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
       otherPrivilege,
       stoppagePercentage,
       days,
-      reportNo,
+      chargeNumberForSuspendedPunishment,
     } = req.query
     const suspendedPunishmentIdToActivate = Number(punishmentNumberToActivate)
 
@@ -140,7 +140,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
             days: numberOfDays,
             startDate: lastHearingDate ? datePickerToApi(lastHearingDate) : null,
             endDate: calculatePunishmentEndDate(lastHearingDate, numberOfDays, 'YYYY-MM-DD'),
-            activatedFrom: reportNo ? String(reportNo) : null,
+            activatedFrom: chargeNumberForSuspendedPunishment ? String(chargeNumberForSuspendedPunishment) : null,
           }
 
           if (this.pageOptions.isManualEdit()) {
@@ -202,7 +202,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
           days,
           startDate: lastHearingDate,
           punishmentNumberToActivate,
-          reportNo,
+          chargeNumberForSuspendedPunishment,
         } as ParsedUrlQueryInput,
       })
     )

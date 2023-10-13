@@ -15,7 +15,7 @@ type PageData = {
   privilegeType?: PrivilegeType
   otherPrivilege?: string
   stoppagePercentage?: number
-  reportNumber?: number
+  chargeNumberForSuspendedPunishment?: number
 }
 
 export default class ManuallyActivateSuspendedPunishmentsPage {
@@ -24,7 +24,14 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
     const { user } = res.locals
-    const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNumber } = pageData
+    const {
+      error,
+      punishmentType,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      chargeNumberForSuspendedPunishment,
+    } = pageData
 
     const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
       chargeNumber,
@@ -38,7 +45,7 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
       privilegeType,
       otherPrivilege,
       stoppagePercentage,
-      reportNumber,
+      chargeNumberForSuspendedPunishment,
       isIndependentAdjudicatorHearing,
     })
   }
@@ -54,12 +61,21 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNumber } = req.body
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, chargeNumberForSuspendedPunishment } =
+      req.body
 
-    const reportNo = reportNumber ? Number(reportNumber.trim()) : null
+    const chargeNumberForSusPun = chargeNumberForSuspendedPunishment
+      ? Number(chargeNumberForSuspendedPunishment.trim())
+      : null
     const stoppageOfEarnings = stoppagePercentage ? Number(stoppagePercentage.trim()) : null
 
-    const error = this.validateInputs(reportNo, punishmentType, privilegeType, otherPrivilege, stoppageOfEarnings)
+    const error = this.validateInputs(
+      chargeNumberForSusPun,
+      punishmentType,
+      privilegeType,
+      otherPrivilege,
+      stoppageOfEarnings
+    )
 
     if (error)
       return this.renderView(req, res, {
@@ -68,14 +84,20 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage: stoppageOfEarnings,
-        reportNumber: reportNo,
+        chargeNumberForSuspendedPunishment: chargeNumberForSusPun,
       })
 
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req, punishmentType as PunishmentType)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-        query: { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, reportNo: reportNumber },
+        query: {
+          punishmentType,
+          privilegeType,
+          otherPrivilege,
+          stoppagePercentage,
+          chargeNumberForSuspendedPunishment,
+        },
       })
     )
   }
@@ -88,15 +110,15 @@ export default class ManuallyActivateSuspendedPunishmentsPage {
   }
 
   validateInputs = (
-    reportNumber: number,
+    chargeNumberForSuspendedPunishment: number,
     punishmentType: PunishmentType,
     privilegeType: PrivilegeType,
     otherPrivilege: string,
     stoppagePercentage: number
   ) => {
-    if (!reportNumber) {
+    if (!chargeNumberForSuspendedPunishment) {
       return {
-        href: '#reportNumber',
+        href: '#chargeNumberForSuspendedPunishment',
         text: 'Enter charge number',
       }
     }

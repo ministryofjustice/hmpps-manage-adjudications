@@ -71,10 +71,10 @@ const convertEvidenceToTableFormat = (evidence: EvidenceDetails[]) => {
   }
 }
 
-const getRedirectUrls = (pageOptions: PageOptions, completedReportNumber: string) => {
+const getRedirectUrls = (pageOptions: PageOptions, completedChargeNumber: string) => {
   if (pageOptions.isEditByReporter())
-    return adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(completedReportNumber)
-  return adjudicationUrls.confirmedOnReport.urls.start(completedReportNumber)
+    return adjudicationUrls.confirmedOnReport.urls.confirmationOfChange(completedChargeNumber)
+  return adjudicationUrls.confirmedOnReport.urls.start(completedChargeNumber)
 }
 
 const getErrorRedirectUrl = (pageOptions: PageOptions, draftId: number) => {

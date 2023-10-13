@@ -31,12 +31,12 @@
         classes: "govuk-body",
         isPageHeading: false
     },
-    id: "reportNumber",
-    name: "reportNumber",
-    value: reportNumber,
+    id: "chargeNumberForSuspendedPunishment",
+    name: "chargeNumberForSuspendedPunishment",
+    value: chargeNumberForSuspendedPunishment,
     classes: "govuk-input--width-5",
-    errorMessage: errors | findErrors(["reportNumber"]),
-    attributes: { "data-qa": "reportNumber" }
+    errorMessage: errors | findErrors(["chargeNumberForSuspendedPunishment"]),
+    attributes: { "data-qa": "chargeNumberForSuspendedPunishment" }
     }) }}
 
     {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, null, isIndependentAdjudicatorHearing, true, true, errors) }}

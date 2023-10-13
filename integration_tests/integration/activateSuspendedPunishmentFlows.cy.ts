@@ -76,17 +76,17 @@ context('Suspended punishment schedule', () => {
     })
     cy.task('stubGetSuspendedPunishments', {
       prisonerNumber: 'G6415GD',
-      reportNumber: 100,
+      chargeNumber: 100,
       response: susPun,
     })
     cy.task('stubGetSuspendedPunishments', {
       prisonerNumber: 'G6415GD',
-      reportNumber: 101,
+      chargeNumber: 101,
       response: susPun,
     })
     cy.task('stubGetSuspendedPunishments', {
       prisonerNumber: 'G6415GD',
-      reportNumber: 102,
+      chargeNumber: 102,
       response: susPun,
     })
     cy.task('stubGetReportedAdjudication', {

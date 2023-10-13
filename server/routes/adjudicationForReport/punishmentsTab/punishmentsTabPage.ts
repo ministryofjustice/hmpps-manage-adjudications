@@ -101,7 +101,7 @@ export default class PunishmentsTabPage {
 
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
-      reportNo: reportedAdjudication.chargeNumber,
+      chargeNumber: reportedAdjudication.chargeNumber,
       reviewStatus: reportedAdjudication.status,
       readOnly,
       isReporter: this.pageOptions.isReporter(),

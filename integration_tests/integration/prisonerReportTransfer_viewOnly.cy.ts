@@ -186,7 +186,7 @@ context('Prisoner report - view only - for transferred prisoners', () => {
       prisonerReportPage.incidentDetailsSummary().should('exist')
       prisonerReportPage.offenceDetailsSummary().should('exist')
       prisonerReportPage.incidentStatement().should('exist')
-      prisonerReportPage.reportNumber().should('exist')
+      prisonerReportPage.chargeNumber().should('exist')
       prisonerReportPage.returnLink().should('exist')
       prisonerReportPage.damageSummary().should('exist')
       prisonerReportPage.hearingsTab().should('exist')
@@ -284,7 +284,7 @@ context('Prisoner report - view only - for transferred prisoners', () => {
     it('should contain the correct report number', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524493))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reportNumber().should('contain.text', '1524493')
+      prisonerReportPage.chargeNumber().should('contain.text', '1524493')
     })
     it('should not have any change links available for changes requiring a draft', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(1524493))

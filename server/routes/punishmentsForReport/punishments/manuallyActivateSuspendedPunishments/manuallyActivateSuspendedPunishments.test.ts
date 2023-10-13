@@ -58,13 +58,13 @@ describe('POST', () => {
         privilegeType: PrivilegeType.OTHER,
         otherPrivilege: 'chocolate',
         stoppagePercentage: null,
-        reportNumber: '123456',
+        chargeNumberForSuspendedPunishment: '123456',
       })
       .expect(
         'Location',
         `${adjudicationUrls.suspendedPunishmentNumberOfDays.urls.manual(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=chocolate&stoppagePercentage=&reportNo=123456`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=chocolate&stoppagePercentage=&chargeNumberForSuspendedPunishment=123456`
       )
   })
 
@@ -75,13 +75,13 @@ describe('POST', () => {
         .post(`${adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100')}`)
         .send({
           punishmentType,
-          reportNumber: '123456',
+          chargeNumberForSuspendedPunishment: '123456',
         })
         .expect(
           'Location',
           `${adjudicationUrls.numberOfAdditionalDays.urls.manualEdit(
             '100'
-          )}?punishmentType=${punishmentType}&privilegeType=&otherPrivilege=&stoppagePercentage=&reportNo=123456`
+          )}?punishmentType=${punishmentType}&privilegeType=&otherPrivilege=&stoppagePercentage=&chargeNumberForSuspendedPunishment=123456`
         )
     }
   )

@@ -162,7 +162,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('should error when no punishment type selected', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.submitButton().click()
 
       punishmentPage
@@ -175,7 +175,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('should error when no privilege type selected', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
 
       punishmentPage.submitButton().click()
@@ -190,7 +190,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('should error when no other privilege selected', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
       punishmentPage.privilege().find('input[value="OTHER"]').check()
 
@@ -206,7 +206,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('should error when no  stoppage percentage selected', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.punishment().find('input[value="EARNINGS"]').check()
 
       punishmentPage.submitButton().click()
@@ -224,7 +224,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('should submit successfully and redirect for type CONFINEMENT', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
 
       punishmentPage.submitButton().click()
@@ -232,7 +232,7 @@ context('Manually activate an existing suspended punishment', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentNumberOfDays.urls.manual('100'))
         expect(loc.search).to.eq(
-          '?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&reportNo=123456'
+          '?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&chargeNumberForSuspendedPunishment=123456'
         )
       })
     })
@@ -241,7 +241,7 @@ context('Manually activate an existing suspended punishment', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
       punishmentPage.punishment().find('input[value="EARNINGS"]').check()
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
 
       punishmentPage.stoppagePercentage().type('10')
       punishmentPage.submitButton().click()
@@ -249,7 +249,7 @@ context('Manually activate an existing suspended punishment', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentNumberOfDays.urls.manual('100'))
         expect(loc.search).to.eq(
-          '?punishmentType=EARNINGS&privilegeType=&otherPrivilege=&stoppagePercentage=10&reportNo=123456'
+          '?punishmentType=EARNINGS&privilegeType=&otherPrivilege=&stoppagePercentage=10&chargeNumberForSuspendedPunishment=123456'
         )
       })
     })
@@ -257,7 +257,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('should submit successfully and redirect for type PRIVILEGE - CANTEEN', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.punishment().find('input[value="EARNINGS"]').check()
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
       punishmentPage.privilege().find('input[value="CANTEEN"]').check()
@@ -267,7 +267,7 @@ context('Manually activate an existing suspended punishment', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentNumberOfDays.urls.manual('100'))
         expect(loc.search).to.eq(
-          '?punishmentType=PRIVILEGE&privilegeType=CANTEEN&otherPrivilege=&stoppagePercentage=&reportNo=123456'
+          '?punishmentType=PRIVILEGE&privilegeType=CANTEEN&otherPrivilege=&stoppagePercentage=&chargeNumberForSuspendedPunishment=123456'
         )
       })
     })
@@ -275,7 +275,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('should submit successfully and redirect for type PRIVILEGE - OTHER', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
       punishmentPage.privilege().find('input[value="OTHER"]').check()
       punishmentPage.otherPrivilege().type('chocolate')
@@ -285,7 +285,7 @@ context('Manually activate an existing suspended punishment', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentNumberOfDays.urls.manual('100'))
         expect(loc.search).to.eq(
-          '?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=chocolate&stoppagePercentage=&reportNo=123456'
+          '?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=chocolate&stoppagePercentage=&chargeNumberForSuspendedPunishment=123456'
         )
       })
     })
@@ -295,7 +295,7 @@ context('Manually activate an existing suspended punishment', () => {
       it(`should submit successfully and redirect for type PRIVILEGE - ${punishmentType}`, () => {
         cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('101'))
         const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-        punishmentPage.reportNumber().type('123456')
+        punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
         punishmentPage.punishment().find(`input[value="${punishmentType}"]`).check()
 
         punishmentPage.submitButton().click()
@@ -303,7 +303,7 @@ context('Manually activate an existing suspended punishment', () => {
         cy.location().should(loc => {
           expect(loc.pathname).to.eq(adjudicationUrls.numberOfAdditionalDays.urls.manualEdit('101'))
           expect(loc.search).to.eq(
-            `?punishmentType=${punishmentType}&privilegeType=&otherPrivilege=&stoppagePercentage=&reportNo=123456`
+            `?punishmentType=${punishmentType}&privilegeType=&otherPrivilege=&stoppagePercentage=&chargeNumberForSuspendedPunishment=123456`
           )
         })
       })
@@ -312,7 +312,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('end to end - immediate', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
       punishmentPage.privilege().find('input[value="MONEY"]').check()
       punishmentPage.submitButton().click()
@@ -412,7 +412,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('end to end - selected date', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
       punishmentPage.privilege().find('input[value="MONEY"]').check()
       punishmentPage.submitButton().click()
@@ -519,7 +519,7 @@ context('Manually activate an existing suspended punishment', () => {
     it('end to end - additional days', () => {
       cy.visit(adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start('101'))
       const punishmentPage = Page.verifyOnPage(ManuallyActivateSuspendedPunishmentPage)
-      punishmentPage.reportNumber().type('123456')
+      punishmentPage.chargeNumberForSuspendedPunishment().type('123456')
       punishmentPage.punishment().find('input[value="ADDITIONAL_DAYS"]').check()
       punishmentPage.submitButton().click()
 
