@@ -25,7 +25,8 @@
   <div class="adjudicationsSummary">
     <h2 class="govuk-heading-s">Print forms</h2>
 
-    {{ printLink('Notice of being placed on report (DIS 1 and 2)', noticeOfBeingPlacedOnReportHref, "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis12") }}
+    {{ printLink('Notice of being placed on report (DIS 1 only)', noticeOfBeingPlacedOnReportStaffHref, "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis12") }}
+    {{ printLink('Notice of being placed on report and prisoner guidance (DIS 1 and 2)', noticeOfBeingPlacedOnReportPrisonerHref, "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis12") }}
     {{ printLink('Record of adjudication hearing (DIS 3)', adjudicationUrls.printPdf.urls.dis3(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis3") }}
     {{ printLink('Record of adjudication hearing continuation sheet (DIS 4)', adjudicationUrls.printPdf.urls.dis4(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis4") }}
     {{ printLink('Adjudication history for current sentence (DIS 5)', adjudicationUrls.printPdf.urls.dis5(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis5") }}
