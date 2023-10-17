@@ -6,6 +6,9 @@ generic-service:
 
   ingress:
     host: manage-adjudications-dev.hmpps.service.justice.gov.uk
+    modsecurity_enabled: true
+    modsecurity_github_team: "hmpps-adjudications"
+
 
   env:
     INGRESS_URL: "https://manage-adjudications-dev.hmpps.service.justice.gov.uk"
