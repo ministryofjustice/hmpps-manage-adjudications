@@ -9,6 +9,12 @@ generic-service:
     modsecurity_enabled: true
     modsecurity_github_team: "hmpps-adjudications"
 
+    modsecurity_snippet: |
+      SecRuleEngine On
+      # Default is only GET HEAD POST OPTIONS so need to include PUT etc.
+      SecAction "id:900200,phase:1,nolog,pass,t:none,setvar:tx.allowed_methods=GET HEAD POST OPTIONS PUT PATCH DELETE"
+      # Missing User Agent Header
+
 
   env:
     INGRESS_URL: "https://manage-adjudications-dev.hmpps.service.justice.gov.uk"
