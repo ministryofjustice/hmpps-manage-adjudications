@@ -37,7 +37,7 @@ export default class OffenceListRoutes {
     )
     const offencesAndTitles = await getOffenceInformation(allOffenceRules, draftAdjudication.isYouthOffender)
     const prisonerName = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
-    offencesAndTitles.forEach(item => console.log(item))
+    // offencesAndTitles.forEach(item => console.log(item))
     return this.renderView(req, res, {
       draftId,
       incidentRole,
