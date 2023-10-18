@@ -29,11 +29,15 @@
   {% for offenceGroup in offencesAndTitles %}
     {% if offenceGroup.offenceRules.length > 1 %}
       {% for offence in offenceGroup.offenceRules %}
-        {% set items = (items.push({value: offence.paragraphNumber, text: offence.paragraphNumber, hint: offence.paragraphDescription}), items) %}
+        {% set items = (items.push({value: offence.paragraphNumber, text: offence.paragraphNumber, hint: {
+          text: offence.paragraphDescription}
+          }), items) %}
       {% endfor %}
     {% else %}
       {% set offenceRule = offenceGroup.offenceRules[0] %}
-      {% set items = (items.push({value: offenceRule.paragraphNumber, text: offenceRule.paragraphNumber, hint: offenceRule.paragraphDescription}), items) %}
+      {% set items = (items.push({value: offenceRule.paragraphNumber, text: offenceRule.paragraphNumber, hint: { text:
+        offenceRule.paragraphDescription}
+      }), items) %}
     {% endif %}
   {% endfor %}
 
