@@ -15,30 +15,30 @@ const CHILD_8_Q = 'Stopping someone who is not a prisoner from doing their job'
 const CHILD_9_Q = 'Being absent without authorisation, being in an unauthorised place, or failing to work correctly'
 
 // Adult
-// {
-// CHILD_1_Q: ["1", "1A", "4", "5"]
-// CHILD_2_Q: ["7", "8"]
-// CHILD_3_Q: ["9", "10", "11", "12", "13", "14", "15", "23", "24"]
-// CHILD_4_Q: ["16", "17", "24A"]
-// CHILD_5_Q: ["19", "20", "20A"]
-// CHILD_6_Q: ["22"]
-// CHILD_7_Q: ["2"]
-// CHILD_8_Q: ["3", "6"]
-// CHILD_9_Q: ["18", "21"]
-// }
+const adultQToOffencePara = [
+  { childQuestion: CHILD_1_Q, paras: ['1', '1A', '4', '5'] },
+  { childQuestion: CHILD_2_Q, paras: ['7', '8'] },
+  { childQuestion: CHILD_3_Q, paras: ['9', '10', '11', '12', '13', '14', '15', '23', '24'] },
+  { childQuestion: CHILD_4_Q, paras: ['16', '17', '24A'] },
+  { childQuestion: CHILD_5_Q, paras: ['19', '20', '20A'] },
+  { childQuestion: CHILD_6_Q, paras: ['22'] },
+  { childQuestion: CHILD_7_Q, paras: ['2'] },
+  { childQuestion: CHILD_8_Q, paras: ['3', '6'] },
+  { childQuestion: CHILD_9_Q, paras: ['18', '21'] },
+]
+// YOI
+const yoiQToOffencePara = [
+  { childQuestion: CHILD_1_Q, paras: ['1', '2', '5', '6'] },
+  { childQuestion: CHILD_2_Q, paras: ['8', '9'] },
+  { childQuestion: CHILD_3_Q, paras: ['10', '11', '12', '13', '14', '15', '16', '27'] },
+  { childQuestion: CHILD_4_Q, paras: ['17', '18', '19', '28'] },
+  { childQuestion: CHILD_5_Q, paras: ['21', '22', '23'] },
+  { childQuestion: CHILD_6_Q, paras: ['25'] },
+  { childQuestion: CHILD_7_Q, paras: ['3'] },
+  { childQuestion: CHILD_8_Q, paras: ['4', '7', '26'] },
+  { childQuestion: CHILD_9_Q, paras: ['20', '24'] },
+]
 
-//  for YOI
-// {
-// CHILD_1_Q: ["1", "2", "5", "6"]
-// CHILD_2_Q: ["8", "9"]
-// CHILD_3_Q: ["10", "11", "12", "13", "14", "15", "16", "27"]
-// CHILD_4_Q: ["17", "18", "19", "28"]
-// CHILD_5_Q: [21", "22", "23"]
-// CHILD_6_Q: ["25"]
-// CHILD_7_Q: ["3"]
-// CHILD_8_Q: ["4", "7", "26"]
-// CHILD_9_Q: ["20", "24"]
-// }
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
 export default question([
