@@ -26,7 +26,7 @@
   <h1 class="govuk-heading-l">What offence did {{ prisonerName }} break?</h1>
   {% set items = [] %}
 
-  {% for offenceGroup in offencesAndTitles %}
+  {# {% for offenceGroup in offencesAndTitles %}
     {% if offenceGroup.offenceRules.length > 1 %}
       {% for offence in offenceGroup.offenceRules %}
         {% set items = (items.push({value: offence.paragraphNumber, text: offence.paragraphNumber, hint: {
@@ -39,17 +39,52 @@
         offenceRule.paragraphDescription}
       }), items) %}
     {% endif %}
-  {% endfor %}
+  {% endfor %} #}
 
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-paragraph-list-form">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-    {{ govukRadios({
+
+    {% for offenceGroup in offencesAndTitles %}
+      {% set items = [] %}
+      {% if offenceGroup.offenceRules.length > 1 %}
+        {% for offence in offenceGroup.offenceRules %}
+          {% set items = (items.push({
+            value: offence.paragraphNumber,
+            text: offence.paragraphNumber,
+            hint: {
+              html: offence.paragraphDescription
+            },
+            id: offence.paragraphNumber
+          }), items) %}
+        {% endfor %}
+      {% else %}
+        {% set offenceRule = offenceGroup.offenceRules[0] %}
+        {% set items = (items.push({
+          value: offenceRule.paragraphNumber,
+          text: offenceRule.paragraphNumber,
+          hint: {
+            html: offenceRule.paragraphDescription
+          },
+          id: offenceRule.paragraphNumber
+        }), items) %}
+      {% endif %}
+      <h2 class="govuk-heading-m">{{ offenceGroup.offenceTitle }}</h2>
+      {{ govukRadios({
+            idPrefix: 'selectedAnswerId',
+            name: 'selectedAnswerId',
+            attributes: { "data-qa": "radio-buttons" },
+            items: items,
+            errorMessage: "selectedAnswerId" | findError(errors)
+        }) }}
+    {% endfor %}
+
+    {# {{ govukRadios({
             idPrefix: 'selectedAnswerId',
             name: 'selectedAnswerId',
             id: 'selectedAnswerId',
             attributes: { "data-qa": "radio-buttons" },
             items: items,
             errorMessage: "selectedAnswerId" | findError(errors)
-        }) }}
+        }) }} #}
   </form>
 {% endblock %}
