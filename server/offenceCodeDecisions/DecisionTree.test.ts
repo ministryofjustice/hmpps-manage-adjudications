@@ -31,11 +31,10 @@ function template() {
 }
 
 describe('decisions', () => {
-  it.only('toString', () => {
+  it('toString', () => {
     // Not a test but useful output
     // eslint-disable-next-line no-console
-    console.log(decisionTree)
-    // console.log(decisionTree.toString())
+    console.log(decisionTree.toString())
   })
 
   it('no answers missing offence codes', () => {

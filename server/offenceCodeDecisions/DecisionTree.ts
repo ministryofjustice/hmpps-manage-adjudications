@@ -15,7 +15,7 @@ const CHILD_8_Q = 'Stopping someone who is not a prisoner from doing their job'
 const CHILD_9_Q = 'Being absent without authorisation, being in an unauthorised place, or failing to work correctly'
 
 // Adult
-const adultQToOffencePara = [
+export const adultQToOffencePara = [
   { childQuestion: CHILD_1_Q, paras: ['1', '1A', '4', '5'] },
   { childQuestion: CHILD_2_Q, paras: ['7', '8'] },
   { childQuestion: CHILD_3_Q, paras: ['9', '10', '11', '12', '13', '14', '15', '23', '24'] },
@@ -27,7 +27,7 @@ const adultQToOffencePara = [
   { childQuestion: CHILD_9_Q, paras: ['18', '21'] },
 ]
 // YOI
-const yoiQToOffencePara = [
+export const yoiQToOffencePara = [
   { childQuestion: CHILD_1_Q, paras: ['1', '2', '5', '6'] },
   { childQuestion: CHILD_2_Q, paras: ['8', '9'] },
   { childQuestion: CHILD_3_Q, paras: ['10', '11', '12', '13', '14', '15', '16', '27'] },

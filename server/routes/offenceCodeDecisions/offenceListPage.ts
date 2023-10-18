@@ -7,13 +7,13 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import { DecisionForm } from './decisionForm'
 import Question from '../../offenceCodeDecisions/Question'
+import { OffenceRuleWithCode } from '../../data/DraftAdjudicationResult'
 
-type OffenceRule = { paragraphNumber: string; paragraphDescription: string; offenceCode: number }
 type PageData = {
   errors?: FormError[]
   draftId: number
   incidentRole: string
-  questions: OffenceRule[]
+  allOffenceRules: OffenceRuleWithCode[]
 } & DecisionForm
 
 export default class OffenceListRoutes {
@@ -26,31 +26,25 @@ export default class OffenceListRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const draftId = Number(req.params.draftId)
     const { incidentRole } = req.params
+    const { user } = res.locals
 
-    // get data from getAllOffenceRules
-    const questions = [
-      {
-        paragraphNumber: '25(c)',
-        paragraphDescription: 'Disobeys any lawful order',
-        offenceCode: 22001,
-      },
-      {
-        paragraphNumber: '1(a)',
-        paragraphDescription: 'Commits any racially aggravated assault',
-        offenceCode: 1007,
-      },
-    ]
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
+    const allOffenceRules = await this.placeOnReportService.getAllOffenceRules(
+      draftAdjudication.isYouthOffender,
+      draftAdjudication.gender,
+      user
+    )
 
-    return this.renderView(req, res, { draftId, incidentRole, questions })
+    return this.renderView(req, res, { draftId, incidentRole, allOffenceRules })
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
-    const { errors, questions } = pageData
+    const { errors, allOffenceRules } = pageData
 
     return res.render(`pages/offenceList.njk`, {
       errors: errors || [],
       decisionForm: pageData,
-      questions,
+      allOffenceRules,
       pageData,
     })
   }

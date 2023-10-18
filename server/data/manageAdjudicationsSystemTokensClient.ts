@@ -14,6 +14,7 @@ import {
   WitnessDetails,
   PrisonerGender,
   DraftAdjudication,
+  OffenceRuleWithCode,
 } from './DraftAdjudicationResult'
 import {
   ReportedAdjudicationResult,
@@ -199,7 +200,7 @@ export default class ManageAdjudicationsSystemTokensClient {
     })
   }
 
-  async getAllOffenceRules(isYouthOffender: boolean, gender: PrisonerGender): Promise<OffenceRule[]> {
+  async getAllOffenceRules(isYouthOffender: boolean, gender: PrisonerGender): Promise<OffenceRuleWithCode[]> {
     return this.restClient.get({
       path: `/draft-adjudications/offence-rules?youthOffender=${isYouthOffender}&gender=${gender}`,
     })
