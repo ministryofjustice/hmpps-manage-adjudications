@@ -3,6 +3,7 @@ import { PlaceholderText as Text } from './Placeholder'
 import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 import { AnswerType as Type } from './Answer'
 import { answer, question } from './Decisions'
+import { OffenceRuleWithCode } from '../data/DraftAdjudicationResult'
 
 const CHILD_1_Q = 'Assault, fighting, or endangering the health or personal safety of others'
 const CHILD_2_Q = 'Escape or failure to comply with temporary release conditions'
@@ -16,11 +17,11 @@ const CHILD_9_Q = 'Being absent without authorisation, being in an unauthorised 
 
 // Adult
 export const adultQToOffencePara = [
-  { childQuestion: CHILD_1_Q, paras: ['1', '1A', '4', '5'] },
+  { childQuestion: CHILD_1_Q, paras: ['1', '1(a)', '4', '5'] },
   { childQuestion: CHILD_2_Q, paras: ['7', '8'] },
   { childQuestion: CHILD_3_Q, paras: ['9', '10', '11', '12', '13', '14', '15', '23', '24'] },
-  { childQuestion: CHILD_4_Q, paras: ['16', '17', '24A'] },
-  { childQuestion: CHILD_5_Q, paras: ['19', '20', '20A'] },
+  { childQuestion: CHILD_4_Q, paras: ['16', '17', '24(a)'] },
+  { childQuestion: CHILD_5_Q, paras: ['19', '20', '20(a)'] },
   { childQuestion: CHILD_6_Q, paras: ['22'] },
   { childQuestion: CHILD_7_Q, paras: ['2'] },
   { childQuestion: CHILD_8_Q, paras: ['3', '6'] },
@@ -38,6 +39,26 @@ export const yoiQToOffencePara = [
   { childQuestion: CHILD_8_Q, paras: ['4', '7', '26'] },
   { childQuestion: CHILD_9_Q, paras: ['20', '24'] },
 ]
+
+export const getOffenceInformation = (allOffenceRules: OffenceRuleWithCode[], isYouthOffender: boolean) => {
+  const dataMap = isYouthOffender ? yoiQToOffencePara : adultQToOffencePara
+  const offenceInformation = []
+  for (const offenceRule of allOffenceRules) {
+    // Find the corresponding data from the dataMap based on the paragraph number
+    const matchingOffence = dataMap.find(offence => offence.paras.includes(offenceRule.paragraphNumber))
+    // If a matching data item is found, create an object and add it to the array
+    if (matchingOffence) {
+      const offenceInfoItem = {
+        childQuestion: matchingOffence.childQuestion,
+        paragraphNumber: offenceRule.paragraphNumber,
+        paragraphDescription: offenceRule.paragraphDescription,
+      }
+
+      offenceInformation.push(offenceInfoItem)
+    }
+  }
+  return offenceInformation
+}
 
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import decisionTree from './DecisionTree'
+import decisionTree, { getOffenceInformation } from './DecisionTree'
 import { Answer } from './Answer'
 import { answer, question } from './Decisions'
 
@@ -22,12 +22,8 @@ function missingOffenceCode(answerToCheck: Answer): boolean {
 
 function template() {
   return question('question 1')
-    .child(answer('answer 1-1')
-      .child(question('question 1-1')
-        .child(answer('answer 1-1-1'))))
-    .child(answer('answer 1-2')
-      .child(question('question 1-2')
-        .child(answer('answer 1-2-1'))))
+    .child(answer('answer 1-1').child(question('question 1-1').child(answer('answer 1-1-1'))))
+    .child(answer('answer 1-2').child(question('question 1-2').child(answer('answer 1-2-1'))))
 }
 
 describe('decisions', () => {
@@ -48,7 +44,7 @@ describe('decisions', () => {
     expect(answersWithMissingOffenceCodes.length).toBeGreaterThan(0)
   })
 
-  if( 'check that find duplicate method works as expected') {
+  if ('check that find duplicate method works as expected') {
     const arrayWithDuplicates = ['1', '1-1', '1-2', '1-3', '1-4', '1-2', '1-4']
     const duplicates = findDuplicates(arrayWithDuplicates)
     expect(duplicates).toEqual(['1-2', '1-4'])
@@ -73,5 +69,109 @@ describe('decisions', () => {
       .allCodes()
     const duplicates = findDuplicates(shouldBeDuplicates)
     expect(duplicates).toHaveLength(1)
+  })
+
+  describe('getOffenceInformation', () => {
+    it('returns correctly formatted result for adult offences', () => {
+      const allOffenceRules = [
+        {
+          paragraphNumber: '1(a)',
+          paragraphDescription: 'Commits any racially aggravated assault',
+          offenceCode: 1001,
+        },
+        {
+          paragraphNumber: '2',
+          paragraphDescription: 'Detains any person against his will',
+          offenceCode: 2004,
+        },
+        {
+          paragraphNumber: '4',
+          paragraphDescription: 'Fights with any person',
+          offenceCode: 4004,
+        },
+        {
+          paragraphNumber: '13',
+          paragraphDescription: 'Sells or delivers to any person any unauthorised article',
+          offenceCode: 13001,
+        },
+      ]
+      const expectedResult = [
+        {
+          childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
+          paragraphDescription: 'Commits any racially aggravated assault',
+          paragraphNumber: '1(a)',
+        },
+        {
+          childQuestion: 'Detains another person',
+          paragraphDescription: 'Detains any person against his will',
+          paragraphNumber: '2',
+        },
+        {
+          childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
+          paragraphDescription: 'Fights with any person',
+          paragraphNumber: '4',
+        },
+        {
+          childQuestion: 'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
+          paragraphDescription: 'Sells or delivers to any person any unauthorised article',
+          paragraphNumber: '13',
+        },
+      ]
+      const result = getOffenceInformation(allOffenceRules, false)
+      expect(result).toEqual(expectedResult)
+    })
+    it('returns correctly formatted result for YOI offences', () => {
+      const allOffenceRules = [
+        {
+          paragraphNumber: '2',
+          paragraphDescription: 'Commits any racially aggravated assault',
+          offenceCode: 1001,
+        },
+        {
+          paragraphNumber: '17',
+          paragraphDescription:
+            'Intentionally or recklessly sets fire to any part of a young offender institution or any other property, whether or not his own',
+          offenceCode: 16001,
+        },
+        {
+          paragraphNumber: '20',
+          paragraphDescription:
+            'Absents himself from any place where he is required to be or is present at any place where he is not authorised to be',
+          offenceCode: 18001,
+        },
+        {
+          paragraphNumber: '25',
+          paragraphDescription: 'Disobeys any lawful order',
+          offenceCode: 22001,
+        },
+      ]
+      const expectedResult = [
+        {
+          childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
+          paragraphDescription: 'Commits any racially aggravated assault',
+          paragraphNumber: '2',
+        },
+        {
+          childQuestion: 'Sets fire to, or damages, the prison or any property',
+          paragraphDescription:
+            'Intentionally or recklessly sets fire to any part of a young offender institution or any other property, whether or not his own',
+          paragraphNumber: '17',
+        },
+        {
+          childQuestion:
+            'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
+          paragraphDescription:
+            'Absents himself from any place where he is required to be or is present at any place where he is not authorised to be',
+          paragraphNumber: '20',
+        },
+        {
+          childQuestion: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
+          paragraphDescription: 'Disobeys any lawful order',
+          paragraphNumber: '25',
+        },
+      ]
+      const result = getOffenceInformation(allOffenceRules, true)
+      expect(result).toEqual(expectedResult)
+    })
   })
 })
