@@ -6,15 +6,15 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import { DecisionForm } from './decisionForm'
-import Question from '../../offenceCodeDecisions/Question'
-import { OffenceRuleWithCode } from '../../data/DraftAdjudicationResult'
-import { adultQToOffencePara } from '../../offenceCodeDecisions/DecisionTree'
+import { GroupedOffenceRulesAndTitles } from '../../data/DraftAdjudicationResult'
+import { getOffenceInformation } from '../../offenceCodeDecisions/DecisionTree'
 
 type PageData = {
   errors?: FormError[]
   draftId: number
   incidentRole: string
-  allOffenceRules: OffenceRuleWithCode[]
+  offencesAndTitles: GroupedOffenceRulesAndTitles[]
+  prisonerName: string
 } & DecisionForm
 
 export default class OffenceListRoutes {
@@ -35,22 +35,26 @@ export default class OffenceListRoutes {
       draftAdjudication.gender,
       user
     )
-
-    return this.renderView(req, res, { draftId, incidentRole, allOffenceRules })
+    const offencesAndTitles = await getOffenceInformation(allOffenceRules, draftAdjudication.isYouthOffender)
+    const prisonerName = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
+    // offencesAndTitles.forEach(item => console.log(item))
+    return this.renderView(req, res, {
+      draftId,
+      incidentRole,
+      offencesAndTitles,
+      prisonerName: prisonerName.friendlyName,
+    })
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
-    const { errors, allOffenceRules } = pageData
+    const { errors, offencesAndTitles, prisonerName } = pageData
 
     return res.render(`pages/offenceList.njk`, {
       errors: errors || [],
       decisionForm: pageData,
-      allOffenceRules,
+      offencesAndTitles,
       pageData,
+      prisonerName,
     })
-  }
-
-  private decisions(): Question {
-    return this.decisionTreeService.getDecisionTree()
   }
 }

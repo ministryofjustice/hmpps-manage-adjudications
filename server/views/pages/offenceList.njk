@@ -7,8 +7,12 @@
 
 {% set title = "Offence details" %}
 
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+
 {% block beforeContent %}
-    {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
@@ -19,21 +23,23 @@
       attributes: { "data-qa": "error-summary" }
       }) }}
   {% endif %}
-    <h1 class="govuk-heading-l">What offence did X break?</h1>
-    {% set items = [] %}
+  <h1 class="govuk-heading-l">What offence did {{ prisonerName }} break?</h1>
+  {% set items = [] %}
 
-    {% for question in questions %}
-      {% set items = (items.push({
-        attributes: { offenceCode: question.offenceCode },
-        value: question.offenceCode,
-        text: question.paragraphDescription,
-        checked: decisionForm.selectedAnswerId == answer.id
-      }), items) %}
-    {% endfor %}
+  {% for offenceGroup in offencesAndTitles %}
+    {% if offenceGroup.offenceRules.length > 1 %}
+      {% for offence in offenceGroup.offenceRules %}
+        {% set items = (items.push({value: offence.paragraphNumber, text: offence.paragraphNumber, hint: offence.paragraphDescription}), items) %}
+      {% endfor %}
+    {% else %}
+      {% set offenceRule = offenceGroup.offenceRules[0] %}
+      {% set items = (items.push({value: offenceRule.paragraphNumber, text: offenceRule.paragraphNumber, hint: offenceRule.paragraphDescription}), items) %}
+    {% endif %}
+  {% endfor %}
 
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-code-decision-form">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        {{ govukRadios({
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-paragraph-list-form">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    {{ govukRadios({
             idPrefix: 'selectedAnswerId',
             name: 'selectedAnswerId',
             id: 'selectedAnswerId',
@@ -41,5 +47,5 @@
             items: items,
             errorMessage: "selectedAnswerId" | findError(errors)
         }) }}
-    </form>
+  </form>
 {% endblock %}

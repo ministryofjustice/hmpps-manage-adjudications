@@ -25,6 +25,13 @@ export type OffenceRule = {
 
 export type OffenceRuleWithCode = OffenceRule & { offenceCode: number }
 
+export type offenceRuleAndTitle = { childQuestion: string } & OffenceRule
+
+export type GroupedOffenceRulesAndTitles = {
+  offenceTitle: string
+  offenceRules: offenceRuleAndTitle[]
+}
+
 export type OffenceDetails = {
   offenceCode: number
   offenceRule?: OffenceRule

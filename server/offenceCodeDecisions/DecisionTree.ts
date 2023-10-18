@@ -3,7 +3,7 @@ import { PlaceholderText as Text } from './Placeholder'
 import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 import { AnswerType as Type } from './Answer'
 import { answer, question } from './Decisions'
-import { OffenceRuleWithCode } from '../data/DraftAdjudicationResult'
+import { GroupedOffenceRulesAndTitles, OffenceRuleWithCode, offenceRuleAndTitle } from '../data/DraftAdjudicationResult'
 
 const CHILD_1_Q = 'Assault, fighting, or endangering the health or personal safety of others'
 const CHILD_2_Q = 'Escape or failure to comply with temporary release conditions'
@@ -40,9 +40,12 @@ export const yoiQToOffencePara = [
   { childQuestion: CHILD_9_Q, paras: ['20', '24'] },
 ]
 
-export const getOffenceInformation = (allOffenceRules: OffenceRuleWithCode[], isYouthOffender: boolean) => {
+export const getOffenceInformation = (
+  allOffenceRules: OffenceRuleWithCode[],
+  isYouthOffender: boolean
+): GroupedOffenceRulesAndTitles[] => {
   const dataMap = isYouthOffender ? yoiQToOffencePara : adultQToOffencePara
-  const offenceInformation = []
+  const offenceInformation = {}
   for (const offenceRule of allOffenceRules) {
     // Find the corresponding data from the dataMap based on the paragraph number
     const matchingOffence = dataMap.find(offence => offence.paras.includes(offenceRule.paragraphNumber))
@@ -54,10 +57,38 @@ export const getOffenceInformation = (allOffenceRules: OffenceRuleWithCode[], is
         paragraphDescription: offenceRule.paragraphDescription,
       }
 
-      offenceInformation.push(offenceInfoItem)
+      // Create a group for the childQuestion if it doesn't exist
+      if (!offenceInformation[offenceInfoItem.childQuestion]) {
+        offenceInformation[offenceInfoItem.childQuestion] = []
+      }
+
+      // Check if the paragraphNumber already exists in the group
+      const isDuplicate = offenceInformation[offenceInfoItem.childQuestion].some(
+        (item: offenceRuleAndTitle) => item.paragraphNumber === offenceInfoItem.paragraphNumber
+      )
+
+      // Add the object to the group if it isn't a duplicate
+      if (!isDuplicate) offenceInformation[offenceInfoItem.childQuestion].push(offenceInfoItem)
     }
   }
-  return offenceInformation
+
+  // Sort the paragraph numbers within each group in ascending order
+  for (const childQuestion in offenceInformation) {
+    if (offenceInformation.hasOwnProperty(childQuestion)) {
+      offenceInformation[childQuestion].sort((a: offenceRuleAndTitle, b: offenceRuleAndTitle) =>
+        a.paragraphNumber.localeCompare(b.paragraphNumber, undefined, { numeric: true })
+      )
+    }
+  }
+
+  // Convert the object into an array
+  const groupedOffenceInformation = Object.entries(offenceInformation).map(
+    ([childQuestion, offenceRules]: [string, offenceRuleAndTitle[]]) => ({
+      offenceTitle: childQuestion,
+      offenceRules,
+    })
+  )
+  return groupedOffenceInformation
 }
 
 

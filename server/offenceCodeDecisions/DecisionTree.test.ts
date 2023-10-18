@@ -97,30 +97,45 @@ describe('decisions', () => {
       ]
       const expectedResult = [
         {
-          childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
-          paragraphDescription: 'Commits any racially aggravated assault',
-          paragraphNumber: '1(a)',
+          offenceRules: [
+            {
+              childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
+              paragraphDescription: 'Commits any racially aggravated assault',
+              paragraphNumber: '1(a)',
+            },
+            {
+              childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
+              paragraphDescription: 'Fights with any person',
+              paragraphNumber: '4',
+            },
+          ],
+          offenceTitle: 'Assault, fighting, or endangering the health or personal safety of others',
         },
         {
-          childQuestion: 'Detains another person',
-          paragraphDescription: 'Detains any person against his will',
-          paragraphNumber: '2',
+          offenceRules: [
+            {
+              childQuestion: 'Detains another person',
+              paragraphDescription: 'Detains any person against his will',
+              paragraphNumber: '2',
+            },
+          ],
+          offenceTitle: 'Detains another person',
         },
         {
-          childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
-          paragraphDescription: 'Fights with any person',
-          paragraphNumber: '4',
-        },
-        {
-          childQuestion: 'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
-          paragraphDescription: 'Sells or delivers to any person any unauthorised article',
-          paragraphNumber: '13',
+          offenceRules: [
+            {
+              childQuestion: 'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
+              paragraphDescription: 'Sells or delivers to any person any unauthorised article',
+              paragraphNumber: '13',
+            },
+          ],
+          offenceTitle: 'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         },
       ]
       const result = getOffenceInformation(allOffenceRules, false)
       expect(result).toEqual(expectedResult)
     })
-    it('returns correctly formatted result for YOI offences', () => {
+    it.only('returns correctly formatted result for YOI offences', () => {
       const allOffenceRules = [
         {
           paragraphNumber: '2',
@@ -132,6 +147,16 @@ describe('decisions', () => {
           paragraphDescription:
             'Intentionally or recklessly sets fire to any part of a young offender institution or any other property, whether or not his own',
           offenceCode: 16001,
+        },
+        {
+          paragraphNumber: '5',
+          paragraphDescription: 'Fights with any person',
+          offenceCode: 4004,
+        },
+        {
+          paragraphNumber: '5',
+          paragraphDescription: 'Fights with any person',
+          offenceCode: 4005,
         },
         {
           paragraphNumber: '20',
@@ -147,27 +172,53 @@ describe('decisions', () => {
       ]
       const expectedResult = [
         {
-          childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
-          paragraphDescription: 'Commits any racially aggravated assault',
-          paragraphNumber: '2',
+          offenceRules: [
+            {
+              childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
+              paragraphDescription: 'Commits any racially aggravated assault',
+              paragraphNumber: '2',
+            },
+            {
+              childQuestion: 'Assault, fighting, or endangering the health or personal safety of others',
+              paragraphDescription: 'Fights with any person',
+              paragraphNumber: '5',
+            },
+          ],
+          offenceTitle: 'Assault, fighting, or endangering the health or personal safety of others',
         },
         {
-          childQuestion: 'Sets fire to, or damages, the prison or any property',
-          paragraphDescription:
-            'Intentionally or recklessly sets fire to any part of a young offender institution or any other property, whether or not his own',
-          paragraphNumber: '17',
+          offenceRules: [
+            {
+              childQuestion: 'Sets fire to, or damages, the prison or any property',
+              paragraphDescription:
+                'Intentionally or recklessly sets fire to any part of a young offender institution or any other property, whether or not his own',
+              paragraphNumber: '17',
+            },
+          ],
+          offenceTitle: 'Sets fire to, or damages, the prison or any property',
         },
         {
-          childQuestion:
+          offenceRules: [
+            {
+              childQuestion:
+                'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
+              paragraphDescription:
+                'Absents himself from any place where he is required to be or is present at any place where he is not authorised to be',
+              paragraphNumber: '20',
+            },
+          ],
+          offenceTitle:
             'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
-          paragraphDescription:
-            'Absents himself from any place where he is required to be or is present at any place where he is not authorised to be',
-          paragraphNumber: '20',
         },
         {
-          childQuestion: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
-          paragraphDescription: 'Disobeys any lawful order',
-          paragraphNumber: '25',
+          offenceRules: [
+            {
+              childQuestion: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
+              paragraphDescription: 'Disobeys any lawful order',
+              paragraphNumber: '25',
+            },
+          ],
+          offenceTitle: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
         },
       ]
       const result = getOffenceInformation(allOffenceRules, true)
