@@ -19,9 +19,21 @@ type PageData = {
   errors?: FormError[]
   draftId: number
   incidentRole: string
-  offencesAndTitles: GroupedOffenceRulesAndTitles[]
-  prisonerName: string
+  offencesAndTitles?: GroupedOffenceRulesAndTitles[]
+  prisonerName?: string
 } & DecisionForm
+
+// eslint-disable-next-line no-shadow
+enum ErrorType {
+  MISSING_DECISION = 'MISSING_DECISION',
+}
+
+const error: { [key in ErrorType]: FormError } = {
+  MISSING_DECISION: {
+    href: '#selectedAnswerId',
+    text: 'Select an option',
+  },
+}
 
 export default class OffenceListRoutes {
   constructor(
@@ -31,8 +43,8 @@ export default class OffenceListRoutes {
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const draftId = Number(req.params.draftId)
     const { incidentRole } = req.params
+    const draftId = Number(req.params.draftId)
     const selectedAnswerId = req.query.selectedAnswerId as string
     const { user } = res.locals
 
@@ -53,7 +65,6 @@ export default class OffenceListRoutes {
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { errors, offencesAndTitles, prisonerName } = pageData
     const draftId = Number(req.params.draftId)
-    // const { incidentRole } = req.params
 
     return res.render(`pages/offenceList.njk`, {
       errors: errors || [],
@@ -66,11 +77,14 @@ export default class OffenceListRoutes {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const draftId = Number(req.params.draftId)
     const { user } = res.locals
     const { selectedAnswerId } = req.body
+    const draftId = Number(req.params.draftId)
+    const { incidentRole } = req.params
 
-    // validation
+    if (!selectedAnswerId) {
+      return this.renderView(req, res, { errors: [error.MISSING_DECISION], draftId, incidentRole })
+    }
 
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
     const allOffenceRules = await this.getAllOffenceRules(draftAdjudication, user)
@@ -82,7 +96,6 @@ export default class OffenceListRoutes {
     if (listOfOffencesWithFurtherQs.includes(selectedAnswerId)) {
       // redirect here to page with appropriate extra question
     }
-    // redirect to place where submit happens for aloEdit
     return this.redirect(
       {
         pathname: adjudicationUrls.detailsOfOffence.urls.aloAdd(draftId),

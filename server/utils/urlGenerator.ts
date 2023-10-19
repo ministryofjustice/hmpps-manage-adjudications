@@ -15,6 +15,7 @@ const adjudicationUrls = {
       question: (incidentRole: string, questionId: string) =>
         `/:draftId/:incidentRole(${incidentRole})/:questionId(${questionId})`,
       start: (incidentRole: string) => `/:draftId/:incidentRole(${incidentRole})`,
+      // I think the below can be deleted once NN-5378 is completed?
       aloEditStart: (incidentRole: string) => `/:draftId/aloEdit/:incidentRole(${incidentRole})`,
       aloEditQuestion: (incidentRole: string, questionId: string) =>
         `/:draftId/aloEdit/:incidentRole(${incidentRole})/:questionId(${questionId})`,
@@ -26,6 +27,7 @@ const adjudicationUrls = {
       },
       start: (draftId: number, incidentRole: string) =>
         `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/${incidentRole}`,
+      // I think the below can be deleted once NN-5378 is completed?
       aloEditStart: (draftId: number, incidentRole: string) =>
         `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/aloEdit/${incidentRole}`,
       aloEditQuestion: (draftId: number, incidentRole: string, questionUrl: string) => {
