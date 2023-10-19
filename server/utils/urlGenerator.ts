@@ -18,7 +18,7 @@ const adjudicationUrls = {
       aloEditStart: (incidentRole: string) => `/:draftId/aloEdit/:incidentRole(${incidentRole})`,
       aloEditQuestion: (incidentRole: string, questionId: string) =>
         `/:draftId/aloEdit/:incidentRole(${incidentRole})/:questionId(${questionId})`,
-      list: '/list/:draftId',
+      list: (incidentRole: string) => `/list/:draftId/${incidentRole}`,
     },
     urls: {
       question: (draftId: number, incidentRole: string, questionUrl: string) => {
@@ -31,7 +31,8 @@ const adjudicationUrls = {
       aloEditQuestion: (draftId: number, incidentRole: string, questionUrl: string) => {
         return `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/aloEdit/${incidentRole}/${questionUrl}`
       },
-      list: (draftId: number) => `${adjudicationUrls.offenceCodeSelection.root}/list/${draftId}`,
+      list: (draftId: number, incidentRole: string) =>
+        `${adjudicationUrls.offenceCodeSelection.root}/list/${draftId}/${incidentRole}`,
     },
   },
   detailsOfOffence: {

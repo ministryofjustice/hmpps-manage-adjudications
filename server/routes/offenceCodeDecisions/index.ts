@@ -74,9 +74,9 @@ export default function offenceCodeDecisionsRoutes({
       adjudicationUrls.offenceCodeSelection.matchers.aloEditStart(key as IncidentRole),
       offenceCodeDecisionsAloEditRoute.redirectToStart
     )
+    get(adjudicationUrls.offenceCodeSelection.matchers.list(key as IncidentRole), offenceListRoute.view)
+    post(adjudicationUrls.offenceCodeSelection.matchers.list(key as IncidentRole), offenceListRoute.submit)
   })
-
-  get(adjudicationUrls.offenceCodeSelection.matchers.list, offenceListRoute.view)
 
   return router
 }

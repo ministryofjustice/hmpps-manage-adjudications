@@ -5,7 +5,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set title = "Offence details" %}
+{% set title = "Which offence did the prisoner commit?" %}
 
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
@@ -23,7 +23,7 @@
       attributes: { "data-qa": "error-summary" }
       }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">What offence did {{ prisonerName }} break?</h1>
+  <h1 class="govuk-heading-l">Which offence did {{ prisonerName }} commit?</h1>
   {% set items = [] %}
 
   {# {% for offenceGroup in offencesAndTitles %}
@@ -86,5 +86,19 @@
             items: items,
             errorMessage: "selectedAnswerId" | findError(errors)
         }) }} #}
+
+    {{ govukButton({
+        text: "Continue",
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "continue" },
+        preventDoubleClick: true
+    }) }}
+    {{ govukButton({
+        text: "Cancel",
+        href: cancelButtonHref,
+        classes: "govuk-button--secondary",
+        attributes: { "data-qa": "cancel" }
+    }) }}
   </form>
 {% endblock %}

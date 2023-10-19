@@ -1,13 +1,19 @@
 /* eslint-disable max-classes-per-file */
-
+import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import DecisionTreeService from '../../services/decisionTreeService'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import { DecisionForm } from './decisionForm'
-import { GroupedOffenceRulesAndTitles } from '../../data/DraftAdjudicationResult'
-import { getOffenceInformation } from '../../offenceCodeDecisions/DecisionTree'
+import { DraftAdjudication, GroupedOffenceRulesAndTitles } from '../../data/DraftAdjudicationResult'
+import {
+  getOffenceCodeFromParagraphNumber,
+  getOffenceInformation,
+  parasWithFurtherQs,
+} from '../../offenceCodeDecisions/DecisionTree'
+import adjudicationUrls from '../../utils/urlGenerator'
+import { User } from '../../data/hmppsManageUsersClient'
 
 type PageData = {
   errors?: FormError[]
@@ -27,27 +33,27 @@ export default class OffenceListRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const draftId = Number(req.params.draftId)
     const { incidentRole } = req.params
+    const selectedAnswerId = req.query.selectedAnswerId as string
     const { user } = res.locals
 
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
-    const allOffenceRules = await this.placeOnReportService.getAllOffenceRules(
-      draftAdjudication.isYouthOffender,
-      draftAdjudication.gender,
-      user
-    )
+    const allOffenceRules = await this.getAllOffenceRules(draftAdjudication, user)
     const offencesAndTitles = await getOffenceInformation(allOffenceRules, draftAdjudication.isYouthOffender)
     const prisonerName = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
-    // offencesAndTitles.forEach(item => console.log(item))
+
     return this.renderView(req, res, {
       draftId,
       incidentRole,
       offencesAndTitles,
       prisonerName: prisonerName.friendlyName,
+      selectedAnswerId,
     })
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { errors, offencesAndTitles, prisonerName } = pageData
+    const draftId = Number(req.params.draftId)
+    // const { incidentRole } = req.params
 
     return res.render(`pages/offenceList.njk`, {
       errors: errors || [],
@@ -55,6 +61,46 @@ export default class OffenceListRoutes {
       offencesAndTitles,
       pageData,
       prisonerName,
+      cancelButtonHref: adjudicationUrls.prisonerReport.urls.review(draftId),
     })
+  }
+
+  submit = async (req: Request, res: Response): Promise<void> => {
+    const draftId = Number(req.params.draftId)
+    const { user } = res.locals
+    const { selectedAnswerId } = req.body
+
+    // validation
+
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
+    const allOffenceRules = await this.getAllOffenceRules(draftAdjudication, user)
+    const chosenOffenceCode = await getOffenceCodeFromParagraphNumber(allOffenceRules, selectedAnswerId)
+
+    const listOfOffencesWithFurtherQs = draftAdjudication.isYouthOffender
+      ? parasWithFurtherQs.yoi
+      : parasWithFurtherQs.adult
+    if (listOfOffencesWithFurtherQs.includes(selectedAnswerId)) {
+      // redirect here to page with appropriate extra question
+    }
+    // redirect to place where submit happens for aloEdit
+    return this.redirect(
+      {
+        pathname: adjudicationUrls.detailsOfOffence.urls.aloAdd(draftId),
+        query: { offenceCode: `${chosenOffenceCode}` },
+      },
+      res
+    )
+  }
+
+  getAllOffenceRules = async (draftAdjudication: DraftAdjudication, user: User) => {
+    return this.placeOnReportService.getAllOffenceRules(
+      draftAdjudication.isYouthOffender,
+      draftAdjudication.gender,
+      user
+    )
+  }
+
+  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
+    return res.redirect(url.format(urlQuery))
   }
 }

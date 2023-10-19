@@ -40,6 +40,11 @@ export const yoiQToOffencePara = [
   { childQuestion: CHILD_9_Q, paras: ['20', '24'] },
 ]
 
+export const parasWithFurtherQs = {
+  adult: ['1', '1(a)', '4', '5', '2', '7', '8', '9', '12'],
+  yoi: ['1', '2', '5', '6', '3', '8', '9', '10', '13'],
+}
+
 export const getOffenceInformation = (
   allOffenceRules: OffenceRuleWithCode[],
   isYouthOffender: boolean
@@ -89,6 +94,15 @@ export const getOffenceInformation = (
     })
   )
   return groupedOffenceInformation
+}
+
+export const getOffenceCodeFromParagraphNumber = (
+  allOffenceRules: OffenceRuleWithCode[],
+  chosenParagraphNumber: string
+) => {
+  const matches = allOffenceRules.filter(offenceRule => offenceRule.paragraphNumber === chosenParagraphNumber)
+  // Select the first offence code of the list of matching paragraphNumbers
+  return matches[0].offenceCode
 }
 
 
