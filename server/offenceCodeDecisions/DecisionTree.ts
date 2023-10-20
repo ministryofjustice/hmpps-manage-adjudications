@@ -40,6 +40,18 @@ export const yoiQToOffencePara = [
   { childQuestion: CHILD_9_Q, paras: ['20', '24'] },
 ]
 
+export const adultParaToNextQuestion = [
+  { para: '4', questionId: '1-1-2' },
+  { para: '5', questionId: '1-1-3' },
+  { para: '2', questionId: '1-7' },
+]
+
+export const yoiParaToNextQuestion = [
+  { para: '5', questionId: '1-1-2' },
+  { para: '6', questionId: '1-1-3' },
+  { para: '3', questionId: '1-7' },
+]
+
 export const parasWithFurtherQs = {
   adult: ['1', '1(a)', '4', '5', '2', '7', '8', '9', '12'],
   yoi: ['1', '2', '5', '6', '3', '8', '9', '10', '13'],
@@ -103,6 +115,16 @@ export const getOffenceCodeFromParagraphNumber = (
   const matches = allOffenceRules.filter(offenceRule => offenceRule.paragraphNumber === chosenParagraphNumber)
   // Select the first offence code of the list of matching paragraphNumbers
   return matches[0].offenceCode
+}
+
+export const paragraphNumberToQuestionId = (paragraphNumber: string, isYoi: boolean) => {
+  const dataMap = isYoi ? yoiParaToNextQuestion : adultParaToNextQuestion
+  const matchingParaQuestion = dataMap.find(paraQuestion => paraQuestion.para === paragraphNumber)
+  if (matchingParaQuestion) {
+    return matchingParaQuestion.questionId
+  }
+  // Figure out what to do if there's not a match
+  return undefined
 }
 
 

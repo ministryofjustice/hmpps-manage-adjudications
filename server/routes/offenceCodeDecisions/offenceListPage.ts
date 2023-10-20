@@ -10,6 +10,7 @@ import { DraftAdjudication, GroupedOffenceRulesAndTitles } from '../../data/Draf
 import {
   getOffenceCodeFromParagraphNumber,
   getOffenceInformation,
+  paragraphNumberToQuestionId,
   parasWithFurtherQs,
 } from '../../offenceCodeDecisions/DecisionTree'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -93,8 +94,10 @@ export default class OffenceListRoutes {
     const listOfOffencesWithFurtherQs = draftAdjudication.isYouthOffender
       ? parasWithFurtherQs.yoi
       : parasWithFurtherQs.adult
+
     if (listOfOffencesWithFurtherQs.includes(selectedAnswerId)) {
-      // redirect here to page with appropriate extra question
+      const nextPageId = paragraphNumberToQuestionId(selectedAnswerId, draftAdjudication.isYouthOffender)
+      return res.redirect(adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(draftId, incidentRole, nextPageId))
     }
     return this.redirect(
       {

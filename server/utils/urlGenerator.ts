@@ -19,7 +19,7 @@ const adjudicationUrls = {
       aloEditStart: (incidentRole: string) => `/:draftId/aloEdit/:incidentRole(${incidentRole})`,
       aloEditQuestion: (incidentRole: string, questionId: string) =>
         `/:draftId/aloEdit/:incidentRole(${incidentRole})/:questionId(${questionId})`,
-      list: (incidentRole: string) => `/list/:draftId/${incidentRole}`,
+      list: (incidentRole: string) => `/list/:draftId/:incidentRole(${incidentRole})`,
     },
     urls: {
       question: (draftId: number, incidentRole: string, questionUrl: string) => {

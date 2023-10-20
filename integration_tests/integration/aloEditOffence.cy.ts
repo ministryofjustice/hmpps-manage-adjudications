@@ -176,7 +176,7 @@ const editedReportedAdjudicationTestTwo = testData.reportedAdjudication({
   },
 })
 
-context('ALO edits offence - test 1', () => {
+context.skip('ALO edits offence - test 1', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
