@@ -20,6 +20,14 @@ import PrisonerOutsideEstablishmentDecisionHelper from './prisonerOutsideEstabli
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import { OffenceData } from './offenceData'
 import { User } from '../../data/hmppsManageUsersClient'
+import {
+  paragraph1,
+  paragraph12,
+  paragraph1A,
+  paragraph7,
+  paragraph8,
+  paragraph9,
+} from '../../offenceCodeDecisions/DecisionTree'
 
 type PageData = { errors?: FormError[]; draftId: number; incidentRole: string } & DecisionForm
 
@@ -208,6 +216,25 @@ export default class OffenceCodeRoutes {
     )
   }
 
+  private getQuestion(questionId: string): Question {
+    switch (questionId) {
+      case '99':
+        return paragraph1
+      case '98':
+        return paragraph1A
+      case '97':
+        return paragraph7
+      case '96':
+        return paragraph8
+      case '95':
+        return paragraph9
+      case '94':
+        return paragraph12
+      default:
+        return this.decisions().findQuestionById(questionId)
+    }
+  }
+
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { draftId, incidentRole, errors } = pageData
     const draftChargeId = Number(draftId)
@@ -218,7 +245,7 @@ export default class OffenceCodeRoutes {
       user
     )
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
-    const question = this.decisions().findQuestionById(questionId)
+    const question = this.getQuestion(questionId)
     const pageTitle = question.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const answers = question.getChildAnswers().map(a => {
       return {

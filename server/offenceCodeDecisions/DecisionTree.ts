@@ -150,7 +150,7 @@ export default question([
       .child(answer('Being in an unauthorised place').offenceCode(18002))
       .child(answer('Failing to work correctly').offenceCode(21001))))
 
-export const paragraph1 =  question('Who was assaulted?', "99")
+export const paragraph1 = question('Who was assaulted?', "99")
   .child(answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`]).type(Type.PRISONER).offenceCode(1002))
   .child(answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.OFFICER).offenceCode(1004))
   .child(answer(['A member of staff who is not a prison officer', `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`]).type(Type.STAFF).offenceCode(1006))
