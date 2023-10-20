@@ -15,8 +15,8 @@ export type WitnessData = {
 export default class DecisionHelper {
   constructor(readonly decisionTreeService: DecisionTreeService) {}
 
-  decision(): Question {
-    return this.decisionTreeService.getDecisionTree()
+  decision(key: string): Question {
+    return this.decisionTreeService.getDecisionTree(key)
   }
 
   viewDataFromForm(form: DecisionForm, user: User): Promise<unknown> {
@@ -54,7 +54,7 @@ export default class DecisionHelper {
       victimOtherPersonsName: currentAnswers?.victimOtherPersonsName,
       victimPrisonersNumber: currentAnswers?.victimPrisonersNumber,
       victimStaffUsername: currentAnswers?.victimStaffUsername,
-      offenceCode: `${this.decision().findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
+      offenceCode: `${this.decision(null).findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
     }
   }
 

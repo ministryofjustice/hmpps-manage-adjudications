@@ -26,11 +26,54 @@ export default class DecisionTreeService {
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
     private readonly reportedAdjudicationService: ReportedAdjudicationsService,
-    private readonly decisionTree: Question
+    private readonly decisionTree: Question,
+    private readonly paragraph1: Question,
+    private readonly paragraph1A: Question,
+    private readonly paragraph7: Question,
+    private readonly paragraph8: Question,
+    private readonly paragraph9: Question,
+    private readonly paragraph12: Question
   ) {}
 
-  getDecisionTree(): Question {
-    return this.decisionTree
+  getDecisionTree(key: string): Question {
+    switch (key) {
+      case '99':
+      case '99-1':
+      case '99-2':
+      case '99-3':
+      case '99-4':
+      case '99-5':
+        return this.paragraph1
+      case '98':
+      case '98-1':
+      case '98-2':
+      case '98-3':
+      case '98-4':
+      case '98-5':
+        return this.paragraph1A
+      case '97':
+      case '97-1':
+      case '97-2':
+        return this.paragraph7
+      case '96':
+      case '96-1':
+      case '96-2':
+        return this.paragraph8
+      case '95':
+      case '95-1':
+      case '95-2':
+        return this.paragraph9
+      case '94':
+      case '94-2':
+      case '94-3':
+        return this.paragraph12
+      case '94-1':
+      case '94-1-1':
+      case '94-1-2':
+        return this.paragraph12.findQuestionById(key)
+      default:
+        return this.decisionTree
+    }
   }
 
   async draftAdjudicationIncidentData(draftAdjudicationId: number, user: User) {
@@ -140,7 +183,7 @@ export default class DecisionTreeService {
     incidentRole: IncidentRoleEnum,
     prisonerView: boolean
   ) {
-    return this.getDecisionTree()
+    return this.getDecisionTree(null)
       .findAnswerByCode(offenceCode)
       .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole, prisonerView)
   }

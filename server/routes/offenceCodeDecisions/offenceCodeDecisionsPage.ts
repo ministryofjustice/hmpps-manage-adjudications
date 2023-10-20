@@ -20,14 +20,6 @@ import PrisonerOutsideEstablishmentDecisionHelper from './prisonerOutsideEstabli
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import { OffenceData } from './offenceData'
 import { User } from '../../data/hmppsManageUsersClient'
-import {
-  paragraph1,
-  paragraph12,
-  paragraph1A,
-  paragraph7,
-  paragraph8,
-  paragraph9,
-} from '../../offenceCodeDecisions/DecisionTree'
 
 type PageData = { errors?: FormError[]; draftId: number; incidentRole: string } & DecisionForm
 
@@ -272,44 +264,7 @@ export default class OffenceCodeRoutes {
     return `${adjudicationUrls.offenceCodeSelection.root}${req.path}`
   }
 
-  private decisions(id: string): Question {
-    switch (id) {
-      case '99':
-      case '99-1':
-      case '99-2':
-      case '99-3':
-      case '99-4':
-      case '99-5':
-        return paragraph1
-      case '98':
-      case '98-1':
-      case '98-2':
-      case '98-3':
-      case '98-4':
-      case '98-5':
-        return paragraph1A
-      case '97':
-      case '97-1':
-      case '97-2':
-        return paragraph7
-      case '96':
-      case '96-1':
-      case '96-2':
-        return paragraph8
-      case '95':
-      case '95-1':
-      case '95-2':
-        return paragraph9
-      case '94':
-      case '94-2':
-      case '94-3':
-        return paragraph12
-      case '94-1':
-      case '94-1-1':
-      case '94-1-2':
-        return paragraph12.findQuestionById(id)
-      default:
-        return this.decisionTreeService.getDecisionTree()
-    }
+  private decisions(key: string): Question {
+    return this.decisionTreeService.getDecisionTree(key)
   }
 }

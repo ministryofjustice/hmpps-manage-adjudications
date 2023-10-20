@@ -44,7 +44,18 @@ const victimPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSumm
 const victimStaffDetails = testData.staffFromUsername('Alan')
 
 beforeEach(() => {
-  service = new DecisionTreeService(placeOnReportService, userService, reportedAdjudicationsService, question)
+  service = new DecisionTreeService(
+    placeOnReportService,
+    userService,
+    reportedAdjudicationsService,
+    question,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  )
 })
 
 afterEach(() => {
