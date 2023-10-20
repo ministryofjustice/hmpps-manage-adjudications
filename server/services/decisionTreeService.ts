@@ -64,8 +64,11 @@ export default class DecisionTreeService {
       case '95-2':
         return this.paragraph9
       case '94':
+      case '94-1':
       case '94-2':
       case '94-3':
+      case '94-1-1':
+      case '94-1-2':
         return this.paragraph12
       default:
         return this.decisionTree
