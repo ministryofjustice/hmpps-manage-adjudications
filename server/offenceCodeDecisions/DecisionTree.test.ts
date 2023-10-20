@@ -1,5 +1,5 @@
 /* eslint-disable */
-import decisionTree, { paragraph1, paragraph12 } from './DecisionTree'
+import decisionTree, { paragraph1, paragraph12, paragraph1A, paragraph7, paragraph8, paragraph9 } from './DecisionTree'
 import { Answer } from './Answer'
 import { answer, question } from './Decisions'
 
@@ -34,7 +34,7 @@ describe('decisions', () => {
   it('toString', () => {
     // Not a test but useful output
     // eslint-disable-next-line no-console
-    console.log(paragraph12.toString())
+    console.log(paragraph9.toString())
   })
 
   it('no answers missing offence codes', () => {

@@ -231,10 +231,43 @@ export default class OffenceCodeRoutes {
       case '94':
         return paragraph12
       case '94-1':
-      case '94-1-1':
         return paragraph12.findQuestionById(questionId)
       default:
         return this.decisions().findQuestionById(questionId)
+    }
+  }
+
+  private getAnswer(answerId: string): Question {
+    switch (answerId) {
+      case '99-1':
+      case '99-2':
+      case '99-3':
+      case '99-4':
+      case '99-5':
+        return paragraph1
+      case '98-1':
+      case '98-2':
+      case '98-3':
+      case '98-4':
+      case '98-5':
+        return paragraph1A
+      case '97-1':
+      case '97-2':
+        return paragraph7
+      case '96-1':
+      case '96-2':
+        return paragraph8
+      case '95-1':
+      case '95-2':
+        return paragraph9
+      case '94-1':
+      case '94-2':
+      case '94-3':
+      case '94-1-1':
+      case '94-1-2':
+        return paragraph12
+      default:
+        return this.decisions()
     }
   }
 
@@ -277,7 +310,9 @@ export default class OffenceCodeRoutes {
     } else {
       selectedAnswerId = decisionFormOrSelectedAnswerId?.selectedAnswerId
     }
-    return selectedAnswerId && this.helpers.get(this.decisions().findAnswerById(selectedAnswerId).getType())
+    return (
+      selectedAnswerId && this.helpers.get(this.getAnswer(selectedAnswerId).findAnswerById(selectedAnswerId).getType())
+    )
   }
 
   private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
