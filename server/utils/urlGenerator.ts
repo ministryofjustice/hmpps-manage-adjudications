@@ -12,12 +12,10 @@ const adjudicationUrls = {
   offenceCodeSelection: {
     root: '/offence-code-selection',
     matchers: {
-      question: (incidentRole: string, questionId: string) =>
-        `/:draftId/:incidentRole(${incidentRole})/:questionId(${questionId})`,
-      start: (incidentRole: string) => `/:draftId/:incidentRole(${incidentRole})`,
-      aloEditStart: (incidentRole: string) => `/:draftId/aloEdit/:incidentRole(${incidentRole})`,
-      aloEditQuestion: (incidentRole: string, questionId: string) =>
-        `/:draftId/aloEdit/:incidentRole(${incidentRole})/:questionId(${questionId})`,
+      question: () => `/:draftId/:incidentRole/:questionId`,
+      start: () => `/:draftId/:incidentRole`,
+      aloEditStart: () => `/:draftId/aloEdit/:incidentRole`,
+      aloEditQuestion: () => `/:draftId/aloEdit/:incidentRole/:questionId`,
     },
     urls: {
       question: (draftId: number, incidentRole: string, questionUrl: string) => {

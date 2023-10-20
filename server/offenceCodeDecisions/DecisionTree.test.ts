@@ -1,5 +1,5 @@
 /* eslint-disable */
-import decisionTree from './DecisionTree'
+import decisionTree, { paragraph1, paragraph12 } from './DecisionTree'
 import { Answer } from './Answer'
 import { answer, question } from './Decisions'
 
