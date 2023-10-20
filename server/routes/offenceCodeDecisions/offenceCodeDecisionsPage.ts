@@ -133,7 +133,7 @@ export default class OffenceCodeRoutes {
     }
 
     const updatedOffenceData = answerTypeHelper.updatedOffenceData(offenceToAdd, form)
-    const selectedAnswer = this.decisions().findAnswerById(form.selectedAnswerId)
+    const selectedAnswer = this.decisions(form.selectedAnswerId).findAnswerById(form.selectedAnswerId)
     if (!selectedAnswer.getOffenceCode()) {
       let nextQuestionUrl = ''
       if (this.pageOptions.isAloEdit()) {
@@ -209,66 +209,15 @@ export default class OffenceCodeRoutes {
     const draftChargeId = Number(draftId)
     if (this.pageOptions.isAloEdit())
       return res.redirect(
-        adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(draftChargeId, incidentRole, this.decisions().id())
+        adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(
+          draftChargeId,
+          incidentRole,
+          this.decisions(null).id()
+        )
       )
     return res.redirect(
-      adjudicationUrls.offenceCodeSelection.urls.question(draftChargeId, incidentRole, this.decisions().id())
+      adjudicationUrls.offenceCodeSelection.urls.question(draftChargeId, incidentRole, this.decisions(null).id())
     )
-  }
-
-  private getQuestion(questionId: string): Question {
-    switch (questionId) {
-      case '99':
-        return paragraph1
-      case '98':
-        return paragraph1A
-      case '97':
-        return paragraph7
-      case '96':
-        return paragraph8
-      case '95':
-        return paragraph9
-      case '94':
-        return paragraph12
-      case '94-1':
-        return paragraph12.findQuestionById(questionId)
-      default:
-        return this.decisions().findQuestionById(questionId)
-    }
-  }
-
-  private getAnswer(answerId: string): Question {
-    switch (answerId) {
-      case '99-1':
-      case '99-2':
-      case '99-3':
-      case '99-4':
-      case '99-5':
-        return paragraph1
-      case '98-1':
-      case '98-2':
-      case '98-3':
-      case '98-4':
-      case '98-5':
-        return paragraph1A
-      case '97-1':
-      case '97-2':
-        return paragraph7
-      case '96-1':
-      case '96-2':
-        return paragraph8
-      case '95-1':
-      case '95-2':
-        return paragraph9
-      case '94-1':
-      case '94-2':
-      case '94-3':
-      case '94-1-1':
-      case '94-1-2':
-        return paragraph12
-      default:
-        return this.decisions()
-    }
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
@@ -281,7 +230,7 @@ export default class OffenceCodeRoutes {
       user
     )
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
-    const question = this.getQuestion(questionId)
+    const question = this.decisions(questionId).findQuestionById(questionId)
     const pageTitle = question.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const answers = question.getChildAnswers().map(a => {
       return {
@@ -311,7 +260,7 @@ export default class OffenceCodeRoutes {
       selectedAnswerId = decisionFormOrSelectedAnswerId?.selectedAnswerId
     }
     return (
-      selectedAnswerId && this.helpers.get(this.getAnswer(selectedAnswerId).findAnswerById(selectedAnswerId).getType())
+      selectedAnswerId && this.helpers.get(this.decisions(selectedAnswerId).findAnswerById(selectedAnswerId).getType())
     )
   }
 
@@ -323,7 +272,44 @@ export default class OffenceCodeRoutes {
     return `${adjudicationUrls.offenceCodeSelection.root}${req.path}`
   }
 
-  private decisions(): Question {
-    return this.decisionTreeService.getDecisionTree()
+  private decisions(id: string): Question {
+    switch (id) {
+      case '99':
+      case '99-1':
+      case '99-2':
+      case '99-3':
+      case '99-4':
+      case '99-5':
+        return paragraph1
+      case '98':
+      case '98-1':
+      case '98-2':
+      case '98-3':
+      case '98-4':
+      case '98-5':
+        return paragraph1A
+      case '97':
+      case '97-1':
+      case '97-2':
+        return paragraph7
+      case '96':
+      case '96-1':
+      case '96-2':
+        return paragraph8
+      case '95':
+      case '95-1':
+      case '95-2':
+        return paragraph9
+      case '94':
+      case '94-2':
+      case '94-3':
+        return paragraph12
+      case '94-1':
+      case '94-1-1':
+      case '94-1-2':
+        return paragraph12.findQuestionById(id)
+      default:
+        return this.decisionTreeService.getDecisionTree()
+    }
   }
 }
