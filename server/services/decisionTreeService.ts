@@ -67,10 +67,6 @@ export default class DecisionTreeService {
       case '94-2':
       case '94-3':
         return this.paragraph12
-      case '94-1':
-      case '94-1-1':
-      case '94-1-2':
-        return this.paragraph12.findQuestionById(key)
       default:
         return this.decisionTree
     }
