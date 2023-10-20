@@ -230,6 +230,9 @@ export default class OffenceCodeRoutes {
         return paragraph9
       case '94':
         return paragraph12
+      case '94-1':
+      case '94-1-1':
+        return paragraph12.findQuestionById(questionId)
       default:
         return this.decisions().findQuestionById(questionId)
     }
