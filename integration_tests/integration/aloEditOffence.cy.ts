@@ -1,180 +1,180 @@
-import Page from '../pages/page'
-import adjudicationUrls from '../../server/utils/urlGenerator'
-import TestData from '../../server/routes/testutils/testData'
-import PrisonerReport from '../pages/prisonerReport'
-import ReviewerEditOffencesWarningPage from '../pages/reviewerEditOffencesWarning'
-import AgeOfPrisonerPage from '../pages/ageofPrisonerSubmittedEdit'
-import IncidentRoleEditPage from '../pages/incidentRoleSubmittedEdit'
-import DetailsOfOffence from '../pages/detailsOfOffence'
+// import Page from '../pages/page'
+// import adjudicationUrls from '../../server/utils/urlGenerator'
+// import TestData from '../../server/routes/testutils/testData'
+// import PrisonerReport from '../pages/prisonerReport'
+// import ReviewerEditOffencesWarningPage from '../pages/reviewerEditOffencesWarning'
+// import AgeOfPrisonerPage from '../pages/ageofPrisonerSubmittedEdit'
+// import IncidentRoleEditPage from '../pages/incidentRoleSubmittedEdit'
+// import DetailsOfOffence from '../pages/detailsOfOffence'
 
-import OffenceCodeSelection from '../pages/offenceCodeSelection'
+// import OffenceCodeSelection from '../pages/offenceCodeSelection'
 
-const testData = new TestData()
+// const testData = new TestData()
 
-const originalDraftTestOne = {
-  draftAdjudication: testData.draftAdjudication({
-    id: 177,
-    chargeNumber: '12345',
-    prisonerNumber: 'G6415GD',
-    dateTimeOfIncident: '2021-11-03T13:10:00',
-    locationId: 25538,
-    incidentRole: {
-      associatedPrisonersNumber: 'T3356FU',
-      roleCode: '25c',
-      offenceRule: {
-        paragraphNumber: '25(c)',
-        paragraphDescription:
-          'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-      },
-    },
-    offenceDetails: {
-      offenceCode: 1001,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-      victimPrisonersNumber: 'G5512G',
-    },
-  }),
-}
+// const originalDraftTestOne = {
+//   draftAdjudication: testData.draftAdjudication({
+//     id: 177,
+//     chargeNumber: '12345',
+//     prisonerNumber: 'G6415GD',
+//     dateTimeOfIncident: '2021-11-03T13:10:00',
+//     locationId: 25538,
+//     incidentRole: {
+//       associatedPrisonersNumber: 'T3356FU',
+//       roleCode: '25c',
+//       offenceRule: {
+//         paragraphNumber: '25(c)',
+//         paragraphDescription:
+//           'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+//       },
+//     },
+//     offenceDetails: {
+//       offenceCode: 1001,
+//       offenceRule: {
+//         paragraphNumber: '1',
+//         paragraphDescription: 'Commits any assault',
+//       },
+//       victimPrisonersNumber: 'G5512G',
+//     },
+//   }),
+// }
 
-const originalReportedTestOne = {
-  reportedAdjudication: testData.reportedAdjudication({
-    chargeNumber: '1524493',
-    prisonerNumber: 'G6415GD',
-    dateTimeOfIncident: '2021-12-09T10:30:00',
-    incidentRole: {
-      associatedPrisonersNumber: 'T3356FU',
-      roleCode: '25c',
-      offenceRule: {
-        paragraphNumber: '25(c)',
-        paragraphDescription:
-          'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-      },
-    },
-    offenceDetails: {
-      offenceCode: 1001,
-      offenceRule: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-      victimPrisonersNumber: 'G5512G',
-    },
-  }),
-}
+// const originalReportedTestOne = {
+//   reportedAdjudication: testData.reportedAdjudication({
+//     chargeNumber: '1524493',
+//     prisonerNumber: 'G6415GD',
+//     dateTimeOfIncident: '2021-12-09T10:30:00',
+//     incidentRole: {
+//       associatedPrisonersNumber: 'T3356FU',
+//       roleCode: '25c',
+//       offenceRule: {
+//         paragraphNumber: '25(c)',
+//         paragraphDescription:
+//           'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+//       },
+//     },
+//     offenceDetails: {
+//       offenceCode: 1001,
+//       offenceRule: {
+//         paragraphNumber: '1',
+//         paragraphDescription: 'Commits any assault',
+//       },
+//       victimPrisonersNumber: 'G5512G',
+//     },
+//   }),
+// }
 
-const editedDraftAdjudicationTestOne = {
-  draftAdjudication: testData.draftAdjudication({
-    id: 177,
-    chargeNumber: '12345',
-    prisonerNumber: 'G6415GD',
-    dateTimeOfIncident: '2021-11-03T13:10:00',
-    locationId: 25538,
-    incidentRole: {},
-  }),
-}
+// const editedDraftAdjudicationTestOne = {
+//   draftAdjudication: testData.draftAdjudication({
+//     id: 177,
+//     chargeNumber: '12345',
+//     prisonerNumber: 'G6415GD',
+//     dateTimeOfIncident: '2021-11-03T13:10:00',
+//     locationId: 25538,
+//     incidentRole: {},
+//   }),
+// }
 
-const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
-  chargeNumber: '12345',
-  prisonerNumber: 'G6415GD',
-  dateTimeOfIncident: '2021-11-03T13:10:00',
-  locationId: 25538,
-  incidentRole: {},
-  offenceDetails: {
-    offenceCode: 1021,
-    offenceRule: {
-      paragraphNumber: '1(a)',
-      paragraphDescription: 'Commits any racially aggravated assault',
-    },
-    victimPrisonersNumber: 'G7123CI',
-    victimOtherPersonsName: 'James Robertson',
-  },
-})
+// const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
+//   chargeNumber: '12345',
+//   prisonerNumber: 'G6415GD',
+//   dateTimeOfIncident: '2021-11-03T13:10:00',
+//   locationId: 25538,
+//   incidentRole: {},
+//   offenceDetails: {
+//     offenceCode: 1021,
+//     offenceRule: {
+//       paragraphNumber: '1(a)',
+//       paragraphDescription: 'Commits any racially aggravated assault',
+//     },
+//     victimPrisonersNumber: 'G7123CI',
+//     victimOtherPersonsName: 'James Robertson',
+//   },
+// })
 
-const originalReportedTestTwo = {
-  reportedAdjudication: testData.reportedAdjudication({
-    chargeNumber: '1524493',
-    prisonerNumber: 'G6415GD',
-    dateTimeOfIncident: '2021-12-09T10:30:00',
-    locationId: 25538,
-    incidentRole: {},
-    offenceDetails: {
-      offenceCode: 24101,
-      offenceRule: {
-        paragraphNumber: '24(a)',
-        paragraphDescription:
-          'Displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting racist words, drawings, symbols or other material',
-      },
-    },
-  }),
-}
+// const originalReportedTestTwo = {
+//   reportedAdjudication: testData.reportedAdjudication({
+//     chargeNumber: '1524493',
+//     prisonerNumber: 'G6415GD',
+//     dateTimeOfIncident: '2021-12-09T10:30:00',
+//     locationId: 25538,
+//     incidentRole: {},
+//     offenceDetails: {
+//       offenceCode: 24101,
+//       offenceRule: {
+//         paragraphNumber: '24(a)',
+//         paragraphDescription:
+//           'Displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting racist words, drawings, symbols or other material',
+//       },
+//     },
+//   }),
+// }
 
-const originalDraftTestTwo = {
-  draftAdjudication: testData.draftAdjudication({
-    id: 188,
-    chargeNumber: '1524493',
-    prisonerNumber: 'G6415GD',
-    dateTimeOfIncident: '2021-12-09T10:30:00',
-    locationId: 25538,
-    incidentRole: {},
-    offenceDetails: {
-      offenceCode: 24101,
-      offenceRule: {
-        paragraphNumber: '24(a)',
-        paragraphDescription:
-          'Displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting racist words, drawings, symbols or other material',
-      },
-    },
-  }),
-}
+// const originalDraftTestTwo = {
+//   draftAdjudication: testData.draftAdjudication({
+//     id: 188,
+//     chargeNumber: '1524493',
+//     prisonerNumber: 'G6415GD',
+//     dateTimeOfIncident: '2021-12-09T10:30:00',
+//     locationId: 25538,
+//     incidentRole: {},
+//     offenceDetails: {
+//       offenceCode: 24101,
+//       offenceRule: {
+//         paragraphNumber: '24(a)',
+//         paragraphDescription:
+//           'Displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting racist words, drawings, symbols or other material',
+//       },
+//     },
+//   }),
+// }
 
-const editedDraftAdjudicationTestTwo = {
-  draftAdjudication: testData.draftAdjudication({
-    id: 188,
-    chargeNumber: '1524493',
-    prisonerNumber: 'G6415GD',
-    dateTimeOfIncident: '2021-12-09T10:30:00',
-    incidentRole: {
-      roleCode: '25b',
-      offenceRule: {
-        paragraphNumber: '25(b)',
-        paragraphDescription: 'Incites another prisoner to commit any of the foregoing offences:',
-      },
-      associatedPrisonersNumber: 'G6415GD',
-    },
-    offenceDetails: {
-      offenceCode: 24101,
-      offenceRule: {
-        paragraphNumber: '24(a)',
-        paragraphDescription:
-          'Displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting racist words, drawings, symbols or other material',
-      },
-    },
-  }),
-}
+// const editedDraftAdjudicationTestTwo = {
+//   draftAdjudication: testData.draftAdjudication({
+//     id: 188,
+//     chargeNumber: '1524493',
+//     prisonerNumber: 'G6415GD',
+//     dateTimeOfIncident: '2021-12-09T10:30:00',
+//     incidentRole: {
+//       roleCode: '25b',
+//       offenceRule: {
+//         paragraphNumber: '25(b)',
+//         paragraphDescription: 'Incites another prisoner to commit any of the foregoing offences:',
+//       },
+//       associatedPrisonersNumber: 'G6415GD',
+//     },
+//     offenceDetails: {
+//       offenceCode: 24101,
+//       offenceRule: {
+//         paragraphNumber: '24(a)',
+//         paragraphDescription:
+//           'Displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting racist words, drawings, symbols or other material',
+//       },
+//     },
+//   }),
+// }
 
-const editedReportedAdjudicationTestTwo = testData.reportedAdjudication({
-  chargeNumber: '1524493',
-  prisonerNumber: 'G6415GD',
-  dateTimeOfIncident: '2021-12-09T10:30:00',
-  locationId: 25538,
-  incidentRole: {
-    roleCode: '25b',
-    offenceRule: {
-      paragraphNumber: '25(b)',
-      paragraphDescription: 'Incites another prisoner to commit any of the foregoing offences:',
-    },
-    associatedPrisonersNumber: 'G6415GD',
-  },
-  offenceDetails: {
-    offenceCode: 24101,
-    offenceRule: {
-      paragraphNumber: '24(a)',
-      paragraphDescription:
-        'Displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting racist words, drawings, symbols or other material',
-    },
-  },
-})
+// const editedReportedAdjudicationTestTwo = testData.reportedAdjudication({
+//   chargeNumber: '1524493',
+//   prisonerNumber: 'G6415GD',
+//   dateTimeOfIncident: '2021-12-09T10:30:00',
+//   locationId: 25538,
+//   incidentRole: {
+//     roleCode: '25b',
+//     offenceRule: {
+//       paragraphNumber: '25(b)',
+//       paragraphDescription: 'Incites another prisoner to commit any of the foregoing offences:',
+//     },
+//     associatedPrisonersNumber: 'G6415GD',
+//   },
+//   offenceDetails: {
+//     offenceCode: 24101,
+//     offenceRule: {
+//       paragraphNumber: '24(a)',
+//       paragraphDescription:
+//         'Displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting racist words, drawings, symbols or other material',
+//     },
+//   },
+// })
 
 // context.skip('ALO edits offence - test 1', () => {
 //   beforeEach(() => {
