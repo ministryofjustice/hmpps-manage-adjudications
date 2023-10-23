@@ -31,6 +31,10 @@ export default class DecisionTreeService {
   ) {}
 
   getDecisionTree(key: string): Question {
+    if (key === null) {
+      return this.decisionTree
+    }
+
     const additionalQuestion = this.additionalQuestions.filter(question => key.startsWith(question.id()))
 
     if (additionalQuestion.length === 0) {
