@@ -13,7 +13,7 @@ jest.mock('../../services/reportedAdjudicationsService')
 jest.mock('../../services/userService')
 
 const testData = new TestData()
-const decisionTreeService = new DecisionTreeService(null, null, null, null) as jest.Mocked<DecisionTreeService>
+const decisionTreeService = new DecisionTreeService(null, null, null, null, []) as jest.Mocked<DecisionTreeService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,

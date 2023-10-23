@@ -187,7 +187,7 @@ export default class AddWitnessRoutes {
   }
 
   private decisions(): Question {
-    return this.decisionTreeService.getDecisionTree()
+    return this.decisionTreeService.getDecisionTree(null)
   }
 
   private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {

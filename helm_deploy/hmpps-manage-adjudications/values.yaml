@@ -14,7 +14,7 @@ generic-service:
     enabled: true
     host: app-hostname.local    # override per environment
     tlsSecretName: hmpps-manage-adjudications-cert
-
+ 
   livenessProbe:
     httpGet:
       path: /ping

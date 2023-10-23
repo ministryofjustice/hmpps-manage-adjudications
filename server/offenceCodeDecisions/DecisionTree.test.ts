@@ -1,5 +1,5 @@
 /* eslint-disable */
-import decisionTree, { getOffenceInformation } from './DecisionTree'
+import decisionTree, { getOffenceInformation, paragraph1, paragraph12, paragraph1A, paragraph7, paragraph8, paragraph9 } from './DecisionTree'
 import { Answer } from './Answer'
 import { answer, question } from './Decisions'
 

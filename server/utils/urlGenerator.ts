@@ -12,14 +12,10 @@ const adjudicationUrls = {
   offenceCodeSelection: {
     root: '/offence-code-selection',
     matchers: {
-      question: (incidentRole: string, questionId: string) =>
-        `/:draftId/:incidentRole(${incidentRole})/:questionId(${questionId})`,
-      start: (incidentRole: string) => `/:draftId/:incidentRole(${incidentRole})`,
-      // I think the below can be deleted once NN-5378 is completed?
-      aloEditStart: (incidentRole: string) => `/:draftId/aloEdit/:incidentRole(${incidentRole})`,
-      aloEditQuestion: (incidentRole: string, questionId: string) =>
-        `/:draftId/aloEdit/:incidentRole(${incidentRole})/:questionId(${questionId})`,
-      list: (incidentRole: string) => `/list/:draftId/:incidentRole(${incidentRole})`,
+      question: () => `/:draftId/:incidentRole/:questionId`,
+      start: () => `/:draftId/:incidentRole`,
+      list: () => `/list/:draftId/:incidentRole`,
+      aloEditQuestion: () => `/:draftId/aloEdit/:incidentRole/:questionId`,
     },
     urls: {
       question: (draftId: number, incidentRole: string, questionUrl: string) => {
@@ -27,9 +23,6 @@ const adjudicationUrls = {
       },
       start: (draftId: number, incidentRole: string) =>
         `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/${incidentRole}`,
-      // I think the below can be deleted once NN-5378 is completed?
-      aloEditStart: (draftId: number, incidentRole: string) =>
-        `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/aloEdit/${incidentRole}`,
       aloEditQuestion: (draftId: number, incidentRole: string, questionUrl: string) => {
         return `${adjudicationUrls.offenceCodeSelection.root}/${draftId}/aloEdit/${incidentRole}/${questionUrl}`
       },

@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import { Request, Response } from 'express'
 import url from 'url'
+import { Request, Response } from 'express'
 import adjudicationUrls from '../../utils/urlGenerator'
 import validateForm from './createOnBehalfOfValidation'
 import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'

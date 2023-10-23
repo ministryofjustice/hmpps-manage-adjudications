@@ -5,8 +5,11 @@ import Question from './Question'
 // eslint-disable-next-line import/no-cycle
 import { Answer } from './Answer'
 
-export function question(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
-  return new Question(title)
+export function question(
+  title: Title | string | (readonly (readonly [IncidentRole, string])[] | null),
+  overrideId?: string | null
+) {
+  return new Question(title, overrideId)
 }
 
 export function answer(text: string | [string, string]) {

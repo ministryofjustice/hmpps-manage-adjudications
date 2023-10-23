@@ -8,7 +8,14 @@ import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import PrisonerSearchService from './prisonerSearchService'
 import LocationService from './locationService'
 import DecisionTreeService from './decisionTreeService'
-import decisionTree from '../offenceCodeDecisions/DecisionTree'
+import decisionTree, {
+  paragraph1,
+  paragraph12,
+  paragraph1A,
+  paragraph7,
+  paragraph8,
+  paragraph9,
+} from '../offenceCodeDecisions/DecisionTree'
 import DamagesSessionService from './damagesSessionService'
 import EvidenceSessionService from './evidenceSessionService'
 import WitnessesSessionService from './witnessesSessionService'
@@ -42,7 +49,8 @@ const decisionTreeService = new DecisionTreeService(
   placeOnReportService,
   userService,
   reportedAdjudicationsService,
-  decisionTree
+  decisionTree,
+  [paragraph1, paragraph1A, paragraph7, paragraph8, paragraph9, paragraph12]
 )
 const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)
