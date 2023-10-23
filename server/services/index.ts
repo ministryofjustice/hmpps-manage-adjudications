@@ -50,12 +50,7 @@ const decisionTreeService = new DecisionTreeService(
   userService,
   reportedAdjudicationsService,
   decisionTree,
-  paragraph1,
-  paragraph1A,
-  paragraph7,
-  paragraph8,
-  paragraph9,
-  paragraph12
+  [paragraph1, paragraph1A, paragraph7, paragraph8, paragraph9, paragraph12]
 )
 const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)

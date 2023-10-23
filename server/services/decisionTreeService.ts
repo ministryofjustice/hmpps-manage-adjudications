@@ -27,52 +27,16 @@ export default class DecisionTreeService {
     private readonly userService: UserService,
     private readonly reportedAdjudicationService: ReportedAdjudicationsService,
     private readonly decisionTree: Question,
-    private readonly paragraph1: Question,
-    private readonly paragraph1A: Question,
-    private readonly paragraph7: Question,
-    private readonly paragraph8: Question,
-    private readonly paragraph9: Question,
-    private readonly paragraph12: Question
+    private readonly additionalQuestions: Question[]
   ) {}
 
   getDecisionTree(key: string): Question {
-    switch (key) {
-      case '99':
-      case '99-1':
-      case '99-2':
-      case '99-3':
-      case '99-4':
-      case '99-5':
-        return this.paragraph1
-      case '98':
-      case '98-1':
-      case '98-2':
-      case '98-3':
-      case '98-4':
-      case '98-5':
-        return this.paragraph1A
-      case '97':
-      case '97-1':
-      case '97-2':
-        return this.paragraph7
-      case '96':
-      case '96-1':
-      case '96-2':
-        return this.paragraph8
-      case '95':
-      case '95-1':
-      case '95-2':
-        return this.paragraph9
-      case '94':
-      case '94-1':
-      case '94-2':
-      case '94-3':
-      case '94-1-1':
-      case '94-1-2':
-        return this.paragraph12
-      default:
-        return this.decisionTree
+    const additionalQuestion = this.additionalQuestions.filter(question => key.startsWith(question.id()))
+
+    if (additionalQuestion.length === 0) {
+      return this.decisionTree
     }
+    return additionalQuestion[0]
   }
 
   async draftAdjudicationIncidentData(draftAdjudicationId: number, user: User) {

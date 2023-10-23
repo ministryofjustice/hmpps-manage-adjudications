@@ -67,12 +67,7 @@ const decisionTreeService = new DecisionTreeService(
   userService,
   reportedAdjudicationsService,
   testDecisionsTree,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null
+  []
 )
 let app: Express
 
