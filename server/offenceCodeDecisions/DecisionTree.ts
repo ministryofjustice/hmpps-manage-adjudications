@@ -3,7 +3,7 @@ import { PlaceholderText as Text } from './Placeholder'
 import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 import { AnswerType as Type } from './Answer'
 import { answer, question } from './Decisions'
-import { GroupedOffenceRulesAndTitles, OffenceRuleWithCode, offenceRuleAndTitle } from '../data/DraftAdjudicationResult'
+import { GroupedOffenceRulesAndTitles, OffenceRule, offenceRuleAndTitle } from '../data/DraftAdjudicationResult'
 
 const CHILD_1_Q = 'Assault, fighting, or endangering the health or personal safety of others'
 const CHILD_2_Q = 'Escape or failure to comply with temporary release conditions'
@@ -76,8 +76,43 @@ export const parasWithFurtherQs = {
   yoi: ['1', '2', '5', '6', '3', '8', '9', '10', '13'],
 }
 
+export const adultParaToOffenceCode = [
+  { para: '11', offenceCode: '11001' },
+  { para: '13', offenceCode: '13001' },
+  { para: '14', offenceCode: '14001' },
+  { para: '15', offenceCode: '15001' },
+  { para: '23', offenceCode: '23101' },
+  { para: '16', offenceCode: '16001' },
+  { para: '17', offenceCode: '17002' },
+  { para: '24a', offenceCode: '24101' },
+  { para: '20', offenceCode: '20002' },
+  { para: '20a', offenceCode: '20001' },
+  { para: '22', offenceCode: '22001' },
+  { para: '3', offenceCode: '3001' },
+  { para: '6', offenceCode: '6001' },
+  { para: '21', offenceCode: '21001' },
+]
+
+export const yoiParaToOffenceCode = [
+  { para: '11', offenceCode: '10001' },
+  { para: '12', offenceCode: '11001' },
+  { para: '14', offenceCode: '13001' },
+  { para: '15', offenceCode: '14001' },
+  { para: '16', offenceCode: '15001' },
+  { para: '17', offenceCode: '16001' },
+  { para: '18', offenceCode: '17002' },
+  { para: '19', offenceCode: '17001' },
+  { para: '28', offenceCode: '24101' },
+  { para: '22', offenceCode: '20002' },
+  { para: '23', offenceCode: '20001' },
+  { para: '25', offenceCode: '22001' },
+  { para: '4', offenceCode: '3001' },
+  { para: '7', offenceCode: '6001' },
+  { para: '24', offenceCode: '21001' },
+]
+
 export const getOffenceInformation = (
-  allOffenceRules: OffenceRuleWithCode[],
+  allOffenceRules: OffenceRule[],
   isYouthOffender: boolean
 ): GroupedOffenceRulesAndTitles[] => {
   const dataMap = isYouthOffender ? yoiQToOffencePara : adultQToOffencePara
@@ -127,23 +162,18 @@ export const getOffenceInformation = (
   return groupedOffenceInformation
 }
 
-export const getOffenceCodeFromParagraphNumber = (
-  allOffenceRules: OffenceRuleWithCode[],
-  chosenParagraphNumber: string
-) => {
-  const matches = allOffenceRules.filter(offenceRule => offenceRule.paragraphNumber === chosenParagraphNumber)
-  // Select the first offence code of the list of matching paragraphNumbers
-  return matches[0].offenceCode
+export const getOffenceCodeFromParagraphNumber = (chosenParagraphNumber: string, isYoi: boolean) => {
+  const dataMap = isYoi ? yoiParaToOffenceCode : adultParaToOffenceCode
+  const matchingParagraphNumber = dataMap.find(paraOffenceCode => paraOffenceCode.para === chosenParagraphNumber)
+  if (matchingParagraphNumber) return matchingParagraphNumber.offenceCode
+  return null
 }
 
 export const paragraphNumberToQuestionId = (paragraphNumber: string, isYoi: boolean) => {
   const dataMap = isYoi ? yoiParaToNextQuestion : adultParaToNextQuestion
   const matchingParaQuestion = dataMap.find(paraQuestion => paraQuestion.para === paragraphNumber)
-  if (matchingParaQuestion) {
-    return matchingParaQuestion.questionId
-  }
-  // Figure out what to do if there's not a match
-  return undefined
+  if (matchingParaQuestion) return matchingParaQuestion.questionId
+  return null
 }
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.

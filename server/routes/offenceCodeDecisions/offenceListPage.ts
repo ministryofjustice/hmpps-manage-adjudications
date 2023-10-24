@@ -88,8 +88,6 @@ export default class OffenceListRoutes {
     }
 
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
-    const allOffenceRules = await this.getAllOffenceRules(draftAdjudication, user)
-    const chosenOffenceCode = await getOffenceCodeFromParagraphNumber(allOffenceRules, selectedAnswerId)
 
     const listOfOffencesWithFurtherQs = draftAdjudication.isYouthOffender
       ? parasWithFurtherQs.yoi
@@ -99,6 +97,10 @@ export default class OffenceListRoutes {
       const nextPageId = paragraphNumberToQuestionId(selectedAnswerId, draftAdjudication.isYouthOffender)
       return res.redirect(adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(draftId, incidentRole, nextPageId))
     }
+    const chosenOffenceCode = await getOffenceCodeFromParagraphNumber(
+      selectedAnswerId,
+      draftAdjudication.isYouthOffender
+    )
     return this.redirect(
       {
         pathname: adjudicationUrls.detailsOfOffence.urls.aloAdd(draftId),

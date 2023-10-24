@@ -77,22 +77,18 @@ describe('decisions', () => {
         {
           paragraphNumber: '1(a)',
           paragraphDescription: 'Commits any racially aggravated assault',
-          offenceCode: 1001,
         },
         {
           paragraphNumber: '2',
           paragraphDescription: 'Detains any person against his will',
-          offenceCode: 2004,
         },
         {
           paragraphNumber: '4',
           paragraphDescription: 'Fights with any person',
-          offenceCode: 4004,
         },
         {
           paragraphNumber: '13',
           paragraphDescription: 'Sells or delivers to any person any unauthorised article',
-          offenceCode: 13001,
         },
       ]
       const expectedResult = [
@@ -135,39 +131,33 @@ describe('decisions', () => {
       const result = getOffenceInformation(allOffenceRules, false)
       expect(result).toEqual(expectedResult)
     })
-    it.only('returns correctly formatted result for YOI offences', () => {
+    it('returns correctly formatted result for YOI offences', () => {
       const allOffenceRules = [
         {
           paragraphNumber: '2',
           paragraphDescription: 'Commits any racially aggravated assault',
-          offenceCode: 1001,
         },
         {
           paragraphNumber: '17',
           paragraphDescription:
             'Intentionally or recklessly sets fire to any part of a young offender institution or any other property, whether or not his own',
-          offenceCode: 16001,
         },
         {
           paragraphNumber: '5',
           paragraphDescription: 'Fights with any person',
-          offenceCode: 4004,
         },
         {
           paragraphNumber: '5',
           paragraphDescription: 'Fights with any person',
-          offenceCode: 4005,
         },
         {
           paragraphNumber: '20',
           paragraphDescription:
             'Absents himself from any place where he is required to be or is present at any place where he is not authorised to be',
-          offenceCode: 18001,
         },
         {
           paragraphNumber: '25',
           paragraphDescription: 'Disobeys any lawful order',
-          offenceCode: 22001,
         },
       ]
       const expectedResult = [

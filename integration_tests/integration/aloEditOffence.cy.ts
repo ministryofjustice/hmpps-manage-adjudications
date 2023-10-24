@@ -1,67 +1,67 @@
-// import Page from '../pages/page'
-// import adjudicationUrls from '../../server/utils/urlGenerator'
-// import TestData from '../../server/routes/testutils/testData'
-// import PrisonerReport from '../pages/prisonerReport'
-// import ReviewerEditOffencesWarningPage from '../pages/reviewerEditOffencesWarning'
-// import AgeOfPrisonerPage from '../pages/ageofPrisonerSubmittedEdit'
-// import IncidentRoleEditPage from '../pages/incidentRoleSubmittedEdit'
+import Page from '../pages/page'
+import adjudicationUrls from '../../server/utils/urlGenerator'
+import TestData from '../../server/routes/testutils/testData'
+import PrisonerReport from '../pages/prisonerReport'
+import ReviewerEditOffencesWarningPage from '../pages/reviewerEditOffencesWarning'
+import AgeOfPrisonerPage from '../pages/ageofPrisonerSubmittedEdit'
+import IncidentRoleEditPage from '../pages/incidentRoleSubmittedEdit'
 // import DetailsOfOffence from '../pages/detailsOfOffence'
 
 // import OffenceCodeSelection from '../pages/offenceCodeSelection'
 
-// const testData = new TestData()
+const testData = new TestData()
 
-// const originalDraftTestOne = {
-//   draftAdjudication: testData.draftAdjudication({
-//     id: 177,
-//     chargeNumber: '12345',
-//     prisonerNumber: 'G6415GD',
-//     dateTimeOfIncident: '2021-11-03T13:10:00',
-//     locationId: 25538,
-//     incidentRole: {
-//       associatedPrisonersNumber: 'T3356FU',
-//       roleCode: '25c',
-//       offenceRule: {
-//         paragraphNumber: '25(c)',
-//         paragraphDescription:
-//           'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-//       },
-//     },
-//     offenceDetails: {
-//       offenceCode: 1001,
-//       offenceRule: {
-//         paragraphNumber: '1',
-//         paragraphDescription: 'Commits any assault',
-//       },
-//       victimPrisonersNumber: 'G5512G',
-//     },
-//   }),
-// }
+const originalDraftTestOne = {
+  draftAdjudication: testData.draftAdjudication({
+    id: 177,
+    chargeNumber: '12345',
+    prisonerNumber: 'G6415GD',
+    dateTimeOfIncident: '2021-11-03T13:10:00',
+    locationId: 25538,
+    incidentRole: {
+      associatedPrisonersNumber: 'T3356FU',
+      roleCode: '25c',
+      offenceRule: {
+        paragraphNumber: '25(c)',
+        paragraphDescription:
+          'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+      },
+    },
+    offenceDetails: {
+      offenceCode: 1001,
+      offenceRule: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+      victimPrisonersNumber: 'G5512G',
+    },
+  }),
+}
 
-// const originalReportedTestOne = {
-//   reportedAdjudication: testData.reportedAdjudication({
-//     chargeNumber: '1524493',
-//     prisonerNumber: 'G6415GD',
-//     dateTimeOfIncident: '2021-12-09T10:30:00',
-//     incidentRole: {
-//       associatedPrisonersNumber: 'T3356FU',
-//       roleCode: '25c',
-//       offenceRule: {
-//         paragraphNumber: '25(c)',
-//         paragraphDescription:
-//           'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
-//       },
-//     },
-//     offenceDetails: {
-//       offenceCode: 1001,
-//       offenceRule: {
-//         paragraphNumber: '1',
-//         paragraphDescription: 'Commits any assault',
-//       },
-//       victimPrisonersNumber: 'G5512G',
-//     },
-//   }),
-// }
+const originalReportedTestOne = {
+  reportedAdjudication: testData.reportedAdjudication({
+    chargeNumber: '1524493',
+    prisonerNumber: 'G6415GD',
+    dateTimeOfIncident: '2021-12-09T10:30:00',
+    incidentRole: {
+      associatedPrisonersNumber: 'T3356FU',
+      roleCode: '25c',
+      offenceRule: {
+        paragraphNumber: '25(c)',
+        paragraphDescription:
+          'Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:',
+      },
+    },
+    offenceDetails: {
+      offenceCode: 1001,
+      offenceRule: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+      victimPrisonersNumber: 'G5512G',
+    },
+  }),
+}
 
 // const editedDraftAdjudicationTestOne = {
 //   draftAdjudication: testData.draftAdjudication({
@@ -74,22 +74,22 @@
 //   }),
 // }
 
-// const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
-//   chargeNumber: '12345',
-//   prisonerNumber: 'G6415GD',
-//   dateTimeOfIncident: '2021-11-03T13:10:00',
-//   locationId: 25538,
-//   incidentRole: {},
-//   offenceDetails: {
-//     offenceCode: 1021,
-//     offenceRule: {
-//       paragraphNumber: '1(a)',
-//       paragraphDescription: 'Commits any racially aggravated assault',
-//     },
-//     victimPrisonersNumber: 'G7123CI',
-//     victimOtherPersonsName: 'James Robertson',
-//   },
-// })
+const editedReportedAdjudicationTestOne = testData.reportedAdjudication({
+  chargeNumber: '12345',
+  prisonerNumber: 'G6415GD',
+  dateTimeOfIncident: '2021-11-03T13:10:00',
+  locationId: 25538,
+  incidentRole: {},
+  offenceDetails: {
+    offenceCode: 1021,
+    offenceRule: {
+      paragraphNumber: '1(a)',
+      paragraphDescription: 'Commits any racially aggravated assault',
+    },
+    victimPrisonersNumber: 'G7123CI',
+    victimOtherPersonsName: 'James Robertson',
+  },
+})
 
 // const originalReportedTestTwo = {
 //   reportedAdjudication: testData.reportedAdjudication({
@@ -108,6 +108,13 @@
 //     },
 //   }),
 // }
+
+const offenceRules = [
+  {
+    paragraphNumber: '1(a)',
+    paragraphDescription: 'Commits any racially aggravated assault',
+  },
+]
 
 // const originalDraftTestTwo = {
 //   draftAdjudication: testData.draftAdjudication({
@@ -175,6 +182,132 @@
 //     },
 //   },
 // })
+
+context('ALO edit test #1', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.task('stubGetUserFromUsername', {
+      username: 'USER1',
+      response: testData.userFromUsername(),
+    })
+    cy.task('stubGetLocation', {
+      locationId: 25538,
+      response: {
+        locationId: 25538,
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-1',
+        userDescription: 'Houseblock 1',
+      },
+    })
+    // Prisoner
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6415GD',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
+    })
+    // Associated Prisoner
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'T3356FU',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'T3356FU',
+        firstName: 'JAMES',
+        lastName: 'JONES',
+      }),
+    })
+    // Prisoner victim
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G5512G',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G5512G',
+        firstName: 'PAUL',
+        lastName: 'WRIGHT',
+      }),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 12345,
+      response: originalReportedTestOne,
+    })
+
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      chargeNumber: '12345',
+      response: {
+        draftAdjudication: testData.draftAdjudication({
+          id: 177,
+          chargeNumber: '12345',
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2021-11-03T13:10:00',
+        }),
+      },
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 177,
+      response: originalDraftTestOne,
+    })
+    cy.task('stubGetAllOffenceRules', { response: offenceRules })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 1001,
+      response: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 1021,
+      response: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+    })
+    cy.task('stubSaveYouthOffenderStatus', {
+      id: '177',
+      response: testData.draftAdjudication({
+        id: 177,
+        prisonerNumber: 'G6415GD',
+        dateTimeOfIncident: '2021-11-03T11:09:00',
+      }),
+    })
+    cy.task('stubUpdateDraftIncidentRole', {
+      id: 177,
+      response: {
+        draftAdjudication: testData.draftAdjudication({
+          id: 177,
+          prisonerNumber: 'G6415GD',
+          incidentRole: {
+            roleCode: '25a',
+          },
+        }),
+      },
+    })
+    cy.task('stubSearchPrisonerDetails', {
+      prisonerNumber: 'G7123CI',
+    })
+    cy.task('stubAloAmendOffenceDetails', {
+      draftId: 177,
+      response: editedReportedAdjudicationTestOne,
+    })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+
+    cy.signIn()
+  })
+  it('', () => {
+    cy.visit(adjudicationUrls.prisonerReport.urls.review('12345'))
+    const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+    prisonerReportPage.offenceDetailsChangeLink().click()
+    const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
+    warningPage.continueButton().click()
+    const ageOfPrisonerPage: AgeOfPrisonerPage = Page.verifyOnPage(AgeOfPrisonerPage)
+    ageOfPrisonerPage.submitButton().click()
+    const incidentRolePage: IncidentRoleEditPage = Page.verifyOnPage(IncidentRoleEditPage)
+    incidentRolePage.radioButtons().find('input[value="committed"]').check()
+    incidentRolePage.submitButton().click()
+  })
+})
 
 // context.skip('ALO edits offence - test 1', () => {
 //   beforeEach(() => {
