@@ -7,7 +7,6 @@ import AgeOfPrisonerPage from '../pages/ageofPrisonerSubmittedEdit'
 import IncidentRoleEditPage from '../pages/incidentRoleSubmittedEdit'
 import OffenceCodeSelectionListPage from '../pages/offenceCodeSelectionList'
 import OffenceCodeSelection from '../pages/offenceCodeSelection'
-import DetailsOfOffence from '../pages/detailsOfOffence'
 
 const testData = new TestData()
 
@@ -61,18 +60,18 @@ const offenceRules = [
     paragraphDescription: 'Commits any racially aggravated assault',
   },
   {
-    paragraphNumber: '12',
+    paragraphNumber: '10',
     paragraphDescription:
-      'Has in his possession:<br><br>(a) any unauthorised article, or<br><br>(b) a greater quantity of any article than he is authorised to have',
+      'Is intoxicated as a consequence of consuming any alcoholic beverage (but subject to rule 52A)',
   },
   {
-    paragraphNumber: '3',
+    paragraphNumber: '19',
     paragraphDescription:
-      'Denies access to any part of the prison to any officer or any person (other than a prisoner) who is at the prison for the purpose of working there',
+      'Is disrespectful to any officer, or any person (other than a prisoner) who is at the prison for the purpose of working there, or any person visiting a prison',
   },
 ]
 
-context('ALO edit test #1', () => {
+context('Adult', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -140,17 +139,26 @@ context('ALO edit test #1', () => {
     })
     cy.task('stubGetAllOffenceRules', { response: offenceRules })
     cy.task('stubGetOffenceRule', {
-      offenceCode: 1001,
-      response: {
-        paragraphNumber: '1',
-        paragraphDescription: 'Commits any assault',
-      },
-    })
-    cy.task('stubGetOffenceRule', {
       offenceCode: 1021,
       response: {
         paragraphNumber: '1(a)',
         paragraphDescription: 'Commits any racially aggravated assault',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 19003,
+      response: {
+        paragraphNumber: '19',
+        paragraphDescription:
+          'Is disrespectful to any officer, or any person (other than a prisoner) who is at the prison for the purpose of working there, or any person visiting a prison',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 10001,
+      response: {
+        paragraphNumber: '10',
+        paragraphDescription:
+          'Is intoxicated as a consequence of consuming any alcoholic beverage (but subject to rule 52A)',
       },
     })
     cy.task('stubSaveYouthOffenderStatus', {
@@ -184,51 +192,65 @@ context('ALO edit test #1', () => {
 
     cy.signIn()
   })
-  it('1001 -> 1021', () => {
-    cy.visit(adjudicationUrls.prisonerReport.urls.review('12345'))
-    const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-    prisonerReportPage.offenceDetailsChangeLink().click()
-    const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
-    warningPage.continueButton().click()
-    const ageOfPrisonerPage: AgeOfPrisonerPage = Page.verifyOnPage(AgeOfPrisonerPage)
-    ageOfPrisonerPage.submitButton().click()
-    const incidentRolePage: IncidentRoleEditPage = Page.verifyOnPage(IncidentRoleEditPage)
-    incidentRolePage.radioButtons().find('input[value="committed"]').check()
-    incidentRolePage.submitButton().click()
-    const offenceCodeSelectionListPage = new OffenceCodeSelectionListPage('Which offence did John Smith commit?')
-    offenceCodeSelectionListPage.radio('1(a)').click()
-    offenceCodeSelectionListPage.continue().click()
-    const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
-    whoWasAssaultedPage.radio('98-4').check()
-    whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
-    whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
-    whoWasAssaultedPage.continue().click()
-    const detailsOfOffencePage = new DetailsOfOffence()
-    detailsOfOffencePage
-      .questionAnswerSectionQuestion(1, 1)
-      .contains('What type of offence did John Smith assist another prisoner to commit or attempt to commit?')
-    detailsOfOffencePage
-      .questionAnswerSectionAnswer(1, 1)
-      .contains('Assault, fighting, or endangering the health or personal safety of others')
-    detailsOfOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
-    detailsOfOffencePage
-      .questionAnswerSectionQuestion(1, 3)
-      .contains('Who did John Smith assist James Jones to assault?')
-    detailsOfOffencePage
-      .questionAnswerSectionAnswer(1, 3)
-      .contains("A prisoner who's left this establishment - James Robertson G7123CI")
-    detailsOfOffencePage.questionAnswerSectionQuestion(1, 4).contains('Was the incident a racially aggravated assault?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 4).contains('Yes')
-    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 1(a)')
-    detailsOfOffencePage.offenceSection(1).contains('Commits any racially aggravated assault')
-    detailsOfOffencePage.prisonRule().contains('Which set of rules apply to this prisoner?')
-    detailsOfOffencePage.prisonRuleDesc().contains('Adult offences')
-    detailsOfOffencePage.prisonRulePara().contains('Prison rule 51')
-    detailsOfOffencePage.deleteLink(1).should('not.exist')
-    detailsOfOffencePage.saveAndContinue().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review('12345'))
+  ;[
+    {
+      testName: '1001 -> 1021 / 1 -> 1(a) / Extra questions with decision tree',
+      radio: '1(a)',
+      radio2: '98-4',
+      title: 'Who was assaulted?',
+      victimName: 'James Robertson',
+      victimPN: 'G7123CI',
+      offenceCode: '1021',
+    },
+    {
+      testName: '1001 -> 19003 / 1 -> 19 / Extra questions',
+      radio: '19',
+      radio2: '1-5-1-3',
+      title: 'Who was John Smith disrespectful to?',
+      victimName: 'James Robertson',
+      victimPN: null,
+      offenceCode: '19003',
+    },
+    {
+      testName: '1001 -> 10001 / 1 -> 10 / Direct answer',
+      radio: '10',
+      radio2: null,
+      title: null,
+      victimName: null,
+      victimPN: null,
+      offenceCode: '10001',
+    },
+  ].forEach(test => {
+    it(test.testName, () => {
+      cy.visit(adjudicationUrls.prisonerReport.urls.review('12345'))
+      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+      prisonerReportPage.offenceDetailsChangeLink().click()
+      const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
+      warningPage.continueButton().click()
+      const ageOfPrisonerPage: AgeOfPrisonerPage = Page.verifyOnPage(AgeOfPrisonerPage)
+      ageOfPrisonerPage.submitButton().click()
+      const incidentRolePage: IncidentRoleEditPage = Page.verifyOnPage(IncidentRoleEditPage)
+      incidentRolePage.radioButtons().find('input[value="committed"]').check()
+      incidentRolePage.submitButton().click()
+      const offenceCodeSelectionListPage = new OffenceCodeSelectionListPage('Which offence did John Smith commit?')
+      offenceCodeSelectionListPage.radio(test.radio).click()
+      offenceCodeSelectionListPage.continue().click()
+      if (test.radio2) {
+        const questionPage = new OffenceCodeSelection(test.title)
+        questionPage.radio(test.radio2).check()
+        if (test.radio === '1(a)') {
+          questionPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
+          questionPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
+        }
+        if (test.radio === '19') {
+          questionPage.radio('1-5-1-3').check()
+          questionPage.victimOtherPersonSearchNameInput().type('Tony Robinson')
+        }
+        questionPage.continue().click()
+      }
+      cy.location().should(loc => {
+        expect(loc.search).to.contain(`offenceCode=${test.offenceCode}`)
+      })
     })
   })
 })

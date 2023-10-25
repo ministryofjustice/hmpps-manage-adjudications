@@ -19,10 +19,10 @@ const CHILD_9_Q = 'Being absent without authorisation, being in an unauthorised 
 export const adultQToOffencePara = [
   { childQuestion: CHILD_1_Q, paras: ['1', '1(a)', '4', '5'] },
   { childQuestion: CHILD_2_Q, paras: ['7', '8'] },
-  { childQuestion: CHILD_3_Q, paras: ['9', '10', '11', '12', '13', '14', '15', '23', '24'] },
+  { childQuestion: CHILD_3_Q, paras: ['9', '10', '11', '12', '13', '14', '15', '24'] },
   { childQuestion: CHILD_4_Q, paras: ['16', '17', '24(a)'] },
   { childQuestion: CHILD_5_Q, paras: ['19', '20', '20(a)'] },
-  { childQuestion: CHILD_6_Q, paras: ['22'] },
+  { childQuestion: CHILD_6_Q, paras: ['22', '23'] },
   { childQuestion: CHILD_7_Q, paras: ['2'] },
   { childQuestion: CHILD_8_Q, paras: ['3', '6'] },
   { childQuestion: CHILD_9_Q, paras: ['18', '21'] },
