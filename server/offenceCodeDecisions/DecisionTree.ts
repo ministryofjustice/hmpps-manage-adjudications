@@ -46,8 +46,10 @@ const adultPara7YoiPara8OverrideQuestionId = '97'
 const adultPara8YoiPara9OverrideQuestionId = '96'
 const adultPara9YoiPara10OverrideQuestionId = '95'
 const adultPara12YoiPara13OverrideQuestionId = '94'
-const adultPara24OverrideQuestionId = '93'
-const adultPara18OverrideQuestionId = '92'
+const adultPara24YoiPara27OverrideQuestionId = '93'
+const adultPara18YoiPara20OverrideQuestionId = '92'
+const adultPara23YoiPara26OverrideQuestionId = '91'
+const adultPara22YoiPara25OverrideQuestionId = '90'
 
 export const adultParaToNextQuestion = [
   { para: '4', questionId: '1-1-2' },
@@ -60,20 +62,27 @@ export const adultParaToNextQuestion = [
   { para: '8', questionId: adultPara8YoiPara9OverrideQuestionId },
   { para: '9', questionId: adultPara9YoiPara10OverrideQuestionId },
   { para: '12', questionId: adultPara12YoiPara13OverrideQuestionId },
-  { para: '24', questionId: adultPara24OverrideQuestionId },
-  { para: '18', questionId: adultPara18OverrideQuestionId },
+  { para: '24', questionId: adultPara24YoiPara27OverrideQuestionId },
+  { para: '18', questionId: adultPara18YoiPara20OverrideQuestionId },
+  { para: '23', questionId: adultPara23YoiPara26OverrideQuestionId },
+  { para: '22', questionId: adultPara22YoiPara25OverrideQuestionId },
 ]
 
 export const yoiParaToNextQuestion = [
   { para: '5', questionId: '1-1-2' },
   { para: '6', questionId: '1-1-3' },
   { para: '3', questionId: '1-7' },
+  { para: '21', questionId: '1-5-1' },
   { para: '1', questionId: para1OverrideQuestionId },
   { para: '2', questionId: adultPara1aYoiPara2OverrideQuestionId },
   { para: '8', questionId: adultPara7YoiPara8OverrideQuestionId },
   { para: '9', questionId: adultPara8YoiPara9OverrideQuestionId },
   { para: '10', questionId: adultPara9YoiPara10OverrideQuestionId },
   { para: '13', questionId: adultPara12YoiPara13OverrideQuestionId },
+  { para: '27', questionId: adultPara24YoiPara27OverrideQuestionId },
+  { para: '20', questionId: adultPara18YoiPara20OverrideQuestionId },
+  { para: '26', questionId: adultPara23YoiPara26OverrideQuestionId },
+  { para: '25', questionId: adultPara22YoiPara25OverrideQuestionId },
 ]
 
 export const adultParaToOffenceCode = [
@@ -82,13 +91,11 @@ export const adultParaToOffenceCode = [
   { para: '13', offenceCode: '13001' },
   { para: '14', offenceCode: '14001' },
   { para: '15', offenceCode: '15001' },
-  { para: '23', offenceCode: '23101' },
   { para: '16', offenceCode: '16001' },
   { para: '17', offenceCode: '17002' },
   { para: '24(a)', offenceCode: '24101' },
   { para: '20', offenceCode: '20002' },
   { para: '20(a)', offenceCode: '20001' },
-  { para: '22', offenceCode: '22001' },
   { para: '3', offenceCode: '3001' },
   { para: '6', offenceCode: '6001' },
   { para: '21', offenceCode: '21001' },
@@ -106,7 +113,6 @@ export const yoiParaToOffenceCode = [
   { para: '28', offenceCode: '24101' },
   { para: '22', offenceCode: '20002' },
   { para: '23', offenceCode: '20001' },
-  { para: '25', offenceCode: '22001' },
   { para: '4', offenceCode: '3001' },
   { para: '7', offenceCode: '6001' },
   { para: '24', offenceCode: '21001' },
@@ -633,10 +639,18 @@ export const paragraph12 = question('What did the incident involve?', adultPara1
   .child(answer('Possessing any unauthorised controlled drugs').offenceCode(12101))
   .child(answer('Possessing a greater quantity of controlled drugs than authorised to have').offenceCode(12102))
 
-export const paragraph24 = question('What happened?', adultPara24OverrideQuestionId)
+export const paragraph24 = question('What happened?', adultPara24YoiPara27OverrideQuestionId)
   .child(answer('Receiving any controlled drug without the consent of an officer').offenceCode(24001))
   .child(answer('Receiving any controlled drug or any other article during a visit').offenceCode(24002))
 
-export const paragraph18 = question('What did the incident involve?', adultPara18OverrideQuestionId)
+export const paragraph18 = question('What did the incident involve?', adultPara18YoiPara20OverrideQuestionId)
   .child(answer('Being absent without authorisation').offenceCode(18001))
   .child(answer('Being in an unauthorised place').offenceCode(18002))
+
+export const paragraph23 = question('What did the incident involve?', adultPara23YoiPara26OverrideQuestionId)
+  .child(answer('Tampering with or falsifying a drug testing sample').offenceCode(23001))
+  .child(answer('Failure to comply with any rule or regulation').offenceCode(23101))
+
+export const paragraph22 = question('What did the incident involve?', adultPara22YoiPara25OverrideQuestionId)
+  .child(answer('Disobeying any lawful order').offenceCode(22001))
+  .child(answer('Refuses to provide a sample for drug testing').offenceCode(23202))

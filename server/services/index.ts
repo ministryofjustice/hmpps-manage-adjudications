@@ -17,6 +17,8 @@ import decisionTree, {
   paragraph9,
   paragraph24,
   paragraph18,
+  paragraph23,
+  paragraph22,
 } from '../offenceCodeDecisions/DecisionTree'
 import DamagesSessionService from './damagesSessionService'
 import EvidenceSessionService from './evidenceSessionService'
@@ -52,7 +54,18 @@ const decisionTreeService = new DecisionTreeService(
   userService,
   reportedAdjudicationsService,
   decisionTree,
-  [paragraph1, paragraph1A, paragraph7, paragraph8, paragraph9, paragraph12, paragraph24, paragraph18]
+  [
+    paragraph1,
+    paragraph1A,
+    paragraph7,
+    paragraph8,
+    paragraph9,
+    paragraph12,
+    paragraph24,
+    paragraph18,
+    paragraph23,
+    paragraph22,
+  ]
 )
 const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)
