@@ -8,10 +8,11 @@ import UserService from '../../services/userService'
 import { DecisionForm } from './decisionForm'
 import { DraftAdjudication, GroupedOffenceRulesAndTitles } from '../../data/DraftAdjudicationResult'
 import {
+  adultParaToNextQuestion,
   getOffenceCodeFromParagraphNumber,
   getOffenceInformation,
   paragraphNumberToQuestionId,
-  parasWithFurtherQs,
+  yoiParaToNextQuestion,
 } from '../../offenceCodeDecisions/DecisionTree'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { User } from '../../data/hmppsManageUsersClient'
@@ -89,11 +90,11 @@ export default class OffenceListRoutes {
 
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
 
-    const listOfOffencesWithFurtherQs = draftAdjudication.isYouthOffender
-      ? parasWithFurtherQs.yoi
-      : parasWithFurtherQs.adult
+    const paragraphToNextQuestionMap = draftAdjudication.isYouthOffender
+      ? yoiParaToNextQuestion
+      : adultParaToNextQuestion
 
-    if (listOfOffencesWithFurtherQs.includes(selectedAnswerId)) {
+    if (paragraphToNextQuestionMap.some(mapItem => mapItem.para === selectedAnswerId)) {
       const nextPageId = paragraphNumberToQuestionId(selectedAnswerId, draftAdjudication.isYouthOffender)
       return res.redirect(adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(draftId, incidentRole, nextPageId))
     }

@@ -46,17 +46,22 @@ const adultPara7YoiPara8OverrideQuestionId = '97'
 const adultPara8YoiPara9OverrideQuestionId = '96'
 const adultPara9YoiPara10OverrideQuestionId = '95'
 const adultPara12YoiPara13OverrideQuestionId = '94'
+const adultPara24OverrideQuestionId = '93'
+const adultPara18OverrideQuestionId = '92'
 
 export const adultParaToNextQuestion = [
   { para: '4', questionId: '1-1-2' },
   { para: '5', questionId: '1-1-3' },
   { para: '2', questionId: '1-7' },
+  { para: '19', questionId: '1-5-1' },
   { para: '1', questionId: para1OverrideQuestionId },
   { para: '1(a)', questionId: adultPara1aYoiPara2OverrideQuestionId },
   { para: '7', questionId: adultPara7YoiPara8OverrideQuestionId },
   { para: '8', questionId: adultPara8YoiPara9OverrideQuestionId },
   { para: '9', questionId: adultPara9YoiPara10OverrideQuestionId },
   { para: '12', questionId: adultPara12YoiPara13OverrideQuestionId },
+  { para: '24', questionId: adultPara24OverrideQuestionId },
+  { para: '18', questionId: adultPara18OverrideQuestionId },
 ]
 
 export const yoiParaToNextQuestion = [
@@ -71,12 +76,8 @@ export const yoiParaToNextQuestion = [
   { para: '13', questionId: adultPara12YoiPara13OverrideQuestionId },
 ]
 
-export const parasWithFurtherQs = {
-  adult: ['1', '1(a)', '4', '5', '2', '7', '8', '9', '12'],
-  yoi: ['1', '2', '5', '6', '3', '8', '9', '10', '13'],
-}
-
 export const adultParaToOffenceCode = [
+  { para: '10', offenceCode: '10001' },
   { para: '11', offenceCode: '11001' },
   { para: '13', offenceCode: '13001' },
   { para: '14', offenceCode: '14001' },
@@ -576,51 +577,51 @@ export const paragraph1 = question('Who was assaulted?', para1OverrideQuestionId
       .offenceCode(1008)
   )
 
-  export const paragraph1A = question('Who was assaulted?', adultPara1aYoiPara2OverrideQuestionId)
-    .child(
-      answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
-        .type(Type.PRISONER)
-        .offenceCode(1001)
-    )
-    .child(
-      answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
-        .type(Type.OFFICER)
-        .offenceCode(1003)
-    )
-    .child(
-      answer([
-        'A member of staff who is not a prison officer',
-        `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
-      ])
-        .type(Type.STAFF)
-        .offenceCode(1005)
-    )
-    .child(
-      answer([
-        'A prisoner who’s left this establishment',
-        `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
-      ])
-        .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
-        .offenceCode(1021)
-    )
-    .child(
-      answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`])
-        .type(Type.OTHER_PERSON)
-        .offenceCode(1007)
-    )
+export const paragraph1A = question('Who was assaulted?', adultPara1aYoiPara2OverrideQuestionId)
+  .child(
+    answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
+      .type(Type.PRISONER)
+      .offenceCode(1001)
+  )
+  .child(
+    answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
+      .type(Type.OFFICER)
+      .offenceCode(1003)
+  )
+  .child(
+    answer([
+      'A member of staff who is not a prison officer',
+      `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
+    ])
+      .type(Type.STAFF)
+      .offenceCode(1005)
+  )
+  .child(
+    answer([
+      'A prisoner who’s left this establishment',
+      `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
+    ])
+      .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
+      .offenceCode(1021)
+  )
+  .child(
+    answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`])
+      .type(Type.OTHER_PERSON)
+      .offenceCode(1007)
+  )
 
-  export const paragraph7 = question('What did the incident involve?', adultPara7YoiPara8OverrideQuestionId)
-    .child(answer('Escaping').offenceCode(7001))
-    .child(answer('Absconding from either prison or legal custody').offenceCode(7002))
-  
-  export const paragraph8 = question('What did the incident involve?', adultPara8YoiPara9OverrideQuestionId)
-    .child(answer('Failing to comply with any conditions of a temporary release').offenceCode(8001))
-    .child(answer('Failing to return from their temporary release').offenceCode(8002))
-    
-  export const paragraph9 = question('What did the incident involve?', adultPara9YoiPara10OverrideQuestionId)
-    .child(answer('Administrating a controlled drug to themself').offenceCode(9001))
-    .child(answer('Failing to stop someone else administrating a controlled drug to them').offenceCode(9002))
-         
+export const paragraph7 = question('What did the incident involve?', adultPara7YoiPara8OverrideQuestionId)
+  .child(answer('Escaping').offenceCode(7001))
+  .child(answer('Absconding from either prison or legal custody').offenceCode(7002))
+
+export const paragraph8 = question('What did the incident involve?', adultPara8YoiPara9OverrideQuestionId)
+  .child(answer('Failing to comply with any conditions of a temporary release').offenceCode(8001))
+  .child(answer('Failing to return from their temporary release').offenceCode(8002))
+
+export const paragraph9 = question('What did the incident involve?', adultPara9YoiPara10OverrideQuestionId)
+  .child(answer('Administrating a controlled drug to themself').offenceCode(9001))
+  .child(answer('Failing to stop someone else administrating a controlled drug to them').offenceCode(9002))
+
 export const paragraph12 = question('What did the incident involve?', adultPara12YoiPara13OverrideQuestionId)
   .child(
     answer('Possession of an unauthorised article').child(
@@ -631,3 +632,11 @@ export const paragraph12 = question('What did the incident involve?', adultPara1
   )
   .child(answer('Possessing any unauthorised controlled drugs').offenceCode(12101))
   .child(answer('Possessing a greater quantity of controlled drugs than authorised to have').offenceCode(12102))
+
+export const paragraph24 = question('What happened?', adultPara24OverrideQuestionId)
+  .child(answer('Receiving any controlled drug without the consent of an officer').offenceCode(24001))
+  .child(answer('Receiving any controlled drug or any other article during a visit').offenceCode(24002))
+
+export const paragraph18 = question('What did the incident involve?', adultPara18OverrideQuestionId)
+  .child(answer('Being absent without authorisation').offenceCode(18001))
+  .child(answer('Being in an unauthorised place').offenceCode(18002))
