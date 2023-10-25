@@ -36,6 +36,25 @@ const originalDraftTestOne = {
     },
   }),
 }
+const originalDraftTestTwo = {
+  draftAdjudication: testData.draftAdjudication({
+    id: 200,
+    chargeNumber: '1526196',
+    prisonerNumber: 'G6415GD',
+    dateTimeOfIncident: '2023-10-25T16:00:00',
+    locationId: 25538,
+    isYouthOffender: true,
+    incidentRole: {},
+    offenceDetails: {
+      offenceCode: 17002,
+      offenceRule: {
+        paragraphNumber: '18',
+        paragraphDescription:
+          'Destroys or damages any part of a young offender institution or any other property other than his own',
+      },
+    },
+  }),
+}
 
 const reportedAdjudicationTestOne = testData.reportedAdjudication({
   chargeNumber: '12345',
@@ -54,7 +73,24 @@ const reportedAdjudicationTestOne = testData.reportedAdjudication({
   },
 })
 
-const offenceRules = [
+const reportedAdjudicationTestTwo = testData.reportedAdjudication({
+  chargeNumber: '1526196',
+  prisonerNumber: 'G6415GD',
+  dateTimeOfIncident: '2023-10-25T16:00:00',
+  locationId: 25538,
+  isYouthOffender: true,
+  incidentRole: {},
+  offenceDetails: {
+    offenceCode: 17002,
+    offenceRule: {
+      paragraphNumber: '18',
+      paragraphDescription:
+        'Destroys or damages any part of a young offender institution or any other property other than his own',
+    },
+  },
+})
+
+const offenceRulesAdult = [
   {
     paragraphNumber: '1(a)',
     paragraphDescription: 'Commits any racially aggravated assault',
@@ -68,6 +104,21 @@ const offenceRules = [
     paragraphNumber: '19',
     paragraphDescription:
       'Is disrespectful to any officer, or any person (other than a prisoner) who is at the prison for the purpose of working there, or any person visiting a prison',
+  },
+]
+
+const offenceRulesYoi = [
+  {
+    paragraphNumber: '5',
+    paragraphDescription: 'Fights with any person',
+  },
+  {
+    paragraphNumber: '8',
+    paragraphDescription: 'Escapes or absconds from a young offender institution or from legal custody',
+  },
+  {
+    paragraphNumber: '11',
+    paragraphDescription: 'Is intoxicated as a consequence of knowingly consuming any alcoholic beverage',
   },
 ]
 
@@ -124,20 +175,13 @@ context('Adult', () => {
 
     cy.task('stubCreateDraftFromCompleteAdjudication', {
       chargeNumber: '12345',
-      response: {
-        draftAdjudication: testData.draftAdjudication({
-          id: 177,
-          chargeNumber: '12345',
-          prisonerNumber: 'G6415GD',
-          dateTimeOfIncident: '2021-11-03T13:10:00',
-        }),
-      },
+      response: originalDraftTestOne,
     })
     cy.task('stubGetDraftAdjudication', {
       id: 177,
       response: originalDraftTestOne,
     })
-    cy.task('stubGetAllOffenceRules', { response: offenceRules })
+    cy.task('stubGetAllOffenceRules', { response: offenceRulesAdult })
     cy.task('stubGetOffenceRule', {
       offenceCode: 1021,
       response: {
@@ -163,23 +207,11 @@ context('Adult', () => {
     })
     cy.task('stubSaveYouthOffenderStatus', {
       id: '177',
-      response: testData.draftAdjudication({
-        id: 177,
-        prisonerNumber: 'G6415GD',
-        dateTimeOfIncident: '2021-11-03T11:09:00',
-      }),
+      response: {},
     })
     cy.task('stubUpdateDraftIncidentRole', {
       id: 177,
-      response: {
-        draftAdjudication: testData.draftAdjudication({
-          id: 177,
-          prisonerNumber: 'G6415GD',
-          incidentRole: {
-            roleCode: '25a',
-          },
-        }),
-      },
+      response: {},
     })
     cy.task('stubSearchPrisonerDetails', {
       prisonerNumber: 'G7123CI',
@@ -189,7 +221,6 @@ context('Adult', () => {
       response: reportedAdjudicationTestOne,
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
-
     cy.signIn()
   })
   ;[
@@ -245,6 +276,140 @@ context('Adult', () => {
         if (test.radio === '19') {
           questionPage.radio('1-5-1-3').check()
           questionPage.victimOtherPersonSearchNameInput().type('Tony Robinson')
+        }
+        questionPage.continue().click()
+      }
+      cy.location().should(loc => {
+        expect(loc.search).to.contain(`offenceCode=${test.offenceCode}`)
+      })
+    })
+  })
+})
+
+context('YOI', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.task('stubGetUserFromUsername', {
+      username: 'USER1',
+      response: testData.userFromUsername(),
+    })
+    cy.task('stubGetLocation', {
+      locationId: 25538,
+      response: {
+        locationId: 25538,
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-1',
+        userDescription: 'Houseblock 1',
+      },
+    })
+    // Prisoner
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6415GD',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1526196,
+      response: { reportedAdjudication: reportedAdjudicationTestTwo },
+    })
+    cy.task('stubCreateDraftFromCompleteAdjudication', {
+      chargeNumber: '1526196',
+      response: originalDraftTestTwo,
+    })
+    cy.task('stubGetDraftAdjudication', {
+      id: 200,
+      response: originalDraftTestTwo,
+    })
+    cy.task('stubGetAllOffenceRules', { isYouthOffender: true, response: offenceRulesYoi })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 4005,
+      isYouthOffender: true,
+      response: {
+        paragraphNumber: '5',
+        paragraphDescription: 'Fights with any person',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 7001,
+      isYouthOffender: true,
+      response: {
+        paragraphNumber: '8',
+        paragraphDescription: 'Escapes or absconds from a young offender institution or from legal custody',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 10001,
+      isYouthOffender: true,
+      response: {
+        paragraphNumber: '11',
+        paragraphDescription: 'Is intoxicated as a consequence of knowingly consuming any alcoholic beverage',
+      },
+    })
+    cy.task('stubSaveYouthOffenderStatus', {
+      id: '200',
+      response: {},
+    })
+    cy.task('stubUpdateDraftIncidentRole', {
+      id: 200,
+      response: {},
+    })
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+    cy.signIn()
+  })
+  ;[
+    {
+      testName: '17002 -> 7001 / 18 -> 8 / Extra questions with decision tree',
+      radio: '8',
+      radio2: '97-1',
+      title: 'What did the incident involve?',
+      victimName: null,
+      victimPN: null,
+      offenceCode: '7001',
+    },
+    {
+      testName: '17002 -> 4005 / 18 -> 5 / Extra questions',
+      radio: '5',
+      radio2: '1-1-2-5',
+      title: 'Who did John Smith fight with?',
+      victimName: 'James Robertson',
+      victimPN: null,
+      offenceCode: '4005',
+    },
+    {
+      testName: '17002 -> 10001 / 18 -> 11 / Direct answer',
+      radio: '11',
+      radio2: null,
+      title: null,
+      victimName: null,
+      victimPN: null,
+      offenceCode: '10001',
+    },
+  ].forEach(test => {
+    it(test.testName, () => {
+      cy.visit(adjudicationUrls.prisonerReport.urls.review('1526196'))
+      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+      prisonerReportPage.offenceDetailsChangeLink().click()
+      const warningPage: ReviewerEditOffencesWarningPage = Page.verifyOnPage(ReviewerEditOffencesWarningPage)
+      warningPage.continueButton().click()
+      const ageOfPrisonerPage: AgeOfPrisonerPage = Page.verifyOnPage(AgeOfPrisonerPage)
+      ageOfPrisonerPage.submitButton().click()
+      const incidentRolePage: IncidentRoleEditPage = Page.verifyOnPage(IncidentRoleEditPage)
+      incidentRolePage.radioButtons().find('input[value="committed"]').check()
+      incidentRolePage.submitButton().click()
+      const offenceCodeSelectionListPage = new OffenceCodeSelectionListPage('Which offence did John Smith commit?')
+      offenceCodeSelectionListPage.radio(test.radio).click()
+      offenceCodeSelectionListPage.continue().click()
+      if (test.radio2) {
+        const questionPage = new OffenceCodeSelection(test.title)
+        questionPage.radio(test.radio2).check()
+        if (test.radio === '5') {
+          questionPage.victimOtherPersonSearchNameInput().type('James Robertson')
         }
         questionPage.continue().click()
       }
