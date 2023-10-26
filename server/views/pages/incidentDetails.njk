@@ -1,10 +1,8 @@
 {% extends "../partials/layout.njk" %}
+{% from "../macros/dateTimePicker.njk" import dateTimePicker %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
-{% from "../macros/datePicker.njk" import datePicker %}
 {% from "../macros/timeInput.njk" import timeInput %}
-{% from "../macros/dateTimePicker.njk" import dateTimePicker %}
-
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -26,8 +24,8 @@
 
 {% block beforeContent %}
   {{
-        breadcrumb()
-    }}
+    breadcrumb()
+  }}
 {% endblock %}
 
 {% block content %}
@@ -56,7 +54,7 @@
         type="hidden"
         name="_csrf"
         value="{{csrfToken }}"
-/>
+      />
 
       {% if originalReporterUsername != null %}
         <input
@@ -64,7 +62,7 @@
           name="originalReporterUsername"
           value="{{originalReporterUsername }}"
           id="originalReporterUsername"
-/>
+        />
       {% endif %}
 
       {% include "../partials/reportingOfficer.njk" %}
@@ -82,7 +80,8 @@
             timeLabel: 'Time of incident',
             dataQaDate: 'incident-details-date',
             dataQaHour: 'incident-date-hour',
-            dataQaMinutes: 'incident-date-minutes'
+            dataQaMinutes: 'incident-date-minutes',
+            maxDate: today
         })
         }}
 
@@ -137,7 +136,8 @@
                             timeLabel: 'Time of discovery',
                             dataQaDate: 'discovery-details-date',
                             dataQaHour: 'discovery-date-hour',
-                            dataQaMinutes: 'discovery-date-minutes'
+                            dataQaMinutes: 'discovery-date-minutes',
+                            maxDate: today
                         })
                     }
                 }

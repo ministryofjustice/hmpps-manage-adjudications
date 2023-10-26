@@ -8,7 +8,7 @@ import PlaceOnReportService, {
 } from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import logger from '../../../logger'
-import { convertSubmittedDateTimeToDateObject, formatDate } from '../../utils/utils'
+import { convertSubmittedDateTimeToDateObject, formatDate, formatDateForDatePicker } from '../../utils/utils'
 import { User } from '../../data/hmppsManageUsersClient'
 import { PrisonLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult, PrisonerGender } from '../../data/DraftAdjudicationResult'
@@ -367,6 +367,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     prisoner: pageData.displayData.prisoner,
     locations: pageData.displayData.possibleLocations,
     data,
+    today: formatDateForDatePicker(new Date().toISOString(), 'short'),
     reportingOfficer: pageData.displayData.reporter || '',
     submitButtonText: 'Save and continue',
     exitButtonHref,

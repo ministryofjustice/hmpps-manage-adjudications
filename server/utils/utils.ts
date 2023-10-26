@@ -75,6 +75,15 @@ export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => 
   return momentDate.format('YYYY-MM-DDTHH:mm')
 }
 
+export const formatDateForDatePicker = (
+  isoDate: string,
+  style: 'short' | 'full' | 'long' | 'medium' = 'long'
+): string => {
+  if (!isoDate) return ''
+
+  return new Date(isoDate).toLocaleDateString('en-gb', { dateStyle: style })
+}
+
 export const momentDateToDatePicker = (mom: moment.Moment): string => mom.format('DD/MM/YYYY')
 
 export const datePickerDateToMoment = (dataPicker: string): moment.Moment => moment(dataPicker, 'DD/MM/YYYY')

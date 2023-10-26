@@ -1,21 +1,21 @@
-{% from "../macros/datePicker.njk" import datePicker %}
+{% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
 {% from "../macros/timeInput.njk" import timeInput %}
 
 {% macro dateTimePicker(params) %}
-    
-	{{
-		datePicker({
-			id: params.dateId+'[date]',
-			label: params.dateLabel,
-			name: params.dateId+'[date]',
-			date: params.dateTimeObj.date,
-            errorMessage: params.errors | findErrors([params.dateId+'[date]']),
-			attributes: {'data-disable-future-date':'true', 'data-qa': params.dataQaDate },
-			classes: 'govuk-input--width-10'
-		})
-	}}
 
-	{{ 
+  {{ hmppsDatepicker({
+        id: params.dateId+'[date]',
+        name: params.dateId+'[date]',
+        label: {
+            text: params.dateLabel
+        },
+        classes: 'hmpps-datepicker--fixed-width',
+        value: params.dateTimeObj.date,
+        errorMessage: params.errors | findErrors([params.dateId+'[date]']),
+        maxDate: params.maxDate,
+        minDate: params.minDate
+    }) }}
+  {{ 
         timeInput({
             errorMessage: params.isHourError or params.isMinuteError,
             legend: params.timeLabel,
