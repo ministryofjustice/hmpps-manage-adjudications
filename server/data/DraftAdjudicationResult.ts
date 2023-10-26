@@ -23,6 +23,13 @@ export type OffenceRule = {
   paragraphNumber: string
 }
 
+export type offenceRuleAndTitle = { childQuestion: string } & OffenceRule
+
+export type GroupedOffenceRulesAndTitles = {
+  offenceTitle: string
+  offenceRules: offenceRuleAndTitle[]
+}
+
 export type OffenceDetails = {
   offenceCode: number
   offenceRule?: OffenceRule

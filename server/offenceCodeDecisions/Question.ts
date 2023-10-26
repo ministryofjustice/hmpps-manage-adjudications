@@ -12,7 +12,13 @@ export default class Question {
 
   private readonly questionTitle: Title
 
-  constructor(title: Title | string | (readonly (readonly [IncidentRole, string])[] | null)) {
+  private readonly overrideId?: string
+
+  constructor(
+    title: Title | string | (readonly (readonly [IncidentRole, string])[] | null),
+    overrideId?: string | null
+  ) {
+    this.overrideId = overrideId
     if (title instanceof Title) {
       this.questionTitle = title
     } else if (typeof title === 'string') {
@@ -24,7 +30,7 @@ export default class Question {
 
   // The id is 1 when this is the top most question otherwise it is that of the parent answer.
   id(): string {
-    return this.getParentAnswer()?.id() || '1'
+    return this.getParentAnswer()?.id() || this.overrideId || '1'
   }
 
   parent(parent: Answer) {

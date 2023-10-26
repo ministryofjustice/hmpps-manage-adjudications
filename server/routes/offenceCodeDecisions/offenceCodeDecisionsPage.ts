@@ -125,7 +125,7 @@ export default class OffenceCodeRoutes {
     }
 
     const updatedOffenceData = answerTypeHelper.updatedOffenceData(offenceToAdd, form)
-    const selectedAnswer = this.decisions().findAnswerById(form.selectedAnswerId)
+    const selectedAnswer = this.decisions(form.selectedAnswerId).findAnswerById(form.selectedAnswerId)
     if (!selectedAnswer.getOffenceCode()) {
       let nextQuestionUrl = ''
       if (this.pageOptions.isAloEdit()) {
@@ -201,10 +201,14 @@ export default class OffenceCodeRoutes {
     const draftChargeId = Number(draftId)
     if (this.pageOptions.isAloEdit())
       return res.redirect(
-        adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(draftChargeId, incidentRole, this.decisions().id())
+        adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(
+          draftChargeId,
+          incidentRole,
+          this.decisions(null).id()
+        )
       )
     return res.redirect(
-      adjudicationUrls.offenceCodeSelection.urls.question(draftChargeId, incidentRole, this.decisions().id())
+      adjudicationUrls.offenceCodeSelection.urls.question(draftChargeId, incidentRole, this.decisions(null).id())
     )
   }
 
@@ -218,7 +222,7 @@ export default class OffenceCodeRoutes {
       user
     )
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
-    const question = this.decisions().findQuestionById(questionId)
+    const question = this.decisions(questionId).findQuestionById(questionId)
     const pageTitle = question.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
     const answers = question.getChildAnswers().map(a => {
       return {
@@ -247,7 +251,9 @@ export default class OffenceCodeRoutes {
     } else {
       selectedAnswerId = decisionFormOrSelectedAnswerId?.selectedAnswerId
     }
-    return selectedAnswerId && this.helpers.get(this.decisions().findAnswerById(selectedAnswerId).getType())
+    return (
+      selectedAnswerId && this.helpers.get(this.decisions(selectedAnswerId).findAnswerById(selectedAnswerId).getType())
+    )
   }
 
   private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
@@ -258,7 +264,7 @@ export default class OffenceCodeRoutes {
     return `${adjudicationUrls.offenceCodeSelection.root}${req.path}`
   }
 
-  private decisions(): Question {
-    return this.decisionTreeService.getDecisionTree()
+  private decisions(key: string): Question {
+    return this.decisionTreeService.getDecisionTree(key)
   }
 }

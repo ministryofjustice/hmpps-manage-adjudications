@@ -29,6 +29,7 @@ import {
   WitnessDetails,
   AdjudicationSectionStatus,
   PrisonerGender,
+  OffenceRule,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
 import { isCentralAdminCaseload, StaffSearchByName } from './userService'
@@ -452,6 +453,12 @@ export default class PlaceOnReportService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const client = new ManageAdjudicationsSystemTokensClient(token, user)
     return client.getOffenceRule(offenceCode, isYouthOffender, gender)
+  }
+
+  getAllOffenceRules = async (isYouthOffender: boolean, gender: PrisonerGender, user: User): Promise<OffenceRule[]> => {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const client = new ManageAdjudicationsSystemTokensClient(token, user)
+    return client.getAllOffenceRules(isYouthOffender, gender)
   }
 
   async saveOffenceDetails(draftId: number, offenceDetails: OffenceDetails, user: User) {

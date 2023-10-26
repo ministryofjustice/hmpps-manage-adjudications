@@ -1,6 +1,6 @@
 import url from 'url'
-import { Request, Response } from 'express'
 import { ParsedUrlQuery } from 'querystring'
+import { Request, Response } from 'express'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'

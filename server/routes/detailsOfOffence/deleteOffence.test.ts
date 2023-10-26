@@ -40,7 +40,8 @@ const decisionTreeService = new DecisionTreeService(
   placeOnReportService,
   userService,
   reportedAdjudicationsService,
-  testDecisionsTree
+  testDecisionsTree,
+  []
 )
 let app: Express
 

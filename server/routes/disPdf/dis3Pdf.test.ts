@@ -33,7 +33,8 @@ const decisionTreeService = new DecisionTreeService(
   placeOnReportService,
   userService,
   reportedAdjudicationsService,
-  testDecisionsTree
+  testDecisionsTree,
+  []
 )
 
 const offenceRule: OffenceRule = {

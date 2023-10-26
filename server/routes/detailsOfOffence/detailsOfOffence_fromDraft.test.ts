@@ -47,7 +47,8 @@ const decisionTreeService = new DecisionTreeService(
   placeOnReportService,
   userService,
   reportedAdjudicationsService,
-  testDecisionsTree
+  testDecisionsTree,
+  []
 )
 
 const testData = new TestData()

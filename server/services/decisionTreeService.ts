@@ -26,11 +26,21 @@ export default class DecisionTreeService {
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
     private readonly reportedAdjudicationService: ReportedAdjudicationsService,
-    private readonly decisionTree: Question
+    private readonly decisionTree: Question,
+    private readonly additionalQuestions: Question[]
   ) {}
 
-  getDecisionTree(): Question {
-    return this.decisionTree
+  getDecisionTree(key: string): Question {
+    if (key === null) {
+      return this.decisionTree
+    }
+
+    const additionalQuestion = this.additionalQuestions.filter(question => key.startsWith(question.id()))
+
+    if (additionalQuestion.length === 0) {
+      return this.decisionTree
+    }
+    return additionalQuestion[0]
   }
 
   async draftAdjudicationIncidentData(draftAdjudicationId: number, user: User) {
@@ -140,7 +150,7 @@ export default class DecisionTreeService {
     incidentRole: IncidentRoleEnum,
     prisonerView: boolean
   ) {
-    return this.getDecisionTree()
+    return this.getDecisionTree(null)
       .findAnswerByCode(offenceCode)
       .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole, prisonerView)
   }

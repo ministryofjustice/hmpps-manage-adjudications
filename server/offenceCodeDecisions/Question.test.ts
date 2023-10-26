@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { paragraph1 } from './DecisionTree'
 import { answer, question } from './Decisions'
 
 function template() {

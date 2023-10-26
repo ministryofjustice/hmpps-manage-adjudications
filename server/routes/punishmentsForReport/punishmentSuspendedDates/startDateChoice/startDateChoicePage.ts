@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import url from 'url'
+import { ParsedUrlQueryInput } from 'querystring'
 import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from 'express'
-import { ParsedUrlQueryInput } from 'querystring'
 import { FormError } from '../../../../@types/template'
 import UserService from '../../../../services/userService'
 import { calculatePunishmentEndDate, datePickerToApi, formatTimestampToDate, hasAnyRole } from '../../../../utils/utils'

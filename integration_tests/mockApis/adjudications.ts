@@ -330,6 +330,29 @@ const stubGetOffenceRule = ({
     },
   })
 
+const stubGetAllOffenceRules = ({
+  isYouthOffender = false,
+  gender = PrisonerGender.MALE,
+  response = {},
+}: {
+  isYouthOffender: boolean
+  gender: PrisonerGender
+  response: Record<string, unknown>
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/draft-adjudications/offence-rules?youthOffender=${isYouthOffender}&gender=${gender}`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 const stubSaveOffenceDetails = ({
   draftId,
   response = {},
@@ -1141,4 +1164,5 @@ export default {
   stubGetAgencyReportCounts,
   stubGetConsecutivePunishments,
   stubCreateGovReferral,
+  stubGetAllOffenceRules,
 }

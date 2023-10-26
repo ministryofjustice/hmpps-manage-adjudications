@@ -1,0 +1,78 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "Which offence did the prisoner commit?" %}
+
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+  <h1 class="govuk-heading-l">Which offence did {{ prisonerName }} commit?</h1>
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-paragraph-list-form">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+    {% for offenceGroup in offencesAndTitles %}
+      {% set items = [] %}
+      {% if offenceGroup.offenceRules.length > 1 %}
+        {% for offence in offenceGroup.offenceRules %}
+          {% set items = (items.push({
+            value: offence.paragraphNumber,
+            text: offence.paragraphNumber,
+            hint: {
+              html: offence.paragraphDescription
+            },
+            id: offence.paragraphNumber
+          }), items) %}
+        {% endfor %}
+      {% else %}
+        {% set offenceRule = offenceGroup.offenceRules[0] %}
+        {% set items = (items.push({
+          value: offenceRule.paragraphNumber,
+          text: offenceRule.paragraphNumber,
+          hint: {
+            html: offenceRule.paragraphDescription
+          },
+          id: offenceRule.paragraphNumber
+        }), items) %}
+      {% endif %}
+      <h2 class="govuk-heading-m">{{ offenceGroup.offenceTitle }}</h2>
+      {{ govukRadios({
+            idPrefix: 'selectedAnswerId',
+            name: 'selectedAnswerId',
+            attributes: { "data-qa": "radio-buttons" },
+            items: items,
+            errorMessage: "selectedAnswerId" | findError(errors)
+        }) }}
+    {% endfor %}
+
+    {{ govukButton({
+        text: "Continue",
+        type: "submit",
+        classes: "govuk-button--submit govuk-!-margin-right-3",
+        attributes: { "data-qa": "continue" },
+        preventDoubleClick: true
+    }) }}
+    {{ govukButton({
+        text: "Cancel",
+        href: cancelButtonHref,
+        classes: "govuk-button--secondary",
+        attributes: { "data-qa": "cancel" }
+    }) }}
+  </form>
+{% endblock %}

@@ -401,7 +401,7 @@ const redirectToOffenceSelection = (
 ) => {
   if (pageOptions.isAloEdit()) {
     return res.redirect(
-      adjudicationUrls.offenceCodeSelection.urls.aloEditStart(
+      adjudicationUrls.offenceCodeSelection.urls.list(
         chargeNumber,
         radioSelectionCodeFromIncidentRole(incidentRoleCode)
       )

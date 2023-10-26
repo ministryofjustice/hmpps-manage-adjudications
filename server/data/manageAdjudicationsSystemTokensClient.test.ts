@@ -351,6 +351,32 @@ describe('manageAdjudicationsSystemTokensClient', () => {
       expect(response).toEqual(result)
     })
   })
+
+  describe('getAllOffenceRules', () => {
+    const result = [
+      {
+        paragraphNumber: '25(c)',
+        paragraphDescription: 'A desc',
+        offenceCode: 0,
+      },
+      {
+        paragraphNumber: '25(a)',
+        paragraphDescription: 'Committed an assault',
+        offenceCode: 0,
+      },
+    ]
+
+    it('returns the relevant rules', async () => {
+      fakeManageAdjudicationsApi
+        .get(`/draft-adjudications/offence-rules?youthOffender=true&gender=MALE`)
+        .matchHeader('authorization', `Bearer ${token}`)
+        .matchHeader('Active-Caseload', user.activeCaseLoadId)
+        .reply(200, result)
+      const response = await client.getAllOffenceRules(true, PrisonerGender.MALE)
+      expect(response).toEqual(result)
+    })
+  })
+
   describe('saveDamageDetails', () => {
     const result = {
       draftAdjudication: testData.draftAdjudication({

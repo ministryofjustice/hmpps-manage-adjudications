@@ -103,7 +103,7 @@ export const redirectToOffenceSelection = (
 ) => {
   if (isAloEdit)
     return res.redirect(
-      adjudicationUrls.offenceCodeSelection.urls.aloEditStart(
+      adjudicationUrls.offenceCodeSelection.urls.list(
         draftId,
         radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase()])
       )

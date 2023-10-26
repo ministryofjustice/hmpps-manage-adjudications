@@ -3,12 +3,11 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import OffenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import OffenceCodeDecisionsAloEditRoutes from './offenceCodeDecisionsAloEdit'
 import PlaceOnReportService from '../../services/placeOnReportService'
-import decisionTree from '../../offenceCodeDecisions/DecisionTree'
-import { IncidentRole } from '../../incidentRole/IncidentRole'
 import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PrisonerSearchService from '../../services/prisonerSearchService'
+import OffenceListRoute from './offenceListPage'
 
 export default function offenceCodeDecisionsRoutes({
   placeOnReportService,
@@ -37,40 +36,18 @@ export default function offenceCodeDecisionsRoutes({
     prisonerSearchService,
   })
 
+  const offenceListRoute = new OffenceListRoute(placeOnReportService, userService, decisionTreeService)
+
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  Object.keys(IncidentRole).forEach(key => {
-    decisionTree.allIds().forEach(id => {
-      get(
-        adjudicationUrls.offenceCodeSelection.matchers.question(key as IncidentRole, id),
-        offenceCodeDecisionsRoute.view
-      )
-      post(
-        adjudicationUrls.offenceCodeSelection.matchers.question(key as IncidentRole, id),
-        offenceCodeDecisionsRoute.submit
-      )
-    })
-    get(
-      adjudicationUrls.offenceCodeSelection.matchers.start(key as IncidentRole),
-      offenceCodeDecisionsRoute.redirectToStart
-    )
-  })
-  Object.keys(IncidentRole).forEach(key => {
-    decisionTree.allIds().forEach(id => {
-      get(
-        adjudicationUrls.offenceCodeSelection.matchers.aloEditQuestion(key as IncidentRole, id),
-        offenceCodeDecisionsAloEditRoute.view
-      )
-      post(
-        adjudicationUrls.offenceCodeSelection.matchers.aloEditQuestion(key as IncidentRole, id),
-        offenceCodeDecisionsAloEditRoute.submit
-      )
-    })
-    get(
-      adjudicationUrls.offenceCodeSelection.matchers.aloEditStart(key as IncidentRole),
-      offenceCodeDecisionsAloEditRoute.redirectToStart
-    )
-  })
+  get(adjudicationUrls.offenceCodeSelection.matchers.list(), offenceListRoute.view)
+  post(adjudicationUrls.offenceCodeSelection.matchers.list(), offenceListRoute.submit)
+  get(adjudicationUrls.offenceCodeSelection.matchers.question(), offenceCodeDecisionsRoute.view)
+  post(adjudicationUrls.offenceCodeSelection.matchers.question(), offenceCodeDecisionsRoute.submit)
+  get(adjudicationUrls.offenceCodeSelection.matchers.start(), offenceCodeDecisionsRoute.redirectToStart)
+  get(adjudicationUrls.offenceCodeSelection.matchers.aloEditQuestion(), offenceCodeDecisionsAloEditRoute.view)
+  post(adjudicationUrls.offenceCodeSelection.matchers.aloEditQuestion(), offenceCodeDecisionsAloEditRoute.submit)
+
   return router
 }
