@@ -1,10 +1,10 @@
-{% from "../macros/datePicker.njk" import datePicker %}
+{% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% macro adjudicationFilter(filter, checkboxes, errors, clearUrl, csrfToken) %}
+{% macro adjudicationFilter(filter, checkboxes, errors, clearUrl, csrfToken, maxDate) %}
     <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
         <h2 class="govuk-heading-m">Date of discovery</h2>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -16,24 +16,28 @@
             </p>
             {% endif %}
             <div class="displayFlex" id="adjudicationFilter">
-                {{ datePicker({
+                {{ hmppsDatepicker({
                     id: 'fromDate[date]',
-                    label: 'From',
                     name: 'fromDate[date]',
-                    date: filter.fromDate,
-                    attributes: {'data-disable-future-date':'true', 'data-qa': "from-date" },
-                    classes: 'date-of-discovery-input' + (' govuk-input--error' if fromDateError else '')
+                    label: {
+                        text: 'From'
+                    },
+                    classes: 'hmpps-datepicker--shorter-width govuk-!-margin-right-1',
+                    value: filter.fromDate,
+                    maxDate: maxDate,
+                    dataQa: 'fromDate'
                 }) }}
 
-
-                {{ datePicker({
+                {{ hmppsDatepicker({
                     id: 'toDate[date]',
-                    label: 'To',
-                    labelClasses: 'govuk-!-margin-left-3',
                     name: 'toDate[date]',
-                    date: filter.toDate,
-                    attributes: {'data-disable-future-date':'true', 'data-qa': "to-date" },
-                    classes: 'govuk-!-margin-left-3 date-of-discovery-input'
+                    label: {
+                        text: 'To'
+                    },
+                    classes: 'hmpps-datepicker--shorter-width',
+                    value: filter.toDate,
+                    maxDate: maxDate,
+                    dataQa: 'toDate'
                 }) }}
 
               <div id="statusFilterBox">

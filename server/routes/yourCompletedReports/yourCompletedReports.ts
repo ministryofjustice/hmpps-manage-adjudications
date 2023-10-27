@@ -14,6 +14,7 @@ import {
   validate,
 } from '../../utils/adjudicationFilterHelper'
 import { FormError } from '../../@types/template'
+import { formatDateForDatePicker } from '../../utils/utils'
 
 export default class YourCompletedReportsRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -34,6 +35,7 @@ export default class YourCompletedReportsRoutes {
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
       ),
       errors,
+      maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
     })
   }
 

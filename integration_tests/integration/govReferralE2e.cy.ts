@@ -20,7 +20,7 @@ import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/Re
 import SelectAssociatedStaff from '../pages/selectAssociatedStaff'
 import NextStepsInadPage from '../pages/nextStepsInad'
 import ScheduleHearingPage from '../pages/scheduleHearing'
-import { forceDateInputWithDate } from '../componentDrivers/dateInput'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV", () => {
@@ -431,7 +431,8 @@ context('Inad refers to gov after hearing', () => {
       const scheduleHearingsPage = Page.verifyOnPage(ScheduleHearingPage)
       scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
       scheduleHearingsPage.locationSelector().select('Houseblock 1')
-      forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
+      const date = formatDateForDatePicker(new Date('1/1/2030').toISOString(), 'short')
+      scheduleHearingsPage.datePicker().type(date)
       scheduleHearingsPage.timeInputHours().select('11')
       scheduleHearingsPage.timeInputMinutes().select('05')
       cy.task('stubGetReportedAdjudication', {

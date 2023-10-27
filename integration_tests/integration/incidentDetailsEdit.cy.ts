@@ -1,8 +1,8 @@
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import IncidentDetails from '../pages/incidentDetailsEdit'
 import Page from '../pages/page'
-import { forceDateInputWithDate, forceDateInput } from '../componentDrivers/dateInput'
 import TestData from '../../server/routes/testutils/testData'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 
@@ -275,8 +275,9 @@ context('Incident details (edit) - statement incomplete', () => {
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
 
-    forceDateInput(10, 10, 2010, '[data-qa="incident-details-date"]')
-    forceDateInput(10, 10, 2010, '[data-qa="discovery-details-date"]')
+    const date = formatDateForDatePicker(new Date('10/10/2010').toISOString(), 'short')
+    incidentDetailsPage.datePicker().clear().type(date)
+    incidentDetailsPage.datePickerDiscovery().clear().type(date)
 
     incidentDetailsPage.timeInputHoursDiscovery().clear()
     incidentDetailsPage.timeInputHoursDiscovery().type('00')
@@ -294,7 +295,8 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-    forceDateInputWithDate(new Date(), '[data-qa="discovery-details-date"]')
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePickerDiscovery().type(date)
     incidentDetailsPage.timeInputHoursDiscovery().clear()
     incidentDetailsPage.timeInputHoursDiscovery().type('23')
     incidentDetailsPage.timeInputMinutesDiscovery().clear()
@@ -311,7 +313,8 @@ context('Incident details (edit) - statement incomplete', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-    forceDateInputWithDate(new Date(), '[data-qa="discovery-details-date"]')
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePickerDiscovery().type(date)
     incidentDetailsPage.timeInputHoursDiscovery().clear()
     incidentDetailsPage.timeInputHoursDiscovery().type('13')
     incidentDetailsPage.timeInputMinutesDiscovery().clear()

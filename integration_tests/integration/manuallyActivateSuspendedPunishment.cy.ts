@@ -9,13 +9,12 @@ import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
 import PunishmentStartDateChoicePage from '../pages/punishmentStartDateChoice'
 import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDates'
 import PunishmentStartDatePage from '../pages/punishmentStartDate'
-
-import { forceDateInput } from '../componentDrivers/dateInput'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { HearingOutcomeCode, OutcomeCode } from '../../server/data/HearingAndOutcomeResult'
 import NumberOfAdditionalDaysPage from '../pages/numberOfAdditionalDays'
 import ManualEntryConsecutivePunishmentPage from '../pages/manualEntryConsecutivePunishment'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 context('Manually activate an existing suspended punishment', () => {
@@ -430,7 +429,8 @@ context('Manually activate an existing suspended punishment', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentStartDate.urls.manual('100'))
       })
       const suspendedPunishmentStartDatePage = Page.verifyOnPage(PunishmentStartDatePage)
-      forceDateInput(12, 10, 2023, '[data-qa="punishment-start-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/12/2023').toISOString(), 'short')
+      suspendedPunishmentStartDatePage.datepicker().type(date)
       suspendedPunishmentStartDatePage.submitButton().click()
 
       cy.location().should(loc => {

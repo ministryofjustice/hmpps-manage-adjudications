@@ -1,7 +1,7 @@
 import moment from 'moment'
 import TransferredReportsPage from '../pages/allReports'
 import Page from '../pages/page'
-import { generateRange } from '../../server/utils/utils'
+import { formatDateForDatePicker, generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
@@ -137,8 +137,10 @@ context('Transferred Reports', () => {
     const transferredReportsPage: TransferredReportsPage = Page.verifyOnPage(TransferredReportsPage)
     transferredReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    adjudicationsFilter.forceFromDate(1, 1, 2022)
-    adjudicationsFilter.forceToDate(9, 1, 2022)
+    const fromDate = formatDateForDatePicker(new Date('1/1/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('1/9/2022').toISOString(), 'short')
+    adjudicationsFilter.fromDateInput().clear().type(fromDate)
+    adjudicationsFilter.toDateInput().clear().type(toDate)
     transferredReportsPage.uncheckAllCheckboxes()
     transferredReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()

@@ -7,6 +7,12 @@
         width: 215px;
       }
     }
+
+    &--shorter-width {
+      .hmpps-datepicker-input__wrapper {
+        width: 160px;
+      }
+    }
   
     &__dialog {
       box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);

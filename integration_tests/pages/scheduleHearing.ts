@@ -7,7 +7,7 @@ export default class ScheduleHearingPage extends Page {
 
   hearingTypeRadios = (): PageElement => cy.get('[data-qa="hearing-type-radio-buttons"]')
 
-  datePicker = (): PageElement => cy.get('[data-qa="hearing-date"]')
+  datePicker = (): PageElement => cy.get('[data-qa="date-picker"]')
 
   timeInputHours = (): PageElement => cy.get('[data-qa="hearingDate[time][hour]"]')
 

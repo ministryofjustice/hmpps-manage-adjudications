@@ -2,7 +2,7 @@ import Page from '../pages/page'
 import AddDateAndTimeOfIssue from '../pages/addDateAndTimeOfIssue'
 import TestData from '../../server/routes/testutils/testData'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { forceDateInputWithDate } from '../componentDrivers/dateInput'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 
@@ -30,14 +30,14 @@ context('Add date and time', () => {
       response: testData.reportedAdjudication({ chargeNumber: '12345', prisonerNumber: 'G6123VU' }),
     })
     const date = new Date()
-    const yesterday = new Date(date.setDate(date.getDate() - 1))
+    const yesterday = formatDateForDatePicker(new Date(date.setDate(date.getDate() - 1)).toISOString(), 'short')
     cy.visit(
       `${adjudicationUrls.addIssueDateTime.urls.start(
         '12345'
       )}?referrer=${adjudicationUrls.confirmDISFormsIssued.urls.start()}`
     )
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
-    forceDateInputWithDate(yesterday, '[data-qa="issued-date"]')
+    addDateTimeOfIssuePage.dateInput().type(yesterday)
     addDateTimeOfIssuePage.hourInput().type('20')
     addDateTimeOfIssuePage.minutesInput().type('30')
     addDateTimeOfIssuePage.submitButton().click()
@@ -67,10 +67,10 @@ context('Add date and time', () => {
       })
   })
   it('should show a validation message if no time is entered', () => {
-    const today = new Date()
+    const today = formatDateForDatePicker(new Date().toISOString(), 'short')
     cy.visit(adjudicationUrls.addIssueDateTime.urls.start('12345'))
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
-    forceDateInputWithDate(today, '[data-qa="issued-date"]')
+    addDateTimeOfIssuePage.dateInput().type(today)
     addDateTimeOfIssuePage.submitButton().click()
     addDateTimeOfIssuePage
       .errorSummary()

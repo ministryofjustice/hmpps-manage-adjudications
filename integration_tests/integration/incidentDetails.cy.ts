@@ -1,9 +1,8 @@
 import IncidentDetails from '../pages/incidentDetails'
 import Page from '../pages/page'
-import { forceDateInputWithDate } from '../componentDrivers/dateInput'
-
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 
@@ -103,7 +102,6 @@ context('Incident details', () => {
     incidentDetailsPage.timeInputMinutes().should('exist')
     incidentDetailsPage.locationSelector().should('exist')
     incidentDetailsPage.submitButton().should('exist')
-
     incidentDetailsPage.datePickerDiscovery().should('exist')
     incidentDetailsPage.timeInputHoursDiscovery().should('exist')
     incidentDetailsPage.timeInputMinutesDiscovery().should('exist')
@@ -133,10 +131,11 @@ context('Incident details', () => {
       })
   })
   it('should show error if one of the time fields is not filled in correctly - 1', () => {
-    const today = new Date()
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
@@ -149,10 +148,10 @@ context('Incident details', () => {
       })
   })
   it('should show error if a location is not selected', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('01')
     incidentDetailsPage.timeInputMinutes().type('30')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="Yes"]').click()
@@ -165,10 +164,10 @@ context('Incident details', () => {
       })
   })
   it('should redirect the user to /age-of-prisoner/ if form is complete', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('03')
     incidentDetailsPage.timeInputMinutes().type('20')
     incidentDetailsPage.locationSelector().select('Houseblock 2')
@@ -180,10 +179,10 @@ context('Incident details', () => {
   })
 
   it('should show error if discovery radio is not selected', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
     incidentDetailsPage.locationSelector().select('Houseblock 1')
@@ -197,10 +196,10 @@ context('Incident details', () => {
   })
 
   it('should show error if discovery radio is selected but no date input', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
     incidentDetailsPage.locationSelector().select('Houseblock 1')
@@ -215,15 +214,15 @@ context('Incident details', () => {
   })
 
   it('should show error if discovery radio is selected but no times input', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
     incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-    forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
+    incidentDetailsPage.datePickerDiscovery().type(date)
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
       .errorSummary()
@@ -234,15 +233,15 @@ context('Incident details', () => {
   })
 
   it('should show error if discovery radio is selected but no hour input', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
     incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-    forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
+    incidentDetailsPage.datePickerDiscovery().type(date)
     incidentDetailsPage.timeInputMinutesDiscovery().type('59')
     incidentDetailsPage.submitButton().click()
     incidentDetailsPage
@@ -254,15 +253,15 @@ context('Incident details', () => {
   })
 
   it('should show error if discovery radio is selected but bad hour input', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
     incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-    forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
+    incidentDetailsPage.datePickerDiscovery().type(date)
     incidentDetailsPage.timeInputHoursDiscovery().type('24')
     incidentDetailsPage.timeInputMinutesDiscovery().type('59')
     incidentDetailsPage.submitButton().click()
@@ -275,15 +274,15 @@ context('Incident details', () => {
   })
 
   it('should show error if discovery radio is selected but bad minute input', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
     incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-    forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
+    incidentDetailsPage.datePickerDiscovery().type(date)
     incidentDetailsPage.timeInputHoursDiscovery().type('23')
     incidentDetailsPage.timeInputMinutesDiscovery().type('x59')
     incidentDetailsPage.submitButton().click()
@@ -296,17 +295,17 @@ context('Incident details', () => {
   })
 
   it('should show error if discovery radio is selected but future date input', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('11')
     incidentDetailsPage.timeInputMinutes().type('22')
     incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
     const tomorrow = new Date()
     tomorrow.setDate(new Date().getDate() + 1)
-    forceDateInputWithDate(tomorrow, '[data-qa="discovery-details-date"]')
+    incidentDetailsPage.datePickerDiscovery().type(formatDateForDatePicker(tomorrow.toISOString(), 'short'))
     incidentDetailsPage.timeInputHoursDiscovery().type('23')
     incidentDetailsPage.timeInputMinutesDiscovery().type('59')
     incidentDetailsPage.submitButton().click()
@@ -319,15 +318,15 @@ context('Incident details', () => {
   })
 
   it('should redirect correctly if discovery radio is selected and date / time set and submitted', () => {
-    const today = new Date()
     cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    forceDateInputWithDate(today)
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    incidentDetailsPage.datePicker().type(date)
     incidentDetailsPage.timeInputHours().type('00')
     incidentDetailsPage.timeInputMinutes().type('01')
     incidentDetailsPage.locationSelector().select('Houseblock 1')
     incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
-    forceDateInputWithDate(today, '[data-qa="discovery-details-date"]')
+    incidentDetailsPage.datePickerDiscovery().type(date)
     incidentDetailsPage.timeInputHoursDiscovery().type('00')
     incidentDetailsPage.timeInputMinutesDiscovery().type('01')
     incidentDetailsPage.submitButton().click()
@@ -341,10 +340,10 @@ context('Incident details', () => {
       cy.task('stubStartNewDraftAdjudication', { response: {}, status: 500 })
     })
     it('should redirect back to incident details if an error occurs whilst calling the API', () => {
-      const today = new Date()
       cy.visit(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      forceDateInputWithDate(today)
+      const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+      incidentDetailsPage.datePicker().type(date)
       incidentDetailsPage.timeInputHours().type('01')
       incidentDetailsPage.timeInputMinutes().type('30')
       incidentDetailsPage.locationSelector().select('Houseblock 1')

@@ -2,7 +2,7 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "../../macros/datePicker.njk" import datePicker %}
+{% from "../../components/datepicker/macro.njk" import hmppsDatepicker %}
 {% from "../../macros/timeInput.njk" import timeInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "../../macros/timeSelect.njk" import timeSelect %}
@@ -66,15 +66,18 @@
         errorMessage: 'locationId' | findError(errors)
       })
       }}
-      {{ datePicker({
+
+          {{ hmppsDatepicker({
         id: 'hearingDate[date]',
-        label: 'Date of hearing',
         name: 'hearingDate[date]',
-        date: data.hearingDate.date,
-        attributes: {'data-disable-future-date':'false', 'data-disable-past-date':'true', 'data-qa': "hearing-date" },
-        classes: 'govuk-input--width-10',
-        errorMessage: errors | findErrors(['hearingDate[date]'])
-      }) }}
+        label: {
+            text: 'Date of hearing'
+        },
+        classes: 'hmpps-datepicker--fixed-width',
+        value: data.hearingDate.date,
+        errorMessage: errors | findErrors(['hearingDate[date]']),
+        minDate: today
+    }) }}
 
     {{ timeSelect({
         id: 'hearingDate[time]',

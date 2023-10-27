@@ -1,9 +1,9 @@
 import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 
@@ -137,7 +137,8 @@ context('Schedule a hearing page', () => {
     })
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
-    forceDateInputWithDate(new Date('2030-01-02'), '[data-qa="hearing-date"]')
+    const date = formatDateForDatePicker(new Date('2/1/2030').toISOString(), 'short')
+    scheduleHearingsPage.datePicker().type(date)
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1524494'))
@@ -184,7 +185,9 @@ context('Schedule a hearing page', () => {
   it('should show error if the date entered is before the date of any existing hearings', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
-    forceDateInputWithDate(new Date('2029-12-28'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.locationSelector().select('Houseblock 1')
+    const date = formatDateForDatePicker(new Date('12/28/2029').toISOString(), 'short')
+    scheduleHearingsPage.datePicker().clear().type(date)
     scheduleHearingsPage.submitButton().click()
     scheduleHearingsPage
       .errorSummary()

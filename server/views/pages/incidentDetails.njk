@@ -54,7 +54,7 @@
         type="hidden"
         name="_csrf"
         value="{{csrfToken }}"
-      />
+/>
 
       {% if originalReporterUsername != null %}
         <input
@@ -62,7 +62,7 @@
           name="originalReporterUsername"
           value="{{originalReporterUsername }}"
           id="originalReporterUsername"
-        />
+/>
       {% endif %}
 
       {% include "../partials/reportingOfficer.njk" %}
@@ -82,7 +82,7 @@
             dataQaHour: 'incident-date-hour',
             dataQaMinutes: 'incident-date-minutes',
             maxDate: today
-        })
+            })
         }}
 
       {{

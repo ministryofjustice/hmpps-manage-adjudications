@@ -46,7 +46,7 @@
         "maxlength": "10",
         "data-mindate": params.minDate,
         "data-maxdate": params.maxDate,
-        "data-qa": 'date-picker' 
+        "data-qa": params.dataQa or 'date-picker' 
       }
     }) }}
     <button class="hmpps-datepicker-button hmpps-js-datepicker-button" data-button="datepicker-{{ params.name }}-toggle">

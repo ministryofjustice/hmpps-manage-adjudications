@@ -7,10 +7,9 @@ import PunishmentStartDateChoicePage from '../pages/punishmentStartDateChoice'
 import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDates'
 import PunishmentStartDatePage from '../pages/punishmentStartDate'
 import AwardPunishmentsPage from '../pages/awardPunishments'
-
-import { forceDateInput } from '../componentDrivers/dateInput'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const susPun = [
   {
@@ -258,7 +257,8 @@ context('Suspended punishment schedule', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentStartDate.urls.existing('100'))
       })
       const suspendedPunishmentStartDatePage = Page.verifyOnPage(PunishmentStartDatePage)
-      forceDateInput(10, 10, 2030, '[data-qa="punishment-start-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      suspendedPunishmentStartDatePage.datepicker().type(date)
       suspendedPunishmentStartDatePage.submitButton().click()
 
       const suspendedPunishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)

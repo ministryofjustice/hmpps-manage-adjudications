@@ -4,6 +4,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const formattedDate = moment().format('DD/MM/YYYY')
 const testData = new TestData()
@@ -81,8 +82,6 @@ context('View scheduled hearings', () => {
     const viewScheduledHearingsPage: ViewScheduledHearingsPage = Page.verifyOnPage(ViewScheduledHearingsPage)
     viewScheduledHearingsPage.scheduledHearingsTab().should('exist')
     viewScheduledHearingsPage.datePicker().should('exist')
-    viewScheduledHearingsPage.leftArrow().should('exist')
-    viewScheduledHearingsPage.rightArrow().should('exist')
     viewScheduledHearingsPage.applyButton().should('exist')
     viewScheduledHearingsPage.clearLink().should('exist')
     viewScheduledHearingsPage.viewReportLink(1).should('exist')
@@ -114,7 +113,8 @@ context('View scheduled hearings', () => {
 
     cy.visit(adjudicationUrls.viewScheduledHearings.root)
     const viewScheduledHearingsPage: ViewScheduledHearingsPage = Page.verifyOnPage(ViewScheduledHearingsPage)
-    viewScheduledHearingsPage.forceHearingDate(5, 11, 2025)
+    const date = formatDateForDatePicker(new Date('11/5/2025').toISOString(), 'short')
+    viewScheduledHearingsPage.datePicker().clear().type(date)
 
     viewScheduledHearingsPage
       .hearingTable()
@@ -167,7 +167,8 @@ context('View scheduled hearings', () => {
 
     cy.visit(adjudicationUrls.viewScheduledHearings.root)
     const viewScheduledHearingsPage: ViewScheduledHearingsPage = Page.verifyOnPage(ViewScheduledHearingsPage)
-    viewScheduledHearingsPage.forceHearingDate(6, 11, 2025)
+    const date = formatDateForDatePicker(new Date('11/6/2025').toISOString(), 'short')
+    viewScheduledHearingsPage.datePicker().clear().type(date)
     viewScheduledHearingsPage.applyButton().click()
 
     cy.location().should(loc => {
@@ -235,7 +236,8 @@ context('View scheduled hearings', () => {
 
     cy.visit(adjudicationUrls.viewScheduledHearings.root)
     const viewScheduledHearingsPage: ViewScheduledHearingsPage = Page.verifyOnPage(ViewScheduledHearingsPage)
-    viewScheduledHearingsPage.forceHearingDate(5, 11, 2025)
+    const date = formatDateForDatePicker(new Date('11/5/2025').toISOString(), 'short')
+    viewScheduledHearingsPage.datePicker().clear().type(date)
 
     viewScheduledHearingsPage
       .hearingTable()

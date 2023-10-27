@@ -5,7 +5,7 @@ export default class PunishmentSuspendedUntilPage extends Page {
     super('Enter the date the punishment is suspended until')
   }
 
-  suspendedUntil = (): PageElement => cy.get('[data-qa="suspended-until-date-picker"]')
+  suspendedUntil = (): PageElement => cy.get('[data-qa="date-picker"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="punishment-suspended-until-submit"]')
 

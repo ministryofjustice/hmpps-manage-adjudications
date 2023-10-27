@@ -5,6 +5,7 @@ import PrintDISFormsFilter from '../pages/printDISFormsFilter'
 import TestData from '../../server/routes/testutils/testData'
 import PrintCompletedDISFormsPage from '../pages/printCompletedDIS12Forms'
 import { allIssueStatuses, IssueStatus } from '../../server/data/ReportedAdjudicationResult'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 
@@ -50,8 +51,10 @@ context('Print completed DIS forms', () => {
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.printCompletedDisForms.root)
     const filter: PrintDISFormsFilter = new PrintDISFormsFilter()
-    filter.forceFromDate(5, 12, 2022)
-    filter.forceToDate(3, 12, 2022)
+    const fromDate = formatDateForDatePicker(new Date('12/5/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('12/3/2022').toISOString(), 'short')
+    filter.fromDateInput().clear().type(fromDate)
+    filter.toDateInput().clear().type(toDate)
     filter.applyButton().click()
     filter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
   })
@@ -243,8 +246,10 @@ context('Print completed DIS forms', () => {
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage.resultsTable().find('tr').should('have.length', 3)
     const filter: PrintDISFormsFilter = new PrintDISFormsFilter()
-    filter.forceFromDate(5, 12, 2022)
-    filter.forceToDate(7, 12, 2022)
+    const fromDate = formatDateForDatePicker(new Date('12/5/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('12/7/2022').toISOString(), 'short')
+    filter.fromDateInput().clear().type(fromDate)
+    filter.toDateInput().clear().type(toDate)
     filter.notIssuedCheckbox().uncheck()
     filter.applyButton().click()
     cy.location().should(loc => {
@@ -291,8 +296,10 @@ context('Print completed DIS forms', () => {
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage.resultsTable().find('tr').should('have.length', 3)
     const filter: PrintDISFormsFilter = new PrintDISFormsFilter()
-    filter.forceFromDate(5, 12, 2022)
-    filter.forceToDate(7, 12, 2022)
+    const fromDate = formatDateForDatePicker(new Date('12/5/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('12/7/2022').toISOString(), 'short')
+    filter.fromDateInput().clear().type(fromDate)
+    filter.toDateInput().clear().type(toDate)
     filter.selectLocation().select('Segregation MPU')
     filter.applyButton().click()
     cy.location().should(loc => {

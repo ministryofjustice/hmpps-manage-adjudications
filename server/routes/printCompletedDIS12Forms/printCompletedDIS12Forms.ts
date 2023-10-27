@@ -12,6 +12,7 @@ import {
 } from '../../utils/adjudicationFilterHelper'
 import { ReportedAdjudicationEnhancedWithIssuingDetails } from '../../data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { formatDateForDatePicker } from '../../utils/utils'
 
 export default class printCompletedDISFormsRoutes {
   constructor(
@@ -33,6 +34,7 @@ export default class printCompletedDISFormsRoutes {
       possibleLocations,
       results,
       errors,
+      today: formatDateForDatePicker(new Date().toISOString(), 'short'),
     })
   }
 
