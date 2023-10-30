@@ -9,6 +9,7 @@ import TestData from '../../server/routes/testutils/testData'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import { HearingOutcomeCode, OutcomeCode } from '../../server/data/HearingAndOutcomeResult'
 import { PunishmentType } from '../../server/data/PunishmentResult'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 const today = moment()
@@ -217,8 +218,6 @@ context('Awarded punishments and damages', () => {
     awardedPunishmentsAndDamagesPage.additionalDaysAwardedPunishmentsTab().should('exist')
     awardedPunishmentsAndDamagesPage.datePicker().should('exist')
     awardedPunishmentsAndDamagesPage.selectLocation().should('exist')
-    awardedPunishmentsAndDamagesPage.leftArrow().should('exist')
-    awardedPunishmentsAndDamagesPage.rightArrow().should('exist')
     awardedPunishmentsAndDamagesPage.applyButton().should('exist')
     awardedPunishmentsAndDamagesPage.clearLink().should('exist')
     awardedPunishmentsAndDamagesPage.resultsTable().should('exist')
@@ -332,7 +331,8 @@ context('Awarded punishments and damages', () => {
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       AwardedPunishmentsAndDamagesPage
     )
-    awardedPunishmentsAndDamagesPage.forceHearingDate(today.date(), month, today.year())
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    awardedPunishmentsAndDamagesPage.datePicker().type(date)
     awardedPunishmentsAndDamagesPage.selectLocation().select('Houseblock 1')
     awardedPunishmentsAndDamagesPage.applyButton().click()
 
@@ -508,8 +508,6 @@ context('Awarded punishments and damages - Financial', () => {
     financialAwardedPunishmentsAndDamagesPage.financialGuidanceMessage().should('exist')
     financialAwardedPunishmentsAndDamagesPage.datePicker().should('exist')
     financialAwardedPunishmentsAndDamagesPage.selectLocation().should('exist')
-    financialAwardedPunishmentsAndDamagesPage.leftArrow().should('exist')
-    financialAwardedPunishmentsAndDamagesPage.rightArrow().should('exist')
     financialAwardedPunishmentsAndDamagesPage.applyButton().should('exist')
     financialAwardedPunishmentsAndDamagesPage.clearLink().should('exist')
     financialAwardedPunishmentsAndDamagesPage.resultsTable().should('exist')
@@ -590,7 +588,8 @@ context('Awarded punishments and damages - Financial', () => {
     const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
       FinancialAwardedPunishmentsAndDamagesPage
     )
-    financialAwardedPunishmentsAndDamagesPage.forceHearingDate(today.date(), month, today.year())
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    financialAwardedPunishmentsAndDamagesPage.datePicker().type(date)
     financialAwardedPunishmentsAndDamagesPage.selectLocation().select('Houseblock 1')
     financialAwardedPunishmentsAndDamagesPage.applyButton().click()
 
@@ -755,8 +754,6 @@ context('Awarded punishments and damages - Additional days', () => {
     additionalDaysAwardedPunishmentsPage.additionalDaysAwardedPunishmentsTab().should('exist')
     additionalDaysAwardedPunishmentsPage.datePicker().should('exist')
     additionalDaysAwardedPunishmentsPage.selectLocation().should('exist')
-    additionalDaysAwardedPunishmentsPage.leftArrow().should('exist')
-    additionalDaysAwardedPunishmentsPage.rightArrow().should('exist')
     additionalDaysAwardedPunishmentsPage.applyButton().should('exist')
     additionalDaysAwardedPunishmentsPage.clearLink().should('exist')
     additionalDaysAwardedPunishmentsPage.resultsTable().should('exist')
@@ -837,7 +834,8 @@ context('Awarded punishments and damages - Additional days', () => {
     const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
       AdditionalDaysAwardedPunishmentsPage
     )
-    additionalDaysAwardedPunishmentsPage.forceHearingDate(today.date(), month, today.year())
+    const date = formatDateForDatePicker(new Date().toISOString(), 'short')
+    additionalDaysAwardedPunishmentsPage.datePicker().type(date)
     additionalDaysAwardedPunishmentsPage.selectLocation().select('Houseblock 1')
     additionalDaysAwardedPunishmentsPage.applyButton().click()
 

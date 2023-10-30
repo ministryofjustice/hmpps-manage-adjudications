@@ -26,7 +26,7 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ DISFormFilter({filter:filter, locations:possibleLocations, errors:errors, clearUrl:adjudicationUrls.confirmDISFormsIssued.urls.start(), csrfToken:csrfToken, dateTitle:"Date of discovery", disableFutureSelection: true, disablePastSelection: false, includeCheckboxes: false}) }}
+  {{ DISFormFilter({filter:filter, locations:possibleLocations, errors:errors, clearUrl:adjudicationUrls.confirmDISFormsIssued.urls.start(), csrfToken:csrfToken, dateTitle:"Date of discovery", disableFutureSelection: true, disablePastSelection: false, includeCheckboxes: false, today: today}) }}
 
   {% set rows = [] %}
   {% for report in reports %}

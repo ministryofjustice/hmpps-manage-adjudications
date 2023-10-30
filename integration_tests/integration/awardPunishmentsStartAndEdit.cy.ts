@@ -14,9 +14,9 @@ import WillPunishmentBeSuspendedPage from '../pages/willPunishmentBeSuspended'
 import WillPunishmentBeConsecutivePage from '../pages/willPunishmentBeConsective'
 import WhichPunishmentConsecutiveToPage from '../pages/whichPunishmentConsecutiveTo'
 import DamagesAmountPage from '../pages/damagesAmountOwed'
-import { forceDateInput } from '../componentDrivers/dateInput'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const susPun = [
   {
@@ -204,7 +204,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
 
       awardPunishmentsPage.editPunishment().first().click()
@@ -284,7 +285,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
 
       awardPunishmentsPage
@@ -321,7 +323,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
 
       awardPunishmentsPage
@@ -358,7 +361,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
 
       awardPunishmentsPage
@@ -485,7 +489,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
 
       awardPunishmentsPage.newPunishment().click()

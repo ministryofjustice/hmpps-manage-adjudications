@@ -13,6 +13,7 @@ import {
   uiFilterFromRequest,
   validate,
 } from './continueReportFilterHelper'
+import { formatDateForDatePicker } from '../../utils/utils'
 
 export default class ContinueReportSelectRoutes {
   constructor(private readonly placeOnReportService: PlaceOnReportService) {}
@@ -32,6 +33,7 @@ export default class ContinueReportSelectRoutes {
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
       ),
       errors,
+      maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
     })
   }
 

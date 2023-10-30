@@ -52,9 +52,6 @@
     justify-content: space-around;
     margin-bottom: 0;
     padding-bottom: 0;
-    input {
-      min-width: 100px;
-    }
   }
   display: flex;
   > div {
@@ -72,6 +69,21 @@
       &::after, &::before {
         content: none;
       }
+    }
+  }
+}
+
+.datePickerWithinHorizontalForm {
+  button {
+    margin-bottom: 0 !important;
+    margin-right: 0 !important;
+    @media print {
+      display: none
+    }
+  }
+  @media print {
+    .hmpps-datepicker-input__wrapper {
+    width: 160px;
     }
   }
 }

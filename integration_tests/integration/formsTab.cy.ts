@@ -5,7 +5,7 @@ import TestData from '../../server/routes/testutils/testData'
 import FormsTabPage from '../pages/formsTab'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import AddDateAndTimeOfIssue from '../pages/addDateAndTimeOfIssue'
-import { forceDateInputWithDate } from '../componentDrivers/dateInput'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 const reportedAdjudication = testData.reportedAdjudication({
@@ -145,8 +145,8 @@ context('Navigated to forms tab', () => {
 
       const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
       const date = new Date()
-      const yesterday = new Date(date.setDate(date.getDate() - 1))
-      forceDateInputWithDate(yesterday, '[data-qa="issued-date"]')
+      const yesterday = formatDateForDatePicker(new Date(date.setDate(date.getDate() - 1)).toISOString(), 'short')
+      addDateTimeOfIssuePage.dateInput().type(yesterday)
       addDateTimeOfIssuePage.hourInput().type('20')
       addDateTimeOfIssuePage.minutesInput().type('30')
       addDateTimeOfIssuePage.submitButton().click()

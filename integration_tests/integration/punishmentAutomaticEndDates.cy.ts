@@ -8,7 +8,7 @@ import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
 import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
 import PunishmentStartDateChoicePage from '../pages/punishmentStartDateChoice'
 import PunishmentStartDatePage from '../pages/punishmentStartDate'
-import { forceDateInput } from '../componentDrivers/dateInput'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 context('Punishment - Punishment schedule', () => {
@@ -98,7 +98,8 @@ context('Punishment - Punishment schedule', () => {
       punishmentStartDateChoicePage.radioButtons().find('input[value="false"]').check()
       punishmentStartDateChoicePage.submitButton().click()
       const punishmentStartDatePage = Page.verifyOnPage(PunishmentStartDatePage)
-      forceDateInput(30, 12, 2030, '[data-qa="punishment-start-date-picker"]')
+      const date = formatDateForDatePicker(new Date('12/30/2030').toISOString(), 'short')
+      punishmentStartDatePage.datepicker().type(date)
       punishmentStartDatePage.submitButton().click()
       const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
       punishmentAutomaticEndDatesPage.name().contains('Removal from wing or unit')

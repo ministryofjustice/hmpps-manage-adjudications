@@ -3,7 +3,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentStartDatePage from '../pages/punishmentStartDate'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
-import { forceDateInput } from '../componentDrivers/dateInput'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 context('Punishment - Enter the date the punishment will start', () => {
@@ -73,7 +73,8 @@ context('Punishment - Enter the date the punishment will start', () => {
         `${adjudicationUrls.punishmentStartDate.urls.start('100')}?punishmentType=PRIVILEGES&privilegeType=TV&days=10`
       )
       const punishmentStartDatePage = Page.verifyOnPage(PunishmentStartDatePage)
-      forceDateInput(10, 10, 2030, '[data-qa="punishment-start-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentStartDatePage.datepicker().type(date)
       punishmentStartDatePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishmentAutomaticDateSchedule.urls.start('100'))

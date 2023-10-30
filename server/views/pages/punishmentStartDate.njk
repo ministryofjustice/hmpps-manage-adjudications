@@ -2,7 +2,7 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "../macros/datePicker.njk" import datePicker %}
+{% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
@@ -22,21 +22,21 @@
       attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">{{ title }}</h1>
-  <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-      {{
-        datePicker({
+      {{ hmppsDatepicker({
           id: 'startDate',
           name: 'startDate',
-          date: startDate,
-          attributes: {'data-disable-future-date':'false', 'data-qa': "punishment-start-date-picker" },
-          classes: 'govuk-input--width-10',
+          label: {
+              text: title,
+              classes: "govuk-label--l",
+              isPageHeading: true
+          },
+          classes: 'hmpps-datepicker--fixed-width',
+          value: startDate,
           errorMessage: errors | findErrors(['startDate'])
-        })
-      }}
+      }) }}
 
       <div class="govuk-button-group">
         {{ govukButton({
@@ -48,7 +48,5 @@
         }) }}
         <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award punishments and add money for damages'</a>
       </div>
-
     </form>
-  </div>
 {% endblock %}

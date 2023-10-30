@@ -4,6 +4,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import DISFormsFilter from '../pages/DISFormsFilter'
 import TestData from '../../server/routes/testutils/testData'
 import ConfirmDISFormsIssuedPage from '../pages/confirmDISFormsIssues'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 
@@ -47,8 +48,10 @@ context('Confirm DIS forms have been issued', () => {
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const filter: DISFormsFilter = new DISFormsFilter()
-    filter.forceFromDate(5, 12, 2022)
-    filter.forceToDate(3, 12, 2022)
+    const fromDate = formatDateForDatePicker(new Date('12/5/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('12/3/2022').toISOString(), 'short')
+    filter.fromDateInput().clear().type(fromDate)
+    filter.toDateInput().clear().type(toDate)
     filter.applyButton().click()
     filter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
   })
@@ -204,8 +207,9 @@ context('Confirm DIS forms have been issued', () => {
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
     confirmDISFormsIssued.resultsTable().find('tr').should('have.length', 3)
     const filter: DISFormsFilter = new DISFormsFilter()
-    filter.forceFromDate(5, 12, 2022)
-    filter.forceToDate(5, 12, 2022)
+    const date = formatDateForDatePicker(new Date('12/5/2022').toISOString(), 'short')
+    filter.fromDateInput().clear().type(date)
+    filter.toDateInput().clear().type(date)
     filter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.confirmDISFormsIssued.root)
@@ -241,8 +245,10 @@ context('Confirm DIS forms have been issued', () => {
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
     confirmDISFormsIssued.resultsTable().find('tr').should('have.length', 3)
     const filter: DISFormsFilter = new DISFormsFilter()
-    filter.forceFromDate(4, 12, 2022)
-    filter.forceToDate(6, 12, 2022)
+    const fromDate = formatDateForDatePicker(new Date('12/4/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('12/6/2022').toISOString(), 'short')
+    filter.fromDateInput().clear().type(fromDate)
+    filter.toDateInput().clear().type(toDate)
     filter.selectLocation().select('Segregation MPU')
     filter.applyButton().click()
     cy.location().should(loc => {

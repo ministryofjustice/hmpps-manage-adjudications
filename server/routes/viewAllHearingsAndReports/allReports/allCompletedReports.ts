@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../../utils/mojPagination/pagination'
-import { hasAnyRole } from '../../../utils/utils'
+import { formatDateForDatePicker, hasAnyRole } from '../../../utils/utils'
 import { ReportedAdjudicationEnhanced } from '../../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../../data/ApiData'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
@@ -43,6 +43,7 @@ export default class AllCompletedReportsRoutes {
       viewTransferredReportsHref: adjudicationUrls.allTransferredReports.urls.start(),
       activeTab: 'viewCompletedReports',
       errors,
+      maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
       activeCaseloadName: (await this.userService.getNameOfActiveCaseload(res.locals.user)) || 'your active caseload',
     })
 

@@ -26,7 +26,7 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ continueReportFilter(filter, errors, adjudicationUrls.continueReport.urls.start(), csrfToken) }}
+  {{ continueReportFilter(filter, errors, adjudicationUrls.continueReport.urls.start(), csrfToken, maxDate) }}
 
   {% set rows = [] %}
   {% for report in reports.content %}

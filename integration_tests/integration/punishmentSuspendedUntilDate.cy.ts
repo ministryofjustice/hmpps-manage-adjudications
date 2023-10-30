@@ -2,7 +2,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentSuspendedUntilPage from '../pages/punishmentSuspendedUntil'
-import { forceDateInput } from '../componentDrivers/dateInput'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 context('Punishment - when is it suspended until?', () => {
@@ -52,7 +52,8 @@ context('Punishment - when is it suspended until?', () => {
     it('should go to correct page when suspended', () => {
       cy.visit(adjudicationUrls.punishmentSuspendedUntil.urls.start('100'))
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))

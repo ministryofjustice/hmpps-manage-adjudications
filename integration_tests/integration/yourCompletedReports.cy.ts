@@ -1,7 +1,7 @@
 import moment from 'moment'
 import YourCompletedReportsPage from '../pages/yourCompletedReports'
 import Page from '../pages/page'
-import { generateRange } from '../../server/utils/utils'
+import { formatDateForDatePicker, generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
@@ -101,8 +101,10 @@ context('Your Completed Reports', () => {
     const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
     yourCompletedReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const filterAdjudication: AdjudicationsFilter = new AdjudicationsFilter()
-    filterAdjudication.forceFromDate(1, 1, 2022)
-    filterAdjudication.forceToDate(9, 1, 2022)
+    const fromDate = formatDateForDatePicker(new Date('1/1/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('1/9/2022').toISOString(), 'short')
+    filterAdjudication.fromDateInput().clear().type(fromDate)
+    filterAdjudication.toDateInput().clear().type(toDate)
     filterAdjudication.uncheckAllCheckboxes()
     filterAdjudication.checkCheckboxWithValue('UNSCHEDULED')
     filterAdjudication.applyButton().click()
@@ -145,8 +147,10 @@ context('Your Completed Reports', () => {
     const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
     yourCompletedReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const filterAdjudication: AdjudicationsFilter = new AdjudicationsFilter()
-    filterAdjudication.forceFromDate(1, 1, 2022)
-    filterAdjudication.forceToDate(9, 1, 2022)
+    const fromDate = formatDateForDatePicker(new Date('1/1/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('1/9/2022').toISOString(), 'short')
+    filterAdjudication.fromDateInput().clear().type(fromDate)
+    filterAdjudication.toDateInput().clear().type(toDate)
     filterAdjudication.uncheckAllCheckboxes()
     filterAdjudication.checkCheckboxWithValue('UNSCHEDULED')
     filterAdjudication.applyButton().click()
@@ -196,8 +200,10 @@ context('Your Completed Reports', () => {
     cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
     const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    adjudicationsFilter.forceFromDate(10, 10, 2021)
-    adjudicationsFilter.forceToDate(19, 10, 2021)
+    const fromDate = formatDateForDatePicker(new Date('10/10/2021').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('10/19/2021').toISOString(), 'short')
+    adjudicationsFilter.fromDateInput().clear().type(fromDate)
+    adjudicationsFilter.toDateInput().clear().type(toDate)
     adjudicationsFilter.uncheckAllCheckboxes()
     adjudicationsFilter.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
@@ -220,8 +226,10 @@ context('Your Completed Reports', () => {
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.yourCompletedReports.root)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    adjudicationsFilter.forceFromDate(19, 10, 2021)
-    adjudicationsFilter.forceToDate(10, 10, 2021)
+    const fromDate = formatDateForDatePicker(new Date('10/19/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('10/10/2022').toISOString(), 'short')
+    adjudicationsFilter.fromDateInput().clear().type(fromDate)
+    adjudicationsFilter.toDateInput().clear().type(toDate)
     adjudicationsFilter.applyButton().click()
     adjudicationsFilter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
   })

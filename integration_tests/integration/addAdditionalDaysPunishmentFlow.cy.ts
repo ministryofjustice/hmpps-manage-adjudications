@@ -6,9 +6,9 @@ import AwardPunishmentsPage from '../pages/awardPunishments'
 import PunishmentPage from '../pages/punishment'
 import WillPunishmentBeSuspendedPage from '../pages/willPunishmentBeSuspended'
 import suspendedUntilPage from '../pages/punishmentSuspendedUntil'
-import { forceDateInput } from '../componentDrivers/dateInput'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 context('Add additional days punishments', () => {
@@ -88,7 +88,8 @@ context('Add additional days punishments', () => {
       willPunishmentBeSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(suspendedUntilPage)
-      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))

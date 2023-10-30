@@ -2,9 +2,9 @@ import moment from 'moment'
 import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
-import { forceDateInputWithDate } from '../componentDrivers/dateInput'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import TestData from '../../server/routes/testutils/testData'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 
@@ -26,6 +26,10 @@ const singleHearing = [
     id: 987,
   }),
 ]
+
+const date = formatDateForDatePicker(new Date('1/1/2030').toISOString(), 'short')
+const date1 = formatDateForDatePicker(new Date().toISOString(), 'short')
+const date2 = formatDateForDatePicker(new Date('12/31/2029').toISOString(), 'short')
 
 context('Schedule a hearing page', () => {
   beforeEach(() => {
@@ -70,7 +74,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.datePicker().type(date)
     scheduleHearingsPage.timeInputHours().select('11')
     scheduleHearingsPage.timeInputMinutes().select('05')
     scheduleHearingsPage.submitButton().click()
@@ -81,7 +85,7 @@ context('Schedule a hearing page', () => {
   it('should show error if hearing type is missing', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.start('1524494'))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
-    forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.datePicker().type(date)
     scheduleHearingsPage.timeInputHours().select('10')
     scheduleHearingsPage.timeInputMinutes().select('30')
     scheduleHearingsPage.submitButton().click()
@@ -96,7 +100,7 @@ context('Schedule a hearing page', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.start('1524494'))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
-    forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.datePicker().type(date)
     scheduleHearingsPage.timeInputHours().select('10')
     scheduleHearingsPage.timeInputMinutes().select('30')
     scheduleHearingsPage.submitButton().click()
@@ -127,7 +131,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.datePicker().type(date)
     scheduleHearingsPage.timeInputMinutes().select('30')
     scheduleHearingsPage.submitButton().click()
     scheduleHearingsPage
@@ -142,7 +146,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.datePicker().type(date)
     scheduleHearingsPage.timeInputHours().select('10')
     scheduleHearingsPage.submitButton().click()
     scheduleHearingsPage
@@ -153,13 +157,12 @@ context('Schedule a hearing page', () => {
       })
   })
   it('should show error if the time entered is in the past', () => {
-    const now = moment().toDate()
     const oneHourAgo = moment().subtract(1, 'hour').format('HH').toString()
     cy.visit(adjudicationUrls.scheduleHearing.urls.start('1524494'))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    forceDateInputWithDate(now, '[data-qa="hearing-date"]')
+    scheduleHearingsPage.datePicker().type(date1)
     scheduleHearingsPage.timeInputHours().select(oneHourAgo)
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()
@@ -175,7 +178,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    forceDateInputWithDate(new Date('2029-12-31'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.datePicker().type(date2)
     scheduleHearingsPage.timeInputHours().select('11')
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()
@@ -193,7 +196,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    forceDateInputWithDate(new Date('2030-01-01'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.datePicker().type(date)
     scheduleHearingsPage.timeInputHours().select('10')
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()
@@ -211,7 +214,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    forceDateInputWithDate(new Date('2029-12-31'), '[data-qa="hearing-date"]')
+    scheduleHearingsPage.datePicker().type(date2)
     scheduleHearingsPage.timeInputHours().select('10')
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()

@@ -5,7 +5,7 @@ export default class PunishmentStartDatePage extends Page {
     super('Enter the date the punishment will start')
   }
 
-  datepicker = (): PageElement => cy.get('[data-qa="punishment-start-date-picker"]')
+  datepicker = (): PageElement => cy.get('[data-qa="date-picker"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="submit"]')
 

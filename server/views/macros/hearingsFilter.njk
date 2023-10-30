@@ -1,30 +1,31 @@
-{% from "../macros/datePicker.njk" import datePicker %}
+{% from 'components/datepicker/macro.njk' import hmppsDatepicker %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% macro hearingsFilter(hearingDate, errors, clearUrl, csrfToken) %}
-    <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="scheduled-hearings-form">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        <div class="horizontal-form" id="scheduledHearingsFilter">
-            <div class="hearings-arrow arrow-left" id="hearing-arrow-left" data-qa="hearing-date-left-arrow"></div>
-            {{ datePicker({
-                id: 'hearingDate',
-                label: 'Date of hearing',
-                labelClasses: 'govuk-!-font-weight-bold',
-                name: 'hearingDate',
-                date: hearingDate,
-                attributes: {'data-disable-future-date':'false', 'data-qa': "hearing-date-picker" },
-                classes: 'govuk-input--width-10'
-            }) }}
-            <div class="hearings-arrow arrow-right" id="hearing-arrow-right" data-qa="hearing-date-right-arrow"></div>
-        </div>
-        <div class="horizontal-form hearings-filter-apply-clear">
-        {{ govukButton({
+  <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="scheduled-hearings-form">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <div id="scheduledHearingsFilter">
+      {{ hmppsDatepicker({
+        id: "hearingDate",
+        name: "hearingDate",
+        label: {
+            text: "Date of hearing",
+            classes: "govuk-!-font-weight-bold"
+        },
+        classes: 'hmpps-datepicker--fixed-width',
+        value: hearingDate
+    }) }}
+    </div>
+    <div class="horizontal-form hearings-filter-apply-clear">
+      {{ govukButton({
             text: "Apply",
             type: "submit",
             classes: "govuk-button--submit hearings-filter-apply",
             attributes: { "data-qa": "hearings-filter-apply" }
         }) }}
-        <p class="govuk-body filter-clear-link"><a class='govuk-link' href='{{ clearUrl }}' data-qa='clear-filter'>Clear</a></p>
-        </div>
-    </form>
+      <p class="govuk-body filter-clear-link">
+        <a class='govuk-link' href='{{ clearUrl }}' data-qa='clear-filter'>Clear</a>
+      </p>
+    </div>
+  </form>
 {% endmacro %}

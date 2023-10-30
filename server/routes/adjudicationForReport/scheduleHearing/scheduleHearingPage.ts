@@ -13,6 +13,7 @@ import {
   convertDateTimeStringToSubmittedDateTime,
   convertSubmittedDateTimeToDateObject,
   formatDate,
+  formatDateForDatePicker,
 } from '../../../utils/utils'
 import { OicHearingType } from '../../../data/ReportedAdjudicationResult'
 
@@ -176,6 +177,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError[]) => {
     cancelHref: adjudicationUrls.hearingDetails.urls.review(pageData.displayData.chargeNumber),
     locations: pageData.displayData.possibleLocations,
     data,
+    today: formatDateForDatePicker(new Date().toISOString(), 'short'),
   })
 }
 

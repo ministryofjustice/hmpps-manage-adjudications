@@ -1,4 +1,4 @@
-{% from "../macros/datePicker.njk" import datePicker %}
+{% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
@@ -17,23 +17,31 @@
       {% endif %}
       <div class="horizontal-form govuk-!-margin-bottom-3" id="DISFormFilter">
         <div class="inputBoxes">
-          {{ datePicker({
-                    id: 'fromDate[date]',
-                    label: 'From',
-                    name: 'fromDate[date]',
-                    date: params.filter.fromDate,
-                    attributes: {'data-disable-future-date': params.disableFutureSelection, 'data-disable-past-date': params.disablePastSelection,'data-qa': "from-date" },
-                    classes: 'govuk-input--width-10' + (' govuk-input--error' if fromDateError else '')
-                }) }}
+          {{ hmppsDatepicker({
+              id: 'fromDate[date]',
+              name: 'fromDate[date]',
+              label: {
+                  text: 'From'
+              },
+              classes: 'hmpps-datepicker--fixed-width datePickerWithinHorizontalForm',
+              value: params.filter.fromDate,
+              maxDate: params.today if params.disableFutureSelection,
+              minDate: params.today if params.disablePastSelection,
+              dataQa: 'fromDate'
+          }) }}
 
-          {{ datePicker({
-                    id: 'toDate[date]',
-                    label: 'To',
-                    name: 'toDate[date]',
-                    date: params.filter.toDate,
-                    attributes: {'data-disable-future-date': params.disableFutureSelection, 'data-disable-past-date': params.disablePastSelection, 'data-qa': "to-date" },
-                    classes: 'govuk-input--width-10'
-                }) }}
+          {{ hmppsDatepicker({
+              id: 'toDate[date]',
+              name: 'toDate[date]',
+              label: {
+                  text: 'To'
+              },
+              classes: 'hmpps-datepicker--fixed-width datePickerWithinHorizontalForm',
+              value: params.filter.toDate,
+              maxDate: params.today if params.disableFutureSelection,
+              minDate: params.today if params.disablePastSelection,
+              dataQa: 'toDate'
+          }) }}
 
           {{ govukSelect({
                   id: 'locationId',

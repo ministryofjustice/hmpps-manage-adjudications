@@ -1,7 +1,7 @@
 import moment from 'moment'
 import AllCompletedReportsPage from '../pages/allReports'
 import Page from '../pages/page'
-import { generateRange } from '../../server/utils/utils'
+import { formatDateForDatePicker, generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
@@ -206,8 +206,10 @@ context('All Completed Reports', () => {
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     allCompletedReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    adjudicationsFilter.forceFromDate(1, 1, 2022)
-    adjudicationsFilter.forceToDate(9, 1, 2022)
+    const fromDate = formatDateForDatePicker(new Date('1/1/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('1/9/2022').toISOString(), 'short')
+    adjudicationsFilter.fromDateInput().clear().type(fromDate)
+    adjudicationsFilter.toDateInput().clear().type(toDate)
     allCompletedReportsPage.uncheckAllCheckboxes()
     allCompletedReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
@@ -250,8 +252,10 @@ context('All Completed Reports', () => {
     cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    adjudicationsFilter.forceFromDate(10, 10, 2021)
-    adjudicationsFilter.forceToDate(19, 10, 2021)
+    const fromDate = formatDateForDatePicker(new Date('10/10/2021').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('10/19/2021').toISOString(), 'short')
+    adjudicationsFilter.fromDateInput().clear().type(fromDate)
+    adjudicationsFilter.toDateInput().clear().type(toDate)
     allCompletedReportsPage.uncheckAllCheckboxes()
     allCompletedReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
@@ -335,8 +339,10 @@ context('All Completed Reports', () => {
     cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    adjudicationsFilter.forceFromDate(10, 10, 2021)
-    adjudicationsFilter.forceToDate(19, 10, 2021)
+    const fromDate = formatDateForDatePicker(new Date('10/10/2021').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('10/19/2021').toISOString(), 'short')
+    adjudicationsFilter.fromDateInput().clear().type(fromDate)
+    adjudicationsFilter.toDateInput().clear().type(toDate)
     allCompletedReportsPage.uncheckAllCheckboxes()
     allCompletedReportsPage.checkCheckboxWithValue('SCHEDULED')
     adjudicationsFilter.applyButton().click()
@@ -404,8 +410,10 @@ context('All Completed Reports', () => {
     cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    adjudicationsFilter.forceFromDate(10, 10, 2021)
-    adjudicationsFilter.forceToDate(19, 10, 2021)
+    const fromDate = formatDateForDatePicker(new Date('10/10/2021').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('10/19/2021').toISOString(), 'short')
+    adjudicationsFilter.fromDateInput().clear().type(fromDate)
+    adjudicationsFilter.toDateInput().clear().type(toDate)
     allCompletedReportsPage.uncheckAllCheckboxes()
     allCompletedReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     allCompletedReportsPage.checkCheckboxWithValue('SCHEDULED')
@@ -446,8 +454,10 @@ context('All Completed Reports', () => {
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.allCompletedReports.root)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    adjudicationsFilter.forceFromDate(19, 10, 2021)
-    adjudicationsFilter.forceToDate(10, 10, 2021)
+    const fromDate = formatDateForDatePicker(new Date('10/19/2022').toISOString(), 'short')
+    const toDate = formatDateForDatePicker(new Date('10/10/2022').toISOString(), 'short')
+    adjudicationsFilter.fromDateInput().clear().type(fromDate)
+    adjudicationsFilter.toDateInput().clear().type(toDate)
     adjudicationsFilter.applyButton().click()
     adjudicationsFilter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
   })
