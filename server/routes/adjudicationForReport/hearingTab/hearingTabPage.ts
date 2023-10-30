@@ -6,6 +6,7 @@ import OutcomesService from '../../../services/outcomesService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { getNextPageForChosenStep, getSchedulingUnavailableStatuses } from './hearingTabHelper'
 import UserService from '../../../services/userService'
+import { OutcomeHistory } from '../../../data/HearingAndOutcomeResult'
 
 export enum PageRequestType {
   REPORTER,
@@ -124,6 +125,7 @@ export default class HearingTabPage {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
+      outcomeRemovable: this.outcomeRemovable(reportedAdjudication.outcomes),
     })
   }
 
@@ -162,7 +164,10 @@ export default class HearingTabPage {
     return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
   }
 
-  acceptableStatus = (status: ReportedAdjudicationStatus) => {
-    return status !== ReportedAdjudicationStatus.AWAITING_REVIEW
+  outcomeRemovable = (outcomes: OutcomeHistory) => {
+    if (!outcomes || !outcomes.length) return false
+    // This is an additional check, if 'canRemove' is undefined or null, it'll
+    // return true as it did before we had this flag, but if it's false, it will return false
+    return outcomes[outcomes.length - 1]?.outcome?.outcome?.canRemove ?? true
   }
 }

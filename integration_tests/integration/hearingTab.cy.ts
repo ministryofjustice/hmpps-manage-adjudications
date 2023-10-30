@@ -398,6 +398,31 @@ const historyWithReferGovHearingOutcome = [
   },
 ]
 
+const historyWithNonRemovableOutcome = [
+  {
+    hearing: {
+      id: 834,
+      locationId: 123,
+      dateTimeOfHearing: '2023-10-30T15:10:00',
+      oicHearingType: OicHearingType.INAD_ADULT,
+      outcome: {
+        id: 1160,
+        adjudicator: 'Jack Jackson',
+        code: HearingOutcomeCode.COMPLETE,
+        plea: HearingOutcomePlea.GUILTY,
+      },
+      agencyId: 'MDI',
+    },
+    outcome: {
+      outcome: {
+        id: 1544,
+        code: OutcomeCode.CHARGE_PROVED,
+        canRemove: false,
+      },
+    },
+  },
+]
+
 context('Hearing details page', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -777,6 +802,17 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.REFER_GOV,
         [],
         historyWithReferGovHearingOutcome,
+        false
+      ),
+    })
+    // Report with ADA punishment that has been linked to by an ADA punishment on another report
+    cy.task('stubGetReportedAdjudication', {
+      id: 1526223,
+      response: reportedAdjudicationResponse(
+        '1526223',
+        ReportedAdjudicationStatus.CHARGE_PROVED,
+        [],
+        historyWithNonRemovableOutcome,
         false
       ),
     })
@@ -2038,6 +2074,11 @@ context('Hearing details page', () => {
           expect($summaryData.get(2).innerText).to.contain('Flawed notice of report\n\nReason for not proceeding')
         })
       hearingTabPage.removeReferralButton().should('exist')
+    })
+    it('Report has a non-removable outcome due to a linked ADA punishment', () => {
+      cy.visit(adjudicationUrls.hearingDetails.urls.review('1526223'))
+      const hearingTabPage = Page.verifyOnPage(hearingTab)
+      hearingTabPage.removeOutcomeButton().should('not.exist')
     })
   })
   describe('Test scenarios - reporter view', () => {
