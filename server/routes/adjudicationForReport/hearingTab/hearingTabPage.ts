@@ -5,8 +5,6 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import OutcomesService from '../../../services/outcomesService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { getNextPageForChosenStep, getSchedulingUnavailableStatuses } from './hearingTabHelper'
-import config from '../../../config'
-import { hasAnyRole } from '../../../utils/utils'
 import UserService from '../../../services/userService'
 
 export enum PageRequestType {
@@ -90,7 +88,10 @@ export default class HearingTabPage {
     )
 
     const userRoles = await this.userService.getUserRoles(user.token)
-    const showFormsTab = config.formsTabFlag === 'true' && hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
+    const showFormsTab = await this.reportedAdjudicationsService.canViewPrintAndIssueFormsTab(
+      userRoles,
+      reportedAdjudication.status
+    )
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,
@@ -159,5 +160,9 @@ export default class HearingTabPage {
     }
 
     return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
+  }
+
+  acceptableStatus = (status: ReportedAdjudicationStatus) => {
+    return status !== ReportedAdjudicationStatus.AWAITING_REVIEW
   }
 }

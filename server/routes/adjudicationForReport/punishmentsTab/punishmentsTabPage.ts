@@ -5,8 +5,6 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
-import config from '../../../config'
-import { hasAnyRole } from '../../../utils/utils'
 import UserService from '../../../services/userService'
 
 export enum PageRequestType {
@@ -97,8 +95,10 @@ export default class PunishmentsTabPage {
     )
 
     const userRoles = await this.userService.getUserRoles(user.token)
-    const showFormsTab = config.formsTabFlag === 'true' && hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
-
+    const showFormsTab = await this.reportedAdjudicationsService.canViewPrintAndIssueFormsTab(
+      userRoles,
+      reportedAdjudication.status
+    )
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
       chargeNumber: reportedAdjudication.chargeNumber,
