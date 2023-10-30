@@ -46,6 +46,7 @@ export type PunishmentData = {
   consecutiveChargeNumber?: string
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
+  canRemove?: boolean
 }
 
 export type PunishmentSchedule = {
@@ -67,6 +68,7 @@ export type PunishmentDataWithSchedule = {
   consecutiveChargeNumber?: string
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
+  canRemove?: boolean
 }
 
 export interface SuspendedPunishment extends PunishmentDataWithSchedule {
@@ -163,6 +165,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     consecutiveChargeNumber,
     consecutiveReportAvailable,
     damagesOwedAmount,
+    canRemove,
   } = punishment
   const { days, startDate, endDate, suspendedUntil } = schedule
   return {
@@ -170,6 +173,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     redisId,
     type,
     days,
+    canRemove,
     ...(privilegeType && { privilegeType }),
     ...(otherPrivilege && { otherPrivilege }),
     ...(stoppagePercentage && { stoppagePercentage }),

@@ -61,7 +61,7 @@
             attributes: { "data-qa": primaryButtonInfo.qa }
           }) }}
           {% endif %}
-          {% if secondaryButtonInfo %}
+          {% if secondaryButtonInfo and outcomeRemovable %}
             {{ govukButton({
             text: secondaryButtonInfo.text,
             type: "submit",

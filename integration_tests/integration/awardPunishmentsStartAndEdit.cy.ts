@@ -113,6 +113,46 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
         },
       },
     })
+    //  Report with ADA punishment which is linked to in another report
+    cy.task('stubGetReportedAdjudication', {
+      id: 105,
+      response: {
+        reportedAdjudication: {
+          ...testData.reportedAdjudication({
+            punishments: [
+              {
+                id: 765,
+                type: PunishmentType.EXTRA_WORK,
+                schedule: {
+                  days: 10,
+                  startDate: '2023-10-30',
+                  endDate: '2023-11-08',
+                },
+                canRemove: true,
+              },
+              {
+                id: 761,
+                type: PunishmentType.ADDITIONAL_DAYS,
+                schedule: {
+                  days: 10,
+                },
+                canRemove: false,
+              },
+            ],
+            chargeNumber: '105',
+            prisonerNumber: 'G6415GD',
+            locationId: 25538,
+            hearings: [
+              testData.singleHearing({
+                dateTimeOfHearing: '2024-11-23T17:00:00',
+                oicHearingType: OicHearingType.INAD_ADULT,
+                id: 69,
+              }),
+            ],
+          }),
+        },
+      },
+    })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: testData.prisonerResultSummary({
@@ -413,6 +453,22 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           expect($summaryData.get(1).innerText).to.contain('-')
           expect($summaryData.get(2).innerText).to.contain('-')
           expect($summaryData.get(3).innerText).to.contain('10')
+        })
+    })
+
+    it('Should not be able to change or remove an ADA punishment if the canRemove flag is false', () => {
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('105'))
+      const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+      awardPunishmentsPage
+        .punishmentsTable()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Extra work')
+          expect($summaryData.get(6).innerText).to.contain('Change')
+          expect($summaryData.get(7).innerText).to.contain('Remove')
+          expect($summaryData.get(8).innerText).to.contain('Additional days')
+          expect($summaryData.get(14).innerText).to.contain('')
+          expect($summaryData.get(15).innerText).to.contain('')
         })
     })
 
