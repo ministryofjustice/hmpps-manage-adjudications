@@ -5,11 +5,10 @@ import DecisionTreeService from '../../../services/decisionTreeService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
 import { FormError } from '../../../@types/template'
-import { getEvidenceCategory, hasAnyRole } from '../../../utils/utils'
+import { getEvidenceCategory } from '../../../utils/utils'
 import { DraftAdjudication, EvidenceDetails } from '../../../data/DraftAdjudicationResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import { User } from '../../../data/hmppsManageUsersClient'
-import config from '../../../config'
 import UserService from '../../../services/userService'
 
 type PageData = {
@@ -176,8 +175,10 @@ export default class prisonerReportRoutes {
     )
 
     const userRoles = await this.userService.getUserRoles(user.token)
-    const showFormsTab = config.formsTabFlag === 'true' && hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
-
+    const showFormsTab = await this.reportedAdjudicationsService.canViewPrintAndIssueFormsTab(
+      userRoles,
+      reportedAdjudication.status
+    )
     const hideChargeNumberAndPrintForAdjudicationStatuses = [
       ReportedAdjudicationStatus.AWAITING_REVIEW,
       ReportedAdjudicationStatus.REJECTED,
