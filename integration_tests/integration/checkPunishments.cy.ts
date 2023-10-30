@@ -4,7 +4,6 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import CheckPunishments from '../pages/checkPunishments'
 import ReasonForChangePunishmentPage from '../pages/reasonForChangePunishment'
 import Page from '../pages/page'
-import { forceDateInput } from '../componentDrivers/dateInput'
 import { PunishmentType } from '../../server/data/PunishmentResult'
 import PunishmentPage from '../pages/punishment'
 import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
@@ -14,6 +13,7 @@ import PunishmentSuspendedUntilPage from '../pages/punishmentSuspendedUntil'
 import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDates'
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import PunishmentStartDatePage from '../pages/punishmentStartDate'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 
@@ -199,7 +199,8 @@ context('Check punishments', () => {
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      forceDateInput(10, 10, 2030, '[data-qa="suspended-until-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
 
       cy.get('[data-qa="punishments-table"]')
@@ -278,7 +279,8 @@ context('Check punishments', () => {
       punishmentStartDateChoicePage.submitButton().click()
 
       const punishmentStartDatePage = Page.verifyOnPage(PunishmentStartDatePage)
-      forceDateInput(10, 10, 2030, '[data-qa="punishment-start-date-picker"]')
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      punishmentStartDatePage.datepicker().type(date)
       punishmentStartDatePage.submitButton().click()
 
       const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
