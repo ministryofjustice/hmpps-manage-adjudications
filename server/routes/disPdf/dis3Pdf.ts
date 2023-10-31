@@ -30,9 +30,10 @@ export default class Dis3Pdf {
     )
 
     const { damages, evidence, witnesses } = reportedAdjudication
-    const [photoVideo, baggedAndTagged] = await Promise.all([
-      getEvidenceCategory(evidence, false),
-      getEvidenceCategory(evidence, true),
+    const [photoVideo, baggedAndTagged, other] = await Promise.all([
+      getEvidenceCategory(evidence, false, false),
+      getEvidenceCategory(evidence, true, false),
+      getEvidenceCategory(evidence, false, true),
     ])
 
     const prepareAndRecordAnAdjudicationHearingData = new PrepareAndRecordAnAdjudicationHearingData(
@@ -40,7 +41,7 @@ export default class Dis3Pdf {
       adjudicationDetails,
       offences,
       damages,
-      { photoVideo, baggedAndTagged },
+      { photoVideo, baggedAndTagged, other },
       witnesses
     )
     res.renderPdf(

@@ -162,6 +162,7 @@ describe('GET /all-completed-reports', () => {
           ],
           evidence: {
             baggedAndTagged: [],
+            other: [],
             photoVideo: [
               {
                 code: 'PHOTO',

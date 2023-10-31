@@ -1,24 +1,35 @@
 import { Request } from 'express'
-import { EvidenceDetails } from '../data/DraftAdjudicationResult'
+import { EvidenceCode, EvidenceDetails } from '../data/DraftAdjudicationResult'
 
 export default class EvidenceSessionService {
   addSessionEvidence(req: Request, evidenceData: EvidenceDetails, id: number | string) {
     this.createSessionForAdjudicationIfNotExists(req, id)
-    if (evidenceData.code === 'BAGGED_AND_TAGGED') {
+    if (evidenceData.code === EvidenceCode.BAGGED_AND_TAGGED) {
       return req.session.evidence[id].baggedAndTagged.push(evidenceData)
+    }
+    if (evidenceData.code === EvidenceCode.OTHER) {
+      return req.session.evidence[id].other.push(evidenceData)
     }
 
     return req.session.evidence[id].photoVideo.push(evidenceData)
   }
 
-  async deleteSessionEvidence(req: Request, index: number, isBaggedAndTagged: boolean, id: number | string) {
+  async deleteSessionEvidence(
+    req: Request,
+    index: number,
+    isBaggedAndTagged: boolean,
+    isOther: boolean,
+    id: number | string
+  ) {
     if (isBaggedAndTagged) return req.session.evidence?.[id]?.baggedAndTagged.splice(index - 1, 1)
+    if (isOther) return req.session.evidence?.[id]?.other.splice(index - 1, 1)
     return req.session.evidence?.[id]?.photoVideo.splice(index - 1, 1)
   }
 
   deleteAllSessionEvidence(req: Request, id: number | string) {
     req.session.evidence?.[id]?.photoVideo.splice(0, req.session.evidence?.[id]?.length)
     req.session.evidence?.[id]?.baggedAndTagged.splice(0, req.session.evidence?.[id]?.length)
+    req.session.evidence?.[id]?.other.splice(0, req.session.evidence?.[id]?.length)
   }
 
   setAllSessionEvidence(req: Request, evidenceData: EvidenceDetails[], id: number | string) {
@@ -63,6 +74,7 @@ export default class EvidenceSessionService {
       req.session.evidence[id] = {
         photoVideo: [],
         baggedAndTagged: [],
+        other: [],
       }
     }
   }

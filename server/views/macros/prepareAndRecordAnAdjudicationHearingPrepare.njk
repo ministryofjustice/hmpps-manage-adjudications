@@ -147,6 +147,24 @@
         {% else %}
           <p class="none-added-text">No bagged and tagged evidence added</p>
         {% endif %}
+        <h3 class='adjudication-pdf-section-subheader-inner govuk-!-padding-top-1'>Other evidence</h3>
+        {% if prepareAndRecordAnAdjudicationHearingData.evidence.other | length %}
+          <table>
+            <tr>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+            {% for item in prepareAndRecordAnAdjudicationHearingData.evidence.other %}
+              <tr>
+                <td>{{ item.code | evidenceCode(item.identifier) }}</td>
+                <td>{{ item.details }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% else %}
+          <p class="none-added-text">No other evidence added</p>
+        {% endif %}
+
       </div>
       <div class='break-inside-avoid'>
         <h3 class='adjudication-pdf-section-header-inner govuk-!-padding-top-2'>Witnesses</h3>

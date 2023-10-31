@@ -63,11 +63,13 @@ const getVariablesForPageType = (
 }
 
 const convertEvidenceToTableFormat = (evidence: EvidenceDetails[]) => {
-  const photoVideo = getEvidenceCategory(evidence, false)
-  const baggedAndTagged = getEvidenceCategory(evidence, true)
+  const photoVideo = getEvidenceCategory(evidence, false, false)
+  const baggedAndTagged = getEvidenceCategory(evidence, true, false)
+  const other = getEvidenceCategory(evidence, false, true)
   return {
     photoVideo,
     baggedAndTagged,
+    other,
   }
 }
 

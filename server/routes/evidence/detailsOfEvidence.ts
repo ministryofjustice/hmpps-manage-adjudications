@@ -70,7 +70,7 @@ export default class DetailsOfEvidencePage {
     const { adjudication, prisoner } = await this.getAdjudicationAndPrisoner(chargeNumber, isSubmittedEdit, user)
 
     const evidence = this.getEvidence(req, chargeNumber, adjudication)
-    const allEvidence = [...evidence.photoVideo, ...evidence.baggedAndTagged]
+    const allEvidence = [...evidence.photoVideo, ...evidence.baggedAndTagged, ...evidence.other]
 
     // If we are not displaying session data then fill in the session data
     if (this.pageOptions.isShowingAPIData()) {
@@ -83,6 +83,7 @@ export default class DetailsOfEvidencePage {
         req,
         evidenceIndexToDelete,
         evidenceTypeToDelete === EvidenceCode.BAGGED_AND_TAGGED,
+        evidenceTypeToDelete === EvidenceCode.OTHER,
         chargeNumber
       )
     }
@@ -127,7 +128,9 @@ export default class DetailsOfEvidencePage {
     const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, chargeNumber)
 
     // we need to merge the different evidence types back together into one array
-    const allEvidence = evidenceDetails ? [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged] : []
+    const allEvidence = evidenceDetails
+      ? [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged, ...evidenceDetails.other]
+      : []
 
     if (isSubmittedEdit) {
       await this.reportedAdjudicationsService.updateEvidenceDetails(chargeNumber, allEvidence, user)
@@ -142,12 +145,14 @@ export default class DetailsOfEvidencePage {
       return this.evidenceSessionService.getAllSessionEvidence(req, chargeNumber)
     }
 
-    const photoVideo = getEvidenceCategory(adjudication.evidence, false)
-    const baggedAndTagged = getEvidenceCategory(adjudication.evidence, true)
+    const photoVideo = getEvidenceCategory(adjudication.evidence, false, false)
+    const baggedAndTagged = getEvidenceCategory(adjudication.evidence, true, false)
+    const other = getEvidenceCategory(adjudication.evidence, false, true)
 
     return {
       photoVideo,
       baggedAndTagged,
+      other,
     }
   }
 

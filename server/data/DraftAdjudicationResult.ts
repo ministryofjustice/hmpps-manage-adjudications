@@ -156,6 +156,7 @@ export enum EvidenceCode {
   BODY_WORN_CAMERA = 'BODY_WORN_CAMERA',
   CCTV = 'CCTV',
   BAGGED_AND_TAGGED = 'BAGGED_AND_TAGGED',
+  OTHER = 'OTHER',
 }
 
 export enum WitnessCode {

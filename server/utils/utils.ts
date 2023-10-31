@@ -152,13 +152,19 @@ export const calculateAge = (dateOfBirth: string, dateOfIncident: string) => {
 
 export const getEvidenceCategory = (
   evidenceArray: EvidenceDetails[],
-  isBaggedAndTagged: boolean
+  isBaggedAndTagged: boolean,
+  isOther: boolean
 ): EvidenceDetails[] => {
   if (!evidenceArray) return []
   if (isBaggedAndTagged) {
     return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.BAGGED_AND_TAGGED)
   }
-  return evidenceArray.filter(evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED)
+  if (isOther) {
+    return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.OTHER)
+  }
+  return evidenceArray.filter(
+    evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED && evidenceItem.code !== EvidenceCode.OTHER
+  )
 }
 
 export const convertDateTimeStringToSubmittedDateTime = (
