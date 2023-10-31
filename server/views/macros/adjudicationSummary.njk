@@ -60,7 +60,7 @@
     {% endif %}
   </div>
   <div class="adjudicationsSummary">
-    {% if evidence.photoVideo | length or evidence.baggedAndTagged | length or evidence.orther | length %}
+    {% if evidence.photoVideo | length or evidence.baggedAndTagged | length or evidence.other | length %}
       {% include "../partials/evidenceTableSection.njk" %}
     {% else %}
       <p class="govuk-body" data-qa="adjudicationsSummary-evidence-none">None</p>

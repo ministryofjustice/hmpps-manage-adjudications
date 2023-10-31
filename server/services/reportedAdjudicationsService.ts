@@ -32,6 +32,7 @@ import {
   getFormattedOfficerName,
   getTime,
   hasAnyRole,
+  getEvidenceCategory,
 } from '../utils/utils'
 import { Location, LocationId } from '../data/PrisonLocationResult'
 import {
@@ -369,6 +370,19 @@ export default class ReportedAdjudicationsService {
   ): Promise<ReportedAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new ManageAdjudicationsSystemTokensClient(token, user).updateEvidenceDetails(chargeNumber, evidence)
+  }
+
+  async convertEvidenceToTableFormat(
+    evidence: EvidenceDetails[]
+  ): Promise<{ photoVideo: EvidenceDetails[]; baggedAndTagged: EvidenceDetails[]; other: EvidenceDetails[] }> {
+    const photoVideo = getEvidenceCategory(evidence, false, false)
+    const baggedAndTagged = getEvidenceCategory(evidence, true, false)
+    const other = getEvidenceCategory(evidence, false, true)
+    return {
+      photoVideo,
+      baggedAndTagged,
+      other,
+    }
   }
 
   async updateWitnessDetails(

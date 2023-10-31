@@ -9,15 +9,23 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import { PrisonerGender } from '../../data/DraftAdjudicationResult'
 import { properCase } from '../../utils/utils'
 import TestData from '../testutils/testData'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
 jest.mock('../../services/decisionTreeService.ts')
+jest.mock('../../services/reportedAdjudicationsService')
 
 const testData = new TestData()
 const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const decisionTreeService = new DecisionTreeService(null, null, null, null, []) as jest.Mocked<DecisionTreeService>
+const reportedAdjudicationsService = new ReportedAdjudicationsService(
+  null,
+  null,
+  null,
+  null
+) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
@@ -28,6 +36,7 @@ beforeEach(() => {
       prisonerNumber: 'G6415GD',
       gender: PrisonerGender.FEMALE,
       dateTimeOfIncident: '2021-12-09T10:30:00',
+      evidence: [],
       offenceDetails: {
         offenceCode: 1002,
         offenceRule: {
@@ -45,6 +54,12 @@ beforeEach(() => {
       lastName: 'SMITH',
       assignedLivingUnitDesc: 'RECP',
     }),
+  })
+
+  reportedAdjudicationsService.convertEvidenceToTableFormat.mockResolvedValue({
+    photoVideo: [],
+    baggedAndTagged: [],
+    other: [],
   })
 
   locationService.getIncidentLocations.mockResolvedValue(testData.residentialLocations())
@@ -100,7 +115,10 @@ beforeEach(() => {
     changeLinkHref: adjudicationUrls.selectGender.url.edit('A8383DY', 100),
   })
 
-  app = appWithAllRoutes({ production: false }, { placeOnReportService, locationService, decisionTreeService })
+  app = appWithAllRoutes(
+    { production: false },
+    { placeOnReportService, locationService, decisionTreeService, reportedAdjudicationsService }
+  )
 })
 
 afterEach(() => {
@@ -125,6 +143,7 @@ describe('GET /check-your-answers', () => {
         expect(response.text).toContain('Commits any assault')
         expect(response.text).toContain('What is the gender of the prisoner?')
         expect(placeOnReportService.getCheckYourAnswersInfo).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.convertEvidenceToTableFormat).toHaveBeenCalledTimes(1)
       })
   })
 })

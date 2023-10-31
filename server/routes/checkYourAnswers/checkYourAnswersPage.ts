@@ -5,10 +5,9 @@ import PlaceOnReportService from '../../services/placeOnReportService'
 import LocationService from '../../services/locationService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { CheckYourAnswers, DraftAdjudication, EvidenceDetails } from '../../data/DraftAdjudicationResult'
+import { CheckYourAnswers, DraftAdjudication } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { User } from '../../data/hmppsManageUsersClient'
-import { getEvidenceCategory } from '../../utils/utils'
 
 type PageData = {
   error?: FormError | FormError[]
@@ -59,17 +58,6 @@ const getVariablesForPageType = (
     editEvidenceURL: adjudicationUrls.detailsOfEvidence.urls.start(draftId),
     editWitnessesURL: adjudicationUrls.detailsOfWitnesses.urls.start(draftId),
     exitUrl: adjudicationUrls.taskList.urls.start(draftId),
-  }
-}
-
-const convertEvidenceToTableFormat = (evidence: EvidenceDetails[]) => {
-  const photoVideo = getEvidenceCategory(evidence, false, false)
-  const baggedAndTagged = getEvidenceCategory(evidence, true, false)
-  const other = getEvidenceCategory(evidence, false, true)
-  return {
-    photoVideo,
-    baggedAndTagged,
-    other,
   }
 }
 
@@ -142,7 +130,9 @@ export default class CheckYourAnswersPage {
       getVariablesForPageType(this.pageOptions, prisoner.prisonerNumber, draftId, incidentDetailsData),
     ])
 
-    const convertedEvidence = convertEvidenceToTableFormat(draftAdjudication.evidence)
+    const convertedEvidence = await this.reportedAdjudicationsService.convertEvidenceToTableFormat(
+      draftAdjudication.evidence
+    )
 
     return res.render(`pages/checkYourAnswers`, {
       errors: error ? [error] : [],

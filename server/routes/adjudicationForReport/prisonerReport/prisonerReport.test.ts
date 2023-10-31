@@ -35,6 +35,12 @@ beforeEach(() => {
     }),
   })
 
+  reportedAdjudicationsService.convertEvidenceToTableFormat.mockResolvedValue({
+    photoVideo: [],
+    baggedAndTagged: [],
+    other: [],
+  })
+
   const draftAdjudication = testData.draftAdjudication({
     id: 12345,
     chargeNumber: '1524661',

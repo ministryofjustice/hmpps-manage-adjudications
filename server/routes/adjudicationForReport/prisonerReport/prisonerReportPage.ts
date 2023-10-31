@@ -5,8 +5,7 @@ import DecisionTreeService from '../../../services/decisionTreeService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import validateForm, { ReviewStatus } from './prisonerReportReviewValidation'
 import { FormError } from '../../../@types/template'
-import { getEvidenceCategory } from '../../../utils/utils'
-import { DraftAdjudication, EvidenceDetails } from '../../../data/DraftAdjudicationResult'
+import { DraftAdjudication } from '../../../data/DraftAdjudicationResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import { User } from '../../../data/hmppsManageUsersClient'
 import UserService from '../../../services/userService'
@@ -38,17 +37,6 @@ class PageOptions {
 
   isReadOnlyView(): boolean {
     return this.pageType === PageRequestType.VIEW
-  }
-}
-
-const convertEvidenceToTableFormat = (evidence: EvidenceDetails[]) => {
-  const photoVideo = getEvidenceCategory(evidence, false, false)
-  const baggedAndTagged = getEvidenceCategory(evidence, true, false)
-  const other = getEvidenceCategory(evidence, false, true)
-  return {
-    photoVideo,
-    baggedAndTagged,
-    other,
   }
 }
 
@@ -165,7 +153,9 @@ export default class prisonerReportRoutes {
       newDraftAdjudicationId
     )
 
-    const convertedEvidence = convertEvidenceToTableFormat(reportedAdjudication.evidence)
+    const convertedEvidence = await this.reportedAdjudicationsService.convertEvidenceToTableFormat(
+      reportedAdjudication.evidence
+    )
 
     const editAndReviewAvailability = this.getEditAndReviewAvailability(reportedAdjudication, this.pageOptions, status)
 
