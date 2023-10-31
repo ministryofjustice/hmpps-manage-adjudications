@@ -8,6 +8,7 @@ const testData = new TestData()
 
 const evidenceList = [
   testData.singleEvidence({ details: 'Bagged evidence', identifier: 'JO345', reporter: 'USER1' }),
+  testData.singleEvidence({ code: EvidenceCode.OTHER, details: 'Other evidence', reporter: 'USER1' }),
   testData.singleEvidence({
     code: EvidenceCode.CCTV,
     details: 'Video of the prisoner doing the thing',
@@ -104,12 +105,29 @@ context('Details of evidence', () => {
     detailsOfEvidencePage.exitButton().should('exist')
     detailsOfEvidencePage.photoVideoTable().should('not.exist')
     detailsOfEvidencePage.baggedAndTaggedTable().should('not.exist')
+    detailsOfEvidencePage.otherTable().should('not.exist')
   })
   it('should show evidence', () => {
     cy.visit(adjudicationUrls.detailsOfEvidence.urls.start(201))
     const detailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
     detailsOfEvidencePage.noEvidence().should('not.exist')
+    detailsOfEvidencePage.otherTable().find('tr').should('have.length', 2) // This includes the header row plus two data rows
     detailsOfEvidencePage.photoVideoTable().find('tr').should('have.length', 3) // This includes the header row plus two data rows
+    detailsOfEvidencePage
+      .otherTable()
+      .find('th')
+      .then($headings => {
+        expect($headings.get(0).innerText).to.contain('Type')
+        expect($headings.get(1).innerText).to.contain('Description')
+      })
+    detailsOfEvidencePage
+      .otherTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contain('Other')
+        expect($data.get(1).innerText).to.contain('Other evidence')
+        expect($data.get(2).innerText).to.contain('Remove')
+      })
     detailsOfEvidencePage
       .photoVideoTable()
       .find('th')
