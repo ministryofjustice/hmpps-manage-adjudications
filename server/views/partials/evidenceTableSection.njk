@@ -1,6 +1,7 @@
 {% set photoVideoEvidence = evidence.photoVideo %}
 {% set baggedTaggedEvidence = evidence.baggedAndTagged %}
-<h3 class="{% if isReport %}govuk-heading-s{% else %}govuk-heading-s{% endif %} govuk-!-margin-bottom-2">Photographic or video evidence</h3>
+{% set otherEvidence = evidence.other %}
+<h3 class="govuk-heading-s govuk-!-margin-bottom-2">Photographic or video evidence</h3>
 {% if photoVideoEvidence | length > 0 %}
 <div class="evidence-table">
     {{ evidenceTable(photoVideoEvidence, redirectAfterRemoveUrl, currentUser, 'photoVideoTable') }}
@@ -15,4 +16,12 @@
 </div>
 {% else %}
 <p class="govuk-body" data-qa="no-baggedAndTagged-evidence">None</p>
+{% endif %}
+<h3 class="govuk-heading-s govuk-!-margin-bottom-2">Other evidence</h3>
+{% if otherEvidence | length > 0 %}
+<div class="evidence-table">
+    {{ evidenceTable(otherEvidence, redirectAfterRemoveUrl, currentUser, 'otherTable') }}
+</div>
+{% else %}
+<p class="govuk-body" data-qa="no-other-evidence">None</p>
 {% endif %}

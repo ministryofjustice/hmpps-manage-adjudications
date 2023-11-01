@@ -134,6 +134,7 @@ describe('GET', () => {
                 identifier: 'JO345',
               },
             ],
+            other: [],
           },
           '100'
         )

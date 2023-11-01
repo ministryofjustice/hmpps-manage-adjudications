@@ -4,7 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import PlaceOnReportService, { PrisonerResultSummary } from '../../services/placeOnReportService'
 import EvidenceSessionService from '../../services/evidenceSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { EvidenceCode } from '../../data/DraftAdjudicationResult'
+import { EvidenceCode, EvidenceDetails } from '../../data/DraftAdjudicationResult'
 import TestData from '../testutils/testData'
 
 jest.mock('../../services/placeOnReportService.ts')
@@ -48,6 +48,7 @@ const evidenceOnSession = {
       identifier: 'JO345',
     }),
   ],
+  other: [] as unknown as EvidenceDetails,
 }
 
 beforeEach(() => {

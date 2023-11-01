@@ -181,6 +181,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         return 'Body-worn camera'
       case EvidenceCode.CCTV:
         return 'CCTV'
+      case EvidenceCode.OTHER:
+        return 'Other'
       case EvidenceCode.BAGGED_AND_TAGGED:
         return baggedEvidenceTagNumber
       default:

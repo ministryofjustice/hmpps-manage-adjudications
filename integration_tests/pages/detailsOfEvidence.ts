@@ -9,6 +9,8 @@ export default class Evidence extends Page {
 
   baggedAndTaggedTable = (): PageElement => cy.get('[data-qa="baggedAndTaggedTable-evidence-table"]')
 
+  otherTable = (): PageElement => cy.get('[data-qa="otherTable-evidence-table"]')
+
   noEvidence = (): PageElement => cy.get('[data-qa="no-evidence"]')
 
   noPhotoVideoEvidence = (): PageElement => cy.get('[data-qa="no-photoVideo-evidence"]')

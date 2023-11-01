@@ -6,6 +6,7 @@ import { DamageDetails, EvidenceDetails, WitnessDetails } from './DraftAdjudicat
 type EvidenceDetailsSplit = {
   baggedAndTagged: EvidenceDetails[]
   photoVideo: EvidenceDetails[]
+  other: EvidenceDetails[]
 }
 
 export default class prepareAndRecordAnAdjudicationHearingData {
