@@ -1016,7 +1016,11 @@ export default class ReportedAdjudicationsService {
     return (
       config.formsTabFlag === 'true' &&
       hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles) &&
-      status !== ReportedAdjudicationStatus.AWAITING_REVIEW
+      ![
+        ReportedAdjudicationStatus.AWAITING_REVIEW,
+        ReportedAdjudicationStatus.REJECTED,
+        ReportedAdjudicationStatus.RETURNED,
+      ].includes(status)
     )
   }
 
