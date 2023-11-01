@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {% set title = "Which offence did the prisoner commit?" %}
 
@@ -23,9 +24,17 @@
       attributes: { "data-qa": "error-summary" }
       }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">Which offence did {{ prisonerName }} commit?</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-paragraph-list-form">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+    {% call govukFieldset({
+      legend: {
+        text: "Which offence did " + prisonerName + " commit?",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: true
+      }
+    }) %}
+
 
     {% for offenceGroup in offencesAndTitles %}
       {% set items = [] %}
@@ -51,12 +60,19 @@
           id: offenceRule.paragraphNumber
         }), items) %}
       {% endif %}
-      <h2 class="govuk-heading-m">{{ offenceGroup.offenceTitle }}</h2>
+
       {{ govukRadios({
             idPrefix: 'selectedAnswerId',
             name: 'selectedAnswerId',
             attributes: { "data-qa": "radio-buttons" },
             items: items,
+            fieldset: {
+              legend: {
+                text: offenceGroup.offenceTitle,
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
             errorMessage: "selectedAnswerId" | findError(errors)
         }) }}
     {% endfor %}
@@ -74,5 +90,6 @@
         classes: "govuk-button--secondary",
         attributes: { "data-qa": "cancel" }
     }) }}
+{% endcall %}
   </form>
 {% endblock %}

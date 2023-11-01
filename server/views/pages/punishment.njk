@@ -23,11 +23,10 @@
       attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">{{ title }}</h1>
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, isIndependentAdjudicatorHearing, damagesUnavailable, cautionUnavailable, errors) }}
+      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, isIndependentAdjudicatorHearing, damagesUnavailable, cautionUnavailable, errors, title) }}
       <div class="govuk-button-group">
         {{ govukButton({
               text: 'Continue',

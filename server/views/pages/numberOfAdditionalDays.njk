@@ -21,7 +21,6 @@
       attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">{{ title }}</h1>
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
@@ -31,7 +30,12 @@
         name: "days",
         value: days,
         classes: "govuk-input--width-5",
-        errorMessage: errors | findErrors(["days"])
+        errorMessage: errors | findErrors(["days"]),
+        label: {
+          text: title,
+          classes: "govuk-label--l",
+          isPageHeading: true
+        }
       }) }}
 
       <div class="govuk-button-group">

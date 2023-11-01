@@ -22,7 +22,6 @@
     }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     <div class="govuk-grid-row">
@@ -31,6 +30,11 @@
           name: "createdOnBehalfOfOfficer",
           id: "createdOnBehalfOfOfficer",
           classes: "govuk-!-width-two-thirds",
+          label: {
+            text: title,
+            classes: "govuk-label--l",
+            isPageHeading: true
+            },
           attributes: { "data-qa": "officers-name" },
           errorMessage: "createdOnBehalfOfOfficer" | findError(errors),
           value: createdOnBehalfOfOfficer

@@ -21,8 +21,6 @@
     {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
   </div>
 
-  <p></p>
-
   <form method="POST" novalidate="novalidate" data-qa="delete-report-form">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 

@@ -132,6 +132,11 @@
   name: "selectedAnswerId",
   errorMessage: "selectedAnswerId" | findError(errors),
   attributes: { "data-qa": "add-witness-radio-buttons" },
+  fieldset: {
+    legend: {
+      text: "Choose a type of witness"
+    }
+  },
   items: [
     {
       value: "OFFICER",

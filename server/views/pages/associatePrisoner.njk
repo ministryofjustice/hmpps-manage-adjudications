@@ -10,65 +10,69 @@
 {% set title %} Who did the prisoner {{ roleCode }} ? {% endset %}
 
 {% block pageTitle %}
-    {{ title }} - Adjudications - Digital Prison Services
+  {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 
 {% block beforeContent %}
-	{{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
-	{% if errors | length %}
-		{{ govukErrorSummary({
+  {% if errors | length %}
+    {{ govukErrorSummary({
       titleText: "There is a problem",
       errorList: errors,
       attributes: { "data-qa": "error-summary" }
     }) }}
-	{% endif %}
+  {% endif %}
 
-    {% set items = [] %}
+  {% set items = [] %}
 
-    {% set decisionHtml %}
-        {{ prisonerSearchOffenceCodeDecisionInput("internal", decisionData, viewData, errors) }}
-    {% endset -%}
+  {% set decisionHtml %}
+  {{ prisonerSearchOffenceCodeDecisionInput("internal", decisionData, viewData, errors) }}
+  {% endset -%}
 
-    {% set items = (items.push({
-        value: "internal",
-        text: "A prisoner in this establishment",
-        conditional: {
-            html: decisionHtml
-        },
-        checked: decisionData.selectedAnswerId == "internal"
-    }), items) %}
+  {% set items = (items.push({
+    value: "internal",
+    text: "A prisoner in this establishment",
+    conditional: {
+      html: decisionHtml
+    },
+    checked: decisionData.selectedAnswerId == "internal"
+  }), items) %}
 
-    {% set decisionHtml %}
-        {{ prisonerOutsideEstablishmentOffenceCodeDecisionInput("external", decisionData, errors) }}
-    {% endset -%}
+  {% set decisionHtml %}
+  {{ prisonerOutsideEstablishmentOffenceCodeDecisionInput("external", decisionData, errors) }}
+  {% endset -%}
 
-    {% set items = (items.push({
-        value: "external",
-        text: "A prisoner who's left this establishment",
-        conditional: {
-            html: decisionHtml
-        },
-        checked: decisionData.selectedAnswerId == "external"
-    }), items) %}
+  {% set items = (items.push({
+    value: "external",
+    text: "A prisoner who's left this establishment",
+    conditional: {
+      html: decisionHtml
+    },
+    checked: decisionData.selectedAnswerId == "external"
+  }), items) %}
 
-
-    <h1 class="govuk-heading-l">Who did {{ prisoner.friendlyName | safe }} {{ roleCode }}?</h1>
-
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="associated-prisoner-form">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-        {{ govukRadios({
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="associated-prisoner-form">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    {{ govukRadios({
             idPrefix: 'selectedAnswerId',
             name: 'selectedAnswerId',
             id: 'selectedAnswerId',
             attributes: { "data-qa": "radio-buttons" },
             items: items,
-            errorMessage: "selectedAnswerId" | findError(errors)
+            errorMessage: "selectedAnswerId" | findError(errors),
+            fieldset: {
+                legend: {
+                text: "Who did "+ prisoner.friendlyName | safe + " " + roleCode +"?",
+                classes: "govuk-fieldset__legend--l",
+                isPageHeading: true
+            }
+            }
         }) }}
 
-        {{ govukButton({
+    {{ govukButton({
             text: 'Save and continue',
             type: "submit",
             name: "incidentAssociateSubmit",
@@ -77,14 +81,13 @@
             attributes: { "data-qa": "associated-prisoner-submit" }
         }) }}
 
-
-        {{ govukButton({
+    {{ govukButton({
             text: 'Exit',
             classes: "govuk-button--secondary",
             href: exitButtonHref,
             attributes: { "data-qa": "associated-prisoner-exit" }
         }) }}
 
-    </form>
+  </form>
 
 {% endblock %}

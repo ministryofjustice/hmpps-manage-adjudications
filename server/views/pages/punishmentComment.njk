@@ -23,7 +23,6 @@
     }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
@@ -34,6 +33,11 @@
           name: "punishmentComment",
           id: "punishmentComment",
           classes: "govuk-!-width-two-thirds",
+          label: {
+            text: title,
+            classes: "govuk-label--l",
+            isPageHeading: true
+          },
           attributes: { "maxlength": "4000", "data-qa": "edit-punishment-comment" },
           errorMessage: "punishmentComment" | findError(errors),
           value: punishmentComment,
