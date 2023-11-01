@@ -26,7 +26,6 @@
       attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     {{ govukRadios({
@@ -35,6 +34,13 @@
               name: 'prosecutionChosen',
               attributes: { "data-qa": "radio-buttons-prosecution" },
               errorMessage: "prosecutionChosen" | findError(errors),
+              fieldset: {
+                legend: {
+                  text: title,
+                  isPageHeading: true,
+                  classes: "govuk-fieldset__legend--l"
+                }
+              },
               items: [
               {
                   value: "yes",

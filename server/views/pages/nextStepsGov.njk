@@ -20,12 +20,11 @@
       attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">{{ title }}</h1>
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-      {{ nextSteps(false) }}
+      {{ nextSteps(false, title) }}
 
       {{ govukButton({
 					text: 'Continue',

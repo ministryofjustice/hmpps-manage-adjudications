@@ -1,6 +1,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% macro nextSteps(allowReferToGov) %}
+{% macro nextSteps(allowReferToGov, title) %}
   {% if allowReferToGov === false %}
     {% set items = [
       {
@@ -37,6 +37,13 @@
     name: 'nextStepChosen',
     attributes: { "data-qa": "radio-buttons-next-step" },
     errorMessage: "nextStepChosen" | findError(errors),
-    items: items
+    items: items,
+    fieldset: {
+    legend: {
+      text: title,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  }
  }) }}
 {% endmacro %}
