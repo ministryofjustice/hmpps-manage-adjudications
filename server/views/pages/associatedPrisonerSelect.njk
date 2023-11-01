@@ -21,35 +21,14 @@
     }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">{{ title }}</h1>
-
-  <form method="POST" novalidate="novalidate" data-qa="search-form">
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-
-  <div class="horizontal-form govuk-!-margin-bottom-3">
-    {{ govukInput({
-      id: "searchTerm",
-      name: "searchTerm",
-      value: searchTerm,
-      label: {
-        html: "Enter a prisoner’s name or number"
-      },
-      classes: "govuk-!-width-full",
-      attributes: {
-        'data-qa': "search-term-input"
-      },
-      errorMessage: "searchTerm" | findError(errors)
-    }) }}
-
-    {{ govukButton({
-      text: "Search",
-      type: "submit",
-      classes: "govuk-button--secondary",
-      attributes: { "data-qa": "search-submit" },
-      preventDoubleClick: true
-    }) }}
+  <div class="govuk-form-group">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-1">{{ title }}</h1>
+      </legend>
+      {% include "../partials/prisonerSearchForm.njk" %}
+    </fieldset>
   </div>
-</form>
 
   {% set rows = [] %}
   {% for prisoner in searchResults %}

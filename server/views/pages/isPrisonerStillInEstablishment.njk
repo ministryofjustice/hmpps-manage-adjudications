@@ -23,39 +23,41 @@
     }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">{{ title }}</h1>
-
-  <div>
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      {{ govukRadios({
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    {{ govukRadios({
 			idPrefix: 'stillInEstablishment',
 			id: 'stillInEstablishment',
 			name: 'stillInEstablishment',
 			attributes: { "data-qa": "still-in-establishment-radio-buttons" },
 			errorMessage: "stillInEstablishment" | findError(errors),
-
-			items: [
-			{
-			value: "true",
-			text: "Yes",
-			checked: stillInEstablishment === "true"
+			fieldset: {
+				legend: {
+				text: title,
+				isPageHeading: true,
+				classes: "govuk-fieldset__legend--l"
+				}
 			},
-			{
-			value: "false",
-			text: "No, they have been transferred or are in transit",
-			checked: stillInEstablishment === "false"
-			}
+			items: [
+        {
+        value: "true",
+        text: "Yes",
+        checked: stillInEstablishment === "true"
+        },
+        {
+        value: "false",
+        text: "No, they have been transferred or are in transit",
+        checked: stillInEstablishment === "false"
+        }
 			]
 			}) }}
-      {{ govukButton({
+    {{ govukButton({
 					text: 'Save and continue',
 					type: "submit",
 					classes: "govuk-button--submit govuk-!-margin-right-3",
 					attributes: { "data-qa": "still-in-establishment-submit" },
 					preventDoubleClick: true
 			}) }}
-    </form>
-  </div>
+  </form>
 
 {% endblock %}
