@@ -47,13 +47,23 @@ export const produceVerticalBarsAndLineCharts = async (
     barData: chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_curr),
     lineData: chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_prev),
     labels,
-    head: [],
+    head: convertChartLabelsToTableHeaders(labels),
     rows: getVerticalBarsAndLineChartRows(
       chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_curr),
       chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_prev)
     ),
     yAxisLabel,
   })
+}
+
+const convertChartLabelsToTableHeaders = (labels: string[][]): TableHead[] => {
+  const months = labels.map(([month, year]) => ({
+    text: `${month} ${year}`,
+    classes: '',
+  }))
+  // add an empty element for the header at LHS
+  months.unshift({ text: '', classes: '' })
+  return months
 }
 
 export const produceMultiVerticalBarsCharts = async (
@@ -717,7 +727,7 @@ export const createMultiVerticalBarsChartSettings = (params: {
       } as ChartOptions,
     },
     tableData: {
-      head: params.head,
+      head: convertChartLabelsToTableHeaders(labels),
       rows: params.rows,
     },
   }
