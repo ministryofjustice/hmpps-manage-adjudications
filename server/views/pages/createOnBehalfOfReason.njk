@@ -22,7 +22,6 @@
     }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     <div class="govuk-grid-row">
@@ -33,7 +32,12 @@
           classes: "govuk-!-width-two-thirds",
           attributes: { "data-qa": "behalf-of-reason" },
           errorMessage: "createdOnBehalfOfReason" | findError(errors),
-          value: createdOnBehalfOfReason
+          value: createdOnBehalfOfReason,
+          label: {
+            text: title,
+            classes: "govuk-label--l",
+            isPageHeading: true
+          }
         }) }}
 
         <div class="flex-container flex-center">

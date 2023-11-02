@@ -22,7 +22,6 @@
       attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">{{ title }}</h1>
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
@@ -33,6 +32,13 @@
         name: 'immediate',
         attributes: { "data-qa": "radio-buttons" },
         errorMessage: "immediate" | findError(errors),
+        fieldset: {
+        legend: {
+          text: title,
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
         items: [
           {
             value: "true",

@@ -67,23 +67,29 @@
 
       {% include "../partials/reportingOfficer.njk" %}
 
-      <h2 class="govuk-heading-s">When did the incident happen?</h2>
-      {{
-        dateTimePicker({
-            errors: errors,
-            isDateError: isDateError,
-            isHourError: isHourError,
-            isMinuteError: isMinuteError,
-            dateTimeObj: data.incidentDate,
-            dateId: 'incidentDate',
-            dateLabel: 'Date of incident',
-            timeLabel: 'Time of incident',
-            dataQaDate: 'incident-details-date',
-            dataQaHour: 'incident-date-hour',
-            dataQaMinutes: 'incident-date-minutes',
-            maxDate: today
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-!-margin-bottom-0">
+            <h2 class="govuk-heading-s">When did the incident happen?</h2>
+          </legend>
+          {{
+            dateTimePicker({
+              errors: errors,
+              isDateError: isDateError,
+              isHourError: isHourError,
+              isMinuteError: isMinuteError,
+              dateTimeObj: data.incidentDate,
+              dateId: 'incidentDate',
+              dateLabel: 'Date of incident',
+              timeLabel: 'Time of incident',
+              dataQaDate: 'incident-details-date',
+              dataQaHour: 'incident-date-hour',
+              dataQaMinutes: 'incident-date-minutes',
+              maxDate: today
             })
-        }}
+          }}
+        </fieldset>
+      </div>
 
       {{
         govukSelect({

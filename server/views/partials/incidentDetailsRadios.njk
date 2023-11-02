@@ -2,13 +2,19 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-
     {{ govukRadios({
     idPrefix: 'currentRadioSelected',
     id: 'currentRadioSelected',
     name: 'currentRadioSelected',
     attributes: { "data-qa": "radio-buttons" },
     errorMessage: "currentRadioSelected" | findError(errors),
+    fieldset: {
+    legend: {
+      text: "What was " + prisoner.friendlyName | possessive | safe  +" role in this incident?",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
     items: [
     {
       value: "committed",

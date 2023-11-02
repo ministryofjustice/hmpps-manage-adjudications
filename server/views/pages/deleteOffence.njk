@@ -6,7 +6,7 @@
 {% from "../macros/offenceQuestionsAndAnswers.njk" import offenceQuestionsAndAnswers %}
 
 {% block beforeContent %}
-    {{ breadcrumb() }}
+  {{ breadcrumb() }}
 {% endblock %}
 
 {% set title = "Do you want to remove this offence?" %}
@@ -23,12 +23,17 @@
       attributes: { "data-qa": "error-summary" }
       }) }}
   {% endif %}
-    <h1 class="govuk-heading-l">{{ title }}</h1>
-    {{ offenceQuestionsAndAnswers(questionsAndAnswers, chargeNumber) }}
-    <div class='govuk-!-margin-top-9'>
-        <form method="POST" novalidate="novalidate" data-qa="delete-offence-form">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-            {{ govukRadios({
+  <div class='govuk-form-group'>
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+          {{title}}
+        </h1>
+      </legend>
+      {{ offenceQuestionsAndAnswers(questionsAndAnswers, chargeNumber) }}
+      <form method="POST" novalidate="novalidate" data-qa="delete-offence-form">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        {{ govukRadios({
                 classes: "govuk-radios--inline",
                 idPrefix: "confirmDelete",
                 id: "confirmDelete",
@@ -49,14 +54,15 @@
                 ]
             }) }}
 
-            {{ govukButton({
+        {{ govukButton({
                 text: "Confirm",
                 type: "submit",
-                classes: "govuk-button--submit",
+                classes: "govuk-button--submit govuk-!-margin-top-2",
                 attributes: { "data-qa": "delete-offence-submit" },
                 preventDoubleClick: true
             }) }}
 
-        </form>
-    </div>
+      </form>
+    </fieldset>
+  </div>
 {% endblock %}

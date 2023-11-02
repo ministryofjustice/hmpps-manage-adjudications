@@ -21,37 +21,45 @@
       attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
-  <h1 class="govuk-heading-l">{{ title }}</h1>
+
   <form method="POST" novalidate="novalidate">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-    {{ govukInput({
-    label: {
-        text: "Charge number",
-        classes: "govuk-body",
-        isPageHeading: false
-    },
-    id: "chargeNumberForSuspendedPunishment",
-    name: "chargeNumberForSuspendedPunishment",
-    value: chargeNumberForSuspendedPunishment,
-    classes: "govuk-input--width-5",
-    errorMessage: errors | findErrors(["chargeNumberForSuspendedPunishment"]),
-    attributes: { "data-qa": "chargeNumberForSuspendedPunishment" }
-    }) }}
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h1 class="govuk-fieldset__heading">{{ title }}</h1>
+        </legend>
 
-    {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, null, isIndependentAdjudicatorHearing, true, true, errors) }}
+        {{ govukInput({
+        label: {
+          text: "Charge number",
+          classes: "govuk-body",
+          isPageHeading: false
+        },
+        id: "chargeNumberForSuspendedPunishment",
+        name: "chargeNumberForSuspendedPunishment",
+        value: chargeNumberForSuspendedPunishment,
+        classes: "govuk-input--width-5",
+        errorMessage: errors | findErrors(["chargeNumberForSuspendedPunishment"]),
+        attributes: { "data-qa": "chargeNumberForSuspendedPunishment" }
+        }) }}
 
-    <div class="govuk-button-group">
-      {{ govukButton({
+        {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, null, isIndependentAdjudicatorHearing, true, true, errors) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
           text: 'Continue',
           type: "submit",
           preventDoubleClick: true,
           classes: "govuk-button--submit govuk-!-margin-right-3",
           attributes: { "data-qa": "submit" }
         }) }}
-      <p class="govuk-body">
-        <a href="{{awardPunishmentsHref}}" data-qa="cancel">Return to 'Award punishments'</a>
-      </p>
+          <p class="govuk-body">
+            <a href="{{awardPunishmentsHref}}" data-qa="cancel">Return to 'Award punishments'</a>
+          </p>
+        </div>
+      </fieldset>
     </div>
   </form>
 

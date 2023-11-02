@@ -5,9 +5,9 @@ export default class SelectAssociatedStaff extends Page {
     super('Select a prisoner')
   }
 
-  searchTermInput = (): PageElement => cy.get('[data-qa="search-term-input"]')
+  searchTermInput = (): PageElement => cy.get('[data-qa="prisoner-search-term-input"]')
 
-  submitButton = (): PageElement => cy.get('[data-qa="search-submit"]')
+  submitButton = (): PageElement => cy.get('[data-qa="prisoner-search-submit"]')
 
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
 
