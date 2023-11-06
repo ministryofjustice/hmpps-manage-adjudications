@@ -59,7 +59,7 @@ context('Report has been accepted', () => {
     acceptedReportConfirmationPage.tp1().should('exist')
     acceptedReportConfirmationPage.tp2().should('exist')
     acceptedReportConfirmationPage.tp3().should('exist')
-    acceptedReportConfirmationPage.scheduleHearingButton().should('exist')
+    acceptedReportConfirmationPage.scheduleHearingLink().should('exist')
     acceptedReportConfirmationPage.viewReportLink().should('exist')
     acceptedReportConfirmationPage.allCompletedReportsLink().should('exist')
   })
@@ -73,7 +73,7 @@ context('Report has been accepted', () => {
     acceptedReportConfirmationPage.tp1().should('exist')
     acceptedReportConfirmationPage.tp2().should('exist')
     acceptedReportConfirmationPage.tp3().should('exist')
-    acceptedReportConfirmationPage.scheduleHearingButton().should('not.exist')
+    acceptedReportConfirmationPage.scheduleHearingLink().should('not.exist')
     acceptedReportConfirmationPage.viewReportLink().should('exist')
     acceptedReportConfirmationPage.allCompletedReportsLink().should('exist')
   })
@@ -96,7 +96,7 @@ context('Report has been accepted', () => {
         'contain',
         'Begin to prepare for the hearing, including gathering details about any damages, evidence or witnesses.'
       )
-    acceptedReportConfirmationPage.scheduleHearingButton().should('contain', 'schedule a hearing')
+    acceptedReportConfirmationPage.scheduleHearingLink().should('contain', 'schedule a hearing')
     acceptedReportConfirmationPage
       .viewReportLink()
       .should('contain', 'view the report and add damages, evidence or witnesses')
@@ -105,7 +105,7 @@ context('Report has been accepted', () => {
   it('should link to the correct schedule hearing page', () => {
     cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
     const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
-    acceptedReportConfirmationPage.scheduleHearingButton().click()
+    acceptedReportConfirmationPage.scheduleHearingLink().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start('1524493'))
     })

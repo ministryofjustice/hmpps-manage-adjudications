@@ -27,8 +27,8 @@
 
     <p class="govuk-body">You can:</p>
     <ul class="govuk-list govuk-list--bullet">
-      {% if showScheduleHearingButton %}
-      <li><a href={{ scheduleHearingLink }} data-qa="schedule-hearing-button">schedule a hearing</a></li>
+      {% if allowScheduleHearing %}
+      <li><a href={{ scheduleHearingLink }} data-qa="schedule-hearing-link">schedule a hearing</a></li>
       {% endif %}
       <li><a href={{ viewReportLink }} data-qa="view-report-link">view the report and add damages, evidence or witnesses</a></li>
       <li><a href={{ allCompletedReportsLink }} data-qa="all-completed-reports-link">review another report</a></li>
