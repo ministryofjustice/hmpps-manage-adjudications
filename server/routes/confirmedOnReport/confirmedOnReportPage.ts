@@ -55,6 +55,7 @@ export default class confirmedOnReportPage {
       submittedEditConfirmationReturnUrl: submittedEditConfirmationDetails.url,
       submittedEditConfirmationReturnText: submittedEditConfirmationDetails.text,
       pageTitle: this.getPageTitle(),
+      startNewReportUrl: adjudicationUrls.isPrisonerStillInEstablishment.urls.start(),
     })
   }
 

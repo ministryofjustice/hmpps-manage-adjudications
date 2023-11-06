@@ -31,16 +31,18 @@
             <li>ask you for more information</li>
           </ul>
 
-          <p class="govuk-body">You will not get an email notification about this report. But you can check its progress in <a class="govuk-link" href={{ yourCompletedReportsLink }}>Your completed reports</a>.</p>
+          <p class="govuk-body">Check your prison’s processes. For example, you may need to submit this report on paper as well as on this system.</p>
+          <p class="govuk-body">You will not get an email notification about this report.</p>
 
-          {{ govukInsetText({
-            text: "Check your prison’s processes. For example, you may need to submit this report on paper as well as on this system."
-          }) }}
+          <p class="govuk-body">You can:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li><a class="govuk-link" href={{ yourCompletedReportsLink }} data-qa="confirmed-on-report-finish">check progress of your completed reports</a></li>
+            <li><a class="govuk-link" href={{ startNewReportUrl }} data-qa="start-another-report-link">start another report</a></li>
+          </ul>
 
           <h3 class="govuk-heading-s">Prisoner transfers</h3>
           <p class="govuk-body">If the prisoner is transferred, this report will need to be reviewed and accepted before it is sent to the new prison.</p>
 
-          <p class="govuk-body"><a class="govuk-link" href={{ yourCompletedReportsLink }} data-qa="confirmed-on-report-finish">Return to your completed reports</a></p>
       </div>
       {% endif %}
       {% if not showNextStepsContent %}

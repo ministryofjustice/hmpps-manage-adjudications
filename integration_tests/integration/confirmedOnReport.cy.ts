@@ -87,4 +87,12 @@ context('Report has been submitted for review', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
     })
   })
+  it('should redirect the user to start another report', () => {
+    cy.visit(adjudicationUrls.confirmedOnReport.urls.start('1524242'))
+    const confirmedOnReportPage = Page.verifyOnPage(ConfirmedOnReport)
+    confirmedOnReportPage.startAnotherLink().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.isPrisonerStillInEstablishment.urls.start())
+    })
+  })
 })

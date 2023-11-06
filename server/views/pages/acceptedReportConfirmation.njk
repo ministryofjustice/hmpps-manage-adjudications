@@ -24,27 +24,21 @@
     <p class="govuk-body" data-qa="para-1">{{ prisonerName }} must be given a printed copy of this report by {{ expiryTime }} on {{ expiryDate }}.</p>
     <p class="govuk-body" data-qa="para-2">Once {{ prisonerName }} has received the report, the first hearing should start by the end of the next day. If that day is a Sunday or a public holiday, then the hearing can be on the following working day.</p>
     <p class="govuk-body" data-qa="para-3">Begin to prepare for the hearing, including gathering details about any damages, evidence or witnesses.</p>
+
+    <p class="govuk-body">You can:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      {% if allowScheduleHearing %}
+      <li><a href={{ scheduleHearingLink }} data-qa="schedule-hearing-link">schedule a hearing</a></li>
+      {% endif %}
+      <li><a href={{ viewReportLink }} data-qa="view-report-link">view the report and add damages, evidence or witnesses</a></li>
+      <li><a href={{ allCompletedReportsLink }} data-qa="all-completed-reports-link">review another report</a></li>
+    </ul>
+
     <h3 class="govuk-heading-s">Prisoner transfers</h3>
     <p class="govuk-body" data-qa="transfer-para-1">If the prisoner is transferred, the adjudication paperwork must be sent to the new prison as soon as possible.</p>
     <p class="govuk-body" data-qa="transfer-para-2">The prisoner must still be given a printed copy of this report within 48 hours of the incident being discovered. The report can be given at the new prison.</p>
     <p class="govuk-body" data-qa="transfer-para-3">All evidence must be retained in case it is needed for a hearing.</p>
-    <p class="govuk-body" data-qa="transfer-para-4">This progress of the adjudication can be viewed in <a class="govuk-link" data-qa="para-reports-link" href={{ allCompletedReportsLink }}>all completed reports</a>.</p>
-    {% if showScheduleHearingButton %}
-      {{ govukButton({
-        text: "Schedule a hearing",
-        classes: "govuk-button--secondary",
-        type: "a",
-        href: scheduleHearingLink,
-        name: "schedule-hearing-link",
-        attributes: {'data-qa': 'schedule-hearing-button'}
-    }) }}
-    {% endif %}
-    <p class="govuk-body">
-      <a class="govuk-link" href={{ viewReportLink }} data-qa="view-report-link">View the report and add damages, evidence or witnesses</a>
-    </p>
-    <p class="govuk-body">
-      <a class="govuk-link" href={{ allCompletedReportsLink }} data-qa="all-completed-reports-link">Return to all completed reports</a>
-    </p>
+    
   </div>
 
 {% endblock %}

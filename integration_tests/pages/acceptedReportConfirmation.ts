@@ -19,13 +19,9 @@ export default class AcceptedReportConfirmationPage extends Page {
 
   tp3 = (): PageElement => cy.get('[data-qa="transfer-para-3"]')
 
-  tp4 = (): PageElement => cy.get('[data-qa="transfer-para-4"]')
-
-  scheduleHearingButton = (): PageElement => cy.get('[data-qa="schedule-hearing-button"]')
+  scheduleHearingLink = (): PageElement => cy.get('[data-qa="schedule-hearing-link"]')
 
   viewReportLink = (): PageElement => cy.get('[data-qa="view-report-link"]')
 
   allCompletedReportsLink = (): PageElement => cy.get('[data-qa="all-completed-reports-link"]')
-
-  inTextReportsLink = (): PageElement => cy.get('[data-qa="para-reports-link"]')
 }
