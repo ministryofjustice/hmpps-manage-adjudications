@@ -59,8 +59,6 @@ context('Report has been accepted', () => {
     acceptedReportConfirmationPage.tp1().should('exist')
     acceptedReportConfirmationPage.tp2().should('exist')
     acceptedReportConfirmationPage.tp3().should('exist')
-    acceptedReportConfirmationPage.tp4().should('exist')
-    acceptedReportConfirmationPage.inTextReportsLink().should('exist')
     acceptedReportConfirmationPage.scheduleHearingButton().should('exist')
     acceptedReportConfirmationPage.viewReportLink().should('exist')
     acceptedReportConfirmationPage.allCompletedReportsLink().should('exist')
@@ -75,8 +73,6 @@ context('Report has been accepted', () => {
     acceptedReportConfirmationPage.tp1().should('exist')
     acceptedReportConfirmationPage.tp2().should('exist')
     acceptedReportConfirmationPage.tp3().should('exist')
-    acceptedReportConfirmationPage.tp4().should('exist')
-    acceptedReportConfirmationPage.inTextReportsLink().should('exist')
     acceptedReportConfirmationPage.scheduleHearingButton().should('not.exist')
     acceptedReportConfirmationPage.viewReportLink().should('exist')
     acceptedReportConfirmationPage.allCompletedReportsLink().should('exist')
@@ -100,11 +96,11 @@ context('Report has been accepted', () => {
         'contain',
         'Begin to prepare for the hearing, including gathering details about any damages, evidence or witnesses.'
       )
-    acceptedReportConfirmationPage.scheduleHearingButton().should('contain', 'Schedule a hearing')
+    acceptedReportConfirmationPage.scheduleHearingButton().should('contain', 'schedule a hearing')
     acceptedReportConfirmationPage
       .viewReportLink()
-      .should('contain', 'View the report and add damages, evidence or witnesses')
-    acceptedReportConfirmationPage.allCompletedReportsLink().should('contain', 'Return to all completed reports')
+      .should('contain', 'view the report and add damages, evidence or witnesses')
+    acceptedReportConfirmationPage.allCompletedReportsLink().should('contain', 'review another report')
   })
   it('should link to the correct schedule hearing page', () => {
     cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
@@ -126,14 +122,6 @@ context('Report has been accepted', () => {
     cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
     const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
     acceptedReportConfirmationPage.allCompletedReportsLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
-    })
-  })
-  it('in text link should go to the completed reports page', () => {
-    cy.visit(adjudicationUrls.acceptedReportConfirmation.urls.start('1524493'))
-    const acceptedReportConfirmationPage = Page.verifyOnPage(AcceptedReportConfirmation)
-    acceptedReportConfirmationPage.inTextReportsLink().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
     })
