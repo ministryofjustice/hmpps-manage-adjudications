@@ -105,7 +105,7 @@ context('Select associated staff', () => {
         expect($data.get(1).innerText).to.contain('Moorland (HMP & YOI)')
         expect($data.get(2).innerText).to.contain('JSMITH_GEN')
         expect($data.get(3).innerText).to.contain('john.smith@digital.justice.gov.uk')
-        expect($data.get(4).innerText).to.contain('Select staff member')
+        expect($data.get(4).innerText).to.contain('Select John Smith')
       })
   })
   it('contains the requires elements - original page: enter hearing outcome', () => {
