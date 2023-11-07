@@ -61,7 +61,6 @@ import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 import { AwardedPunishmentsAndDamagesFilter } from '../utils/adjudicationFilterHelper'
 import { PunishmentType } from '../data/PunishmentResult'
-import config from '../config'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -1014,7 +1013,6 @@ export default class ReportedAdjudicationsService {
 
   async canViewPrintAndIssueFormsTab(userRoles: string[], status: ReportedAdjudicationStatus): Promise<boolean> {
     return (
-      config.formsTabFlag === 'true' &&
       hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles) &&
       ![
         ReportedAdjudicationStatus.AWAITING_REVIEW,

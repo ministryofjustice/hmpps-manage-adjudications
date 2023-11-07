@@ -22,7 +22,6 @@ generic-service:
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
     FRONTEND_COMPONENT_API_URL: "https://frontend-components.hmpps.service.justice.gov.uk"
     MAINTENANCE_MODE: false
-    FORMS_TAB_FLAG: true
 
   allowlist:
     global-protect: "35.176.93.186/32"
