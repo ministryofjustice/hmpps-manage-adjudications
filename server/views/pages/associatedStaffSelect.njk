@@ -54,7 +54,7 @@
   {% set rows = [] %}
   {% for staffMember in searchResults %}
     {% set startReportlLinkHtml %}
-    <a href="{{ redirectUrl }}{{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select staff member</a>
+    <a href="{{ redirectUrl }}{{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select {{ staffMember.name }}</a>
     {% endset -%}
     {% set rows = (rows.push([
       {
