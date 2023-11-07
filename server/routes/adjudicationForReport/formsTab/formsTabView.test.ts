@@ -5,7 +5,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import TestData from '../../testutils/testData'
 import UserService from '../../../services/userService'
-import config from '../../../config'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
@@ -22,7 +21,6 @@ const userService = new UserService(null, null) as jest.Mocked<UserService>
 let app: Express
 
 beforeEach(() => {
-  config.formsTabFlag = 'true'
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   const reportedAdjudication = testData.reportedAdjudication({
     chargeNumber: '12345',

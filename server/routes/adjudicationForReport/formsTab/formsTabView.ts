@@ -5,7 +5,6 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../../utils/utils'
 import { DISFormfilterFromUiFilter } from '../../../utils/adjudicationFilterHelper'
-import config from '../../../config'
 
 export default class FormsTabRoute {
   constructor(
@@ -16,7 +15,7 @@ export default class FormsTabRoute {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
-    if (config.formsTabFlag !== 'true' || !hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
+    if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
