@@ -40,7 +40,7 @@
 							id: params.minutes.id,
 							name: params.minutes.name,
 							value: params.minutes.value,
-							attributes: { 'data-qa': params.minutes.dataQaMinutes or 'incident-date-minutes', pattern: "[0-9]*", inputmode: "numeric" }
+							attributes: { 'data-qa': params.minutes.dataQaMinutes or 'incident-date-minutes', pattern: "[0-9]*", inputmode: "numeric", 'aria-describedby':"timeInput-hint" }
 					}) }}
         </div>
       </div>
