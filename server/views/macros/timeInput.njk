@@ -2,38 +2,38 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {% macro timeInput(params) %}
-	<div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error {% endif %}">
-		{% call govukFieldset({
-			role: 'group',
-			legend: {
-				text: params.legend,
-				isPageHeading: false
-			}
-		}) %}
+  <div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error {% endif %}">
+    {% call govukFieldset({
+      role: 'group',
+      legend: {
+        text: params.legend,
+        isPageHeading: false
+      }
+    }) %}
 
-		<div id="timeInput-hint" class="govuk-hint">
-			{{ params.hint }}
-		</div>
+    <div id="timeInput-hint" class="govuk-hint">
+      {{ params.hint }}
+    </div>
 
-		<div class="govuk-date-input" id="incidentTime">
-			<div class="govuk-date-input__item flex-container">
-				<div id="incidentDate[time]" class="govuk-!-margin-right-4">
-					{{ govukInput({
+    <div class="govuk-date-input" id="incidentTime">
+      <div class="govuk-date-input__item flex-container">
+        <div id="incidentDate[time]" class="govuk-!-margin-right-4">
+          {{ govukInput({
 						label: {
-							text: "Hours",
+							text: "Hour",
 							classes: 'govuk-date-input__label'
 						},
 						classes: 'govuk-date-input__input govuk-input--width-2 ' + params.hour.classes,
 						id: params.hour.id,
 						name: params.hour.name,
 						value: params.hour.value,
-						attributes: { 'data-qa': params.hour.dataQaHour or 'incident-date-hour', pattern: "[0-9]*", inputmode: "numeric" }
+						attributes: { 'data-qa': params.hour.dataQaHour or 'incident-date-hour', pattern: "[0-9]*", inputmode: "numeric", 'aria-describedby':"timeInput-hint" }
 					}) }}
-				</div>
-				<div id="incidentDate[time]" class="govuk-!-margin-right-4">
-					{{	govukInput({
+        </div>
+        <div id="incidentDate[time]" class="govuk-!-margin-right-4">
+          {{	govukInput({
 							label: {
-								text: "Minutes",
+								text: "Minute",
 								classes: 'govuk-date-input__label'
 							},
 							classes: 'govuk-date-input__input govuk-input--width-2 ' + params.minutes.classes,
@@ -42,10 +42,10 @@
 							value: params.minutes.value,
 							attributes: { 'data-qa': params.minutes.dataQaMinutes or 'incident-date-minutes', pattern: "[0-9]*", inputmode: "numeric" }
 					}) }}
-				</div>
-			</div>
-		</div>
+        </div>
+      </div>
+    </div>
 
-		{% endcall %}
-	</div>
+    {% endcall %}
+  </div>
 {% endmacro %}
