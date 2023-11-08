@@ -54,6 +54,8 @@
   {% if rows | length %}
     <div class="results-table">
       {{ govukTable({
+        caption: "Adjudications with financial punishments, column headers with buttons are sortable",
+        captionClasses: "govuk-visually-hidden",
         head: [
           { text: "Charge number" },
           { text: "Name and prison number",

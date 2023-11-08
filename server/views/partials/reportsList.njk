@@ -43,12 +43,14 @@
         {{ mojPagination(pagination) }}
         <div class="results-table">
           {{ govukTable({
-      head: [
+            caption: "Adjudication reports, column headers with buttons are sortable",
+            captionClasses: "govuk-visually-hidden",
+          head: [
         { text: "Charge number" },
         { text: "Discovery date and time",
-                  attributes: {
+          attributes: {
           "aria-sort": "descending"
-        }
+          }
         },
         { html: "Name and prison number" },
         { text: "Status" },

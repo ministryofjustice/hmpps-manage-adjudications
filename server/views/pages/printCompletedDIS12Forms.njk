@@ -56,6 +56,8 @@
   {% if rows | length %}
     <div class="results-table">
       {{ govukTable({
+        caption: "Adjudication DIS forms, column headers with buttons are sortable",
+        captionClasses: "govuk-visually-hidden",
       head: [
         { text: 'Name and prison number',
           classes: 'printCompletedDISForms-prisonerNameNumber',
