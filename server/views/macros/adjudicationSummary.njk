@@ -10,16 +10,8 @@
       {{ summaryList(userSetGenderData.data, null, { "data-qa": "gender-summary-table" }, null, userSetGenderData.changeLinkHref ) }}
     </div>
   {% endif %}
-  <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
-    <h2 class="govuk-heading-m">Incident details</h2>
-    {% if editAndReviewAvailability.incidentDetailsEditable %}
-      <p class="govuk-body">
-        <a href="{{ detailsURL }}" class="govuk-link" data-qa="adjudicationsSummary-details-changeLink" id="adjudication-summary-details-change-link">Change</a>
-      </p>
-    {% endif %}
-  </div>
   <div class="adjudicationsSummary">
-    {{ summaryListWithChangeLinks(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }, '', "Report on someone's behalf") }}
+    {{ summaryListWithChangeLinks(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }, '', "Report on someone's behalf",  'Incident details', editAndReviewAvailability.incidentDetailsEditable, detailsURL, 'adjudicationsSummary-details-changeLink') }}
   </div>
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">

@@ -1,13 +1,17 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro summaryListWithChangeLinks(array = [], missingValueText = 'Not entered', attributes = {}, classes='', changeLinkText='Change') %}
+{% macro summaryListWithChangeLinks(array = [], missingValueText = 'Not entered', attributes = {}, classes = '', changeLinkText = 'Change', cardTitle = null, cardActionPresent = false, cardActionHref = null, cardActionDataQa = null, cardActionText = "Change") %}
   {% set rows = [] %}
 
   {% for detail in array %}
     {% if detail.html %}
-      {% set value = {html: detail.html | showDefault(missingValueText)} %}
+      {% set value = {
+        html: detail.html | showDefault(missingValueText)
+      } %}
     {% else %}
-      {% set value = {text: detail.value | showDefault(missingValueText)} %}
+      {% set value = {
+        text: detail.value | showDefault(missingValueText)
+      } %}
     {% endif %}
 
     {% if detail.changeLinkHref %}
@@ -16,22 +20,53 @@
       {% set actions = '' %}
     {% endif %}
 
-    {% set rows = (rows.push(
-      {
-        key: {
-          text: detail.label
-        },
-        value: value,
-        actions: actions
-      }
-    ), rows) %}
+    {% set rows = (rows.push({
+      key: {
+        text: detail.label
+      },
+      value: value,
+      actions: actions
+    }), rows) %}
   {% endfor %}
 
+  {% if cardActionPresent %}
+    {% set cardActionItems = [
+      {
+        href: cardActionHref,
+        text: cardActionText,
+        visuallyHiddenText: cardTitle,
+        attributes: cardActionDataQa
+      }
+    ] %}
+  {% else %}
+    {% set cardActionItems = [] %}
+  {% endif %}
+
+  {% set cardDetails = {
+    title: {
+      text: cardTitle
+    },
+    actions: {
+      items: cardActionItems
+    }
+  } %}
+
   {% if rows.length %}
-    {{ govukSummaryList({
+    {% if cardTitle %}
+      {{ govukSummaryList({
+      card: cardDetails,
       rows: rows,
       classes: classes,
       attributes: attributes
     }) }}
-  {% endif %}
-{% endmacro %}
+    {% else %}
+      {{ govukSummaryList({
+      rows: rows,
+      classes: classes,
+      attributes: attributes
+    }) }}
+
+    {% endif %}
+    {% endif %}
+
+  {% endmacro %}
