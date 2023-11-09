@@ -172,5 +172,20 @@ describe('validateForm', () => {
         },
       ])
     })
+    it('shows error if the date and time entered are the same as the latest existing hearing', () => {
+      expect(
+        validateForm({
+          hearingDate: { date: '03/03/2030', time: { hour: '10', minute: '00' } },
+          locationId: 2343,
+          hearingType: OicHearingType.GOV_ADULT as string,
+          latestExistingHearing: '2030-03-03T10:00:00',
+        })
+      ).toEqual([
+        {
+          href: '#hearingDate[time][hour]',
+          text: 'The time of this hearing must be after the time of the previous hearing',
+        },
+      ])
+    })
   })
 })

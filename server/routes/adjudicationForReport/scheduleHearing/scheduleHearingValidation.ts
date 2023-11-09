@@ -76,7 +76,7 @@ export default function validateForm({
   if (
     formatTimestampToDate(formatDate(hearingDate), 'YYYY-MM-DD') ===
       formatTimestampToDate(latestExistingHearing, 'YYYY-MM-DD') &&
-    formatTimestampToTime(formatDate(hearingDate)) < formatTimestampToTime(latestExistingHearing)
+    formatTimestampToTime(formatDate(hearingDate)) <= formatTimestampToTime(latestExistingHearing)
   ) {
     return [errors.TIME_BEFORE_PREVIOUS_HEARING]
   }
