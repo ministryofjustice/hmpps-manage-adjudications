@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro offenceQAndASummaryList(offence, isYouthOffender, attributes = {}, classes='') %}
+{% macro offenceQAndASummaryList(offence, isYouthOffender, attributes = {}, classes='', cardTitle = null, cardActionPresent = false, cardActionHref = null, cardActionDataQa = null, cardActionText = "Change") %}
   {% set rows = [] %}
 
     {# Add YOI rule to table rows #}
@@ -59,14 +59,43 @@
         }
     ), rows) %}
 
+  {% if cardActionPresent %}
+    {% set cardActionItems = [
+      {
+        href: cardActionHref,
+        text: cardActionText,
+        visuallyHiddenText: cardTitle,
+        attributes: cardActionDataQa
+      }
+    ] %}
+  {% else %}
+    {% set cardActionItems = [] %}
+  {% endif %}
 
+  {% set cardDetails = {
+    title: {
+      text: cardTitle
+    },
+    actions: {
+      items: cardActionItems
+    }
+  } %}
 
   {% if rows.length %}
-    {{ govukSummaryList({
+    {% if cardTitle %}
+      {{ govukSummaryList({
+      card: cardDetails,
       rows: rows,
       classes: classes,
       attributes: attributes
     }) }}
-  {% endif %}
+    {% else %}
+      {{ govukSummaryList({
+      rows: rows,
+      classes: classes,
+      attributes: attributes
+    }) }}
+    {% endif %}
+    {% endif %}
 
 {% endmacro %}

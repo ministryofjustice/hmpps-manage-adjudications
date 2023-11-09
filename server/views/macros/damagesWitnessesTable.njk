@@ -30,6 +30,7 @@
 
     {% if rows.length %}
       {{ govukTable({
+        card: {},
         head: [
           {
             text: "Type of repair needed" if dataType === "damages" else "Name",
