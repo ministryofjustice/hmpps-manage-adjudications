@@ -23,17 +23,16 @@ const hearingDateTime = '2030-01-01T11:00:00'
 
 const previouslyExistingHearing = [
   testData.singleHearing({
-    dateTimeOfHearing: '2029-12-T11:00:00',
+    dateTimeOfHearing: '2029-11-20T12:00:00',
+    id: 332,
+    locationId: 25538,
+  }),
+  testData.singleHearing({
+    dateTimeOfHearing: '2029-12-01T11:00:00',
     id: 333,
     locationId: 25538,
   }),
 ]
-
-const originalHearing = testData.singleHearing({
-  dateTimeOfHearing: hearingDateTime,
-  id: 333,
-  locationId: 25538,
-})
 
 const changedDayHearing = testData.singleHearing({
   dateTimeOfHearing: '2030-01-02T11:00:00',
@@ -75,11 +74,11 @@ context('Schedule a hearing page', () => {
 
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
-      response: reportedAdjudicationResponse('1524494', [previouslyExistingHearing, originalHearing]),
+      response: reportedAdjudicationResponse('1524494', previouslyExistingHearing),
     })
     cy.task('stubAmendHearing', {
       chargeNumber: 1524494,
-      response: reportedAdjudicationResponse('1524494', [previouslyExistingHearing, changedDayHearing]),
+      response: reportedAdjudicationResponse('1524494', [...previouslyExistingHearing, changedDayHearing]),
     })
 
     cy.signIn()
@@ -98,7 +97,7 @@ context('Schedule a hearing page', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').should('be.checked')
-    scheduleHearingsPage.datePicker().should('have.value', '01/01/2030')
+    scheduleHearingsPage.datePicker().should('have.value', '01/12/2029')
     scheduleHearingsPage.timeInputHours().should('have.value', '11')
     scheduleHearingsPage.timeInputMinutes().should('have.value', '00')
     scheduleHearingsPage.locationSelector().should('have.value', '25538')
@@ -186,7 +185,7 @@ context('Schedule a hearing page', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    const date = formatDateForDatePicker(new Date('12/28/2029').toISOString(), 'short')
+    const date = formatDateForDatePicker(new Date('11/19/2029').toISOString(), 'short')
     scheduleHearingsPage.datePicker().clear().type(date)
     scheduleHearingsPage.submitButton().click()
     scheduleHearingsPage
@@ -201,7 +200,26 @@ context('Schedule a hearing page', () => {
   it('should show error if the time entered is before the datetime of any existing hearings', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    const date = formatDateForDatePicker(new Date('11/20/2029').toISOString(), 'short')
+    scheduleHearingsPage.datePicker().clear().type(date)
     scheduleHearingsPage.timeInputHours().select('09')
+    scheduleHearingsPage.timeInputMinutes().select('00')
+    scheduleHearingsPage.submitButton().click()
+    scheduleHearingsPage
+      .errorSummary()
+      .find('li')
+      .then($errors => {
+        expect($errors.get(0).innerText).to.contain(
+          'The time of this hearing must be after the time of the previous hearing'
+        )
+      })
+  })
+  it('should show error if the date and time entered is the same as the latest hearing', () => {
+    cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
+    const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
+    const date = formatDateForDatePicker(new Date('11/20/2029').toISOString(), 'short')
+    scheduleHearingsPage.datePicker().clear().type(date)
+    scheduleHearingsPage.timeInputHours().select('12')
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()
     scheduleHearingsPage

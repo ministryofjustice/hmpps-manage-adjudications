@@ -61,7 +61,7 @@ beforeEach(() => {
     }),
   })
 
-  reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
+  reportedAdjudicationsService.getLatestNonMatchingHearing.mockResolvedValue(
     testData.singleHearing({ dateTimeOfHearing: '2022-11-03T11:00:00' })
   )
 
