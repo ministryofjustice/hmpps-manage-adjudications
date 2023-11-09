@@ -164,6 +164,7 @@ export const allStatuses = [
   ReportedAdjudicationStatus.REFER_GOV,
   ReportedAdjudicationStatus.QUASHED,
   ReportedAdjudicationStatus.PROSECUTION,
+  ReportedAdjudicationStatus.CORRUPTED,
 ]
 
 export enum OicHearingType {
