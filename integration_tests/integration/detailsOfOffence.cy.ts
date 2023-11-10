@@ -198,26 +198,35 @@ context('Details of offence', () => {
     detailsOfOffencePage.prisonerNameDiv().contains('Smith, John')
     // Questions and Answers
     detailsOfOffencePage
-      .questionAnswerSectionQuestion(1, 1)
-      .contains('What type of offence did John Smith assist another prisoner to commit or attempt to commit?')
+      .offenceDetailsSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
+        expect($summaryLabels.get(1).innerText).to.contain(
+          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+        )
+        expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
+        expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to assault?')
+        expect($summaryLabels.get(4).innerText).to.contain('Was the incident a racially aggravated assault?')
+        expect($summaryLabels.get(5).innerText).to.contain('This offence broke')
+      })
+
     detailsOfOffencePage
-      .questionAnswerSectionAnswer(1, 1)
-      .contains('Assault, fighting, or endangering the health or personal safety of others')
-    detailsOfOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
-    detailsOfOffencePage
-      .questionAnswerSectionQuestion(1, 3)
-      .contains('Who did John Smith assist James Jones to assault?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
-    detailsOfOffencePage.questionAnswerSectionQuestion(1, 4).contains('Was the incident a racially aggravated assault?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 4).contains('Yes')
-    // Offence details
-    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 25(c)')
-    detailsOfOffencePage
-      .offenceSection(1)
-      .contains('Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:')
-    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 1')
-    detailsOfOffencePage.offenceSection(1).contains('Commits any assault')
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
+        expect($summaryData.get(1).innerText).to.contain(
+          'Assault, fighting, or endangering the health or personal safety of others'
+        )
+        expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
+        expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
+        expect($summaryData.get(4).innerText).to.contain('Yes')
+        expect($summaryData.get(5).innerText).to.contain(
+          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+        )
+      })
+
     // Delete link
     detailsOfOffencePage.deleteLink(1).should('exist')
   })
@@ -243,32 +252,33 @@ context('Details of offence', () => {
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     // Prisoner playback
     detailsOfOffencePage.prisonerNameDiv().contains('Smith, John')
-    // Questions and Answers
     detailsOfOffencePage
-      .questionAnswerSectionQuestion(1, 1)
-      .contains('What type of offence did John Smith assist another prisoner to commit or attempt to commit?')
+      .offenceDetailsSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
+        expect($summaryLabels.get(1).innerText).to.contain(
+          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+        )
+        expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
+        expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to endanger?')
+        expect($summaryLabels.get(4).innerText).to.contain('This offence broke')
+      })
+
     detailsOfOffencePage
-      .questionAnswerSectionAnswer(1, 1)
-      .contains('Assault, fighting, or endangering the health or personal safety of others')
-    detailsOfOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
-    detailsOfOffencePage
-      .questionAnswerSectionAnswer(1, 2)
-      .contains('Endangering the health or personal safety of someone')
-    detailsOfOffencePage
-      .questionAnswerSectionQuestion(1, 3)
-      .contains('Who did John Smith assist James Jones to endanger?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
-    // Offence details
-    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 25(c)')
-    detailsOfOffencePage
-      .offenceSection(1)
-      .contains('Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:')
-    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 5')
-    detailsOfOffencePage
-      .offenceSection(1)
-      .contains(
-        'Intentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered'
-      )
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
+        expect($summaryData.get(1).innerText).to.contain(
+          'Assault, fighting, or endangering the health or personal safety of others'
+        )
+        expect($summaryData.get(2).innerText).to.contain('Endangering the health or personal safety of someone')
+        expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
+        expect($summaryData.get(4).innerText).to.contain(
+          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 5\n\nIntentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered'
+        )
+      })
     // Delete link
     detailsOfOffencePage.deleteLink(1).should('exist')
   })
@@ -296,25 +306,32 @@ context('Details of offence', () => {
     detailsOfOffencePage.prisonerNameDiv().contains('Smith, John')
     // Questions and Answers
     detailsOfOffencePage
-      .questionAnswerSectionQuestion(1, 1)
-      .contains('What type of offence did John Smith assist another prisoner to commit or attempt to commit?')
+      .offenceDetailsSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
+        expect($summaryLabels.get(1).innerText).to.contain(
+          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+        )
+        expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
+        expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to fight with?')
+        expect($summaryLabels.get(4).innerText).to.contain('This offence broke')
+      })
+
     detailsOfOffencePage
-      .questionAnswerSectionAnswer(1, 1)
-      .contains('Assault, fighting, or endangering the health or personal safety of others')
-    detailsOfOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Fighting with someone')
-    detailsOfOffencePage
-      .questionAnswerSectionQuestion(1, 3)
-      .contains('Who did John Smith assist James Jones to fight with?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
-    // Offence details
-    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 25(c)')
-    detailsOfOffencePage
-      .offenceSection(1)
-      .contains('Assists another prisoner to commit, or to attempt to commit, any of the foregoing offences:')
-    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 4')
-    detailsOfOffencePage.offenceSection(1).contains('Fights with any person')
-    // Delete link
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
+        expect($summaryData.get(1).innerText).to.contain(
+          'Assault, fighting, or endangering the health or personal safety of others'
+        )
+        expect($summaryData.get(2).innerText).to.contain('Fighting with someone')
+        expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
+        expect($summaryData.get(4).innerText).to.contain(
+          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 4\n\nFights with any person'
+        )
+      }) // Delete link
     detailsOfOffencePage.deleteLink(1).should('exist')
   })
 
@@ -345,27 +362,49 @@ context('Details of offence', () => {
     racialPage.radio('1-1-1-1-2').check()
     racialPage.continue().click()
     Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 1).should('exist')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 4).should('contain', 'No')
-    detailsOfOffencePage.questionAnswerSection(2).should('not.exist')
+    detailsOfOffencePage
+      .offenceDetailsSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(4).innerText).to.contain('Was the incident a racially aggravated assault?')
+      })
+
+    detailsOfOffencePage
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(4).innerText).to.contain('No')
+      })
   })
 
   it('offence details page when there is already an offence saved', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(201))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.questionAnswerSectionQuestion(1, 1).contains('What type of offence did John Smith commit?')
     detailsOfOffencePage
-      .questionAnswerSectionAnswer(1, 1)
-      .contains('Assault, fighting, or endangering the health or personal safety of others')
-    detailsOfOffencePage.questionAnswerSectionQuestion(1, 2).contains('What did the incident involve?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 2).contains('Assaulting someone')
-    detailsOfOffencePage.questionAnswerSectionQuestion(1, 3).contains('Who was assaulted?')
-    detailsOfOffencePage.questionAnswerSectionAnswer(1, 3).contains('Another prisoner - Paul Wright')
-    detailsOfOffencePage.offenceSection(1).contains('Prison rule 51, paragraph 1')
-    detailsOfOffencePage.offenceSection(1).contains('Commits any assault')
-    detailsOfOffencePage.prisonRule().contains('Which set of rules apply to this prisoner?')
-    detailsOfOffencePage.prisonRuleDesc().contains('Adult offences')
-    detailsOfOffencePage.prisonRulePara().contains('Prison rule 51')
+      .offenceDetailsSummary()
+      .find('dt')
+      .then($summaryLabels => {
+        expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
+        expect($summaryLabels.get(1).innerText).to.contain('What type of offence did John Smith commit?')
+        expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
+        expect($summaryLabels.get(3).innerText).to.contain('Who was assaulted?')
+        expect($summaryLabels.get(4).innerText).to.contain('Was the incident a racially aggravated assault?')
+        expect($summaryLabels.get(5).innerText).to.contain('This offence broke')
+      })
+
+    detailsOfOffencePage
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
+        expect($summaryData.get(1).innerText).to.contain(
+          'Assault, fighting, or endangering the health or personal safety of others'
+        )
+        expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
+        expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
+        expect($summaryData.get(4).innerText).to.contain('Yes')
+        expect($summaryData.get(5).innerText).to.contain('Prison rule 51, paragraph 1\n\nCommits any assault')
+      })
   })
 
   it('offence details page when there is no offences, rules or roles', () => {
