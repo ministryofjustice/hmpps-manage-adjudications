@@ -125,7 +125,7 @@ export default class PrisonApiClient {
 
   async getLocation(locationId: LocationId): Promise<Location> {
     return this.restClient.get({
-      path: `/api/locations/${locationId}`,
+      path: `/api/locations/${locationId}?includeInactive=true`,
     })
   }
 

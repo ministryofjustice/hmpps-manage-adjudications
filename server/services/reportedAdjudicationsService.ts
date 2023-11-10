@@ -938,6 +938,22 @@ export default class ReportedAdjudicationsService {
     return reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
   }
 
+  async getLatestNonMatchingHearing(
+    chargeNumber: string,
+    hearingIdToSkip: number,
+    user: User
+  ): Promise<HearingDetails | Record<string, never>> {
+    try {
+      const { reportedAdjudication } = await this.getReportedAdjudicationDetails(chargeNumber, user)
+      const { hearings } = reportedAdjudication
+      const filteredHearings = hearings.filter(hearing => hearing.id !== hearingIdToSkip)
+      const latestHearing = filteredHearings.pop() || {}
+      return latestHearing
+    } catch (error) {
+      return {}
+    }
+  }
+
   async getAgencyReportCounts(user: User): Promise<AgencyReportCounts> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new ManageAdjudicationsSystemTokensClient(token, user).getAgencyReportCounts()

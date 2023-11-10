@@ -84,12 +84,16 @@ export default class scheduleHearingRoutes {
     const postValues = extractValuesFromPost(req)
     const { chargeNumber } = req.params
     const hearingId = Number(req.params.hearingId) // Only present if we're on the edit page
-    const { dateTimeOfHearing } = await this.reportedAdjudicationsService.getLatestHearing(chargeNumber, user)
+    const latestHearing = await this.reportedAdjudicationsService.getLatestNonMatchingHearing(
+      chargeNumber,
+      hearingId,
+      user
+    )
     const validationError = validateForm({
       hearingDate: postValues.hearingDetails.hearingDate,
       locationId: postValues.hearingDetails.locationId,
       hearingType: postValues.hearingDetails.hearingType,
-      latestExistingHearing: dateTimeOfHearing,
+      latestExistingHearing: latestHearing.dateTimeOfHearing,
     })
     if (validationError) {
       const pageData = await this.getPageDataOnGet(chargeNumber, postValues.hearingDetails, user)

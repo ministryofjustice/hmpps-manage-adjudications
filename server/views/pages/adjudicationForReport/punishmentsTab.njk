@@ -25,7 +25,7 @@
 
   {{ adjudicationTabHeaderSingular(chargeNumber, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
 
-  {% if chargeProved %}
+  {% if chargeProved or (corrupted and punishments.length) %}
 
     {% if filteredPunishments.damages | length %}
       {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, chargeNumber, true) }}

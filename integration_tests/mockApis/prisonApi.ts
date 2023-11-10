@@ -99,7 +99,7 @@ const stubGetLocation = ({ locationId, response }: { locationId: number; respons
   stubFor({
     request: {
       method: 'GET',
-      url: `/prisonApi/api/locations/${locationId}`,
+      url: `/prisonApi/api/locations/${locationId}?includeInactive=true`,
     },
     response: {
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
