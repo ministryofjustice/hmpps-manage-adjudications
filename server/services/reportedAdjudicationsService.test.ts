@@ -1129,6 +1129,65 @@ describe('reportedAdjudicationsService', () => {
       )
     })
   })
+  describe('getLatestNonMatchingHearing', () => {
+    it('it returns an empty object if there are no hearings', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '123',
+          prisonerNumber: 'A1234AA',
+          status: ReportedAdjudicationStatus.UNSCHEDULED,
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+        }),
+      })
+      const result = await service.getLatestNonMatchingHearing('123', 1, user)
+      expect(result).toEqual({})
+    })
+    it('it returns an empty object if there is a hearing, but it is the matching one', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '123',
+          prisonerNumber: 'A1234AA',
+          status: ReportedAdjudicationStatus.UNSCHEDULED,
+          dateTimeOfIncident: '2021-10-28T15:40:25.884',
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-03-21T19:00:00',
+              id: 1,
+            }),
+          ],
+        }),
+      })
+      const result = await service.getLatestNonMatchingHearing('123', 1, user)
+      expect(result).toEqual({})
+    })
+    it('returns the latest hearing that does not match the one being compared', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '123',
+          prisonerNumber: 'A1234AA',
+          status: ReportedAdjudicationStatus.SCHEDULED,
+          dateTimeOfIncident: '2023-03-20T10:00:00',
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-03-21T10:05:00',
+              id: 1,
+            }),
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-03-21T19:00:00',
+              id: 2,
+            }),
+          ],
+        }),
+      })
+      const result = await service.getLatestNonMatchingHearing('123', 2, user)
+      expect(result).toEqual(
+        testData.singleHearing({
+          dateTimeOfHearing: '2023-03-21T10:05:00',
+          id: 1,
+        })
+      )
+    })
+  })
   describe('getPrisonerLatestADMMovement', () => {
     it('should return null if there are no transfers that match the overrideAgencyId', async () => {
       getMovementByOffender.mockResolvedValue([])
