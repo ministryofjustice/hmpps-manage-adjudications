@@ -124,16 +124,9 @@ export default class PrisonApiClient {
   }
 
   async getLocation(locationId: LocationId): Promise<Location> {
-    const location = await this.restClient
-      .get({
-        path: `/api/locations/${locationId}`,
-      })
-      .catch(error => {
-        if (error.status === 404) {
-          logger.info(`No locations available for locationId: ${locationId}`)
-        }
-      })
-    return location as Location
+    return this.restClient.get({
+      path: `/api/locations/${locationId}?includeInactive=true`,
+    })
   }
 
   async getUsersLocations(): Promise<Location[]> {
