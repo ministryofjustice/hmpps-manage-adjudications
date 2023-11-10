@@ -62,13 +62,23 @@ context('Incident details', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage
-      .questionAnswerSectionAnswer(1, 1)
-      .contains('Assault, fighting, or endangering the health or personal safety of others')
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(1).innerText).to.contain(
+          'Assault, fighting, or endangering the health or personal safety of others'
+        )
+      })
     detailsOfOffencePage.deleteLink(1).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence
-      .questionAnswerSectionAnswer(1, 1)
-      .contains('Assault, fighting, or endangering the health or personal safety of others')
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(1).innerText).to.contain(
+          'Assault, fighting, or endangering the health or personal safety of others'
+        )
+      })
   })
 
   it('Go to the delete offence page and get a validation failure', () => {
@@ -83,24 +93,24 @@ context('Incident details', () => {
   it('Go to the delete offence page and select yes', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.questionAnswerSection(1).should('exist')
+    detailsOfOffencePage.offenceDetailsSummary().should('exist')
     detailsOfOffencePage.deleteLink(1).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.yesRadio().click()
     deleteOffence.confirm().click()
     detailsOfOffencePage.checkOnPage()
-    detailsOfOffencePage.questionAnswerSection(1).should('not.exist')
+    detailsOfOffencePage.offenceDetailsSummary().should('not.exist')
   })
 
   it('Go to the delete offence page and select no', () => {
     cy.visit(adjudicationUrls.detailsOfOffence.urls.start(300))
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    detailsOfOffencePage.questionAnswerSection(1).should('exist')
+    detailsOfOffencePage.offenceDetailsSummary().should('exist')
     detailsOfOffencePage.deleteLink(1).click()
     const deleteOffence = Page.verifyOnPage(DeleteOffence)
     deleteOffence.noRadio().click()
     deleteOffence.confirm().click()
     detailsOfOffencePage.checkOnPage()
-    detailsOfOffencePage.questionAnswerSection(1).should('exist')
+    detailsOfOffencePage.offenceDetailsSummary().should('exist')
   })
 })
