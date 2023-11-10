@@ -5,14 +5,7 @@ export default class DeleteOffence extends Page {
     super('Do you want to remove this offence?')
   }
 
-  questionAnswerSection = (offenceIndex: number): PageElement =>
-    cy.get(`[data-qa="question-answer-section-${offenceIndex}"]`)
-
-  questionAnswerSectionQuestion = (offenceIndex: number, questionIndex: number): PageElement =>
-    this.questionAnswerSection(offenceIndex).get(`[data-qa="question-${questionIndex}"]`)
-
-  questionAnswerSectionAnswer = (offenceIndex: number, answerIndex: number): PageElement =>
-    this.questionAnswerSection(offenceIndex).get(`[data-qa="answer-${answerIndex}"]`)
+  offenceDetailsSummary = (): PageElement => cy.get('[data-qa="offence-summary-table"]')
 
   noRadio = (): PageElement => cy.get('[data-qa="no-radio"]')
 

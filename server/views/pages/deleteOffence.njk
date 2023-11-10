@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../macros/offenceQuestionsAndAnswers.njk" import offenceQuestionsAndAnswers %}
+{% from "../macros/offenceQAndASummaryList.njk" import offenceQAndASummaryList %}
 
 {% block beforeContent %}
   {{ breadcrumb() }}
@@ -30,6 +31,9 @@
           {{title}}
         </h1>
       </legend>
+      <div class="adjudicationsSummary">
+        {{ offenceQAndASummaryList(offence, offence.isYouthOffender, { "data-qa": "offence-summary-table" }) }}
+      </div>
       {{ offenceQuestionsAndAnswers(questionsAndAnswers, chargeNumber) }}
       <form method="POST" novalidate="novalidate" data-qa="delete-offence-form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>

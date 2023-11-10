@@ -5,6 +5,7 @@ import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { FormError } from '../../@types/template'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { OffenceData } from '../offenceCodeDecisions/offenceData'
+import PlaceOnReportService from '../../services/placeOnReportService'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -19,17 +20,18 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class DeleteOffenceRoutes {
-  constructor(private readonly decisionTreeService: DecisionTreeService) {}
+  constructor(
+    private readonly decisionTreeService: DecisionTreeService,
+    private readonly placeOnReportService: PlaceOnReportService
+  ) {}
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, [])
 
   private async renderView(req: Request, res: Response, errors: FormError[]) {
     const { user } = res.locals
     const draftId = Number(req.params.draftId)
-    const { incidentRole, prisoner, associatedPrisoner } = await this.decisionTreeService.draftAdjudicationIncidentData(
-      draftId,
-      user
-    )
+    const { incidentRole, prisoner, associatedPrisoner, draftAdjudication } =
+      await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
 
     const offenceData: OffenceData = { ...req.query }
     const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
@@ -41,8 +43,20 @@ export default class DeleteOffenceRoutes {
       false
     )
 
-    return res.render(`pages/deleteOffence`, {
+    const offenceToDisplay = {
       questionsAndAnswers,
+      incidentRule: draftAdjudication.incidentRole?.offenceRule,
+      offenceRule: await this.placeOnReportService.getOffenceRule(
+        Number(offenceData.offenceCode),
+        draftAdjudication.isYouthOffender,
+        draftAdjudication.gender,
+        user
+      ),
+      isYouthOffender: draftAdjudication.isYouthOffender,
+    }
+
+    return res.render(`pages/deleteOffence`, {
+      offence: offenceToDisplay,
       errors,
       offenceData,
     })
