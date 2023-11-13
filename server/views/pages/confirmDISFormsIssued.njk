@@ -36,6 +36,7 @@
       </a>
     {% endset -%}
     {% set rows = (rows.push([
+      { text: report.chargeNumber },
       { text: report.displayName + ' - ' + report.prisonerNumber },
       { text: report.formattedDateTimeOfDiscovery,
         attributes: {
@@ -54,8 +55,12 @@
         caption: "Adjudication DIS forms, column headers with buttons are sortable",
         captionClasses: "govuk-visually-hidden",
       head: [
+        {
+          text: 'Charge number',
+          classes: 'confirmDISFormTable-chargeNumber'
+
+        },
         { text: 'Name and prison number',
-          classes: 'confirmDISFormTable-prisonerNameNumber',
           attributes: {
           "aria-sort": "none"
         }
@@ -67,7 +72,7 @@
         }
         },
         { text: "Prisoner location",
-          classes: 'confirmDISFormTable-prisonerLocation'
+          classes: 'confirmDISFormTable-prisonerLocation' 
         },
         { text: "Last issued",
           classes: 'confirmDISFormTable-lastIssued'
@@ -75,9 +80,7 @@
         { text: "Issuing officer",
           classes: 'confirmDISFormTable-officerName'
         },
-        { text: "",
-          classes: 'confirmDISFormTable-link'
-        }
+        { text: ""        }
       ],
       rows: rows,
       attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }

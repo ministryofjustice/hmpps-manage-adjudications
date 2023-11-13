@@ -1,11 +1,11 @@
 .confirmDISFormTable {
-  &-prisonerLocation, &-officerName {
+  &-lastIssued, &-discDateTime, &-officerName, &-prisonerLocation  {
     width: 15%;
   }
-  &-lastIssued  {
-    width: 17%;
-  }
   &-link {
-    width: 13%;
+    width: 8%;
+  }
+  &-chargeNumber {
+    width: 10%;
   }
 }
