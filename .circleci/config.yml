@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@7.1.0
+  hmpps: ministryofjustice/hmpps@7
   slack: circleci/slack@4.12.3
 
 parameters:
@@ -69,7 +69,8 @@ jobs:
       - run:
           command: |
             npm run build
-      - run: # Run linter after build because the integration test code depend on compiled typescript...
+      - run:
+          # Run linter after build because the integration test code depend on compiled typescript...
           name: Linter check
           command: npm run lint
       - persist_to_workspace:
@@ -124,7 +125,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: integration tests
-          command:  |
+          command: |
             TESTFILES=$(circleci tests glob "integration_tests/integration/*.cy.ts" | circleci tests split | paste -sd ',')
             npm run int-test -- --spec ${TESTFILES}
       - store_test_results:
