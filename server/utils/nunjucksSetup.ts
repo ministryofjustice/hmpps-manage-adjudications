@@ -348,6 +348,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('convertHearingOutcomeFinding', convertHearingOutcomeFinding)
   njkEnv.addFilter('reportedAdjudicationStatusDisplayName', reportedAdjudicationStatusDisplayName)
   njkEnv.addFilter('convertPunishmentType', convertPunishmentType)
+  njkEnv.addFilter('toUpperCase', (input: string) => input.replace(/\b\w/g, match => match.toUpperCase()))
   njkEnv.addGlobal('IssueStatus', IssueStatus)
   njkEnv.addGlobal('OicHearingType', OicHearingType)
   njkEnv.addGlobal('ReportedAdjudicationStatus', ReportedAdjudicationStatus)
