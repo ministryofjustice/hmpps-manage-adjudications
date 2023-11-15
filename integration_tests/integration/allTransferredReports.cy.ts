@@ -23,8 +23,7 @@ context('Transferred Reports', () => {
     cy.task('stubGetAllReportedAdjudications', {
       filter: {
         status: null,
-        toDate: moment().format('YYYY-MM-DD'),
-        fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+        fromDate: '2001-01-01',
         transfersOnly: true,
       },
     })
