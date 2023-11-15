@@ -12,7 +12,7 @@
         If you refuse to allow the prisoner to attend, record the decision and reasons in the ‘Record of hearing’ box, saying why it was just and fair in the circumstances. (See PSI 05/2018 Annex A Paras 2.3 and 2.4.)
     </p>
     </div>
-    {% for hearing in range(0,3) %}
+    {% for hearing in range(0,4) %}
     <section class="page-break-before-always">
     <h3 class='adjudication-pdf-section-header-inner'>{{ loop.index | convertToWord | toUpperCase }} hearing</h3>
     <div class='adjudication-pdf-section-hearing-details'>
@@ -296,10 +296,12 @@ evidence</li>
       <h3 class='adjudication-pdf-section-subheader-inner'>For governor/director only</h3>
       <div class="restricted-width">
       <p>Consider whether additional days may be an appropriate punishment, and if so refer the case to the independent adjudicator.</p>
+      <div class="break-inside-avoid">
       <h3 class='adjudication-pdf-section-subheader-inner'>Cellular confinement</h3>
       <p>If considering cellular confinement (CC), confirm Initial Segregation Health Screen (ISHS) recording fitness for this punishment has been completed before a decision on punishment is made, and take the recommendation into account.</p>
       <p>If the ISHS has not been completed, adjourn and ensure it’s completed within 2 hours of the hearing being completed. Record the outcome of the assessment. <span class="govuk-!-font-weight-bold">Attach the ISHS to this record.</span></p>
       <p>If imposing suspended cellular confinement, ensure a further ISHS is completed before any punishment is activated.</p>
+      </div>
       </div>
       <h3 class='adjudication-pdf-section-subheader-inner'>Punishment decision</h3>
       <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>

@@ -329,6 +329,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         return 'second'
       case 3:
         return 'third'
+      case 4:
+        return 'fourth'
       default:
         return null
     }
