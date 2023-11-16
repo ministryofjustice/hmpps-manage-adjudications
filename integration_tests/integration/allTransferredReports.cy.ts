@@ -24,6 +24,7 @@ context('Transferred Reports', () => {
       filter: {
         status: null,
         fromDate: '2001-01-01',
+        toDate: null,
         transfersOnly: true,
       },
     })
@@ -39,8 +40,8 @@ context('Transferred Reports', () => {
     cy.task('stubGetAllReportedAdjudications', {
       filter: {
         status: null,
-        toDate: moment().format('YYYY-MM-DD'),
-        fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+        toDate: null,
+        fromDate: '2001-01-01',
         transfersOnly: true,
       },
     })
@@ -62,8 +63,8 @@ context('Transferred Reports', () => {
       allContent: manyReportedAdjudications,
       filter: {
         status: null,
-        toDate: moment().format('YYYY-MM-DD'),
-        fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+        toDate: null,
+        fromDate: '2001-01-01',
         transfersOnly: true,
       },
     }) // Page 1
@@ -107,8 +108,8 @@ context('Transferred Reports', () => {
       allContent: [],
       filter: {
         status: null,
-        toDate: moment().format('YYYY-MM-DD'),
-        fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+        toDate: null,
+        fromDate: '2001-01-01',
         transfersOnly: true,
       },
     })
@@ -125,8 +126,8 @@ context('Transferred Reports', () => {
       ],
       filter: {
         status: ReportedAdjudicationStatus.UNSCHEDULED,
-        fromDate: '2022-01-01',
-        toDate: '2022-01-09',
+        toDate: null,
+        fromDate: '2001-01-01',
         transfersOnly: true,
       },
     })
@@ -136,43 +137,22 @@ context('Transferred Reports', () => {
     const transferredReportsPage: TransferredReportsPage = Page.verifyOnPage(TransferredReportsPage)
     transferredReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    const fromDate = formatDateForDatePicker(new Date('1/1/2022').toISOString(), 'short')
-    const toDate = formatDateForDatePicker(new Date('1/9/2022').toISOString(), 'short')
-    adjudicationsFilter.fromDateInput().clear().type(fromDate)
-    adjudicationsFilter.toDateInput().clear().type(toDate)
     transferredReportsPage.uncheckAllCheckboxes()
     transferredReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allTransferredReports.root)
-      expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED&transfersOnly=true')
+      expect(loc.search).to.eq('?status=UNSCHEDULED&transfersOnly=true')
     })
     transferredReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
-  })
-
-  it('default date range is as expected', () => {
-    cy.task('stubGetAllReportedAdjudications', {
-      filter: {
-        status: null,
-        toDate: moment().format('YYYY-MM-DD'),
-        fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
-        transfersOnly: true,
-      },
-    })
-    cy.task('stubGetBatchPrisonerDetails')
-
-    cy.visit(adjudicationUrls.allTransferredReports.root)
-    const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    adjudicationsFilter.toDateInput().should('have.value', moment().format('DD/MM/YYYY'))
-    adjudicationsFilter.fromDateInput().should('have.value', moment().subtract(2, 'days').format('DD/MM/YYYY'))
   })
 
   it('dynamic links for transferred prisoners', () => {
     cy.task('stubGetAllReportedAdjudications', {
       filter: {
         status: null,
-        fromDate: '2022-01-01',
-        toDate: '2022-01-09',
+        toDate: null,
+        fromDate: '2001-01-01',
         transfersOnly: true,
       },
     })

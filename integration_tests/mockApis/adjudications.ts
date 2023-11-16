@@ -9,6 +9,7 @@ import {
   IssueStatus,
   ReportedAdjudicationStatus,
 } from '../../server/data/ReportedAdjudicationResult'
+import { transferredStatuses } from '../../server/utils/adjudicationFilterHelper'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -256,12 +257,13 @@ const stubGetReportedAdjudications =
       size,
       number,
     }
+    const fullStatusList = filter.transfersOnly ? transferredStatuses : allStatuses
     const apiResponse = apiPageResponseFrom(apiRequest, allContent)
     const path =
       `${prefix}?page=${number}&size=${size}` +
       `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
       `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
-      `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
+      `${(filter.status && `&status=${filter.status}`) || `&status=${fullStatusList}`}` +
       `${(filter.transfersOnly && `&transfersOnly=${filter.transfersOnly}`) || ''}`
     return stubFor({
       request: {
