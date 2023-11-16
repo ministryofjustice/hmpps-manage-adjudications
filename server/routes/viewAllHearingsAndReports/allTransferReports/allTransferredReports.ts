@@ -7,13 +7,12 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import {
-  fillInDefaults,
-  filterFromUiFilter,
+  fillInTransfersDefaults,
   transferredAdjudicationStatuses,
-  UiFilter,
-  uiFilterFromBody,
-  uiFilterFromRequest,
-  validate,
+  transfersFilterFromUiFilter,
+  TransfersUiFilter,
+  transfersUiFilterFromBody,
+  uiTransfersFilterFromRequest,
 } from '../../../utils/adjudicationFilterHelper'
 import { FormError } from '../../../@types/template'
 
@@ -26,7 +25,7 @@ export default class AllTransferredReportsRoutes {
   private renderView = async (
     req: Request,
     res: Response,
-    filter: UiFilter,
+    filter: TransfersUiFilter,
     results: ApiPageResponse<ReportedAdjudicationEnhanced>,
     errors: FormError[]
   ): Promise<void> => {
@@ -50,11 +49,11 @@ export default class AllTransferredReportsRoutes {
 
   view = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
-      const uiFilter = fillInDefaults(uiFilterFromRequest(req))
-      const filter = filterFromUiFilter(uiFilter)
+      const uiFilter = fillInTransfersDefaults(uiTransfersFilterFromRequest(req))
+      const filter = transfersFilterFromUiFilter(uiFilter)
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,
-        { ...filter, transfersOnly: true },
+        filter,
         pageRequestFrom(20, +req.query.pageNumber || 1)
       )
       return this.renderView(req, res, uiFilter, results, [])
@@ -63,17 +62,7 @@ export default class AllTransferredReportsRoutes {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
-      const uiFilter = uiFilterFromBody(req)
-      const errors = validate(uiFilter)
-      if (errors && errors.length !== 0) {
-        return this.renderView(
-          req,
-          res,
-          { ...uiFilter, transfersOnly: true },
-          { size: 20, number: 0, totalElements: 0, content: [] },
-          errors
-        )
-      }
+      const uiFilter = transfersUiFilterFromBody(req)
       return res.redirect(adjudicationUrls.allTransferredReports.urls.filter(uiFilter))
     })
   }

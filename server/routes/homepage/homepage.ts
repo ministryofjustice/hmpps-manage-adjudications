@@ -67,8 +67,6 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
         {
           text: `Reports from transfers in (${transferReviewTotal})`,
           href: adjudicationUrls.allTransferredReports.urls.filter({
-            fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
-            toDate: momentDateToDatePicker(moment()),
             status: [
               ReportedAdjudicationStatus.UNSCHEDULED,
               ReportedAdjudicationStatus.REFER_POLICE,

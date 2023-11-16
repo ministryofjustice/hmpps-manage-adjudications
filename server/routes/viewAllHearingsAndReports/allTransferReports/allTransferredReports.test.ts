@@ -105,14 +105,9 @@ describe('POST /all-transferred-reports', () => {
     return request(app)
       .post(adjudicationUrls.allTransferredReports.root)
       .send({
-        fromDate: { date: '01/01/2021' },
-        toDate: { date: '02/01/2021' },
         status: ReportedAdjudicationStatus.ADJOURNED,
       })
-      .expect(
-        'Location',
-        `${adjudicationUrls.allTransferredReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=ADJOURNED&transfersOnly=true`
-      )
+      .expect('Location', `${adjudicationUrls.allTransferredReports.root}?status=ADJOURNED&transfersOnly=true`)
   })
   it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])

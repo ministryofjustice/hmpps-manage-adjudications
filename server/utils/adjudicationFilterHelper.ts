@@ -28,6 +28,11 @@ export type UiFilter = {
   transfersOnly?: boolean
 }
 
+export type TransfersUiFilter = {
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  transfersOnly?: boolean
+}
+
 export type DISUiFilter = {
   fromDate: string
   toDate: string
@@ -59,6 +64,13 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
   return {
     fromDate: req.query.fromDate as string,
     toDate: req.query.toDate as string,
+    status: req.query.status as ReportedAdjudicationStatus,
+    transfersOnly: req.query.transfersOnly as unknown as boolean,
+  }
+}
+
+export const uiTransfersFilterFromRequest = (req: Request): TransfersUiFilter => {
+  return {
     status: req.query.status as ReportedAdjudicationStatus,
     transfersOnly: req.query.transfersOnly as unknown as boolean,
   }
@@ -129,6 +141,12 @@ export const fillInDISFormFilterDefaults = (DISUiFilter: DISUiFilter): DISUiFilt
   }
 }
 
+export const fillInTransfersDefaults = (uiFilter: TransfersUiFilter): TransfersUiFilter => {
+  return {
+    status: uiFilter.status || transferredStatuses,
+  }
+}
+
 // Same as fillInDefaults r.e. dates
 export const fillInPrintDISFormFilterDefaults = (
   printDISFormsUiFilter: PrintDISFormsUiFilter
@@ -145,6 +163,12 @@ export const uiFilterFromBody = (req: Request) => {
   return {
     fromDate: req.body.fromDate.date,
     toDate: req.body.toDate.date,
+    status: req.body.status as ReportedAdjudicationStatus,
+  }
+}
+
+export const transfersUiFilterFromBody = (req: Request) => {
+  return {
     status: req.body.status as ReportedAdjudicationStatus,
   }
 }
@@ -179,6 +203,14 @@ export const DISFormfilterFromUiFilter = (filter: DISUiFilter) => {
     fromDate: datePickerDateToMoment(filter.fromDate),
     toDate: datePickerDateToMoment(filter.toDate),
     locationId: (filter.locationId && Number(filter.locationId)) || null,
+  }
+}
+
+export const transfersFilterFromUiFilter = (filter: TransfersUiFilter) => {
+  return {
+    fromDate: datePickerDateToMoment('01/01/2001'),
+    status: filter.status || transferredStatuses,
+    transfersOnly: true,
   }
 }
 
@@ -220,18 +252,15 @@ export const reportedAdjudicationStatuses = (filter: UiFilter) => {
   })
 }
 
-export const transferredAdjudicationStatuses = (filter: UiFilter) => {
-  const statuses = Object.keys(ReportedAdjudicationStatus)
+export const transferredStatuses = [
+  ReportedAdjudicationStatus.UNSCHEDULED,
+  ReportedAdjudicationStatus.REFER_INAD,
+  ReportedAdjudicationStatus.REFER_POLICE,
+  ReportedAdjudicationStatus.ADJOURNED,
+]
 
-  const filteredStatuses = statuses.filter(
-    key =>
-      key === ReportedAdjudicationStatus.UNSCHEDULED ||
-      key === ReportedAdjudicationStatus.REFER_INAD ||
-      key === ReportedAdjudicationStatus.REFER_POLICE ||
-      key === ReportedAdjudicationStatus.ADJOURNED
-  )
-
-  return filteredStatuses.map(key => {
+export const transferredAdjudicationStatuses = (filter: TransfersUiFilter) => {
+  return transferredStatuses.map(key => {
     return {
       value: key,
       text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),

@@ -1,0 +1,33 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% macro transfersFilter(filter, checkboxes, errors, clearUrl, csrfToken) %}
+    <form class="horizontal-form-container" method="POST" novalidate="novalidate" data-qa="completed-reports-form">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+              <div class="displayFlex">
+                {{ govukCheckboxes({
+                  name: "status",
+                  classes: "govuk-checkboxes--small flex-container",
+                  fieldset: {
+                    legend: {
+                      text: "Status",
+                      isPageHeading: false,
+                      classes: "govuk-fieldset__legend--m"
+                    }
+                  },
+                  items: checkboxes
+                }) }}
+              </div>
+            <div class="horizontal-form govuk-!-margin-bottom-3">
+                {{ govukButton({
+                    text: "Apply",
+                    type: "submit",
+                    classes: "govuk-button--submit",
+                    attributes: { "data-qa": "filter-apply" }
+                }) }}
+                <p class="govuk-body filter-clear-link"><a class='govuk-link' href='{{ clearUrl }}' data-qa='clear-filter'>Clear</a></p>
+            </div>
+    </form>
+{% endmacro %}

@@ -5,6 +5,7 @@ import {
   AwardedPunishmentsAndDamagesUiFilter,
   DISUiFilter,
   PrintDISFormsUiFilter,
+  TransfersUiFilter,
   UiFilter,
 } from './adjudicationFilterHelper'
 
@@ -279,7 +280,7 @@ const adjudicationUrls = {
     root: '/all-transferred-reports',
     urls: {
       start: () => adjudicationUrls.allTransferredReports.root,
-      filter: (filter: UiFilter) =>
+      filter: (filter: TransfersUiFilter) =>
         url.format({
           pathname: adjudicationUrls.allTransferredReports.root,
           query: { ...filter, transfersOnly: true },
