@@ -1,7 +1,6 @@
-import moment from 'moment'
 import TransferredReportsPage from '../pages/allReports'
 import Page from '../pages/page'
-import { formatDateForDatePicker, generateRange } from '../../server/utils/utils'
+import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
