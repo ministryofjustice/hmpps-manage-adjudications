@@ -646,7 +646,7 @@ export default class ReportedAdjudicationsService {
       if (historyItem.hearing) {
         // Reconstruct the data but add the hearing location name
         const hearingLocationName = locationNamesByIdMap.get(historyItem.hearing.locationId) || ''
-        const convertedGovAdjudicator = governorMap.get(historyItem.hearing.outcome?.adjudicator) || 'Entered in NOMIS'
+        const convertedGovAdjudicator = governorMap.get(historyItem.hearing.outcome?.adjudicator) || ''
         return {
           hearing: {
             ...historyItem.hearing,
