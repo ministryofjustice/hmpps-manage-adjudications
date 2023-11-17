@@ -68,6 +68,7 @@ export default class UserService {
   }
 
   async getStaffFromUsername(username: string, user: User): Promise<UserWithEmail> {
+    if (!username) return null
     const [result, userEmail] = await Promise.all([
       this.hmppsManageUsersClient.getUserFromUsername(username, user.token),
       this.hmppsManageUsersClient.getUserEmail(username, user.token),

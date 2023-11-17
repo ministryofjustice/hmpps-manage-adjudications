@@ -210,3 +210,54 @@ context('Enter hearing outcome', () => {
     })
   })
 })
+context('Governor username not present due to migration', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+    cy.task('stubGetUserFromUsername', {
+      username: '',
+      response: {},
+    })
+    cy.task('stubGetEmail', {
+      username: '',
+      response: {},
+    })
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.task('stubGetReportedAdjudication', {
+      id: 100,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '100',
+          prisonerNumber: 'G6123VU',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-01-23T17:00:00',
+                id: 68,
+                locationId: 775,
+                outcome: testData.hearingOutcome({
+                  adjudicator: null,
+                  optionalItems: { details: 'A reason for referral' },
+                }),
+              }),
+            },
+          ] as OutcomeHistory,
+        }),
+      },
+    })
+    cy.signIn()
+  })
+
+  it('still loads even when there is no username present', () => {
+    cy.visit(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
+    const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
+    enterHearingOutcomePage.governorName().should('exist')
+    enterHearingOutcomePage.governorName().should('be.empty')
+    enterHearingOutcomePage.searchButton().should('exist')
+    enterHearingOutcomePage.chosenGovernorName().should('not.exist')
+    enterHearingOutcomePage.chosenGovernorId().should('not.exist')
+    enterHearingOutcomePage.radioButtons().find('input[value="REFER_POLICE"]').should('be.checked')
+  })
+})
