@@ -87,7 +87,7 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^0.2.6",
+    "@ministryofjustice/frontend": "^1.8.1",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.0",
     "body-parser": "^1.20.2",
