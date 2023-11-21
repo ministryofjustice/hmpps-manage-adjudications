@@ -47,16 +47,16 @@ describe('ValidateForm', () => {
       text: 'Enter the camera number',
     })
   })
-  it('returns correct error if body-worn camera is selected but the camera number is more than 32 characters', () => {
+  it('returns correct error if body-worn camera is selected but the camera number is more than 15 characters', () => {
     const result = validateForm({
       evidenceDescription: 'Video showing prisoner assaulting victim',
       evidenceType: 'BODY_WORN_CAMERA',
-      bwcIdentifier: 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz',
+      bwcIdentifier: 'abcdefghijklmnop',
       batIdentifier: undefined,
     })
     expect(result).toStrictEqual({
       href: '#bwcIdentifier',
-      text: 'A camera number must be 32 characters or fewer',
+      text: 'Camera number must be 15 characters or less',
     })
   })
   it('returns correct error if bagged and tagged evidence is selected but the seal number is not entered', () => {
@@ -80,7 +80,7 @@ describe('ValidateForm', () => {
     })
     expect(result).toStrictEqual({
       href: '#batIdentifier',
-      text: 'A seal number must be 32 characters or fewer',
+      text: 'Seal number must be 32 characters or less',
     })
   })
   it('returns the expected response for an invalid submit', () => {
@@ -93,7 +93,7 @@ describe('ValidateForm', () => {
       })
     ).toStrictEqual({
       href: '#evidenceDescription',
-      text: 'Your statement must be 4,000 characters or fewer',
+      text: 'Your statement must be 4,000 characters or less',
     })
   })
 })
