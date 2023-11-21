@@ -47,6 +47,18 @@ describe('ValidateForm', () => {
       text: 'Enter the camera number',
     })
   })
+  it('returns correct error if body-worn camera is selected but the camera number is more than 32 characters', () => {
+    const result = validateForm({
+      evidenceDescription: 'Video showing prisoner assaulting victim',
+      evidenceType: 'BODY_WORN_CAMERA',
+      bwcIdentifier: 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz',
+      batIdentifier: undefined,
+    })
+    expect(result).toStrictEqual({
+      href: '#bwcIdentifier',
+      text: 'A camera number must be 32 characters or fewer',
+    })
+  })
   it('returns correct error if bagged and tagged evidence is selected but the seal number is not entered', () => {
     const result = validateForm({
       evidenceDescription: 'Table leg used to assault victim',
@@ -57,6 +69,18 @@ describe('ValidateForm', () => {
     expect(result).toStrictEqual({
       href: '#batIdentifier',
       text: 'Enter the seal number',
+    })
+  })
+  it('returns correct error if bagged and tagged evidence is selected and seal number is more than 32 characters', () => {
+    const result = validateForm({
+      evidenceDescription: 'Table leg used to assault victim',
+      evidenceType: 'BAGGED_AND_TAGGED',
+      bwcIdentifier: undefined,
+      batIdentifier: 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz',
+    })
+    expect(result).toStrictEqual({
+      href: '#batIdentifier',
+      text: 'A seal number must be 32 characters or fewer',
     })
   })
   it('returns the expected response for an invalid submit', () => {

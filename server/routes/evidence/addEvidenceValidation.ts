@@ -20,9 +20,17 @@ const errors: { [key: string]: FormError } = {
     href: '#bwcIdentifier',
     text: 'Enter the camera number',
   },
+  BWC_IDENTIFIER_TOO_LONG: {
+    href: '#bwcIdentifier',
+    text: 'A camera number must be 32 characters or fewer',
+  },
   BAT_IDENTIFIER_MISSING: {
     href: '#batIdentifier',
     text: 'Enter the seal number',
+  },
+  BAT_IDENTIFIER_TOO_LONG: {
+    href: '#batIdentifier',
+    text: 'A seal number must be 32 characters or fewer',
   },
   WORD_COUNT_EXCEEDED: {
     href: '#evidenceDescription',
@@ -38,7 +46,9 @@ export default function validateForm({
 }: addEvidenceForm): FormError | null {
   if (!evidenceType) return errors.RADIO_OPTION_MISSING
   if (evidenceType === 'BODY_WORN_CAMERA' && !bwcIdentifier) return errors.BWC_IDENTIFIER_MISSING
+  if (evidenceType === 'BODY_WORN_CAMERA' && bwcIdentifier.length > 32) return errors.BWC_IDENTIFIER_TOO_LONG
   if (evidenceType === 'BAGGED_AND_TAGGED' && !batIdentifier) return errors.BAT_IDENTIFIER_MISSING
+  if (evidenceType === 'BAGGED_AND_TAGGED' && batIdentifier.length > 32) return errors.BAT_IDENTIFIER_TOO_LONG
   if (!evidenceDescription) return errors.MISSING_TEXT
   if (evidenceDescription.length > 4000) return errors.WORD_COUNT_EXCEEDED
 
