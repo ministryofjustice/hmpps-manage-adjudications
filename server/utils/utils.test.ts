@@ -152,6 +152,9 @@ describe('getFormattedOfficerName', () => {
   it('should return a correctly formatted name if only one name is added', () => {
     expect(getFormattedOfficerName('smithy')).toEqual('Smithy')
   })
+  it('should return a correctly formatted name if lots of spaces are used', () => {
+    expect(getFormattedOfficerName(' John     Smith')).toEqual('J. Smith')
+  })
 })
 
 describe('convertNameForPlaceholder', () => {
