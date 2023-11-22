@@ -276,8 +276,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   })
 
   njkEnv.addFilter('witnessName', (witnessLastName: string, witnessFirstName: string) => {
-    if (!witnessLastName) return witnessFirstName
-    return `${witnessLastName}, ${witnessFirstName}`
+    if (witnessFirstName && witnessLastName) return `${witnessLastName}, ${witnessFirstName}`
+    return witnessFirstName || witnessLastName || 'No name provided'
   })
 
   njkEnv.addFilter('toTextValue', (array, selected) => {

@@ -32,9 +32,9 @@ export const getFormattedOfficerName = (name: string): string => {
   if (!name) {
     return null
   }
-  const replaceAnyAdditionalSpaces = name.trim().replace(/ +/g, ' ')
-  const names = replaceAnyAdditionalSpaces.split(' ')
-  if (names.length < 2) return properCaseName(name)
+  const trimmedName = name.trim().replace(/ +/g, ' ')
+  const names = trimmedName.split(' ')
+  if (names.length < 2) return properCaseName(trimmedName)
   return `${names[0][0].toUpperCase()}. ${properCaseName(names.reverse()[0])}`
 }
 

@@ -4,7 +4,7 @@ import { OtherPersonData, DecisionForm } from '../offenceCodeDecisions/decisionF
 import DecisionHelper from '../offenceCodeDecisions/decisionHelper'
 import { FormError } from '../../@types/template'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { convertToTitleCase } from '../../utils/utils'
+import { properCaseName } from '../../utils/utils'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
@@ -44,10 +44,16 @@ export default class OtherPersonWitnessDecisionHelper extends DecisionHelper {
   override async witnessNamesForSession(form: DecisionForm): Promise<unknown> {
     const { otherPersonNameInput } = form.selectedAnswerData as OtherPersonData
     if (otherPersonNameInput) {
-      const name = convertToTitleCase(otherPersonNameInput).split(' ')
+      const trimmedName = otherPersonNameInput.trim().replace(/ +/g, ' ')
+      const names = trimmedName.split(' ')
+      if (names.length < 2)
+        return {
+          firstName: null,
+          lastName: properCaseName(names[0]),
+        }
       return {
-        firstName: name[0],
-        lastName: name.slice(1).join(' '),
+        firstName: properCaseName(names[0]),
+        lastName: properCaseName(names.reverse()[0]),
       }
     }
     return null
