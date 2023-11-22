@@ -92,7 +92,7 @@ describe('placeOnReportService', () => {
         PrisonerGender.MALE,
         '2021-10-29T15:40:25.884'
       )
-      expect(startNewDraftAdjudication).toBeCalledWith({
+      expect(startNewDraftAdjudication).toHaveBeenCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         dateTimeOfDiscovery: '2021-10-29T15:40:25.884',
         locationId: 3,
@@ -100,6 +100,7 @@ describe('placeOnReportService', () => {
         agencyId: 'MDI',
         gender: PrisonerGender.MALE,
         overrideAgencyId: null,
+        offenderBookingId: 123,
       })
       expect(result).toEqual({
         draftAdjudication: testData.draftAdjudication({
@@ -128,7 +129,7 @@ describe('placeOnReportService', () => {
         PrisonerGender.MALE,
         '2021-10-29T15:40:25.884'
       )
-      expect(startNewDraftAdjudication).toBeCalledWith({
+      expect(startNewDraftAdjudication).toHaveBeenCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         dateTimeOfDiscovery: '2021-10-29T15:40:25.884',
         locationId: 3,
@@ -136,6 +137,7 @@ describe('placeOnReportService', () => {
         agencyId: 'MDI',
         gender: PrisonerGender.MALE,
         overrideAgencyId: 'LEI',
+        offenderBookingId: 123,
       })
     })
   })

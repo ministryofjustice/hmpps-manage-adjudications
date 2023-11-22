@@ -120,6 +120,7 @@ export default class PlaceOnReportService {
       dateTimeOfDiscovery,
       gender,
       overrideAgencyId: prisoner.agencyId !== user.activeCaseLoadId ? prisoner.agencyId : null,
+      offenderBookingId: prisoner.bookingId,
     }
     return client.startNewDraftAdjudication(requestBody)
   }
