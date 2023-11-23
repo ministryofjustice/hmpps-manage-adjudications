@@ -538,7 +538,7 @@ export default class ReportedAdjudicationsService {
 
     const incidentDetails = [
       {
-        label: 'Reporting Officer',
+        label: 'Reporting officer',
         value: formatReportingOfficer(reporter.name, adjudication),
         changeLinkHref: changeReportingOfficerLink,
         dataQa: changeReportingOfficerDataQa,

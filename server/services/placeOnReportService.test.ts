@@ -174,7 +174,7 @@ describe('placeOnReportService', () => {
       const expectedResult = {
         incidentDetails: [
           {
-            label: 'Reporting Officer',
+            label: 'Reporting officer',
             value: 'T. User',
             changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.start(
               '10'
@@ -232,7 +232,7 @@ describe('placeOnReportService', () => {
       const expectedResult = {
         incidentDetails: [
           {
-            label: 'Reporting Officer',
+            label: 'Reporting officer',
             value: 'T. User',
             changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.start(
               '10'
@@ -292,7 +292,7 @@ describe('placeOnReportService', () => {
       const expectedResult = {
         incidentDetails: [
           {
-            label: 'Reporting Officer',
+            label: 'Reporting officer',
             value: 'T. User on behalf of some officer',
           },
           {
