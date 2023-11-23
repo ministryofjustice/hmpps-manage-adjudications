@@ -64,7 +64,7 @@ beforeEach(() => {
     statement: '',
     incidentDetails: [
       {
-        label: 'Reporting Officer',
+        label: 'Reporting officer',
         value: 'Test McTest',
       },
       {

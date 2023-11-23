@@ -71,7 +71,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getPrisonerReport.mockResolvedValue({
     incidentDetails: [
       {
-        label: 'Reporting Officer',
+        label: 'Reporting officer',
         value: 'T. User',
       },
       {

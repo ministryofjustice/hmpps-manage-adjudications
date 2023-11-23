@@ -69,7 +69,7 @@ beforeEach(() => {
     statement: '',
     incidentDetails: [
       {
-        label: 'Reporting Officer',
+        label: 'Reporting officer',
         value: 'Test McTest',
       },
       {
@@ -155,7 +155,7 @@ describe('GET /check-your-answers for youth offender', () => {
       statement: '',
       incidentDetails: [
         {
-          label: 'Reporting Officer',
+          label: 'Reporting officer',
           value: 'Test McTest',
         },
       ],

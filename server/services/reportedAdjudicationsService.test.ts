@@ -474,7 +474,7 @@ describe('reportedAdjudicationsService', () => {
       const expectedResult = {
         incidentDetails: [
           {
-            label: 'Reporting Officer',
+            label: 'Reporting officer',
             value: 'T. User',
           },
           {
@@ -524,7 +524,7 @@ describe('reportedAdjudicationsService', () => {
       const expectedResult = {
         incidentDetails: [
           {
-            label: 'Reporting Officer',
+            label: 'Reporting officer',
             value: 'T. User on behalf of some officer',
           },
           {

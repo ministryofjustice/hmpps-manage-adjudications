@@ -75,7 +75,7 @@ beforeEach(() => {
 
     incidentDetails: [
       {
-        label: 'Reporting Officer',
+        label: 'Reporting officer',
         value: 'T. User',
       },
       {

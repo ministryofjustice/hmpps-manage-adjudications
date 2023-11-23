@@ -193,7 +193,7 @@ export default class PlaceOnReportService {
 
     const incidentDetails = [
       {
-        label: 'Reporting Officer',
+        label: 'Reporting officer',
         value: formatReportingOfficer(reporter.name, draftAdjudication),
         changeLinkHref: changeReportingOfficerLink,
         dataQa: changeReportingOfficerDataQa,
