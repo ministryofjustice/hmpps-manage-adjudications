@@ -104,7 +104,7 @@ describe('POST', () => {
         )}?punishmentType=ADDITIONAL_DAYS&days=5`
       )
       .send({
-        select: 'consecutive-punishment-report-101',
+        select: 'consecutive-report-101',
       })
       .then(() => {
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(

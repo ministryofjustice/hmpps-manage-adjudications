@@ -96,7 +96,7 @@ describe('POST', () => {
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS&days=5`
       )
       .send({
-        select: 'consecutive-punishment-report-101',
+        select: 'consecutive-report-101',
       })
       .then(() => {
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
