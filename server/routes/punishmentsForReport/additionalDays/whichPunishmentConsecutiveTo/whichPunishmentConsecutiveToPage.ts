@@ -63,7 +63,7 @@ export default class WhichPunishmentConsecutiveToPage {
     const { select } = req.body
 
     // We're grabbing the value of the button clicked, which has `consecutive-report-` before the charge number, so we need to strip that out first
-    const chargeNumberOfSelectedPunishment = select.split('consecutive-report-').join('') || null
+    const chargeNumberOfSelectedPunishment = select.replace('consecutive-report-', '') || null
     try {
       const punishmentData = {
         type,
