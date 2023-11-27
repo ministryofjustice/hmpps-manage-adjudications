@@ -37,6 +37,9 @@
                     errorMessage: params.errorMessage | truthy,
                     classes: 'time-select-hours',
                     items: hour | toTextValue(params.hour),
+                    label: {
+                        text: 'Hour'
+                    },
                     attributes: {
                         'aria-label': 'Hour',
                         'data-qa': 'hearingDate[time][hour]'
@@ -49,6 +52,9 @@
                     errorMessage: params.errorMessage | truthy,
                     classes: 'time-select-minutes',
                     items: minute | toTextValue(params.minute),
+                    label: {
+                        text: 'Minute'
+                    },
                     attributes: {
                         'aria-label': 'Minute',
                         'data-qa': 'hearingDate[time][minute]'
