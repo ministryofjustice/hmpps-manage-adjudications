@@ -23,6 +23,12 @@ const TURQUOISE = '#28a197'
 const TURQUOISE_DARKER = '#238d84'
 const BLACK = '#0b0c0c'
 
+const BAR_LINE_DARK_BLUE_OUT = '#003078'
+const BAR_LINE_DARK_BLUE_IN = '#3D76CA'
+const BAR_LINE_LIGHT_BLUE_OUT = '#5694CA'
+const BAR_LINE_LIGHT_BLUE_IN = '#91C1EA'
+const LINE_BLACK = '#000000'
+
 const FONT_FAMILY = '"GDS Transport",arial,sans-serif'
 
 export const produceVerticalBarsAndLineCharts = async (
@@ -451,8 +457,9 @@ export const createVerticalBarsAndLineChartSettings = (params: {
   yAxisLabel: string
 }) => {
   const dataLength = params.barData.length
-  const barsColors = createCustomArray(dataLength, DARK_BLUE, LIGHT_BLUE)
-  const barsColorsDarker = createCustomArray(dataLength, DARK_BLUE_DARKER, LIGHT_BLUE_DARKER)
+  const barsColors = createCustomArray(dataLength, BAR_LINE_DARK_BLUE_IN, BAR_LINE_LIGHT_BLUE_IN)
+  const barsColorsDarker = createCustomArray(dataLength, BAR_LINE_DARK_BLUE_OUT, BAR_LINE_LIGHT_BLUE_OUT)
+  const barBorders = createCustomArray(dataLength, BAR_LINE_DARK_BLUE_OUT, BAR_LINE_LIGHT_BLUE_OUT)
 
   return {
     title: params.chartTitle,
@@ -471,6 +478,8 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               hoverBackgroundColor: barsColorsDarker,
               hoverBorderWidth: 1,
               hoverBorderColor: barsColorsDarker,
+              borderWidth: 3,
+              borderColor: barBorders,
             },
             {
               type: 'line',
@@ -478,17 +487,17 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               label: 'Previous year',
               data: params.lineData,
               fill: false,
-              borderColor: TURQUOISE,
-              backgroundColor: TURQUOISE,
-              hoverBorderColor: TURQUOISE_DARKER,
-              pointBackgroundColor: TURQUOISE,
+              borderColor: LINE_BLACK,
+              backgroundColor: LINE_BLACK,
+              hoverBorderColor: LINE_BLACK,
+              pointBackgroundColor: LINE_BLACK,
               pointBorderColor: '#ffffff',
               pointBorderWidth: 1,
               pointHoverBackgroundColor: '#ffffff',
-              pointHoverBorderColor: TURQUOISE_DARKER,
+              pointHoverBorderColor: LINE_BLACK,
               pointHoverBorderWidth: 3,
               tension: 0,
-              borderWidth: 2,
+              borderWidth: 3,
               hoverBorderWidth: 4,
               pointStyle: 'circle',
               font: {
@@ -503,8 +512,8 @@ export const createVerticalBarsAndLineChartSettings = (params: {
               label: 'Current incomplete month',
               data: [] as unknown[],
               fill: false,
-              borderColor: LIGHT_BLUE,
-              backgroundColor: LIGHT_BLUE,
+              borderColor: BAR_LINE_LIGHT_BLUE_OUT,
+              backgroundColor: BAR_LINE_LIGHT_BLUE_IN,
               tension: 1,
             },
           ],
