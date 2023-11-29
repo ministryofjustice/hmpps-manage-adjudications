@@ -8,15 +8,10 @@ import { properCaseName } from '../../utils/utils'
 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
-  OTHER_PERSON_MISSING_NAME_INPUT_SUBMIT = 'OTHER_PERSON_MISSING_NAME_INPUT_SUBMIT',
-  OTHER_PERSON_SINGLE_NAME = 'OTHER_PERSON_SINGLE_NAME',
+  OTHER_PERSON_NAME = 'OTHER_PERSON_NAME',
 }
 const error: { [key in ErrorType]: FormError } = {
-  OTHER_PERSON_MISSING_NAME_INPUT_SUBMIT: {
-    href: '#otherPersonNameInput',
-    text: 'Enter the person’s name',
-  },
-  OTHER_PERSON_SINGLE_NAME: {
+  OTHER_PERSON_NAME: {
     href: '#otherPersonNameInput',
     text: 'Enter the person’s first and last names',
   },
@@ -45,12 +40,9 @@ export default class OtherPersonWitnessDecisionHelper extends DecisionHelper {
   override async validateForm(form: DecisionForm): Promise<FormError[]> {
     const otherPersonData = form.selectedAnswerData as OtherPersonData
     const errors = []
-    if (!otherPersonData.otherPersonNameInput) {
-      errors.push(error.OTHER_PERSON_MISSING_NAME_INPUT_SUBMIT)
-    }
     const names = prepareWitnessName(otherPersonData.otherPersonNameInput)
-    if (names.length < 2) {
-      errors.push(error.OTHER_PERSON_SINGLE_NAME)
+    if (!otherPersonData.otherPersonNameInput || names.length < 2) {
+      errors.push(error.OTHER_PERSON_NAME)
     }
     return errors
   }
