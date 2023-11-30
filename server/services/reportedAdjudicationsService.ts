@@ -6,6 +6,7 @@ import ManageAdjudicationsSystemTokensClient, {
 } from '../data/manageAdjudicationsSystemTokensClient'
 import CuriousApiService from './curiousApiService'
 import {
+  AdjudicationHistoryFilter,
   AwardedPunishmentsAndDamages,
   FormattedDisIssue,
   IssueStatus,
@@ -1158,5 +1159,29 @@ export default class ReportedAdjudicationsService {
       additionalDays,
       prospectiveAdditionalDays,
     }
+  }
+
+  async getAdjudicationHistory(
+    prisonerNumber: string,
+    filter: AdjudicationHistoryFilter,
+    pageRequest: ApiPageRequest,
+    user: User
+  ): Promise<ApiPageResponse<ReportedAdjudication>> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const [movementInfo, prisoner] = await Promise.all([
+      new PrisonApiClient(token).getMovementByOffender(prisonerNumber),
+      new PrisonApiClient(user.token).getPrisonerDetails(prisonerNumber),
+    ])
+
+    const allPastAgenciesForPrisoner = movementInfo.map(bookings => bookings.fromAgency)
+    const allAgenciesForPrisoner = [movementInfo[0].toAgency, ...allPastAgenciesForPrisoner]
+    const uniqueListOfAgenciesForPrisoner = Array.from(new Set(allAgenciesForPrisoner))
+    const results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistory(
+      prisoner.bookingId,
+      filter,
+      uniqueListOfAgenciesForPrisoner,
+      pageRequest
+    )
+    return results
   }
 }

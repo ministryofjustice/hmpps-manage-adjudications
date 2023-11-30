@@ -1,0 +1,63 @@
+.adjudication-history-card-list-item {
+    padding-bottom: 30px;
+    border-bottom: 1px solid govuk-colour('dark-grey');
+    margin-bottom: 30px;
+  
+    &__title {
+      font-size: 24px;
+      font-weight: bold;
+      color: $govuk-text-colour;
+      margin-bottom: 10px;
+    }
+
+    &__header {
+        display: flex;
+        justify-content:space-between;
+    }
+
+    &__status {
+        margin-bottom: 10px;
+    }
+ 
+    &__notes {
+      font-size: 19px;
+      font-weight: 300;
+      color: $govuk-text-colour;
+      margin-bottom: 30px;
+      max-width: 670px;
+      word-break: break-word;
+  
+      @media (max-width: 1152px) {
+        max-width: 570px;
+      }
+      @media (max-width: 1000px) {
+        max-width: 380px;
+      }
+    }
+
+    &__metadata {
+      font-size: 19px;
+      font-weight: 300;
+      color: $govuk-text-colour;
+      margin-bottom: 10px;
+    }
+
+    &__location {
+      font-size: 19px;
+      font-weight: 300;
+      color: $govuk-secondary-text-colour;
+      margin-bottom: 0;
+    }
+  
+    &__link {
+      white-space: nowrap;
+  
+      a {
+        display: block;
+      }
+  
+      a + a {
+        margin-top: 20px;
+      }
+    }
+}

@@ -43,6 +43,13 @@ export interface PrintDISFormsUiFilter extends DISUiFilter {
   issueStatus: IssueStatus | IssueStatus[]
 }
 
+export type AdjudicationHistoryUiFilter = {
+  fromDate?: string
+  toDate?: string
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  agency?: string | string[]
+}
+
 export const uiDISFormFilterFromRequest = (req: Request): DISUiFilter => {
   return {
     fromDate: req.query.fromDate as string,
@@ -73,6 +80,15 @@ export const uiTransfersFilterFromRequest = (req: Request): TransfersUiFilter =>
   return {
     status: req.query.status as ReportedAdjudicationStatus,
     transfersOnly: req.query.transfersOnly as unknown as boolean,
+  }
+}
+
+export const uiAdjudicationHistoryFilterFromRequest = (req: Request): AdjudicationHistoryUiFilter => {
+  return {
+    fromDate: req.query.fromDate as string,
+    toDate: req.query.toDate as string,
+    status: req.query.status as ReportedAdjudicationStatus,
+    agency: req.query.agency as string,
   }
 }
 
@@ -159,6 +175,14 @@ export const fillInPrintDISFormFilterDefaults = (
   }
 }
 
+export const fillInAdjudicationHistoryDefaults = (
+  uiFilter: AdjudicationHistoryUiFilter
+): AdjudicationHistoryUiFilter => {
+  return {
+    status: uiFilter.status || allStatuses,
+  }
+}
+
 export const uiFilterFromBody = (req: Request) => {
   return {
     fromDate: req.body.fromDate.date,
@@ -214,6 +238,15 @@ export const transfersFilterFromUiFilter = (filter: TransfersUiFilter) => {
   }
 }
 
+export const adjudicationHistoryFilterFromUiFilter = (filter: AdjudicationHistoryUiFilter) => {
+  return {
+    fromDate: filter.fromDate && datePickerDateToMoment(filter.fromDate),
+    toDate: filter.toDate && datePickerDateToMoment(filter.toDate),
+    status: filter.status || allStatuses,
+    agency: filter.agency,
+  }
+}
+
 export const printDISFormfilterFromUiFilter = (filter: PrintDISFormsUiFilter) => {
   return {
     fromDate: datePickerDateToMoment(filter.fromDate),
@@ -238,7 +271,7 @@ const statusKeyMatch = (
   return adjStatuses.includes(adjKey)
 }
 
-export const reportedAdjudicationStatuses = (filter: UiFilter) => {
+export const reportedAdjudicationStatuses = (filter: UiFilter | AdjudicationHistoryUiFilter) => {
   const statuses = Object.keys(ReportedAdjudicationStatus)
 
   const filteredStatuses = statuses.filter(key => key !== ReportedAdjudicationStatus.ACCEPTED)
