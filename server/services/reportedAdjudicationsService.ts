@@ -1161,21 +1161,23 @@ export default class ReportedAdjudicationsService {
     }
   }
 
+  async getUniqueListOfAgenciesForPrisoner(prisonerNumber: string, user: User) {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const movementInfo = await new PrisonApiClient(token).getMovementByOffender(prisonerNumber)
+    const allPastAgenciesForPrisoner = movementInfo.map(bookings => bookings.fromAgency)
+    const allAgenciesForPrisoner = [movementInfo[0].toAgency, ...allPastAgenciesForPrisoner]
+    return Array.from(new Set(allAgenciesForPrisoner))
+  }
+
   async getAdjudicationHistory(
     prisonerNumber: string,
+    prisoner: PrisonerResultSummary,
+    uniqueListOfAgenciesForPrisoner: string[],
     filter: AdjudicationHistoryFilter,
     pageRequest: ApiPageRequest,
     user: User
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const [movementInfo, prisoner] = await Promise.all([
-      new PrisonApiClient(token).getMovementByOffender(prisonerNumber),
-      new PrisonApiClient(user.token).getPrisonerDetails(prisonerNumber),
-    ])
-
-    const allPastAgenciesForPrisoner = movementInfo.map(bookings => bookings.fromAgency)
-    const allAgenciesForPrisoner = [movementInfo[0].toAgency, ...allPastAgenciesForPrisoner]
-    const uniqueListOfAgenciesForPrisoner = Array.from(new Set(allAgenciesForPrisoner))
     const results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistory(
       prisoner.bookingId,
       filter,

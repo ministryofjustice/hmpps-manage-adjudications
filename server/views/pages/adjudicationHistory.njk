@@ -5,7 +5,7 @@
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "../macros/adjudicationFilter.njk" import adjudicationFilter %}
 
-{% set title = "Adjudications" %}
+{% set title = 'Adjudication history' %}
 
 {% block pageTitle %}
   {{ title }} - Digital Prison Services
@@ -23,10 +23,12 @@
       }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <h1 class="govuk-heading-l">{{ prisonerName | possessive }} adjudication history</h1>
 
-  {{ adjudicationFilter(filter, checkboxes, errors, adjudicationUrls.adjudicationHistory.urls.start(), csrfToken, maxDate) }}
   <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+      {% include '../partials/adjudicationHistoryFilter.njk' %}
+    </div>
     <div class="govuk-grid-column-three-quarters ">
       {% include '../partials/adjudicationHistoryList.njk' %}
     </div>

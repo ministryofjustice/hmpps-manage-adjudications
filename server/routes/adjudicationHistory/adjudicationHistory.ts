@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
-import { formatDateForDatePicker } from '../../utils/utils'
+import { convertToTitleCase, formatDateForDatePicker } from '../../utils/utils'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
@@ -8,13 +8,14 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import {
   adjudicationHistoryFilterFromUiFilter,
   AdjudicationHistoryUiFilter,
+  adjudicationHistoryUiFilterFromBody,
+  establishmentCheckboxes,
   reportedAdjudicationStatuses,
   uiAdjudicationHistoryFilterFromRequest,
-  UiFilter,
-  uiFilterFromBody,
   validate,
 } from '../../utils/adjudicationFilterHelper'
 import { FormError } from '../../@types/template'
+import { PrisonerResultSummary } from '../../services/placeOnReportService'
 
 export default class AdjudicationHistoryRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -24,12 +25,17 @@ export default class AdjudicationHistoryRoutes {
     res: Response,
     filter: AdjudicationHistoryUiFilter,
     results: ApiPageResponse<ReportedAdjudication>,
-    errors: FormError[]
-  ): Promise<void> =>
+    errors: FormError[],
+    prisonerName: string,
+    uniqueListOfAgenciesForPrisoner: string[]
+  ): Promise<void> => {
     res.render(`pages/adjudicationHistory.njk`, {
+      prisonerNumber: req.params.prisonerNumber,
+      prisonerName,
       adjudications: results,
       filter,
-      checkboxes: reportedAdjudicationStatuses(filter),
+      statuses: reportedAdjudicationStatuses(filter),
+      establishments: establishmentCheckboxes(filter, uniqueListOfAgenciesForPrisoner),
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
@@ -37,29 +43,57 @@ export default class AdjudicationHistoryRoutes {
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
     })
+  }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { prisonerNumber } = req.params
+    const { user } = res.locals
     const uiFilter = uiAdjudicationHistoryFilterFromRequest(req)
     const filter = adjudicationHistoryFilterFromUiFilter(uiFilter)
-
+    const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
+    const uniqueListOfAgenciesForPrisoner = await this.reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner(
+      prisonerNumber,
+      user
+    )
     const results = await this.reportedAdjudicationsService.getAdjudicationHistory(
       prisonerNumber,
+      prisoner,
+      uniqueListOfAgenciesForPrisoner,
       filter,
       pageRequestFrom(20, +req.query.pageNumber || 1),
       res.locals.user
     )
 
-    return this.renderView(req, res, uiFilter, results, [])
+    const prisonerName = await this.getPrisonerName(prisoner)
+    return this.renderView(req, res, uiFilter, results, [], prisonerName, uniqueListOfAgenciesForPrisoner)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    // const uiFilter = uiFilterFromBody(req)
-    // const errors = validate(uiFilter)
-    // if (errors && errors.length !== 0) {
-    //   return this.renderView(req, res, ...uiFilter, { size: 20, number: 0, totalElements: 0, content: [] }, errors)
-    // }
-    // return res.redirect(adjudicationUrls.adjudicationHistory.urls.filter(uiFilter))
-    return null
+    const { prisonerNumber } = req.params
+    const { user } = res.locals
+
+    const uiFilter = adjudicationHistoryUiFilterFromBody(req)
+    const errors = validate(uiFilter)
+    if (errors && errors.length !== 0) {
+      const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
+      const prisonerName = await this.getPrisonerName(prisoner)
+      const uniqueListOfAgenciesForPrisoner =
+        await this.reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner(prisonerNumber, user)
+
+      return this.renderView(
+        req,
+        res,
+        uiFilter,
+        { size: 20, number: 0, totalElements: 0, content: [] },
+        errors,
+        prisonerName,
+        uniqueListOfAgenciesForPrisoner
+      )
+    }
+    return res.redirect(adjudicationUrls.adjudicationHistory.urls.filter(prisonerNumber, uiFilter))
+  }
+
+  getPrisonerName = async (prisoner: PrisonerResultSummary) => {
+    return convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
   }
 }

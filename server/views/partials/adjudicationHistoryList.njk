@@ -1,52 +1,16 @@
-  {# {% set rows = [] %} 
- {% for completedReport in adjudications.content %} 
-{% set viewCompletedReportlLinkHtml %}
-        <a href="{{ adjudicationUrls.prisonerReport.urls.review(completedReport.chargeNumber) }}" class="govuk-link" data-qa="view-report-link">View report<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span>
-        </a> 
-        {% endset -%} 
-
- {% set rows = (rows.push([
-      { text: completedReport.chargeNumber },
-      { text: completedReport.status | reportedAdjudicationStatusDisplayName },
-      { text: completedReport.offenceDetails.offenceRule.paragraphDescription },
-      { text: completedReport.incidentDetails.dateTimeOfDiscovery | formatTimestampTo('D MMM YYYY') },
-      { text: "Happened at "+completedReport.originatingAgencyId }
-      ]), rows) %}
-    {% endfor %}
-      
-      {% if rows | length %}
-        {{ mojPagination(pagination) }}
-        <div class="results-table">
-          {{ govukTable({
-            caption: "Adjudication history",
-            captionClasses: "govuk-visually-hidden",
-          head: [
-        { text: "Charge number" },
-        { text: "Status" },
-        { text: "Offence description" },
-        { text: "Discovery date and time" },
-        { text: "Originating agency" }
-      ],
-      rows: rows,
-      attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
-    }) }}
-        </div>
-        {{ mojPagination(pagination) }}
-      {% else %}
-        <p class="govuk-!-padding-top-3" data-qa="no-results-message">No adjudication history.</p>
-      {% endif %}
-       #}
-
-
 {% from '../macros/adjudicationHistoryCard.njk' import adjudicationHistoryCard %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+      {% if adjudications.totalElements %}
         <div class="adjudication-history-card-list" role="list">
+          {{ mojPagination(pagination) }}
+          <hr class="adjudication-history-card-list__top-border">
           {% for report in adjudications.content %} 
-                {{ adjudicationHistoryCard(report) }}
-            {% endfor %}
+            {{ adjudicationHistoryCard(report) }}
+          {% endfor %}
+        {{ mojPagination(pagination) }}
         </div>
-        {% if not adjudications.totalElements %}
+        {% else %}
             <div>
                 <p>No adjudications have been found for the selected filters.</p>
                 <p>You can:</p>

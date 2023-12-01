@@ -214,6 +214,15 @@ export const PrintDISFormUiFilterFromBody = (req: Request) => {
   }
 }
 
+export const adjudicationHistoryUiFilterFromBody = (req: Request) => {
+  return {
+    fromDate: req.body.fromDate,
+    toDate: req.body.toDate,
+    status: req.body.status as ReportedAdjudicationStatus,
+    agency: req.body.agency as string,
+  }
+}
+
 export const filterFromUiFilter = (filter: UiFilter) => {
   return {
     fromDate: datePickerDateToMoment(filter.fromDate),
@@ -263,12 +272,9 @@ export const validate = (uiFilter: UiFilter | DISUiFilter): FormError[] => {
   return []
 }
 
-const statusKeyMatch = (
-  adjStatuses: ReportedAdjudicationStatus | ReportedAdjudicationStatus[],
-  adjKey: ReportedAdjudicationStatus
-) => {
-  if (!Array.isArray(adjStatuses)) return adjStatuses === adjKey
-  return adjStatuses.includes(adjKey)
+const itemCheckBoxMatch = (selectedItems: any, checkbox: any) => {
+  if (!Array.isArray(selectedItems)) return selectedItems === checkbox
+  return selectedItems.includes(checkbox)
 }
 
 export const reportedAdjudicationStatuses = (filter: UiFilter | AdjudicationHistoryUiFilter) => {
@@ -280,7 +286,17 @@ export const reportedAdjudicationStatuses = (filter: UiFilter | AdjudicationHist
     return {
       value: key,
       text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
-      checked: statusKeyMatch(filter.status, key as ReportedAdjudicationStatus),
+      checked: itemCheckBoxMatch(filter.status, key as ReportedAdjudicationStatus),
+    }
+  })
+}
+
+export const establishmentCheckboxes = (filter: AdjudicationHistoryUiFilter, establishments: string[]) => {
+  return establishments.map(key => {
+    return {
+      value: key,
+      text: key,
+      checked: itemCheckBoxMatch(filter.agency, key),
     }
   })
 }
@@ -297,7 +313,7 @@ export const transferredAdjudicationStatuses = (filter: TransfersUiFilter) => {
     return {
       value: key,
       text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
-      checked: statusKeyMatch(filter.status, key as ReportedAdjudicationStatus),
+      checked: itemCheckBoxMatch(filter.status, key as ReportedAdjudicationStatus),
     }
   })
 }
