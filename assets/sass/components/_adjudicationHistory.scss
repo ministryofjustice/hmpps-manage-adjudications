@@ -1,6 +1,15 @@
+.adjudication-history-filter {
+    background-color: #f3f2f1;
+    padding: 30px 15px;
+}
 .adjudication-history-card-list {
     &__top-border {
         margin: 10px 0 30px 0;
+    }
+}
+.adjudication-history-no-entries {
+    li {
+        margin-left:10px;
     }
 }
 .adjudication-history-card-list-item {

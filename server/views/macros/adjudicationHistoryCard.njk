@@ -1,4 +1,4 @@
-{% macro adjudicationHistoryCard(adjudication) %}
+{% macro adjudicationHistoryCard(adjudication, uniqueListOfAgenciesForPrisoner) %}
   <div class="adjudication-history-card-list-item" role="listitem">
     <div class="adjudication-history-card-list-item__content">
       <div class="adjudication-history-card-list-item__header">
@@ -8,7 +8,7 @@
       </div>
       <p class="adjudication-history-card-list-item__notes govuk-body">{{ adjudication.offenceDetails.offenceRule.paragraphDescription }}</p>
       <p class="adjudication-history-card-list-item__metadata govuk-body">Date of discovery: {{ adjudication.incidentDetails.dateTimeOfDiscovery | formatTimestampTo('DD/MM/YYYY - hh:mm') }}</p>
-      <p class="adjudication-history-card-list-item__location govuk-body">Happened at {{ adjudication.originatingAgencyId }}</p>
+      <p class="adjudication-history-card-list-item__location govuk-body">Happened at {{ adjudication.originatingAgencyId | agencyIdToName(uniqueListOfAgenciesForPrisoner) }}</p>
     </div>
   </div>
 {% endmacro %} 

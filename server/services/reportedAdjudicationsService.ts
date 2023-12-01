@@ -62,6 +62,7 @@ import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 import { AwardedPunishmentsAndDamagesFilter } from '../utils/adjudicationFilterHelper'
 import { PunishmentType } from '../data/PunishmentResult'
+import { EstablishmentInformation } from '../@types/template'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -1164,24 +1165,47 @@ export default class ReportedAdjudicationsService {
   async getUniqueListOfAgenciesForPrisoner(prisonerNumber: string, user: User) {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const movementInfo = await new PrisonApiClient(token).getMovementByOffender(prisonerNumber)
-    const allPastAgenciesForPrisoner = movementInfo.map(bookings => bookings.fromAgency)
-    const allAgenciesForPrisoner = [movementInfo[0].toAgency, ...allPastAgenciesForPrisoner]
-    return Array.from(new Set(allAgenciesForPrisoner))
+    // Sometimes the 'agencyTo' doesn't always match the 'agencyFrom' on the next entry, so I'm getting everything
+    const allAgencyIdsForPrisoner = movementInfo.map(bookings => {
+      return [bookings.fromAgency, bookings.toAgency]
+    })
+    const uniqueAgencyIds = Array.from(new Set(allAgencyIdsForPrisoner.flat()))
+    const agencyInformation = uniqueAgencyIds.map(chosenAgency => {
+      if (chosenAgency === 'OUT') return null
+      // Now we have a unique set of agency ids, we can match them to their descriptions
+      const matchingAgencyInfo = movementInfo.find(
+        node => node.fromAgency === chosenAgency || node.toAgency === chosenAgency
+      )
+      if (matchingAgencyInfo) {
+        return {
+          agency: chosenAgency,
+          agencyDescription:
+            matchingAgencyInfo.fromAgency === chosenAgency
+              ? matchingAgencyInfo.fromAgencyDescription
+              : matchingAgencyInfo.toAgencyDescription,
+        }
+      }
+
+      return null
+    })
+    // remove any nulls
+    return agencyInformation.filter(agency => agency)
   }
 
   async getAdjudicationHistory(
-    prisonerNumber: string,
     prisoner: PrisonerResultSummary,
-    uniqueListOfAgenciesForPrisoner: string[],
+    uniqueListOfAgenciesForPrisoner: EstablishmentInformation[],
     filter: AdjudicationHistoryFilter,
     pageRequest: ApiPageRequest,
     user: User
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const agencyIds = uniqueListOfAgenciesForPrisoner.map(agencyInfo => agencyInfo.agency)
+
     const results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistory(
       prisoner.bookingId,
       filter,
-      uniqueListOfAgenciesForPrisoner,
+      agencyIds,
       pageRequest
     )
     return results

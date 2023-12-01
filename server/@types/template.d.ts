@@ -18,3 +18,5 @@ export default interface FrontendComponent {
   css: string[]
   javascript: string[]
 }
+
+export type EstablishmentInformation = { agency: string; agencyDescription: string }

@@ -3,7 +3,6 @@ import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojP
 import { convertToTitleCase, formatDateForDatePicker } from '../../utils/utils'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import {
   adjudicationHistoryFilterFromUiFilter,
@@ -14,8 +13,9 @@ import {
   uiAdjudicationHistoryFilterFromRequest,
   validate,
 } from '../../utils/adjudicationFilterHelper'
-import { FormError } from '../../@types/template'
+import { EstablishmentInformation, FormError } from '../../@types/template'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
+import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 export default class AdjudicationHistoryRoutes {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -27,7 +27,7 @@ export default class AdjudicationHistoryRoutes {
     results: ApiPageResponse<ReportedAdjudication>,
     errors: FormError[],
     prisonerName: string,
-    uniqueListOfAgenciesForPrisoner: string[]
+    uniqueListOfAgenciesForPrisoner: Array<EstablishmentInformation>
   ): Promise<void> => {
     res.render(`pages/adjudicationHistory.njk`, {
       prisonerNumber: req.params.prisonerNumber,
@@ -42,6 +42,7 @@ export default class AdjudicationHistoryRoutes {
       ),
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
+      uniqueListOfAgenciesForPrisoner,
     })
   }
 
@@ -56,14 +57,12 @@ export default class AdjudicationHistoryRoutes {
       user
     )
     const results = await this.reportedAdjudicationsService.getAdjudicationHistory(
-      prisonerNumber,
       prisoner,
       uniqueListOfAgenciesForPrisoner,
       filter,
       pageRequestFrom(20, +req.query.pageNumber || 1),
       res.locals.user
     )
-
     const prisonerName = await this.getPrisonerName(prisoner)
     return this.renderView(req, res, uiFilter, results, [], prisonerName, uniqueListOfAgenciesForPrisoner)
   }
@@ -71,7 +70,6 @@ export default class AdjudicationHistoryRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { prisonerNumber } = req.params
     const { user } = res.locals
-
     const uiFilter = adjudicationHistoryUiFilterFromBody(req)
     const errors = validate(uiFilter)
     if (errors && errors.length !== 0) {

@@ -8,7 +8,7 @@ import {
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, datePickerToApi, momentDateToDatePicker } from './utils'
-import { FormError } from '../@types/template'
+import { EstablishmentInformation, FormError } from '../@types/template'
 
 enum ErrorType {
   FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',
@@ -272,7 +272,7 @@ export const validate = (uiFilter: UiFilter | DISUiFilter): FormError[] => {
   return []
 }
 
-const itemCheckBoxMatch = (selectedItems: any, checkbox: any) => {
+const itemCheckBoxMatch = (selectedItems: Array<unknown> | string, checkbox: string) => {
   if (!Array.isArray(selectedItems)) return selectedItems === checkbox
   return selectedItems.includes(checkbox)
 }
@@ -291,12 +291,15 @@ export const reportedAdjudicationStatuses = (filter: UiFilter | AdjudicationHist
   })
 }
 
-export const establishmentCheckboxes = (filter: AdjudicationHistoryUiFilter, establishments: string[]) => {
-  return establishments.map(key => {
+export const establishmentCheckboxes = (
+  filter: AdjudicationHistoryUiFilter,
+  establishments: EstablishmentInformation[]
+) => {
+  return establishments.map(agencyInfo => {
     return {
-      value: key,
-      text: key,
-      checked: itemCheckBoxMatch(filter.agency, key),
+      value: agencyInfo.agency,
+      text: agencyInfo.agencyDescription,
+      checked: itemCheckBoxMatch(filter.agency, agencyInfo.agency),
     }
   })
 }
