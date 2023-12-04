@@ -6,7 +6,7 @@
           <hr class="adjudication-history-card-list__top-border">
           {% if adjudications.totalElements %}
           {% for report in adjudications.content %} 
-            {{ adjudicationHistoryCard(report) }}
+            {{ adjudicationHistoryCard(report, uniqueListOfAgenciesForPrisoner) }}
           {% endfor %}
           {{ mojPagination(pagination) }}
           {% else %}

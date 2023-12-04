@@ -224,12 +224,13 @@ export const formatReportingOfficer = (
 }
 
 export const agencyIdToName = (agencyId: string, agencyInfo: EstablishmentInformation[]) => {
+  if (!agencyInfo) return agencyId
   const matchingAgency = agencyInfo.filter(chosenAgency => chosenAgency.agency === agencyId)
   if (matchingAgency.length) {
     const { agencyDescription } = matchingAgency[0]
     return agencyDescription
   }
-  return null
+  return agencyId || null
 }
 
 export default {
