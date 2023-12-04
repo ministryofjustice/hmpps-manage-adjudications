@@ -10,8 +10,8 @@
           {% endfor %}
           {{ mojPagination(pagination) }}
           {% else %}
-            <div class="adjudication-history-no-entries">
-                <p class="govuk-body">No adjudications have been found for the selected filters.</p>
+            <div>
+                <p class="govuk-body" data-qa="adjudication-history-no-entries">No adjudications have been found for the selected filters.</p>
                 <p class="govuk-body">You can:</p>
                 <ul class="govuk-list govuk-list--bullet">
                     <li>select different statuses or establishments</li>

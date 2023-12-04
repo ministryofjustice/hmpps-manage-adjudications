@@ -1,12 +1,12 @@
 {% macro adjudicationHistoryCard(adjudication, uniqueListOfAgenciesForPrisoner) %}
-  <div class="adjudication-history-card-list-item" role="listitem">
+  <div class="adjudication-history-card-list-item" role="listitem" data-qa="adjudication-history-card">
     <div class="adjudication-history-card-list-item__content">
       <div class="adjudication-history-card-list-item__header">
-        <h2 class="adjudication-history-card-list-item__title govuk-heading-m"><a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(adjudication.chargeNumber) }}">{{ adjudication.chargeNumber }}</a></h2>
+        <h2 class="adjudication-history-card-list-item__title govuk-heading-m" data-qa="report-link"><a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(adjudication.chargeNumber) }}">{{ adjudication.chargeNumber }}</a></h2>
         <p class="adjudication-history-card-list-item__status govuk-body">{{ adjudication.status | reportedAdjudicationStatusDisplayName }}</p>
       </div>
       <p class="adjudication-history-card-list-item__notes govuk-body">{{ adjudication.offenceDetails.offenceRule.paragraphDescription }}</p>
-      <p class="adjudication-history-card-list-item__metadata govuk-body">Date of discovery: {{ adjudication.incidentDetails.dateTimeOfDiscovery | formatTimestampTo('DD/MM/YYYY - hh:mm') }}</p>
+      <p class="adjudication-history-card-list-item__metadata govuk-body">Date of discovery: {{ adjudication.incidentDetails.dateTimeOfDiscovery | formatTimestampTo('DD/MM/YYYY - HH:mm') }}</p>
       <p class="adjudication-history-card-list-item__location govuk-body">Happened at {{ adjudication.originatingAgencyId | agencyIdToName(uniqueListOfAgenciesForPrisoner) }}</p>
     </div>
   </div>

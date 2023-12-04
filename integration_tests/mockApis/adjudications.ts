@@ -1106,6 +1106,56 @@ const stubCreateGovReferral = ({ chargeNumber, response }): SuperAgentRequest =>
     },
   })
 
+const stubGetPrisonerAdjudicationHistory = ({
+  bookingId = '123',
+  number = 0,
+  size = 20,
+  allContent = [],
+  filter = {
+    status: null,
+    toDate: null,
+    fromDate: null,
+    agency: null,
+  },
+}: {
+  bookingId: string
+  number: number
+  size: number
+  allContent: unknown[]
+  filter: {
+    status: ReportedAdjudicationStatus
+    fromDate?: string
+    toDate?: string
+    agency?: string
+  }
+}): SuperAgentRequest => {
+  const apiRequest = {
+    size,
+    number,
+  }
+  const apiResponse = apiPageResponseFrom(apiRequest, allContent)
+  const agencies = 'MDI,LEI'
+  const path =
+    `/adjudications/reported-adjudications/booking/${bookingId}?page=${number}&size=${size}` +
+    `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
+    `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
+    `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
+    `${(filter.agency && `&agency=${filter.agency}`) || `&agency=${agencies}`}`
+  return stubFor({
+    request: {
+      method: 'GET',
+      url: path,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: apiResponse,
+    },
+  })
+}
+
 export default {
   stubPing,
   stubStartNewDraftAdjudication,
@@ -1123,6 +1173,7 @@ export default {
   stubGetOffenceRule,
   stubSaveOffenceDetails,
   verifySaveOffenceDetails,
+  stubGetPrisonerAdjudicationHistory,
   stubUpdateAdjudicationStatus,
   stubSaveYouthOffenderStatus,
   stubSaveAssociatedPrisoner,
