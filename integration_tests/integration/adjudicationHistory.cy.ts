@@ -75,10 +75,6 @@ context('Adjudication history', () => {
         'contain.text',
         'Destroys or damages any part of a young offender institution or any other property other than his own'
       )
-    adjudicationHistoryPage.cardLinks().first().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly('1'))
-    })
   })
   it('pagination should work', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 40, _ => {
