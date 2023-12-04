@@ -39,17 +39,40 @@ export default class FormsTabRoute {
       adj => adj.chargeNumber === chargeNumber
     )
 
+    const { path } = req.query
+    const tabUrls = this.getTabUrls(path as string, chargeNumber)
+
     return res.render(`pages/adjudicationForReport/formsTab`, {
       prisoner,
       chargeNumber: reportedAdjudication.chargeNumber,
       reviewStatus: reportedAdjudication.status,
       reports: results,
-      reportHref: adjudicationUrls.prisonerReport.urls.review(chargeNumber),
-      hearingsHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
-      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
-      formsHref: adjudicationUrls.forms.urls.review(chargeNumber),
+      formsHref: adjudicationUrls.forms.urls.view(chargeNumber),
       noticeOfBeingPlacedOnReportPrisonerHref: `${adjudicationUrls.printPdf.urls.dis12(chargeNumber)}?copy=prisoner`,
       noticeOfBeingPlacedOnReportStaffHref: `${adjudicationUrls.printPdf.urls.dis12(chargeNumber)}?copy=staff`,
+      ...tabUrls,
     })
+  }
+
+  getTabUrls = (path: string, chargeNumber: string) => {
+    if (!path || path === 'view') {
+      return {
+        reportHref: adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber),
+        hearingsHref: adjudicationUrls.hearingDetails.urls.viewOnly(chargeNumber),
+        punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(chargeNumber),
+      }
+    }
+    if (path === 'review') {
+      return {
+        reportHref: adjudicationUrls.prisonerReport.urls.review(chargeNumber),
+        hearingsHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
+        punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
+      }
+    }
+    return {
+      reportHref: adjudicationUrls.prisonerReport.urls.report(chargeNumber),
+      hearingsHref: adjudicationUrls.hearingDetails.urls.report(chargeNumber),
+      punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.report(chargeNumber),
+    }
   }
 }
