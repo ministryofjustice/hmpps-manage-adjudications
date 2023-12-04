@@ -76,7 +76,7 @@
       {{ govukButton({
         text: 'Add date and time',
         classes: "govuk-button--secondary",
-        href: adjudicationUrls.addIssueDateTime.urls.start(chargeNumber) + '?referrer=' + adjudicationUrls.forms.urls.review(chargeNumber),
+        href: adjudicationUrls.addIssueDateTime.urls.start(chargeNumber) + '?referrer=' + adjudicationUrls.forms.urls.view(chargeNumber),
         attributes: { "data-qa": "add-issue-date-time" }
       }) }}
     </div>

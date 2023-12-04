@@ -49,7 +49,7 @@ afterEach(() => {
 describe('GET /print-issue-forms', () => {
   it('should load print and issue forms page', () => {
     return request(app)
-      .get(adjudicationUrls.forms.urls.review('12345'))
+      .get(adjudicationUrls.forms.urls.view('12345'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Print forms')
@@ -62,7 +62,7 @@ describe('GET /print-issue-forms', () => {
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
 
     return request(app)
-      .get(adjudicationUrls.forms.urls.review('12345'))
+      .get(adjudicationUrls.forms.urls.view('12345'))
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Page not found')

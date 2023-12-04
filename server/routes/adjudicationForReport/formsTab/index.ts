@@ -19,7 +19,7 @@ export default function FormsRoutes({
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get(adjudicationUrls.forms.matchers.review, formsTabRoute.view)
+  get(adjudicationUrls.forms.matchers.view, formsTabRoute.view)
 
   return router
 }

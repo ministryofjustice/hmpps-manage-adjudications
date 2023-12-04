@@ -66,7 +66,7 @@ context('Navigated to forms tab', () => {
 
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(adjudicationUrls.forms.urls.review('100'))
+      cy.visit(adjudicationUrls.forms.urls.view('100'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
       formsTabPage
         .printLink('12')
@@ -105,7 +105,7 @@ context('Navigated to forms tab', () => {
         response: { reportedAdjudications: [reportedAdjudication] },
       })
 
-      cy.visit(adjudicationUrls.forms.urls.review('100'))
+      cy.visit(adjudicationUrls.forms.urls.view('100'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
       formsTabPage.printLink('12')
       formsTabPage.printLink('3')
@@ -136,7 +136,7 @@ context('Navigated to forms tab', () => {
     })
 
     it('should redirect to the forms tab page on successful submit of issue date time', () => {
-      cy.visit(adjudicationUrls.forms.urls.review('100'))
+      cy.visit(adjudicationUrls.forms.urls.view('100'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
       formsTabPage.addIssueButton().click()
       cy.location().should(loc => {
@@ -151,7 +151,7 @@ context('Navigated to forms tab', () => {
       addDateTimeOfIssuePage.minutesInput().type('30')
       addDateTimeOfIssuePage.submitButton().click()
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.forms.urls.review('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.forms.urls.view('100'))
       })
     })
   })

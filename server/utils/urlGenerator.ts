@@ -325,10 +325,10 @@ const adjudicationUrls = {
   forms: {
     root: '/print-issue-forms',
     matchers: {
-      review: '/:chargeNumber/review',
+      view: '/:chargeNumber/view',
     },
     urls: {
-      review: (chargeNumber: string) => `${adjudicationUrls.forms.root}/${chargeNumber}/review`,
+      view: (chargeNumber: string) => `${adjudicationUrls.forms.root}/${chargeNumber}/view`,
     },
   },
   printPdf: {
