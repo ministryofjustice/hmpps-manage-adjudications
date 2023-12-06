@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
-import { convertToTitleCase, formatDateForDatePicker } from '../../utils/utils'
+import { formatDateForDatePicker } from '../../utils/utils'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -26,12 +26,12 @@ export default class AdjudicationHistoryRoutes {
     filter: AdjudicationHistoryUiFilter,
     results: ApiPageResponse<ReportedAdjudication>,
     errors: FormError[],
-    prisonerName: string,
+    prisoner: PrisonerResultSummary,
     uniqueListOfAgenciesForPrisoner: Array<EstablishmentInformation>
   ): Promise<void> => {
     res.render(`pages/adjudicationHistory.njk`, {
       prisonerNumber: req.params.prisonerNumber,
-      prisonerName,
+      prisoner,
       adjudications: results,
       filter,
       statuses: reportedAdjudicationStatuses(filter),
@@ -63,8 +63,7 @@ export default class AdjudicationHistoryRoutes {
       pageRequestFrom(20, +req.query.pageNumber || 1),
       res.locals.user
     )
-    const prisonerName = await this.getPrisonerName(prisoner)
-    return this.renderView(req, res, uiFilter, results, [], prisonerName, uniqueListOfAgenciesForPrisoner)
+    return this.renderView(req, res, uiFilter, results, [], prisoner, uniqueListOfAgenciesForPrisoner)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -74,7 +73,6 @@ export default class AdjudicationHistoryRoutes {
     const errors = validate(uiFilter)
     if (errors && errors.length !== 0) {
       const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
-      const prisonerName = await this.getPrisonerName(prisoner)
       const uniqueListOfAgenciesForPrisoner =
         await this.reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner(prisonerNumber, user)
 
@@ -84,14 +82,10 @@ export default class AdjudicationHistoryRoutes {
         uiFilter,
         { size: 20, number: 0, totalElements: 0, content: [] },
         errors,
-        prisonerName,
+        prisoner,
         uniqueListOfAgenciesForPrisoner
       )
     }
     return res.redirect(adjudicationUrls.adjudicationHistory.urls.filter(prisonerNumber, uiFilter))
-  }
-
-  getPrisonerName = async (prisoner: PrisonerResultSummary) => {
-    return convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
   }
 }

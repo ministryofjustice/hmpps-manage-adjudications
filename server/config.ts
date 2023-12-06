@@ -139,6 +139,7 @@ export default {
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   digitalPrisonServiceUrl: get('DIGITAL_PRISON_SERVICE_URL', 'http://localhost:3002', requiredInProduction),
+  prisonerProfileServiceUrl: get('PRISONER_PROFILE_SERVICE_URL', 'http://localhost:3005', requiredInProduction),
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),

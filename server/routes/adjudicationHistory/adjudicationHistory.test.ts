@@ -23,8 +23,8 @@ beforeEach(() => {
   reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue(
     testData.prisonerResultSummary({
       offenderNo: 'G7234VB',
-      firstName: 'JAMES',
-      lastName: 'SMITH',
+      firstName: 'James',
+      lastName: 'Smith',
     })
   )
   reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner.mockResolvedValue([
