@@ -1,3 +1,4 @@
+import { EstablishmentInformation } from '../@types/template'
 import {
   numberRange,
   convertToTitleCase,
@@ -14,6 +15,7 @@ import {
   convertDateTimeStringToSubmittedDateTime,
   convertSubmittedDateTimeToDateObject,
   getFullDate,
+  agencyIdToName,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -241,5 +243,48 @@ describe('getFullDate', () => {
     // Adjust the expected result accordingly.
     const result = getFullDate(new Date().toString())
     expect(result).toEqual('Invalid date or time') // assuming it returns 'Invalid date' for invalid inputs.
+  })
+})
+
+describe('agencyIdToName', () => {
+  it("should return the id if establishment info isn't available", () => {
+    const result = agencyIdToName('MDI', [] as EstablishmentInformation[])
+    expect(result).toEqual('MDI')
+  })
+  it('should return the id if there is not a matching establishment', () => {
+    const establishmentInfo = [
+      {
+        agency: 'BSI',
+        agencyDescription: 'Brinsford',
+      },
+      {
+        agency: 'CLI',
+        agencyDescription: 'Coldingley',
+      },
+      {
+        agency: 'LEI',
+        agencyDescription: 'Leeds',
+      },
+    ]
+    const result = agencyIdToName('MDI', establishmentInfo)
+    expect(result).toEqual('MDI')
+  })
+  it('should return the establishment name if there is a matching one', () => {
+    const establishmentInfo = [
+      {
+        agency: 'BSI',
+        agencyDescription: 'Brinsford',
+      },
+      {
+        agency: 'MDI',
+        agencyDescription: 'Moorland',
+      },
+      {
+        agency: 'LEI',
+        agencyDescription: 'Leeds',
+      },
+    ]
+    const result = agencyIdToName('MDI', establishmentInfo)
+    expect(result).toEqual('Moorland')
   })
 })
