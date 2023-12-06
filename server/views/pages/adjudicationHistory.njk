@@ -20,7 +20,7 @@
       href: digitalPrisonServiceUrl
     },
     {
-      text: breadcrumbName,
+      text: prisoner.displayName,
       href: prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
     }
     ],
@@ -36,7 +36,7 @@
       }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l" data-qa="title">{{ prisonerName | possessive }} adjudication history</h1>
+  <h1 class="govuk-heading-l" data-qa="title">{{ prisoner.friendlyName | possessive }} adjudication history</h1>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-quarter">
