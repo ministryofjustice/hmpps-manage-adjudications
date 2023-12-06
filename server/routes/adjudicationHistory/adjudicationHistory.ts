@@ -27,11 +27,13 @@ export default class AdjudicationHistoryRoutes {
     results: ApiPageResponse<ReportedAdjudication>,
     errors: FormError[],
     prisonerName: string,
+    breadcrumbName: string,
     uniqueListOfAgenciesForPrisoner: Array<EstablishmentInformation>
   ): Promise<void> => {
     res.render(`pages/adjudicationHistory.njk`, {
       prisonerNumber: req.params.prisonerNumber,
       prisonerName,
+      breadcrumbName,
       adjudications: results,
       filter,
       statuses: reportedAdjudicationStatuses(filter),
@@ -64,7 +66,18 @@ export default class AdjudicationHistoryRoutes {
       res.locals.user
     )
     const prisonerName = await this.getPrisonerName(prisoner)
-    return this.renderView(req, res, uiFilter, results, [], prisonerName, uniqueListOfAgenciesForPrisoner)
+    const breadcrumbName = await this.getBreadcrumbName(prisoner)
+
+    return this.renderView(
+      req,
+      res,
+      uiFilter,
+      results,
+      [],
+      prisonerName,
+      breadcrumbName,
+      uniqueListOfAgenciesForPrisoner
+    )
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -75,6 +88,7 @@ export default class AdjudicationHistoryRoutes {
     if (errors && errors.length !== 0) {
       const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
       const prisonerName = await this.getPrisonerName(prisoner)
+      const breadcrumbName = await this.getBreadcrumbName(prisoner)
       const uniqueListOfAgenciesForPrisoner =
         await this.reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner(prisonerNumber, user)
 
@@ -85,6 +99,7 @@ export default class AdjudicationHistoryRoutes {
         { size: 20, number: 0, totalElements: 0, content: [] },
         errors,
         prisonerName,
+        breadcrumbName,
         uniqueListOfAgenciesForPrisoner
       )
     }
@@ -93,5 +108,9 @@ export default class AdjudicationHistoryRoutes {
 
   getPrisonerName = async (prisoner: PrisonerResultSummary) => {
     return convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
+  }
+
+  getBreadcrumbName = async (prisoner: PrisonerResultSummary) => {
+    return convertToTitleCase(`${prisoner.lastName}, ${prisoner.firstName} `)
   }
 }

@@ -12,6 +12,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     HMPPS_MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"
     DIGITAL_PRISON_SERVICE_URL: https://digital-preprod.prison.service.justice.gov.uk
+    PRISONER_PROFILE_SERVICE_URL: https://prisoner-preprod.digital.prison.service.justice.gov.uk
     MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-preprod.hmpps.service.justice.gov.uk
     CURIOUS_API_URL: https://preprodservices.sequation.net/sequation-virtual-campus2-api
     PRISON_API_URL: https://api-preprod.prison.service.justice.gov.uk
