@@ -66,7 +66,7 @@ context('Adjudication history', () => {
     adjudicationHistoryPage.card().should('have.length', 5)
     adjudicationHistoryPage.card().first().should('contain.text', '1')
     adjudicationHistoryPage.card().first().should('contain.text', 'Date of discovery: 15/11/2323 - 11:30')
-    adjudicationHistoryPage.card().first().should('contain.text', 'Happened at Moorland (HMP & YOI')
+    adjudicationHistoryPage.card().first().should('contain.text', 'Happened at: Moorland (HMP & YOI')
     adjudicationHistoryPage.card().first().should('contain.text', 'Awaiting review')
     adjudicationHistoryPage
       .card()
@@ -156,7 +156,7 @@ context('Adjudication history', () => {
     adjudicationHistoryPage.card().should('have.length', 1)
     adjudicationHistoryPage.card().first().should('contain.text', '1')
     adjudicationHistoryPage.card().first().should('contain.text', 'Date of discovery: 15/11/2022 - 11:30')
-    adjudicationHistoryPage.card().first().should('contain.text', 'Happened at Moorland (HMP & YOI')
+    adjudicationHistoryPage.card().first().should('contain.text', 'Happened at: Moorland (HMP & YOI')
     adjudicationHistoryPage.card().first().should('contain.text', 'Charge proved')
   })
 })
