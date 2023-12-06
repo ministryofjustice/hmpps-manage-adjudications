@@ -1059,6 +1059,20 @@ const adjudicationUrls = {
       start: () => `${adjudicationUrls.isPrisonerStillInEstablishment.root}/`,
     },
   },
+  adjudicationHistory: {
+    root: '/adjudication-history',
+    matchers: {
+      start: '/:prisonerNumber',
+    },
+    urls: {
+      start: (prisonerNumber: string) => `${adjudicationUrls.adjudicationHistory.root}/${prisonerNumber}`,
+      filter: (prisonerNumber: string, filter: UiFilter) =>
+        url.format({
+          pathname: `${adjudicationUrls.adjudicationHistory.root}/${prisonerNumber}`,
+          query: { ...filter },
+        }),
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

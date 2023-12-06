@@ -1,0 +1,25 @@
+{% from '../macros/adjudicationHistoryCard.njk' import adjudicationHistoryCard %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <div class="adjudication-history-card-list" role="list">
+          {{ mojPagination(pagination) }}
+          <hr class="adjudication-history-card-list__top-border">
+          {% if adjudications.totalElements %}
+          {% for report in adjudications.content %} 
+            {{ adjudicationHistoryCard(report, uniqueListOfAgenciesForPrisoner) }}
+          {% endfor %}
+          {{ mojPagination(pagination) }}
+          {% else %}
+            <div>
+                <p class="govuk-body" data-qa="adjudication-history-no-entries">No adjudications have been found for the selected filters.</p>
+                <p class="govuk-body">You can:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>select different statuses or establishments</li>
+                    <li>choose different dates</li>
+                    <li>clear filters to view all adjudication reports</li>
+                </ul>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+</div>

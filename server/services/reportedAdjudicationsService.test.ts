@@ -1276,4 +1276,54 @@ describe('reportedAdjudicationsService', () => {
       })
     })
   })
+  describe('getUniqueListOfAgenciesForPrisoner', () => {
+    it('should return an array of objects containing id and description of agency', async () => {
+      getMovementByOffender.mockResolvedValue(testData.prisonerMovement({ offenderNo: 'G6123VU' }))
+      getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('G6123VU', 'Harry', 'Potter', '1-2-015'))
+      const result = await service.getUniqueListOfAgenciesForPrisoner('G6123VU', user)
+      expect(result).toEqual([
+        {
+          agency: 'MDI',
+          agencyDescription: 'Moorland (HMP & YOI)',
+        },
+        {
+          agency: 'LEI',
+          agencyDescription: 'Leeds (HMP)',
+        },
+      ])
+    })
+    it('should remove duplicates', async () => {
+      getMovementByOffender.mockResolvedValue(testData.prisonerMovement({ offenderNo: 'G6123VU', single: false }))
+      getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('G6123VU', 'Harry', 'Potter', '1-2-015'))
+      const result = await service.getUniqueListOfAgenciesForPrisoner('G6123VU', user)
+      expect(result).toEqual([
+        {
+          agency: 'MDI',
+          agencyDescription: 'Moorland (HMP & YOI)',
+        },
+        {
+          agency: 'LEI',
+          agencyDescription: 'Leeds (HMP)',
+        },
+      ])
+    })
+    it("removes any nulls where there wasn't a match", async () => {
+      getMovementByOffender.mockResolvedValue([
+        ...testData.prisonerMovement({ offenderNo: 'G6123VU' }),
+        ...testData.prisonerMovement({ offenderNo: 'G6123VU', toAgency: 'OUT' }),
+      ])
+      getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('G6123VU', 'Harry', 'Potter', '1-2-015'))
+      const result = await service.getUniqueListOfAgenciesForPrisoner('G6123VU', user)
+      expect(result).toEqual([
+        {
+          agency: 'MDI',
+          agencyDescription: 'Moorland (HMP & YOI)',
+        },
+        {
+          agency: 'LEI',
+          agencyDescription: 'Leeds (HMP)',
+        },
+      ])
+    })
+  })
 })

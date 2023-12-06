@@ -1,0 +1,36 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+{% from "../macros/adjudicationFilter.njk" import adjudicationFilter %}
+
+{% set title = 'Adjudication history' %}
+
+{% block pageTitle %}
+  {{ title }} - Digital Prison Services
+{% endblock %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l" data-qa="title">{{ prisonerName | possessive }} adjudication history</h1>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+      {% include '../partials/adjudicationHistoryFilter.njk' %}
+    </div>
+    <div class="govuk-grid-column-three-quarters ">
+      {% include '../partials/adjudicationHistoryList.njk' %}
+    </div>
+  </div>
+{% endblock %}

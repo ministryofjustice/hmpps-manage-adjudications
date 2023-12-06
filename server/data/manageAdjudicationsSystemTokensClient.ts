@@ -24,6 +24,7 @@ import {
   ReportedAdjudicationFilter,
   allStatuses,
   ScheduledHearingList,
+  AdjudicationHistoryFilter,
 } from './ReportedAdjudicationResult'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
@@ -331,6 +332,24 @@ export default class ManageAdjudicationsSystemTokensClient {
   async getHearingsGivenAgencyAndDate(chosenHearingDate: string): Promise<ScheduledHearingList> {
     return this.restClient.get({
       path: `/reported-adjudications/hearings?hearingDate=${chosenHearingDate}`,
+    })
+  }
+
+  async getPrisonerAdjudicationHistory(
+    bookingId: number,
+    filter: AdjudicationHistoryFilter,
+    allAgencies: Array<string>,
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudication>> {
+    const path =
+      `/reported-adjudications/booking/${bookingId}?page=${pageRequest.number}&size=${pageRequest.size}` +
+      `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
+      `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
+      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
+      `${(filter.agency && `&agency=${filter.agency}`) || `&agency=${allAgencies}`}`
+
+    return this.restClient.get({
+      path,
     })
   }
 }

@@ -5,7 +5,7 @@ import express from 'express'
 import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
-import { possessive, getFormattedOfficerName, formatTimestampTo, convertOicHearingType } from './utils'
+import { possessive, getFormattedOfficerName, formatTimestampTo, convertOicHearingType, agencyIdToName } from './utils'
 import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
 import {
@@ -343,6 +343,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addGlobal('adjudicationUrls', adjudicationUrls)
 
   njkEnv.addFilter('possessive', possessive)
+  njkEnv.addFilter('agencyIdToName', agencyIdToName)
   njkEnv.addFilter('formatTimestampTo', formatTimestampTo)
   njkEnv.addFilter('convertOicHearingType', convertOicHearingType)
   njkEnv.addFilter('convertHearingOutcomeAdjournReason', convertHearingOutcomeAdjournReason)

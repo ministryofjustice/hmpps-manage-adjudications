@@ -85,8 +85,15 @@ export interface ReportedAdjudicationEnhancedWithIssuingDetails extends Reported
   formattedDisIssueHistory?: FormattedDisIssue[]
 }
 
+export type AdjudicationHistoryFilter = {
+  fromDate?: moment.Moment
+  toDate?: moment.Moment
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  agency?: string | string[]
+}
+
 export type ReportedAdjudicationFilter = {
-  fromDate: moment.Moment
+  fromDate?: moment.Moment
   toDate?: moment.Moment
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
   transfersOnly?: boolean

@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { SubmittedDateTime } from '../@types/template'
+import { EstablishmentInformation, SubmittedDateTime } from '../@types/template'
 import { DraftAdjudication, EvidenceCode, EvidenceDetails } from '../data/DraftAdjudicationResult'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 
@@ -221,6 +221,16 @@ export const formatReportingOfficer = (
     reportingOfficer = reportingOfficer.concat(` on behalf of ${adjudication.createdOnBehalfOfOfficer}`)
   }
   return reportingOfficer
+}
+
+export const agencyIdToName = (agencyId: string, agencyInfo: EstablishmentInformation[]) => {
+  if (!agencyInfo) return agencyId
+  const matchingAgency = agencyInfo.filter(chosenAgency => chosenAgency.agency === agencyId)
+  if (matchingAgency.length) {
+    const { agencyDescription } = matchingAgency[0]
+    return agencyDescription
+  }
+  return agencyId || null
 }
 
 export default {

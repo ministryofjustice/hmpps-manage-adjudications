@@ -8,7 +8,7 @@ import {
   reportedAdjudicationStatusDisplayName,
 } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, datePickerToApi, momentDateToDatePicker } from './utils'
-import { FormError } from '../@types/template'
+import { EstablishmentInformation, FormError } from '../@types/template'
 
 enum ErrorType {
   FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',
@@ -43,6 +43,13 @@ export interface PrintDISFormsUiFilter extends DISUiFilter {
   issueStatus: IssueStatus | IssueStatus[]
 }
 
+export type AdjudicationHistoryUiFilter = {
+  fromDate?: string
+  toDate?: string
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  agency?: string | string[]
+}
+
 export const uiDISFormFilterFromRequest = (req: Request): DISUiFilter => {
   return {
     fromDate: req.query.fromDate as string,
@@ -73,6 +80,15 @@ export const uiTransfersFilterFromRequest = (req: Request): TransfersUiFilter =>
   return {
     status: req.query.status as ReportedAdjudicationStatus,
     transfersOnly: req.query.transfersOnly as unknown as boolean,
+  }
+}
+
+export const uiAdjudicationHistoryFilterFromRequest = (req: Request): AdjudicationHistoryUiFilter => {
+  return {
+    fromDate: req.query.fromDate as string,
+    toDate: req.query.toDate as string,
+    status: req.query.status as ReportedAdjudicationStatus,
+    agency: req.query.agency as string,
   }
 }
 
@@ -159,6 +175,14 @@ export const fillInPrintDISFormFilterDefaults = (
   }
 }
 
+export const fillInAdjudicationHistoryDefaults = (
+  uiFilter: AdjudicationHistoryUiFilter
+): AdjudicationHistoryUiFilter => {
+  return {
+    status: uiFilter.status || allStatuses,
+  }
+}
+
 export const uiFilterFromBody = (req: Request) => {
   return {
     fromDate: req.body.fromDate.date,
@@ -190,6 +214,15 @@ export const PrintDISFormUiFilterFromBody = (req: Request) => {
   }
 }
 
+export const adjudicationHistoryUiFilterFromBody = (req: Request) => {
+  return {
+    fromDate: req.body.fromDate,
+    toDate: req.body.toDate,
+    status: req.body.status as ReportedAdjudicationStatus,
+    agency: req.body.agency as string,
+  }
+}
+
 export const filterFromUiFilter = (filter: UiFilter) => {
   return {
     fromDate: datePickerDateToMoment(filter.fromDate),
@@ -214,6 +247,15 @@ export const transfersFilterFromUiFilter = (filter: TransfersUiFilter) => {
   }
 }
 
+export const adjudicationHistoryFilterFromUiFilter = (filter: AdjudicationHistoryUiFilter) => {
+  return {
+    fromDate: filter.fromDate && datePickerDateToMoment(filter.fromDate),
+    toDate: filter.toDate && datePickerDateToMoment(filter.toDate),
+    status: filter.status || allStatuses,
+    agency: filter.agency,
+  }
+}
+
 export const printDISFormfilterFromUiFilter = (filter: PrintDISFormsUiFilter) => {
   return {
     fromDate: datePickerDateToMoment(filter.fromDate),
@@ -230,15 +272,12 @@ export const validate = (uiFilter: UiFilter | DISUiFilter): FormError[] => {
   return []
 }
 
-const statusKeyMatch = (
-  adjStatuses: ReportedAdjudicationStatus | ReportedAdjudicationStatus[],
-  adjKey: ReportedAdjudicationStatus
-) => {
-  if (!Array.isArray(adjStatuses)) return adjStatuses === adjKey
-  return adjStatuses.includes(adjKey)
+const itemCheckBoxMatch = (selectedItems: Array<unknown> | string, checkbox: string) => {
+  if (!Array.isArray(selectedItems)) return selectedItems === checkbox
+  return selectedItems.includes(checkbox)
 }
 
-export const reportedAdjudicationStatuses = (filter: UiFilter) => {
+export const reportedAdjudicationStatuses = (filter: UiFilter | AdjudicationHistoryUiFilter) => {
   const statuses = Object.keys(ReportedAdjudicationStatus)
 
   const filteredStatuses = statuses.filter(key => key !== ReportedAdjudicationStatus.ACCEPTED)
@@ -247,7 +286,20 @@ export const reportedAdjudicationStatuses = (filter: UiFilter) => {
     return {
       value: key,
       text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
-      checked: statusKeyMatch(filter.status, key as ReportedAdjudicationStatus),
+      checked: itemCheckBoxMatch(filter.status, key as ReportedAdjudicationStatus),
+    }
+  })
+}
+
+export const establishmentCheckboxes = (
+  filter: AdjudicationHistoryUiFilter,
+  establishments: EstablishmentInformation[]
+) => {
+  return establishments.map(agencyInfo => {
+    return {
+      value: agencyInfo.agency,
+      text: agencyInfo.agencyDescription,
+      checked: itemCheckBoxMatch(filter.agency, agencyInfo.agency),
     }
   })
 }
@@ -264,7 +316,7 @@ export const transferredAdjudicationStatuses = (filter: TransfersUiFilter) => {
     return {
       value: key,
       text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),
-      checked: statusKeyMatch(filter.status, key as ReportedAdjudicationStatus),
+      checked: itemCheckBoxMatch(filter.status, key as ReportedAdjudicationStatus),
     }
   })
 }

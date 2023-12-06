@@ -154,6 +154,7 @@ export default defineConfig({
         stubGetAgencyReportCounts: adjudications.stubGetAgencyReportCounts,
         stubGetConsecutivePunishments: adjudications.stubGetConsecutivePunishments,
         stubCreateGovReferral: adjudications.stubCreateGovReferral,
+        stubGetPrisonerAdjudicationHistory: adjudications.stubGetPrisonerAdjudicationHistory,
       })
     },
 

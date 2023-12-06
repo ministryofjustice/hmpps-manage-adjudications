@@ -582,31 +582,35 @@ export default class TestData {
     fromAgencyDescription = 'Moorland (HMP & YOI)',
     toAgency = 'LEI',
     toAgencyDescription = 'Leeds (HMP)',
+    single = true,
   }: {
     offenderNo?: string
     fromAgency?: string
     fromAgencyDescription?: string
     toAgency?: string
     toAgencyDescription?: string
+    single?: boolean
   }): OffenderMovementInfo[] => {
-    return [
-      {
-        offenderNo,
-        createDateTime: '2030-11-19T15:48:40.579962663',
-        fromAgency,
-        fromAgencyDescription,
-        toAgency,
-        toAgencyDescription,
-        fromCity: '',
-        toCity: '',
-        movementType: 'ADM',
-        movementTypeDescription: 'Admission',
-        directionCode: 'IN',
-        movementDate: '2030-11-19',
-        movementTime: '15:35:17',
-        movementReason: 'Transfer In from Other Establishment',
-        commentText: 'Prisoner was transferred to Leeds',
-      },
-    ]
+    const movementData = {
+      offenderNo,
+      createDateTime: '2030-11-19T15:48:40.579962663',
+      fromAgency,
+      fromAgencyDescription,
+      toAgency,
+      toAgencyDescription,
+      fromCity: '',
+      toCity: '',
+      movementType: 'ADM',
+      movementTypeDescription: 'Admission',
+      directionCode: 'IN',
+      movementDate: '2030-11-19',
+      movementTime: '15:35:17',
+      movementReason: 'Transfer In from Other Establishment',
+      commentText: 'Prisoner was transferred to Leeds',
+    }
+    if (!single) {
+      return [movementData, movementData]
+    }
+    return [movementData]
   }
 }
