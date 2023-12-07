@@ -420,4 +420,12 @@ div.adjudication-pdf {
   &-bold {
     font-weight: bold;
   }
+
+  &-punishment-container {
+    display:flex;
+
+    div {
+      width: 50%;
+    }
+  }
 }

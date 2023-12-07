@@ -136,6 +136,25 @@ export function convertPrivilegeTypeForDIS7(privilege: PrivilegeType) {
   }
 }
 
+export function convertPrivilegeDTypeDescriptionForDIS7(privilege: PrivilegeType) {
+  switch (privilege) {
+    case PrivilegeType.ASSOCIATION:
+      return "You have lost your 'association' privilege. This means you will not be allowed time out of your cell to mix with others in your residential location."
+    case PrivilegeType.CANTEEN:
+      return 'You have lost your canteen privilege. You cannot buy things from the canteen list.'
+    case PrivilegeType.FACILITIES:
+      return 'You have lost your ‘purchase’ privilege. You cannot buy some things from the prison ‘facilities list’.'
+    case PrivilegeType.MONEY:
+      return 'You cannot spend money from your private cash account.'
+    case PrivilegeType.TV:
+      return 'Your TV will be removed from your cell.'
+    case PrivilegeType.GYM:
+      return 'You have lost your gym privilege. This means you will not be allowed to attend the gym.'
+    default:
+      return null
+  }
+}
+
 export function convertPunishmentType(
   type: PunishmentType,
   stoppage: number,

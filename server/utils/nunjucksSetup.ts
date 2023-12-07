@@ -30,6 +30,7 @@ import {
   QuashGuiltyFindingReason,
 } from '../data/HearingAndOutcomeResult'
 import {
+  convertPrivilegeDTypeDescriptionForDIS7,
   convertPrivilegeTypeForDIS7,
   convertPunishmentType,
   PrivilegeType,
@@ -370,6 +371,32 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
       }
     }
   )
+
+  njkEnv.addFilter('punishmentExplanations', (type: PunishmentType, stoppage: number, privilege: PrivilegeType) => {
+    switch (type) {
+      case PunishmentType.ADDITIONAL_DAYS:
+        return "You'll get a 'release date notification slip' within 5 working days that will tell you what this means for your time in custody."
+      case PunishmentType.CONFINEMENT:
+        return "You'll spend more time in your cell. You'll be moved to another wing or the segregation unit. This is sometimes call 'seg', the care and separation unit or 'CSU'."
+      case PunishmentType.EARNINGS:
+        return `You will lost ${stoppage}% of your earnings. You'll have enough to pay for postage stamps and PIN phone credits.`
+      case PunishmentType.EXCLUSION_WORK:
+        return "You cannot do any work with other prisoners. This is called 'exclusion from associated work'."
+      case PunishmentType.EXTRA_WORK:
+        return 'You have to do extra work. This is outside the normal time you work. It cannot be more than 2 extra hours a day.'
+      case PunishmentType.PRIVILEGE:
+        if (privilege === PrivilegeType.OTHER) return ''
+        return convertPrivilegeDTypeDescriptionForDIS7(privilege)
+      case PunishmentType.PROSPECTIVE_DAYS:
+        return 'If you are given a prison sentence for a fixed length of time, these days will be added to your time in custody.'
+      case PunishmentType.REMOVAL_ACTIVITY:
+        return 'You will not be able to take part in a particular activity or activities. You can stil go to education, training courses and physical education'
+      case PunishmentType.REMOVAL_WING:
+        return "You'll be moved somewhere else in the prison. You'll be able to continue to take part, as far as possible, in normal prison activities."
+      default:
+        return null
+    }
+  })
 
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
