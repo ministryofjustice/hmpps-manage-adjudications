@@ -1,4 +1,4 @@
-import { PunishmentData } from './PunishmentResult'
+import { PunishmentDataWithSchedule } from './PunishmentResult'
 
 export type ConfirmedOnReportData = {
   reportExpirationDateTime: string
@@ -48,4 +48,6 @@ export type DIS7Data = {
   lastHearingDate: string
   adjudicatorName: string
   damagesAmount: number
+  cautionGiven: boolean
+  punishments: PunishmentDataWithSchedule[]
 }

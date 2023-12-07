@@ -164,6 +164,10 @@ export default class ReportedAdjudicationsService {
 
     const lastHearing = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
 
+    const cautionGiven = reportedAdjudication.punishments.filter(
+      punishment => punishment.type === PunishmentType.CAUTION
+    )
+
     const ccPunishmentAwarded = reportedAdjudication.punishments.filter(
       punishment => punishment.type === PunishmentType.CONFINEMENT
     )
@@ -194,11 +198,13 @@ export default class ReportedAdjudicationsService {
       isYouthOffender: reportedAdjudication.isYouthOffender,
       prisonName: prisoner.agencyId,
       adjudicatorType: lastHearing.oicHearingType.includes('INAD') ? 'INAD' : 'GOV',
+      cautionGiven: cautionGiven.length > 0,
       ccPunishmentAwarded: ccPunishmentAwarded.length > 0,
       adaGiven: adaGiven.length > 0,
       lastHearingDate: lastHearing.dateTimeOfHearing,
       adjudicatorName,
       damagesAmount: damages.length ? damages[0].damagesOwedAmount : null,
+      punishments: reportedAdjudication.punishments,
     }
   }
 

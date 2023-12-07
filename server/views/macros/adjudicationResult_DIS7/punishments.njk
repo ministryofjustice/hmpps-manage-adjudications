@@ -1,0 +1,13 @@
+{% macro punishments(adjudicationResultReportData) %}
+    {% for punishment in adjudicationResultReportData.punishments %}
+        {% if punishment.schedule.suspendedUntil %}
+        <h3 class="govuk-body dis7-subheader">Suspended: {{ punishment.type | convertPunishmentForDIS7(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }} - {{ punishment.schedule.days }} days</h3>
+        <p class="govuk-body">Suspended until: {{ punishment.schedule.suspendedUntil | formatTimestampTo('D MMMM YYYY') }}</p>
+        {% else %}
+        <h3 class="govuk-body dis7-subheader">{{ punishment.type | convertPunishmentForDIS7(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }} - {{ punishment.schedule.days }} days</h3>
+        <p class="govuk-body dis7-grouped-paragraph">First day: {{ punishment.schedule.startDate | formatTimestampTo('D MMMM YYYY') }}</p>
+        <p class="govuk-body">Last day: {{ punishment.schedule.endDate | formatTimestampTo('D MMMM YYYY') }}</p>
+        {% endif %}
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+    {% endfor %}
+{% endmacro %}

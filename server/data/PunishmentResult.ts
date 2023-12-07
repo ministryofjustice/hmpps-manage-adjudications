@@ -117,6 +117,25 @@ export function convertPrivilegeType(privilege: PrivilegeType) {
   }
 }
 
+export function convertPrivilegeTypeForDIS7(privilege: PrivilegeType) {
+  switch (privilege) {
+    case PrivilegeType.ASSOCIATION:
+      return 'association (meeting other prisoners)'
+    case PrivilegeType.CANTEEN:
+      return 'buying from the canteen list'
+    case PrivilegeType.FACILITIES:
+      return 'buying from the facilities list'
+    case PrivilegeType.MONEY:
+      return 'money'
+    case PrivilegeType.TV:
+      return 'TV'
+    case PrivilegeType.GYM:
+      return 'gym'
+    default:
+      return null
+  }
+}
+
 export function convertPunishmentType(
   type: PunishmentType,
   stoppage: number,

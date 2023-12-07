@@ -5,6 +5,7 @@ import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import { DIS7Data } from '../../data/ConfirmedOnReportData'
 import TestData from '../testutils/testData'
 import Dis7Pdf from './dis7Pdf'
+import { PunishmentType } from '../../data/PunishmentResult'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
@@ -29,6 +30,14 @@ const reportedAdjudicationYoi: ReportedAdjudication = testData.reportedAdjudicat
   isYouthOffender: true,
 })
 
+const punishments = [
+  testData.punishmentWithSchedule({
+    type: PunishmentType.CONFINEMENT,
+    otherPrivilege: null,
+    privilegeType: null,
+  }),
+]
+
 const data = (isYoi: boolean): DIS7Data => {
   return {
     reportExpirationDateTime: '2020-12-23T07:21',
@@ -50,6 +59,8 @@ const data = (isYoi: boolean): DIS7Data => {
     adjudicatorName: 'Steven Paulette',
     damagesAmount: null,
     isYouthOffender: isYoi,
+    cautionGiven: false,
+    punishments,
   }
 }
 
@@ -93,6 +104,8 @@ describe('GET /dis7', () => {
           adjudicatorName: 'Steven Paulette',
           lastHearingDate: '2020-12-22T09:00',
           damagesAmount: null,
+          cautionGiven: false,
+          punishments,
         },
       },
       'pages/adjudicationResultReportHeader',
@@ -140,6 +153,8 @@ describe('GET /dis7', () => {
           adjudicatorName: 'Steven Paulette',
           lastHearingDate: '2020-12-22T09:00',
           damagesAmount: null,
+          cautionGiven: false,
+          punishments,
         },
       },
       'pages/adjudicationResultReportHeader',

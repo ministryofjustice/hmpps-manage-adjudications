@@ -29,7 +29,13 @@ import {
   NextStep,
   QuashGuiltyFindingReason,
 } from '../data/HearingAndOutcomeResult'
-import { convertPunishmentType, PunishmentReasonForChange } from '../data/PunishmentResult'
+import {
+  convertPrivilegeTypeForDIS7,
+  convertPunishmentType,
+  PrivilegeType,
+  PunishmentReasonForChange,
+  PunishmentType,
+} from '../data/PunishmentResult'
 import { ApplicationInfo } from '../applicationInfo'
 
 const production = process.env.NODE_ENV === 'production'
@@ -335,6 +341,35 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         return null
     }
   })
+
+  njkEnv.addFilter(
+    'convertPunishmentForDIS7',
+    (type: PunishmentType, stoppage: number, privilege: PrivilegeType, otherPrivilege: string) => {
+      switch (type) {
+        case PunishmentType.ADDITIONAL_DAYS:
+          return 'Days added to time in prison'
+        case PunishmentType.CONFINEMENT:
+          return "Cellular confinement or 'CC' (more time in a cell)"
+        case PunishmentType.EARNINGS:
+          return `Loss of earnings: ${stoppage}%`
+        case PunishmentType.EXCLUSION_WORK:
+          return 'Cannot work with other prisoners'
+        case PunishmentType.EXTRA_WORK:
+          return 'Extra work'
+        case PunishmentType.PRIVILEGE:
+          if (privilege === PrivilegeType.OTHER) return `Loss of ${otherPrivilege.toLowerCase()}`
+          return `Loss of ${convertPrivilegeTypeForDIS7(privilege)}`
+        case PunishmentType.PROSPECTIVE_DAYS:
+          return 'Days added to potential time in prison'
+        case PunishmentType.REMOVAL_ACTIVITY:
+          return 'Removal from activity'
+        case PunishmentType.REMOVAL_WING:
+          return 'Removal from wing or unit'
+        default:
+          return null
+      }
+    }
+  )
 
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
