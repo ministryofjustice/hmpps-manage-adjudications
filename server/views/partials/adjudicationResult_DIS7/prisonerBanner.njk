@@ -1,0 +1,34 @@
+<hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+<div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
+    <div class='adjudication-pdf-section-prisoner__item'>
+        <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name</p>
+        <p class='govuk-!-margin-bottom-0'
+            data-qa='notice-of-being-placed-on-report-prisoner-display-name'>
+            {{ adjudicationResultReportData.prisonerDisplayName }}
+        </p>
+    </div>
+    <div class='adjudication-pdf-section-prisoner__item'>
+        <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
+        <p class='govuk-!-margin-bottom-0'
+            data-qa='notice-of-being-placed-on-report-prisoner-number'>
+            {{ adjudicationResultReportData.prisonerNumber }}
+        </p>
+    </div>
+    <div class='adjudication-pdf-section-prisoner__item'>
+        <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Location</p>
+        <p class='govuk-!-margin-bottom-0'
+            data-qa='notice-of-being-placed-on-report-prisoner-location-description'>
+            {{ adjudicationResultReportData.prisonerLocationDescription }}
+        </p>
+    </div>
+    <div class='adjudication-pdf-section-prisoner__item'>
+        <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Date of charge</p>
+        <p class='govuk-!-margin-bottom-0'
+            data-qa='notice-of-being-placed-on-report-prisoner-reported-date'>
+            {{ adjudicationResultReportData.reportedDate }}
+        </p>
+    </div>
+</div>
+
+<hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
