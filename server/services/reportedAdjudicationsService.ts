@@ -10,7 +10,6 @@ import {
   AwardedPunishmentsAndDamages,
   FormattedDisIssue,
   IssueStatus,
-  OicHearingType,
   ReportedAdjudication,
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationEnhanced,
