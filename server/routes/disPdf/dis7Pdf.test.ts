@@ -38,6 +38,18 @@ const punishments = [
   }),
 ]
 
+const suspendedPunishments = [
+  testData.punishmentWithSchedule({
+    type: PunishmentType.CONFINEMENT,
+    otherPrivilege: null,
+    privilegeType: null,
+    schedule: {
+      suspendedUntil: '2022-01-01T00:00',
+      days: 20,
+    },
+  }),
+]
+
 const data = (isYoi: boolean): DIS7Data => {
   return {
     reportExpirationDateTime: '2020-12-23T07:21',
@@ -61,6 +73,8 @@ const data = (isYoi: boolean): DIS7Data => {
     isYouthOffender: isYoi,
     cautionGiven: false,
     punishments,
+    suspendedPunishments,
+    suspendedPunishmentsPresent: true,
   }
 }
 
@@ -106,10 +120,12 @@ describe('GET /dis7', () => {
           damagesAmount: null,
           cautionGiven: false,
           punishments,
+          suspendedPunishments,
+          suspendedPunishmentsPresent: true,
         },
       },
       'pages/adjudicationResultReportHeader',
-      { chargeNumber: '1524493', header: 'Young Offender (YOI Rule 55)' },
+      { chargeNumber: '1524493', header: 'Result of your adjudication' },
       'pages/adjudicationResultReportFooter',
       {},
       {
@@ -155,10 +171,12 @@ describe('GET /dis7', () => {
           damagesAmount: null,
           cautionGiven: false,
           punishments,
+          suspendedPunishments,
+          suspendedPunishmentsPresent: true,
         },
       },
       'pages/adjudicationResultReportHeader',
-      { chargeNumber: '1524493', header: 'Adult (Prison Rule 51)' },
+      { chargeNumber: '1524493', header: 'Result of your adjudication' },
       'pages/adjudicationResultReportFooter',
       {},
       {

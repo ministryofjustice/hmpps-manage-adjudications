@@ -14,7 +14,7 @@ export default class Dis7Pdf {
     const adjudicationDetails = await this.reportedAdjudicationsService.getDetailsForDIS7(chargeNumber, user)
 
     const adjudicationResultReportData = new AdjudicationResultReportData(chargeNumber, adjudicationDetails)
-    const header = adjudicationResultReportData.isYOI ? 'Young Offender (YOI Rule 55)' : 'Adult (Prison Rule 51)'
+    const header = 'Result of your adjudication'
 
     res.renderPdf(
       `pages/adjudicationResultReport`,

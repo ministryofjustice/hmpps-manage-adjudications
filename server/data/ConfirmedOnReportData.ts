@@ -50,4 +50,6 @@ export type DIS7Data = {
   damagesAmount: number
   cautionGiven: boolean
   punishments: PunishmentDataWithSchedule[]
+  suspendedPunishments: PunishmentDataWithSchedule[]
+  suspendedPunishmentsPresent: boolean
 }

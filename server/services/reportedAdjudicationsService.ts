@@ -181,6 +181,11 @@ export default class ReportedAdjudicationsService {
       punishment => punishment.type === PunishmentType.DAMAGES_OWED
     )
 
+    const activePunishments = reportedAdjudication.punishments.filter(punishment => punishment.schedule?.startDate)
+    const suspendedPunishments = reportedAdjudication.punishments.filter(
+      punishment => punishment.schedule?.suspendedUntil
+    )
+
     const adjudicatorName = await this.getAdjudicatorName(lastHearing, user)
 
     return {
@@ -204,7 +209,9 @@ export default class ReportedAdjudicationsService {
       lastHearingDate: lastHearing.dateTimeOfHearing,
       adjudicatorName,
       damagesAmount: damages.length ? damages[0].damagesOwedAmount : null,
-      punishments: reportedAdjudication.punishments,
+      punishments: activePunishments,
+      suspendedPunishments,
+      suspendedPunishmentsPresent: suspendedPunishments.length > 0,
     }
   }
 

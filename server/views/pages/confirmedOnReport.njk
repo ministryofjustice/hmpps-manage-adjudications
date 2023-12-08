@@ -1,11 +1,13 @@
 {% extends "../partials/layout.njk" %}
-
 {% from "../macros/printLink.njk" import printLink %}
-
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
+{% block beforeContent %}
+	{{ breadcrumb() }}
+{% endblock %}
 
 {% block pageTitle %}
   {{ pageTitle }}

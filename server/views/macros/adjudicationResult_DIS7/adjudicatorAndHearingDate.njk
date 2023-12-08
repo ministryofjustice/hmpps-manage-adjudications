@@ -1,4 +1,6 @@
 {% macro adjudicatorAndHearingDate(adjudicationResultReportData) %}
+<div class="break-inside-avoid">
     <p class="govuk-body"><span class="dis7-bold">Adjudicating governor:</span> {{ adjudicationResultReportData.adjudicatorName | initialiseName}}</p>
     <p class="govuk-body"><span class="dis7-bold">Hearing date:</span> {{ adjudicationResultReportData.lastHearingDate | formatTimestampTo('D MMMM YYYY') }}</p>
+</div>
 {% endmacro %}

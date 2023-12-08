@@ -3,14 +3,15 @@
 {% from "../macros/adjudicationResult_DIS7/adjudicatorAndHearingDate.njk" import adjudicatorAndHearingDate %}
 {% from "../macros/adjudicationResult_DIS7/damages.njk" import damages %}
 {% from "../macros/adjudicationResult_DIS7/punishments.njk" import punishments %}
-{# {% from "../macros/adjudicationResultReportDetails.njk" import adjudicationResultReportDetails %}
-{% from "../macros/adjudicationResultReportLegal.njk" import adjudicationResultReportLegal %} #}
+{% from "../macros/adjudicationResult_DIS7/suspendedPunishments.njk" import suspendedPunishments %}
+{% from "../macros/adjudicationResultReportDetails.njk" import adjudicationResultReportDetails %}
+
 {% block content %}
     <div class='adjudication-pdf dis7'>
-    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>  
+        <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>  
         {% include '../partials/adjudicationResult_DIS7/prisonerBanner.njk' %}
 
-        {% if adjudicationResultReportData.cautionGiven %}
+         {% if adjudicationResultReportData.cautionGiven %}
             {% include '../partials/adjudicationResult_DIS7/caution.njk' %}
         {% endif %}
 
@@ -18,15 +19,17 @@
             {{ punishments(adjudicationResultReportData) }}
         {% endif %}
 
+        {% if adjudicationResultReportData.suspendedPunishmentsPresent %}
+            {{ suspendedPunishments(adjudicationResultReportData)}}
+            {% include '../partials/adjudicationResult_DIS7/suspendedPunishmentInfo.njk' %}
+        {% endif %}
+
         {% if adjudicationResultReportData.damagesAmount %}
             {{ damages(adjudicationResultReportData) }}
         {% endif %}
-
+        {{ adjudicationResultReportDetails(adjudicationResultReportData) }}
         {{ askForAReview(adjudicationResultReportData) }}
-        {{ adjudicatorAndHearingDate(adjudicationResultReportData) }}
-
-        {# {{ adjudicationResultReportDetails(adjudicationResultReportData) }}
-        {{ adjudicationResultReportLegal(adjudicationResultReportData) }} #}
-        <div>
+        {{ adjudicatorAndHearingDate(adjudicationResultReportData) }} 
+       <div>
     </div>
 {% endblock %}

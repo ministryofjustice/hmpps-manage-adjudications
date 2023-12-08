@@ -1,6 +1,6 @@
 {% macro askForAReview(adjudicationResultReportData) %}
 {% set adaReviewMonths = 4 if adjudicationResultReportData.isYOI else 6 %}
-<div>
+<div class="break-inside-avoid">
     <h2 class="dis7-header">How to ask for a review</h2>
     {% if adjudicationResultReportData.adjudicatorType === 'GOV' %}
         <p class="govuk-body">You can ask for a review of your hearing. This might be because you:</p>
