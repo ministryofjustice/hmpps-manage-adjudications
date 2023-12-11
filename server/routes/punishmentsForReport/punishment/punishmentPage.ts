@@ -111,7 +111,6 @@ export default class PunishmentPage {
       damagesOwedAmount,
       damagesAlreadyAdded,
     })
-
     if (error)
       return this.renderView(req, res, {
         error,
@@ -137,12 +136,30 @@ export default class PunishmentPage {
     }
 
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req, punishmentType as PunishmentType)
+    const query = this.getQueryParamsToPass(punishmentType, privilegeType, otherPrivilege, stoppageOfEarningsPercentage)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-        query: { punishmentType, privilegeType, otherPrivilege, stoppagePercentage: stoppageOfEarningsPercentage },
+        query,
       })
     )
+  }
+
+  private getQueryParamsToPass = (
+    punishmentType: PunishmentType,
+    privilegeType: PrivilegeType,
+    otherPrivilege: string,
+    stoppageOfEarningsPercentage: number
+  ) => {
+    if (this.pageOptions.isEdit()) {
+      if (punishmentType === PunishmentType.PRIVILEGE && privilegeType === PrivilegeType.OTHER)
+        return { punishmentType, privilegeType, otherPrivilege }
+      if (punishmentType === PunishmentType.PRIVILEGE) return { punishmentType, privilegeType }
+      if (punishmentType === PunishmentType.EARNINGS)
+        return { punishmentType, stoppagePercentage: stoppageOfEarningsPercentage }
+      return { punishmentType }
+    }
+    return { punishmentType, privilegeType, otherPrivilege, stoppagePercentage: stoppageOfEarningsPercentage }
   }
 
   private getRedirectUrl = (chargeNumber: string, req: Request, punishmentType: PunishmentType) => {
