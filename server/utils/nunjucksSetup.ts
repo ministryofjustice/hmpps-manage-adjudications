@@ -382,7 +382,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         case PunishmentType.CONFINEMENT:
           return "You'll spend more time in your cell. You'll be moved to another wing or the segregation unit. This is sometimes call 'seg', the care and separation unit or 'CSU'."
         case PunishmentType.EARNINGS:
-          return `You will lost ${stoppage}% of your earnings. You'll have enough to pay for postage stamps and PIN phone credits.`
+          return `You will lose ${stoppage}% of your earnings. You'll have enough to pay for postage stamps and PIN phone credits.`
         case PunishmentType.EXCLUSION_WORK:
           return "You cannot do any work with other prisoners. This is called 'exclusion from associated work'."
         case PunishmentType.EXTRA_WORK:

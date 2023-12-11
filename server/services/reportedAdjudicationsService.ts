@@ -182,6 +182,11 @@ export default class ReportedAdjudicationsService {
     const activePunishments = reportedAdjudication.punishments.filter(
       punishment => !punishment.schedule?.suspendedUntil
     )
+
+    const activePunishmentsExcludingCautionAndDamages = activePunishments.filter(
+      punishment => punishment.type !== PunishmentType.DAMAGES_OWED && punishment.type !== PunishmentType.CAUTION
+    )
+
     const suspendedPunishments = reportedAdjudication.punishments.filter(
       punishment => punishment.schedule?.suspendedUntil
     )
@@ -209,7 +214,7 @@ export default class ReportedAdjudicationsService {
       lastHearingDate: lastHearing.dateTimeOfHearing,
       adjudicatorName,
       damagesAmount: damages.length ? damages[0].damagesOwedAmount : null,
-      punishments: activePunishments,
+      punishments: activePunishmentsExcludingCautionAndDamages,
       suspendedPunishments,
       suspendedPunishmentsPresent: suspendedPunishments.length > 0,
     }

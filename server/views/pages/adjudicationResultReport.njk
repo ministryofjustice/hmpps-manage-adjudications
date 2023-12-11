@@ -15,7 +15,7 @@
             {% include '../partials/adjudicationResult_DIS7/caution.njk' %}
         {% endif %}
 
-        {% if adjudicationResultReportData.punishments %}
+        {% if adjudicationResultReportData.punishments | length %}
             {{ punishments(adjudicationResultReportData) }}
         {% endif %}
 
