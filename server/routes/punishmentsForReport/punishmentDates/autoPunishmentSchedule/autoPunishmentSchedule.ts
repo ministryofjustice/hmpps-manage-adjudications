@@ -52,7 +52,6 @@ export default class AutoPunishmentSchedulePage {
         days,
       } as ParsedUrlQueryInput,
     })
-
     return res.render(`pages/autoPunishmentSchedule.njk`, {
       chargeNumber,
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),

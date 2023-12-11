@@ -179,8 +179,9 @@ export default class ReportedAdjudicationsService {
     const damages = reportedAdjudication.punishments.filter(
       punishment => punishment.type === PunishmentType.DAMAGES_OWED
     )
-
-    const activePunishments = reportedAdjudication.punishments.filter(punishment => punishment.schedule?.startDate)
+    const activePunishments = reportedAdjudication.punishments.filter(
+      punishment => !punishment.schedule?.suspendedUntil
+    )
     const suspendedPunishments = reportedAdjudication.punishments.filter(
       punishment => punishment.schedule?.suspendedUntil
     )

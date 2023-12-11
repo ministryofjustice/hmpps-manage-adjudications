@@ -29,7 +29,8 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockResolvedValue({
-    type: PunishmentType.EXCLUSION_WORK,
+    type: PunishmentType.EARNINGS,
+    stoppagePercentage: 25,
   })
   reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
     testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' })
@@ -81,7 +82,19 @@ describe('POST /punishment', () => {
         `${adjudicationUrls.punishmentNumberOfDays.urls.edit(
           '100',
           'XYZ'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch`
+      )
+  })
+  it('should successfully call the endpoint and redirect - only passing parameters with new data', () => {
+    return request(app)
+      .post(`${adjudicationUrls.punishment.urls.edit('100', 'XYZ')}`)
+      .send({
+        punishmentType: PunishmentType.EXTRA_WORK,
+      })
+      .expect(302)
+      .expect(
+        'Location',
+        `${adjudicationUrls.punishmentNumberOfDays.urls.edit('100', 'XYZ')}?punishmentType=EXTRA_WORK`
       )
   })
 })
