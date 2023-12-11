@@ -117,6 +117,63 @@ export function convertPrivilegeType(privilege: PrivilegeType) {
   }
 }
 
+export function convertPrivilegeTypeForDIS7(privilege: PrivilegeType) {
+  switch (privilege) {
+    case PrivilegeType.ASSOCIATION:
+      return 'association (meeting other prisoners)'
+    case PrivilegeType.CANTEEN:
+      return 'buying from the canteen list'
+    case PrivilegeType.FACILITIES:
+      return 'buying from the facilities list'
+    case PrivilegeType.MONEY:
+      return 'money'
+    case PrivilegeType.TV:
+      return 'TV'
+    case PrivilegeType.GYM:
+      return 'gym'
+    default:
+      return null
+  }
+}
+
+export function convertPrivilegeDTypeDescriptionForDIS7(privilege: PrivilegeType) {
+  switch (privilege) {
+    case PrivilegeType.ASSOCIATION:
+      return "You have lost your 'association' privilege. This means you will not be allowed time out of your cell to mix with others in your residential location."
+    case PrivilegeType.CANTEEN:
+      return 'You have lost your canteen privilege. You cannot buy things from the canteen list.'
+    case PrivilegeType.FACILITIES:
+      return 'You have lost your ‘purchase’ privilege. You cannot buy some things from the prison ‘facilities list’.'
+    case PrivilegeType.MONEY:
+      return 'You cannot spend money from your private cash account.'
+    case PrivilegeType.TV:
+      return 'Your TV will be removed from your cell.'
+    case PrivilegeType.GYM:
+      return "You have lost the extra gym access you had under the prison incentives scheme. You'll still be able to exercise."
+    default:
+      return null
+  }
+}
+
+export function convertPrivilegeDTypeDescriptionForDIS7Suspended(privilege: PrivilegeType) {
+  switch (privilege) {
+    case PrivilegeType.ASSOCIATION:
+      return 'You would lose your ‘association’ privilege. This means you would not be allowed time out of your cell to mix with others in your residential location.'
+    case PrivilegeType.CANTEEN:
+      return 'You would lose your canteen privilege. You would not be able to buy things from the canteen list.'
+    case PrivilegeType.FACILITIES:
+      return 'You would lose your ‘purchase’ privilege. You would not be able to buy some things on the prison ‘facilities list’.'
+    case PrivilegeType.MONEY:
+      return 'You would not be able to spend money from your private cash account.'
+    case PrivilegeType.TV:
+      return 'Your TV would be removed from your cell.'
+    case PrivilegeType.GYM:
+      return "You would lose the extra gym access you had under the prison incentives scheme. You'd still be able to exercise."
+    default:
+      return null
+  }
+}
+
 export function convertPunishmentType(
   type: PunishmentType,
   stoppage: number,

@@ -1,0 +1,20 @@
+{% macro punishments(adjudicationResultReportData) %}
+  <h2 class="dis7-header">Punishments</h2>
+  {% for punishment in adjudicationResultReportData.punishments %}
+    {% set punishmentLength = punishment.schedule.days + ' days' if punishment.schedule.days > 1 else 
+      punishment.schedule.days + ' day' %}
+    <div class="dis7-punishment-container">
+      <div class="break-inside-avoid">
+          <h3 class="govuk-body dis7-subheader">{{ punishment.type | convertPunishmentForDIS7(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }} - {{ punishmentLength }}</h3>
+          {% if punishment.schedule.startDate %}
+            <p class="govuk-body dis7-grouped-paragraph">First day: {{ punishment.schedule.startDate | formatTimestampTo('D MMMM YYYY') }}</p>
+            <p class="govuk-body">Last day: {{ punishment.schedule.endDate | formatTimestampTo('D MMMM YYYY') }}</p>
+          {% endif %}
+      </div>
+      <div>
+          <p class="govuk-body">{{ punishment.type | punishmentExplanationsActive(punishment.stoppagePercentage, punishment.privilegeType) }}</p>
+      </div>
+    </div>
+    <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible {% if loop.last %}govuk-!-margin-bottom-4{% endif %}'>
+  {% endfor %}
+{% endmacro %}

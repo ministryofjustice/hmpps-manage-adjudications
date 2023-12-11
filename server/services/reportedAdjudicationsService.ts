@@ -1,4 +1,4 @@
-import { ConfirmedOnReportChangedData, ConfirmedOnReportData } from '../data/ConfirmedOnReportData'
+import { ConfirmedOnReportChangedData, ConfirmedOnReportData, DIS7Data } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { OffenderBannerInfo } from '../data/prisonApiClient'
 import ManageAdjudicationsSystemTokensClient, {
@@ -144,6 +144,86 @@ export default class ReportedAdjudicationsService {
     return {
       reviewSummary,
       reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
+    }
+  }
+
+  async getDetailsForDIS7(chargeNumber: string, user: User): Promise<DIS7Data> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const { reportedAdjudication } = await new ManageAdjudicationsSystemTokensClient(
+      token,
+      user
+    ).getReportedAdjudication(chargeNumber)
+
+    const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
+    const location = await this.locationService.getIncidentLocation(
+      reportedAdjudication.incidentDetails.locationId,
+      user
+    )
+    const agencyDescription = await this.locationService.getAgency(location.agencyId, user)
+
+    const lastHearing = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
+
+    const cautionGiven = reportedAdjudication.punishments.filter(
+      punishment => punishment.type === PunishmentType.CAUTION
+    )
+
+    const ccPunishmentAwarded = reportedAdjudication.punishments.filter(
+      punishment => punishment.type === PunishmentType.CONFINEMENT
+    )
+
+    const adaGiven = reportedAdjudication.punishments.filter(
+      punishment =>
+        punishment.type === PunishmentType.ADDITIONAL_DAYS || punishment.type === PunishmentType.PROSPECTIVE_DAYS
+    )
+
+    const damages = reportedAdjudication.punishments.filter(
+      punishment => punishment.type === PunishmentType.DAMAGES_OWED
+    )
+
+    const activePunishments = reportedAdjudication.punishments.filter(punishment => punishment.schedule?.startDate)
+    const suspendedPunishments = reportedAdjudication.punishments.filter(
+      punishment => punishment.schedule?.suspendedUntil
+    )
+
+    const adjudicatorName = await this.getAdjudicatorName(lastHearing, user)
+
+    return {
+      reportExpirationDateTime: reportedAdjudication.incidentDetails.handoverDeadline,
+      prisonerNumber: reportedAdjudication.prisonerNumber,
+      prisonerFirstName: prisoner.firstName,
+      prisonerLastName: prisoner.lastName,
+      statement: reportedAdjudication.incidentStatement.statement,
+      incidentLocationName: location.userDescription,
+      incidentAgencyName: agencyDescription.description,
+      prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
+      prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
+      incidentDate: reportedAdjudication.incidentDetails.dateTimeOfIncident,
+      createdDateTime: reportedAdjudication.createdDateTime,
+      isYouthOffender: reportedAdjudication.isYouthOffender,
+      prisonName: prisoner.agencyId,
+      adjudicatorType: lastHearing.oicHearingType.includes('INAD') ? 'INAD' : 'GOV',
+      cautionGiven: cautionGiven.length > 0,
+      ccPunishmentAwarded: ccPunishmentAwarded.length > 0,
+      adaGiven: adaGiven.length > 0,
+      lastHearingDate: lastHearing.dateTimeOfHearing,
+      adjudicatorName,
+      damagesAmount: damages.length ? damages[0].damagesOwedAmount : null,
+      punishments: activePunishments,
+      suspendedPunishments,
+      suspendedPunishmentsPresent: suspendedPunishments.length > 0,
+    }
+  }
+
+  async getAdjudicatorName(lastHearing: HearingDetails, user: User) {
+    if (lastHearing.oicHearingType.includes('INAD')) return lastHearing.outcome.adjudicator
+    try {
+      const adjudicatorUser = await this.hmppsManageUsersClient.getUserFromUsername(
+        lastHearing.outcome.adjudicator,
+        user.token
+      )
+      return adjudicatorUser.name
+    } catch {
+      return null
     }
   }
 

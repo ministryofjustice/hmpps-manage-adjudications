@@ -399,3 +399,37 @@ div.adjudication-pdf {
 .none-added-text {
   padding: 10px 0;
 }
+
+.dis7 {
+  &-header {
+    margin-bottom: govuk-spacing(3);
+    font-weight: bold;
+    font-size: 24px;
+  }
+  
+  &-subheader {
+    margin-bottom: govuk-spacing(3);
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  &-grouped-paragraph {
+    margin-bottom: 0;
+  }
+
+  &-bold {
+    font-weight: bold;
+  }
+
+  &-punishment-container {
+    display:flex;
+
+    div {
+      width: 50%;
+    }
+  }
+  .grey-box {
+    background-color: govuk-colour("light-grey");
+    padding: govuk-spacing(3) govuk-spacing(5);
+  }
+}

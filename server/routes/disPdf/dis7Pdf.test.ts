@@ -2,9 +2,10 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
-import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
+import { DIS7Data } from '../../data/ConfirmedOnReportData'
 import TestData from '../testutils/testData'
 import Dis7Pdf from './dis7Pdf'
+import { PunishmentType } from '../../data/PunishmentResult'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
@@ -29,29 +30,53 @@ const reportedAdjudicationYoi: ReportedAdjudication = testData.reportedAdjudicat
   isYouthOffender: true,
 })
 
-const confirmedOnReportData: ConfirmedOnReportData = {
-  reportExpirationDateTime: '2020-12-23T07:21',
-  prisonerFirstName: 'John',
-  prisonerLastName: 'Smith',
-  prisonerNumber: 'H5123BY',
-  prisonerPreferredNonEnglishLanguage: 'French',
-  prisonerOtherLanguages: ['English', 'Spanish'],
-  prisonerNeurodiversities: ['Moderate learning difficulty', 'Dyslexia'],
-  incidentAgencyName: 'Moorland (HMP & YOI)',
-  incidentLocationName: 'Adj',
-  statement: 'A statement',
-  reportingOfficer: 'An officer',
-  prisonerAgencyName: 'Moorland (HMP & YOI)',
-  prisonerLivingUnitName: '5-2-A-050',
-  incidentDate: '2020-12-21T07:21',
-  createdDateTime: '2020-12-21T10:45',
-  isYouthOffender: false,
-  prisonName: 'MDI',
-}
+const punishments = [
+  testData.punishmentWithSchedule({
+    type: PunishmentType.CONFINEMENT,
+    otherPrivilege: null,
+    privilegeType: null,
+  }),
+]
 
-beforeEach(() => {
-  reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(confirmedOnReportData)
-})
+const suspendedPunishments = [
+  testData.punishmentWithSchedule({
+    type: PunishmentType.CONFINEMENT,
+    otherPrivilege: null,
+    privilegeType: null,
+    schedule: {
+      suspendedUntil: '2022-01-01T00:00',
+      days: 20,
+    },
+  }),
+]
+
+const data = (isYoi: boolean): DIS7Data => {
+  return {
+    reportExpirationDateTime: '2020-12-23T07:21',
+    prisonerFirstName: 'John',
+    prisonerLastName: 'Smith',
+    prisonerNumber: 'H5123BY',
+    incidentAgencyName: 'Moorland (HMP & YOI)',
+    incidentLocationName: 'Adj',
+    statement: 'A statement',
+    prisonerAgencyName: 'Moorland (HMP & YOI)',
+    prisonerLivingUnitName: '5-2-A-050',
+    incidentDate: '2020-12-21T07:21',
+    createdDateTime: '2020-12-21T10:45',
+    prisonName: 'MDI',
+    adjudicatorType: 'GOV',
+    ccPunishmentAwarded: false,
+    adaGiven: false,
+    lastHearingDate: '2020-12-22T09:00',
+    adjudicatorName: 'Steven Paulette',
+    damagesAmount: null,
+    isYouthOffender: isYoi,
+    cautionGiven: false,
+    punishments,
+    suspendedPunishments,
+    suspendedPunishmentsPresent: true,
+  }
+}
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -59,6 +84,7 @@ afterEach(() => {
 
 describe('GET /dis7', () => {
   it('should render a PDF view of an dis7 report for YOI', async () => {
+    reportedAdjudicationsService.getDetailsForDIS7.mockResolvedValue(data(true))
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: reportedAdjudicationYoi,
     })
@@ -82,26 +108,24 @@ describe('GET /dis7', () => {
         adjudicationResultReportData: {
           chargeNumber: '1524493',
           prisonerDisplayName: 'Smith, John',
-          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           reportedDate: '21 December 2020',
+          adjudicatorType: 'GOV',
+          ccPunishmentAwarded: false,
+          adaGiven: false,
           isYOI: true,
-          canteenDaysMax: 21,
-          facilitiesDaysMax: 21,
-          privateCashDaysMax: 21,
-          tvDaysMax: 21,
-          associationDaysMax: 21,
-          anyPrivilegeDaysMax: 21,
-          stoppageOfEarningsDaysMax: 42,
-          cellularConfinementDaysMax: 10,
-          removalDaysMax: 21,
-          daysAddedDaysMax: 42,
-          prospectiveDaysMax: 42,
-          applyMonths: 4,
+          adjudicatorName: 'Steven Paulette',
+          lastHearingDate: '2020-12-22T09:00',
+          damagesAmount: null,
+          cautionGiven: false,
+          punishments,
+          suspendedPunishments,
+          suspendedPunishmentsPresent: true,
         },
       },
       'pages/adjudicationResultReportHeader',
-      { chargeNumber: '1524493', header: 'Young Offender (YOI Rule 55)' },
+      { chargeNumber: '1524493', header: 'Result of your adjudication' },
       'pages/adjudicationResultReportFooter',
       {},
       {
@@ -111,6 +135,7 @@ describe('GET /dis7', () => {
     )
   })
   it('should render a PDF view of an dis7 report for Adult', async () => {
+    reportedAdjudicationsService.getDetailsForDIS7.mockResolvedValue(data(false))
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: reportedAdjudicationAdult,
     })
@@ -134,26 +159,24 @@ describe('GET /dis7', () => {
         adjudicationResultReportData: {
           chargeNumber: '1524493',
           prisonerDisplayName: 'Smith, John',
-          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
+          prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           reportedDate: '21 December 2020',
+          adjudicatorType: 'GOV',
+          ccPunishmentAwarded: false,
+          adaGiven: false,
           isYOI: false,
-          canteenDaysMax: 42,
-          facilitiesDaysMax: 42,
-          privateCashDaysMax: 42,
-          tvDaysMax: 42,
-          associationDaysMax: 42,
-          anyPrivilegeDaysMax: 42,
-          stoppageOfEarningsDaysMax: 84,
-          cellularConfinementDaysMax: 21,
-          removalDaysMax: 28,
-          daysAddedDaysMax: 42,
-          prospectiveDaysMax: 42,
-          applyMonths: 6,
+          adjudicatorName: 'Steven Paulette',
+          lastHearingDate: '2020-12-22T09:00',
+          damagesAmount: null,
+          cautionGiven: false,
+          punishments,
+          suspendedPunishments,
+          suspendedPunishmentsPresent: true,
         },
       },
       'pages/adjudicationResultReportHeader',
-      { chargeNumber: '1524493', header: 'Adult (Prison Rule 51)' },
+      { chargeNumber: '1524493', header: 'Result of your adjudication' },
       'pages/adjudicationResultReportFooter',
       {},
       {

@@ -1,5 +1,6 @@
-import { ConfirmedOnReportData } from './ConfirmedOnReportData'
+import { DIS7Data } from './ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
+import { PunishmentDataWithSchedule } from './PunishmentResult'
 
 export default class adjudicationResultReportData {
   chargeNumber: string
@@ -14,52 +15,42 @@ export default class adjudicationResultReportData {
 
   isYOI: boolean
 
-  canteenDaysMax: number
+  adjudicatorType: string
 
-  facilitiesDaysMax: number
+  ccPunishmentAwarded: boolean
 
-  privateCashDaysMax: number
+  adaGiven: boolean
 
-  tvDaysMax: number
+  adjudicatorName: string
 
-  associationDaysMax: number
+  lastHearingDate: string
 
-  anyPrivilegeDaysMax: number
+  damagesAmount: number
 
-  stoppageOfEarningsDaysMax: number
+  cautionGiven: boolean
 
-  cellularConfinementDaysMax: number
+  punishments: PunishmentDataWithSchedule[]
 
-  removalDaysMax: number
+  suspendedPunishments: PunishmentDataWithSchedule[]
 
-  daysAddedDaysMax: number
+  suspendedPunishmentsPresent: boolean
 
-  prospectiveDaysMax: number
-
-  applyMonths: number
-
-  constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData, isYOI: boolean) {
+  constructor(chargeNumber: string, data: DIS7Data) {
     this.chargeNumber = chargeNumber
-    this.prisonerDisplayName = convertToTitleCase(
-      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
-    )
-    this.prisonerNumber = confirmedOnReportData.prisonerNumber
-    this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${
-      confirmedOnReportData.prisonerLivingUnitName || 'Unknown'
-    }`
-    this.reportedDate = formatTimestampTo(confirmedOnReportData.createdDateTime, 'D MMMM YYYY')
-    this.isYOI = isYOI
-    this.canteenDaysMax = isYOI ? 21 : 42
-    this.facilitiesDaysMax = isYOI ? 21 : 42
-    this.privateCashDaysMax = isYOI ? 21 : 42
-    this.tvDaysMax = isYOI ? 21 : 42
-    this.associationDaysMax = isYOI ? 21 : 42
-    this.anyPrivilegeDaysMax = isYOI ? 21 : 42
-    this.stoppageOfEarningsDaysMax = isYOI ? 42 : 84
-    this.cellularConfinementDaysMax = isYOI ? 10 : 21
-    this.removalDaysMax = isYOI ? 21 : 28
-    this.daysAddedDaysMax = isYOI ? 42 : 42
-    this.prospectiveDaysMax = isYOI ? 42 : 42
-    this.applyMonths = isYOI ? 4 : 6
+    this.prisonerDisplayName = convertToTitleCase(`${data.prisonerLastName}, ${data.prisonerFirstName}`)
+    this.prisonerNumber = data.prisonerNumber
+    this.prisonerLocationDescription = `${data.prisonerAgencyName} - ${data.prisonerLivingUnitName || 'Unknown'}`
+    this.reportedDate = formatTimestampTo(data.createdDateTime, 'D MMMM YYYY')
+    this.adjudicatorType = data.adjudicatorType
+    this.ccPunishmentAwarded = data.ccPunishmentAwarded
+    this.adaGiven = data.adaGiven
+    this.isYOI = data.isYouthOffender
+    this.adjudicatorName = data.adjudicatorName
+    this.lastHearingDate = data.lastHearingDate
+    this.damagesAmount = data.damagesAmount
+    this.cautionGiven = data.cautionGiven
+    this.punishments = data.punishments
+    this.suspendedPunishments = data.suspendedPunishments
+    this.suspendedPunishmentsPresent = data.suspendedPunishmentsPresent
   }
 }

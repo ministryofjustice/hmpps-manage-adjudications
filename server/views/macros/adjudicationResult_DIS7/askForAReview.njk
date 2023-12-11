@@ -1,0 +1,36 @@
+{% macro askForAReview(adjudicationResultReportData) %}
+{% set adaReviewMonths = 4 if adjudicationResultReportData.isYOI else 6 %}
+<div class="break-inside-avoid">
+    <h2 class="dis7-header">How to ask for a review</h2>
+    {% if adjudicationResultReportData.adjudicatorType === 'GOV' %}
+        <p class="govuk-body">You can ask for a review of your hearing. This might be because you:</p>
+        <ul>
+            <li class="govuk-list--bullet">do not agree with being found guilty</li>
+            <li class="govuk-list--bullet">think you’ve been treated unfairly</li>
+            <li class="govuk-list--bullet">think the punishment is too much</li>
+        </ul>
+        <p class="govuk-body">Ask a member of staff for this form: DIS8 - ‘Request for a review of an adjudication heard by a Governor or Director’.</p>
+        <p class="govuk-body">You can ask for help filling in the form. Ask an officer or your key worker.</p>
+        <p class="govuk-body">You must ask for your review in the next 6 weeks.</p>
+        <p class="govuk-body">You can also ask for legal advice. If a solicitor, MP or another group helps with the review, it goes through the same steps. But the prison does not need to complete a DIS8 form.</p>
+    {% else %}
+        <p class="govuk-body">You can ask for a review of your hearing. This might be a review of the punishment or damage payments.</p>
+        <p class="govuk-body">Ask a member of staff for this form: IA4 - ‘Request for a review of an adjudication punishment imposed by an independent adjudicator’.</p>
+        <p class="govuk-body">You can ask for help filling in the form. Ask an officer or your key worker.</p>
+        <p class="govuk-body">You or your solicitor must send the IA4 form to the governor. This must happen in the next 14 days. The governor will send it to the Chief Magistrate’s Office.</p>
+    {% endif %}
+    {% if adjudicationResultReportData.ccPunishmentAwarded %}
+        <h3 class="dis7-header">Cellular confinement (CC)</h3>
+        <p class="govuk-body">A review of a hearing where you were given CC will be dealt with quickly. This is called 'fast-track'. You may hear back about the review within 48 hours.</p>
+    {% endif %}
+    {% if adjudicationResultReportData.adaGiven %}
+        <h3 class="dis7-header">Review of added days</h3>
+        <p class="govuk-body">You can ask for some of your added days to be removed. The governor will decide on this based on your progress and behaviour in prison.</p>
+        <p class="govuk-body">You can do this after {{ adaReviewMonths }} months from the offence date. You can apply again if your last application was over {{ adaReviewMonths }} months ago.</p>
+        <p class="govuk-body">The governor may reduce the number of added days by half. Very occasionally, they may reduce it even more.</p>
+        <p class="govuk-body">Ask for this form: DIS9 - ‘Application for remission of additional days’.</p>
+        <p class="govuk-body">You can ask for help filling in the form. Ask an officer or your key worker.</p>
+    {% endif %}
+</div>
+<hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+{% endmacro %}
