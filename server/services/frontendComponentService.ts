@@ -1,10 +1,13 @@
 import FrontendComponentApiClient from '../data/frontendComponentApiClient'
-import FrontendComponent from '../@types/template'
+import FrontendComponent, { AvailableComponent } from '../@types/template'
 
 export default class FrontendComponentService {
   constructor(private readonly frontendApiClient: FrontendComponentApiClient) {}
 
-  async getFrontendComponent(component: 'header' | 'footer', userToken: string): Promise<FrontendComponent> {
-    return this.frontendApiClient.getComponent(component, userToken)
+  async getComponents<T extends AvailableComponent[]>(
+    components: T,
+    userToken: string
+  ): Promise<Record<T[number], FrontendComponent>> {
+    return this.frontendApiClient.getComponents(components, userToken)
   }
 }

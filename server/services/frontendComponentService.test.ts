@@ -2,11 +2,11 @@ import FrontendComponent from '../@types/template'
 import FrontendComponentApiClient from '../data/frontendComponentApiClient'
 import FrontendComponentService from './frontendComponentService'
 
-const getComponent = jest.fn()
+const getComponents = jest.fn()
 
 jest.mock('../data/frontendComponentApiClient', () => {
   return jest.fn().mockImplementation(() => {
-    return { getComponent }
+    return { getComponents }
   })
 })
 
@@ -21,12 +21,12 @@ describe('Frontend component service', () => {
   })
 
   it('header', async () => {
-    getComponent.mockResolvedValue({
+    getComponents.mockResolvedValue({
       html: '<div>Header</div>',
       css: ['https://frontend-componenents-dev/headerStyles.css'],
       javascript: ['https://frontend-componenents-dev/headerScripts.js'],
     } as FrontendComponent)
-    const result = await frontendComponentService.getFrontendComponent('header', token)
+    const result = await frontendComponentService.getComponents(['header'], token)
     expect(result).toEqual({
       html: '<div>Header</div>',
       css: ['https://frontend-componenents-dev/headerStyles.css'],
@@ -34,16 +34,43 @@ describe('Frontend component service', () => {
     })
   })
   it('footer', async () => {
-    getComponent.mockResolvedValue({
+    getComponents.mockResolvedValue({
       html: '<div>Footer</div>',
       css: ['https://frontend-componenents-dev/footerStyles.css'],
       javascript: ['https://frontend-componenents-dev/footerScripts.js'],
     } as FrontendComponent)
-    const result = await frontendComponentService.getFrontendComponent('footer', token)
+    const result = await frontendComponentService.getComponents(['footer'], token)
     expect(result).toEqual({
       html: '<div>Footer</div>',
       css: ['https://frontend-componenents-dev/footerStyles.css'],
       javascript: ['https://frontend-componenents-dev/footerScripts.js'],
+    })
+  })
+  it('Both', async () => {
+    getComponents.mockResolvedValue({
+      header: {
+        html: '<div>Header</div>',
+        css: ['https://frontend-componenents-dev/headerStyles.css'],
+        javascript: ['https://frontend-componenents-dev/headerScripts.js'],
+      },
+      footer: {
+        html: '<div>Footer</div>',
+        css: ['https://frontend-componenents-dev/footerStyles.css'],
+        javascript: ['https://frontend-componenents-dev/footerScripts.js'],
+      },
+    })
+    const result = await frontendComponentService.getComponents(['header', 'footer'], token)
+    expect(result).toEqual({
+      header: {
+        html: '<div>Header</div>',
+        css: ['https://frontend-componenents-dev/headerStyles.css'],
+        javascript: ['https://frontend-componenents-dev/headerScripts.js'],
+      },
+      footer: {
+        html: '<div>Footer</div>',
+        css: ['https://frontend-componenents-dev/footerStyles.css'],
+        javascript: ['https://frontend-componenents-dev/footerScripts.js'],
+      },
     })
   })
 })
