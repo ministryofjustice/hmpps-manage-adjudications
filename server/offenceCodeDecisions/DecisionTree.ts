@@ -205,7 +205,10 @@ export default question([
                 Role.ASSISTED,
                 `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,
               ],
-              [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to assault?`],
+              [
+                Role.INCITED,
+                `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,
+              ],
             ])
               .child(
                 answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
@@ -272,7 +275,10 @@ export default question([
                 Role.ASSISTED,
                 `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to fight with?`,
               ],
-              [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to fight with?`],
+              [
+                Role.INCITED,
+                `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to fight with?`,
+              ],
             ])
               .child(
                 answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
@@ -319,7 +325,10 @@ export default question([
                 Role.ASSISTED,
                 `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to endanger?`,
               ],
-              [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to endanger?`],
+              [
+                Role.INCITED,
+                `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to endanger?`,
+              ],
             ])
               .child(
                 answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
@@ -488,7 +497,7 @@ export default question([
       question([
         [Role.COMMITTED, `Who did ${Text.PRISONER_FULL_NAME} detain?`],
         [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to detain?`],
-        [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite another prisoner to detain?`],
+        [Role.INCITED, `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to detain?`],
         [Role.ASSISTED, `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to detain?`],
       ])
         .child(
