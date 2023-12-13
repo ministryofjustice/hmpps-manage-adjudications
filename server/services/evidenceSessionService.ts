@@ -44,7 +44,9 @@ export default class EvidenceSessionService {
   }
 
   getAllSessionEvidence(req: Request, id: number | string) {
-    return req.session?.evidence?.[id]
+    const evidence = req.session?.evidence?.[id]
+    if (!evidence) return {}
+    return evidence
   }
 
   setReferrerOnSession(req: Request, referrer: string, chargeNumber: string) {

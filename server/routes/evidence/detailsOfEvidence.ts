@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import EvidenceSessionService from '../../services/evidenceSessionService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { DraftAdjudication, EvidenceCode } from '../../data/DraftAdjudicationResult'
+import { DraftAdjudication, EvidenceCode, EvidenceDetails } from '../../data/DraftAdjudicationResult'
 import { getEvidenceCategory } from '../../utils/utils'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { User } from '../../data/hmppsManageUsersClient'
@@ -70,7 +70,10 @@ export default class DetailsOfEvidencePage {
     const { adjudication, prisoner } = await this.getAdjudicationAndPrisoner(chargeNumber, isSubmittedEdit, user)
 
     const evidence = this.getEvidence(req, chargeNumber, adjudication)
-    const allEvidence = [...evidence.photoVideo, ...evidence.baggedAndTagged, ...evidence.other]
+    const allEvidence: Array<EvidenceDetails> = []
+    Object.keys(evidence).forEach(key => {
+      if (evidence[key].length) allEvidence.push(...evidence[key])
+    })
 
     // If we are not displaying session data then fill in the session data
     if (this.pageOptions.isShowingAPIData()) {
@@ -87,7 +90,6 @@ export default class DetailsOfEvidencePage {
         chargeNumber
       )
     }
-
     if (!allEvidence || allEvidence.length < 1) {
       return res.render(`pages/detailsOfEvidence`, {
         evidence,
@@ -128,10 +130,10 @@ export default class DetailsOfEvidencePage {
     const evidenceDetails = this.evidenceSessionService.getAndDeleteAllSessionEvidence(req, chargeNumber)
 
     // we need to merge the different evidence types back together into one array
-    const allEvidence = evidenceDetails
-      ? [...evidenceDetails.photoVideo, ...evidenceDetails.baggedAndTagged, ...evidenceDetails.other]
-      : []
-
+    const allEvidence: Array<EvidenceDetails> = []
+    Object.keys(evidenceDetails).forEach(key => {
+      if (evidenceDetails[key].length) allEvidence.push(...evidenceDetails[key])
+    })
     if (isSubmittedEdit) {
       await this.reportedAdjudicationsService.updateEvidenceDetails(chargeNumber, allEvidence, user)
     } else {
