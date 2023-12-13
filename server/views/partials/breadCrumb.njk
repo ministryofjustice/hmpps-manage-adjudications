@@ -1,6 +1,14 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 
-{% macro breadcrumb(breadcrumbList) %}
+{% macro breadcrumb(breadcrumbList, fromAdjudicationHistory) %}
+  {% if fromAdjudicationHistory %}
+    {% set rows = [
+    {
+      text: "Digital Prison Services",
+      href: digitalPrisonServiceUrl
+    }
+  ] %}
+  {% else %}
   {% set rows = [
     {
       text: "Digital Prison Services",
@@ -11,7 +19,7 @@
       href: adjudicationUrls.homepage.root
     }
   ] %}
-
+  {% endif %}
   {% for item in breadcrumbList %}
     {% set rows = (rows.push(
       {
