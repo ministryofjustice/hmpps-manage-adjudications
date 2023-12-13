@@ -81,6 +81,8 @@ beforeEach(() => {
 
   placeOnReportService.saveEvidenceDetails.mockResolvedValue(adjudicationWithoutEvidenceSaved)
 
+  evidenceSessionService.getAndDeleteAllSessionEvidence.mockResolvedValue({})
+
   app = appWithAllRoutes({ production: false }, { placeOnReportService, evidenceSessionService })
 })
 

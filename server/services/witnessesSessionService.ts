@@ -27,7 +27,7 @@ export default class WitnessesSessionService {
   }
 
   getAllSessionWitnesses(req: Request, chargeNumber: string) {
-    return req.session?.witnesses?.[chargeNumber]
+    return req.session?.witnesses?.[chargeNumber] || []
   }
 
   setReferrerOnSession(req: Request, referrer: string, chargeNumber: string) {
