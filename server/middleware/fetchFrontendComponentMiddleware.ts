@@ -6,10 +6,7 @@ export default function getFrontendComponents({ frontendComponentService }: Serv
   return async (req, res, next) => {
     try {
       const { user } = res.locals
-      const [header, footer] = await Promise.all([
-        frontendComponentService.getFrontendComponent('header', user.token),
-        frontendComponentService.getFrontendComponent('footer', user.token),
-      ])
+      const { header, footer } = await frontendComponentService.getComponents(['header', 'footer'], user.token)
       res.locals.feComponents = {
         header: header.html,
         footer: footer.html,

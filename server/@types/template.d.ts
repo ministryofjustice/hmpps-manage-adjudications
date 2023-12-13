@@ -19,4 +19,6 @@ export default interface FrontendComponent {
   javascript: string[]
 }
 
+export type AvailableComponent = 'header' | 'footer'
+
 export type EstablishmentInformation = { agency: string; agencyDescription: string }
