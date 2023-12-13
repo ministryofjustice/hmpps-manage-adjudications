@@ -105,7 +105,7 @@ describe('GET /dis7', () => {
       'pages/adjudicationResultReport',
       {
         adjudicationsUrl: 'http://host.docker.internal:3000',
-        adjudicationResultReportData: {
+        data: {
           chargeNumber: '1524493',
           prisonerDisplayName: 'Smith, John',
           prisonerNumber: 'H5123BY',
@@ -156,7 +156,7 @@ describe('GET /dis7', () => {
       'pages/adjudicationResultReport',
       {
         adjudicationsUrl: 'http://host.docker.internal:3000',
-        adjudicationResultReportData: {
+        data: {
           chargeNumber: '1524493',
           prisonerDisplayName: 'Smith, John',
           prisonerNumber: 'H5123BY',

@@ -31,7 +31,12 @@
     {{ printLink('Record of adjudication hearing continuation sheet - DIS 4 (PDF)', adjudicationUrls.printPdf.urls.dis4(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis4") }}
     {{ printLink('Adjudication history for current sentence - DIS 5 (PDF)', adjudicationUrls.printPdf.urls.dis5(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis5") }}
     {{ printLink('Conduct report - DIS 6 (PDF)', adjudicationUrls.printPdf.urls.dis6(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis6") }}
-    {{ printLink('Adjudication result - DIS 7 (PDF)', adjudicationUrls.printPdf.urls.dis7(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-1", "_blank", "printDis7") }}
+    {{ printLink('Adjudication result - DIS 7 (PDF)', adjudicationUrls.printPdf.urls.dis7Blank(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-1", "_blank", "printDis7") }}
+    {% if outcomesEntered %}
+    {{ printLink('Adjudication result with punishment details - DIS 7 (PDF)', adjudicationUrls.printPdf.urls.dis7(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-1", "_blank", "printDis7") }}
+    {% else %}
+    <p class="govuk-body">After entering the hearing outcome, a different DIS7 form for the prisoner<br> becomes available. It explains the punishment and how to ask for a review</p>
+    {% endif %}
   </div>
 
   <div class="adjudicationsSummary">

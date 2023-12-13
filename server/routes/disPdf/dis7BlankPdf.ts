@@ -2,23 +2,25 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import config from '../../config'
-import AdjudicationResultReportData from '../../data/adjudicationResultReportData'
+import AdjudicationResultReportDataBlank from '../../data/adjudicationResultReportDataBlank'
 
-export default class Dis7Pdf {
+export default class Dis7PdfBlank {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { user } = res.locals
     const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
-    const adjudicationDetails = await this.reportedAdjudicationsService.getDetailsForDIS7(chargeNumber, user)
+    const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
 
-    const adjudicationResultReportData = new AdjudicationResultReportData(chargeNumber, adjudicationDetails)
-    const header = 'Result of your adjudication'
+    const header = adjudicationDetails.isYouthOffender
+      ? 'Adjudication result – Young Offender (YOI Rule 55)'
+      : 'Adjudication result – Adult (Prison Rule 51)'
+    const adjudicationResultReportDataBlank = new AdjudicationResultReportDataBlank(chargeNumber, adjudicationDetails)
 
     res.renderPdf(
-      `pages/adjudicationResultReport`,
-      { adjudicationsUrl, data: adjudicationResultReportData },
+      `pages/adjudicationResultReportBlank`,
+      { adjudicationsUrl, data: adjudicationResultReportDataBlank },
       `pages/adjudicationResultReportHeader`,
       { chargeNumber, header },
       `pages/adjudicationResultReportFooter`,
