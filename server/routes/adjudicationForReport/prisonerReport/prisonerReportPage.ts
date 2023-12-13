@@ -195,6 +195,7 @@ export default class prisonerReportRoutes {
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
       showChargeNumberAndPrint: !hideChargeNumberAndPrintForAdjudicationStatuses,
       showFormsTab,
+      adjudicationHistoryBreadcrumb: this.pageOptions.isReadOnlyView() && req.query.fromHistoryPage,
     })
   }
 

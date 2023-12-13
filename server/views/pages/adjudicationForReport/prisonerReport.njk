@@ -10,14 +10,27 @@
 
 {% set title = 'Prisoner’s report' %}
 
+{% if adjudicationHistoryBreadcrumb %}
+  {% set historyBreadcrumb = [{
+      title: prisoner.displayName,
+      href: prisonerProfileServiceUrl + '/prisoner/' + prisoner.prisonerNumber
+    },
+    {
+      title: 'Adjudication history',
+      href: adjudicationUrls.adjudicationHistory.urls.start(prisoner.prisonerNumber)
+    }
+    ] %}
+{% endif %}
+
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
-{% block beforeContent %}
-  {{ breadcrumb() }}
-{% endblock %}
-{% block content %}
 
+{% block beforeContent %}
+  {{ breadcrumb(historyBreadcrumb, adjudicationHistoryBreadcrumb) }}
+{% endblock %}
+
+{% block content %}
   {% if overrideAgencyId and transferBannerContent %}
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
