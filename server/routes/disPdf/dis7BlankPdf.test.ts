@@ -51,10 +51,6 @@ const confirmedOnReportData = (isYoi: boolean): ConfirmedOnReportData => {
   }
 }
 
-// beforeEach(() => {
-//   reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(confirmedOnReportData)
-// })
-
 afterEach(() => {
   jest.resetAllMocks()
 })
