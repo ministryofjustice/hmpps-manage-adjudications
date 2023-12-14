@@ -24,7 +24,6 @@ export default class FormsTabRoute {
       chargeNumber,
       user
     )
-
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(
       reportedAdjudication.prisonerNumber,
       user
