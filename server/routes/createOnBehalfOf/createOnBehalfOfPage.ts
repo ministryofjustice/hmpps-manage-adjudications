@@ -34,7 +34,7 @@ export default class CreateOnBehalfOfPage {
       return res.render(`pages/createOnBehalfOf`, {
         errors: validationError ? [validationError] : [],
         id,
-        sessionCreatedOnBehalfOfOfficer: createdOnBehalfOfOfficer,
+        createdOnBehalfOfOfficer,
         cancelHref: this.createOnBehalfOfSessionService.getRedirectUrl(req, id),
       })
     }
