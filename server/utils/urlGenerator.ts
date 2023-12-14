@@ -340,6 +340,7 @@ const adjudicationUrls = {
       dis5: '/:chargeNumber/dis5/pdf',
       dis6: '/:chargeNumber/dis6/pdf',
       dis7: '/:chargeNumber/dis7/pdf',
+      dis7Blank: '/:chargeNumber/dis7/blank/pdf',
     },
     urls: {
       dis12: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis12/pdf`,
@@ -348,6 +349,7 @@ const adjudicationUrls = {
       dis5: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis5/pdf`,
       dis6: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis6/pdf`,
       dis7: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis7/pdf`,
+      dis7Blank: (chargeNumber: string) => `${adjudicationUrls.printPdf.root}/${chargeNumber}/dis7/blank/pdf`,
     },
   },
   prisonerReport: {

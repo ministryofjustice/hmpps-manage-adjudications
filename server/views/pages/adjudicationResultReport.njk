@@ -11,25 +11,25 @@
         <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>  
         {% include '../partials/adjudicationResult_DIS7/prisonerBanner.njk' %}
 
-         {% if adjudicationResultReportData.cautionGiven %}
+         {% if data.cautionGiven %}
             {% include '../partials/adjudicationResult_DIS7/caution.njk' %}
         {% endif %}
 
-        {% if adjudicationResultReportData.punishments | length %}
-            {{ punishments(adjudicationResultReportData) }}
+        {% if data.punishments | length %}
+            {{ punishments(data) }}
         {% endif %}
 
-        {% if adjudicationResultReportData.suspendedPunishmentsPresent %}
-            {{ suspendedPunishments(adjudicationResultReportData)}}
+        {% if data.suspendedPunishmentsPresent %}
+            {{ suspendedPunishments(data)}}
             {% include '../partials/adjudicationResult_DIS7/suspendedPunishmentInfo.njk' %}
         {% endif %}
 
-        {% if adjudicationResultReportData.damagesAmount %}
-            {{ damages(adjudicationResultReportData) }}
+        {% if data.damagesAmount %}
+            {{ damages(data) }}
         {% endif %}
-        {{ adjudicationResultReportDetails(adjudicationResultReportData) }}
-        {{ askForAReview(adjudicationResultReportData) }}
-        {{ adjudicatorAndHearingDate(adjudicationResultReportData) }} 
+        {{ adjudicationResultReportDetails(data) }}
+        {{ askForAReview(data) }}
+        {{ adjudicatorAndHearingDate(data) }} 
        <div>
     </div>
 {% endblock %}

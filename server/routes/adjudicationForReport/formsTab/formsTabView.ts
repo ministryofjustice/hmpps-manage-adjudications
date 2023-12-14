@@ -24,7 +24,6 @@ export default class FormsTabRoute {
       chargeNumber,
       user
     )
-
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(
       reportedAdjudication.prisonerNumber,
       user
@@ -51,6 +50,7 @@ export default class FormsTabRoute {
       noticeOfBeingPlacedOnReportPrisonerHref: `${adjudicationUrls.printPdf.urls.dis12(chargeNumber)}?copy=prisoner`,
       noticeOfBeingPlacedOnReportStaffHref: `${adjudicationUrls.printPdf.urls.dis12(chargeNumber)}?copy=staff`,
       ...tabUrls,
+      outcomesEntered: reportedAdjudication.punishments?.length > 0,
     })
   }
 

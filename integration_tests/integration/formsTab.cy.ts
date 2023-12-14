@@ -14,6 +14,32 @@ const reportedAdjudication = testData.reportedAdjudication({
   status: ReportedAdjudicationStatus.CHARGE_PROVED,
   dateTimeOfIssue: '2022-12-05T15:00:00',
   issuingOfficer: 'USER1',
+  punishments: [],
+  hearings: [
+    testData.singleHearing({
+      dateTimeOfHearing: '2024-11-23T17:00:00',
+      id: 68,
+    }),
+  ],
+  disIssueHistory: [
+    {
+      issuingOfficer: 'USER1',
+      dateTimeOfIssue: '2022-12-03T13:00:00',
+    },
+    {
+      issuingOfficer: 'USER1',
+      dateTimeOfIssue: '2022-12-04T14:00:00',
+    },
+  ],
+})
+
+const reportedAdjudication2 = testData.reportedAdjudication({
+  chargeNumber: '101',
+  prisonerNumber: 'G6123VU',
+  status: ReportedAdjudicationStatus.CHARGE_PROVED,
+  dateTimeOfIssue: '2022-12-05T15:00:00',
+  issuingOfficer: 'USER1',
+  punishments: [testData.punishmentWithSchedule({})],
   hearings: [
     testData.singleHearing({
       dateTimeOfHearing: '2024-11-23T17:00:00',
@@ -48,6 +74,12 @@ context('Navigated to forms tab', () => {
         reportedAdjudication,
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 101,
+      response: {
+        reportedAdjudication: reportedAdjudication2,
+      },
+    })
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6123VU',
       response: testData.prisonerResultSummary({
@@ -65,7 +97,7 @@ context('Navigated to forms tab', () => {
   })
 
   describe('Loads', () => {
-    it('should contain the required page elements', () => {
+    it('should contain the required page elements for report with no punishments', () => {
       cy.visit(adjudicationUrls.forms.urls.view('100'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
       formsTabPage
@@ -89,9 +121,44 @@ context('Navigated to forms tab', () => {
         .should('have.attr', 'href')
         .and('include', `${adjudicationUrls.printPdf.urls.dis6('100')}`)
       formsTabPage
+        .printLink('7Blank')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis7Blank('100')}`)
+      formsTabPage.noDis7Content().should('exist')
+      formsTabPage.noResultsMessage().should('exist')
+      formsTabPage.addIssueButton().should('exist')
+    })
+    it('should contain the required page elements for report with no punishments', () => {
+      cy.visit(adjudicationUrls.forms.urls.view('101'))
+      const formsTabPage = Page.verifyOnPage(FormsTabPage)
+      formsTabPage
+        .printLink('12')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis12('101')}`)
+      formsTabPage
+        .printLink('3')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis3('101')}`)
+      formsTabPage
+        .printLink('4')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis4('101')}`)
+      formsTabPage
+        .printLink('5')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis5('101')}`)
+      formsTabPage
+        .printLink('6')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis6('101')}`)
+      formsTabPage
+        .printLink('7Blank')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis7Blank('101')}`)
+      formsTabPage
         .printLink('7')
         .should('have.attr', 'href')
-        .and('include', `${adjudicationUrls.printPdf.urls.dis7('100')}`)
+        .and('include', `${adjudicationUrls.printPdf.urls.dis7('101')}`)
       formsTabPage.noResultsMessage().should('exist')
       formsTabPage.addIssueButton().should('exist')
     })
@@ -112,7 +179,7 @@ context('Navigated to forms tab', () => {
       formsTabPage.printLink('4')
       formsTabPage.printLink('5')
       formsTabPage.printLink('6')
-      formsTabPage.printLink('7')
+      formsTabPage.printLink('7Blank')
       formsTabPage.noResultsMessage().should('not.exist')
       formsTabPage
         .resultsTable()
