@@ -35,9 +35,10 @@ export default class IncidentStatementRoutes {
     const { user } = res.locals
 
     const draftAdjudicationResult = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
+
     const { draftAdjudication } = draftAdjudicationResult
     const prisoner = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
-
+    console.log(!draftAdjudication?.offenceDetails)
     return this.renderView(req, res, {
       prisoner,
       incidentStatement: draftAdjudication.incidentStatement?.statement,
@@ -74,7 +75,7 @@ export default class IncidentStatementRoutes {
   }
 
   getNextPage = (incidentStatementComplete: boolean, draftAdjudication: DraftAdjudication) => {
-    if (incidentStatementComplete && Object.keys(draftAdjudication.offenceDetails).length !== 0)
+    if (incidentStatementComplete && !!draftAdjudication?.offenceDetails)
       return adjudicationUrls.checkYourAnswers.urls.start(draftAdjudication.id)
     return adjudicationUrls.taskList.urls.start(draftAdjudication.id)
   }
