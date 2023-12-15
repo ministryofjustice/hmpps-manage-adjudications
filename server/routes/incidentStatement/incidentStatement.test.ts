@@ -12,6 +12,21 @@ const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked
 
 let app: Express
 
+const draftAdjudication = (statement: { statement: string; completed: boolean }) => {
+  return {
+    id: 1041,
+    chargeNumber: '123456',
+    prisonerNumber: 'A7937DY',
+    incidentDetails: {
+      locationId: 1,
+      dateTimeOfIncident: '2023-01-01T06:00:00',
+    },
+    incidentStatement: statement,
+    startedByUserId: 'USER1',
+    isYouthOffender: false,
+  }
+}
+
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { placeOnReportService })
   placeOnReportService.getPrisonerDetailsFromAdjNumber.mockResolvedValue(
@@ -23,14 +38,7 @@ beforeEach(() => {
   )
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
-    draftAdjudication: testData.draftAdjudication({
-      id: 1041,
-      prisonerNumber: 'A7937DY',
-      incidentStatement: {
-        statement: 'Lorem Ipsum',
-        completed: true,
-      },
-    }),
+    draftAdjudication: draftAdjudication(null),
   })
 })
 
@@ -53,13 +61,9 @@ describe('POST /incident-statement', () => {
   describe('Statement complete, offence details incomplete', () => {
     beforeEach(() => {
       placeOnReportService.addOrUpdateDraftIncidentStatement.mockResolvedValue({
-        draftAdjudication: testData.draftAdjudication({
-          id: 1041,
-          prisonerNumber: 'A7937DY',
-          incidentStatement: {
-            statement: 'Lorem Ipsum',
-            completed: true,
-          },
+        draftAdjudication: draftAdjudication({
+          statement: 'Lorem Ipsum',
+          completed: true,
         }),
       })
     })

@@ -118,7 +118,7 @@ context('Incident Statement', () => {
       })
     })
   })
-  context('Incident details present, offence details missing', () => {
+  context.only('Incident details present, offence details missing', () => {
     beforeEach(() => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,
@@ -129,6 +129,7 @@ context('Incident Statement', () => {
             dateTimeOfIncident: '2021-11-03T11:09:42',
             locationId: 234,
             incidentStatement: null,
+            offenceDetails: null,
           }),
         },
       })
@@ -141,6 +142,7 @@ context('Incident Statement', () => {
             prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2021-11-03T11:09:42',
             locationId: 234,
+            offenceDetails: null,
             incidentStatement: {
               statement: 'This is my statement',
             },
