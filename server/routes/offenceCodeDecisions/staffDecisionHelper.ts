@@ -117,7 +117,7 @@ export default class StaffDecisionHelper extends DecisionHelper {
         lastName: staffName.slice(1).join(' '),
       }
     }
-    return null
+    return {}
   }
 
   override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {
