@@ -64,7 +64,7 @@ export default class PunishmentNumberOfDaysPage {
     if (this.pageOptions.isEdit()) {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
       return this.renderView(req, res, {
-        days: sessionData.days,
+        days: sessionData.days || null,
       })
     }
 
