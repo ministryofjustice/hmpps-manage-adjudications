@@ -38,7 +38,6 @@ export default class IncidentStatementRoutes {
 
     const { draftAdjudication } = draftAdjudicationResult
     const prisoner = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
-    console.log(!draftAdjudication?.offenceDetails)
     return this.renderView(req, res, {
       prisoner,
       incidentStatement: draftAdjudication.incidentStatement?.statement,
