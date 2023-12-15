@@ -119,7 +119,7 @@ export default class OfficerDecisionHelper extends DecisionHelper {
         lastName: officerName.slice(1).join(' '),
       }
     }
-    return null
+    return {}
   }
 
   override updatedOffenceData(currentAnswers: OffenceData, form: DecisionForm): OffenceData {

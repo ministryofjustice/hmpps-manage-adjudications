@@ -119,14 +119,16 @@ export default class AddWitnessRoutes {
     }
 
     const witnessName = await answerTypeHelper.witnessNamesForSession(form, user)
-    const witnessToAdd = {
-      code: WitnessCode[selectedAnswerId],
-      firstName: witnessName.firstName,
-      lastName: witnessName.lastName,
-      reporter: user.username,
+    if (witnessName) {
+      const witnessToAdd = {
+        code: WitnessCode[selectedAnswerId],
+        firstName: witnessName?.firstName,
+        lastName: witnessName?.lastName,
+        reporter: user.username,
+      }
+      this.witnessesSessionService.addSessionWitness(req, witnessToAdd, chargeNumber)
     }
 
-    this.witnessesSessionService.addSessionWitness(req, witnessToAdd, chargeNumber)
     const redirectUrl = this.getRedirectUrl(
       this.witnessesSessionService.getSubmittedEditFlagFromSession(req),
       chargeNumber

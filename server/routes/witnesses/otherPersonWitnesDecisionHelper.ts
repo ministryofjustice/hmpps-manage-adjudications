@@ -56,6 +56,6 @@ export default class OtherPersonWitnessDecisionHelper extends DecisionHelper {
         lastName: properCaseName(names.reverse()[0]),
       }
     }
-    return null
+    return {}
   }
 }

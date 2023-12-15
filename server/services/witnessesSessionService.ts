@@ -58,7 +58,7 @@ export default class WitnessesSessionService {
   }
 
   deleteSubmittedEditFlagOnSession(req: Request) {
-    delete req.session.witnesses.submitted
+    delete req.session.witnesses?.submitted
   }
 
   private createSessionForAdjudicationIfNotExists(req: Request, chargeNumber: string) {
