@@ -85,7 +85,7 @@ export default class AddWitnessRoutes {
     if (selectedPerson && selectedAnswerId) {
       // We are coming back from a user selection.
       const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
-      const form = answerTypeHelper.formAfterSearch(selectedAnswerId, selectedPerson)
+      const form = answerTypeHelper?.formAfterSearch(selectedAnswerId, selectedPerson)
 
       return this.renderView(req, res, { ...form, chargeNumber })
     }
@@ -179,6 +179,7 @@ export default class AddWitnessRoutes {
 
   // The helper that knows how to deal with the specifics of a particular decision type.
   private answerTypeHelper(decisionFormOrSelectedAnswerId: DecisionForm | string): DecisionHelper {
+    if (!decisionFormOrSelectedAnswerId) return null
     let selectedAnswerId = ''
     if (typeof decisionFormOrSelectedAnswerId === 'string') {
       selectedAnswerId = decisionFormOrSelectedAnswerId
