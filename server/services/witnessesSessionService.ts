@@ -36,16 +36,16 @@ export default class WitnessesSessionService {
   }
 
   getReferrerFromSession(req: Request) {
-    return req.session.witnesses.referrer
+    return req.session.witnesses?.referrer
   }
 
   deleteReferrerOnSession(req: Request) {
-    delete req.session.witnesses.referrer
+    delete req.session.witnesses?.referrer
   }
 
   getAndDeleteReferrerOnSession(req: Request) {
     const referrer = this.getReferrerFromSession(req)
-    delete req.session.witnesses.referrer
+    delete req.session.witnesses?.referrer
     return referrer
   }
 
@@ -54,7 +54,7 @@ export default class WitnessesSessionService {
   }
 
   getSubmittedEditFlagFromSession(req: Request) {
-    return req.session.witnesses.submitted
+    return req.session.witnesses?.submitted
   }
 
   deleteSubmittedEditFlagOnSession(req: Request) {
