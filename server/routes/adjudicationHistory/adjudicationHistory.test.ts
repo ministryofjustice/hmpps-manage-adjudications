@@ -75,7 +75,7 @@ afterEach(() => {
 })
 
 describe('GET /adjudication-history', () => {
-  it.skip('should load the correct details', () => {
+  it('should load the correct details', () => {
     return request(app)
       .get(adjudicationUrls.adjudicationHistory.urls.start('G7234VB'))
       .expect('Content-Type', /html/)
@@ -94,7 +94,7 @@ describe('GET /adjudication-history', () => {
 })
 
 describe('POST /adjudication-history', () => {
-  it.skip('should redirect with the correct filter parameters', () => {
+  it('should redirect with the correct filter parameters', () => {
     return request(app)
       .post(adjudicationUrls.adjudicationHistory.urls.start('G7234VB'))
       .send({

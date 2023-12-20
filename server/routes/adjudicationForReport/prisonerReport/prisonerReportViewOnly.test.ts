@@ -111,7 +111,7 @@ beforeEach(() => {
     },
   })
 
-  userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER', 'GLOBAL_SEARCH'])
 
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, decisionTreeService, userService })
 })
@@ -139,6 +139,34 @@ describe('GET prisoner report', () => {
         expect(response.text).toContain('This offence broke')
         expect(response.text).toContain('Prison rule 51, paragraph 1')
         expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(1)
+      })
+  })
+})
+
+describe('GET prisoner report from history page with global search', () => {
+  it('should load the prisoner report page', () => {
+    return request(app)
+      .get(`${adjudicationUrls.prisonerReport.urls.viewOnly(12345)}?fromHistoryPage=true&agency=TJW`)
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('10:45')
+        expect(response.text).toContain('Chapel')
+        expect(response.text).toContain('What type of offence did Bobby Da Smith Jones commit?')
+        expect(response.text).toContain('Assault, fighting, or endangering the health or personal safety of others')
+        expect(response.text).toContain('What did the incident involve?')
+        expect(response.text).toContain('Assaulting someone')
+        expect(response.text).toContain('Who was assaulted?')
+        expect(response.text).toContain('Another prisoner - John Saunders')
+        expect(response.text).toContain('Was the incident a racially aggravated assault?')
+        expect(response.text).toContain('No')
+        expect(response.text).toContain('This offence broke')
+        expect(response.text).toContain('Prison rule 51, paragraph 1')
+        expect(reportedAdjudicationsService.getPrisonerReport).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.getReportedAdjudicationDetails).toHaveBeenCalledWith(
+          '12345',
+          expect.anything(),
+          'TJW'
+        )
       })
   })
 })
