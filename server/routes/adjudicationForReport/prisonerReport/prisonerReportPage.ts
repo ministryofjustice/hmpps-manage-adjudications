@@ -141,7 +141,7 @@ export default class prisonerReportRoutes {
     let { activeCaseLoadId } = user
 
     if (fromHistoryPage && hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
-      activeCaseLoadId = req.query.originatingAgencyId
+      activeCaseLoadId = req.query.agency
     }
 
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
