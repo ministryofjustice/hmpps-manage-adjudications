@@ -141,7 +141,6 @@ export default class prisonerReportRoutes {
     let { activeCaseLoadId } = user
 
     if (fromHistoryPage && hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
-      console.log('global search')
       activeCaseLoadId = req.query.agency
     }
 
