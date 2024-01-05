@@ -33,4 +33,4 @@ generic-prometheus-alerts:
   alertSeverity: digital-prison-service
 
 gotenberg:
-  replicaCount: 2
+  replicaCount: 4
