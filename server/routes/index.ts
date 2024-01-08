@@ -94,6 +94,7 @@ import suspendedPunishmentEnterStartDateRoutes from './punishmentsForReport/puni
 import autoPunishmentSuspendedScheduleRoutes from './punishmentsForReport/punishmentSuspendedDates/autoPunishmentSchedule'
 
 import adjudicationHistoryRoutes from './adjudicationHistory'
+import activePunishmentsRoutes from './activePunishments'
 
 export default function routes(
   router: Router,
@@ -435,6 +436,7 @@ export default function routes(
     })
   )
   router.use(adjudicationUrls.adjudicationHistory.root, adjudicationHistoryRoutes({ reportedAdjudicationsService }))
+  router.use(adjudicationUrls.activePunishments.root, activePunishmentsRoutes({ reportedAdjudicationsService }))
 
   return router
 }

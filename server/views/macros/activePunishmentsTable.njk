@@ -1,0 +1,66 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro activePunishmentsTable(dataArray) %}
+  {% set rows = [] %}
+  {% for data in dataArray %}
+    {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
+
+    {% set rows = (rows.push(
+      [
+          {
+            html: typeColumnValue,
+            classes: "columnWidth30"
+          },
+          {
+            text: data.startDate | formatTimestampTo('D MMM YYYY') if data.startDate else '-',
+            classes: "columnWidth15"
+          },
+          {
+            text: data.endDate | formatTimestampTo('D MMM YYYY') if data.endDate else '-',
+            classes: "columnWidth15"
+          },
+          {
+            text: data.days if data.days > 0 else '-',
+            classes: "columnWidth12"
+          },
+          {
+            text: data.damages if data.damages else  '-',
+            classes: "columnWidth12"
+          },
+          {
+            text: data.activatedFrom if data.activatedFrom else '-',
+            classes: "columnWidth20"
+          }
+      ]
+    ), rows) %}
+  {% endfor %}
+
+  {% if rows.length %}
+    {{ govukTable({
+        head: [
+          {
+            text: "Type"
+          },
+          {
+            text: "Start date"
+          },
+          {
+            text: "Last day"
+          },
+          {
+            text: "Number of days"
+          },
+          {
+            text: "Comments"
+          },
+          {
+            text: "Activated from report"
+          }
+        ],
+        rows: rows,
+        attributes: {"data-qa": "active-punishments-table"}
+      }) }}
+  {% else %}
+    <p class="govuk-body">There are currently no active punishments for this prisoner. </p>
+  {% endif %}
+{% endmacro %}

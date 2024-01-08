@@ -1,0 +1,39 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "../macros/activePunishmentsTable.njk" import activePunishmentsTable %}
+
+{% block pageTitle %}
+  Active punishments - Adjudications - Digital Prison Services
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    collapseOnMobile: true,
+    items: [
+    {
+      text: "Digital Prison Services",
+      href: digitalPrisonServiceUrl
+    },
+    {
+      text: prisoner.displayName,
+      href: prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
+    }
+    ],
+    classes: "govuk-!-display-none-print"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ prisoner.friendlyName | possessive }} active punishments</h1>
+  <div>
+    {% if punishments | length %}
+      {{ activePunishmentsTable(punishments) }}
+    {% else %}
+      <p class="govuk-body">There are currently no active punishments or damages for this prisoner.</p>
+    {% endif %}
+
+    <p class="govuk-body govuk-!-margin-top-1">
+      <a href="{{ adjudicationHistoryHref }}" class="govuk-link" data-qa="adjudicationHistory-link">View adjudication history</a>
+    </p>
+  </div>
+{% endblock %}
