@@ -22,7 +22,7 @@ export default class AdjudicationsHistoryPage extends Page {
 
   card = (): PageElement => cy.get('[data-qa="adjudication-history-card"]')
 
-  cardLinks = (): PageElement => cy.get('[data-qa="report-link"] > a')
+  cardLinks = (): PageElement => cy.get('[data-qa="report-link"]')
 
   applyFilters = (): PageElement => cy.get('[data-qa="apply-filter-button"]')
 }
