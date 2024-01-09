@@ -12,19 +12,19 @@
             classes: "columnWidth30"
           },
           {
-            text: data.startDate | formatTimestampTo('D MMM YYYY') if data.startDate else '-',
+            text: data.schedule.startDate | formatTimestampTo('D MMM YYYY') if data.schedule.startDate else '-',
             classes: "columnWidth15"
           },
           {
-            text: data.endDate | formatTimestampTo('D MMM YYYY') if data.endDate else '-',
+            text: data.schedule.endDate | formatTimestampTo('D MMM YYYY') if data.schedule.endDate else '-',
             classes: "columnWidth15"
           },
           {
-            text: data.days if data.days > 0 else '-',
+            text: data.schedule.days if data.schedule.days > 0 else '-',
             classes: "columnWidth12"
           },
           {
-            text: data.damages if data.damages else  '-',
+            text: data.damagesOwedAmount if data.damagesOwedAmount else  '-',
             classes: "columnWidth12"
           },
           {
