@@ -9,7 +9,6 @@ import { DraftAdjudication } from '../../../data/DraftAdjudicationResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import { User } from '../../../data/hmppsManageUsersClient'
 import UserService from '../../../services/userService'
-import { hasAnyRole } from '../../../utils/utils'
 
 type PageData = {
   errors?: FormError[]
@@ -138,16 +137,9 @@ export default class prisonerReportRoutes {
     const { chargeNumber } = req.params
     const { fromHistoryPage } = req.query
 
-    let { activeCaseLoadId } = user
-
-    if (fromHistoryPage && hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
-      activeCaseLoadId = req.query.agency
-    }
-
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
-      user,
-      activeCaseLoadId
+      user
     )
 
     const { status } = reportedAdjudication

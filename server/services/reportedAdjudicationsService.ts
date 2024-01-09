@@ -79,15 +79,9 @@ export default class ReportedAdjudicationsService {
     private readonly locationService: LocationService
   ) {}
 
-  async getReportedAdjudicationDetails(
-    chargeNumber: string,
-    user: User,
-    activeCaseLoadId: string = user.activeCaseLoadId
-  ): Promise<ReportedAdjudicationResult> {
+  async getReportedAdjudicationDetails(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    return new ManageAdjudicationsSystemTokensClient(token, user, activeCaseLoadId).getReportedAdjudication(
-      chargeNumber
-    )
+    return new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(chargeNumber)
   }
 
   async getReviewDetails(reportedAdjudication: ReportedAdjudication, user: User) {

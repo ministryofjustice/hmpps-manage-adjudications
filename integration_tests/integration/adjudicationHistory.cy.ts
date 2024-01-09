@@ -68,7 +68,6 @@ context('Adjudication history', () => {
     adjudicationHistoryPage.card().first().should('contain.text', 'Date of discovery: 15/11/2323 - 11:30')
     adjudicationHistoryPage.card().first().should('contain.text', 'Moorland (HMP & YOI)')
     adjudicationHistoryPage.card().first().should('contain.text', 'Awaiting review')
-    adjudicationHistoryPage.cardLinks().first().should('have.attr', 'href').and('include', `agency=MDI`)
     adjudicationHistoryPage
       .card()
       .first()
