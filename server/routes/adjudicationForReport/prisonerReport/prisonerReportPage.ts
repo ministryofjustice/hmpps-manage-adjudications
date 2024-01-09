@@ -9,7 +9,6 @@ import { DraftAdjudication } from '../../../data/DraftAdjudicationResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import { User } from '../../../data/hmppsManageUsersClient'
 import UserService from '../../../services/userService'
-import { hasAnyRole } from '../../../utils/utils'
 
 type PageData = {
   errors?: FormError[]
@@ -133,21 +132,10 @@ export default class prisonerReportRoutes {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { user } = res.locals
-    const userRoles = await this.userService.getUserRoles(user.token)
-
     const { chargeNumber } = req.params
-    const { fromHistoryPage } = req.query
-
-    let { activeCaseLoadId } = user
-
-    if (fromHistoryPage && hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
-      activeCaseLoadId = req.query.agency
-    }
-
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
-      user,
-      activeCaseLoadId
+      user
     )
 
     const { status } = reportedAdjudication
@@ -178,6 +166,7 @@ export default class prisonerReportRoutes {
       user
     )
 
+    const userRoles = await this.userService.getUserRoles(user.token)
     const showFormsTab = await this.reportedAdjudicationsService.canViewPrintAndIssueFormsTab(
       userRoles,
       reportedAdjudication.status
@@ -206,7 +195,7 @@ export default class prisonerReportRoutes {
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
       showChargeNumberAndPrint: !hideChargeNumberAndPrintForAdjudicationStatuses,
       showFormsTab,
-      adjudicationHistoryBreadcrumb: this.pageOptions.isReadOnlyView() && fromHistoryPage,
+      adjudicationHistoryBreadcrumb: this.pageOptions.isReadOnlyView() && req.query.fromHistoryPage,
     })
   }
 
