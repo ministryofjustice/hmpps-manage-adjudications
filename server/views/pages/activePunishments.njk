@@ -29,7 +29,7 @@
     {% if punishments | length %}
       {{ activePunishmentsTable(punishments) }}
     {% else %}
-      <p class="govuk-body">There are currently no active punishments or damages for this prisoner.</p>
+      <p class="govuk-body" data-qa="no-data">There are currently no active punishments or damages for this prisoner.</p>
     {% endif %}
 
     <p class="govuk-body govuk-!-margin-top-1">
