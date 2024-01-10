@@ -19,6 +19,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
       { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: false },
+      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -50,6 +51,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: true },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: true },
       { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: true },
+      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: true },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -70,6 +72,7 @@ describe('reportedAdjudicationStatuses', () => {
         ReportedAdjudicationStatus.REFER_POLICE,
         ReportedAdjudicationStatus.REFER_GOV,
         ReportedAdjudicationStatus.CORRUPTED,
+        ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT,
       ],
       transfersOnly: false,
     }
@@ -93,6 +96,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
       { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: false },
+      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -120,6 +124,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
       { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: false },
+      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -147,6 +152,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
       { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: false },
+      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
