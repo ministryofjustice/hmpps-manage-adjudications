@@ -66,7 +66,7 @@ context('Adjudication history', () => {
     adjudicationHistoryPage.card().should('have.length', 5)
     adjudicationHistoryPage.card().first().should('contain.text', '1')
     adjudicationHistoryPage.card().first().should('contain.text', 'Date of discovery: 15/11/2323 - 11:30')
-    adjudicationHistoryPage.card().first().should('contain.text', 'Moorland (HMP & YOI)')
+    adjudicationHistoryPage.card().first().should('contain.text', 'Happened at: Moorland (HMP & YOI)')
     adjudicationHistoryPage.card().first().should('contain.text', 'Awaiting review')
     adjudicationHistoryPage
       .card()
@@ -75,6 +75,75 @@ context('Adjudication history', () => {
         'contain.text',
         'Destroys or damages any part of a young offender institution or any other property other than his own'
       )
+  })
+  it('should only contain the link to the report if the users activeCaseload is the same as the override or originating caseload of the report', () => {
+    cy.task('stubGetPrisonerAdjudicationHistory', {
+      bookingId: '123',
+      number: 0,
+      allContent: [
+        testData.reportedAdjudication({
+          chargeNumber: '1',
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2023-11-15T11:30:00',
+          dateTimeOfDiscovery: '2323-11-15T11:30:00',
+          originatingAgencyId: 'LEI',
+          otherData: {
+            overrideAgencyId: 'SKI',
+          },
+          offenceDetails: {
+            offenceCode: 17002,
+            offenceRule: {
+              paragraphNumber: '18',
+              paragraphDescription:
+                'Destroys or damages any part of a young offender institution or any other property other than his own',
+            },
+          },
+        }),
+        testData.reportedAdjudication({
+          chargeNumber: '2',
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2023-11-15T11:30:00',
+          dateTimeOfDiscovery: '2323-11-15T11:30:00',
+          originatingAgencyId: 'LEI',
+          otherData: {
+            overrideAgencyId: 'MDI',
+          },
+          offenceDetails: {
+            offenceCode: 17002,
+            offenceRule: {
+              paragraphNumber: '18',
+              paragraphDescription:
+                'Destroys or damages any part of a young offender institution or any other property other than his own',
+            },
+          },
+        }),
+        testData.reportedAdjudication({
+          chargeNumber: '3',
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2023-11-15T11:30:00',
+          dateTimeOfDiscovery: '2323-11-15T11:30:00',
+          originatingAgencyId: 'MDI',
+          otherData: {
+            overrideAgencyId: 'SKI',
+          },
+          offenceDetails: {
+            offenceCode: 17002,
+            offenceRule: {
+              paragraphNumber: '18',
+              paragraphDescription:
+                'Destroys or damages any part of a young offender institution or any other property other than his own',
+            },
+          },
+        }),
+      ],
+    })
+
+    cy.visit(adjudicationUrls.adjudicationHistory.urls.start('G6415GD'))
+    const adjudicationHistoryPage: AdjudicationHistoryPage = Page.verifyOnPage(AdjudicationHistoryPage)
+    adjudicationHistoryPage.card().should('have.length', 3)
+    adjudicationHistoryPage.cardLinks().first().find('a').should('not.exist')
+    adjudicationHistoryPage.cardLinks().eq(1).find('a').should('exist')
+    adjudicationHistoryPage.cardLinks().last().find('a').should('exist')
   })
   it('pagination should work', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 40, _ => {
