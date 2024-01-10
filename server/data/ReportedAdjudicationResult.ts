@@ -154,6 +154,7 @@ export enum ReportedAdjudicationStatus {
   QUASHED = 'QUASHED',
   ACCEPTED = 'ACCEPTED',
   CORRUPTED = 'CORRUPTED',
+  CORRUPTED_PUNISHMENT = 'CORRUPTED_PUNISHMENT',
 }
 
 export const allStatuses = [
@@ -172,6 +173,7 @@ export const allStatuses = [
   ReportedAdjudicationStatus.QUASHED,
   ReportedAdjudicationStatus.PROSECUTION,
   ReportedAdjudicationStatus.CORRUPTED,
+  ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT,
 ]
 
 export enum OicHearingType {
@@ -215,6 +217,8 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
       return 'Referred to Gov'
     case ReportedAdjudicationStatus.CORRUPTED:
       return 'Corrupted'
+    case ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT:
+      return 'Corrupted punishment'
     default:
       return null
   }

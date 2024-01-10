@@ -37,6 +37,7 @@ const suspendedPunishments = {
   suspendedPunishments: [
     {
       chargeNumber: '100',
+      corrupted: false,
       punishment: {
         id: 71,
         type: PunishmentType.PRIVILEGE,
@@ -51,6 +52,7 @@ const suspendedPunishments = {
     },
     {
       chargeNumber: '101',
+      corrupted: false,
       punishment: {
         id: 60,
         type: PunishmentType.CONFINEMENT,

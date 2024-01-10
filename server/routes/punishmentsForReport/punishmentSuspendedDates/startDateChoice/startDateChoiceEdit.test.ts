@@ -47,6 +47,7 @@ beforeEach(() => {
     suspendedPunishments: [
       {
         chargeNumber: '102',
+        corrupted: false,
         punishment: {
           id: 72,
           type: PunishmentType.CONFINEMENT,
@@ -58,6 +59,7 @@ beforeEach(() => {
       },
       {
         chargeNumber: '103',
+        corrupted: false,
         punishment: {
           id: 73,
           type: PunishmentType.ADDITIONAL_DAYS,
@@ -69,6 +71,7 @@ beforeEach(() => {
       },
       {
         chargeNumber: '104',
+        corrupted: false,
         punishment: {
           id: 74,
           type: PunishmentType.PROSPECTIVE_DAYS,
