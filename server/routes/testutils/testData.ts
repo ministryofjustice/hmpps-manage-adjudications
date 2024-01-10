@@ -31,6 +31,7 @@ import {
   ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
 import {
+  ActivePunishment,
   PrivilegeType,
   PunishmentComment,
   PunishmentDataWithSchedule,

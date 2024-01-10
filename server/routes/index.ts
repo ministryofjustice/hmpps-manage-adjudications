@@ -436,7 +436,10 @@ export default function routes(
     })
   )
   router.use(adjudicationUrls.adjudicationHistory.root, adjudicationHistoryRoutes({ reportedAdjudicationsService }))
-  router.use(adjudicationUrls.activePunishments.root, activePunishmentsRoutes({ reportedAdjudicationsService }))
+  router.use(
+    adjudicationUrls.activePunishments.root,
+    activePunishmentsRoutes({ reportedAdjudicationsService, punishmentsService })
+  )
 
   return router
 }

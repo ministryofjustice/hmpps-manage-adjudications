@@ -2,16 +2,20 @@ import { Request, Response } from 'express'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { PunishmentDataWithSchedule, PunishmentType } from '../../data/PunishmentResult'
+import { ActivePunishment } from '../../data/PunishmentResult'
+import PunishmentsService from '../../services/punishmentsService'
 
 export default class ActivePunishmentsRoutes {
-  constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
+  constructor(
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
+    private readonly punishmentsService: PunishmentsService
+  ) {}
 
   private renderView = async (
     req: Request,
     res: Response,
     prisoner: PrisonerResultSummary,
-    punishments: PunishmentDataWithSchedule[]
+    punishments: ActivePunishment[]
   ): Promise<void> => {
     res.render(`pages/activePunishments.njk`, {
       prisonerNumber: req.params.prisonerNumber,
@@ -25,34 +29,7 @@ export default class ActivePunishmentsRoutes {
     const { prisonerNumber } = req.params
     const { user } = res.locals
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
-    const punishments = [
-      {
-        type: PunishmentType.DAMAGES_OWED,
-        comment: '£50',
-        schedule: {
-          days: 10,
-          startDate: '01/10/2024',
-          endDate: '01/20/2024',
-        },
-      },
-      {
-        type: PunishmentType.EARNINGS,
-        stoppagePercentage: 10,
-        schedule: {
-          days: 20,
-          startDate: '01/10/2024',
-          endDate: '01/30/2024',
-        },
-      },
-      {
-        type: PunishmentType.CONFINEMENT,
-        schedule: {
-          days: 5,
-          startDate: '01/11/2024',
-          endDate: '01/16/2024',
-        },
-      },
-    ]
+    const punishments = await this.punishmentsService.getActivePunishmentsByOffender(prisoner.bookingId, user)
     return this.renderView(req, res, prisoner, punishments)
   }
 }

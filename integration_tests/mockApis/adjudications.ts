@@ -1106,6 +1106,21 @@ const stubCreateGovReferral = ({ chargeNumber, response }): SuperAgentRequest =>
     },
   })
 
+const stubPrisonerActivePunishments = ({ bookingId, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/adjudications/reported-adjudications/punishments/${bookingId}/active`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 const stubGetPrisonerAdjudicationHistory = ({
   bookingId = '123',
   number = 0,
@@ -1218,4 +1233,5 @@ export default {
   stubGetConsecutivePunishments,
   stubCreateGovReferral,
   stubGetAllOffenceRules,
+  stubPrisonerActivePunishments,
 }

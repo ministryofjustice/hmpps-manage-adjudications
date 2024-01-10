@@ -30,7 +30,7 @@ import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
 import { momentDateToApi } from '../utils/utils'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
-import { PunishmentDataWithSchedule } from './PunishmentResult'
+import { ActivePunishment, PunishmentDataWithSchedule } from './PunishmentResult'
 import { User } from './hmppsManageUsersClient'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
@@ -345,6 +345,12 @@ export default class ManageAdjudicationsSystemTokensClient {
 
     return this.restClient.get({
       path,
+    })
+  }
+
+  async getPrisonerActiveAdjudications(bookingId: number): Promise<ActivePunishment[]> {
+    return this.restClient.get({
+      path: `/reported-adjudications/punishments/${bookingId}/active`,
     })
   }
 }

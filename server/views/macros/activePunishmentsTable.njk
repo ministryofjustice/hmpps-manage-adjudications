@@ -3,7 +3,7 @@
 {% macro activePunishmentsTable(dataArray) %}
   {% set rows = [] %}
   {% for data in dataArray %}
-    {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
+    {% set typeColumnValue = data.punishmentType | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
 
     {% set rows = (rows.push(
       [
@@ -12,24 +12,24 @@
             classes: "columnWidth30"
           },
           {
-            text: data.schedule.startDate | formatTimestampTo('D MMM YYYY') if data.schedule.startDate else '-',
-            classes: "columnWidth15"
-          },
-          {
-            text: data.schedule.endDate | formatTimestampTo('D MMM YYYY') if data.schedule.endDate else '-',
-            classes: "columnWidth15"
-          },
-          {
-            text: data.schedule.days if data.schedule.days > 0 else '-',
+            text: data.startDate | formatTimestampTo('D MMM YYYY') if data.startDate else '-',
             classes: "columnWidth12"
           },
           {
-            text: data.damagesOwedAmount if data.damagesOwedAmount else  '-',
+            text: data.lastDay | formatTimestampTo('D MMM YYYY') if data.lastDay else '-',
+            classes: "columnWidth12"
+          },
+          {
+            text: data.days if data.days > 0 else '-',
+            classes: "columnWidth15"
+          },
+          {
+            text: '£' + data.amount if data.amount else  '-',
             classes: "columnWidth12"
           },
           {
             text: data.activatedFrom if data.activatedFrom else '-',
-            classes: "columnWidth20"
+            classes: "columnWidth17"
           }
       ]
     ), rows) %}
