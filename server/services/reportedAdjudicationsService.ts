@@ -1294,6 +1294,19 @@ export default class ReportedAdjudicationsService {
       agencyIds,
       pageRequest
     )
-    return results
+
+    const enhancedContent = results.content.map(adjudication => {
+      const userCaseloadMatch =
+        [adjudication.overrideAgencyId, adjudication.originatingAgencyId].includes(user.activeCaseLoadId) || null
+      return {
+        ...adjudication,
+        userCaseloadMatch,
+      }
+    })
+
+    return {
+      ...results,
+      content: enhancedContent,
+    }
   }
 }
