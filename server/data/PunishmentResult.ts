@@ -77,6 +77,7 @@ export interface SuspendedPunishment extends PunishmentDataWithSchedule {
 
 export type SuspendedPunishmentResult = {
   chargeNumber: string
+  corrupted: boolean
   punishment: SuspendedPunishment
 }
 
