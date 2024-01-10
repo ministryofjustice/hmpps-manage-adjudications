@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { Request } from 'express'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import {
+  ActivePunishment,
   PunishmentComment,
   PunishmentData,
   PunishmentDataWithSchedule,
@@ -306,5 +307,10 @@ export default class PunishmentsService {
       damages,
       otherPunishments,
     }
+  }
+
+  async getActivePunishmentsByOffender(bookingId: number, user: User): Promise<ActivePunishment[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerActiveAdjudications(bookingId)
   }
 }

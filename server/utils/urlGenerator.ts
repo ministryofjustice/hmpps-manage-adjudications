@@ -1075,6 +1075,15 @@ const adjudicationUrls = {
         }),
     },
   },
+  activePunishments: {
+    root: '/active-punishments',
+    matchers: {
+      start: '/:prisonerNumber',
+    },
+    urls: {
+      start: (prisonerNumber: string) => `${adjudicationUrls.activePunishments.root}/${prisonerNumber}`,
+    },
+  },
   homepage: {
     root: '/place-a-prisoner-on-report',
     matchers: {

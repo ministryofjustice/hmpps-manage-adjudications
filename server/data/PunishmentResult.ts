@@ -249,3 +249,16 @@ export function flattenPunishments(punishments: PunishmentDataWithSchedule[]): P
   if (!punishments) return null
   return punishments.map(punishment => flattenPunishment(punishment))
 }
+
+export type ActivePunishment = {
+  chargeNumber: string
+  punishmentType: PunishmentType
+  privilegeType?: PrivilegeType
+  otherPrivilege?: string
+  days?: number
+  startDate: string
+  lastDay?: string
+  amount?: number
+  stoppagePercentage?: number
+  activatedFrom?: string
+}
