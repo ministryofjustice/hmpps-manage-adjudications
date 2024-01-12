@@ -55,7 +55,7 @@
       text: 'Reason'
     },
     value: {
-      html: '<p>' + hearingDetails.outcome.reason | convertHearingOutcomeAdjournReason + '</p><p>' + hearingDetails.outcome.details + '</p>'
+      html: '<p>' + hearingDetails.outcome.reason | convertHearingOutcomeAdjournReason + '</p><p>' + hearingDetails.outcome.details | hideIfUndefined + '</p>'
     },
     actions: ReasonDetailsPleaChangeLink
   }, {

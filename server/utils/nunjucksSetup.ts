@@ -353,7 +353,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         case PunishmentType.CONFINEMENT:
           return "Cellular confinement or 'CC' (more time in a cell)"
         case PunishmentType.EARNINGS:
-          return `Loss of earnings: ${stoppage}%`
+          if (stoppage) return `Loss of earnings: ${stoppage}%`
+          return `Loss of earnings`
         case PunishmentType.EXCLUSION_WORK:
           return 'Cannot work with other prisoners'
         case PunishmentType.EXTRA_WORK:
@@ -429,6 +430,11 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
       }
     }
   )
+
+  njkEnv.addFilter('hideIfUndefined', data => {
+    if (data) return data
+    return ''
+  })
 
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
