@@ -89,7 +89,7 @@
   {
     key: { text: 'Reason' },
     value: {
-        text: outcome.details
+        text: outcome.details | hideIfUndefined
     },
     actions: reasonChangeLink
   }

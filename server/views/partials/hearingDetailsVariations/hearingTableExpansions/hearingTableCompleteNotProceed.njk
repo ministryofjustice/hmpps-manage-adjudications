@@ -87,7 +87,7 @@
   {
     key: { text: 'Reason' },
     value: {
-        html: '<p>'+ outcome.reason | convertNotProceedReason + '</p><p>' +  outcome.details +'</p>'
+        html: '<p>'+ outcome.reason | convertNotProceedReason + '</p><p>' +  outcome.details | hideIfUndefined + '</p>'
     },
     actions: reasonChangeLink
   }

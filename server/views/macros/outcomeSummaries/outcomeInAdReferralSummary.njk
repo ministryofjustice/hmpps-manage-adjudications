@@ -59,7 +59,7 @@
         key: {
           text: 'Reason for not proceeding'
         },
-        value: { html: '<p class="govuk-body">'+ referralDetails.reason | convertNotProceedReason +'</p><p class="govuk-body">'+ referralDetails.details +'</p>' }
+        value: { html: '<p class="govuk-body">'+ referralDetails.reason | convertNotProceedReason +'</p><p class="govuk-body">'+ referralDetails.details | hideIfUndefined +'</p>' }
       }), rows) %}
     {% endif %}
   {% endif %}
@@ -96,7 +96,7 @@
         text: 'What is the reason for not having an independent adjudicator hearing?'
       },
       value: {
-        text: referralDetails.details
+        text: referralDetails.details | hideIfUndefined
       },
       actions: reasonForReferralChangeLink
     }

@@ -49,7 +49,7 @@
         key: {
           text: 'Reason for not proceeding'
         },
-        value: { html: '<p class="govuk-body">'+ referralDetails.reason | convertNotProceedReason +'</p><p class="govuk-body">'+ referralDetails.details +'</p>' }
+        value: { html: '<p class="govuk-body">'+ referralDetails.reason | convertNotProceedReason +'</p><p class="govuk-body">'+ referralDetails.details | hideIfUndefined +'</p>' }
       }), rows) %}
     {% endif %}
   {% endif %}
