@@ -108,8 +108,9 @@ export default class PunishmentsTabPage {
       outcomeEnteredInNomis: reportedAdjudication.outcomeEnteredInNomis,
       chargeProved: reportedAdjudication.status === ReportedAdjudicationStatus.CHARGE_PROVED,
       corrupted:
-        reportedAdjudication.status === ReportedAdjudicationStatus.CORRUPTED ||
-        reportedAdjudication.status === ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT,
+        reportedAdjudication.status === ReportedAdjudicationStatus.INVALID_OUTCOME ||
+        reportedAdjudication.status === ReportedAdjudicationStatus.INVALID_SUSPENDED ||
+        reportedAdjudication.status === ReportedAdjudicationStatus.INVALID_ADA,
       quashed: reportedAdjudication.status === ReportedAdjudicationStatus.QUASHED,
       punishments,
       filteredPunishments,

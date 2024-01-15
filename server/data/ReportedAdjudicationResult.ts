@@ -153,8 +153,9 @@ export enum ReportedAdjudicationStatus {
   CHARGE_PROVED = 'CHARGE_PROVED',
   QUASHED = 'QUASHED',
   ACCEPTED = 'ACCEPTED',
-  CORRUPTED = 'CORRUPTED',
-  CORRUPTED_PUNISHMENT = 'CORRUPTED_PUNISHMENT',
+  INVALID_OUTCOME = 'INVALID_OUTCOME',
+  INVALID_SUSPENDED = 'INVALID_SUSPENDED',
+  INVALID_ADA = 'INVALID_ADA',
 }
 
 export const allStatuses = [
@@ -172,8 +173,9 @@ export const allStatuses = [
   ReportedAdjudicationStatus.REFER_GOV,
   ReportedAdjudicationStatus.QUASHED,
   ReportedAdjudicationStatus.PROSECUTION,
-  ReportedAdjudicationStatus.CORRUPTED,
-  ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT,
+  ReportedAdjudicationStatus.INVALID_SUSPENDED,
+  ReportedAdjudicationStatus.INVALID_OUTCOME,
+  ReportedAdjudicationStatus.INVALID_ADA,
 ]
 
 export enum OicHearingType {
@@ -215,10 +217,12 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
       return 'Police prosecution'
     case ReportedAdjudicationStatus.REFER_GOV:
       return 'Referred to Gov'
-    case ReportedAdjudicationStatus.CORRUPTED:
-      return 'Corrupted'
-    case ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT:
-      return 'Corrupted punishment'
+    case ReportedAdjudicationStatus.INVALID_OUTCOME:
+      return 'Invalid outcome'
+    case ReportedAdjudicationStatus.INVALID_SUSPENDED:
+      return 'Invalid suspended'
+    case ReportedAdjudicationStatus.INVALID_ADA:
+      return 'Invalid ADA'
     default:
       return null
   }
