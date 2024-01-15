@@ -18,8 +18,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
-      { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: false },
-      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -50,8 +51,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: true },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: true },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: true },
-      { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: true },
-      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: true },
+      { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: true },
+      { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: true },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: true },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -71,8 +73,9 @@ describe('reportedAdjudicationStatuses', () => {
         ReportedAdjudicationStatus.REFER_INAD,
         ReportedAdjudicationStatus.REFER_POLICE,
         ReportedAdjudicationStatus.REFER_GOV,
-        ReportedAdjudicationStatus.CORRUPTED,
-        ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT,
+        ReportedAdjudicationStatus.INVALID_OUTCOME,
+        ReportedAdjudicationStatus.INVALID_SUSPENDED,
+        ReportedAdjudicationStatus.INVALID_ADA,
       ],
       transfersOnly: false,
     }
@@ -95,8 +98,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
-      { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: false },
-      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -123,8 +127,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
-      { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: false },
-      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -151,8 +156,9 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.REFER_GOV, text: 'Referred to Gov', checked: false },
       { value: ReportedAdjudicationStatus.CHARGE_PROVED, text: 'Charge proved', checked: false },
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
-      { value: ReportedAdjudicationStatus.CORRUPTED, text: 'Corrupted', checked: false },
-      { value: ReportedAdjudicationStatus.CORRUPTED_PUNISHMENT, text: 'Corrupted punishment', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
