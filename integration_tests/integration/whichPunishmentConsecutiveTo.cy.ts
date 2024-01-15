@@ -94,7 +94,6 @@ context('which punishment will it be consecutive to page', () => {
       const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
       whichPunishmentConsecutiveToPage.table().should('exist')
       whichPunishmentConsecutiveToPage.emptyDataPara().should('not.exist')
-      whichPunishmentConsecutiveToPage.enterManuallyLink().should('exist')
       whichPunishmentConsecutiveToPage.selectButton().should('exist')
       whichPunishmentConsecutiveToPage.cancelLink().should('exist')
     })
@@ -105,7 +104,6 @@ context('which punishment will it be consecutive to page', () => {
       const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
       whichPunishmentConsecutiveToPage.table().should('not.exist')
       whichPunishmentConsecutiveToPage.emptyDataPara().should('exist')
-      whichPunishmentConsecutiveToPage.enterManuallyLink().should('exist')
       whichPunishmentConsecutiveToPage.selectButton().should('not.exist')
       whichPunishmentConsecutiveToPage.cancelLink().should('exist')
     })
@@ -135,16 +133,6 @@ context('which punishment will it be consecutive to page', () => {
       const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
       whichPunishmentConsecutiveToPage.cancelLink().click()
       cy.location().should(loc => expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100')))
-    })
-    it('goes to manually add report number page if link is clicked', () => {
-      cy.visit(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS&days=5`
-      )
-      const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
-      whichPunishmentConsecutiveToPage.enterManuallyLink().click()
-      cy.location().should(loc =>
-        expect(loc.pathname).to.eq(adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start('100'))
-      )
     })
     it('goes to the award punishment page if the activate button is clicked', () => {
       cy.visit(
