@@ -7,6 +7,7 @@ import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
+import config from '../../../../config'
 
 export enum PageRequestType {
   CREATION,
@@ -53,6 +54,7 @@ export default class WhichPunishmentConsecutiveToPage {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       manuallySelectConsecutivePunishment: this.getManualConsecutivePunishmentUrl(req, chargeNumber),
       possibleConsecutivePunishments,
+      hideManualLink: config.hideManualActionsFlag === 'true',
     })
   }
 

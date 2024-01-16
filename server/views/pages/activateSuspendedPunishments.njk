@@ -17,8 +17,10 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     {{ activateSuspendedPunishmentsTable(suspendedPunishments) }}
   </form>
+  {% if not hideManualLink %}
   <p class="govuk-body">If an existing punishment is not shown, you can <a href="{{manuallyActivateSuspendedPunishmentsHref}}" data-qa="enter-manually-link">enter details to activate it manually</a>
   </p>
+  {% endif %}
 
   <p class="govuk-body">
     <a href="{{awardPunishmentsHref}}" data-qa="cancel">Return to 'Award punishments'</a>
