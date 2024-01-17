@@ -199,6 +199,7 @@ export default class prisonerReportRoutes {
       showChargeNumberAndPrint: !hideChargeNumberAndPrintForAdjudicationStatuses,
       showFormsTab,
       adjudicationHistoryBreadcrumb: this.pageOptions.isReadOnlyView() && fromHistoryPage,
+      status,
     })
   }
 

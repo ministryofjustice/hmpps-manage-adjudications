@@ -23,7 +23,7 @@
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
 
-  {{ adjudicationTabHeaderSingular(chargeNumber, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
+  {{ adjudicationTabHeaderSingular(chargeNumber, reviewStatus, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
 
   {% if chargeProved or (corrupted and punishments.length) %}
 

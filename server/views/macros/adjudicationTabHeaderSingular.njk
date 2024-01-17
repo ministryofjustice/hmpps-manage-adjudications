@@ -1,7 +1,9 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
-{% macro adjudicationTabHeaderSingular(chargeNumber, reviewStatus, prisoner, activeTab, reportHref, hearingsHref, punishmentsHref, formsHref, showHearings = true, showFormsTab = false) %}
+
+{% macro adjudicationTabHeaderSingular(chargeNumber, status, reviewStatusText, prisoner, activeTab, reportHref, hearingsHref, punishmentsHref, formsHref, showHearings = true, showFormsTab = false) %}
     {% set items = [{
       text: 'Report',
       href: reportHref,
@@ -35,7 +37,12 @@
     {% endif %}
 
   <h1 class="govuk-heading-l">Adjudication for charge {{ chargeNumber }}</h1>
-  <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatus }}</h2>
+  <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatusText }}</h2>
+
+  {% if status == ReportedAdjudicationStatus.INVALID_OUTCOME %}
+    {% include "../partials/invalidReportGuidance/invalidOutcome.njk" %}
+  {% endif %}
+
   <div class="prisonerPlaybackSection">
     {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
   </div>
