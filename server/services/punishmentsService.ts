@@ -13,7 +13,11 @@ import {
   SuspendedPunishmentResult,
   punishmentChangeReasonAndDetails,
 } from '../data/PunishmentResult'
-import { ReportedAdjudication, ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
+import {
+  ReportedAdjudication,
+  ReportedAdjudicationResult,
+  ReportedAdjudicationStatus,
+} from '../data/ReportedAdjudicationResult'
 import ManageAdjudicationsSystemTokensClient, {
   ConsecutiveAdditionalDaysReport,
 } from '../data/manageAdjudicationsSystemTokensClient'
@@ -24,6 +28,10 @@ import logger from '../../logger'
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
+
+export interface SuspendedPunishmentDetailsWithStatus extends SuspendedPunishmentDetails {
+  status: ReportedAdjudicationStatus
+}
 
 export default class PunishmentsService {
   constructor(
@@ -149,7 +157,7 @@ export default class PunishmentsService {
     return reportedAdjudication.punishmentComments
   }
 
-  async getSuspendedPunishmentDetails(chargeNumber: string, user: User): Promise<SuspendedPunishmentDetails> {
+  async getSuspendedPunishmentDetails(chargeNumber: string, user: User): Promise<SuspendedPunishmentDetailsWithStatus> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const manageAdjudicationsClient = new ManageAdjudicationsUserTokensClient(user)
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
@@ -162,6 +170,7 @@ export default class PunishmentsService {
     return {
       prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
       suspendedPunishments,
+      status: reportedAdjudication.status,
     }
   }
 

@@ -169,6 +169,7 @@ describe('PunishmentsService', () => {
       const result = await service.getSuspendedPunishmentDetails('100', user)
       expect(result).toEqual({
         prisonerName: 'John Smith',
+        status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         suspendedPunishments: punishments,
       })
     })

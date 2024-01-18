@@ -14,4 +14,6 @@ export default class ActivateSuspendedPunishmentsPage extends Page {
   enterManuallyLink = (): PageElement => cy.get('[data-qa="enter-manually-link"]')
 
   cancelLink = (): PageElement => cy.get('[data-qa="cancel"]')
+
+  guidanceContent = (): PageElement => cy.get('[data-qa="guidanceContent"]')
 }
