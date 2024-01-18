@@ -21,7 +21,7 @@
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
 
-  {{ adjudicationTabHeaderSingular(chargeNumber, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'hearings', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
+  {{ adjudicationTabHeaderSingular(chargeNumber, reviewStatus, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'hearings', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
 
   {% if schedulingNotAvailable %}
     {% include "../../partials/hearingDetailsVariations/emptyState.njk" %}

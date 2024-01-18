@@ -133,6 +133,17 @@ context('Prisoner report - reviewer view', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 500000,
+      response: {
+        reportedAdjudication: reportedAdjudicationResponse({
+          chargeNumber: '500000',
+          status: ReportedAdjudicationStatus.INVALID_OUTCOME,
+          reviewedByUserId: 'USER1',
+          isYouthOffender: false,
+        }),
+      },
+    })
     cy.task('stubGetLocation', {
       locationId: 25538,
       response: {
@@ -458,6 +469,17 @@ context('Prisoner report - reviewer view', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('456791'))
       })
+    })
+  })
+  describe('invalid', () => {
+    it('should include the guidance details if invalid - invalid outcome', () => {
+      cy.visit(adjudicationUrls.prisonerReport.urls.review(500000))
+      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+      prisonerReportPage.guidanceContent().should('exist')
+      prisonerReportPage.guidanceContent().contains('Help with ‘invalid outcome’ reports')
+      prisonerReportPage
+        .guidanceContent()
+        .contains('An adjudication may have an ‘invalid outcome’ status because there is')
     })
   })
   describe('report MIGRATED', () => {
