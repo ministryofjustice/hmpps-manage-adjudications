@@ -5,6 +5,7 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
+import { ReportedAdjudicationStatus } from '../../../../data/ReportedAdjudicationResult'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
@@ -34,6 +35,7 @@ const punishmentsOnSession = [
 
 const suspendedPunishments = {
   prisonerName: 'James Wellbeloved',
+  status: ReportedAdjudicationStatus.CHARGE_PROVED,
   suspendedPunishments: [
     {
       chargeNumber: '100',

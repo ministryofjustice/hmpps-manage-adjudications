@@ -39,6 +39,7 @@ export default class ActivateSuspendedPunishmentsPage {
       suspendedPunishments: suspendedPunishmentsToActivate,
       errors: error ? [error] : [],
       hideManualLink: config.hideManualActionsFlag === 'true',
+      status: suspendedPunishmentDetails.status,
     })
   }
 

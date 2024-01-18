@@ -7,6 +7,7 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import TestData from '../../../testutils/testData'
 import { PunishmentType } from '../../../../data/PunishmentResult'
+import { ReportedAdjudicationStatus } from '../../../../data/ReportedAdjudicationResult'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
@@ -44,6 +45,7 @@ beforeEach(() => {
   })
   punishmentsService.getSuspendedPunishmentDetails.mockResolvedValue({
     prisonerName: 'G6123VU',
+    status: ReportedAdjudicationStatus.CHARGE_PROVED,
     suspendedPunishments: [
       {
         chargeNumber: '102',

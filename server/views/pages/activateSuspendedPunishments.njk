@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../macros/activateSuspendedPunishmentsTable.njk" import activateSuspendedPunishmentsTable %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% set title = "Activate an existing suspended punishment" %}
 
@@ -11,6 +12,11 @@
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block content %}
+
+  {% if status == ReportedAdjudicationStatus.INVALID_SUSPENDED %}
+    {% include "../partials/invalidReportGuidance/invalidSuspended.njk" %}
+  {% endif %}
+
   <h1 class="govuk-heading-l">{{ title }}</h1>
   <h2 class="govuk-heading-m" data-qa="subheading">{{ prisonerName | possessive }} suspended punishments</h2>
   <form method="POST" novalidate="novalidate">

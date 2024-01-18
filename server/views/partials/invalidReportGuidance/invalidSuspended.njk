@@ -1,0 +1,13 @@
+{% set html %}
+<p class="govuk-notification-banner__heading">Suspended punishment details may not be correct</p>
+<p class="govuk-body">Some suspended punishments on this page have a ‘Suspended until’ date in the past. The date may have been entered incorrectly.</p>
+
+<p class="govuk-body">Check the original report. Follow the ‘Help with ‘invalid punishment’ reports’ guidance to fix it.</p>
+{% endset %}
+
+{{ govukNotificationBanner({
+  html: html,
+  attributes: {
+  "data-qa": "guidanceContent"
+  }
+}) }}

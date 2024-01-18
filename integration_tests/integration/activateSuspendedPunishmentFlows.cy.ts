@@ -14,6 +14,7 @@ import { formatDateForDatePicker } from '../../server/utils/utils'
 const susPun = [
   {
     chargeNumber: 100,
+    status: ReportedAdjudicationStatus.CHARGE_PROVED,
     punishment: {
       id: 71,
       type: PunishmentType.PRIVILEGE,
@@ -28,6 +29,7 @@ const susPun = [
   },
   {
     chargeNumber: 101,
+    status: ReportedAdjudicationStatus.CHARGE_PROVED,
     punishment: {
       id: 72,
       type: PunishmentType.ADDITIONAL_DAYS,
@@ -41,6 +43,7 @@ const susPun = [
   },
   {
     chargeNumber: 102,
+    status: ReportedAdjudicationStatus.CHARGE_PROVED,
     punishment: {
       id: 73,
       type: PunishmentType.PROSPECTIVE_DAYS,
@@ -80,12 +83,7 @@ context('Suspended punishment schedule', () => {
     })
     cy.task('stubGetSuspendedPunishments', {
       prisonerNumber: 'G6415GD',
-      chargeNumber: 101,
-      response: susPun,
-    })
-    cy.task('stubGetSuspendedPunishments', {
-      prisonerNumber: 'G6415GD',
-      chargeNumber: 102,
+      chargeNumber: 103,
       response: susPun,
     })
     cy.task('stubGetReportedAdjudication', {
@@ -158,6 +156,27 @@ context('Suspended punishment schedule', () => {
       },
     })
 
+    cy.task('stubGetReportedAdjudication', {
+      id: 103,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '103',
+          status: ReportedAdjudicationStatus.INVALID_SUSPENDED,
+          prisonerNumber: 'G6415GD',
+          punishments: [
+            {
+              id: 71,
+              type: PunishmentType.PROSPECTIVE_DAYS,
+              schedule: {
+                days: 5,
+                suspendedUntil: '2023-04-29',
+              },
+            },
+          ],
+        }),
+      },
+    })
+
     cy.signIn()
   })
   describe('Suspended punishment automatic punishment date flows', () => {
@@ -168,6 +187,7 @@ context('Suspended punishment schedule', () => {
       activateSuspendedPunishmentsPage.subheading().contains('John Smith’s suspended punishments')
       activateSuspendedPunishmentsPage.suspendedPunishmentsTable().should('exist')
       activateSuspendedPunishmentsPage.cancelLink().should('exist')
+      activateSuspendedPunishmentsPage.guidanceContent().should('not.exist')
     })
     it('goes back to award punishments page if return link clicked', () => {
       cy.visit(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
@@ -323,6 +343,11 @@ context('Suspended punishment schedule', () => {
           expect($summaryData.get(4).innerText).to.contain('-')
           expect($summaryData.get(5).innerText).to.contain('102')
         })
+    })
+    it('should show guidance if report has status INVALID_SUSPENDED', () => {
+      cy.visit(adjudicationUrls.activateSuspendedPunishments.urls.start('103'))
+      const activateSuspendedPunishmentsPage = Page.verifyOnPage(ActivateSuspendedPunishmentsPage)
+      activateSuspendedPunishmentsPage.guidanceContent().should('exist')
     })
   })
 })
