@@ -76,4 +76,6 @@ export default class PrisonerReportPage extends Page {
   reportingOfficerChangeLink = (): PageElement => cy.get('[data-qa="reporting-officer-changeLink"]')
 
   guidanceContent = (): PageElement => cy.get('[data-qa="guidanceContent"]')
+
+  linkedChargeReportLink = (): PageElement => cy.get('[data-qa="linkedCharge-report"]')
 }

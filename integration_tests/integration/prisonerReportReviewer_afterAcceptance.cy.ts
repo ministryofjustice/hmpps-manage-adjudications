@@ -15,6 +15,7 @@ const reportedAdjudicationResponse = ({
   isYouthOffender = false,
   paragraphNumber = '1',
   offenceCode = 1001,
+  linkedChargeNumbers = [],
 }: {
   chargeNumber: string
   status: ReportedAdjudicationStatus
@@ -24,6 +25,7 @@ const reportedAdjudicationResponse = ({
   isYouthOffender: boolean
   paragraphNumber?: string
   offenceCode?: number
+  linkedChargeNumbers?: string[]
 }) => {
   return testData.reportedAdjudication({
     chargeNumber,
@@ -60,6 +62,7 @@ const reportedAdjudicationResponse = ({
       statusReason,
       statusDetails,
       isYouthOffender,
+      linkedChargeNumbers,
     },
   })
 }
@@ -148,10 +151,34 @@ context('Prisoner report - reviewer view', () => {
       id: 500001,
       response: {
         reportedAdjudication: reportedAdjudicationResponse({
-          chargeNumber: '500000',
+          chargeNumber: '500001',
           status: ReportedAdjudicationStatus.INVALID_ADA,
           reviewedByUserId: 'USER1',
           isYouthOffender: false,
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 500002,
+      response: {
+        reportedAdjudication: reportedAdjudicationResponse({
+          chargeNumber: '500002',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          reviewedByUserId: 'USER1',
+          isYouthOffender: false,
+          linkedChargeNumbers: ['MDI-000041', 'MDI-000042'],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 500003,
+      response: {
+        reportedAdjudication: reportedAdjudicationResponse({
+          chargeNumber: '500003',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          reviewedByUserId: 'USER1',
+          isYouthOffender: false,
+          linkedChargeNumbers: ['MDI-000041'],
         }),
       },
     })
@@ -502,6 +529,31 @@ context('Prisoner report - reviewer view', () => {
         .contains(
           'An adjudication with the ‘invalid added days’ status has a punishment of added days but an outcome that is not correct. '
         )
+    })
+    it('should include the guidance details if the report has linked charges - multiple', () => {
+      cy.visit(adjudicationUrls.prisonerReport.urls.review(500002))
+      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+      prisonerReportPage.guidanceContent().should('exist')
+      prisonerReportPage.guidanceContent().contains('Check that information has been entered on the right charge.')
+      prisonerReportPage.guidanceContent().contains('There are other charges for this report:')
+      prisonerReportPage.guidanceContent().contains('MDI-000041 (opens in new tab)')
+      prisonerReportPage.guidanceContent().contains('MDI-000042 (opens in new tab)')
+      prisonerReportPage.linkedChargeReportLink().last().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly('MDI-000042'))
+      })
+    })
+    it('should include the guidance details if the report has linked charges - single', () => {
+      cy.visit(adjudicationUrls.prisonerReport.urls.review(500003))
+      const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
+      prisonerReportPage.guidanceContent().should('exist')
+      prisonerReportPage.guidanceContent().contains('Check that information has been entered on the right charge.')
+      prisonerReportPage.guidanceContent().contains('There’s another charge for this report:')
+      prisonerReportPage.guidanceContent().contains('MDI-000041 (opens in new tab)')
+      prisonerReportPage.linkedChargeReportLink().first().click()
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly('MDI-000041'))
+      })
     })
   })
   describe('report MIGRATED', () => {
