@@ -46,6 +46,11 @@
       {{ printLink('Print a copy of this report', printHref, 'right', 'govuk-!-padding-right-0') }}
     </div>
   {% endif %}
+
+  {% if linkedCharges | length %}
+    {% include '../../partials/invalidReportGuidance/linkedCharges.njk' %}
+  {% endif %}
+
   {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftChargeNumber), prisonerReportData, offence, damages, evidence, witnesses, null, editAndReviewAvailability) }}
   {% if editAndReviewAvailability.reviewAvailable %}
     {{ adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) }}

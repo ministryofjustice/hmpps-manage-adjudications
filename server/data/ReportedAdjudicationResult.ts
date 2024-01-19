@@ -47,6 +47,7 @@ export type ReportedAdjudication = {
   disIssueHistory?: DisIssue[]
   createdOnBehalfOfOfficer?: string
   createdOnBehalfOfReason?: string
+  linkedChargeNumbers?: string[]
 }
 
 export type ReportedAdjudicationResult = {

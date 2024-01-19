@@ -200,6 +200,7 @@ export default class prisonerReportRoutes {
       showFormsTab,
       adjudicationHistoryBreadcrumb: this.pageOptions.isReadOnlyView() && fromHistoryPage,
       status,
+      linkedCharges: reportedAdjudication.linkedChargeNumbers || [],
     })
   }
 
