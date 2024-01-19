@@ -1,12 +1,12 @@
 <div data-qa="guidanceContent">
 {% if linkedCharges | length == 1 %}
   {% set linkedCharge = linkedCharges[0] %}
-  <p class="govuk-body">There’s another charge for this report: <a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(linkedCharge) }}" data-qa="linkedCharge-report" class="govuk-link">{{ linkedCharge }}</a> (opens in new tab).</p>
+  <p class="govuk-body">There’s another charge for this report: <a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(linkedCharge) }}" data-qa="linkedCharge-report" class="govuk-link" target="_blank" rel="noreferrer noopener">{{ linkedCharge }}</a> (opens in new tab).</p>
 {% else %}
   <p class="govuk-body">There are other charges for this report:</p>
   <ul>
   {% for linkedCharge in linkedCharges %}
-    <li><a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(linkedCharge) }}" class="govuk-link" data-qa="linkedCharge-report">{{ linkedCharge }} (opens in new tab)</a></li>
+    <li><a href="{{ adjudicationUrls.prisonerReport.urls.viewOnly(linkedCharge) }}" class="govuk-link" data-qa="linkedCharge-report" target="_blank" rel="noreferrer noopener">{{ linkedCharge }} (opens in new tab)</a></li>
   {% endfor %}
   </ul>
 {% endif %}
