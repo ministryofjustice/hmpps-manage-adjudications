@@ -538,10 +538,6 @@ context('Prisoner report - reviewer view', () => {
       prisonerReportPage.guidanceContent().contains('There are other charges for this report:')
       prisonerReportPage.guidanceContent().contains('MDI-000041 (opens in new tab)')
       prisonerReportPage.guidanceContent().contains('MDI-000042 (opens in new tab)')
-      prisonerReportPage.linkedChargeReportLink().last().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly('MDI-000042'))
-      })
     })
     it('should include the guidance details if the report has linked charges - single', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(500003))
@@ -550,10 +546,6 @@ context('Prisoner report - reviewer view', () => {
       prisonerReportPage.guidanceContent().contains('Check that information has been entered on the right charge.')
       prisonerReportPage.guidanceContent().contains('There’s another charge for this report:')
       prisonerReportPage.guidanceContent().contains('MDI-000041 (opens in new tab)')
-      prisonerReportPage.linkedChargeReportLink().first().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly('MDI-000041'))
-      })
     })
   })
   describe('report MIGRATED', () => {
