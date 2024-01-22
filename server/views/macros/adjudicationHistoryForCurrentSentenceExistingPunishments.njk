@@ -14,21 +14,29 @@
         </div>
 
         {% for punishment in range(1, 6) %}
-            <h2>Existing punishment {{ loop.index }}</h2>
             <div class='break-inside-avoid'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Punishment</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-two-lines-full-width'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details'>
-                <div class='adjudication-pdf-section-sentence-details__item'>
-                    <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Length of punishment (in days) if applicable</p>
-                    <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
+                <h2>Existing punishment {{ loop.index }}</h2>
+                <div class='break-inside-avoid'>
+                    <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Punishment</p>
+                    <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-two-lines-full-width'>
                 </div>
-                <div class='adjudication-pdf-section-sentence-details__item'>
-                    <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Date punishment ends (DD/MM/YYYY)</p>
-                    <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+                <div class='adjudication-pdf-section-sentence-details'>
+                    <div class='adjudication-pdf-section-sentence-details__item'>
+                        <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Length of punishment (in days) if applicable</p>
+                        <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
+                    </div>
+                    <div class='adjudication-pdf-section-sentence-details__item'>
+                        <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Date punishment ends (DD/MM/YYYY)</p>
+                        <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+                        <span>
+                            <strong> / </strong>
+                        </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+                        <span>
+                            <strong> / </strong>
+                        </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+                    </div>
                 </div>
+                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
-{% endmacro %}
+        {% endmacro %}
