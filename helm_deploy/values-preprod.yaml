@@ -23,7 +23,7 @@ generic-service:
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
     FRONTEND_COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
     MAINTENANCE_MODE: false
-    HIDE_MANUAL_ACTIONS: false
+    HIDE_MANUAL_ACTIONS: true
     ENVIRONMENT_NAME: 'PRE-PRODUCTION'
 
   allowlist:
