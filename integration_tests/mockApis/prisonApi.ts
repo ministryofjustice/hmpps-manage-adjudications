@@ -112,7 +112,7 @@ const stubGetAgency = ({ agencyId, response }: { agencyId: string; response: Age
   stubFor({
     request: {
       method: 'GET',
-      url: `/prisonApi/api/agencies/${agencyId}`,
+      url: `/prisonApi/api/agencies/${agencyId}?activeOnly=false`,
     },
     response: {
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
