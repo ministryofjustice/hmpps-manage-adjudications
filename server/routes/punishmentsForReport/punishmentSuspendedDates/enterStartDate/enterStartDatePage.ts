@@ -76,15 +76,7 @@ export default class PunishmentSuspendedStartDatePage {
     const { chargeNumber } = req.params
     const { user } = res.locals
     const { startDate } = req.body
-    const {
-      punishmentType,
-      privilegeType,
-      days,
-      punishmentNumberToActivate,
-      otherPrivilege,
-      stoppagePercentage,
-      chargeNumberForSuspendedPunishment,
-    } = req.query
+    const { punishmentType, privilegeType, days, punishmentNumberToActivate } = req.query
 
     const type = PunishmentType[punishmentType as string]
     const numberOfDays = Number(days)
