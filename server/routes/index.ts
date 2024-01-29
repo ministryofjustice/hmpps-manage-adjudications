@@ -71,13 +71,10 @@ import willPunishmentBeSuspendedRoutes from './punishmentsForReport/additionalDa
 import punishmentSuspendedUntilAdditionalDays from './punishmentsForReport/additionalDays/suspendedUntilDate'
 import checkPunishmentRoutes from './punishmentsForReport/punishments/checkPunishments'
 import activateSuspendedPunishmentsRoutes from './punishmentsForReport/punishments/activateSuspendedPunishments'
-import manuallyActivateSuspendedPunishmentsRoutes from './punishmentsForReport/punishments/manuallyActivateSuspendedPunishments'
 import reviewerEditOffenceWarningRoute from './reviewerEditOffenceWarning'
 import isPrisonerStillInEstablishmentRoutes from './isPrisonerStillInEstablishment'
 import willPunishmentBeConsecutiveRoutes from './punishmentsForReport/additionalDays/willPunishmentBeConsecutive'
 import whichPunishmentConsecutiveToRoutes from './punishmentsForReport/additionalDays/whichPunishmentConsecutiveTo'
-import manualEntryConsecutivePunishmentRoutes from './punishmentsForReport/additionalDays/manualEntryConsecutivePunishment'
-import manualConsecutivePunishmentErrorRoutes from './punishmentsForReport/additionalDays/manualConsecutivePunishmentError'
 import damagesAmountRoutes from './punishmentsForReport/punishments/damagesAmount'
 import reasonForChangeRoutes from './punishmentsForReport/punishments/reasonForChange'
 import punishmentNumberOfDaysRoutes from './punishmentsForReport/punishmentDates/numberOfDays'
@@ -333,27 +330,12 @@ export default function routes(
     adjudicationUrls.whichPunishmentIsItConsecutiveTo.root,
     whichPunishmentConsecutiveToRoutes({ userService, punishmentsService })
   )
-  router.use(
-    adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root,
-    manualEntryConsecutivePunishmentRoutes({ userService, punishmentsService })
-  )
-  router.use(
-    adjudicationUrls.manualConsecutivePunishmentError.root,
-    manualConsecutivePunishmentErrorRoutes({ userService, punishmentsService })
-  )
-
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
   router.use(adjudicationUrls.checkPunishments.root, checkPunishmentRoutes({ punishmentsService, userService }))
   router.use(
     adjudicationUrls.activateSuspendedPunishments.root,
     activateSuspendedPunishmentsRoutes({ punishmentsService, userService })
   )
-
-  router.use(
-    adjudicationUrls.manuallyActivateSuspendedPunishment.root,
-    manuallyActivateSuspendedPunishmentsRoutes({ punishmentsService, userService })
-  )
-
   router.use(
     adjudicationUrls.reasonForChangePunishment.root,
     reasonForChangeRoutes({ punishmentsService, userService })

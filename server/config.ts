@@ -142,6 +142,5 @@ export default {
   prisonerProfileServiceUrl: get('PRISONER_PROFILE_SERVICE_URL', 'http://localhost:3005', requiredInProduction),
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
-  hideManualActionsFlag: get('HIDE_MANUAL_ACTIONS', false, requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
 }

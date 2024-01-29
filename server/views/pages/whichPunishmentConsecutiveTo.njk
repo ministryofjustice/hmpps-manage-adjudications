@@ -23,12 +23,9 @@
       {% else %}
         <p class="govuk-body" data-qa='no-data'>There are no existing punishments to select.</p>
       {% endif %}
-      {% if not hideManualLink %}
-        <p class="govuk-body">If an existing punishment is not shown, you can <a href="{{ manuallySelectConsecutivePunishment }}" data-qa="enter-manually-link">enter details to select it manually</a>.</p>
-      {% endif %}
-        <p class="govuk-body">
-          <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award punishments'</a>
-        </p>
-      </form>
-    </div>
-  {% endblock %}
+      <p class="govuk-body">
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='cancel'>Return to 'Award punishments'</a>
+      </p>
+    </form>
+  </div>
+{% endblock %}

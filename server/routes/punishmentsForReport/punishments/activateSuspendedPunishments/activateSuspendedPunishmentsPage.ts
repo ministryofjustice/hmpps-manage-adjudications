@@ -7,7 +7,6 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import PunishmentsService from '../../../../services/punishmentsService'
 import { PunishmentDataWithSchedule } from '../../../../data/PunishmentResult'
-import config from '../../../../config'
 
 export default class ActivateSuspendedPunishmentsPage {
   constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {}
@@ -33,12 +32,9 @@ export default class ActivateSuspendedPunishmentsPage {
 
     return res.render(`pages/activateSuspendedPunishments.njk`, {
       awardPunishmentsHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
-      manuallyActivateSuspendedPunishmentsHref:
-        adjudicationUrls.manuallyActivateSuspendedPunishment.urls.start(chargeNumber),
       prisonerName: suspendedPunishmentDetails.prisonerName,
       suspendedPunishments: suspendedPunishmentsToActivate,
       errors: error ? [error] : [],
-      hideManualLink: config.hideManualActionsFlag === 'true',
       status: suspendedPunishmentDetails.status,
     })
   }

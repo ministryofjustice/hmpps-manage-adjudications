@@ -805,28 +805,6 @@ const adjudicationUrls = {
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
-  whichPunishmentIsItConsecutiveToManual: {
-    root: '/punishment-consecutive-to/manual',
-    matchers: {
-      start: '/:chargeNumber',
-      edit: '/:chargeNumber/edit/:redisId',
-    },
-    urls: {
-      start: (chargeNumber: string) =>
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root}/${chargeNumber}`,
-      edit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root}/${chargeNumber}/edit/${redisId}`,
-    },
-  },
-  manualConsecutivePunishmentError: {
-    root: '/punishment-consecutive-to/manual/error',
-    matchers: {
-      start: '/:chargeId',
-    },
-    urls: {
-      start: (chargeId: string) => `${adjudicationUrls.manualConsecutivePunishmentError.root}/${chargeId}`,
-    },
-  },
   awardPunishments: {
     root: '/award-punishments',
     matchers: {
@@ -910,15 +888,6 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentComment.root}/${chargeNumber}/edit/${id}`,
       delete: (chargeNumber: string, id: number) =>
         `${adjudicationUrls.punishmentComment.root}/${chargeNumber}/delete/${id}`,
-    },
-  },
-  manuallyActivateSuspendedPunishment: {
-    root: '/manually-activate-suspended-punishment',
-    matchers: {
-      start: '/:chargeNumber',
-    },
-    urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.manuallyActivateSuspendedPunishment.root}/${chargeNumber}`,
     },
   },
   suspendedPunishmentNumberOfDays: {
