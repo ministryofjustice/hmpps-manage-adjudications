@@ -143,7 +143,7 @@ export default class PrisonApiClient {
 
   async getAgency(agencyId: AgencyId): Promise<Agency> {
     return this.restClient.get({
-      path: `/api/agencies/${agencyId}`,
+      path: `/api/agencies/${agencyId}?activeOnly=false`,
     })
   }
 
