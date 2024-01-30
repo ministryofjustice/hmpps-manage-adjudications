@@ -98,6 +98,7 @@ describe('POST /adjudication-history', () => {
     return request(app)
       .post(adjudicationUrls.adjudicationHistory.urls.start('G7234VB'))
       .send({
+        bookingType: 'current',
         fromDate: '01/01/2021',
         toDate: '02/01/2021',
         status: 'AWAITING_REVIEW',
@@ -107,7 +108,7 @@ describe('POST /adjudication-history', () => {
         'Location',
         `${adjudicationUrls.adjudicationHistory.urls.start(
           'G7234VB'
-        )}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&agency=MDI`
+        )}?bookingType=current&fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&agency=MDI`
       )
   })
 })

@@ -63,6 +63,7 @@ import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUser
 import { AwardedPunishmentsAndDamagesFilter } from '../utils/adjudicationFilterHelper'
 import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
+import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -1287,13 +1288,19 @@ export default class ReportedAdjudicationsService {
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const agencyIds = uniqueListOfAgenciesForPrisoner.map(agencyInfo => agencyInfo.agency)
+    let results = {} as ApiPageResponse<ReportedAdjudication>
 
-    const results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistory(
-      prisoner.bookingId,
-      filter,
-      agencyIds,
-      pageRequest
-    )
+    if (filter.bookingType === AdjudicationHistoryBookingType.ALL) {
+      // TODO: Add in new API endpoint call here
+      results = {} as ApiPageResponse<ReportedAdjudication>
+    } else {
+      results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistory(
+        prisoner.bookingId,
+        filter,
+        agencyIds,
+        pageRequest
+      )
+    }
 
     const enhancedContent = results.content.map(adjudication => {
       const userCaseloadMatch =

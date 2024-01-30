@@ -9,6 +9,7 @@ import {
 } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, datePickerToApi, momentDateToDatePicker } from './utils'
 import { EstablishmentInformation, FormError } from '../@types/template'
+import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
 
 enum ErrorType {
   FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',
@@ -44,9 +45,10 @@ export interface PrintDISFormsUiFilter extends DISUiFilter {
 }
 
 export type AdjudicationHistoryUiFilter = {
+  bookingType: AdjudicationHistoryBookingType
   fromDate?: string
   toDate?: string
-  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  status?: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
   agency?: string | string[]
 }
 
@@ -85,6 +87,7 @@ export const uiTransfersFilterFromRequest = (req: Request): TransfersUiFilter =>
 
 export const uiAdjudicationHistoryFilterFromRequest = (req: Request): AdjudicationHistoryUiFilter => {
   return {
+    bookingType: req.query.bookingType as AdjudicationHistoryBookingType,
     fromDate: req.query.fromDate as string,
     toDate: req.query.toDate as string,
     status: req.query.status as ReportedAdjudicationStatus,
@@ -179,7 +182,8 @@ export const fillInAdjudicationHistoryDefaults = (
   uiFilter: AdjudicationHistoryUiFilter
 ): AdjudicationHistoryUiFilter => {
   return {
-    status: uiFilter.status || allStatuses,
+    ...uiFilter,
+    bookingType: uiFilter.bookingType || AdjudicationHistoryBookingType.CURRENT,
   }
 }
 
@@ -216,6 +220,7 @@ export const PrintDISFormUiFilterFromBody = (req: Request) => {
 
 export const adjudicationHistoryUiFilterFromBody = (req: Request) => {
   return {
+    bookingType: req.body.bookingType,
     fromDate: req.body.fromDate,
     toDate: req.body.toDate,
     status: req.body.status as ReportedAdjudicationStatus,
@@ -249,6 +254,7 @@ export const transfersFilterFromUiFilter = (filter: TransfersUiFilter) => {
 
 export const adjudicationHistoryFilterFromUiFilter = (filter: AdjudicationHistoryUiFilter) => {
   return {
+    bookingType: filter.bookingType || AdjudicationHistoryBookingType.CURRENT,
     fromDate: filter.fromDate && datePickerDateToMoment(filter.fromDate),
     toDate: filter.toDate && datePickerDateToMoment(filter.toDate),
     status: filter.status || allStatuses,
