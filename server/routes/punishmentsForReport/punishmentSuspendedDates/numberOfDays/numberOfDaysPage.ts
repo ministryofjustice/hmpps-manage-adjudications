@@ -27,8 +27,6 @@ type PageData = {
 export enum PageRequestType {
   EXISTING,
   EDIT,
-  MANUAL,
-  MANUAL_EDIT,
 }
 
 class PageOptions {
@@ -36,14 +34,6 @@ class PageOptions {
 
   isEdit(): boolean {
     return this.pageType === PageRequestType.EDIT
-  }
-
-  isManual(): boolean {
-    return this.pageType === PageRequestType.MANUAL
-  }
-
-  isManualEdit(): boolean {
-    return this.pageType === PageRequestType.MANUAL_EDIT
   }
 }
 
@@ -170,12 +160,6 @@ export default class SuspendedPunishmentNumberOfDaysPage {
     if (isTypeAdditionalDays) return adjudicationUrls.awardPunishments.urls.modified(chargeNumber)
     if (this.pageOptions.isEdit()) {
       return adjudicationUrls.suspendedPunishmentStartDateChoice.urls.edit(chargeNumber, req.params.redisId)
-    }
-    if (this.pageOptions.isManual()) {
-      return adjudicationUrls.suspendedPunishmentStartDateChoice.urls.manual(chargeNumber)
-    }
-    if (this.pageOptions.isManualEdit()) {
-      return adjudicationUrls.suspendedPunishmentStartDateChoice.urls.manualEdit(chargeNumber, req.params.redisId)
     }
     return adjudicationUrls.suspendedPunishmentStartDateChoice.urls.existing(chargeNumber)
   }

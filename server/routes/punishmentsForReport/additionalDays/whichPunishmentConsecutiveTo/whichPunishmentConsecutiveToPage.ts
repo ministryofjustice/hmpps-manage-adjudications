@@ -1,13 +1,10 @@
 /* eslint-disable max-classes-per-file */
-import url from 'url'
-import { ParsedUrlQueryInput } from 'querystring'
 import { Request, Response } from 'express'
 import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
-import config from '../../../../config'
 
 export enum PageRequestType {
   CREATION,
@@ -52,9 +49,7 @@ export default class WhichPunishmentConsecutiveToPage {
 
     return res.render(`pages/whichPunishmentConsecutiveTo.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
-      manuallySelectConsecutivePunishment: this.getManualConsecutivePunishmentUrl(req, chargeNumber),
       possibleConsecutivePunishments,
-      hideManualLink: config.hideManualActionsFlag === 'true',
     })
   }
 
@@ -86,20 +81,5 @@ export default class WhichPunishmentConsecutiveToPage {
       throw postError
     }
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
-  }
-
-  private getPrefix = (chargeNumber: string, req: Request) => {
-    if (this.pageOptions.isEdit()) {
-      return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.edit(chargeNumber, req.params.redisId)
-    }
-    return adjudicationUrls.whichPunishmentIsItConsecutiveToManual.urls.start(chargeNumber)
-  }
-
-  private getManualConsecutivePunishmentUrl = (req: Request, chargeNumber: string) => {
-    const prefix = this.getPrefix(chargeNumber, req)
-    return url.format({
-      pathname: prefix,
-      query: { ...(req.query as ParsedUrlQueryInput) },
-    })
   }
 }

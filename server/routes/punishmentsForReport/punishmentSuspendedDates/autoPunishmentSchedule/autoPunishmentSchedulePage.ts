@@ -20,29 +20,8 @@ type PageData = {
   chargeNumberForSuspendedPunishment?: string
 }
 
-export enum PageRequestType {
-  EXISTING,
-  MANUAL,
-}
-
-class PageOptions {
-  constructor(private readonly pageType: PageRequestType) {}
-
-  isManual(): boolean {
-    return this.pageType === PageRequestType.MANUAL
-  }
-}
-
 export default class AutoPunishmentSuspendedSchedulePage {
-  pageOptions: PageOptions
-
-  constructor(
-    pageType: PageRequestType,
-    private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
-  ) {
-    this.pageOptions = new PageOptions(pageType)
-  }
+  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
@@ -131,17 +110,10 @@ export default class AutoPunishmentSuspendedSchedulePage {
   }
 
   getPathnameForStartDateEdit = (chargeNumber: string, redisId: string) => {
-    if (this.pageOptions.isManual()) {
-      return adjudicationUrls.suspendedPunishmentStartDate.urls.manualEdit(chargeNumber, redisId)
-    }
-
     return adjudicationUrls.suspendedPunishmentStartDate.urls.edit(chargeNumber, redisId)
   }
 
   getPathnameForDaysEdit = (chargeNumber: string, redisId: string) => {
-    if (this.pageOptions.isManual()) {
-      return adjudicationUrls.suspendedPunishmentNumberOfDays.urls.manualEdit(chargeNumber, redisId)
-    }
     return adjudicationUrls.suspendedPunishmentNumberOfDays.urls.edit(chargeNumber, redisId)
   }
 }

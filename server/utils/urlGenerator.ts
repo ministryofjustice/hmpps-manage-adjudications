@@ -805,28 +805,6 @@ const adjudicationUrls = {
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
-  whichPunishmentIsItConsecutiveToManual: {
-    root: '/punishment-consecutive-to/manual',
-    matchers: {
-      start: '/:chargeNumber',
-      edit: '/:chargeNumber/edit/:redisId',
-    },
-    urls: {
-      start: (chargeNumber: string) =>
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root}/${chargeNumber}`,
-      edit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveToManual.root}/${chargeNumber}/edit/${redisId}`,
-    },
-  },
-  manualConsecutivePunishmentError: {
-    root: '/punishment-consecutive-to/manual/error',
-    matchers: {
-      start: '/:chargeId',
-    },
-    urls: {
-      start: (chargeId: string) => `${adjudicationUrls.manualConsecutivePunishmentError.root}/${chargeId}`,
-    },
-  },
   awardPunishments: {
     root: '/award-punishments',
     matchers: {
@@ -912,32 +890,17 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentComment.root}/${chargeNumber}/delete/${id}`,
     },
   },
-  manuallyActivateSuspendedPunishment: {
-    root: '/manually-activate-suspended-punishment',
-    matchers: {
-      start: '/:chargeNumber',
-    },
-    urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.manuallyActivateSuspendedPunishment.root}/${chargeNumber}`,
-    },
-  },
   suspendedPunishmentNumberOfDays: {
     root: '/suspended-punishment-number-days',
     matchers: {
       existingPunishment: '/:chargeNumber/existing',
       edit: '/:chargeNumber/edit/:redisId',
-      manualPunishment: '/:chargeNumber/manual',
-      manualPunishmentEdit: '/:chargeNumber/manual/edit/:redisId',
     },
     urls: {
       existing: (chargeNumber: string) =>
         `${adjudicationUrls.suspendedPunishmentNumberOfDays.root}/${chargeNumber}/existing`,
       edit: (chargeNumber: string, redisId: string) =>
         `${adjudicationUrls.suspendedPunishmentNumberOfDays.root}/${chargeNumber}/edit/${redisId}`,
-      manual: (chargeNumber: string) =>
-        `${adjudicationUrls.suspendedPunishmentNumberOfDays.root}/${chargeNumber}/manual`,
-      manualEdit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.suspendedPunishmentNumberOfDays.root}/${chargeNumber}/manual/edit/${redisId}`,
     },
   },
   suspendedPunishmentStartDateChoice: {
@@ -945,18 +908,12 @@ const adjudicationUrls = {
     matchers: {
       existingPunishment: '/:chargeNumber/existing',
       edit: '/:chargeNumber/edit/:redisId',
-      manualPunishment: '/:chargeNumber/manual',
-      manualPunishmentEdit: '/:chargeNumber/manual/edit/:redisId',
     },
     urls: {
       existing: (chargeNumber: string) =>
         `${adjudicationUrls.suspendedPunishmentStartDateChoice.root}/${chargeNumber}/existing`,
       edit: (chargeNumber: string, redisId: string) =>
         `${adjudicationUrls.suspendedPunishmentStartDateChoice.root}/${chargeNumber}/edit/${redisId}`,
-      manual: (chargeNumber: string) =>
-        `${adjudicationUrls.suspendedPunishmentStartDateChoice.root}/${chargeNumber}/manual`,
-      manualEdit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.suspendedPunishmentStartDateChoice.root}/${chargeNumber}/manual/edit/${redisId}`,
     },
   },
   suspendedPunishmentStartDate: {
@@ -964,29 +921,22 @@ const adjudicationUrls = {
     matchers: {
       existingPunishment: '/:chargeNumber/existing',
       edit: '/:chargeNumber/edit/:redisId',
-      manualPunishment: '/:chargeNumber/manual',
-      manualPunishmentEdit: '/:chargeNumber/manual/edit/:redisId',
     },
     urls: {
       existing: (chargeNumber: string) =>
         `${adjudicationUrls.suspendedPunishmentStartDate.root}/${chargeNumber}/existing`,
       edit: (chargeNumber: string, redisId: string) =>
         `${adjudicationUrls.suspendedPunishmentStartDate.root}/${chargeNumber}/edit/${redisId}`,
-      manual: (chargeNumber: string) => `${adjudicationUrls.suspendedPunishmentStartDate.root}/${chargeNumber}/manual`,
-      manualEdit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.suspendedPunishmentStartDate.root}/${chargeNumber}/manual/edit/${redisId}`,
     },
   },
   suspendedPunishmentAutoDates: {
     root: '/suspended-punishment-schedule-check',
     matchers: {
       existingPunishment: '/:chargeNumber/existing',
-      manualPunishment: '/:chargeNumber/manual',
     },
     urls: {
       existing: (chargeNumber: string) =>
         `${adjudicationUrls.suspendedPunishmentAutoDates.root}/${chargeNumber}/existing`,
-      manual: (chargeNumber: string) => `${adjudicationUrls.suspendedPunishmentAutoDates.root}/${chargeNumber}/manual`,
     },
   },
   reviewerEditOffenceWarning: {
