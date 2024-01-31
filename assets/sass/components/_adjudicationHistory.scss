@@ -37,7 +37,7 @@
       font-size: 19px;
       font-weight: 300;
       color: $govuk-text-colour;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       max-width: 670px;
       word-break: break-word;
   
@@ -49,11 +49,15 @@
       }
     }
 
+    &__metadata-group {
+      margin-bottom: 10px;
+    }
+
     &__metadata {
       font-size: 19px;
       font-weight: 300;
       color: $govuk-text-colour;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
 
     &__location {

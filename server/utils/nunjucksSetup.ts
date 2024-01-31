@@ -437,6 +437,21 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     return ''
   })
 
+  njkEnv.addFilter('adjudicationHistoryPunishments', punishment => {
+    const punishmentName = convertPunishmentType(
+      punishment.type,
+      punishment.stoppagePercentage,
+      punishment.privilegeType,
+      punishment.otherPrivilege
+    )
+    const { days, suspendedUntil } = punishment.schedule
+    const numberOfDaysPhrasing = days > 1 ? `${days} days` : `${days} day`
+    const suspendedAddition = suspendedUntil
+      ? `- suspended until ${formatTimestampTo(suspendedUntil, 'DD/MM/YYYY')}`
+      : ``
+    return `${punishmentName}: ${numberOfDaysPhrasing} ${suspendedAddition}`
+  })
+
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)
