@@ -445,7 +445,9 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     const suspendedAddition = suspendedUntil
       ? `- suspended until ${formatTimestampTo(suspendedUntil, 'DD/MM/YYYY')}`
       : ``
-
+    if (punishment.type === PunishmentType.CAUTION) return `${punishment.punishmentName}`
+    if (punishment.type === PunishmentType.DAMAGES_OWED)
+      return `${punishment.punishmentName}: £${punishment.damagesOwedAmount}`
     return `${punishment.punishmentName}: ${numberOfDaysPhrasing} ${suspendedAddition}`
   })
 
@@ -462,6 +464,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         punishmentName,
       }
     })
+
     return punishmentsWithConvertedNames.sort((a: PunishmentWithConvertedName, b: PunishmentWithConvertedName) =>
       a.punishmentName.localeCompare(b.punishmentName)
     )
