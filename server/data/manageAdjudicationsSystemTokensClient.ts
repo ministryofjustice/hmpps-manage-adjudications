@@ -354,18 +354,15 @@ export default class ManageAdjudicationsSystemTokensClient {
   }
 
   async getPrisonerAdjudicationHistoryAllBookings(
-    bookingId: number,
+    prisonerNumber: string,
     filter: AdjudicationHistoryFilter,
-    allAgencies: Array<string>,
     pageRequest: ApiPageRequest
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const path =
-      `/reported-adjudications/booking/${bookingId}?page=${pageRequest.number}&size=${pageRequest.size}` +
+      `/reported-adjudications/bookings/prisoner/${prisonerNumber}?page=${pageRequest.number}&size=${pageRequest.size}` +
       `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
       `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
-      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-      `${(filter.agency && `&agency=${filter.agency}`) || `&agency=${allAgencies}`}`
-
+      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
     return this.restClient.get({
       path,
     })

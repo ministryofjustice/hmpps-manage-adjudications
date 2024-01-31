@@ -1288,11 +1288,14 @@ export default class ReportedAdjudicationsService {
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const agencyIds = uniqueListOfAgenciesForPrisoner.map(agencyInfo => agencyInfo.agency)
-    let results = {} as ApiPageResponse<ReportedAdjudication>
 
+    let results = {} as ApiPageResponse<ReportedAdjudication>
     if (filter.bookingType === AdjudicationHistoryBookingType.ALL) {
-      // TODO: Add in new API endpoint call here
-      results = {} as ApiPageResponse<ReportedAdjudication>
+      results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistoryAllBookings(
+        prisoner.prisonerNumber,
+        filter,
+        pageRequest
+      )
     } else {
       results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistory(
         prisoner.bookingId,
@@ -1301,7 +1304,6 @@ export default class ReportedAdjudicationsService {
         pageRequest
       )
     }
-
     const enhancedContent = results.content.map(adjudication => {
       const userCaseloadMatch =
         [adjudication.overrideAgencyId, adjudication.originatingAgencyId].includes(user.activeCaseLoadId) || null

@@ -94,7 +94,7 @@ describe('GET /adjudication-history', () => {
 })
 
 describe('POST /adjudication-history', () => {
-  it('should redirect with the correct filter parameters', () => {
+  it('should redirect with the correct filter parameters - current booking', () => {
     return request(app)
       .post(adjudicationUrls.adjudicationHistory.urls.start('G7234VB'))
       .send({
@@ -109,6 +109,23 @@ describe('POST /adjudication-history', () => {
         `${adjudicationUrls.adjudicationHistory.urls.start(
           'G7234VB'
         )}?bookingType=current&fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&agency=MDI`
+      )
+  })
+  it('should redirect with the correct filter parameters - all bookings', () => {
+    return request(app)
+      .post(adjudicationUrls.adjudicationHistory.urls.start('G7234VB'))
+      .send({
+        bookingType: 'all',
+        fromDate: '',
+        toDate: '',
+        status: '',
+        agency: '',
+      })
+      .expect(
+        'Location',
+        `${adjudicationUrls.adjudicationHistory.urls.start(
+          'G7234VB'
+        )}?bookingType=all&fromDate=&toDate=&status=&agency=`
       )
   })
 })
