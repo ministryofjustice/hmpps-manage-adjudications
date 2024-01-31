@@ -35,8 +35,10 @@ import {
   convertPrivilegeTypeForDIS7,
   convertPunishmentType,
   PrivilegeType,
+  PunishmentData,
   PunishmentReasonForChange,
   PunishmentType,
+  PunishmentWithConvertedName,
 } from '../data/PunishmentResult'
 import { ApplicationInfo } from '../applicationInfo'
 import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
@@ -438,18 +440,31 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   })
 
   njkEnv.addFilter('adjudicationHistoryPunishments', punishment => {
-    const punishmentName = convertPunishmentType(
-      punishment.type,
-      punishment.stoppagePercentage,
-      punishment.privilegeType,
-      punishment.otherPrivilege
-    )
     const { days, suspendedUntil } = punishment.schedule
     const numberOfDaysPhrasing = days > 1 ? `${days} days` : `${days} day`
     const suspendedAddition = suspendedUntil
       ? `- suspended until ${formatTimestampTo(suspendedUntil, 'DD/MM/YYYY')}`
       : ``
-    return `${punishmentName}: ${numberOfDaysPhrasing} ${suspendedAddition}`
+
+    return `${punishment.punishmentName}: ${numberOfDaysPhrasing} ${suspendedAddition}`
+  })
+
+  njkEnv.addFilter('sortPunishmentAlphabetically', punishments => {
+    const punishmentsWithConvertedNames = punishments.map((punishment: PunishmentData) => {
+      const punishmentName = convertPunishmentType(
+        punishment.type,
+        punishment.stoppagePercentage,
+        punishment.privilegeType,
+        punishment.otherPrivilege
+      )
+      return {
+        ...punishment,
+        punishmentName,
+      }
+    })
+    return punishmentsWithConvertedNames.sort((a: PunishmentWithConvertedName, b: PunishmentWithConvertedName) =>
+      a.punishmentName.localeCompare(b.punishmentName)
+    )
   })
 
   njkEnv.addFilter('truthy', data => Boolean(data))
