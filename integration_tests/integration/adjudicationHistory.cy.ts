@@ -78,7 +78,7 @@ context('Adjudication history', () => {
         'Destroys or damages any part of a young offender institution or any other property other than his own'
       )
   })
-  it.only('should display the results correctly - punishments present', () => {
+  it('should display the results correctly - punishments present', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 5, _ => {
       return testData.reportedAdjudication({
         chargeNumber: _ as unknown as string,
