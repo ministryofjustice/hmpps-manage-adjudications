@@ -11,8 +11,9 @@
       <p class="adjudication-history-card-list-item__notes govuk-body">{{ adjudication.offenceDetails.offenceRule.paragraphDescription | safe }}</p>
       <p class="adjudication-history-card-list-item__status govuk-body govuk-!-margin-right-6"><span class="govuk-!-font-weight-bold">Status:</span> {{ adjudication.status | reportedAdjudicationStatusDisplayName }}</p>
       {% if adjudication.punishments | length %}
+      {% set punishments = adjudication.punishments | sortPunishmentAlphabetically %}
       <p class="adjudication-history-card-list-item__notes govuk-body  govuk-!-font-weight-bold govuk-!-margin-right-6">Punishment:</p>
-      {% for punishment in adjudication.punishments %}
+      {% for punishment in punishments %}
         <p class="govuk-body adjudication-history-card-list-item__notes">{{ punishment | adjudicationHistoryPunishments }}</p>
       {% endfor %}
       {% endif %}
