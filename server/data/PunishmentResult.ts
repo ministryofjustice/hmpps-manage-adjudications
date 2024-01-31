@@ -71,6 +71,10 @@ export type PunishmentDataWithSchedule = {
   canRemove?: boolean
 }
 
+export interface PunishmentWithConvertedName extends PunishmentData {
+  punishmentName: string
+}
+
 export interface SuspendedPunishment extends PunishmentDataWithSchedule {
   activatedBy?: string
 }
