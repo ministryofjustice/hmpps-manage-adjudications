@@ -11,6 +11,7 @@ import {
   OicHearingType,
   ReportedAdjudicationDISFormFilter,
   ReportedAdjudicationStatus,
+  allStatuses,
 } from '../data/ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 import {
@@ -21,6 +22,7 @@ import {
   ReferralOutcomeCode,
 } from '../data/HearingAndOutcomeResult'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
+import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
 
 const testData = new TestData()
 
@@ -37,6 +39,8 @@ const getReportedAdjudicationIssueData = jest.fn()
 const getReportedAdjudicationPrintData = jest.fn()
 const getAlertsForPrisoner = jest.fn()
 const getMovementByOffender = jest.fn()
+const getPrisonerAdjudicationHistory = jest.fn()
+const getPrisonerAdjudicationHistoryAllBookings = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/hmppsManageUsersClient')
@@ -68,6 +72,8 @@ jest.mock('../data/manageAdjudicationsSystemTokensClient', () => {
       getHearingsGivenAgencyAndDate,
       getReportedAdjudicationIssueData,
       getReportedAdjudicationPrintData,
+      getPrisonerAdjudicationHistory,
+      getPrisonerAdjudicationHistoryAllBookings,
     }
   })
 })
@@ -1324,6 +1330,80 @@ describe('reportedAdjudicationsService', () => {
           agencyDescription: 'Leeds (HMP)',
         },
       ])
+    })
+  })
+  describe('getAdjudicationHistory', () => {
+    const prisoner = testData.prisonerResultSummary({
+      offenderNo: 'G6123VU',
+      firstName: 'John',
+      lastName: 'Saunders',
+    })
+    const agencies = [
+      {
+        agency: 'MDI',
+        agencyDescription: 'Moorland (HMP & YOI)',
+      },
+      {
+        agency: 'LEI',
+        agencyDescription: 'Leeds (HMP)',
+      },
+    ]
+    const pageRequest = { size: 20, number: 1 }
+    it('uses the booking id api call as default', async () => {
+      getPrisonerAdjudicationHistory.mockResolvedValue({
+        size: 20,
+        number: 1,
+        totalElements: 1,
+        content: [testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' })],
+      })
+      const result = await service.getAdjudicationHistory(
+        prisoner,
+        agencies,
+        { bookingType: AdjudicationHistoryBookingType.CURRENT, status: allStatuses },
+        pageRequest,
+        user
+      )
+      expect(getPrisonerAdjudicationHistoryAllBookings).not.toHaveBeenCalled()
+      expect(getPrisonerAdjudicationHistory).toHaveBeenCalled()
+      expect(result).toEqual({
+        size: 20,
+        number: 1,
+        totalElements: 1,
+        content: [
+          {
+            ...testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' }),
+            userCaseloadMatch: true,
+          },
+        ],
+      })
+    })
+    it('calls the all bookings endpoint if user selects all bookings', async () => {
+      getPrisonerAdjudicationHistoryAllBookings.mockResolvedValue({
+        size: 20,
+        number: 1,
+        totalElements: 1,
+        content: [testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' })],
+      })
+      const result = await service.getAdjudicationHistory(
+        prisoner,
+        agencies,
+        { bookingType: AdjudicationHistoryBookingType.ALL, status: allStatuses },
+        pageRequest,
+        user
+      )
+      expect(getPrisonerAdjudicationHistoryAllBookings).toHaveBeenCalled()
+      expect(getPrisonerAdjudicationHistory).not.toHaveBeenCalled()
+      expect(result).toEqual({
+        size: 20,
+        number: 1,
+        totalElements: 1,
+        content: [
+          {
+            ...testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' }),
+            userCaseloadMatch: true,
+          },
+        ],
+      })
     })
   })
 })

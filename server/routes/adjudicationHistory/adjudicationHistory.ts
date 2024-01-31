@@ -9,6 +9,7 @@ import {
   AdjudicationHistoryUiFilter,
   adjudicationHistoryUiFilterFromBody,
   establishmentCheckboxes,
+  fillInAdjudicationHistoryDefaults,
   reportedAdjudicationStatuses,
   uiAdjudicationHistoryFilterFromRequest,
   validate,
@@ -49,7 +50,7 @@ export default class AdjudicationHistoryRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const { prisonerNumber } = req.params
     const { user } = res.locals
-    const uiFilter = uiAdjudicationHistoryFilterFromRequest(req)
+    const uiFilter = fillInAdjudicationHistoryDefaults(uiAdjudicationHistoryFilterFromRequest(req))
     const filter = adjudicationHistoryFilterFromUiFilter(uiFilter)
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
     const uniqueListOfAgenciesForPrisoner = await this.reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner(

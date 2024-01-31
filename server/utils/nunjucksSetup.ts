@@ -39,6 +39,7 @@ import {
   PunishmentType,
 } from '../data/PunishmentResult'
 import { ApplicationInfo } from '../applicationInfo'
+import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -467,4 +468,5 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addGlobal('QuashGuiltyFindingReason', QuashGuiltyFindingReason)
   njkEnv.addGlobal('PunishmentReasonForChange', PunishmentReasonForChange)
   njkEnv.addGlobal('PunishmentType', PunishmentType)
+  njkEnv.addGlobal('AdjudicationHistoryBookingType', AdjudicationHistoryBookingType)
 }

@@ -2,12 +2,36 @@
 {% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 <form method="POST" novalidate="novalidate" class="adjudication-history-filter">
-  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
   <h2 class="govuk-heading-m">Filter</h2>
   <div class="govuk-form-group">
+    {{ govukRadios({
+      classes: "govuk-radios--small",
+      id: "bookingType",
+      name: "bookingType",
+      fieldset: {
+        legend: {
+          text: "Prison booking",
+          isPageHeading: false,
+          classes: "govuk-heading-s govuk-!-font-weight-bold"
+        }
+      },
+      items: [
+        {
+          value: AdjudicationHistoryBookingType.CURRENT,
+          text: "Current booking", 
+          checked: filter.bookingType === AdjudicationHistoryBookingType.CURRENT
+        },
+        {
+          value: AdjudicationHistoryBookingType.ALL,
+          text: "All bookings", 
+          checked: filter.bookingType === AdjudicationHistoryBookingType.ALL
+        }
+        ]
+    }) }}
     <h3 class="govuk-heading-s">Date of discovery</h3>
     {{ hmppsDatepicker({
               id: 'fromDate',
@@ -33,9 +57,9 @@
               dataQa: 'toDate',
               maxDate: maxDate
           }) }}
-    <h3 class="govuk-heading-s">Establishment</h3>
-      <div id="establishment-checkboxes">
-        {{ govukCheckboxes({
+    <h3 class="govuk-heading-s">Establishment (current booking only)</h3>
+    <div id="establishment-checkboxes">
+      {{ govukCheckboxes({
           name: "agency",
           classes: "govuk-checkboxes--small",
           fieldset: {
@@ -47,10 +71,10 @@
           },
           items: establishments
         }) }}
-      </div>
+    </div>
     <h3 class="govuk-heading-s govuk-!-margin-top-6">Status</h3>
-          <div id="status-checkboxes">
-        {{ govukCheckboxes({
+    <div id="status-checkboxes">
+      {{ govukCheckboxes({
           name: "status",
           classes: "govuk-checkboxes--small",
           fieldset: {
@@ -62,15 +86,15 @@
           },
           items: statuses
         }) }}
-      </div>
+    </div>
 
   </div>
-{{ govukButton({
+  {{ govukButton({
     text: "Apply",
     preventDoubleClick: true,
     attributes: { "data-qa": "apply-filter-button" }
 }) }}
-<div>
+  <div>
     <a href="{{ adjudicationUrls.adjudicationHistory.urls.start(prisonerNumber) }}" class="govuk-link govuk-link--no-visited-state">Clear filters</a>
-</div>
+  </div>
 </form>

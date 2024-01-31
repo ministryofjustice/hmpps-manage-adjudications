@@ -14,6 +14,7 @@ import {
 import { LocationId } from './PrisonLocationResult'
 import { HearingDetails, OutcomeHistory } from './HearingAndOutcomeResult'
 import { PunishmentComment, PunishmentDataWithSchedule } from './PunishmentResult'
+import AdjudicationHistoryBookingType from './AdjudicationHistoryData'
 
 export type ReportedAdjudication = {
   chargeNumber: string
@@ -87,6 +88,7 @@ export interface ReportedAdjudicationEnhancedWithIssuingDetails extends Reported
 }
 
 export type AdjudicationHistoryFilter = {
+  bookingType: AdjudicationHistoryBookingType
   fromDate?: moment.Moment
   toDate?: moment.Moment
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]

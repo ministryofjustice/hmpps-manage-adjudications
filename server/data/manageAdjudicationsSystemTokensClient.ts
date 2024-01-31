@@ -353,6 +353,21 @@ export default class ManageAdjudicationsSystemTokensClient {
     })
   }
 
+  async getPrisonerAdjudicationHistoryAllBookings(
+    prisonerNumber: string,
+    filter: AdjudicationHistoryFilter,
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudication>> {
+    const path =
+      `/reported-adjudications/bookings/prisoner/${prisonerNumber}?page=${pageRequest.number}&size=${pageRequest.size}` +
+      `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
+      `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
+      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
+    return this.restClient.get({
+      path,
+    })
+  }
+
   async getPrisonerActiveAdjudications(bookingId: number): Promise<ActivePunishment[]> {
     return this.restClient.get({
       path: `/reported-adjudications/punishments/${bookingId}/active`,

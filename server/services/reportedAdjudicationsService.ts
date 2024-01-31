@@ -63,6 +63,7 @@ import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUser
 import { AwardedPunishmentsAndDamagesFilter } from '../utils/adjudicationFilterHelper'
 import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
+import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -1288,13 +1289,21 @@ export default class ReportedAdjudicationsService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const agencyIds = uniqueListOfAgenciesForPrisoner.map(agencyInfo => agencyInfo.agency)
 
-    const results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistory(
-      prisoner.bookingId,
-      filter,
-      agencyIds,
-      pageRequest
-    )
-
+    let results = {} as ApiPageResponse<ReportedAdjudication>
+    if (filter.bookingType === AdjudicationHistoryBookingType.ALL) {
+      results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistoryAllBookings(
+        prisoner.prisonerNumber,
+        filter,
+        pageRequest
+      )
+    } else {
+      results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistory(
+        prisoner.bookingId,
+        filter,
+        agencyIds,
+        pageRequest
+      )
+    }
     const enhancedContent = results.content.map(adjudication => {
       const userCaseloadMatch =
         [adjudication.overrideAgencyId, adjudication.originatingAgencyId].includes(user.activeCaseLoadId) || null
