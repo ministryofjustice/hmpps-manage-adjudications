@@ -4,7 +4,6 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
-
 {% from "../macros/adjudicationSummary.njk" import adjudicationSummary %}
 {% from "../macros/adjudicationReviewSummary.njk" import adjudicationReviewSummary %}
 {% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
@@ -40,7 +39,7 @@
 {% block content %}
   {# Report details #}
   <div class="govuk-grid-row">
-    {% if overridereportedAdjudication.overrideAgencyId and transferBannerContent %}
+    {% if reportedAdjudication.overrideAgencyId and transferBannerContent %}
       {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
     {% endif %}
     <h1 class="govuk-heading-l">Adjudication for charge {{ reportedAdjudication.chargeNumber }}</h1>
@@ -67,7 +66,7 @@
       {% for item in history %}
         {% if item.hearing %}
           {% set hearingNumber = hearingNumber + 1 %}
-          {{ hearingTable(hearingNumber, item.hearing, item.outcome, readOnly, reportedAdjudication.chargeNumber, false, reviewStatus) }}
+          {{ hearingTable(hearingNumber, item.hearing, item.outcome, readOnly, reportedAdjudication.chargeNumber, false) }}
           {% if item.outcome and item.hearing.outcome.code != HearingOutcomeCode.COMPLETE %}
             {{ outcomeTable(item, readOnly, reportedAdjudication.chargeNumber, true, false, history[loop.index0+1]) }}
           {% endif %}

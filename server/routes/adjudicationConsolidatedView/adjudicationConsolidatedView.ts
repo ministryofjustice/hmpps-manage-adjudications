@@ -42,6 +42,7 @@ type PageData = {
   punishmentComments: PunishmentComment[]
   quashed: boolean
   chargeProved: boolean
+  corrupted: boolean
 }
 
 export default class AdjudicationConsolidatedView {
@@ -68,6 +69,7 @@ export default class AdjudicationConsolidatedView {
       punishmentComments,
       quashed,
       chargeProved,
+      corrupted,
     } = pageData
     res.render(`pages/adjudicationConsolidatedView.njk`, {
       prisonerNumber: prisoner.prisonerNumber,
@@ -87,6 +89,7 @@ export default class AdjudicationConsolidatedView {
       punishmentComments,
       quashed,
       chargeProved,
+      corrupted,
     })
   }
 
@@ -110,7 +113,7 @@ export default class AdjudicationConsolidatedView {
       )
       const { history, latestHearingId } = await this.getInfoForHearings(reportedAdjudication, user)
 
-      const { punishments, filteredPunishments, punishmentComments, quashed, chargeProved } =
+      const { punishments, filteredPunishments, punishmentComments, quashed, chargeProved, corrupted } =
         await this.getInfoForPunishments(reportedAdjudication, user)
 
       return this.renderView(req, res, {
@@ -128,6 +131,7 @@ export default class AdjudicationConsolidatedView {
         punishmentComments,
         quashed,
         chargeProved,
+        corrupted,
       })
     })
   }
@@ -200,6 +204,10 @@ export default class AdjudicationConsolidatedView {
       punishmentComments,
       quashed: reportedAdjudication.status === ReportedAdjudicationStatus.QUASHED,
       chargeProved: reportedAdjudication.status === ReportedAdjudicationStatus.CHARGE_PROVED,
+      corrupted:
+        reportedAdjudication.status === ReportedAdjudicationStatus.INVALID_OUTCOME ||
+        reportedAdjudication.status === ReportedAdjudicationStatus.INVALID_SUSPENDED ||
+        reportedAdjudication.status === ReportedAdjudicationStatus.INVALID_ADA,
     }
   }
 }
