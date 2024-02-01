@@ -93,8 +93,8 @@ export type SuspendedPunishmentDetails = {
 export type PunishmentComment = {
   id: number
   comment: string
-  createdByUserId: string
-  dateTime: string
+  createdByUserId?: string
+  dateTime?: string
   reasonForChange?: PunishmentReasonForChange
 }
 

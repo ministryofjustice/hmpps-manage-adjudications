@@ -72,6 +72,12 @@ function getNonEnglishLanguage(primaryLanguage: string): string {
   return primaryLanguage
 }
 
+export type ConvertedEvidence = {
+  photoVideo: EvidenceDetails[]
+  baggedAndTagged: EvidenceDetails[]
+  other: EvidenceDetails[]
+}
+
 export default class ReportedAdjudicationsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
@@ -460,9 +466,7 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsSystemTokensClient(token, user).updateEvidenceDetails(chargeNumber, evidence)
   }
 
-  async convertEvidenceToTableFormat(
-    evidence: EvidenceDetails[]
-  ): Promise<{ photoVideo: EvidenceDetails[]; baggedAndTagged: EvidenceDetails[]; other: EvidenceDetails[] }> {
+  async convertEvidenceToTableFormat(evidence: EvidenceDetails[]): Promise<ConvertedEvidence> {
     const photoVideo = getEvidenceCategory(evidence, false, false)
     const baggedAndTagged = getEvidenceCategory(evidence, true, false)
     const other = getEvidenceCategory(evidence, false, true)

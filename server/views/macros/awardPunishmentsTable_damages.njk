@@ -4,7 +4,10 @@
   {% set rows = [] %}
   {% set damage = dataArray[0] %}
   {% set redisId = damage.redisId %}
-  {% set changeUrl = adjudicationUrls.damagesAmount.urls.edit(chargeNumber, redisId) %}
+  {% set changeUrl = adjudicationUrls
+    .damagesAmount
+    .urls
+    .edit(chargeNumber, redisId) %}
 
   {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-damages" class="govuk-link">Remove <span class="govuk-visually-hidden"> money for damages</span></a></p>' %}
 
@@ -14,22 +17,22 @@
     {
       text: "Money to be recovered for damages £" + damage.damagesOwedAmount,
       classes: "columnWidth90"
-    }, 
-    {
+    }, {
       html: changeColumnValue if not readOnly else 
         '',
-      classes: "changeColumn"
-    }, 
-    {
+        classes: "changeColumn"
+    }, {
       html: removeColumnValue if not readOnly else 
         '',
-      classes: "removeColumn"
+        classes: "removeColumn"
     }
   ]), rows) %}
 
-{% if rows.length %}
-  <h2 class="govuk-heading-m">Damages</h2>
-  {{ govukTable({
+  {% if rows.length %}
+    <h2 class="govuk-heading-m">Damages</h2>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        {{ govukTable({
         head: [
           {
             text: null,
@@ -47,6 +50,8 @@
         rows: rows,
         attributes: {"data-qa": "damages-table"}
       }) }}
-{% endif %}
+      </div>
+    </div>
+  {% endif %}
 
 {% endmacro %}

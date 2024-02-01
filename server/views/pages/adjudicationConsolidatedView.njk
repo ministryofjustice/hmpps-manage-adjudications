@@ -1,0 +1,125 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../macros/adjudicationFilter.njk" import adjudicationFilter %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+
+{% from "../macros/adjudicationSummary.njk" import adjudicationSummary %}
+{% from "../macros/adjudicationReviewSummary.njk" import adjudicationReviewSummary %}
+{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../macros/transferBanner.njk" import transferBanner%}
+{% from "../partials/hearingDetailsVariations/outcomeTable.njk" import outcomeTable %}
+{% from "../partials/hearingDetailsVariations/hearingTable.njk" import hearingTable %}
+{% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
+{% from "../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
+{% from "../macros/punishmentCommentTable.njk" import punishmentCommentTable %}
+
+{% set title = 'Prisoner’s report' %}
+
+{% block pageTitle %}
+  {{ title }} - Digital Prison Services
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    collapseOnMobile: true,
+    items: [
+    {
+      text: "Digital Prison Services",
+      href: digitalPrisonServiceUrl
+    },
+    {
+      text: prisoner.displayName,
+      href: prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
+    }
+    ],
+    classes: "govuk-!-display-none-print"
+  }) }}
+{% endblock %}
+{% block content %}
+  {# Report details #}
+  <div class="govuk-grid-row">
+    {% if overridereportedAdjudication.overrideAgencyId and transferBannerContent %}
+      {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
+    {% endif %}
+    <h1 class="govuk-heading-l">Adjudication for charge {{ reportedAdjudication.chargeNumber }}</h1>
+    <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reportedAdjudication.status | reportedAdjudicationStatusDisplayName }}</h2>
+    <div class="prisonerPlaybackSection">
+      {{ prisonerPlaybackSection(prisoner.displayName, prisoner.prisonerNumber, prisoner.currentLocation) }}
+    </div>
+    {{ adjudicationReviewSummary(reviewData.reviewSummary, 'Not entered', 'govuk-!-margin-top-2') }}
+    {{ adjudicationSummary(null, null, null, null, null, null, prisonerReportData.prisonerReportDetails, prisonerReportData.offence, reportedAdjudication.damages, evidence, reportedAdjudication.witnesses, null, null) }}
+  </div>
+  {# Hearing details #}
+  <div class="govuk-grid-row">
+    <h2 class="govuk-heading-m">Hearings and referrals</h2>
+    {% if schedulingNotAvailable %}
+      {% include "../partials/hearingDetailsVariations/emptyState.njk" %}
+    {% endif %}
+
+    {% if reportedAdjudication.status === ReportedAdjudicationStatus.UNSCHEDULED and not history | length %}
+      {% include "../partials/hearingDetailsVariations/unscheduledState.njk" %}
+    {% endif %}
+
+    {% if not schedulingNotAvailable %}
+      {% set hearingNumber = 0 %}
+      {% for item in history %}
+        {% if item.hearing %}
+          {% set hearingNumber = hearingNumber + 1 %}
+          {{ hearingTable(hearingNumber, item.hearing, item.outcome, readOnly, reportedAdjudication.chargeNumber, false, reviewStatus) }}
+          {% if item.outcome and item.hearing.outcome.code != HearingOutcomeCode.COMPLETE %}
+            {{ outcomeTable(item, readOnly, reportedAdjudication.chargeNumber, true, false, history[loop.index0+1]) }}
+          {% endif %}
+        {% else %}
+          {# Tables not attached to a hearing #}
+          {{ outcomeTable(item, readOnly, reportedAdjudication.chargeNumber, false, false) }}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+  </div>
+  {# Punishments #}
+  <div class="govuk-grid-row">
+    <h2 class="govuk-heading-m">Punishments and damages</h2>
+    {% if chargeProved or(corrupted and punishments.length) %}
+
+      {% if filteredPunishments.damages | length %}
+        {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, reportedAdjudication.chargeNumber, true) }}
+      {% endif %}
+
+      {% if filteredPunishments.otherPunishments | length %}
+        <h2 class="govuk-heading-m">Punishments</h2>
+        {{ awardPunishmentsTable(filteredPunishments.otherPunishments, null, reportedAdjudication.chargeNumber, true, false) }}
+      {% endif %}
+
+    {% elif quashed %}
+      {{ govukWarningText({
+          html: "<p class='govuk-!-font-weight-bold'>The guilty finding has been quashed. Punishments and recovery of <br>damages should not be enforced.</p>",
+          iconFallbackText: "Warning",
+          classes: "govuk-!-margin-bottom-0",
+          attributes: {
+            "data-qa": "quashed-warning"
+          }
+      }) }}
+      {{ awardPunishmentsTable(punishments, null, reportedAdjudication.chargeNumber, true, false) }}
+
+    {% else %}
+      <div data-qa="no-punishments">
+        <p class="govuk-body govuk-!-margin-top-5">There are no punishments added.</p>
+        <p class="govuk-body govuk-!-margin-top-3">You can only add punishments if the charge is proved.</p>
+      </div>
+    {% endif %}
+
+    {% if (chargeProved or quashed) 
+      and not reportedAdjudication.outcomeEnteredInNomis %}
+      <div data-qa="punishment-comments-section">
+        {% if punishmentComments | length > 0 %}
+          <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
+          {{ punishmentCommentTable(punishmentComments, false) }}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+{% endblock %}

@@ -10,15 +10,15 @@
 
     {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove <span class="govuk-visually-hidden">' + typeColumnValue + '</span></a></p>' %}
 
-      {% set changeUrl = adjudicationUrls
-        .damagesAmount
-        .urls
-        .edit(chargeNumber, redisId) if data
-        .type === 'DAMAGES_OWED' else 
-          adjudicationUrls
-            .punishment
-            .urls
-            .edit(chargeNumber, redisId) %}
+    {% set changeUrl = adjudicationUrls
+      .damagesAmount
+      .urls
+      .edit(chargeNumber, redisId)if data
+      .type === 'DAMAGES_OWED' else 
+        adjudicationUrls
+          .punishment
+          .urls
+          .edit(chargeNumber, redisId) %}
 
     {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+changeUrl+'" data-qa="edit-punishment" class="govuk-link">Change <span class="govuk-visually-hidden">'+ typeColumnValue + '</span></a></p>' %}
 
@@ -69,7 +69,9 @@
   {% endfor %}
 
   {% if rows.length %}
-    {{ govukTable({
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        {{ govukTable({
         head: [
           {
             text: "Type"
@@ -99,6 +101,8 @@
         rows: rows,
         attributes: {"data-qa": "punishments-table"}
       }) }}
+      </div>
+    </div>
   {% else %}
     <p class="govuk-body">There are currently no punishments for this adjudication. You can activate <br>existing suspended punishments and/or add new punishments.</p>
   {% endif %}
