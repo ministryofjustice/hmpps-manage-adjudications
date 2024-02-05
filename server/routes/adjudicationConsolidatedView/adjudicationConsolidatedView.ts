@@ -94,10 +94,12 @@ export default class AdjudicationConsolidatedView {
   view = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, prisonerNumber } = req.params
     const { user } = res.locals
+    const { activeCaseLoadId } = user
 
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
-      user
+      user,
+      activeCaseLoadId
     )
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
     const { reviewData, evidence, offence, prisonerReportDetails, transferBannerInfo } = await this.getInfoForReport(
