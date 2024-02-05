@@ -1,26 +1,31 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro punishmentCommentTable(punishmentComments, isReporter) %}
+{% macro punishmentCommentTable(punishmentComments, isReporter, readOnlyOverride = false) %}
   {% set rows = [] %}
   {% for comment in punishmentComments %}
     {% set commentId = comment.id %}
     {% set commentText %}
-      {% if comment.reasonForChange %}
-        {{ comment.reasonForChange | convertReasonForChangingPunishments }} </br></br> {{ comment.comment }}
-      {% else %}
-        {{ comment.comment }} 
-      {% endif %}
-    {% endset %}
+    {% if comment.reasonForChange %}
+      {{ comment.reasonForChange | convertReasonForChangingPunishments }}
+    </br>
+  </br>
+  {{ comment.comment }}
+{% else %}
+  {{ comment.comment }}
+{% endif %}
+{% endset %}
 
-    {% if not isReporter and comment.isOwner %}
-      {% set changeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.changeLink+'" data-qa="change-punishment-comment-'+commentId+'" class="govuk-link">Change</a></p>' %}
-      {% set removeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.removeLink+'" data-qa="remove-punishment-comment-'+commentId+'" class="govuk-link">Remove</a></p>' %}
-    {% else %}
-      {% set changeLinkHref = null %}
-      {% set removeLinkHref = null %}
-    {% endif %}
+{% if not readOnlyOverride %}
+  {% if not isReporter and comment.isOwner %}
+    {% set changeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.changeLink+'" data-qa="change-punishment-comment-'+commentId+'" class="govuk-link">Change</a></p>' %}
+    {% set removeLinkHref = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+comment.removeLink+'" data-qa="remove-punishment-comment-'+commentId+'" class="govuk-link">Remove</a></p>' %}
+  {% else %}
+    {% set changeLinkHref = null %}
+    {% set removeLinkHref = null %}
+  {% endif %}
+{% endif %}
 
-    {% set rows = (rows.push(
+{% set rows = (rows.push(
       [
         {
           html: comment.date+'<br>'+comment.time+'<br>'+comment.name,
@@ -40,12 +45,12 @@
         }
       ]
     ), rows) %}
-  {% endfor %}
+{% endfor %}
 
-  {% if rows.length %}
-    {{ govukTable({
+{% if rows.length %}
+{{ govukTable({
       rows: rows,
       attributes: {"data-qa": "punishment-comments-table"}
     }) }}
-  {% endif %}
+{% endif %}
 {% endmacro %}

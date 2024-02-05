@@ -368,10 +368,11 @@ const adjudicationUrls = {
   prisonerReportConsolidated: {
     root: '/prisoner-report-consolidated',
     matchers: {
-      view: '/:chargeNumber',
+      view: '/:prisonerNumber/report/:chargeNumber',
     },
     urls: {
-      view: (chargeNumber: string | number) => `${adjudicationUrls.prisonerReport.root}/${chargeNumber}`,
+      view: (prisonerNumber: string, chargeNumber: string | number) =>
+        `${adjudicationUrls.prisonerReportConsolidated.root}/${prisonerNumber}/report/${chargeNumber}`,
     },
   },
   deletePerson: {

@@ -84,7 +84,7 @@
     {% if chargeProved or(corrupted and punishments.length) %}
 
       {% if filteredPunishments.damages | length %}
-        {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, reportedAdjudication.chargeNumber, true) }}
+        {{ awardPunishmentsTableDamages(filteredPunishments.damages, null, reportedAdjudication.chargeNumber, true, 'damages-money-table') }}
       {% endif %}
 
       {% if filteredPunishments.otherPunishments | length %}
@@ -115,7 +115,7 @@
       <div data-qa="punishment-comments-section">
         {% if punishmentComments | length > 0 %}
           <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-bottom-4">Punishment comments</h2>
-          {{ punishmentCommentTable(punishmentComments, false) }}
+          {{ punishmentCommentTable(punishmentComments, false, true) }}
         {% endif %}
       </div>
     {% endif %}

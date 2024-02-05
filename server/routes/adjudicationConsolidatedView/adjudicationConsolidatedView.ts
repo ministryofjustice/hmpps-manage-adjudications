@@ -2,8 +2,6 @@ import { Request, Response } from 'express'
 import ReportedAdjudicationsService, { ConvertedEvidence } from '../../services/reportedAdjudicationsService'
 import UserService from '../../services/userService'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
-import { hasAnyRole } from '../../utils/utils'
-import adjudicationUrls from '../../utils/urlGenerator'
 import DecisionTreeService, { IncidentAndOffences } from '../../services/decisionTreeService'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
@@ -94,54 +92,41 @@ export default class AdjudicationConsolidatedView {
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
-    return this.validateRoles(req, res, async () => {
-      const { chargeNumber } = req.params
-      const { user } = res.locals
+    const { chargeNumber, prisonerNumber } = req.params
+    const { user } = res.locals
 
-      const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-        chargeNumber,
-        user
-      )
-      const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(
-        reportedAdjudication.prisonerNumber,
-        user
-      )
-      const { reviewData, evidence, offence, prisonerReportDetails, transferBannerInfo } = await this.getInfoForReport(
-        reportedAdjudication,
-        prisoner,
-        user
-      )
-      const { history, latestHearingId } = await this.getInfoForHearings(reportedAdjudication, user)
+    const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
+      chargeNumber,
+      user
+    )
+    const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
+    const { reviewData, evidence, offence, prisonerReportDetails, transferBannerInfo } = await this.getInfoForReport(
+      reportedAdjudication,
+      prisoner,
+      user
+    )
+    const { history, latestHearingId } = await this.getInfoForHearings(reportedAdjudication, user)
 
-      const { punishments, filteredPunishments, punishmentComments, quashed, chargeProved, corrupted } =
-        await this.getInfoForPunishments(reportedAdjudication, user)
+    const { punishments, filteredPunishments, punishmentComments, quashed, chargeProved, corrupted } =
+      await this.getInfoForPunishments(reportedAdjudication, user)
 
-      return this.renderView(req, res, {
-        prisoner,
-        reportedAdjudication,
-        reviewData,
-        evidence,
-        prisonerReportData: { offence, prisonerReportDetails },
-        transferBannerContent: transferBannerInfo.transferBannerContent,
-        showTransferHearingWarning: transferBannerInfo.originatingAgencyToAddOutcome,
-        history,
-        latestHearingId,
-        punishments,
-        filteredPunishments,
-        punishmentComments,
-        quashed,
-        chargeProved,
-        corrupted,
-      })
+    return this.renderView(req, res, {
+      prisoner,
+      reportedAdjudication,
+      reviewData,
+      evidence,
+      prisonerReportData: { offence, prisonerReportDetails },
+      transferBannerContent: transferBannerInfo.transferBannerContent,
+      showTransferHearingWarning: transferBannerInfo.originatingAgencyToAddOutcome,
+      history,
+      latestHearingId,
+      punishments,
+      filteredPunishments,
+      punishmentComments,
+      quashed,
+      chargeProved,
+      corrupted,
     })
-  }
-
-  private validateRoles = async (req: Request, res: Response, thenCall: () => Promise<void>) => {
-    const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    if (!hasAnyRole(['ADJUDICATIONS_REVIEWER', 'GLOBAL_SEARCH'], userRoles)) {
-      return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
-    }
-    return thenCall()
   }
 
   private getInfoForReport = async (
