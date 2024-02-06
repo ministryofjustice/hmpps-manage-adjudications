@@ -125,7 +125,7 @@ context('Adjudication history', () => {
         'Destroys or damages any part of a young offender institution or any other property other than his own'
       )
   })
-  it('should only contain the link to the report if the users activeCaseload is the same as the override or originating caseload of the report', () => {
+  it('should contain the link to the report', () => {
     cy.task('stubGetPrisonerAdjudicationHistory', {
       bookingId: '123',
       number: 0,
@@ -190,7 +190,6 @@ context('Adjudication history', () => {
     cy.visit(adjudicationUrls.adjudicationHistory.urls.start('G6415GD'))
     const adjudicationHistoryPage: AdjudicationHistoryPage = Page.verifyOnPage(AdjudicationHistoryPage)
     adjudicationHistoryPage.card().should('have.length', 3)
-    adjudicationHistoryPage.cardLinks().first().find('a').should('not.exist')
     adjudicationHistoryPage.cardLinks().eq(1).find('a').should('exist')
     adjudicationHistoryPage.cardLinks().last().find('a').should('exist')
   })

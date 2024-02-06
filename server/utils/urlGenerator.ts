@@ -365,6 +365,16 @@ const adjudicationUrls = {
       viewOnly: (chargeNumber: string | number) => `${adjudicationUrls.prisonerReport.root}/${chargeNumber}/view`,
     },
   },
+  prisonerReportConsolidated: {
+    root: '/prisoner-report-consolidated',
+    matchers: {
+      view: '/:prisonerNumber/report/:chargeNumber',
+    },
+    urls: {
+      view: (prisonerNumber: string, chargeNumber: string | number) =>
+        `${adjudicationUrls.prisonerReportConsolidated.root}/${prisonerNumber}/report/${chargeNumber}`,
+    },
+  },
   deletePerson: {
     root: '/delete-person',
     matchers: {

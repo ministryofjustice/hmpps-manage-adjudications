@@ -72,6 +72,12 @@ function getNonEnglishLanguage(primaryLanguage: string): string {
   return primaryLanguage
 }
 
+export type ConvertedEvidence = {
+  photoVideo: EvidenceDetails[]
+  baggedAndTagged: EvidenceDetails[]
+  other: EvidenceDetails[]
+}
+
 export default class ReportedAdjudicationsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
@@ -80,9 +86,15 @@ export default class ReportedAdjudicationsService {
     private readonly locationService: LocationService
   ) {}
 
-  async getReportedAdjudicationDetails(chargeNumber: string, user: User): Promise<ReportedAdjudicationResult> {
+  async getReportedAdjudicationDetails(
+    chargeNumber: string,
+    user: User,
+    activeCaseLoadId: string = user.activeCaseLoadId
+  ): Promise<ReportedAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    return new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(chargeNumber)
+    return new ManageAdjudicationsSystemTokensClient(token, user, activeCaseLoadId).getReportedAdjudication(
+      chargeNumber
+    )
   }
 
   async getReviewDetails(reportedAdjudication: ReportedAdjudication, user: User) {
@@ -460,9 +472,7 @@ export default class ReportedAdjudicationsService {
     return new ManageAdjudicationsSystemTokensClient(token, user).updateEvidenceDetails(chargeNumber, evidence)
   }
 
-  async convertEvidenceToTableFormat(
-    evidence: EvidenceDetails[]
-  ): Promise<{ photoVideo: EvidenceDetails[]; baggedAndTagged: EvidenceDetails[]; other: EvidenceDetails[] }> {
+  async convertEvidenceToTableFormat(evidence: EvidenceDetails[]): Promise<ConvertedEvidence> {
     const photoVideo = getEvidenceCategory(evidence, false, false)
     const baggedAndTagged = getEvidenceCategory(evidence, true, false)
     const other = getEvidenceCategory(evidence, false, true)
@@ -1304,18 +1314,7 @@ export default class ReportedAdjudicationsService {
         pageRequest
       )
     }
-    const enhancedContent = results.content.map(adjudication => {
-      const userCaseloadMatch =
-        [adjudication.overrideAgencyId, adjudication.originatingAgencyId].includes(user.activeCaseLoadId) || null
-      return {
-        ...adjudication,
-        userCaseloadMatch,
-      }
-    })
 
-    return {
-      ...results,
-      content: enhancedContent,
-    }
+    return results
   }
 }

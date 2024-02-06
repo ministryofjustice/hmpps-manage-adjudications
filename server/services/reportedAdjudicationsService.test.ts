@@ -1369,12 +1369,7 @@ describe('reportedAdjudicationsService', () => {
         size: 20,
         number: 1,
         totalElements: 1,
-        content: [
-          {
-            ...testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' }),
-            userCaseloadMatch: true,
-          },
-        ],
+        content: [testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' })],
       })
     })
     it('calls the all bookings endpoint if user selects all bookings', async () => {
@@ -1397,12 +1392,7 @@ describe('reportedAdjudicationsService', () => {
         size: 20,
         number: 1,
         totalElements: 1,
-        content: [
-          {
-            ...testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' }),
-            userCaseloadMatch: true,
-          },
-        ],
+        content: [testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' })],
       })
     })
   })
