@@ -94,7 +94,7 @@ export default class AdjudicationConsolidatedView {
   view = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, prisonerNumber } = req.params
     const { user } = res.locals
-    const { activeCaseLoadId } = user
+    const activeCaseLoadId = req.query.agency as string
 
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
