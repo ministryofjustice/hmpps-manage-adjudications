@@ -174,11 +174,8 @@ export default class AdjudicationConsolidatedView {
   }
 
   private getInfoForPunishments = async (reportedAdjudication: ReportedAdjudication, user: User) => {
-    const punishments = flattenPunishments(
-      await this.punishmentsService.getPunishmentsFromServer(reportedAdjudication.chargeNumber, user)
-    )
+    const punishments = flattenPunishments(reportedAdjudication.punishments)
     const filteredPunishments = await this.punishmentsService.filteredPunishments(punishments)
-
     const punishmentComments = await this.punishmentsService.formatPunishmentComments(
       reportedAdjudication,
       reportedAdjudication.chargeNumber,

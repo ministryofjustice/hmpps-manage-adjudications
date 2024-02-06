@@ -55,6 +55,7 @@ export default class ManageAdjudicationsSystemTokensClient {
   restClient: RestClient
 
   constructor(token: string, user: User, activeCaseLoadId: string = user.activeCaseLoadId) {
+    console.log(activeCaseLoadId)
     this.restClient = new RestClient('Manage Adjudications API', config.apis.adjudications, token, activeCaseLoadId)
   }
 
