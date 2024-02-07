@@ -54,7 +54,7 @@ export type ConsecutiveAdditionalDaysReport = {
 export default class ManageAdjudicationsSystemTokensClient {
   restClient: RestClient
 
-  constructor(token: string, user: User, activeCaseLoadId: string = user.activeCaseLoadId) {
+  constructor(token: string, user: User, activeCaseLoadId: string = user.meta.caseLoadId) {
     this.restClient = new RestClient('Manage Adjudications API', config.apis.adjudications, token, activeCaseLoadId)
   }
 

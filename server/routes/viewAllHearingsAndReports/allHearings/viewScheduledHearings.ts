@@ -29,7 +29,7 @@ export default class viewScheduledHearingsRoutes {
       viewTransferredReportsHref: adjudicationUrls.allTransferredReports.urls.start(),
       activeTab: 'viewScheduledHearings',
       errors,
-      activeCaseloadName: (await this.userService.getNameOfActiveCaseload(res.locals.user)) || 'your active caseload',
+      activeCaseloadName: res.locals.user.meta.description || 'your active caseload',
     })
   }
 

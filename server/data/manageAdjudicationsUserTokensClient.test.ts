@@ -4,6 +4,7 @@ import config from '../config'
 import { ReportedAdjudicationStatus } from './ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 import ManageAdjudicationsUserTokensClient from './manageAdjudicationsUserTokensClient'
+import { ActiveCaseLoad } from '../@types/template'
 
 jest.mock('../../logger')
 const testData = new TestData()
@@ -19,6 +20,9 @@ describe('manageAdjudicationsSystemTokensClient', () => {
     name: '',
     activeCaseLoadId: '',
     authSource: '',
+    meta: {
+      caseLoadId: '',
+    } as ActiveCaseLoad,
   }
 
   beforeEach(() => {
@@ -58,7 +62,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
           `/reported-adjudications/reports?page=0&size=20&startDate=2021-01-01&endDate=2021-01-01&status=AWAITING_REVIEW`
         )
         .matchHeader('authorization', `Bearer ${token}`)
-        .matchHeader('Active-Caseload', user.activeCaseLoadId)
+        .matchHeader('Active-Caseload', user.meta.caseLoadId)
         .reply(200, response)
 
       const result = await client.getAllCompletedAdjudications(

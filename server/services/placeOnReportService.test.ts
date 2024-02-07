@@ -5,7 +5,7 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 import adjudicationUrls from '../utils/urlGenerator'
 import { PrisonerGender } from '../data/DraftAdjudicationResult'
 import TestData from '../routes/testutils/testData'
-import HmppsManageUsersClient from '../data/hmppsManageUsersClient'
+import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 
 const testData = new TestData()
 
@@ -54,7 +54,16 @@ const token = 'some token'
 describe('placeOnReportService', () => {
   let service: PlaceOnReportService
 
-  const user = testData.userFromUsername('user1')
+  const user = {
+    activeCaseLoadId: 'MDI',
+    name: '',
+    username: 'user1',
+    token: 'token-1',
+    authSource: 'auth',
+    meta: {
+      caseLoadId: 'MDI',
+    },
+  } as unknown as User
 
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)

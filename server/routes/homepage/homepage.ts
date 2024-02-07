@@ -131,14 +131,14 @@ export default class HomepageRoutes {
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
-    const [userRoles, counts, activeCaseloadName] = await Promise.all([
-      this.userService.getUserRoles(res.locals.user.token),
-      this.reportedAdjudicationsService.getAgencyReportCounts(res.locals.user),
-      this.userService.getNameOfActiveCaseload(res.locals.user),
+    const { user } = res.locals
+    const [userRoles, counts] = await Promise.all([
+      this.userService.getUserRoles(user.token),
+      this.reportedAdjudicationsService.getAgencyReportCounts(user),
     ])
     const { reviewTotal, transferReviewTotal } = counts
-
-    const enabledTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(task => task.enabled)
+    const userCaseloadName = user.meta?.description || user.activeCaseLoad.description
+    const enabledTasks = createTasks(reviewTotal, transferReviewTotal, userCaseloadName).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
 
     const disRelatedTasksPredicate = (task: TaskType) =>
@@ -146,7 +146,7 @@ export default class HomepageRoutes {
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !disRelatedTasksPredicate(task)
     )
-    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, activeCaseloadName).filter(
+    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, userCaseloadName).filter(
       disRelatedTasksPredicate
     )
 

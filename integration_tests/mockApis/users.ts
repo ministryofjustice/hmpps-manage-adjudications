@@ -29,6 +29,13 @@ const stubUser = ({ username = 'USER1', activeCaseLoadId = 'MDI' }: { username?:
         active: true,
         name: 'john smith',
         activeCaseLoadId,
+        meta: {
+          caseLoadId: activeCaseLoadId,
+          description: 'Moorland (HMP & YOI)',
+          type: 'INST',
+          caseloadFunction: 'TEST',
+          currentlyActive: true,
+        },
       },
     },
   })

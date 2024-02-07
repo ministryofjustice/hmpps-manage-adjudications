@@ -30,7 +30,7 @@ export default class PrisonerSelectRoutes {
       searchResults = await this.prisonerSearchService.search({ searchTerm, prisonIds }, user)
 
       if (prisonIds.length === 0) {
-        searchResults = searchResults.filter(prisoner => prisoner.prisonId !== user.activeCaseLoadId)
+        searchResults = searchResults.filter(prisoner => prisoner.prisonId !== user.meta.caseLoadId)
       }
     }
 

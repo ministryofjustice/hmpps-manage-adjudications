@@ -32,7 +32,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
 
     const { user } = res.locals
     const { username } = user
-    const agencyId: AgencyId = user.activeCaseLoadId
+    const agencyId: AgencyId = user.meta.caseLoadId
     const lastModifiedDate = getFullDate(
       (await this.chartApiService.getLastModifiedChart(username, '1a')).lastModifiedDate
     )

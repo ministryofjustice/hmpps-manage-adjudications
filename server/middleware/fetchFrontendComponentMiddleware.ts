@@ -6,7 +6,11 @@ export default function getFrontendComponents({ frontendComponentService }: Serv
   return async (req, res, next) => {
     try {
       const { user } = res.locals
-      const { header, footer } = await frontendComponentService.getComponents(['header', 'footer'], user.token)
+      const { header, footer, meta } = await frontendComponentService.getComponents(
+        ['header', 'footer', 'meta'],
+        user.token
+      )
+      res.locals.userMetadata = meta.activeCaseLoad
       res.locals.feComponents = {
         header: header.html,
         footer: footer.html,

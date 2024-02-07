@@ -91,7 +91,7 @@ export default class ManageAdjudicationsUserTokensClient {
       'Manage Adjudications API',
       config.apis.adjudications,
       user.token,
-      user.activeCaseLoadId
+      user.meta.caseLoadId
     )
   }
 

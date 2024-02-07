@@ -37,6 +37,10 @@ const user = {
   name: 'User',
   activeCaseLoadId: 'MDI',
   token: 'token-1',
+  meta: {
+    caseLoadId: 'MDI',
+    description: 'Moorland',
+  },
 } as User
 
 describe('prisonerSearchService', () => {

@@ -114,12 +114,12 @@ export default class PlaceOnReportService {
     const prisoner = await this.getPrisonerDetails(prisonerNumber, user)
     const requestBody = {
       dateTimeOfIncident,
-      agencyId: user.activeCaseLoadId,
+      agencyId: user.meta.caseLoadId,
       locationId,
       prisonerNumber,
       dateTimeOfDiscovery,
       gender,
-      overrideAgencyId: prisoner.agencyId !== user.activeCaseLoadId ? prisoner.agencyId : null,
+      overrideAgencyId: prisoner.agencyId !== user.meta.caseLoadId ? prisoner.agencyId : null,
       offenderBookingId: prisoner.bookingId,
     }
     return client.startNewDraftAdjudication(requestBody)

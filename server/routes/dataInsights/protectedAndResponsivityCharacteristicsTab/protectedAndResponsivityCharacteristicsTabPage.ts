@@ -50,7 +50,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const { error } = pageData
     const { user } = res.locals
     const { username } = user
-    const agencyId: AgencyId = user.activeCaseLoadId
+    const agencyId: AgencyId = user.meta.caseLoadId
 
     const chartSettingMap = {}
 
