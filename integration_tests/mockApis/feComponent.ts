@@ -1,7 +1,19 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 
-const stubFeComponents = (): SuperAgentRequest =>
+const stubFeComponents = ({
+  caseLoadId = 'MDI',
+  description = 'Moorland (HMP & YOI)',
+  type = 'INST',
+  caseloadFunction = 'TEST',
+  currentlyActive = true,
+}: {
+  caseLoadId?: string
+  description?: string
+  type?: string
+  caseloadFunction?: string
+  currentlyActive?: boolean
+}): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
@@ -24,10 +36,7 @@ const stubFeComponents = (): SuperAgentRequest =>
           css: ['http://localhost:9091/components/footer.css'],
         },
         meta: {
-          activeCaseLoad: {
-            caseLoadId: 'MDI',
-            description: 'Moorland (HMP & YOI)',
-          },
+          activeCaseLoad: { caseLoadId, description, type, caseloadFunction, currentlyActive },
         },
       },
     },

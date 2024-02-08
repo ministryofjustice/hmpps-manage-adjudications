@@ -63,7 +63,7 @@ export default defineConfig({
             }),
             prisonApi.stubUserCaseloads(userCaseLoads),
             prisonApi.stubGetAgency(agencyIdResponse),
-            feComponent.stubFeComponents(),
+            feComponent.stubFeComponents({}),
             feComponent.stubFeComponentsJs(),
             feComponent.stubFeComponentsCss(),
           ])
@@ -160,13 +160,7 @@ export default defineConfig({
         stubCreateGovReferral: adjudications.stubCreateGovReferral,
         stubGetPrisonerAdjudicationHistory: adjudications.stubGetPrisonerAdjudicationHistory,
         stubPrisonerActivePunishments: adjudications.stubPrisonerActivePunishments,
-
-        stubFeComponents: () =>
-          Promise.all([
-            feComponent.stubFeComponents(),
-            feComponent.stubFeComponentsJs(),
-            feComponent.stubFeComponentsCss(),
-          ]),
+        stubFeComponents: feComponent.stubFeComponents,
       })
     },
 
