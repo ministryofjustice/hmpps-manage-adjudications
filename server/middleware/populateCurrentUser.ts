@@ -8,7 +8,7 @@ export default function populateCurrentUser(userService: UserService): RequestHa
       if (res.locals.user) {
         const user = res.locals.user && (await userService.getUserWithSession(req, res.locals.user.token))
         if (user) {
-          res.locals.user = { ...user, ...res.locals.user }
+          res.locals.user = { ...user, ...res.locals.user, meta: { ...res.locals.userMetadata } }
         } else {
           logger.info('No user available')
         }

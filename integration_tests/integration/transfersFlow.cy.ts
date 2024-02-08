@@ -620,7 +620,12 @@ context('Transfer banner', () => {
         },
       })
       cy.signIn()
+      cy.task('stubFeComponents', {
+        description: 'Leeds',
+        caseLoadId: 'LEI',
+      })
     })
+
     it('prisoner report - scheduled - should show correct title and no extra content', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.viewOnly(6))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)

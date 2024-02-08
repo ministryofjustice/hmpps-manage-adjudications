@@ -63,6 +63,13 @@ const user = {
     caseloadFunction: 'TEST',
     currentlyActive: true,
   },
+  meta: {
+    caseLoadId: 'MDI',
+    description: 'Moorland (HMP & YOI)',
+    type: 'INST',
+    caseloadFunction: 'TEST',
+    currentlyActive: true,
+  },
 }
 
 class MockUserService extends UserService {

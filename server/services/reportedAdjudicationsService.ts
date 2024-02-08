@@ -89,7 +89,7 @@ export default class ReportedAdjudicationsService {
   async getReportedAdjudicationDetails(
     chargeNumber: string,
     user: User,
-    activeCaseLoadId: string = user.activeCaseLoadId
+    activeCaseLoadId: string = user.meta.caseLoadId
   ): Promise<ReportedAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new ManageAdjudicationsSystemTokensClient(token, user, activeCaseLoadId).getReportedAdjudication(
@@ -1087,7 +1087,7 @@ export default class ReportedAdjudicationsService {
   ) => {
     if (!overrideAgencyId || !overrideAgencyId.length) return null
     // Prisoner has been transferred and current user is in the agency where the adjudication was first reported
-    if (user.activeCaseLoadId === originatingAgencyId) {
+    if (user.meta.caseLoadId === originatingAgencyId) {
       try {
         const movementData = await this.getPrisonerLatestADMMovement(prisonerNumber, overrideAgencyId, user)
         const { movementDate, prisonerName, toAgencyDescription } = movementData
@@ -1099,7 +1099,7 @@ export default class ReportedAdjudicationsService {
       }
     }
     // Prisoner has been transferred and current user is in the override agency
-    if (user.activeCaseLoadId === overrideAgencyId) {
+    if (user.meta.caseLoadId === overrideAgencyId) {
       try {
         const agencyName =
           (await this.locationService.getAgency(originatingAgencyId, user))?.description || 'another establishment.'
@@ -1118,7 +1118,7 @@ export default class ReportedAdjudicationsService {
 
     const originatingAgencyToAddOutcome =
       status === ReportedAdjudicationStatus.SCHEDULED &&
-      user.activeCaseLoadId === reportedAdjudication.overrideAgencyId &&
+      user.meta.caseLoadId === reportedAdjudication.overrideAgencyId &&
       transferableActionsAllowed === false
     return {
       transferBannerContent,

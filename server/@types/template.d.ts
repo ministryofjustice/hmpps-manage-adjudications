@@ -17,8 +17,17 @@ export default interface FrontendComponent {
   html: string
   css: string[]
   javascript: string[]
+  activeCaseLoad?: ActiveCaseLoad
 }
 
-export type AvailableComponent = 'header' | 'footer'
+export type ActiveCaseLoad = {
+  caseLoadId: string
+  description: string
+  type: string
+  caseloadFunction: string
+  currentlyActive: boolean
+}
+
+export type AvailableComponent = 'header' | 'footer' | 'meta'
 
 export type EstablishmentInformation = { agency: string; agencyDescription: string }

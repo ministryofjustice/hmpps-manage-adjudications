@@ -43,7 +43,7 @@ export default class AllTransferredReportsRoutes {
       activeTab: 'viewTransferredReports',
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
-      activeCaseloadName: (await this.userService.getNameOfActiveCaseload(res.locals.user)) || 'your active caseload',
+      activeCaseloadName: res.locals.user.meta.description || 'your active caseload',
     })
   }
 

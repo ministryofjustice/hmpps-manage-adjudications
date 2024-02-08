@@ -3,6 +3,7 @@ import querystring from 'querystring'
 import logger from '../../logger'
 import config from '../config'
 import RestClient from './restClient'
+import { ActiveCaseLoad } from '../@types/template'
 
 export interface User {
   username: string
@@ -11,6 +12,7 @@ export interface User {
   token: string
   authSource: string
   userId?: string
+  meta?: ActiveCaseLoad
 }
 
 export interface UserRole {

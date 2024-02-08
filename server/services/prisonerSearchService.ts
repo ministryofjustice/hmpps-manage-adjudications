@@ -74,7 +74,7 @@ export default class PrisonerSearchService {
     const enhancedResults = results.map(prisoner => {
       return {
         ...prisoner,
-        onlyShowPrisonName: prisoner.prisonId !== user.activeCaseLoadId,
+        onlyShowPrisonName: prisoner.prisonId !== user.meta.caseLoadId,
         ...PrisonerSearchService.enhancePrisoner(prisoner),
       }
     })

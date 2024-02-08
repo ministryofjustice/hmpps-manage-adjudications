@@ -26,7 +26,6 @@ beforeEach(() => {
     transferReviewTotal: 1,
     reviewTotal: 1,
   })
-  userService.getNameOfActiveCaseload.mockResolvedValue('Moorland (HMP & YOI)')
 })
 
 afterEach(() => {

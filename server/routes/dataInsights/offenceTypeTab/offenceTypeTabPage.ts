@@ -53,7 +53,7 @@ export default class OffenceTypeTabPage {
 
     const { user } = res.locals
     const { username } = user
-    const agencyId: AgencyId = user.activeCaseLoadId
+    const agencyId: AgencyId = user.meta.caseLoadId
 
     const chartSettingMap = {}
     const lastModifiedDate = getFullDate(

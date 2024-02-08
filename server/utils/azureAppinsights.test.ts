@@ -1,9 +1,13 @@
 import { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 import { addUserDataToRequests, ContextObject } from './azureAppInsights'
+import { ActiveCaseLoad } from '../@types/template'
 
 const user = {
   activeCaseLoadId: 'LII',
   username: 'test-user',
+  meta: {
+    caseLoadId: 'LII',
+  } as ActiveCaseLoad,
 }
 
 const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>
@@ -22,6 +26,9 @@ const createContext = (username: string, activeCaseLoadId: string) =>
           user: {
             username,
             activeCaseLoadId,
+            meta: {
+              caseLoadId: activeCaseLoadId,
+            },
           },
         },
       },

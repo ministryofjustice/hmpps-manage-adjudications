@@ -155,7 +155,7 @@ export default class scheduleHearingRoutes {
   }
 
   getDisplayData = async (chargeNumber: string, user: User): Promise<DisplayDataFromApis> => {
-    const possibleLocations = await this.locationService.getHearingLocations(user.activeCaseLoadId, user)
+    const possibleLocations = await this.locationService.getHearingLocations(user.meta.caseLoadId, user)
     return {
       possibleLocations,
       chargeNumber,

@@ -100,7 +100,7 @@ export default class CheckYourAnswersPage {
     const { draftAdjudication, prisoner, associatedPrisoner } =
       await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
 
-    const incidentLocations = await this.locationService.getIncidentLocations(user.activeCaseLoadId, user)
+    const incidentLocations = await this.locationService.getIncidentLocations(user.meta.caseLoadId, user)
 
     const incidentDetailsData = await this.placeOnReportService.getCheckYourAnswersInfo(
       draftId,

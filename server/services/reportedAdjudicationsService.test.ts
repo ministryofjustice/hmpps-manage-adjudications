@@ -91,7 +91,16 @@ const curiousApiService = new CuriousApiService() as jest.Mocked<CuriousApiServi
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
 const token = 'token-1'
-const user = testData.userFromUsername('user1') as User
+const user = {
+  activeCaseLoadId: 'MDI',
+  name: 'Test User',
+  username: 'user1',
+  token: 'token-1',
+  authSource: 'auth',
+  meta: {
+    caseLoadId: 'MDI',
+  },
+} as unknown as User
 
 const location = {
   locationId: 27187,
@@ -1257,7 +1266,16 @@ describe('reportedAdjudicationsService', () => {
           transferableActionsAllowed: true,
         },
       })
-      const userInLeeds = testData.userFromUsername('user1', 'Test User', 'LEI') as User
+      const userInLeeds = {
+        activeCaseLoadId: 'LEI',
+        name: '',
+        username: 'user1',
+        token: 'token-1',
+        authSource: 'auth',
+        meta: {
+          caseLoadId: 'LEI',
+        },
+      } as unknown as User
       const result = await service.getTransferBannerInfo(reportedAdjudication, userInLeeds)
       expect(result).toEqual({
         originatingAgencyToAddOutcome: false,
@@ -1274,7 +1292,16 @@ describe('reportedAdjudicationsService', () => {
           transferableActionsAllowed: false,
         },
       })
-      const userInLeeds = testData.userFromUsername('user1', 'Test User', 'LEI') as User
+      const userInLeeds = {
+        activeCaseLoadId: 'LEI',
+        name: '',
+        username: 'user1',
+        token: 'token-1',
+        authSource: 'auth',
+        meta: {
+          caseLoadId: 'LEI',
+        },
+      } as unknown as User
       const result = await service.getTransferBannerInfo(reportedAdjudication, userInLeeds)
       expect(result).toEqual({
         originatingAgencyToAddOutcome: true,
