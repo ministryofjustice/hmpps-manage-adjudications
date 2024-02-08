@@ -252,6 +252,10 @@ context('Adjudication data', () => {
     })
 
     cy.signIn()
+    cy.task('stubFeComponents', {
+      caseLoadId: 'RNI',
+      description: 'Ranby (HMP)',
+    })
   })
 
   it('should contain the required page elements on /data-insights', () => {
