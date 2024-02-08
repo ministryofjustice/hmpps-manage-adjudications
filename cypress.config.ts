@@ -10,6 +10,7 @@ import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import adjudications from './integration_tests/mockApis/adjudications'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import users from './integration_tests/mockApis/users'
+import feComponent from './integration_tests/mockApis/feComponent'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -62,10 +63,13 @@ export default defineConfig({
             }),
             prisonApi.stubUserCaseloads(userCaseLoads),
             prisonApi.stubGetAgency(agencyIdResponse),
+            feComponent.stubFeComponents(),
+            feComponent.stubFeComponentsJs(),
+            feComponent.stubFeComponentsCss(),
           ])
         },
-        stubGetUserFromUsername: users.stubGetUserFromUsername,
 
+        stubGetUserFromUsername: users.stubGetUserFromUsername,
         stubSearch: prisonerSearch.stubSearch,
         stubSearchPrisonerDetails: prisonerSearch.stubSearchPrisonerDetails,
         stubAuthUser: users.stubAuthUser,
@@ -156,6 +160,13 @@ export default defineConfig({
         stubCreateGovReferral: adjudications.stubCreateGovReferral,
         stubGetPrisonerAdjudicationHistory: adjudications.stubGetPrisonerAdjudicationHistory,
         stubPrisonerActivePunishments: adjudications.stubPrisonerActivePunishments,
+
+        stubFeComponents: () =>
+          Promise.all([
+            feComponent.stubFeComponents(),
+            feComponent.stubFeComponentsJs(),
+            feComponent.stubFeComponentsCss(),
+          ]),
       })
     },
 

@@ -5,7 +5,6 @@ import UserService from '../../services/userService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 import adjudicationUrls from '../../utils/urlGenerator'
-import { User } from '../../data/hmppsManageUsersClient'
 
 jest.mock('../../services/userService.ts')
 jest.mock('../../services/reportedAdjudicationsService.ts')
