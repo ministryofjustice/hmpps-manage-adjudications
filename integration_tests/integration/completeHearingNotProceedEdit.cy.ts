@@ -21,7 +21,6 @@ context('Will this charge continue to prosecution?', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubPostCompleteHearingNotProceed', {
       chargeNumber: '100',
       response: {

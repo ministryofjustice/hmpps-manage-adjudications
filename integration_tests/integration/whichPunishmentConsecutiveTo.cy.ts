@@ -11,7 +11,6 @@ context('which punishment will it be consecutive to page', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',

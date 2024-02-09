@@ -53,21 +53,6 @@ const stubGetUser = ({ username, response }: { username: string; response: { use
     },
   })
 
-const stubUserRoles = (roles = []): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/users/users/me/roles',
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: roles,
-    },
-  })
-
 const stubGetUserFromUsername = ({
   username,
   response = {},
@@ -137,11 +122,10 @@ const stubGetEmail = ({
 
 export default {
   stubPing,
-  stubAuthUser: (args?: { username?: string; activeCaseLoadId?: string }): Promise<[Response, Response]> =>
-    Promise.all([stubUser({ username: args?.username, activeCaseLoadId: args?.activeCaseLoadId }), stubUserRoles()]),
+  stubAuthUser: (args?: { username?: string; activeCaseLoadId?: string }): Promise<Response> =>
+    stubUser({ username: args?.username, activeCaseLoadId: args?.activeCaseLoadId }),
   stubUserOriginatingAgency: (activeCaseLoadId: string): Promise<Response> => stubUser({ activeCaseLoadId }),
   stubGetUserFromUsername,
-  stubUserRoles,
   stubGetUser,
   stubGetUserFromNames,
   stubGetEmail,

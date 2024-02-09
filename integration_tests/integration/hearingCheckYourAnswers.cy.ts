@@ -15,7 +15,6 @@ context('Check your answers before submitting', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
     cy.task('stubPostCompleteHearingChargeProved', {
       chargeNumber: '100',

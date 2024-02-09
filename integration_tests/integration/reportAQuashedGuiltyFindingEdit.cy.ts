@@ -15,7 +15,6 @@ context('Report a quashed guilty finding', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {

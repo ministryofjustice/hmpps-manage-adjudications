@@ -74,7 +74,6 @@ context('Warning - reviewer edits offence', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
 
     // Prisoner
     cy.task('stubGetPrisonerDetails', {

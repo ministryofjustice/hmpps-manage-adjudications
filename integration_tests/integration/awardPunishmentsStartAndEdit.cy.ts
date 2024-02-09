@@ -71,7 +71,6 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
     cy.task('stubGetReportedAdjudication', {
       id: 100,
