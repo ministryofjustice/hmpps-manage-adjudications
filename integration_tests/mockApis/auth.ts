@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import { Response, SuperAgentRequest } from 'superagent'
-import { CaseLoad } from '../../server/data/prisonApiClient'
 
 import { stubFor, getRequests } from './wiremock'
 import tokenVerification from './tokenVerification'
