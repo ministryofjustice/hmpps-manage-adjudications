@@ -64,6 +64,7 @@ import { AwardedPunishmentsAndDamagesFilter } from '../utils/adjudicationFilterH
 import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
 import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
+import UserService from './userService'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -83,7 +84,8 @@ export default class ReportedAdjudicationsService {
     private readonly hmppsAuthClient: HmppsAuthClient,
     private readonly hmppsManageUsersClient: HmppsManageUsersClient,
     private readonly curiousApiService: CuriousApiService,
-    private readonly locationService: LocationService
+    private readonly locationService: LocationService,
+    private readonly userService: UserService
   ) {}
 
   async getReportedAdjudicationDetails(
@@ -1296,7 +1298,11 @@ export default class ReportedAdjudicationsService {
     pageRequest: ApiPageRequest,
     user: User
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const userRoles = await this.userService.getUserRoles(user.token)
+    let { token } = user
+    if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
+      token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    }
     const agencyIds = uniqueListOfAgenciesForPrisoner.map(agencyInfo => agencyInfo.agency)
 
     let results = {} as ApiPageResponse<ReportedAdjudication>

@@ -192,7 +192,12 @@ context('Adjudication history', () => {
     adjudicationHistoryPage.card().should('have.length', 3)
     adjudicationHistoryPage.cardLinks().eq(1).find('a').should('exist')
     adjudicationHistoryPage.cardLinks().last().find('a').should('exist')
+    adjudicationHistoryPage.cardLinks().first().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReportConsolidated.urls.view('G6415GD', 1))
+    })
   })
+
   it('pagination should work', () => {
     const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 40, _ => {
       return testData.reportedAdjudication({
@@ -275,5 +280,64 @@ context('Adjudication history', () => {
     adjudicationHistoryPage.card().first().should('contain.text', 'Date of discovery: 15/11/2022 - 11:30')
     adjudicationHistoryPage.card().first().should('contain.text', 'Moorland (HMP & YOI)')
     adjudicationHistoryPage.card().first().should('contain.text', 'Charge proved')
+  })
+})
+
+context('Adjudication history - as ALO', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6415GD',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
+    })
+    cy.task('stubGetMovementByOffender', {
+      response: testData.prisonerMovement({
+        offenderNo: 'G6415GD',
+      }),
+    })
+    cy.signIn()
+  })
+
+  it('should contain the link to the report and go the reviewer page', () => {
+    // this will be removed, due to the other PR to be merged first.
+    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
+    cy.task('stubGetPrisonerAdjudicationHistory', {
+      bookingId: '123',
+      number: 0,
+      allContent: [
+        testData.reportedAdjudication({
+          canActionFromHistory: true,
+          chargeNumber: '1',
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2023-11-15T11:30:00',
+          dateTimeOfDiscovery: '2323-11-15T11:30:00',
+          originatingAgencyId: 'LEI',
+          otherData: {
+            overrideAgencyId: 'SKI',
+          },
+          offenceDetails: {
+            offenceCode: 17002,
+            offenceRule: {
+              paragraphNumber: '18',
+              paragraphDescription:
+                'Destroys or damages any part of a young offender institution or any other property other than his own',
+            },
+          },
+        }),
+      ],
+    })
+
+    cy.visit(adjudicationUrls.adjudicationHistory.urls.start('G6415GD'))
+    const adjudicationHistoryPage: AdjudicationHistoryPage = Page.verifyOnPage(AdjudicationHistoryPage)
+    adjudicationHistoryPage.cardLinks().first().click()
+    cy.location().should(loc => {
+      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1))
+    })
   })
 })
