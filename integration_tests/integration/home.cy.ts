@@ -12,7 +12,7 @@ context('Home page - not reviewer', () => {
     cy.signIn()
   })
 
-  it.only('should only see some tiles without the reviewer role', () => {
+  it('should only see some tiles without the reviewer role', () => {
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.startANewReportLink().should('exist')
