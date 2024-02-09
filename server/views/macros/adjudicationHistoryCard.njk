@@ -3,7 +3,7 @@
     <div class="adjudication-history-card-list-item__content">
       <div class="adjudication-history-card-list-item__header">
         {% if adjudication.canActionFromHistory %}
-        <h2 class="adjudication-history-card-list-item__title govuk-heading-m" data-qa="report-link"><a href="{{adjudicationUrls.prisonerReport.urls.review(adjudication.chargeNumber)}}?fromHistoryPage=true}}">{{ adjudication.chargeNumber }}</a></h2>
+        <h2 class="adjudication-history-card-list-item__title govuk-heading-m" data-qa="report-link"><a href="{{adjudicationUrls.prisonerReport.urls.review(adjudication.chargeNumber)}}?fromHistoryPage=true">{{ adjudication.chargeNumber }}</a></h2>
         {% else %}
         <h2 class="adjudication-history-card-list-item__title govuk-heading-m" data-qa="report-link"><a href="{{adjudicationUrls.prisonerReportConsolidated.urls.view(adjudication.prisonerNumber, adjudication.chargeNumber)}}?agency={{ adjudication.originatingAgencyId }}">{{ adjudication.chargeNumber }}</a></h2>
         {% endif %} 

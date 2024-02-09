@@ -192,7 +192,7 @@ context('Adjudication history', () => {
     adjudicationHistoryPage.card().should('have.length', 3)
     adjudicationHistoryPage.cardLinks().eq(1).find('a').should('exist')
     adjudicationHistoryPage.cardLinks().last().find('a').should('exist')
-    adjudicationHistoryPage.cardLinks().first().click()
+    adjudicationHistoryPage.cardLinks().eq(0).find('a').click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.prisonerReportConsolidated.urls.view('G6415GD', 1))
     })
@@ -335,7 +335,7 @@ context('Adjudication history - as ALO', () => {
 
     cy.visit(adjudicationUrls.adjudicationHistory.urls.start('G6415GD'))
     const adjudicationHistoryPage: AdjudicationHistoryPage = Page.verifyOnPage(AdjudicationHistoryPage)
-    adjudicationHistoryPage.cardLinks().first().click()
+    adjudicationHistoryPage.cardLinks().eq(0).find('a').click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1))
     })
