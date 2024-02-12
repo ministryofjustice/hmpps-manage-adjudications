@@ -2,7 +2,6 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import Page from '../pages/page'
 import DataInsightsPage from '../pages/dataInsights'
 import { ChartDetailsResult, ChartLastUpdatedResult } from '../../server/services/ChartDetailsResult'
-import { CaseLoad } from '../../server/data/prisonApiClient'
 import { getFullDate } from '../../server/utils/utils'
 
 context('Adjudication data', () => {
@@ -11,15 +10,7 @@ context('Adjudication data', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', [
-      {
-        caseLoadId: 'RNI',
-        description: 'Ranby (HMP)',
-        currentlyActive: true,
-        type: '',
-        caseloadFunction: '',
-      },
-    ] as CaseLoad[])
+    cy.task('stubSignIn')
     cy.task('stubAuthUser', {
       username: 'USER1',
       activeCaseLoadId: 'RNI',
