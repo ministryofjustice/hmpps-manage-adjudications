@@ -13,7 +13,6 @@ context('Plea and finding', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
   })
   describe('Loads', () => {

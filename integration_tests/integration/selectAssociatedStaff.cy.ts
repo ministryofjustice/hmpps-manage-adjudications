@@ -49,7 +49,6 @@ context('Select associated staff', () => {
       username: 'JSMITH_GEN',
       response: testData.emailFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {

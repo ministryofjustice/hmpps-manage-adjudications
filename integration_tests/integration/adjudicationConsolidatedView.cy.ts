@@ -661,7 +661,7 @@ context('Consolidated report', () => {
           expect($summaryData.get(0).innerText).to.contain('This is my reason for referring.')
         })
     })
-    it.only('Quashed stuff', () => {
+    it('Quashed stuff', () => {
       cy.visit(adjudicationUrls.prisonerReportConsolidated.urls.view('G6415GD', 9))
       const reportPage: AdjudicationConsolidatedView = Page.verifyOnPage(AdjudicationConsolidatedView)
       reportPage

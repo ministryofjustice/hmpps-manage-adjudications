@@ -67,7 +67,6 @@ context('Suspended punishment schedule', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: testData.prisonerResultSummary({

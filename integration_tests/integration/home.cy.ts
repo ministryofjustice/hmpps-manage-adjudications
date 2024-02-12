@@ -3,10 +3,10 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import HomepagePage from '../pages/home'
 import Page from '../pages/page'
 
-context('Home page', () => {
+context('Home page - not reviewer', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', ['NOT_REVIEWER'])
     cy.task('stubAuthUser')
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.signIn()
@@ -25,9 +25,18 @@ context('Home page', () => {
     homepage.confirmDisHasBeenIssuedLink().should('exist')
     homepage.enterOutcomesCard().should('not.exist')
   })
+})
+
+context('Home page', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+    cy.signIn()
+  })
 
   it('should see all the tiles with the reviewer role', () => {
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.startANewReportLink().should('exist')
@@ -44,7 +53,6 @@ context('Home page', () => {
   })
 
   it('should link to the correct location - view all reports (main link)', () => {
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.viewAllReportsCard('Moorland (HMP & YOI)').click()
@@ -56,7 +64,6 @@ context('Home page', () => {
     const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
       'DD/MM/YYYY'
     )}&status=AWAITING_REVIEW&transfersOnly=false`
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.reviewReportsLink().click()
@@ -69,7 +76,6 @@ context('Home page', () => {
     const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
       'DD/MM/YYYY'
     )}&status=UNSCHEDULED&status=ADJOURNED&status=REFER_INAD&transfersOnly=false`
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.scheduleHearingsLink().click()
@@ -80,7 +86,6 @@ context('Home page', () => {
   })
   it('should link to the correct location - view transferred reports', () => {
     const filterString = `?status=UNSCHEDULED&status=REFER_POLICE&status=ADJOURNED&status=REFER_INAD&transfersOnly=true`
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.transferReportsLink().click()
@@ -90,7 +95,6 @@ context('Home page', () => {
     })
   })
   it('should link to the correct location - view scheduled hearings', () => {
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.viewScheduledHearingsCard().click()

@@ -19,7 +19,6 @@ context('What is the reason for this change', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {

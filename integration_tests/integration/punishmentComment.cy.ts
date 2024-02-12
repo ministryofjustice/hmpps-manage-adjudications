@@ -13,7 +13,6 @@ context('Add a comment about punishments', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubCreatePunishmentComment', {
       chargeNumber: 100,
     })

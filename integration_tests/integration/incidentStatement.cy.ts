@@ -118,7 +118,7 @@ context('Incident Statement', () => {
       })
     })
   })
-  context.only('Incident details present, offence details missing', () => {
+  context('Incident details present, offence details missing', () => {
     beforeEach(() => {
       cy.task('stubGetDraftAdjudication', {
         id: 3456,

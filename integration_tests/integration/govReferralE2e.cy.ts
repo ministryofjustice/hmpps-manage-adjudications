@@ -47,7 +47,6 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
       username: 'JSMITH_GEN',
       response: testData.emailFromUsername('JSMITH_GEN'),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
@@ -255,7 +254,6 @@ context('Inad refers to gov after hearing', () => {
       username: 'JSMITH_GEN',
       response: testData.emailFromUsername('JSMITH_GEN'),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetReportedAdjudication', {
       id: 101,
       response: {

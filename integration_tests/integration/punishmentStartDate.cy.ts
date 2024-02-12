@@ -15,7 +15,6 @@ context('Punishment - Enter the date the punishment will start', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {

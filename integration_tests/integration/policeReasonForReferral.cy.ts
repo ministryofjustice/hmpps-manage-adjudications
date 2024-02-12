@@ -13,7 +13,6 @@ context('What is the reason for the referral?', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubCreatePoliceReferral', {
       chargeNumber: 100,
       response: {

@@ -29,8 +29,8 @@ export default defineConfig({
       on('task', {
         reset: resetStubs,
         getSignInUrl: auth.getSignInUrl,
-        stubSignIn: (caseLoads: CaseLoad[]) => {
-          const userCaseLoads: CaseLoad[] = caseLoads || [
+        stubSignIn: (roles: string[] = ['ADJUDICATIONS_REVIEWER']) => {
+          const userCaseLoads = [
             {
               caseLoadId: 'MDI',
               description: 'Moorland (HMP & YOI)',
@@ -54,7 +54,7 @@ export default defineConfig({
                 }
 
           return Promise.all([
-            auth.stubSignIn(),
+            auth.stubSignIn(roles),
             adjudications.stubGetAgencyReportCounts({
               response: {
                 reviewTotal: 2,
@@ -74,7 +74,6 @@ export default defineConfig({
         stubSearchPrisonerDetails: prisonerSearch.stubSearchPrisonerDetails,
         stubAuthUser: users.stubAuthUser,
         stubUserOriginatingAgency: users.stubUserOriginatingAgency,
-        stubUserRoles: users.stubUserRoles,
         stubGetUser: users.stubGetUser,
         stubGetUserFromNames: users.stubGetUserFromNames,
         stubGetEmail: users.stubGetEmail,

@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import jwtDecode from 'jwt-decode'
 import { Request } from 'express'
 import { convertToTitleCase } from '../utils/utils'
 import HmppsAuthClient from '../data/hmppsAuthClient'
@@ -45,7 +46,9 @@ export default class UserService {
   ) {}
 
   async getUserRoles(token: string): Promise<string[]> {
-    return this.hmppsManageUsersClient.getUserRoles(token)
+    const { authorities: roles = [] } = jwtDecode(token) as { authorities?: string[] }
+
+    return roles
   }
 
   async getUserWithSession(req: Request, token: string): Promise<UserDetails> {

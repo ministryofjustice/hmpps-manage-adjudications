@@ -16,7 +16,6 @@ context('Transfers flow', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubUserOriginatingAgency', 'MDI')
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
       response: testData.userFromUsername(),
@@ -540,7 +539,6 @@ context('Transfer banner', () => {
     beforeEach(() => {
       cy.task('stubUserOriginatingAgency', 'LEI')
       cy.task('stubGetAgency', { agencyId: 'LEI', response: { agencyId: 'LEI', description: 'Leeds (HMP)' } })
-      cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
       cy.task('stubGetUserFromUsername', {
         username: 'USER1',
         response: testData.userFromUsername('USER1', 'Test User', 'LEI'),

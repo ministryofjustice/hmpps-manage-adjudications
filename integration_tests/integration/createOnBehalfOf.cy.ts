@@ -16,8 +16,6 @@ context('Create on behalf of', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-
     // for Check your answers before placing them on report test
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
