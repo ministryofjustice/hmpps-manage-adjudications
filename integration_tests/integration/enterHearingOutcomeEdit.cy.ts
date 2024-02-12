@@ -34,7 +34,6 @@ context('Enter hearing outcome', () => {
       username: 'JBLACK_GEN',
       response: testData.emailFromUsername('JBLACK_GEN'),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {
@@ -224,7 +223,6 @@ context('Governor username not present due to migration', () => {
       username: '',
       response: {},
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {

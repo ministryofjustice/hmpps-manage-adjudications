@@ -13,7 +13,6 @@ context('Enter the amount to be recovered for damages', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
   })
   describe('Loads', () => {

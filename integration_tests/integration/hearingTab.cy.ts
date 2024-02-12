@@ -827,9 +827,6 @@ context('Hearing details page', () => {
     cy.signIn()
   })
   describe('Test scenarios - reviewer view', () => {
-    beforeEach(() => {
-      cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
-    })
     ;[
       { id: '1524480' },
       { id: '1524481' },

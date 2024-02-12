@@ -21,7 +21,6 @@ context('Damages and punishments summary', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
@@ -566,13 +565,12 @@ context('Damages and punishments summary', () => {
 context('Reporter view', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', ['NOT_REVIEWER'])
     cy.task('stubAuthUser')
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'NOT_A_REVIEWER' }])
     cy.signIn()
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',

@@ -14,7 +14,6 @@ context('Punishment - when is it suspended until?', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
   })
   describe('Loads', () => {

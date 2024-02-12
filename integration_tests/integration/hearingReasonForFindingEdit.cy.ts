@@ -38,7 +38,6 @@ context('What is the reason for this finding?', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubPostCompleteDismissedHearing', {
       chargeNumber: 100,
       response: {

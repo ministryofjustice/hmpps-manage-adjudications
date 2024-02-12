@@ -13,7 +13,6 @@ context('What is the next step?', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.signIn()
   })
   describe('Loads', () => {
