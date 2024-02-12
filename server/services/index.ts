@@ -44,7 +44,8 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   hmppsAuthClient,
   hmppsManageUsersClient,
   curiousApiService,
-  locationService
+  locationService,
+  userService
 )
 const prisonerSearchService = new PrisonerSearchService(hmppsAuthClient)
 const damagesSessionService = new DamagesSessionService()

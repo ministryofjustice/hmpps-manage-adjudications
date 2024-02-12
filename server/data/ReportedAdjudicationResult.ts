@@ -49,6 +49,7 @@ export type ReportedAdjudication = {
   createdOnBehalfOfOfficer?: string
   createdOnBehalfOfReason?: string
   linkedChargeNumbers?: string[]
+  canActionFromHistory: boolean
 }
 
 export type ReportedAdjudicationResult = {

@@ -71,6 +71,7 @@ export default class TestData {
     createdOnBehalfOfReason = null,
     otherData,
     disIssueHistory = [],
+    canActionFromHistory = false,
   }: {
     chargeNumber?: string
     prisonerNumber: string
@@ -100,6 +101,7 @@ export default class TestData {
     createdOnBehalfOfReason?: string
     otherData?: any
     disIssueHistory?: DisIssue[]
+    canActionFromHistory?: boolean
   }) => {
     return {
       chargeNumber,
@@ -136,6 +138,7 @@ export default class TestData {
       createdOnBehalfOfReason,
       ...otherData,
       disIssueHistory,
+      canActionFromHistory,
     }
   }
 

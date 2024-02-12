@@ -2,7 +2,11 @@
   <div class="adjudication-history-card-list-item" role="listitem" data-qa="adjudication-history-card">
     <div class="adjudication-history-card-list-item__content">
       <div class="adjudication-history-card-list-item__header">
+        {% if adjudication.canActionFromHistory %}
+        <h2 class="adjudication-history-card-list-item__title govuk-heading-m" data-qa="report-link"><a href="{{adjudicationUrls.prisonerReport.urls.review(adjudication.chargeNumber)}}?fromHistoryPage=true">{{ adjudication.chargeNumber }}</a></h2>
+        {% else %}
         <h2 class="adjudication-history-card-list-item__title govuk-heading-m" data-qa="report-link"><a href="{{adjudicationUrls.prisonerReportConsolidated.urls.view(adjudication.prisonerNumber, adjudication.chargeNumber)}}?agency={{ adjudication.originatingAgencyId }}">{{ adjudication.chargeNumber }}</a></h2>
+        {% endif %} 
         <div class="adjudication-history-card-list-item__metadata-group">
           <p class="adjudication-history-card-list-item__metadata govuk-body">Date of discovery: {{ adjudication.incidentDetails.dateTimeOfDiscovery | formatTimestampTo('DD/MM/YYYY - HH:mm') }}</p>
           <p class="adjudication-history-card-list-item__location govuk-body">Happened at: {{ adjudication.originatingAgencyId | agencyIdToName(uniqueListOfAgenciesForPrisoner) }}</p>

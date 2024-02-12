@@ -25,6 +25,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
+  null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>

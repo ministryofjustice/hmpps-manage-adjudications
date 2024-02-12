@@ -23,6 +23,7 @@ import {
 } from '../data/HearingAndOutcomeResult'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
+import UserService from './userService'
 
 const testData = new TestData()
 
@@ -84,11 +85,13 @@ jest.mock('./curiousApiService', () => {
 })
 
 jest.mock('./locationService')
+jest.mock('./userService')
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const hmppsManageUsersClient = new HmppsManageUsersClient() as jest.Mocked<HmppsManageUsersClient>
 const curiousApiService = new CuriousApiService() as jest.Mocked<CuriousApiService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 
 const token = 'token-1'
 const user = {
@@ -123,6 +126,7 @@ describe('reportedAdjudicationsService', () => {
   let service: ReportedAdjudicationsService
 
   beforeEach(() => {
+    userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
     locationService.getIncidentLocation.mockResolvedValue(location)
     locationService.getAgency.mockResolvedValue(agency)
@@ -131,7 +135,8 @@ describe('reportedAdjudicationsService', () => {
       hmppsAuthClient,
       hmppsManageUsersClient,
       curiousApiService,
-      locationService
+      locationService,
+      userService
     )
   })
 
