@@ -26,6 +26,7 @@ context('Adjudication history', () => {
         offenderNo: 'G6415GD',
       }),
     })
+
     cy.signIn()
   })
 
@@ -256,6 +257,7 @@ context('Adjudication history', () => {
             },
           },
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          punishments: [testData.punishmentWithSchedule({ type: PunishmentType.ADDITIONAL_DAYS })],
         }),
       ],
       filter: {
@@ -263,6 +265,7 @@ context('Adjudication history', () => {
         toDate: '2022-11-20',
         status: ReportedAdjudicationStatus.CHARGE_PROVED,
         agency: 'MDI',
+        ada: true,
       },
     })
     cy.visit(adjudicationUrls.adjudicationHistory.urls.start('G6415GD'))
@@ -273,6 +276,7 @@ context('Adjudication history', () => {
     cy.get('#fromDate').type(fromDate)
     cy.get('#toDate').type(toDate)
     cy.get('#agency').check()
+    cy.get('#punishment').check()
     cy.get('#status-13').check()
     adjudicationHistoryPage.applyFilters().click()
     adjudicationHistoryPage.card().should('have.length', 1)
@@ -305,7 +309,6 @@ context('Adjudication history - as ALO', () => {
   })
 
   it('should contain the link to the report and go the reviewer page', () => {
-    // this will be removed, due to the other PR to be merged first.
     cy.task('stubGetPrisonerAdjudicationHistory', {
       bookingId: '123',
       number: 0,
@@ -331,7 +334,6 @@ context('Adjudication history - as ALO', () => {
         }),
       ],
     })
-
     cy.visit(adjudicationUrls.adjudicationHistory.urls.start('G6415GD'))
     const adjudicationHistoryPage: AdjudicationHistoryPage = Page.verifyOnPage(AdjudicationHistoryPage)
     adjudicationHistoryPage.cardLinks().eq(0).find('a').click()

@@ -341,7 +341,10 @@ export default class ManageAdjudicationsSystemTokensClient {
       `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
       `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
       `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-      `${(filter.agency && `&agency=${filter.agency}`) || `&agency=${allAgencies}`}`
+      `${(filter.agency && `&agency=${filter.agency}`) || `&agency=${allAgencies}`}` +
+      `${(filter.ada && `&ada=true`) || ''}` +
+      `${(filter.pada && `&pada=true`) || ''}` +
+      `${(filter.suspended && `&suspended=true`) || ''}`
 
     return this.restClient.get({
       path,
@@ -357,7 +360,10 @@ export default class ManageAdjudicationsSystemTokensClient {
       `/reported-adjudications/bookings/prisoner/${prisonerNumber}?page=${pageRequest.number}&size=${pageRequest.size}` +
       `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
       `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
-      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
+      `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
+      `${(filter.ada && `&ada=true`) || ''}` +
+      `${(filter.pada && `&pada=true`) || ''}` +
+      `${(filter.suspended && `&suspended=true`) || ''}`
     return this.restClient.get({
       path,
     })

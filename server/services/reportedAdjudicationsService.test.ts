@@ -22,7 +22,7 @@ import {
   ReferralOutcomeCode,
 } from '../data/HearingAndOutcomeResult'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
-import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
+import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
 import UserService from './userService'
 
 const testData = new TestData()

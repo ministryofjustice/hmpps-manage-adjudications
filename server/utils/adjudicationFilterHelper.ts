@@ -9,7 +9,10 @@ import {
 } from '../data/ReportedAdjudicationResult'
 import { datePickerDateToMoment, datePickerToApi, momentDateToDatePicker } from './utils'
 import { EstablishmentInformation, FormError } from '../@types/template'
-import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
+import {
+  AdjudicationHistoryBookingType,
+  AdjudicationHistoryPunishmentTypeFilter,
+} from '../data/AdjudicationHistoryData'
 
 enum ErrorType {
   FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',
@@ -50,6 +53,7 @@ export type AdjudicationHistoryUiFilter = {
   toDate?: string
   status?: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
   agency?: string | string[]
+  punishment?: AdjudicationHistoryPunishmentTypeFilter | AdjudicationHistoryPunishmentTypeFilter[]
 }
 
 export const uiDISFormFilterFromRequest = (req: Request): DISUiFilter => {
@@ -92,6 +96,7 @@ export const uiAdjudicationHistoryFilterFromRequest = (req: Request): Adjudicati
     toDate: req.query.toDate as string,
     status: req.query.status as ReportedAdjudicationStatus,
     agency: req.query.agency as string,
+    punishment: req.query.punishment as AdjudicationHistoryPunishmentTypeFilter,
   }
 }
 
@@ -225,6 +230,7 @@ export const adjudicationHistoryUiFilterFromBody = (req: Request) => {
     toDate: req.body.toDate,
     status: req.body.status as ReportedAdjudicationStatus,
     agency: req.body.agency as string,
+    punishment: req.body.punishment as AdjudicationHistoryPunishmentTypeFilter,
   }
 }
 
@@ -259,6 +265,9 @@ export const adjudicationHistoryFilterFromUiFilter = (filter: AdjudicationHistor
     toDate: filter.toDate && datePickerDateToMoment(filter.toDate),
     status: filter.status || allStatuses,
     agency: filter.agency,
+    ada: filter.punishment?.includes(AdjudicationHistoryPunishmentTypeFilter.ADDITIONAL_DAYS) || false,
+    pada: filter.punishment?.includes(AdjudicationHistoryPunishmentTypeFilter.PROSPECTIVE_DAYS) || false,
+    suspended: filter.punishment?.includes(AdjudicationHistoryPunishmentTypeFilter.SUSPENDED) || false,
   }
 }
 
@@ -306,6 +315,30 @@ export const establishmentCheckboxes = (
       value: agencyInfo.agency,
       text: agencyInfo.agencyDescription,
       checked: itemCheckBoxMatch(filter.agency, agencyInfo.agency),
+    }
+  })
+}
+
+export const punishmentCheckboxes = (filter: AdjudicationHistoryUiFilter) => {
+  const chosenPunishments = [
+    {
+      type: AdjudicationHistoryPunishmentTypeFilter.ADDITIONAL_DAYS,
+      name: 'Additional days',
+    },
+    {
+      type: AdjudicationHistoryPunishmentTypeFilter.PROSPECTIVE_DAYS,
+      name: 'Prospective additional days',
+    },
+    {
+      type: AdjudicationHistoryPunishmentTypeFilter.SUSPENDED,
+      name: 'Suspended',
+    },
+  ]
+  return chosenPunishments.map(punishment => {
+    return {
+      value: punishment.type,
+      text: punishment.name,
+      checked: itemCheckBoxMatch(filter.punishment, punishment.type),
     }
   })
 }

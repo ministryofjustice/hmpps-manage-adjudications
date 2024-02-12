@@ -72,6 +72,23 @@
           items: establishments
         }) }}
     </div>
+
+    <h3 class="govuk-heading-s govuk-!-margin-top-6">Punishments</h3>
+    <div id="establishment-checkboxes">
+      {{ govukCheckboxes({
+          name: "punishment",
+          classes: "govuk-checkboxes--small",
+          fieldset: {
+            legend: {
+              text: "",
+              isPageHeading: false,
+              classes: ""
+            }
+          },
+          items:  punishment
+        }) }}
+    </div>
+
     <h3 class="govuk-heading-s govuk-!-margin-top-6">Status</h3>
     <div id="status-checkboxes">
       {{ govukCheckboxes({
