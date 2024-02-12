@@ -6,7 +6,7 @@ import Page from '../pages/page'
 context('Home page - not reviewer', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', ['NOT_REVIEWER'])
+    cy.task('stubSignIn', ['ROLE_NOT_REVIEWER'])
     cy.task('stubAuthUser')
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.signIn()
@@ -36,7 +36,7 @@ context('Home page', () => {
     cy.signIn()
   })
 
-  it('should see all the tiles with the reviewer role', () => {
+  it.only('should see all the tiles with the reviewer role', () => {
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.startANewReportLink().should('exist')

@@ -48,7 +48,7 @@ export default class UserService {
   async getUserRoles(token: string): Promise<string[]> {
     const { authorities: roles = [] } = jwtDecode(token) as { authorities?: string[] }
 
-    return roles
+    return roles.map(role => role.replace('ROLE_', ''))
   }
 
   async getUserWithSession(req: Request, token: string): Promise<UserDetails> {

@@ -565,7 +565,7 @@ context('Damages and punishments summary', () => {
 context('Reporter view', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn', ['NOT_REVIEWER'])
+    cy.task('stubSignIn', ['ROLE_NOT_REVIEWER'])
     cy.task('stubAuthUser')
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
