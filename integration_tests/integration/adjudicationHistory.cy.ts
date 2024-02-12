@@ -11,7 +11,7 @@ const testData = new TestData()
 context('Adjudication history', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', ['NOT_REVIEWER'])
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
@@ -306,7 +306,6 @@ context('Adjudication history - as ALO', () => {
 
   it('should contain the link to the report and go the reviewer page', () => {
     // this will be removed, due to the other PR to be merged first.
-    cy.task('stubUserRoles', [{ roleCode: 'ADJUDICATIONS_REVIEWER' }])
     cy.task('stubGetPrisonerAdjudicationHistory', {
       bookingId: '123',
       number: 0,
