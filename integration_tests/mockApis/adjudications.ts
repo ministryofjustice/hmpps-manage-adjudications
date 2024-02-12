@@ -1131,6 +1131,9 @@ const stubGetPrisonerAdjudicationHistory = ({
     toDate: null,
     fromDate: null,
     agency: null,
+    ada: null,
+    pada: null,
+    suspended: null,
   },
 }: {
   bookingId: string
@@ -1142,6 +1145,9 @@ const stubGetPrisonerAdjudicationHistory = ({
     fromDate?: string
     toDate?: string
     agency?: string
+    ada?: boolean
+    pada?: boolean
+    suspended?: boolean
   }
 }): SuperAgentRequest => {
   const apiRequest = {
@@ -1155,7 +1161,10 @@ const stubGetPrisonerAdjudicationHistory = ({
     `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
     `${(filter.fromDate && `&startDate=${filter.fromDate}`) || ''}` +
     `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}` +
-    `${(filter.agency && `&agency=${filter.agency}`) || `&agency=${agencies}`}`
+    `${(filter.agency && `&agency=${filter.agency}`) || `&agency=${agencies}`}` +
+    `${(filter.ada && `&ada=true`) || ''}` +
+    `${(filter.pada && `&pada=true`) || ''}` +
+    `${(filter.suspended && `&suspended=true`) || ''}`
   return stubFor({
     request: {
       method: 'GET',

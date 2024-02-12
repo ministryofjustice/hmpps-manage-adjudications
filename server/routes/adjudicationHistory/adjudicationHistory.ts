@@ -10,6 +10,7 @@ import {
   adjudicationHistoryUiFilterFromBody,
   establishmentCheckboxes,
   fillInAdjudicationHistoryDefaults,
+  punishmentCheckboxes,
   reportedAdjudicationStatuses,
   uiAdjudicationHistoryFilterFromRequest,
   validate,
@@ -37,6 +38,7 @@ export default class AdjudicationHistoryRoutes {
       filter,
       statuses: reportedAdjudicationStatuses(filter),
       establishments: establishmentCheckboxes(filter, uniqueListOfAgenciesForPrisoner),
+      punishment: punishmentCheckboxes(filter),
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
@@ -76,7 +78,6 @@ export default class AdjudicationHistoryRoutes {
       const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
       const uniqueListOfAgenciesForPrisoner =
         await this.reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner(prisonerNumber, user)
-
       return this.renderView(
         req,
         res,

@@ -41,7 +41,7 @@ import {
   PunishmentWithConvertedName,
 } from '../data/PunishmentResult'
 import { ApplicationInfo } from '../applicationInfo'
-import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
+import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
 
 const production = process.env.NODE_ENV === 'production'
 

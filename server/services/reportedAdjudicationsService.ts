@@ -63,7 +63,7 @@ import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUser
 import { AwardedPunishmentsAndDamagesFilter } from '../utils/adjudicationFilterHelper'
 import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
-import AdjudicationHistoryBookingType from '../data/AdjudicationHistoryData'
+import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
 import UserService from './userService'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
