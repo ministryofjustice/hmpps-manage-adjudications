@@ -4,7 +4,7 @@ import { Response, SuperAgentRequest } from 'superagent'
 import { stubFor, getRequests } from './wiremock'
 import tokenVerification from './tokenVerification'
 
-const createToken = (roles: string[] = ['ADJUDICATIONS_REVIEWER']) => {
+const createToken = (roles: string[] = ['ROLE_ADJUDICATIONS_REVIEWER']) => {
   const payload = {
     user_name: 'USER1',
     scope: ['read'],
@@ -78,7 +78,7 @@ const signOut = () =>
     },
   })
 
-const token = (roles: string[] = ['ADJUDICATIONS_REVIEWER']) =>
+const token = (roles: string[] = ['ROLE_ADJUDICATIONS_REVIEWER']) =>
   stubFor({
     request: {
       method: 'POST',
@@ -105,7 +105,7 @@ export default {
   getSignInUrl,
   stubPing,
   stubSignIn: (
-    roles: string[] = ['ADJUDICATIONS_REVIEWER']
+    roles: string[] = ['ROLE_ADJUDICATIONS_REVIEWER']
   ): Promise<[Response, Response, Response, Response, Response]> =>
     Promise.all([favicon(), redirect(), signOut(), token(roles), tokenVerification.stubVerifyToken()]),
 }
