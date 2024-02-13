@@ -1,23 +1,21 @@
 #statusFilterBox {
-    margin-top:-47px;
-    margin-left: 20px;
+    margin-top:-50px;
+    margin-left: 2.5em;
 
     .horizontal-form, .govuk-form-group {
         margin-bottom: 0px!important;
     }
-    .govuk-checkboxes__item {
-        width: 170px!important;
-    }
+
     .statusFilterCheckboxes {
         height: 200px;
-        width: 750px;
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
     }
 
     .govuk-checkboxes__label {
-        padding: 8px 8px 8px 1px;
+        padding: 8px 15px 8px 1px;
+        max-width:fit-content;
     }
 }
 
@@ -35,4 +33,10 @@
 
 .viewReport {
     width: 96px;
+}
+
+.transfers-filter-checkboxes {
+    .govuk-checkboxes__label {
+        max-width:fit-content;
+    }
 }
