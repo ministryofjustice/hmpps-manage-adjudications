@@ -31,9 +31,9 @@
 }
 
 .issueStatusCheckboxes {
-  display:flex;
-  justify-content: space-around;
-  padding-top: 5px;
+  .govuk-checkboxes__input {
+    margin-left: 20px;
+  }
 }
 
 .printCompletedDISForms-checkboxes-formGroup {
@@ -42,7 +42,7 @@
 
 .checkboxes-printWidth{
   @media print {
-    max-width: 250px;
+    display: none
   }
 }
 .inputBoxes {
