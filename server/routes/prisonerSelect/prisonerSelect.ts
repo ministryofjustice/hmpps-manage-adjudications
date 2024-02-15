@@ -17,7 +17,7 @@ export default class PrisonerSelectRoutes {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { user } = res.locals
     const { error, searchTerm, transfer } = pageData
-    const prisonIds = [user.activeCaseLoad.caseLoadId]
+    const prisonIds = [user.meta.caseLoadId]
 
     let searchResults = null
     if (!error) {
