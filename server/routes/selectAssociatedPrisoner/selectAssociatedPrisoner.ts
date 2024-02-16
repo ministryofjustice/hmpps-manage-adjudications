@@ -35,7 +35,7 @@ export default class SelectAssociatedPrisonerRoutes {
       return res.render(`pages/notFound.njk`, { url: req.headers.referer || adjudicationUrls.homepage.root })
 
     const searchResults = await this.prisonerSearchService.search(
-      { searchTerm, prisonIds: [user.activeCaseLoad.caseLoadId] },
+      { searchTerm, prisonIds: [user.meta.caseLoadId] },
       user
     )
 

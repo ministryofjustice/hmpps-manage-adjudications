@@ -138,7 +138,6 @@ export default class HomepageRoutes {
     ])
     const { reviewTotal, transferReviewTotal } = counts
     const userCaseloadName = user.meta?.description || null
-    // const userCaseloadName = user.meta?.description || user.activeCaseLoad.description
     const enabledTasks = createTasks(reviewTotal, transferReviewTotal, userCaseloadName).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
 
