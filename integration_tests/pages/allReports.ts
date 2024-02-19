@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class AllCompletedReportsPage extends Page {
   constructor() {
-    super('Adjudications')
+    super('Hearings and reports')
   }
 
   noResultsMessage = (): PageElement => cy.get('[data-qa="no-results-message"]')
@@ -20,9 +20,9 @@ export default class AllCompletedReportsPage extends Page {
 
   resultsTable = (): PageElement => cy.get('[data-qa="complete-adjudications-results-table"]')
 
-  uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck()
+  uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck({ force: true })
 
-  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
+  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value, { force: true })
 
   viewReportLink = () => cy.get('[data-qa="view-report-link"]')
 
