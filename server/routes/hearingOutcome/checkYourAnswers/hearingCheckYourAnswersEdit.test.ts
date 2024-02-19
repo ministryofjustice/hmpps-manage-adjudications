@@ -63,7 +63,9 @@ describe('GET', () => {
 describe('GET /', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingsCheckAnswers.urls.edit('100'))
+      .get(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=UNFIT&finding=CHARGE_PROVED`
+      )
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Check your answers before submitting')
@@ -82,11 +84,16 @@ describe('POST', () => {
       }),
     })
     return request(app)
-      .post(adjudicationUrls.hearingsCheckAnswers.urls.edit('100'))
+      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=NOT_ASKED`)
       .expect(302)
       .expect('Location', adjudicationUrls.awardPunishments.urls.start('100'))
       .then(() =>
-        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith('100', expect.anything(), null, null)
+        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith(
+          '100',
+          expect.anything(),
+          'JGREEN',
+          'NOT_ASKED'
+        )
       )
   })
 
@@ -112,11 +119,16 @@ describe('POST', () => {
       }),
     })
     return request(app)
-      .post(adjudicationUrls.hearingsCheckAnswers.urls.edit('100'))
+      .post(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=NOT_ASKED`)
       .expect(302)
       .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
       .then(() =>
-        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith('100', expect.anything(), null, null)
+        expect(hearingsService.editChargeProvedOutcome).toHaveBeenCalledWith(
+          '100',
+          expect.anything(),
+          'JGREEN',
+          'NOT_ASKED'
+        )
       )
   })
 })

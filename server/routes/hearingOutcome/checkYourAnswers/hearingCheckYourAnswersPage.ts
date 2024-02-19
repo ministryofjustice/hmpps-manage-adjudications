@@ -36,6 +36,10 @@ export default class HearingCheckYourAnswersPage {
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { adjudicator, plea, finding } = req.query
+    // if the data has been lost, they need to restart this journey
+    if (!plea || !adjudicator || !finding) {
+      return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
+    }
 
     const changeHref = url.format({
       pathname: adjudicationUrls.hearingPleaAndFinding.urls.start(chargeNumber),
@@ -63,6 +67,9 @@ export default class HearingCheckYourAnswersPage {
     const { chargeNumber } = req.params
     const { user } = res.locals
     const { plea, adjudicator } = req.query
+
+    // if the plea or adjudicator has been lost, they need to restart this journey
+    if (!plea || !adjudicator) return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
 
     try {
       if (this.pageOptions.isEdit()) {
