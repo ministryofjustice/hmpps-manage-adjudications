@@ -107,14 +107,18 @@ context('Check your answers before submitting', () => {
   })
   describe('Loads', () => {
     it('should contain the required page elements', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?plea=GUILTY&finding=CHARGE_PROVED`)
+      cy.visit(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`
+      )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().should('exist')
       checkAnswersPage.cancelLink().should('exist')
       checkAnswersPage.answersTable().should('exist')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?plea=GUILTY&finding=CHARGE_PROVED`)
+      cy.visit(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`
+      )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.cancelLink().click()
       cy.location().should(loc => {
@@ -122,7 +126,9 @@ context('Check your answers before submitting', () => {
       })
     })
     it('shows the correct information in the summary table', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?plea=GUILTY&finding=CHARGE_PROVED`)
+      cy.visit(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`
+      )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage
         .answersTable()
@@ -143,7 +149,9 @@ context('Check your answers before submitting', () => {
 
   describe('saves', () => {
     it('should submit successful', () => {
-      cy.visit(`${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?plea=GUILTY&finding=CHARGE_PROVED`)
+      cy.visit(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`
+      )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().click()
       cy.location().should(loc => {
