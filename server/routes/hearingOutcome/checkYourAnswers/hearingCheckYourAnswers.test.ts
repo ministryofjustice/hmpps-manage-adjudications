@@ -53,7 +53,9 @@ describe('GET', () => {
 describe('GET /', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.hearingsCheckAnswers.urls.start('100'))
+      .get(
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start('100')}?adjudicator=JGREEN&plea=UNFIT&finding=CHARGE_PROVED`
+      )
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Check your answers before submitting')
