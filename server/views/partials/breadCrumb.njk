@@ -9,7 +9,22 @@
     }
   ] %}
   {% else %}
-  {% set rows = [
+    {% if not breadcrumbList | length %}
+      {% set rows = [
+    {
+      text: "Digital Prison Services",
+      href: digitalPrisonServiceUrl
+    },
+    {
+      text: "Adjudications",
+      href: adjudicationUrls.homepage.root,
+      attributes: {
+        'aria-current': 'page'
+      }
+    }
+  ] %}
+    {% else %}
+      {% set rows = [
     {
       text: "Digital Prison Services",
       href: digitalPrisonServiceUrl
@@ -19,7 +34,10 @@
       href: adjudicationUrls.homepage.root
     }
   ] %}
+    {% endif %}
   {% endif %}
+
+
   {% for item in breadcrumbList %}
     {% set rows = (rows.push(
       {
@@ -32,6 +50,9 @@
   {{ govukBreadcrumbs({
     collapseOnMobile: true,
     items: rows,
-    classes: "govuk-!-display-none-print"
+    classes: "govuk-!-display-none-print",
+    attributes: {
+      'aria-label': 'breadcrumb'
+    }
   }) }}
 {% endmacro %}
