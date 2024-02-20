@@ -231,7 +231,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       awardPunishmentsPage.newPunishment().click()
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
-      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
+      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check({ force: true })
       punishmentPage.submitButton().click()
 
       const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
@@ -239,7 +239,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentNumberOfDaysPage.submitButton().click()
 
       const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
+      punishmentSuspendedPage.suspended().find('input[value="yes"]').check({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
@@ -268,7 +268,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       awardPunishmentsPage.newPunishment().click()
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
-      punishmentPage.punishment().find('input[value="EARNINGS"]').check()
+      punishmentPage.punishment().find('input[value="EARNINGS"]').check({ force: true })
       punishmentPage.stoppagePercentage().type('10')
       punishmentPage.submitButton().click()
 
@@ -277,11 +277,11 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentNumberOfDaysPage.submitButton().click()
 
       const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
+      punishmentSuspendedPage.suspended().find('input[value="no"]').check({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
+      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check({ force: true })
       punishmentStartDateChoicePage.submitButton().click()
 
       const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
@@ -311,8 +311,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       awardPunishmentsPage.newPunishment().click()
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
-      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="CANTEEN"]').check()
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check({ force: true })
+      punishmentPage.privilege().find('input[value="CANTEEN"]').check({ force: true })
       punishmentPage.submitButton().click()
 
       const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
@@ -320,7 +320,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentNumberOfDaysPage.submitButton().click()
 
       const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
+      punishmentSuspendedPage.suspended().find('input[value="yes"]').check({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
@@ -348,8 +348,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       awardPunishmentsPage.newPunishment().click()
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
-      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="GYM"]').check()
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check({ force: true })
+      punishmentPage.privilege().find('input[value="GYM"]').check({ force: true })
 
       punishmentPage.submitButton().click()
 
@@ -358,7 +358,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentNumberOfDaysPage.submitButton().click()
 
       const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
+      punishmentSuspendedPage.suspended().find('input[value="yes"]').check({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
@@ -386,8 +386,8 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       awardPunishmentsPage.newPunishment().click()
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
-      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="OTHER"]').check()
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check({ force: true })
+      punishmentPage.privilege().find('input[value="OTHER"]').check({ force: true })
       punishmentPage.otherPrivilege().type('nintendo switch')
       punishmentPage.submitButton().click()
 
@@ -396,7 +396,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentNumberOfDaysPage.submitButton().click()
 
       const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
+      punishmentSuspendedPage.suspended().find('input[value="yes"]').check({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
@@ -424,7 +424,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       awardPunishmentsPage.newPunishment().click()
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
-      punishmentPage.punishment().find('input[value="PROSPECTIVE_DAYS"]').check()
+      punishmentPage.punishment().find('input[value="PROSPECTIVE_DAYS"]').click({ force: true })
 
       punishmentPage.submitButton().click()
 
@@ -433,11 +433,11 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       numberOfAdditionalDaysPage.submitButton().click()
 
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
-      willPunishmentBeSuspendedPage.suspended().find('input[value="no"]').click()
+      willPunishmentBeSuspendedPage.suspended().find('input[value="no"]').click({ force: true })
       willPunishmentBeSuspendedPage.submitButton().click()
 
       const willPunishmentBeConsecutivePage = Page.verifyOnPage(WillPunishmentBeConsecutivePage)
-      willPunishmentBeConsecutivePage.consecutive().find('input[value="yes"]').click()
+      willPunishmentBeConsecutivePage.consecutive().find('input[value="yes"]').click({ force: true })
       willPunishmentBeConsecutivePage.submitButton().click()
 
       const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
@@ -486,7 +486,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       const suspendedPunishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
       suspendedPunishmentNumberOfDaysPage.submitButton().click()
       const suspendedPunishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      suspendedPunishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
+      suspendedPunishmentStartDateChoicePage.radioButtons().find('input[value="true"]').click({ force: true })
       suspendedPunishmentStartDateChoicePage.submitButton().click()
 
       const suspendedPunishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
@@ -532,7 +532,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentPage.punishment().find('input[value="CAUTION"]').should('exist')
       punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').should('exist')
 
-      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
+      punishmentPage.punishment().find('input[value="CONFINEMENT"]').click({ force: true })
       punishmentPage.submitButton().click()
 
       const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
@@ -540,7 +540,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentNumberOfDaysPage.submitButton().click()
 
       const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').click()
+      punishmentSuspendedPage.suspended().find('input[value="yes"]').click({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
@@ -551,7 +551,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       awardPunishmentsPage.newPunishment().click()
 
       punishmentPage.punishment().find('input[value="CAUTION"]').should('not.exist')
-      punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').check()
+      punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').click({ force: true })
       cy.get('#damagesOwedAmount').type('50')
       punishmentPage.submitButton().click()
       awardPunishmentsPage.newPunishment().click()
@@ -562,10 +562,10 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
       awardPunishmentsPage.newPunishment().click()
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').check()
+      punishmentPage.punishment().find('input[value="DAMAGES_OWED"]').click({ force: true })
       cy.get('#damagesOwedAmount').type('50')
       punishmentPage.submitButton().click()
-      cy.get('[data-qa="edit-damages"]').click()
+      cy.get('[data-qa="edit-damages"]').click({ force: true })
       const damagesAmountPage = Page.verifyOnPage(DamagesAmountPage)
       damagesAmountPage.damagesAmount().should('have.value', 50)
     })

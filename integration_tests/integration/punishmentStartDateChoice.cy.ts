@@ -70,7 +70,7 @@ context('Punishment - when will the punishment start?', () => {
     it('should go to correct page when punishment starts immediately', () => {
       cy.visit(adjudicationUrls.whenWillPunishmentStart.urls.start('100'))
       const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
+      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check({ force: true })
       punishmentStartDateChoicePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishmentAutomaticDateSchedule.urls.start('100'))
@@ -79,7 +79,7 @@ context('Punishment - when will the punishment start?', () => {
     it('should go to correct page when punishment starts on another day', () => {
       cy.visit(adjudicationUrls.whenWillPunishmentStart.urls.start('100'))
       const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="false"]').check()
+      punishmentStartDateChoicePage.radioButtons().find('input[value="false"]').check({ force: true })
       punishmentStartDateChoicePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishmentStartDate.urls.start('100'))

@@ -208,7 +208,7 @@ context('Details of witnesses', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.add(200))
     })
-    detailsOfWitnessesPage.addWitnessType().find('input[value="OTHER_PERSON"]').check()
+    detailsOfWitnessesPage.addWitnessType().find('input[value="OTHER_PERSON"]').check({ force: true })
     detailsOfWitnessesPage.witnessOtherNameInput().type('Jake Peters')
     detailsOfWitnessesPage.addWitnessSubmit().click()
     detailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 2) // This includes the header row plus the Witness we just added
@@ -242,7 +242,7 @@ context('Details of witnesses', () => {
 
     detailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 5)
     detailsOfWitnessesPage.addWitnessButton().click()
-    detailsOfWitnessesPage.addWitnessType().find('input[value="OFFICER"]').check()
+    detailsOfWitnessesPage.addWitnessType().find('input[value="OFFICER"]').check({ force: true })
     detailsOfWitnessesPage.witnessOfficerSearchNameInput().type('Adam Owens')
     detailsOfWitnessesPage.searchOfficer().click()
     cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffName=Adam%20Owens`)
@@ -265,7 +265,7 @@ context('Details of witnesses', () => {
 
     detailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 5)
     detailsOfWitnessesPage.addWitnessButton().click()
-    detailsOfWitnessesPage.addWitnessType().find('input[value="STAFF"]').check()
+    detailsOfWitnessesPage.addWitnessType().find('input[value="STAFF"]').check({ force: true })
     detailsOfWitnessesPage.witnessStaffSearchNameInput().type('Janet Planet')
     detailsOfWitnessesPage.searchStaff().click()
     cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffName=Janet%20Planet`)
@@ -319,7 +319,7 @@ context('Details of witnesses', () => {
     cy.visit(adjudicationUrls.detailsOfWitnesses.urls.start(201))
     const detailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
     detailsOfWitnessesPage.addWitnessButton().click()
-    detailsOfWitnessesPage.addWitnessType().find('input[value="OTHER_PERSON"]').check()
+    detailsOfWitnessesPage.addWitnessType().find('input[value="OTHER_PERSON"]').check({ force: true })
     detailsOfWitnessesPage.witnessOtherNameInput().type('Jake Peters')
     detailsOfWitnessesPage.addWitnessSubmit().click()
     detailsOfWitnessesPage.saveAndContinue().click()
@@ -403,7 +403,7 @@ context('Details of witnesses', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.add(12345))
       })
-      detailsOfWitnessesPage.addWitnessType().find('input[value="OTHER_PERSON"]').check()
+      detailsOfWitnessesPage.addWitnessType().find('input[value="OTHER_PERSON"]').check({ force: true })
       detailsOfWitnessesPage.witnessOtherNameInput().type('Jake Peters')
       detailsOfWitnessesPage.addWitnessSubmit().click()
       detailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 2) // This includes the header row plus the Witness we just added

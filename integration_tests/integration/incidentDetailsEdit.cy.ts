@@ -90,7 +90,7 @@ context('Incident details (edit) - statement incomplete', () => {
   it('should not contain any discovery details if No is selected', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click({ force: true })
     incidentDetailsPage.timeInputHoursDiscovery().should('have.value', '')
     incidentDetailsPage.timeInputMinutesDiscovery().should('have.value', '')
     incidentDetailsPage.datePickerDiscovery().should('have.value', '')
@@ -234,7 +234,7 @@ context('Incident details (edit) - statement incomplete', () => {
     it('Should return validation error if the hour is cleared', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click({ force: true })
       incidentDetailsPage.timeInputHoursDiscovery().clear()
       incidentDetailsPage.submitButton().click()
       incidentDetailsPage
@@ -247,7 +247,7 @@ context('Incident details (edit) - statement incomplete', () => {
     it('Should submit successfully if "No" radio option selected and date/time filled correctly', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click({ force: true })
       incidentDetailsPage.timeInputHoursDiscovery().clear()
       incidentDetailsPage.timeInputHoursDiscovery().type('13')
       incidentDetailsPage.timeInputMinutesDiscovery().clear()
@@ -260,7 +260,7 @@ context('Incident details (edit) - statement incomplete', () => {
     it('Should return validation error if "No" radio option selected and date/time filled incorrectly', () => {
       cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click({ force: true })
       incidentDetailsPage.submitButton().click()
       incidentDetailsPage
         .errorSummary()
@@ -273,7 +273,7 @@ context('Incident details (edit) - statement incomplete', () => {
   it('Should return validation error if discovery time is before the incident time', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click({ force: true })
 
     const date = formatDateForDatePicker(new Date('10/10/2010').toISOString(), 'short')
     incidentDetailsPage.datePicker().clear().type(date)
@@ -294,7 +294,7 @@ context('Incident details (edit) - statement incomplete', () => {
   it('Should return validation error if "No" radio option selected and hour filled incorrectly', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click({ force: true })
     const date = formatDateForDatePicker(new Date().toISOString(), 'short')
     incidentDetailsPage.datePickerDiscovery().type(date)
     incidentDetailsPage.timeInputHoursDiscovery().clear()
@@ -312,7 +312,7 @@ context('Incident details (edit) - statement incomplete', () => {
   it('should return validation error if "No" radio option selected and minute filled incorrectly', () => {
     cy.visit(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
+    incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click({ force: true })
     const date = formatDateForDatePicker(new Date().toISOString(), 'short')
     incidentDetailsPage.datePickerDiscovery().type(date)
     incidentDetailsPage.timeInputHoursDiscovery().clear()

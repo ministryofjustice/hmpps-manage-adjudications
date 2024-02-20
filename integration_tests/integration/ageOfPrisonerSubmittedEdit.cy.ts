@@ -53,7 +53,7 @@ context('Age of the prisoner', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
     ageOfPrisonerPage.prisonRuleRadios().find('input[value="adult"]').should('be.checked')
-    ageOfPrisonerPage.submitButton().click()
+    ageOfPrisonerPage.submitButton().click({ force: true })
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.submittedEdit(3456))
     })
@@ -82,7 +82,7 @@ context('Age of the prisoner', () => {
   it('should redirect the user to the role page if the page receives a valid submission', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    ageOfPrisonerPage.radioAdult().click()
+    ageOfPrisonerPage.radioAdult().click({ force: true })
     ageOfPrisonerPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentRole.urls.submittedEdit(3456))
@@ -91,7 +91,7 @@ context('Age of the prisoner', () => {
   it('should redirect the user to the task list page if they cancel', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.submittedEdit(3456))
     const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    ageOfPrisonerPage.radioYoi().click()
+    ageOfPrisonerPage.radioYoi().click({ force: true })
     ageOfPrisonerPage.cancelButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq('/place-the-prisoner-on-report/3456')

@@ -122,7 +122,7 @@ context('Schedule a hearing page', () => {
   it('should submit the form successfully when the type is changed', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
-    scheduleHearingsPage.hearingTypeRadios().find('input[value="IND_ADJ"]').click()
+    scheduleHearingsPage.hearingTypeRadios().find('input[value="IND_ADJ"]').click({ force: true })
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1524494'))

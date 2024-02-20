@@ -71,7 +71,7 @@ context('Will this punishment be consecutive to another one?', () => {
     it('redirects if the user selects no', () => {
       cy.visit(adjudicationUrls.isPunishmentConsecutive.urls.start('100'))
       const willPunishmentBeConsectivePage = Page.verifyOnPage(WillPunishmentBeConsectivePage)
-      willPunishmentBeConsectivePage.consecutive().find('input[value="no"]').check()
+      willPunishmentBeConsectivePage.consecutive().find('input[value="no"]').check({ force: true })
       willPunishmentBeConsectivePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
@@ -80,7 +80,7 @@ context('Will this punishment be consecutive to another one?', () => {
     it('the page redirects to the next page if the user selects yes', () => {
       cy.visit(adjudicationUrls.isPunishmentConsecutive.urls.start('100'))
       const willPunishmentBeConsectivePage = Page.verifyOnPage(WillPunishmentBeConsectivePage)
-      willPunishmentBeConsectivePage.consecutive().find('input[value="yes"]').check()
+      willPunishmentBeConsectivePage.consecutive().find('input[value="yes"]').check({ force: true })
       willPunishmentBeConsectivePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100'))

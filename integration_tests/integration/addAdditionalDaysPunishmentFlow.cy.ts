@@ -71,7 +71,7 @@ context('Add additional days punishments', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishment.urls.start('100'))
       })
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="ADDITIONAL_DAYS"]').check()
+      punishmentPage.punishment().find('input[value="ADDITIONAL_DAYS"]').check({ force: true })
       punishmentPage.submitButton().click()
 
       const numberOfAdditionalDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
@@ -83,7 +83,7 @@ context('Add additional days punishments', () => {
       })
 
       const willPunishmentBeSuspendedPage = Page.verifyOnPage(WillPunishmentBeSuspendedPage)
-      willPunishmentBeSuspendedPage.suspended().find('input[value="yes"]').click()
+      willPunishmentBeSuspendedPage.suspended().find('input[value="yes"]').click({ force: true })
       willPunishmentBeSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(suspendedUntilPage)

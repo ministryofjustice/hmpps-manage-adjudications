@@ -46,7 +46,7 @@ context('Will this charge continue to prosecution?', () => {
     it('shows correct fields when No is selected', () => {
       cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
-      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check()
+      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check({ force: true })
       nextStepsPolicePage.nextStepRadioButtons().should('exist')
       nextStepsPolicePage.nextStepRadioButtons().find('input[value="schedule_hearing"]').should('not.be.checked')
       nextStepsPolicePage.nextStepRadioButtons().find('input[value="not_proceed"]').should('not.be.checked')
@@ -69,7 +69,7 @@ context('Will this charge continue to prosecution?', () => {
     it('should show error if no answer to next steps', () => {
       cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
-      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check()
+      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check({ force: true })
 
       nextStepsPolicePage.submitButton().click()
 
@@ -85,7 +85,7 @@ context('Will this charge continue to prosecution?', () => {
     it('redirects to hearing review when prosecution is Yes', () => {
       cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
-      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="yes"]').check()
+      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="yes"]').check({ force: true })
 
       nextStepsPolicePage.submitButton().click()
 
@@ -96,8 +96,8 @@ context('Will this charge continue to prosecution?', () => {
     it('redirects to schedule hearing when prosecution is No and schedule hearing', () => {
       cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
-      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check()
-      nextStepsPolicePage.nextStepRadioButtons().find('input[value="schedule_hearing"]').check()
+      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check({ force: true })
+      nextStepsPolicePage.nextStepRadioButtons().find('input[value="schedule_hearing"]').check({ force: true })
 
       nextStepsPolicePage.submitButton().click()
 
@@ -108,8 +108,8 @@ context('Will this charge continue to prosecution?', () => {
     it('redirects to not proceed reason when prosecution is No and Not proceed', () => {
       cy.visit(adjudicationUrls.nextStepsPolice.urls.start('100'))
       const nextStepsPolicePage = Page.verifyOnPage(NextStepsPolice)
-      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check()
-      nextStepsPolicePage.nextStepRadioButtons().find('input[value="not_proceed"]').check()
+      nextStepsPolicePage.prosecutionRadioButtons().find('input[value="no"]').check({ force: true })
+      nextStepsPolicePage.nextStepRadioButtons().find('input[value="not_proceed"]').check({ force: true })
 
       nextStepsPolicePage.submitButton().click()
 

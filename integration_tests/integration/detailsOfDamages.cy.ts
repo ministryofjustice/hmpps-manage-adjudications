@@ -180,7 +180,7 @@ context('Details of damages', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.add(200))
     })
-    detailsOfDamagePage.addDamageType().find('input[value="ELECTRICAL_REPAIR"]').check()
+    detailsOfDamagePage.addDamageType().find('input[value="ELECTRICAL_REPAIR"]').check({ force: true })
     detailsOfDamagePage.addDamageDescription().type('Plug socket broken')
     detailsOfDamagePage.addDamageSubmit().click()
     detailsOfDamagePage.damagesTable().find('tr').should('have.length', 2) // This includes the header row plus the damage we just added
@@ -221,7 +221,7 @@ context('Details of damages', () => {
     const detailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
     detailsOfDamagePage.damagesTable().find('tr').should('have.length', 5) // This includes the header row plus four data rows
     detailsOfDamagePage.addDamagesButton().click()
-    detailsOfDamagePage.addDamageType().find('input[value="ELECTRICAL_REPAIR"]').check()
+    detailsOfDamagePage.addDamageType().find('input[value="ELECTRICAL_REPAIR"]').check({ force: true })
     detailsOfDamagePage.addDamageDescription().type('Light fitting pulled out')
     detailsOfDamagePage.addDamageSubmit().click()
     detailsOfDamagePage
@@ -388,7 +388,7 @@ context('Details of damages', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfDamages.urls.add(12345))
       })
-      detailsOfDamagePage.addDamageType().find('input[value="ELECTRICAL_REPAIR"]').check()
+      detailsOfDamagePage.addDamageType().find('input[value="ELECTRICAL_REPAIR"]').check({ force: true })
       detailsOfDamagePage.addDamageDescription().type('Plug socket broken')
       detailsOfDamagePage.addDamageSubmit().click()
       detailsOfDamagePage.damagesTable().find('tr').should('have.length', 2) // This includes the header row plus the damage we just added

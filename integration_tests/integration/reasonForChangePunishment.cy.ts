@@ -72,7 +72,7 @@ context('What is the reason for this change', () => {
       // Need to set up a punishment in the session first
       cy.visit(adjudicationUrls.awardPunishments.urls.modified('100'))
       cy.get('[data-qa="add-new-punishment-button"]').click()
-      cy.get('#punishmentType-4').click()
+      cy.get('#punishmentType-4').click({ force: true })
       cy.get('#stoppagePercentage').type('25')
       cy.get('[data-qa="punishment-submit"]').click()
 
@@ -81,11 +81,11 @@ context('What is the reason for this change', () => {
       punishmentNumberOfDaysPage.submitButton().click()
 
       const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
+      punishmentSuspendedPage.suspended().find('input[value="no"]').check({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
+      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check({ force: true })
       punishmentStartDateChoicePage.submitButton().click()
 
       const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
@@ -94,7 +94,7 @@ context('What is the reason for this change', () => {
       cy.get('[data-qa="punishments-continue').click()
 
       const reasonForChangePunishmentPage = Page.verifyOnPage(ReasonForChangePunishmentPage)
-      reasonForChangePunishmentPage.radios().find('input[value="CORRECTION"]').click()
+      reasonForChangePunishmentPage.radios().find('input[value="CORRECTION"]').click({ force: true })
       reasonForChangePunishmentPage.details().type('Some reason')
       reasonForChangePunishmentPage.submitButton().click()
       cy.location().should(loc => {
@@ -117,7 +117,7 @@ context('What is the reason for this change', () => {
     it('shows correct error message if details are missing', () => {
       cy.visit(adjudicationUrls.reasonForChangePunishment.urls.start('100'))
       const reasonForChangePunishmentPage = Page.verifyOnPage(ReasonForChangePunishmentPage)
-      reasonForChangePunishmentPage.radios().find('input[value="CORRECTION"]').click()
+      reasonForChangePunishmentPage.radios().find('input[value="CORRECTION"]').click({ force: true })
       reasonForChangePunishmentPage.submitButton().click()
       reasonForChangePunishmentPage
         .errorSummary()

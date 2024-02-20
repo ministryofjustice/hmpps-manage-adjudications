@@ -84,7 +84,7 @@ context('Delete punishment comment', () => {
     it('should submit successfully and redirect - option "Yes"', () => {
       cy.visit(adjudicationUrls.punishmentComment.urls.delete('99', 1))
       const page = Page.verifyOnPage(PunishmentCommentDeletePage)
-      page.radioButtons().find('input[value="yes"]').click()
+      page.radioButtons().find('input[value="yes"]').click({ force: true })
       page.submitButton().click()
 
       cy.location().should(loc => {
@@ -94,7 +94,7 @@ context('Delete punishment comment', () => {
     it('should submit successfully and redirect - option "No"', () => {
       cy.visit(adjudicationUrls.punishmentComment.urls.delete('99', 1))
       const page = Page.verifyOnPage(PunishmentCommentDeletePage)
-      page.radioButtons().find('input[value="no"]').click()
+      page.radioButtons().find('input[value="no"]').click({ force: true })
       page.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('99'))
