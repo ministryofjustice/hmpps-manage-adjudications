@@ -1,29 +1,19 @@
 {% macro adjudicationHistoryForCurrentSentencePreviousAdjudication(adjudicationHistoryForCurrentSentenceData) %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
         <h2>Previous adjudication details</h2>
-        <div class='adjudication-pdf-section-sentence-details-four-items'>
-            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
-                <p class='govuk-!-margin-bottom-2'>Total previous findings of guilt on adjudication (on current sentence)</p>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-sixth-width'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
-                <p class='govuk-!-margin-bottom-2'>Number of previous findings of guilt at the current establishment</p>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-sixth-width'>
-            </div>
-        </div>
+				{# TODO PUT THIS IN TABLE #}
+        <p>Total previous findings of guilt on adjudication (on current sentence): {{ adjudicationHistoryForCurrentSentenceData.chargeProvedSentenceCount }}</p>
+        <p>Number of previous findings of guilt at the current establishment: {{ adjudicationHistoryForCurrentSentenceData.chargeProvedAtCurrentEstablishmentCount }}</p>
+        <p>Number of charges for same offence: {{ adjudicationHistoryForCurrentSentenceData.sameOffenceCount }}</p>
 
-        <div class='adjudication-pdf-section-sentence-details-four-items'>
-            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
-                <p class='govuk-!-margin-bottom-2'>Number of charges for same offences</p>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details-four-items__item'>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-sixth-width'>
-            </div>
-        </div>
+				{% if adjudicationHistoryForCurrentSentenceData.lastReportedOffence %}
+        <h2>Details of the last reported same offence</h2>
+				<p>Date: {{ adjudicationHistoryForCurrentSentenceData.lastReportedOffenceDiscoveryDate }}</p>
+				<p>Charge number: {{  adjudicationHistoryForCurrentSentenceData.lastReportedOffence.chargeNumber }}</p>
+				<p>Reporting officer's statement about the offence: {{ adjudicationHistoryForCurrentSentenceData.lastReportedOffence.statement }}</p>
+				<p>Punishment given: </p> 
+				{# TODO PUNISHMENTS #}
+
 
         <div class='adjudication-pdf-section-sentence-details'>
             <div class='adjudication-pdf-section-sentence-details__item'>

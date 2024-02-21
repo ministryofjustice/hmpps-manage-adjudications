@@ -13,10 +13,14 @@ export default class Dis5Pdf {
     const { pdfMargins, adjudicationsUrl } = config.apis.gotenberg
     const adjudicationDetails = await this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
 
+    const dis5Data = await this.reportedAdjudicationsService.getDis5Data(chargeNumber, user)
     const adjudicationHistoryForCurrentSentenceData = new AdjudicationHistoryForCurrentSentenceData(
       chargeNumber,
-      adjudicationDetails
+      adjudicationDetails,
+      dis5Data
     )
+
+    console.log(adjudicationHistoryForCurrentSentenceData)
 
     res.renderPdf(
       `pages/adjudicationHistoryForCurrentSentence`,
