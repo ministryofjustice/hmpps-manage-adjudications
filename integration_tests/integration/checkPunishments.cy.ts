@@ -186,7 +186,7 @@ context('Check punishments', () => {
       cy.get('[data-qa="add-new-punishment-button"]').click()
 
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
+      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check({ force: true })
       punishmentPage.submitButton().click()
 
       const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
@@ -194,7 +194,7 @@ context('Check punishments', () => {
       punishmentNumberOfDaysPage.submitButton().click()
 
       const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
+      punishmentSuspendedPage.suspended().find('input[value="yes"]').check({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
@@ -214,18 +214,18 @@ context('Check punishments', () => {
         })
       cy.get('[data-qa="add-new-punishment-button"]').click()
 
-      punishmentPage.punishment().find('input[value="EARNINGS"]').check()
+      punishmentPage.punishment().find('input[value="EARNINGS"]').check({ force: true })
       cy.get('#stoppagePercentage').type('25')
       punishmentPage.submitButton().click()
 
       punishmentNumberOfDaysPage.days().type('2')
       punishmentNumberOfDaysPage.submitButton().click()
 
-      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
+      punishmentSuspendedPage.suspended().find('input[value="no"]').check({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
+      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check({ force: true })
       punishmentStartDateChoicePage.submitButton().click()
 
       const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
@@ -261,7 +261,7 @@ context('Check punishments', () => {
     it('can submit edited punishments', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start('456'))
       cy.get('[data-qa="add-new-punishment-button"]').click()
-      cy.get('#punishmentType-3').click()
+      cy.get('#punishmentType-3').click({ force: true })
       cy.get('#stoppagePercentage').type('25')
       cy.get('[data-qa="punishment-submit"]').click()
 
@@ -270,11 +270,11 @@ context('Check punishments', () => {
       punishmentNumberOfDaysPage.submitButton().click()
 
       const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
+      punishmentSuspendedPage.suspended().find('input[value="no"]').check({ force: true })
       punishmentSuspendedPage.submitButton().click()
 
       const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="false"]').check()
+      punishmentStartDateChoicePage.radioButtons().find('input[value="false"]').check({ force: true })
       punishmentStartDateChoicePage.submitButton().click()
 
       const punishmentStartDatePage = Page.verifyOnPage(PunishmentStartDatePage)
@@ -285,10 +285,10 @@ context('Check punishments', () => {
       const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
       punishmentAutomaticEndDatesPage.submitButton().click()
 
-      cy.get('[data-qa="punishments-continue').click()
+      cy.get('[data-qa="punishments-continue').click({ force: true })
       const reasonForChangePunishmentPage: ReasonForChangePunishmentPage =
         Page.verifyOnPage(ReasonForChangePunishmentPage)
-      reasonForChangePunishmentPage.radios().find('input[value="APPEAL"]').click()
+      reasonForChangePunishmentPage.radios().find('input[value="APPEAL"]').click({ force: true })
       reasonForChangePunishmentPage.details().type('test text')
       reasonForChangePunishmentPage.submitButton().click()
       const checkPunishmentsPage: CheckPunishments = Page.verifyOnPage(CheckPunishments)

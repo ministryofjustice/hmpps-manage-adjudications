@@ -13,6 +13,7 @@ import users from './integration_tests/mockApis/users'
 import feComponent from './integration_tests/mockApis/feComponent'
 
 export default defineConfig({
+  projectId: 'gy9q8q',
   chromeWebSecurity: false,
   fixturesFolder: 'integration_tests/fixtures',
   screenshotsFolder: 'integration_tests/screenshots',

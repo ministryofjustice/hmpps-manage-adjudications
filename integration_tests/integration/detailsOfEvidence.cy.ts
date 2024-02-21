@@ -170,7 +170,7 @@ context('Details of evidence', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(201))
     })
-    detailsOfEvidencePage.addEvidenceType().find('input[value="PHOTO"]').check()
+    detailsOfEvidencePage.addEvidenceType().find('input[value="PHOTO"]').check({ force: true })
     detailsOfEvidencePage
       .addEvidenceDescription()
       .type('A photo of the prisoner stealing the keys from behind a prison officers back')
@@ -213,7 +213,7 @@ context('Details of evidence', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(201))
     })
-    detailsOfEvidencePage.addEvidenceType().find('input[value="PHOTO"]').check()
+    detailsOfEvidencePage.addEvidenceType().find('input[value="PHOTO"]').check({ force: true })
     detailsOfEvidencePage
       .addEvidenceDescription()
       .type('A photo of the prisoner stealing the keys from behind a prison officers back')
@@ -239,7 +239,7 @@ context('Details of evidence', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(201))
     })
-    detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check()
+    detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check({ force: true })
     detailsOfEvidencePage.addSealNumber().type('JO1234')
     detailsOfEvidencePage.addEvidenceDescription().type('The hook used to steal the keys')
     detailsOfEvidencePage.addEvidenceSubmit().click()
@@ -260,9 +260,9 @@ context('Details of evidence', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(200))
     })
-    detailsOfEvidencePage.addEvidenceType().find('input[value="BODY_WORN_CAMERA"]').check()
+    detailsOfEvidencePage.addEvidenceType().find('input[value="BODY_WORN_CAMERA"]').check({ force: true })
     detailsOfEvidencePage.addBWCNumber().type('BWC123')
-    detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check()
+    detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check({ force: true })
     detailsOfEvidencePage.addSealNumber().type('SealNo123')
     detailsOfEvidencePage.addEvidenceDescription().type('The hook used to steal the keys')
     detailsOfEvidencePage.addEvidenceSubmit().click()
@@ -280,9 +280,9 @@ context('Details of evidence', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(200))
     })
-    detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check()
+    detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check({ force: true })
     detailsOfEvidencePage.addSealNumber().type('SealNo123')
-    detailsOfEvidencePage.addEvidenceType().find('input[value="BODY_WORN_CAMERA"]').check()
+    detailsOfEvidencePage.addEvidenceType().find('input[value="BODY_WORN_CAMERA"]').check({ force: true })
     detailsOfEvidencePage.addBWCNumber().type('BWC123')
     detailsOfEvidencePage.addEvidenceDescription().type('A video of the prisoner stealing keys')
     detailsOfEvidencePage.addEvidenceSubmit().click()
@@ -315,7 +315,7 @@ context('Details of evidence', () => {
     cy.visit(adjudicationUrls.detailsOfEvidence.urls.start(202))
     const detailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
     detailsOfEvidencePage.addEvidenceButton().click()
-    detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check()
+    detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check({ force: true })
     detailsOfEvidencePage.addSealNumber().type('JO1234')
     detailsOfEvidencePage.addEvidenceDescription().type('A knife')
     detailsOfEvidencePage.addEvidenceSubmit().click()
@@ -436,7 +436,7 @@ context('Details of evidence', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(23456))
       })
-      detailsOfEvidencePage.addEvidenceType().find('input[value="PHOTO"]').check()
+      detailsOfEvidencePage.addEvidenceType().find('input[value="PHOTO"]').check({ force: true })
       detailsOfEvidencePage
         .addEvidenceDescription()
         .type('A photo of the prisoner stealing the keys from behind a prison officers back')
@@ -462,7 +462,7 @@ context('Details of evidence', () => {
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.detailsOfEvidence.urls.add(23456))
       })
-      detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check()
+      detailsOfEvidencePage.addEvidenceType().find('input[value="BAGGED_AND_TAGGED"]').check({ force: true })
       detailsOfEvidencePage.addSealNumber().type('JO1234')
       detailsOfEvidencePage.addEvidenceDescription().type('The hook used to steal the keys')
       detailsOfEvidencePage.addEvidenceSubmit().click()

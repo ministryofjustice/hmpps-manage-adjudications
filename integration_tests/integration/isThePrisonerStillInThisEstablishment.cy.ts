@@ -25,7 +25,7 @@ context('Is the prisoner still in this establishment?', () => {
       IsThePrisonerStillInThisEstablishmentPage
     )
     isThePrisonerStillInThisEstablishmentPage.checkOnPage()
-    isThePrisonerStillInThisEstablishmentPage.radioYes().click()
+    isThePrisonerStillInThisEstablishmentPage.radioYes().click({ force: true })
     isThePrisonerStillInThisEstablishmentPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.searchForPrisoner.root)
@@ -37,7 +37,7 @@ context('Is the prisoner still in this establishment?', () => {
       IsThePrisonerStillInThisEstablishmentPage
     )
     isThePrisonerStillInThisEstablishmentPage.checkOnPage()
-    isThePrisonerStillInThisEstablishmentPage.radioNo().click()
+    isThePrisonerStillInThisEstablishmentPage.radioNo().click({ force: true })
     isThePrisonerStillInThisEstablishmentPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.searchForPrisoner.root)

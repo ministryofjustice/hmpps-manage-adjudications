@@ -132,7 +132,7 @@ context('Incident role', () => {
   it('should submit form successfully if all data entered', () => {
     cy.visit(adjudicationUrls.incidentRole.urls.start(34))
     const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
-    incidentRolePage.radioButtons().find('input[value="attempted"]').check()
+    incidentRolePage.radioButtons().find('input[value="attempted"]').check({ force: true })
     incidentRolePage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'attempted', '1'))
@@ -141,7 +141,7 @@ context('Incident role', () => {
   it('should submit form successfully if all data entered and go to associated prisoner page', () => {
     cy.visit(adjudicationUrls.incidentRole.urls.start(34))
     const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
-    incidentRolePage.radioButtons().find('input[value="assisted"]').check()
+    incidentRolePage.radioButtons().find('input[value="assisted"]').check({ force: true })
     incidentRolePage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
@@ -173,7 +173,7 @@ context('Incident role', () => {
     it('should redirect back to incident role if an error occurs whilst calling the API', () => {
       cy.visit(adjudicationUrls.incidentRole.urls.start(34))
       const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
-      incidentRolePage.radioButtons().find('input[value="attempted"]').check()
+      incidentRolePage.radioButtons().find('input[value="attempted"]').check({ force: true })
       incidentRolePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.not.eq(adjudicationUrls.offenceCodeSelection.urls.question(34, 'attempted', '1'))

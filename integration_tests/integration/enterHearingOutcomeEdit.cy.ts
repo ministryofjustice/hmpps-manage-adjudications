@@ -163,7 +163,7 @@ context('Enter hearing outcome', () => {
     it('goes to correct endpoint if the radio button is changed, query values updated', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
-      enterHearingOutcomePage.radioButtons().find('input[value="REFER_INAD"]').check()
+      enterHearingOutcomePage.radioButtons().find('input[value="REFER_INAD"]').check({ force: true })
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.edit('100'))
@@ -185,7 +185,7 @@ context('Enter hearing outcome', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.edit('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.inAdName().clear()
-      enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
+      enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check({ force: true })
       enterHearingOutcomePage.submitButton().click()
       enterHearingOutcomePage
         .errorSummary()
@@ -198,7 +198,7 @@ context('Enter hearing outcome', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.deleteButton().click()
-      enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check()
+      enterHearingOutcomePage.radioButtons().find('input[value="ADJOURN"]').check({ force: true })
       enterHearingOutcomePage.submitButton().click()
       enterHearingOutcomePage
         .errorSummary()

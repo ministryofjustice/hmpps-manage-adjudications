@@ -142,7 +142,7 @@ context('Incident assist submitted edit', () => {
     cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
     const associatedPrisonerPage: AssociatedPrisoner = Page.verifyOnPage(AssociatedPrisoner)
     associatedPrisonerPage.associatedPrisonerDeleteButton().click()
-    cy.get('[data-qa="radio-buttons"]').find('input[value="yes"]').check()
+    cy.get('[data-qa="radio-buttons"]').find('input[value="yes"]').check({ force: true })
     cy.get('[data-qa="delete-person-submit"]').click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
@@ -155,7 +155,7 @@ context('Incident assist submitted edit', () => {
   it('should show error summary if associated prisoner location changed to internal', () => {
     cy.visit(adjudicationUrls.incidentAssociate.urls.start(35, 'assisted'))
     const associatedPrisonerPage: AssociatedPrisoner = Page.verifyOnPage(AssociatedPrisoner)
-    associatedPrisonerPage.radioButtons().find('input[value="internal"]').check()
+    associatedPrisonerPage.radioButtons().find('input[value="internal"]').check({ force: true })
     associatedPrisonerPage.submitButton().click()
     associatedPrisonerPage
       .errorSummary()
@@ -168,7 +168,7 @@ context('Incident assist submitted edit', () => {
   it('should show error summary if associated prisoner location changed to external', () => {
     cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
     const associatedPrisonerPage: AssociatedPrisoner = Page.verifyOnPage(AssociatedPrisoner)
-    associatedPrisonerPage.radioButtons().find('input[value="external"]').check()
+    associatedPrisonerPage.radioButtons().find('input[value="external"]').check({ force: true })
     associatedPrisonerPage.submitButton().click()
     associatedPrisonerPage
       .errorSummary()
@@ -182,7 +182,7 @@ context('Incident assist submitted edit', () => {
   it('should save correctly when switching from internal to external ', () => {
     cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
     const associatedPrisonerPage: AssociatedPrisoner = Page.verifyOnPage(AssociatedPrisoner)
-    associatedPrisonerPage.radioButtons().find('input[value="external"]').check()
+    associatedPrisonerPage.radioButtons().find('input[value="external"]').check({ force: true })
     associatedPrisonerPage.externalNameInput().type('Bla Blah')
     associatedPrisonerPage.externalNumberInput().type('T3356FU')
 
@@ -196,7 +196,7 @@ context('Incident assist submitted edit', () => {
   it('should save correctly when switching from external to internal ', () => {
     cy.visit(adjudicationUrls.incidentAssociate.urls.start(35, 'assisted'))
     const associatedPrisonerPage: AssociatedPrisoner = Page.verifyOnPage(AssociatedPrisoner)
-    associatedPrisonerPage.radioButtons().find('input[value="internal"]').check()
+    associatedPrisonerPage.radioButtons().find('input[value="internal"]').check({ force: true })
     associatedPrisonerPage.conditionalInputInternal().type('T3356FU')
     associatedPrisonerPage.searchButton().click()
     cy.get('[data-qa="select-prisoner-link"]').click()

@@ -76,7 +76,7 @@ context('Incident Statement', () => {
     it('should show validation message if there is no statement given', () => {
       cy.visit(adjudicationUrls.incidentStatement.urls.start(3456))
       const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
-      incidentStatementPage.radioYes().check()
+      incidentStatementPage.radioYes().check({ force: true })
       incidentStatementPage.submitButton().click()
       incidentStatementPage
         .errorSummary()
@@ -101,7 +101,7 @@ context('Incident Statement', () => {
       cy.visit(adjudicationUrls.incidentStatement.urls.start(3456))
       const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
       incidentStatementPage.statementTextArea().type('John was badly behaved today.')
-      incidentStatementPage.radioYes().check()
+      incidentStatementPage.radioYes().check({ force: true })
       incidentStatementPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.checkYourAnswers.urls.start(3456))
@@ -111,7 +111,7 @@ context('Incident Statement', () => {
       cy.visit(adjudicationUrls.incidentStatement.urls.start(3456))
       const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
       incidentStatementPage.statementTextArea().type('This is my statement, it is not finished.')
-      incidentStatementPage.radioNo().check()
+      incidentStatementPage.radioNo().check({ force: true })
       incidentStatementPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.taskList.urls.start(3456))
@@ -163,7 +163,7 @@ context('Incident Statement', () => {
     it('should show validation message if there is no statement given', () => {
       cy.visit(adjudicationUrls.incidentStatement.urls.start(3456))
       const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
-      incidentStatementPage.radioYes().check()
+      incidentStatementPage.radioYes().check({ force: true })
       incidentStatementPage.submitButton().click()
       incidentStatementPage
         .errorSummary()
@@ -188,7 +188,7 @@ context('Incident Statement', () => {
       cy.visit(adjudicationUrls.incidentStatement.urls.start(3456))
       const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
       incidentStatementPage.statementTextArea().type('John was badly behaved today.')
-      incidentStatementPage.radioYes().check()
+      incidentStatementPage.radioYes().check({ force: true })
       incidentStatementPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.taskList.urls.start(3456))
@@ -198,7 +198,7 @@ context('Incident Statement', () => {
       cy.visit(adjudicationUrls.incidentStatement.urls.start(3456))
       const incidentStatementPage: IncidentStatement = Page.verifyOnPage(IncidentStatement)
       incidentStatementPage.statementTextArea().type('This is my statement, it is not finished.')
-      incidentStatementPage.radioNo().check()
+      incidentStatementPage.radioNo().check({ force: true })
       incidentStatementPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.taskList.urls.start(3456))

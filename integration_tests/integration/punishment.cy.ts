@@ -97,7 +97,7 @@ context('Add a new punishment', () => {
     it('should error when no privilege type selected', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check({ force: true })
 
       punishmentPage.submitButton().click()
 
@@ -111,8 +111,8 @@ context('Add a new punishment', () => {
     it('should error when no other privilege selected', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="OTHER"]').check()
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check({ force: true })
+      punishmentPage.privilege().find('input[value="OTHER"]').check({ force: true })
 
       punishmentPage.submitButton().click()
 
@@ -126,7 +126,7 @@ context('Add a new punishment', () => {
     it('should error when no  stoppage percentage selected', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="EARNINGS"]').check()
+      punishmentPage.punishment().find('input[value="EARNINGS"]').check({ force: true })
 
       punishmentPage.submitButton().click()
 
@@ -143,7 +143,7 @@ context('Add a new punishment', () => {
     it('should submit successfully and redirect for type CONFINEMENT', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
+      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check({ force: true })
 
       punishmentPage.submitButton().click()
 
@@ -155,7 +155,7 @@ context('Add a new punishment', () => {
     it('should submit successfully and redirect for type EARNINGS', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="EARNINGS"]').check()
+      punishmentPage.punishment().find('input[value="EARNINGS"]').check({ force: true })
       punishmentPage.stoppagePercentage().type('10')
 
       punishmentPage.submitButton().click()
@@ -169,8 +169,8 @@ context('Add a new punishment', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
-      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="CANTEEN"]').check()
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check({ force: true })
+      punishmentPage.privilege().find('input[value="CANTEEN"]').check({ force: true })
 
       punishmentPage.submitButton().click()
 
@@ -183,8 +183,8 @@ context('Add a new punishment', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
-      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="OTHER"]').check()
+      punishmentPage.punishment().find('input[value="PRIVILEGE"]').check({ force: true })
+      punishmentPage.privilege().find('input[value="OTHER"]').check({ force: true })
       punishmentPage.otherPrivilege().type('nintendo switch')
 
       punishmentPage.submitButton().click()

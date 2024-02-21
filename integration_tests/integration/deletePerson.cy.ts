@@ -112,14 +112,14 @@ context('Delete person - full journey', () => {
   it('should redirect to redirectUrl with correct query attached - yes selected', () => {
     // start on previous page to place redirectUrl on to session
     cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
-    cy.get('button[name="deleteUser"]').click()
+    cy.get('button[name="deleteUser"]').click({ force: true })
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(`${adjudicationUrls.deletePerson.root}`)
       expect(loc.search).to.eq('?associatedPersonId=G6415GD')
     })
     const DeletePersonPage: DeletePerson = Page.verifyOnPage(DeletePerson)
 
-    DeletePersonPage.radioButtons().find('input[value="yes"]').check()
+    DeletePersonPage.radioButtons().find('input[value="yes"]').check({ force: true })
     DeletePersonPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
@@ -129,14 +129,14 @@ context('Delete person - full journey', () => {
   it('should redirect to redirectUrl with correct query attached - no selected', () => {
     // start on previous page to place redirectUrl on to session
     cy.visit(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
-    cy.get('button[name="deleteUser"]').click()
+    cy.get('button[name="deleteUser"]').click({ force: true })
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(`${adjudicationUrls.deletePerson.root}`)
       expect(loc.search).to.eq('?associatedPersonId=G6415GD')
     })
     const DeletePersonPage: DeletePerson = Page.verifyOnPage(DeletePerson)
 
-    DeletePersonPage.radioButtons().find('input[value="no"]').check()
+    DeletePersonPage.radioButtons().find('input[value="no"]').check({ force: true })
     DeletePersonPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentAssociate.urls.start(34, 'assisted'))
