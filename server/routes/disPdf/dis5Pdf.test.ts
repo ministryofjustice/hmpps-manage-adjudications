@@ -6,10 +6,11 @@ import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import TestData from '../testutils/testData'
 import Dis5Pdf from './dis5Pdf'
 import PrisonerSearchService from '../../services/prisonerSearchService'
+import { PunishmentType } from '../../data/PunishmentResult'
+import { Dis5PrintSupport } from '../../data/manageAdjudicationsSystemTokensClient'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
-jest.mock('../../services/userService.ts')
-jest.mock('../../services/placeOnReportService.ts')
+jest.mock('../../services/prisonerSearchService.ts')
 
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
@@ -47,8 +48,51 @@ const confirmedOnReportData: ConfirmedOnReportData = {
   prisonName: 'MDI',
 }
 
+const prisonerSearchDis5Data = {
+  currentIncentiveLevel: 'Basic',
+  dateTimeOfLevel: '2020-09-01',
+  nextReviewDate: '2025-09-01',
+}
+
+const dis5Data = {
+  chargeNumber: 'MDI-000060',
+  dateOfIncident: '2023-02-10',
+  dateOfDiscovery: '2023-02-10',
+  previousCount: 2,
+  previousAtCurrentEstablishmentCount: 2,
+  sameOffenceCount: 0,
+  chargesWithSuspendedPunishments: [
+    {
+      dateOfIncident: '2023-01-01',
+      dateOfDiscovery: '2023-01-01',
+      chargeNumber: 'MDI-000010',
+      suspendedPunishments: [
+        {
+          type: PunishmentType.EXCLUSION_WORK,
+          schedule: {
+            days: 10,
+            suspendedUntil: '2023-01-30',
+          },
+        },
+      ],
+    },
+  ],
+  existingPunishments: [
+    {
+      type: PunishmentType.EXCLUSION_WORK,
+      schedule: {
+        days: 10,
+        startDate: '2023-01-05',
+        endDate: '2023-01-15',
+      },
+    },
+  ],
+}
+
 beforeEach(() => {
   reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(confirmedOnReportData)
+  prisonerSearchService.getPrisonerDetailsForDis5.mockResolvedValue(prisonerSearchDis5Data)
+  reportedAdjudicationsService.getDis5Data.mockResolvedValue(dis5Data as unknown as Dis5PrintSupport)
 })
 
 afterEach(() => {
@@ -76,9 +120,43 @@ describe('GET /dis5', () => {
         adjudicationHistoryForCurrentSentenceData: {
           chargeNumber: '1524493',
           prisonerDisplayName: 'Smith, John',
+          prisonerFriendlyName: 'John Smith',
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
-          incidentDate: 'Monday, 21 December 2020',
+          chargeProvedAtCurrentEstablishmentCount: 2,
+          chargeProvedSentenceCount: 2,
+          sameOffenceCount: 0,
+          lastReportedOffence: {},
+          discoveryDate: 'Friday, 10 February 2023',
+          currentIncentiveLevel: 'Basic',
+          incentiveNextReviewDate: '2025-09-01',
+          currentIncentiveLevelDateTime: '2020-09-01',
+          chargesWithSuspendedPunishments: [
+            {
+              chargeNumber: 'MDI-000010',
+              dateOfDiscovery: '2023-01-01',
+              dateOfIncident: '2023-01-01',
+              suspendedPunishments: [
+                {
+                  schedule: {
+                    days: 10,
+                    suspendedUntil: '2023-01-30',
+                  },
+                  type: PunishmentType.EXCLUSION_WORK,
+                },
+              ],
+            },
+          ],
+          existingPunishments: [
+            {
+              schedule: {
+                days: 10,
+                endDate: '2023-01-15',
+                startDate: '2023-01-05',
+              },
+              type: PunishmentType.EXCLUSION_WORK,
+            },
+          ],
         },
       },
       'pages/adjudicationHistoryForCurrentSentenceHeader',
