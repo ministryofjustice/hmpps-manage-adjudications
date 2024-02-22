@@ -59,6 +59,13 @@ export type LastReportedOffence = {
   punishments: PunishmentData[]
 }
 
+export type ChargesWithSuspendedPunishments = {
+  dateOfIncident: string
+  dateOfDiscovery: string
+  chargeNumber: string
+  suspendedPunishments: SuspendedPunishment[]
+}
+
 export type Dis5PrintSupport = {
   chargeNumber: string
   dateOfIncident: string
@@ -66,8 +73,9 @@ export type Dis5PrintSupport = {
   previousCount: number
   previousAtCurrentEstablishmentCount: number
   sameOffenceCount: number
-  lastReportedOffence: LastReportedOffence
-  suspendedPunishments: SuspendedPunishment[]
+  lastReportedOffence?: LastReportedOffence
+  chargesWithSuspendedPunishments: ChargesWithSuspendedPunishments[]
+  existingPunishments: PunishmentData[]
 }
 
 export default class ManageAdjudicationsSystemTokensClient {

@@ -1,5 +1,15 @@
 import { Expose } from 'class-transformer'
 
+type CurrentIncentiveLevel = {
+  code: string
+  description: string
+}
+type CurrentIncentive = {
+  level: CurrentIncentiveLevel
+  dateTime: string
+  nextReviewDate: string
+}
+
 export default class PrisonerSearchResult {
   @Expose()
   prisonerNumber: string
@@ -21,4 +31,7 @@ export default class PrisonerSearchResult {
 
   @Expose()
   gender: string
+
+  @Expose()
+  currentIncentive?: CurrentIncentive
 }

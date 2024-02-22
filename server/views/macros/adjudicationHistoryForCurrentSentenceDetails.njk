@@ -1,146 +1,165 @@
 {% macro adjudicationHistoryForCurrentSentenceDetails(adjudicationHistoryForCurrentSentenceData) %}
-    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
-        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+	<div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+		<hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
 
-        <div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
-            <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name</p>
-                <p class='govuk-!-margin-bottom-0'
+		<div class='adjudication-pdf-section-prisoner govuk-!-width-full'>
+			<div class='adjudication-pdf-section-prisoner__item'>
+				<p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Name</p>
+				<p class='govuk-!-margin-bottom-0'
                    data-qa='notice-of-being-placed-on-report-prisoner-display-name'>
-                    {{ adjudicationHistoryForCurrentSentenceData.prisonerDisplayName }}
-                </p>
-            </div>
-            <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
-                <p class='govuk-!-margin-bottom-0'
+					{{ adjudicationHistoryForCurrentSentenceData.prisonerDisplayName }}
+				</p>
+			</div>
+			<div class='adjudication-pdf-section-prisoner__item'>
+				<p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Prison number</p>
+				<p class='govuk-!-margin-bottom-0'
                    data-qa='notice-of-being-placed-on-report-prisoner-number'>
-                    {{ adjudicationHistoryForCurrentSentenceData.prisonerNumber }}
-                </p>
-            </div>
-            <div class='adjudication-pdf-section-prisoner__item'>
-                <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Location</p>
-                <p class='govuk-!-margin-bottom-0'
+					{{ adjudicationHistoryForCurrentSentenceData.prisonerNumber }}
+				</p>
+			</div>
+			<div class='adjudication-pdf-section-prisoner__item'>
+				<p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Location</p>
+				<p class='govuk-!-margin-bottom-0'
                    data-qa='notice-of-being-placed-on-report-prisoner-location-description'>
-                    {{ adjudicationHistoryForCurrentSentenceData.prisonerLocationDescription }}
-                </p>
-            </div>
-        </div>
+					{{ adjudicationHistoryForCurrentSentenceData.prisonerLocationDescription }}
+				</p>
+			</div>
+		</div>
 
-        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+		<hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
 
-        <h2>Date of alleged offence</h2>
-        <p class='govuk-!-margin-bottom-0'
+		<h2>Date of alleged offence</h2>
+		<p class='govuk-!-margin-bottom-0'
            data-qa='notice-of-being-placed-on-report-incident-date'>
-            {{ adjudicationHistoryForCurrentSentenceData.incidentDate }}
-        </p>
+			{{ adjudicationHistoryForCurrentSentenceData.discoveryDate }}
+		</p>
 
-        <h2>Details of prisoner</h2>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Sentence</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Remanded on (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-        </div>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Sentenced on (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Automatic Release Date (ARD) (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-        </div>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Non Parole Date (NPD) (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Conditional Release Date (CRD) (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-        </div>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Does this prisoner have an open Assessment, Care in Custody and Teamwork (ACCT), or an ACCT that has been closed in the last 3 months?</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> Yes</span>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> No</span>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Does this prisoner have a CSIP (Challenge Support Intervention Plan) alert?</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> Yes</span>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> No</span>
-            </div>
-        </div>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Is the prisoner subject to any additional criminal harassment court orders or civil court orders restricting their contacts or behaviour?</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> Yes</span>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> No</span>
-            </div>
-        </div>
-        <div class='break-inside-avoid govuk-!-margin-top-1'>
-            <p>If Yes, add details below</p>
-            <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
-        </div>
+		<h2>Details of prisoner</h2>
+		<div class='adjudication-pdf-section-sentence-details'>
+			<div class='adjudication-pdf-section-sentence-details__item'>
+				<p class='govuk-!-margin-bottom-1'>Sentence</p>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
+			</div>
+			<div class='adjudication-pdf-section-sentence-details__item'>
+				<p class='govuk-!-margin-bottom-1'>Remanded on (DD/MM/YYYY)</p>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+			</div>
+		</div>
+		<div class='adjudication-pdf-section-sentence-details'>
+			<div class='adjudication-pdf-section-sentence-details__item'>
+				<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Sentenced on (DD/MM/YYYY)</p>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+			</div>
+			<div class='adjudication-pdf-section-sentence-details__item'>
+				<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Automatic Release Date (ARD) (DD/MM/YYYY)</p>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+			</div>
+		</div>
+		<div class='adjudication-pdf-section-sentence-details'>
+			<div class='adjudication-pdf-section-sentence-details__item'>
+				<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Non Parole Date (NPD) (DD/MM/YYYY)</p>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+			</div>
+			<div class='adjudication-pdf-section-sentence-details__item'>
+				<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Conditional Release Date (CRD) (DD/MM/YYYY)</p>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+				<span>
+					<strong> / </strong>
+				</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+			</div>
+		</div>
+		<div class='adjudication-pdf-section-sentence-details'>
+			<div class='adjudication-pdf-section-sentence-details__item'>
+				<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Does this prisoner have an open Assessment, Care in Custody and Teamwork (ACCT), or an ACCT that has been closed in the last 3 months?</p>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+				<span> Yes</span>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+				<span> No</span>
+			</div>
+			<div class='adjudication-pdf-section-sentence-details__item'>
+				<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Does this prisoner have a CSIP (Challenge Support Intervention Plan) alert?</p>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+				<span> Yes</span>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+				<span> No</span>
+			</div>
+		</div>
+		<div class='adjudication-pdf-section-sentence-details'>
+			<div class='adjudication-pdf-section-sentence-details__item'>
+				<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Is the prisoner subject to any additional criminal harassment court orders or civil court orders restricting their contacts or behaviour?</p>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+				<span> Yes</span>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+				<span> No</span>
+			</div>
+		</div>
+		<div class='break-inside-avoid govuk-!-margin-top-1'>
+			<p>If Yes, add details below</p>
+			<input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
+		</div>
 
-        <h2>Incentive level</h2>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Incentive level</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1'>Date prisoner put on that level (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-        </div>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Date of next incentive level review (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Was the prisoner placed on their current incentive level for the same reason they received this adjudication?</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> Yes</span>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> No</span>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> Don't know</span>
-            </div>
-        </div>
-
-        <div class="break-inside-avoid">
-        <h2>Employment and pay</h2>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Employed in/as</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Weekly pay of</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-            </div>
-        </div>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Spends</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Private cash</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-            </div>
-        </div>
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Savings account</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-            </div>
-        </div>
-        </div>
-    </div>
+		<div class='break-inside-avoid govuk-!-margin-top-1'>
+			<h2>Incentive level</h2>
+			<p class="govuk-body">Incentive level: {{ adjudicationHistoryForCurrentSentenceData.currentIncentiveLevel }}</p>
+			<p class="govuk-body">Date prisoner was put on that level: {{ adjudicationHistoryForCurrentSentenceData.currentIncentiveLevelDateTime | formatTimestampTo('D MMMM YYYY') }}</p>
+			<p class="govuk-body">Date of next incentive level review: {{ adjudicationHistoryForCurrentSentenceData.incentiveNextReviewDate | formatTimestampTo('D MMMM YYYY') }}</p>
+		</div>
+		
+		<div class="break-inside-avoid">
+			<h2>Employment and pay</h2>
+			<div class='adjudication-pdf-section-sentence-details'>
+				<div class='adjudication-pdf-section-sentence-details__item'>
+					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Employed in/as</p>
+					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
+				</div>
+				<div class='adjudication-pdf-section-sentence-details__item'>
+					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Weekly pay of</p>
+					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
+				</div>
+			</div>
+			<div class='adjudication-pdf-section-sentence-details'>
+				<div class='adjudication-pdf-section-sentence-details__item'>
+					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Spends</p>
+					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
+				</div>
+				<div class='adjudication-pdf-section-sentence-details__item'>
+					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Private cash</p>
+					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
+				</div>
+			</div>
+			<div class='adjudication-pdf-section-sentence-details'>
+				<div class='adjudication-pdf-section-sentence-details__item'>
+					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Savings account</p>
+					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endmacro %}

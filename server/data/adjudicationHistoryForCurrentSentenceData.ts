@@ -1,18 +1,23 @@
 import { ConfirmedOnReportData } from './ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
-import { Dis5PrintSupport, LastReportedOffence } from './manageAdjudicationsSystemTokensClient'
-import { SuspendedPunishment } from './PunishmentResult'
+import {
+  ChargesWithSuspendedPunishments,
+  Dis5PrintSupport,
+  LastReportedOffence,
+} from './manageAdjudicationsSystemTokensClient'
+import { PrisonerSearchDetailsDis5 } from '../services/prisonerSearchService'
+import { PunishmentData } from './PunishmentResult'
 
 export default class adjudicationHistoryForCurrentSentenceData {
   chargeNumber: string
 
   prisonerDisplayName: string
 
+  prisonerFriendlyName: string
+
   prisonerNumber: string
 
   prisonerLocationDescription: string
-
-  incidentDate: string
 
   discoveryDate: string
 
@@ -24,29 +29,43 @@ export default class adjudicationHistoryForCurrentSentenceData {
 
   lastReportedOffence: LastReportedOffence | Record<string, never>
 
-  lastReportedOffenceDiscoveryDate: string
+  chargesWithSuspendedPunishments: ChargesWithSuspendedPunishments[]
 
-  suspendedPunishments: SuspendedPunishment[]
+  currentIncentiveLevel: string
 
-  constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData, dis5Data: Dis5PrintSupport) {
+  currentIncentiveLevelDateTime: string
+
+  incentiveNextReviewDate: string
+
+  existingPunishments: PunishmentData[]
+
+  constructor(
+    chargeNumber: string,
+    confirmedOnReportData: ConfirmedOnReportData,
+    dis5Data: Dis5PrintSupport,
+    prisonerSearchDis5Data: PrisonerSearchDetailsDis5
+  ) {
     this.chargeNumber = chargeNumber
 
     this.prisonerDisplayName = convertToTitleCase(
       `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
     )
+    this.prisonerFriendlyName = convertToTitleCase(
+      `${confirmedOnReportData.prisonerFirstName} ${confirmedOnReportData.prisonerLastName}`
+    )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${
       confirmedOnReportData.prisonerLivingUnitName || 'Unknown'
     }`
-    this.incidentDate = formatTimestampTo(dis5Data.dateOfIncident, 'dddd, D MMMM YYYY')
+    this.discoveryDate = formatTimestampTo(dis5Data.dateOfDiscovery, 'dddd, D MMMM YYYY')
     this.chargeProvedSentenceCount = dis5Data.previousCount
     this.chargeProvedAtCurrentEstablishmentCount = dis5Data.previousAtCurrentEstablishmentCount
     this.sameOffenceCount = dis5Data.sameOffenceCount
     this.lastReportedOffence = dis5Data.lastReportedOffence || {}
-    this.lastReportedOffenceDiscoveryDate = formatTimestampTo(
-      dis5Data.lastReportedOffence.dateOfDiscovery,
-      'dddd, D MMMM YYYY'
-    )
-    this.suspendedPunishments = dis5Data.suspendedPunishments
+    this.chargesWithSuspendedPunishments = dis5Data.chargesWithSuspendedPunishments
+    this.existingPunishments = dis5Data.existingPunishments
+    this.currentIncentiveLevel = prisonerSearchDis5Data.currentIncentiveLevel
+    this.currentIncentiveLevelDateTime = prisonerSearchDis5Data.dateTimeOfLevel
+    this.incentiveNextReviewDate = prisonerSearchDis5Data.nextReviewDate
   }
 }

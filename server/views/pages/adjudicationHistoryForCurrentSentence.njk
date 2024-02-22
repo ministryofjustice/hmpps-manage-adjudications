@@ -1,13 +1,13 @@
 {% extends "../partials/pdfLayout.njk" %}
 {% from "../macros/adjudicationHistoryForCurrentSentenceDetails.njk" import adjudicationHistoryForCurrentSentenceDetails %}
-{% from "../macros/adjudicationHistoryForCurrentSentencePreviousAdjudication.njk" import adjudicationHistoryForCurrentSentencePreviousAdjudication %}
+ {% from "../macros/adjudicationHistoryForCurrentSentencePreviousAdjudication.njk" import adjudicationHistoryForCurrentSentencePreviousAdjudication %}
 {% from "../macros/adjudicationHistoryForCurrentSentenceExistingPunishments.njk" import adjudicationHistoryForCurrentSentenceExistingPunishments %}
 {% from "../macros/adjudicationHistoryForCurrentSentenceSuspendedPunishments.njk" import adjudicationHistoryForCurrentSentenceSuspendedPunishments %}
 {% block content %}
     <div class='adjudication-pdf'>
         {{ adjudicationHistoryForCurrentSentenceDetails(adjudicationHistoryForCurrentSentenceData) }}
         {{ adjudicationHistoryForCurrentSentencePreviousAdjudication(adjudicationHistoryForCurrentSentenceData) }}
+        {{ adjudicationHistoryForCurrentSentenceSuspendedPunishments(adjudicationHistoryForCurrentSentenceData) }} 
         {{ adjudicationHistoryForCurrentSentenceExistingPunishments(adjudicationHistoryForCurrentSentenceData) }}
-        {{ adjudicationHistoryForCurrentSentenceSuspendedPunishments(adjudicationHistoryForCurrentSentenceData) }}
     </div>
 {% endblock %}

@@ -1,48 +1,35 @@
 {% macro adjudicationHistoryForCurrentSentenceSuspendedPunishments(adjudicationHistoryForCurrentSentenceData) %}
-    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
-        <div class="break-inside-avoid">
-        <h2>Suspended punishments (if applicable)</h2>
-        <div class='adjudication-pdf-section-sentence-details-three-items'>
-            <div class='adjudication-pdf-section-sentence-details-three-items__item'>
-                <p class='govuk-!-margin-bottom-1'>List any outstanding suspended punishment(s).</p>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details-three-items__item'>
-                <p class='govuk-!-margin-bottom-1'>Number of suspended punishments</p>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details-three-items__item'>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
-            </div>
-        </div>
-        </div>
+  <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+    <div class="break-inside-avoid">
+    <h2>Suspended punishments</h2>
+    {% if adjudicationHistoryForCurrentSentenceData.chargesWithSuspendedPunishments | length %}
+      <p class="govuk-body">Charges with current suspended punishments: {{ adjudicationHistoryForCurrentSentenceData.chargesWithSuspendedPunishments | length }}</p>
 
-        {% for punishment in range(1, 5) %}
-            <div class='break-inside-avoid'>
-                <h2>Suspended punishment {{ loop.index }}</h2>
-                <div class='adjudication-pdf-section-sentence-details'>
-                    <div class='adjudication-pdf-section-sentence-details__item'>
-                        <p class='govuk-!-margin-bottom-1'>Charge number</p>
-                        <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-                    </div>
-                    <div class='adjudication-pdf-section-sentence-details__item'>
-                        <p class='govuk-!-margin-bottom-1'>Date (DD/MM/YYYY)</p>
-                        <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-                        <span>
-                            <strong> / </strong>
-                        </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-                        <span>
-                            <strong> / </strong>
-                        </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-                    </div>
-                </div>
-                <div class='break-inside-avoid'>
-                    <p class='govuk-!-margin-top-3'>Offence</p>
-                    <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-entry'>
-                </div>
-                <div class='break-inside-avoid'>
-                    <p class='govuk-!-margin-top-3'>Punishment</p>
-                    <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-entry'>
-                </div>
-            </div>
+      {% for charge in adjudicationHistoryForCurrentSentenceData.chargesWithSuspendedPunishments %}
+        <div class="break-inside-avoid">
+          <h3 class="govuk-!-margin-top-8">Suspended punishment for charge {{ charge.chargeNumber }}</h3>
+          <p class="govuk-body">Date suspended punishment given: {{ charge.dateOfDiscovery | formatTimestampTo('D MMMM YYYY') }}.</p>
+          <p class="govuk-body">Offence: {{ charge.offenceDetails.offenceRule.paragraphDescription }}.</p>
+          <p class="govuk-body">Punishment given:</p>
+          <table>
+            <tr>
+              <th>Punishment</th>
+              <th>Suspended to</th>
+            </tr>
+            {% for punishment in charge.suspendedPunishments %}
+              {% set punishmentLength = punishment.schedule.days + ' days' if punishment.schedule.days > 1 else 
+                punishment.schedule.days + ' day' %}
+              <tr>
+                <td>{{ punishment.type | convertPunishmentForDISForm(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}: {{ punishmentLength }}</td>
+                <td>{{ punishment.schedule.suspendedUntil | formatTimestampTo('D MMMM YYYY') }}</td>
+              </tr>
+            {% endfor %}
+          </table>
         {% endfor %}
+      </div>
+    {% else %}
+      <p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} has no suspended punishments.</p>
+    {% endif %}
     </div>
+  </div>
 {% endmacro %}

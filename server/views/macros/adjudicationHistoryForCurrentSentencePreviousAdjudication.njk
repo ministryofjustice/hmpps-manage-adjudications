@@ -1,39 +1,55 @@
 {% macro adjudicationHistoryForCurrentSentencePreviousAdjudication(adjudicationHistoryForCurrentSentenceData) %}
-    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
-        <h2>Previous adjudication details</h2>
-				{# TODO PUT THIS IN TABLE #}
-        <p>Total previous findings of guilt on adjudication (on current sentence): {{ adjudicationHistoryForCurrentSentenceData.chargeProvedSentenceCount }}</p>
-        <p>Number of previous findings of guilt at the current establishment: {{ adjudicationHistoryForCurrentSentenceData.chargeProvedAtCurrentEstablishmentCount }}</p>
-        <p>Number of charges for same offence: {{ adjudicationHistoryForCurrentSentenceData.sameOffenceCount }}</p>
+	<div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+		<h2 class='govuk-!-margin-top-8'>Previous adjudication details</h2>
+		<dl class="govuk-summary-list">
+			<div class="govuk-summary-list__row">
+				<dt class="govuk-summary-list__key">
+							<p class="govuk-body">Total previous findings of guilt on adjudication (on current sentence):</p>
+						</dt>
+				<dd class="govuk-summary-list__value">
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.chargeProvedSentenceCount }}</p>
+				</dd>
+			</div>
+			<div class="govuk-summary-list__row">
+				<dt class="govuk-summary-list__key">
+					<p class="govuk-body">Number of previous findings of guilt at the current establishment:</p>
+				</dt>
+				<dd class="govuk-summary-list__value">
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.chargeProvedAtCurrentEstablishmentCount }}</p>
+				</dd>
+			</div>
+			<div class="govuk-summary-list__row">
+				<dt class="govuk-summary-list__key">
+							<p class="govuk-body">Number of charges for same offence:</p>
+						</dt>
+				<dd class="govuk-summary-list__value">
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.sameOffenceCount }}</p>
+				</dd>
+			</div>
+		</dl>
 
-				{% if adjudicationHistoryForCurrentSentenceData.lastReportedOffence %}
-        <h2>Details of the last reported same offence</h2>
-				<p>Date: {{ adjudicationHistoryForCurrentSentenceData.lastReportedOffenceDiscoveryDate }}</p>
-				<p>Charge number: {{  adjudicationHistoryForCurrentSentenceData.lastReportedOffence.chargeNumber }}</p>
-				<p>Reporting officer's statement about the offence: {{ adjudicationHistoryForCurrentSentenceData.lastReportedOffence.statement }}</p>
-				<p>Punishment given: </p> 
-				{# TODO PUNISHMENTS #}
+		{% if adjudicationHistoryForCurrentSentenceData.sameOffenceCount > 0 %}
+			<h2>Details of the last reported same offence</h2>
+			<p class="govuk-body">Date: {{ adjudicationHistoryForCurrentSentenceData.lastReportedOffence.dateOfDiscovery | formatTimestampTo('D MMMM YYYY')  }}</p>
+			<p class="govuk-body">Charge number: {{  adjudicationHistoryForCurrentSentenceData.lastReportedOffence.chargeNumber }}</p>
+			<p class="govuk-body">Reporting officer's statement about the offence: </p>
+			<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.lastReportedOffence.statement | safe }}</p>
+			<p class="govuk-body">Punishment given: </p>
+			<dl class="govuk-summary-list">
+				{% for punishment in adjudicationHistoryForCurrentSentenceData.lastReportedOffence.punishments %}
+					{% set punishmentLength = punishment.schedule.days + ' days' if punishment.schedule.days > 1 else 
+						punishment.schedule.days + ' day' %}
+					<div class="govuk-summary-list__row lastReportedOffenceSummary__row">
+						<dt class="govuk-summary-list__key lastReportedOffenceSummary__key">
+							<p class="govuk-body">{{ punishment.type | convertPunishmentForDISForm(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}:</p>
+						</dt>
+						<dd class="govuk-summary-list__value lastReportedOffenceSummary__value">
+							<p class="govuk-body">{{ punishmentLength }}</p>
+						</dd>
+					</div>
+				{% endfor %}
+			</dl>
+		{% endif %}
 
-
-        <div class='adjudication-pdf-section-sentence-details'>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Date of last reported same offence, if applicable (DD/MM/YYYY)</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-            </div>
-            <div class='adjudication-pdf-section-sentence-details__item'>
-                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Charge number</p>
-                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-            </div>
-        </div>
-
-        <div class='break-inside-avoid'>
-            <p class='govuk-!-margin-top-3'>Brief details of the offence</p>
-            <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-offence-details-small'>
-        </div>
-
-        <div class='break-inside-avoid'>
-            <p class='govuk-!-margin-top-3'>Punishment given</p>
-            <input type='text' class='adjudication-pdf-input adjudication-pdf-punishment-given-small'>
-        </div>
-    </div>
+	</div>
 {% endmacro %}

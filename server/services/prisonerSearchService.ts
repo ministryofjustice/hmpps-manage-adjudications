@@ -18,6 +18,12 @@ export interface PrisonerSearchSummary extends PrisonerSearchResult {
   onlyShowPrisonName: boolean
 }
 
+export type PrisonerSearchDetailsDis5 = {
+  currentIncentiveLevel: string
+  dateTimeOfLevel: string
+  nextReviewDate: string
+}
+
 // Anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
 export const isPrisonerIdentifier = (searchTerm: string): boolean => /\d/.test(searchTerm)
 
@@ -95,6 +101,16 @@ export default class PrisonerSearchService {
         return false
       }
       throw err
+    }
+  }
+
+  async getPrisonerDetailsForDis5(prisonerNumber: string, user: User): Promise<PrisonerSearchDetailsDis5> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const prisonerDetails = await new PrisonerSearchClient(token).getPrisonerDetails(prisonerNumber)
+    return {
+      currentIncentiveLevel: prisonerDetails.currentIncentive.level.description || null,
+      dateTimeOfLevel: prisonerDetails.currentIncentive.dateTime || null,
+      nextReviewDate: prisonerDetails.currentIncentive.nextReviewDate || null,
     }
   }
 

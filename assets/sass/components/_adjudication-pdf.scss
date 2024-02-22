@@ -36,6 +36,17 @@ div.adjudication-pdf {
     width:50%;
   }
 
+  dl {
+    display: table;
+    width: 60%;
+  }
+  dt {
+    display: table-cell;
+    width: 100%;
+  }
+  dd {
+    display: table-cell;
+  }
 }
 
 .adjudication-pdf-input {
@@ -432,4 +443,11 @@ div.adjudication-pdf {
     background-color: govuk-colour("light-grey");
     padding: govuk-spacing(3) govuk-spacing(5);
   }
+}
+
+.lastReportedOffenceSummary__row {
+  width: 100%;
+}
+.lastReportedOffenceSummary__key {
+  width: 90% !important;
 }

@@ -5,6 +5,7 @@ import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import TestData from '../testutils/testData'
 import Dis5Pdf from './dis5Pdf'
+import PrisonerSearchService from '../../services/prisonerSearchService'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/userService.ts')
@@ -17,6 +18,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
+const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 
 const testData = new TestData()
 
@@ -65,7 +67,7 @@ describe('GET /dis5', () => {
     const req: Request = {
       params: { chargeNumber: reportedAdjudication.chargeNumber },
     } as unknown as Request
-    await new Dis5Pdf(reportedAdjudicationsService).renderPdf(req, res)
+    await new Dis5Pdf(reportedAdjudicationsService, prisonerSearchService).renderPdf(req, res)
     expect(res.renderPdf).toHaveBeenCalled()
     expect(res.renderPdf).toHaveBeenCalledWith(
       'pages/adjudicationHistoryForCurrentSentence',
