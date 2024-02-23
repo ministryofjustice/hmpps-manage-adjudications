@@ -572,6 +572,9 @@ export default class TestData {
         gender,
       },
       agencyId,
+      sentenceDetail: {
+        nonParoleDate: '2029-12-09',
+      },
     }
   }
 

@@ -8,6 +8,7 @@ import { convertToTitleCase } from '../utils/utils'
 import { PrisonerGender } from '../data/DraftAdjudicationResult'
 import adjudicationUrls from '../utils/urlGenerator'
 import { User } from '../data/hmppsManageUsersClient'
+import { Alert } from '../utils/alertHelper'
 
 export interface PrisonerSearchSummary extends PrisonerSearchResult {
   displayName: string
@@ -19,9 +20,16 @@ export interface PrisonerSearchSummary extends PrisonerSearchResult {
 }
 
 export type PrisonerSearchDetailsDis5 = {
-  currentIncentiveLevel: string
-  dateTimeOfLevel: string
-  nextReviewDate: string
+  currentIncentiveLevel?: string
+  dateTimeOfLevel?: string
+  nextReviewDate?: string
+  autoReleaseDate?: string
+  conditionalReleaseDate?: string
+  imprisonmentStatus?: string
+  sentenceStartDate?: string
+  alerts?: Alert[]
+  acctAlertPresent?: boolean
+  csipAlertPresent?: boolean
 }
 
 // Anything with a number is considered not to be a name, so therefore an identifier (prison no, PNC no etc.)
@@ -65,6 +73,16 @@ export default class PrisonerSearchService {
       return adjudicationUrls.incidentDetails.urls.start(prisoner.prisonerNumber)
     }
     return adjudicationUrls.selectGender.url.start(prisoner.prisonerNumber)
+  }
+
+  private static activeAcctAlertPresent(alerts: Alert[]) {
+    const acctAlert = alerts.filter(alert => alert.alertCode === 'HA')
+    return acctAlert.length && acctAlert[0].active
+  }
+
+  private static activeCsipAlertPresent(alerts: Alert[]) {
+    const csipAlert = alerts.filter(alert => alert.alertCode === 'CSIP')
+    return csipAlert.length && csipAlert[0].active
   }
 
   async search(search: PrisonerSearch, user: User): Promise<PrisonerSearchSummary[]> {
@@ -111,6 +129,11 @@ export default class PrisonerSearchService {
       currentIncentiveLevel: prisonerDetails.currentIncentive.level.description || null,
       dateTimeOfLevel: prisonerDetails.currentIncentive.dateTime || null,
       nextReviewDate: prisonerDetails.currentIncentive.nextReviewDate || null,
+      autoReleaseDate: prisonerDetails.automaticReleaseDate || null,
+      conditionalReleaseDate: prisonerDetails.conditionalReleaseDate || null,
+      sentenceStartDate: prisonerDetails.sentenceStartDate || null,
+      acctAlertPresent: PrisonerSearchService.activeAcctAlertPresent(prisonerDetails.alerts) || null,
+      csipAlertPresent: PrisonerSearchService.activeCsipAlertPresent(prisonerDetails.alerts) || null,
     }
   }
 

@@ -294,6 +294,7 @@ export default class ReportedAdjudicationsService {
       createdDateTime: adjudicationData.reportedAdjudication.createdDateTime,
       isYouthOffender: adjudicationData.reportedAdjudication.isYouthOffender,
       prisonName: prisoner.agencyId,
+      nonParoleDate: prisoner.sentenceDetail.nonParoleDate,
     }
   }
 

@@ -39,6 +39,18 @@ export default class adjudicationHistoryForCurrentSentenceData {
 
   existingPunishments: PunishmentData[]
 
+  autoReleaseDate: string
+
+  conditionalReleaseDate: string
+
+  sentenceStartDate: string
+
+  nonParoleDate: string
+
+  acctAlertPresent: boolean
+
+  csipAlertPresent: boolean
+
   constructor(
     chargeNumber: string,
     confirmedOnReportData: ConfirmedOnReportData,
@@ -67,5 +79,11 @@ export default class adjudicationHistoryForCurrentSentenceData {
     this.currentIncentiveLevel = prisonerSearchDis5Data.currentIncentiveLevel
     this.currentIncentiveLevelDateTime = prisonerSearchDis5Data.dateTimeOfLevel
     this.incentiveNextReviewDate = prisonerSearchDis5Data.nextReviewDate
+    this.autoReleaseDate = prisonerSearchDis5Data.autoReleaseDate
+    this.conditionalReleaseDate = prisonerSearchDis5Data.conditionalReleaseDate
+    this.sentenceStartDate = prisonerSearchDis5Data.sentenceStartDate
+    this.nonParoleDate = confirmedOnReportData.nonParoleDate
+    this.acctAlertPresent = prisonerSearchDis5Data.acctAlertPresent
+    this.csipAlertPresent = prisonerSearchDis5Data.csipAlertPresent
   }
 }
