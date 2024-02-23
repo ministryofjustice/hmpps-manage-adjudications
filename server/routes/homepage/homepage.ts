@@ -71,7 +71,15 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     {
       id: 'transfers',
       heading: 'Transfers',
-      href: adjudicationUrls.viewScheduledHearings.root,
+      href: adjudicationUrls.allTransferredReports.urls.filter({
+        status: [
+          ReportedAdjudicationStatus.UNSCHEDULED,
+          ReportedAdjudicationStatus.REFER_POLICE,
+          ReportedAdjudicationStatus.ADJOURNED,
+          ReportedAdjudicationStatus.REFER_INAD,
+        ],
+        transfersOnly: true,
+      }),
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
       links: [
