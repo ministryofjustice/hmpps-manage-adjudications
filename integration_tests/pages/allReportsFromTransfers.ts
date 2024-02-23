@@ -1,8 +1,8 @@
 import Page, { PageElement } from './page'
 
-export default class AllCompletedReportsPage extends Page {
+export default class AllTransferReportsPage extends Page {
   constructor() {
-    super('Reports from Moorland (HMP & YOI)')
+    super('Reports from transfers in')
   }
 
   noResultsMessage = (): PageElement => cy.get('[data-qa="no-results-message"]')

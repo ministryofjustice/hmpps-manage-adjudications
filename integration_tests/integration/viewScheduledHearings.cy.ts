@@ -79,7 +79,6 @@ context('View scheduled hearings', () => {
 
     cy.visit(adjudicationUrls.viewScheduledHearings.root)
     const viewScheduledHearingsPage: ViewScheduledHearingsPage = Page.verifyOnPage(ViewScheduledHearingsPage)
-    viewScheduledHearingsPage.scheduledHearingsTab().should('exist')
     viewScheduledHearingsPage.datePicker().should('exist')
     viewScheduledHearingsPage.applyButton().should('exist')
     viewScheduledHearingsPage.clearLink().should('exist')
@@ -210,20 +209,6 @@ context('View scheduled hearings', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.viewScheduledHearings.urls.start())
       expect(loc.search).to.eq('')
-    })
-  })
-  it('should go to the all reports page when tab clicked', () => {
-    cy.task('stubGetHearingsGivenAgencyAndDate', {
-      response: { hearings: [] },
-    })
-    cy.task('stubGetBatchPrisonerDetails', [])
-
-    cy.visit(adjudicationUrls.viewScheduledHearings.root)
-    const viewScheduledHearingsPage: ViewScheduledHearingsPage = Page.verifyOnPage(ViewScheduledHearingsPage)
-    viewScheduledHearingsPage.allReportsTab().click()
-
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.urls.start())
     })
   })
   it('should handle if some prisoner information is missing', () => {

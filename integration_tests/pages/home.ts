@@ -37,5 +37,5 @@ export default class Home extends Page {
 
   dataInsightsLink = (): PageElement => cy.get('[data-qa="data-insights"]')
 
-  enterOutcomesCard = (): PageElement => cy.get('a').contains('Enter outcomes')
+  enterOutcomesCard = (): PageElement => cy.get('a').contains('Hearings and enter outcomes')
 }

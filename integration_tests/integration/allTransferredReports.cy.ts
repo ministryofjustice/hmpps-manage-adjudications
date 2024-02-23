@@ -1,4 +1,5 @@
-import TransferredReportsPage from '../pages/allReports'
+import AllTransferReportsPage from '../pages/allReportsFromTransfers'
+import AllCompletedReportsPage from '../pages/allReports'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
@@ -29,7 +30,7 @@ context('Transferred Reports', () => {
     cy.task('stubGetBatchPrisonerDetails')
 
     cy.visit(adjudicationUrls.allTransferredReports.root)
-    const transferredReportsPage: TransferredReportsPage = Page.verifyOnPage(TransferredReportsPage)
+    const transferredReportsPage: AllTransferReportsPage = Page.verifyOnPage(AllTransferReportsPage)
 
     transferredReportsPage.noResultsMessage().should('exist')
   })
@@ -69,7 +70,7 @@ context('Transferred Reports', () => {
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
 
     cy.visit(adjudicationUrls.allTransferredReports.root)
-    const transferredReportsPage: TransferredReportsPage = Page.verifyOnPage(TransferredReportsPage)
+    const transferredReportsPage: AllTransferReportsPage = Page.verifyOnPage(AllTransferReportsPage)
     transferredReportsPage.resultsTable().should('exist')
     transferredReportsPage
       .resultsTable()
@@ -132,7 +133,7 @@ context('Transferred Reports', () => {
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
 
     cy.visit(adjudicationUrls.allTransferredReports.root) // visit page one
-    const transferredReportsPage: TransferredReportsPage = Page.verifyOnPage(TransferredReportsPage)
+    const transferredReportsPage: AllTransferReportsPage = Page.verifyOnPage(AllTransferReportsPage)
     transferredReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     transferredReportsPage.uncheckAllCheckboxes()
@@ -192,7 +193,7 @@ context('Transferred Reports', () => {
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: reportedAdjudications })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
     cy.visit(adjudicationUrls.allCompletedReports.root)
-    const transferredReportsPage: TransferredReportsPage = Page.verifyOnPage(TransferredReportsPage)
+    const transferredReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     transferredReportsPage.viewReportLink().first().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1))
