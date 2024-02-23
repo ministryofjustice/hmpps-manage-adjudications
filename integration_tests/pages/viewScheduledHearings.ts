@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class ViewScheduledHearingsPage extends Page {
   constructor() {
-    super('Hearings')
+    super('Adjudications')
   }
 
   datePicker = (): PageElement => cy.get('[data-qa="date-picker"]')
