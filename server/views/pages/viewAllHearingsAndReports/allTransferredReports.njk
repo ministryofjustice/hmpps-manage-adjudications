@@ -4,9 +4,8 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "../../macros/transfersFilter.njk" import transfersFilter %}
-{% from '../../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
 
-{% set title = "Hearings and reports" %}
+{% set title = "Reports from transfers in" %}
 
 {% block pageTitle %}
   {{ title }} - Digital Prison Services
@@ -27,8 +26,7 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ adjudicationTabHeaderAll(activeCaseloadName, activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref, viewTransferredReportsHref, transferReportCount) }}
-
+ 
   {{ transfersFilter(filter, checkboxes, errors, adjudicationUrls.allTransferredReports.urls.start(), csrfToken) }}
 
   {% include '../../partials/reportsList.njk' %}
