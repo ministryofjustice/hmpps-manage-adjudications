@@ -1,6 +1,5 @@
 {% macro adjudicationHistoryForCurrentSentenceSuspendedPunishments(adjudicationHistoryForCurrentSentenceData) %}
-  <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
-    <div class="break-inside-avoid">
+  <div class='govuk-!-margin-left-8 govuk-!-margin-right-8 break-inside-avoid'>
     <h2>Suspended punishments</h2>
     {% if adjudicationHistoryForCurrentSentenceData.chargesWithSuspendedPunishments | length %}
       <p class="govuk-body">Charges with current suspended punishments: {{ adjudicationHistoryForCurrentSentenceData.chargesWithSuspendedPunishments | length }}</p>
@@ -20,7 +19,7 @@
               {% set punishmentLength = punishment.schedule.days + ' days' if punishment.schedule.days > 1 else 
                 punishment.schedule.days + ' day' %}
               <tr>
-                <td>{{ punishment.type | convertPunishmentForDISForm(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}: {{ punishmentLength }}</td>
+                <td>{{ punishment.type | convertPunishmentType(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}: {{ punishmentLength }}</td>
                 <td>{{ punishment.schedule.suspendedUntil | formatTimestampTo('D MMMM YYYY') }}</td>
               </tr>
             {% endfor %}
@@ -30,6 +29,5 @@
     {% else %}
       <p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} has no suspended punishments.</p>
     {% endif %}
-    </div>
   </div>
 {% endmacro %}
