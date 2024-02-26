@@ -48,7 +48,7 @@ context('Home page', () => {
     homepage.sectionBreak().should('exist')
     homepage.printCompletedDisFormsLink().should('exist')
     homepage.confirmDisHasBeenIssuedLink().should('exist')
-    homepage.reviewReportsLink().should('contain.text', 'Review reports (2)')
+    homepage.reviewReportsLink().should('contain.text', 'Awaiting review (2)')
     homepage.transferReportsLink().should('contain.text', 'Reports from transfers in (1)')
   })
 
