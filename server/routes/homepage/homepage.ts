@@ -55,7 +55,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
       href: adjudicationUrls.allCompletedReports.root,
       links: [
         {
-          text: `Review reports (${reviewTotal})`,
+          text: `Awaiting review (${reviewTotal})`,
           href: adjudicationUrls.allCompletedReports.urls.filter({
             fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
             toDate: momentDateToDatePicker(moment()),
@@ -70,7 +70,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     },
     {
       id: 'transfers',
-      heading: 'Transfers',
+      heading: `Reports from transfers in (${transferReviewTotal})`,
       href: adjudicationUrls.allTransferredReports.urls.filter({
         status: [
           ReportedAdjudicationStatus.UNSCHEDULED,
@@ -82,21 +82,6 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
       }),
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
-      links: [
-        {
-          text: `Reports from transfers in (${transferReviewTotal})`,
-          href: adjudicationUrls.allTransferredReports.urls.filter({
-            status: [
-              ReportedAdjudicationStatus.UNSCHEDULED,
-              ReportedAdjudicationStatus.REFER_POLICE,
-              ReportedAdjudicationStatus.ADJOURNED,
-              ReportedAdjudicationStatus.REFER_INAD,
-            ],
-            transfersOnly: true,
-          }),
-          id: 'view-transferred-reports',
-        },
-      ],
     },
     {
       id: 'hearings-and-enter-outcomes',
@@ -104,6 +89,22 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
       href: adjudicationUrls.viewScheduledHearings.root,
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
+      links: [
+        {
+          text: 'Schedule hearings',
+          href: adjudicationUrls.allCompletedReports.urls.filter({
+            fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
+            toDate: momentDateToDatePicker(moment()),
+            status: [
+              ReportedAdjudicationStatus.UNSCHEDULED,
+              ReportedAdjudicationStatus.ADJOURNED,
+              ReportedAdjudicationStatus.REFER_INAD,
+            ],
+            transfersOnly: false,
+          }),
+          id: 'schedule-hearings',
+        },
+      ],
     },
     {
       id: 'print-completed-dis-forms',
@@ -158,26 +159,6 @@ export default class HomepageRoutes {
     const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, userCaseloadName).filter(
       disRelatedTasksPredicate
     )
-
-    reviewerTasks.map(task => {
-      if (task.id === 'view-scheduled-hearings') {
-        return task.links.push({
-          text: 'Schedule hearings',
-          href: adjudicationUrls.allCompletedReports.urls.filter({
-            fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
-            toDate: momentDateToDatePicker(moment()),
-            status: [
-              ReportedAdjudicationStatus.UNSCHEDULED,
-              ReportedAdjudicationStatus.ADJOURNED,
-              ReportedAdjudicationStatus.REFER_INAD,
-            ],
-            transfersOnly: false,
-          }),
-          id: 'schedule-hearings',
-        })
-      }
-      return task
-    })
 
     const dataInsightsTask = {
       id: 'data-insights',

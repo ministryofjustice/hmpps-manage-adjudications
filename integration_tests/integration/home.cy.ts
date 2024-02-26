@@ -48,8 +48,7 @@ context('Home page', () => {
     homepage.sectionBreak().should('exist')
     homepage.printCompletedDisFormsLink().should('exist')
     homepage.confirmDisHasBeenIssuedLink().should('exist')
-    homepage.reviewReportsLink().should('contain.text', 'Review reports (2)')
-    homepage.transferReportsLink().should('contain.text', 'Reports from transfers in (1)')
+    homepage.reviewReportsLink().should('contain.text', 'Awaiting review (2)')
   })
 
   it('should link to the correct location - view all reports (main link)', () => {
@@ -81,16 +80,6 @@ context('Home page', () => {
     homepage.scheduleHearingsLink().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
-      expect(loc.search).to.eq(filterString.replace(/\//g, '%2F'))
-    })
-  })
-  it('should link to the correct location - view transferred reports', () => {
-    const filterString = `?status=UNSCHEDULED&status=REFER_POLICE&status=ADJOURNED&status=REFER_INAD&transfersOnly=true`
-    cy.visit(adjudicationUrls.homepage.root)
-    const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
-    homepage.transferReportsLink().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.allTransferredReports.root)
       expect(loc.search).to.eq(filterString.replace(/\//g, '%2F'))
     })
   })
