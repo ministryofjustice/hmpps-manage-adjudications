@@ -3,11 +3,13 @@
  {% from "../macros/adjudicationHistoryForCurrentSentencePreviousAdjudication.njk" import adjudicationHistoryForCurrentSentencePreviousAdjudication %}
 {% from "../macros/adjudicationHistoryForCurrentSentenceExistingPunishments.njk" import adjudicationHistoryForCurrentSentenceExistingPunishments %}
 {% from "../macros/adjudicationHistoryForCurrentSentenceSuspendedPunishments.njk" import adjudicationHistoryForCurrentSentenceSuspendedPunishments %}
+{% from "../macros/adjudicationHistoryForCurrentSentenceDamagesOwed.njk" import adjudicationHistoryForCurrentSentenceDamagesOwed %}
 {% block content %}
     <div class='adjudication-pdf'>
         {{ adjudicationHistoryForCurrentSentenceDetails(adjudicationHistoryForCurrentSentenceData) }}
         {{ adjudicationHistoryForCurrentSentencePreviousAdjudication(adjudicationHistoryForCurrentSentenceData) }}
         {{ adjudicationHistoryForCurrentSentenceSuspendedPunishments(adjudicationHistoryForCurrentSentenceData) }} 
         {{ adjudicationHistoryForCurrentSentenceExistingPunishments(adjudicationHistoryForCurrentSentenceData) }}
+        {{ adjudicationHistoryForCurrentSentenceDamagesOwed(adjudicationHistoryForCurrentSentenceData) }}
     </div>
 {% endblock %}

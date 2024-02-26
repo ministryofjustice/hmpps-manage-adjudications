@@ -38,7 +38,7 @@
 		<div class='adjudication-pdf-section-sentence-details'>
 			<div class='adjudication-pdf-section-sentence-details__item'>
 				<p class='govuk-!-margin-bottom-1'>Sentence</p>
-				<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
+				<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-half-width'>
 			</div>
 		</div>
 
@@ -88,14 +88,16 @@
 			</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
 		</div>
 
-		<div class="govuk-!-margin-top-5">
+		<div class='break-inside-avoid govuk-!-padding-top-5'>
+		<div class="govuk-!-margin-top-5 acctStatement">
 			<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} <span class="govuk-!-font-weight-bold">{% if adjudicationHistoryForCurrentSentenceData.acctAlertPresent %}does{% else %}does not{% endif %}</span> have an open Assessment, Care in Custody and Teamwork (ACCT), or an ACCT that has been closed in the last 3 months.</p>
 		</div>
 		<div class="govuk-!-margin-top-5">
 			<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} <span class="govuk-!-font-weight-bold">{% if adjudicationHistoryForCurrentSentenceData.csipAlertPresent %}does{% else %}does not{% endif %}</span> have a CSIP (Challenge Support Intervention Plan) alert.</p>
 		</div>
+		</div>
 
-		<div class='break-inside-avoid govuk-!-margin-top-1'>
+		<div class='break-inside-avoid govuk-!-padding-top-5'>
 			<h2>Incentive level</h2>
 			<p class="govuk-body">Incentive level: {{ adjudicationHistoryForCurrentSentenceData.currentIncentiveLevel }}</p>
 			<p class="govuk-body">Date prisoner was put on that level: {{ adjudicationHistoryForCurrentSentenceData.currentIncentiveLevelDateTime | formatTimestampTo('D MMMM YYYY') }}</p>
