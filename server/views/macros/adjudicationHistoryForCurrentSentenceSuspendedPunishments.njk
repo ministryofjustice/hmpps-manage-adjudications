@@ -20,7 +20,7 @@
               {% set punishmentLength = punishment.schedule.days + ' days' if punishment.schedule.days > 1 else 
                 punishment.schedule.days + ' day' %}
               <tr>
-                <td>{{ punishment.type | convertPunishmentForDISForm(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}: {{ punishmentLength }}</td>
+                <td>{{ punishment.type | convertPunishmentType(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}: {{ punishmentLength }}</td>
                 <td>{{ punishment.schedule.suspendedUntil | formatTimestampTo('D MMMM YYYY') }}</td>
               </tr>
             {% endfor %}
