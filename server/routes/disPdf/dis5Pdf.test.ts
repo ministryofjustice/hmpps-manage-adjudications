@@ -7,7 +7,7 @@ import TestData from '../testutils/testData'
 import Dis5Pdf from './dis5Pdf'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import { PunishmentType } from '../../data/PunishmentResult'
-import { Dis5AdjudicationsAndDamageObligationsPrintSupport } from '../../data/manageAdjudicationsSystemTokensClient'
+import { Dis5AdjudicationsAndMoneyPrintSupport } from '../../data/manageAdjudicationsSystemTokensClient'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/prisonerSearchService.ts')
@@ -46,6 +46,7 @@ const confirmedOnReportData: ConfirmedOnReportData = {
   createdDateTime: '2020-12-21T10:45',
   isYouthOffender: false,
   prisonName: 'MDI',
+  bookingId: 1,
 }
 
 const prisonerSearchDis5Data = {
@@ -102,12 +103,17 @@ const dis5Data = {
       currency: 'GBP',
     },
   ],
+  balances: {
+    savings: 10,
+    cash: 10,
+    spends: 100,
+  },
 }
 beforeEach(() => {
   reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(confirmedOnReportData)
   prisonerSearchService.getPrisonerDetailsForDis5.mockResolvedValue(prisonerSearchDis5Data)
   reportedAdjudicationsService.getDis5Data.mockResolvedValue(
-    dis5Data as unknown as Dis5AdjudicationsAndDamageObligationsPrintSupport
+    dis5Data as unknown as Dis5AdjudicationsAndMoneyPrintSupport
   )
 })
 
@@ -150,6 +156,7 @@ describe('GET /dis5', () => {
           acctAlertPresent: undefined,
           autoReleaseDate: undefined,
           conditionalReleaseDate: undefined,
+          nonParoleDate: undefined,
           csipAlertPresent: undefined,
           damageObligations: [
             {
@@ -166,6 +173,11 @@ describe('GET /dis5', () => {
               currency: 'GBP',
             },
           ],
+
+          savings: 10,
+          spends: 100,
+          cash: 10,
+
           chargesWithSuspendedPunishments: [
             {
               chargeNumber: 'MDI-000010',

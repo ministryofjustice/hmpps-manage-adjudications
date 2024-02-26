@@ -2,8 +2,7 @@ import { ConfirmedOnReportData } from './ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
 import {
   ChargesWithSuspendedPunishments,
-  Dis5AdjudicationsAndDamageObligationsPrintSupport,
-  Dis5PrintSupport,
+  Dis5AdjudicationsAndMoneyPrintSupport,
   LastReportedOffence,
 } from './manageAdjudicationsSystemTokensClient'
 import { PrisonerSearchDetailsDis5 } from '../services/prisonerSearchService'
@@ -55,10 +54,16 @@ export default class adjudicationHistoryForCurrentSentenceData {
 
   damageObligations: DamageObligation[]
 
+  spends: number
+
+  savings: number
+
+  cash: number
+
   constructor(
     chargeNumber: string,
     confirmedOnReportData: ConfirmedOnReportData,
-    dis5Data: Dis5AdjudicationsAndDamageObligationsPrintSupport,
+    dis5Data: Dis5AdjudicationsAndMoneyPrintSupport,
     prisonerSearchDis5Data: PrisonerSearchDetailsDis5
   ) {
     this.chargeNumber = chargeNumber
@@ -90,5 +95,8 @@ export default class adjudicationHistoryForCurrentSentenceData {
     this.acctAlertPresent = prisonerSearchDis5Data.acctAlertPresent
     this.csipAlertPresent = prisonerSearchDis5Data.csipAlertPresent
     this.damageObligations = dis5Data.damageObligations
+    this.spends = dis5Data.balances.spends
+    this.savings = dis5Data.balances.savings
+    this.cash = dis5Data.balances.cash
   }
 }

@@ -1,25 +1,26 @@
 {% macro adjudicationHistoryForCurrentSentenceExistingPunishments(adjudicationHistoryForCurrentSentenceData) %}
-    <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
-        <h2 class="govuk-!-margin-top-8">Existing punishments</h2>
+  <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+    <h2 class="govuk-!-margin-top-8">Existing punishments</h2>
 
-		{% if adjudicationHistoryForCurrentSentenceData.existingPunishments | length %}
-				<div class="break-inside-avoid">
-					<table>
-						<tr>
-							<th>Punishment</th>
-							<th>Date the punishment ends</th>
-						</tr>
-						{% for punishment in adjudicationHistoryForCurrentSentenceData.existingPunishments %}
-							{% set punishmentLength = punishment.schedule.days + ' days' if punishment.schedule.days > 1 else 
-								punishment.schedule.days + ' day' %}
-							<tr>
-								<td class="existingPunishmentsTable__key">{{ punishment.type | convertPunishmentType(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}: {{ punishmentLength }}</td>
-								<td>{{ punishment.schedule.endDate | formatTimestampTo('D MMMM YYYY') or 'No end date' }}</td>
-							</tr>
-						{% endfor %}
-					</table>
-			</div>
-		{% else %}
-			<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} has no existing punishments.</p>
-		{% endif %}
+    {% if adjudicationHistoryForCurrentSentenceData.existingPunishments | length %}
+      <div class="break-inside-avoid">
+        <table>
+          <tr>
+            <th>Punishment</th>
+            <th>Date the punishment ends</th>
+          </tr>
+          {% for punishment in adjudicationHistoryForCurrentSentenceData.existingPunishments %}
+            {% set punishmentLength = punishment.schedule.days + ' days' if punishment.schedule.days > 1 else 
+              punishment.schedule.days + ' day' %}
+            <tr>
+              <td class="existingPunishmentsTable__key">{{ punishment.type | convertPunishmentType(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}: {{ punishmentLength }}</td>
+              <td>{{ punishment.schedule.endDate | formatTimestampTo('D MMMM YYYY') or 'No end date' }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    {% else %}
+      <p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} has no existing punishments.</p>
+    {% endif %}
+  </div>
 {% endmacro %}

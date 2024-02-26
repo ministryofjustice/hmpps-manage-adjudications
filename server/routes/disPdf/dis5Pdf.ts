@@ -24,6 +24,7 @@ export default class Dis5Pdf {
     const dis5Data = await this.reportedAdjudicationsService.getDis5Data(
       chargeNumber,
       adjudicationDetails.prisonerNumber,
+      adjudicationDetails.bookingId,
       user
     )
 

@@ -70,6 +70,13 @@ export interface DamageObligation {
   currency: string
 }
 
+export interface Balances {
+  spends: number
+  cash: number
+  savings: number
+  currency: string
+}
+
 export enum SanctionStatus {
   IMMEDIATE = 'IMMEDIATE',
   PROSPECTIVE = 'PROSPECTIVE',
@@ -183,6 +190,12 @@ export default class PrisonApiClient {
   async getDamageObligation(offenderNo: string): Promise<DamageObligation[]> {
     return this.restClient.get({
       path: `/api/offenders/${offenderNo}/damage-obligations?status=ACTIVE`,
+    })
+  }
+
+  async getBalances(bookingId: number): Promise<Balances> {
+    return this.restClient.get({
+      path: `/api/bookings/${bookingId}/balances`,
     })
   }
 }

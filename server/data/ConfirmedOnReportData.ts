@@ -19,6 +19,7 @@ export type ConfirmedOnReportData = {
   isYouthOffender: boolean
   prisonName?: string
   nonParoleDate?: string
+  bookingId?: number
 }
 
 export type ConfirmedOnReportChangedData = {

@@ -319,6 +319,7 @@ describe('reportedAdjudicationsService', () => {
           createdDateTime: '2022-12-09T10:30:00',
           prisonName: 'MDI',
           nonParoleDate: '2029-12-09',
+          bookingId: 123,
         })
       })
 

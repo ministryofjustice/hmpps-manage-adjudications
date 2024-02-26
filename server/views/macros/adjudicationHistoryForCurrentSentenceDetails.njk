@@ -104,7 +104,7 @@
 			<p class="govuk-body">Date of next incentive level review: {{ adjudicationHistoryForCurrentSentenceData.incentiveNextReviewDate | formatTimestampTo('D MMMM YYYY') }}</p>
 		</div>
 
-		<div class="break-inside-avoid">
+		<div class="break-inside-avoid govuk-!-padding-top-5">
 			<h2>Employment and pay</h2>
 			<div class='adjudication-pdf-section-sentence-details'>
 				<div class='adjudication-pdf-section-sentence-details__item'>
@@ -116,21 +116,11 @@
 					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
 				</div>
 			</div>
-			<div class='adjudication-pdf-section-sentence-details'>
-				<div class='adjudication-pdf-section-sentence-details__item'>
-					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Spends</p>
-					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-				</div>
-				<div class='adjudication-pdf-section-sentence-details__item'>
-					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Private cash</p>
-					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-				</div>
-			</div>
-			<div class='adjudication-pdf-section-sentence-details'>
-				<div class='adjudication-pdf-section-sentence-details__item'>
-					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Savings account</p>
-					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-				</div>
+			<div class="break-inside-avoid govuk-!-padding-top-5">
+			<h2>Prisoner money</h2>
+			<p class="govuk-body">Spends: £{{ adjudicationHistoryForCurrentSentenceData.spends }}</p>
+			<p class="govuk-body">Private cash: £{{ adjudicationHistoryForCurrentSentenceData.cash }}</p>
+			<p class="govuk-body">Savings account: £{{ adjudicationHistoryForCurrentSentenceData.savings }}</p>
 			</div>
 		</div>
 	</div>
