@@ -3,7 +3,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../../macros/hearingsFilter.njk" import hearingsFilter %}
-{% from '../../macros/adjudicationTabHeaderAll.njk' import adjudicationTabHeaderAll %}
 
 {% set title = "View scheduled hearings" %}
 
@@ -24,8 +23,6 @@
       }) }}
   {% endif %}
   <h1 class="govuk-heading-l">Adjudications</h1>
-
-  {{ adjudicationTabHeaderAll(activeCaseloadName, activeTab, viewScheduledHearingsHref, viewAllCompletedReportsHref, viewTransferredReportsHref, transferReportCount) }}
 
   {{ hearingsFilter(uiChosenDate, errors, clearUrl, csrfToken) }}
 

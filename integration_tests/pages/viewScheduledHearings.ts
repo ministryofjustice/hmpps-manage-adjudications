@@ -5,10 +5,6 @@ export default class ViewScheduledHearingsPage extends Page {
     super('Adjudications')
   }
 
-  scheduledHearingsTab = (): PageElement => cy.get('[data-qa="viewScheduledHearingsTab"]')
-
-  allReportsTab = (): PageElement => cy.get('[data-qa="viewAllCompletedReportsTab"]')
-
   datePicker = (): PageElement => cy.get('[data-qa="date-picker"]')
 
   applyButton = (): PageElement => cy.get('[data-qa="hearings-filter-apply"]')

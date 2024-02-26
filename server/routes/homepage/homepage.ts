@@ -64,6 +64,25 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
           }),
           id: 'review-reports',
         },
+      ],
+      roles: ['ADJUDICATIONS_REVIEWER'],
+      enabled: true,
+    },
+    {
+      id: 'transfers',
+      heading: 'Transfers',
+      href: adjudicationUrls.allTransferredReports.urls.filter({
+        status: [
+          ReportedAdjudicationStatus.UNSCHEDULED,
+          ReportedAdjudicationStatus.REFER_POLICE,
+          ReportedAdjudicationStatus.ADJOURNED,
+          ReportedAdjudicationStatus.REFER_INAD,
+        ],
+        transfersOnly: true,
+      }),
+      roles: ['ADJUDICATIONS_REVIEWER'],
+      enabled: true,
+      links: [
         {
           text: `Reports from transfers in (${transferReviewTotal})`,
           href: adjudicationUrls.allTransferredReports.urls.filter({
@@ -78,20 +97,10 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
           id: 'view-transferred-reports',
         },
       ],
-      roles: ['ADJUDICATIONS_REVIEWER'],
-      enabled: true,
     },
     {
-      id: 'view-scheduled-hearings',
-      heading: 'Hearings',
-      href: adjudicationUrls.viewScheduledHearings.root,
-      roles: ['ADJUDICATIONS_REVIEWER'],
-      enabled: true,
-      links: [],
-    },
-    {
-      id: 'enter-outcomes',
-      heading: 'Enter outcomes',
+      id: 'hearings-and-enter-outcomes',
+      heading: 'Hearings and enter outcomes',
       href: adjudicationUrls.viewScheduledHearings.root,
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
