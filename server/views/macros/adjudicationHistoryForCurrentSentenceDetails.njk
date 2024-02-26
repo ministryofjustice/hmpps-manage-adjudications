@@ -48,7 +48,7 @@
 					<p class="govuk-body">Sentenced on: </p>
 				</dt>
 				<dd class="govuk-summary-list__value">
-					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.sentenceStartDate | formatTimestampTo('D MMMM YYYY') or 'Not known' }}</p>
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.sentenceStartDate | formatTimestampTo('D MMMM YYYY') or 'Not applicable' }}</p>
 				</dd>
 			</div>
 			<div class="govuk-summary-list__row">
@@ -56,7 +56,7 @@
 					<p class="govuk-body">Automatic release date (ARD): </p>
 				</dt>
 				<dd class="govuk-summary-list__value">
-					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.autoReleaseDate | formatTimestampTo('D MMMM YYYY') or 'Not known' }}</p>
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.autoReleaseDate | formatTimestampTo('D MMMM YYYY') or 'Not applicable' }}</p>
 				</dd>
 			</div>
 			<div class="govuk-summary-list__row">
@@ -64,7 +64,7 @@
 					<p class="govuk-body">Conditional release date (CRD): </p>
 				</dt>
 				<dd class="govuk-summary-list__value">
-					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.conditionalReleaseDate | formatTimestampTo('D MMMM YYYY') or 'Not known' }}</p>
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.conditionalReleaseDate | formatTimestampTo('D MMMM YYYY') or 'Not applicable' }}</p>
 				</dd>
 			</div>
 			<div class="govuk-summary-list__row">
@@ -72,7 +72,7 @@
 					<p class="govuk-body">Non parole date (NPD): </p>
 				</dt>
 				<dd class="govuk-summary-list__value">
-					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.nonParoleDate | formatTimestampTo('D MMMM YYYY') or 'Not known' }}</p>
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.nonParoleDate | formatTimestampTo('D MMMM YYYY') or 'Not applicable' }}</p>
 				</dd>
 			</div>
 		</dl>

@@ -1,4 +1,5 @@
 {% macro adjudicationHistoryForCurrentSentenceDamagesOwed(adjudicationHistoryForCurrentSentenceData) %}
+<<<<<<< Updated upstream
   <div class='page-break-before-always'>
     <h2 class="">Money owed for damages</h2>
     <div class='adjudication-pdf-section-sentence-details'>
@@ -43,5 +44,32 @@
       </div>
       </div>
     {% endfor %}
+=======
+  <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+    <h2 class="govuk-!-margin-top-8">Money owed for damages</h2>
+    {% if adjudicationHistoryForCurrentSentenceData.damageObligations | length %}
+      <table>
+        <tr>
+          <th>Charge number</th>
+          <th>Dates</th>
+          <th>Amount</th>
+          <th>Paid</th>
+          <th>Left to pay</th>
+        </tr>
+        {% for damage in adjudicationHistoryForCurrentSentenceData.damageObligations %}
+          {% set amountLeftToPay = (amountToPay - amountPaid) %}
+          <tr>
+            <td>{{ damage.referenceNumber }}</td>
+            <td>{{ damage.startDateTime | formatTimestampTo('D MMMM YYYY') }} to {{ damage.endDateTime | formatTimestampTo('D MMMM YYYY') }}</td>
+            <td>£{{ amountToPay }}</td>
+            <td>£{{ amountPaid }}</td>
+            <td>£{{ amountLeftToPay }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} does not owe any money for damages.</p>
+    {% endif %}
+>>>>>>> Stashed changes
   </div>
 {% endmacro %}

@@ -2,11 +2,13 @@ import { ConfirmedOnReportData } from './ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
 import {
   ChargesWithSuspendedPunishments,
+  Dis5AdjudicationsAndDamageObligationsPrintSupport,
   Dis5PrintSupport,
   LastReportedOffence,
 } from './manageAdjudicationsSystemTokensClient'
 import { PrisonerSearchDetailsDis5 } from '../services/prisonerSearchService'
 import { PunishmentData } from './PunishmentResult'
+import { DamageObligation } from './prisonApiClient'
 
 export default class adjudicationHistoryForCurrentSentenceData {
   chargeNumber: string
@@ -51,10 +53,12 @@ export default class adjudicationHistoryForCurrentSentenceData {
 
   csipAlertPresent: boolean
 
+  damageObligations: DamageObligation[]
+
   constructor(
     chargeNumber: string,
     confirmedOnReportData: ConfirmedOnReportData,
-    dis5Data: Dis5PrintSupport,
+    dis5Data: Dis5AdjudicationsAndDamageObligationsPrintSupport,
     prisonerSearchDis5Data: PrisonerSearchDetailsDis5
   ) {
     this.chargeNumber = chargeNumber
@@ -85,5 +89,6 @@ export default class adjudicationHistoryForCurrentSentenceData {
     this.nonParoleDate = confirmedOnReportData.nonParoleDate
     this.acctAlertPresent = prisonerSearchDis5Data.acctAlertPresent
     this.csipAlertPresent = prisonerSearchDis5Data.csipAlertPresent
+    this.damageObligations = dis5Data.damageObligations
   }
 }

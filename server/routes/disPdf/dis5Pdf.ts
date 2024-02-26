@@ -21,7 +21,12 @@ export default class Dis5Pdf {
       adjudicationDetails.prisonerNumber,
       user
     )
-    const dis5Data = await this.reportedAdjudicationsService.getDis5Data(chargeNumber, user)
+    const dis5Data = await this.reportedAdjudicationsService.getDis5Data(
+      chargeNumber,
+      adjudicationDetails.prisonerNumber,
+      user
+    )
+
     const adjudicationHistoryForCurrentSentenceData = new AdjudicationHistoryForCurrentSentenceData(
       chargeNumber,
       adjudicationDetails,

@@ -7,7 +7,7 @@ import TestData from '../testutils/testData'
 import Dis5Pdf from './dis5Pdf'
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import { PunishmentType } from '../../data/PunishmentResult'
-import { Dis5PrintSupport } from '../../data/manageAdjudicationsSystemTokensClient'
+import { Dis5AdjudicationsAndDamageObligationsPrintSupport } from '../../data/manageAdjudicationsSystemTokensClient'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/prisonerSearchService.ts')
@@ -87,12 +87,28 @@ const dis5Data = {
       },
     },
   ],
+  damageObligations: [
+    {
+      id: 1,
+      offenderNo: 'H5123BY',
+      referenceNumber: '12345',
+      startDateTime: '2020-01-05',
+      endDateTime: '2020-01-05',
+      prisonId: 'MDI',
+      amountToPay: 100,
+      amountPaid: 20,
+      status: 'ACTIVE',
+      comment: 'NA',
+      currency: 'GBP',
+    },
+  ],
 }
-
 beforeEach(() => {
   reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(confirmedOnReportData)
   prisonerSearchService.getPrisonerDetailsForDis5.mockResolvedValue(prisonerSearchDis5Data)
-  reportedAdjudicationsService.getDis5Data.mockResolvedValue(dis5Data as unknown as Dis5PrintSupport)
+  reportedAdjudicationsService.getDis5Data.mockResolvedValue(
+    dis5Data as unknown as Dis5AdjudicationsAndDamageObligationsPrintSupport
+  )
 })
 
 afterEach(() => {
@@ -131,6 +147,25 @@ describe('GET /dis5', () => {
           currentIncentiveLevel: 'Basic',
           incentiveNextReviewDate: '2025-09-01',
           currentIncentiveLevelDateTime: '2020-09-01',
+          acctAlertPresent: undefined,
+          autoReleaseDate: undefined,
+          conditionalReleaseDate: undefined,
+          csipAlertPresent: undefined,
+          damageObligations: [
+            {
+              id: 1,
+              offenderNo: 'H5123BY',
+              referenceNumber: '12345',
+              startDateTime: '2020-01-05',
+              endDateTime: '2020-01-05',
+              prisonId: 'MDI',
+              amountToPay: 100,
+              amountPaid: 20,
+              status: 'ACTIVE',
+              comment: 'NA',
+              currency: 'GBP',
+            },
+          ],
           chargesWithSuspendedPunishments: [
             {
               chargeNumber: 'MDI-000010',

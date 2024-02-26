@@ -32,6 +32,7 @@ import { momentDateToApi } from '../utils/utils'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
 import { ActivePunishment, PunishmentData, PunishmentDataWithSchedule, SuspendedPunishment } from './PunishmentResult'
 import { User } from './hmppsManageUsersClient'
+import { DamageObligation } from './prisonApiClient'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -76,6 +77,10 @@ export type Dis5PrintSupport = {
   lastReportedOffence?: LastReportedOffence
   chargesWithSuspendedPunishments: ChargesWithSuspendedPunishments[]
   existingPunishments: PunishmentData[]
+}
+
+export interface Dis5AdjudicationsAndDamageObligationsPrintSupport extends Dis5PrintSupport {
+  damageObligations?: DamageObligation[]
 }
 
 export default class ManageAdjudicationsSystemTokensClient {
