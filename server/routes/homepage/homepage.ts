@@ -70,7 +70,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     },
     {
       id: 'transfers',
-      heading: 'Transfers',
+      heading: `Reports from transfers in (${transferReviewTotal})`,
       href: adjudicationUrls.allTransferredReports.urls.filter({
         status: [
           ReportedAdjudicationStatus.UNSCHEDULED,
