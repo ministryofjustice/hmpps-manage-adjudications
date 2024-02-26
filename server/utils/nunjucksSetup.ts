@@ -348,7 +348,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   })
 
   njkEnv.addFilter(
-    'convertPunishmentForDIS7',
+    'convertPunishmentForDISForm',
     (type: PunishmentType, stoppage: number, privilege: PrivilegeType, otherPrivilege: string) => {
       switch (type) {
         case PunishmentType.ADDITIONAL_DAYS:

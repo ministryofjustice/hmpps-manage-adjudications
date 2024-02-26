@@ -294,6 +294,7 @@ export default class ReportedAdjudicationsService {
       createdDateTime: adjudicationData.reportedAdjudication.createdDateTime,
       isYouthOffender: adjudicationData.reportedAdjudication.isYouthOffender,
       prisonName: prisoner.agencyId,
+      nonParoleDate: prisoner.sentenceDetail.nonParoleDate,
     }
   }
 
@@ -1322,5 +1323,10 @@ export default class ReportedAdjudicationsService {
     }
 
     return results
+  }
+
+  async getDis5Data(chargeNumber: string, user: User) {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new ManageAdjudicationsSystemTokensClient(token, user).getDataForDis5(chargeNumber)
   }
 }

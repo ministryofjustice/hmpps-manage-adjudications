@@ -11,6 +11,10 @@ type PhysicalAttributes = {
   gender: string
 }
 
+type SentenceDetail = {
+  nonParoleDate: string
+}
+
 export default class PrisonerResult {
   @Expose()
   offenderNo: string
@@ -44,4 +48,7 @@ export default class PrisonerResult {
 
   @Expose()
   agencyId: string
+
+  @Expose()
+  sentenceDetail?: SentenceDetail
 }

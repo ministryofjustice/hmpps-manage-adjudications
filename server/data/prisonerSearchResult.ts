@@ -1,4 +1,15 @@
 import { Expose } from 'class-transformer'
+import { Alert } from '../utils/alertHelper'
+
+type CurrentIncentiveLevel = {
+  code: string
+  description: string
+}
+type CurrentIncentive = {
+  level: CurrentIncentiveLevel
+  dateTime: string
+  nextReviewDate: string
+}
 
 export default class PrisonerSearchResult {
   @Expose()
@@ -21,4 +32,19 @@ export default class PrisonerSearchResult {
 
   @Expose()
   gender: string
+
+  @Expose()
+  currentIncentive?: CurrentIncentive
+
+  @Expose()
+  automaticReleaseDate?: string
+
+  @Expose()
+  conditionalReleaseDate?: string
+
+  @Expose()
+  sentenceStartDate?: string
+
+  @Expose()
+  alerts?: Alert[]
 }

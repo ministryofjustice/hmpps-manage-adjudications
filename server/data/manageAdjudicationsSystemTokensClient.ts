@@ -30,7 +30,7 @@ import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import RestClient from './restClient'
 import { momentDateToApi } from '../utils/utils'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
-import { ActivePunishment, PunishmentDataWithSchedule } from './PunishmentResult'
+import { ActivePunishment, PunishmentData, PunishmentDataWithSchedule, SuspendedPunishment } from './PunishmentResult'
 import { User } from './hmppsManageUsersClient'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
@@ -49,6 +49,33 @@ export type ConsecutiveAdditionalDaysReport = {
   chargeNumber: string
   chargeProvedDate: string
   punishment: PunishmentDataWithSchedule
+}
+
+export type LastReportedOffence = {
+  chargeNumber: string
+  dateOfIncident: string
+  dateOfDiscovery: string
+  statement: string
+  punishments: PunishmentData[]
+}
+
+export type ChargesWithSuspendedPunishments = {
+  dateOfIncident: string
+  dateOfDiscovery: string
+  chargeNumber: string
+  suspendedPunishments: SuspendedPunishment[]
+}
+
+export type Dis5PrintSupport = {
+  chargeNumber: string
+  dateOfIncident: string
+  dateOfDiscovery: string
+  previousCount: number
+  previousAtCurrentEstablishmentCount: number
+  sameOffenceCount: number
+  lastReportedOffence?: LastReportedOffence
+  chargesWithSuspendedPunishments: ChargesWithSuspendedPunishments[]
+  existingPunishments: PunishmentData[]
 }
 
 export default class ManageAdjudicationsSystemTokensClient {
@@ -372,6 +399,12 @@ export default class ManageAdjudicationsSystemTokensClient {
   async getPrisonerActiveAdjudications(bookingId: number): Promise<ActivePunishment[]> {
     return this.restClient.get({
       path: `/reported-adjudications/punishments/${bookingId}/active`,
+    })
+  }
+
+  async getDataForDis5(chargeNumber: string): Promise<Dis5PrintSupport> {
+    return this.restClient.get({
+      path: `/reported-adjudications/${chargeNumber}/print-support/dis5`,
     })
   }
 }

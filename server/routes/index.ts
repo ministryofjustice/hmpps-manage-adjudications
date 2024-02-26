@@ -160,7 +160,10 @@ export default function routes(
   router.use(adjudicationUrls.continueReport.root, continueReportSelectRoutes({ placeOnReportService }))
   router.use(adjudicationUrls.deleteReport.root, deleteReportRoutes({ placeOnReportService }))
   router.use(adjudicationUrls.printReport.root, printReportRoutes({ reportedAdjudicationsService }))
-  router.use(adjudicationUrls.printPdf.root, disPdfRoutes({ reportedAdjudicationsService, decisionTreeService }))
+  router.use(
+    adjudicationUrls.printPdf.root,
+    disPdfRoutes({ reportedAdjudicationsService, decisionTreeService, prisonerSearchService })
+  )
   router.use(
     adjudicationUrls.prisonerReport.root,
     adjudicationReportRoutes({
