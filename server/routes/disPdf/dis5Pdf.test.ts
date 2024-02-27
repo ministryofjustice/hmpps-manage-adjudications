@@ -88,7 +88,7 @@ const dis5Data = {
       },
     },
   ],
-  damageObligationsList: [
+  damageObligations: [
     {
       id: 1,
       offenderNo: 'H5123BY',
