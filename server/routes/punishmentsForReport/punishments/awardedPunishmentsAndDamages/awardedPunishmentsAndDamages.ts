@@ -15,8 +15,6 @@ import {
 import LocationService from '../../../../services/locationService'
 import { PrisonLocation } from '../../../../data/PrisonLocationResult'
 import UserService from '../../../../services/userService'
-import { hasAnyRole } from '../../../../utils/utils'
-import { User } from '../../../../data/hmppsManageUsersClient'
 
 export default class AwardedPunishmentsAndDamagesRoutes {
   constructor(
@@ -24,11 +22,6 @@ export default class AwardedPunishmentsAndDamagesRoutes {
     private readonly locationService: LocationService,
     private readonly userService: UserService
   ) {}
-
-  private isUserALO = async (user: User): Promise<boolean> => {
-    const userRoles = await this.userService.getUserRoles(user.token)
-    return hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
-  }
 
   private renderView = async (
     req: Request,
@@ -71,7 +64,7 @@ export default class AwardedPunishmentsAndDamagesRoutes {
     )
     const filter = awardedPunishmentsAndDamagesFilterFromUiFilter(uiFilter)
     const possibleLocations = await this.locationService.getLocationsForUser(user)
-    const userIsALO = await this.isUserALO(user)
+    const userIsALO = await this.userService.isUserALO(user)
     const results = await this.reportedAdjudicationsService.getAwardedPunishmentsAndDamages(
       filter,
       possibleLocations,

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import jwtDecode from 'jwt-decode'
 import { Request } from 'express'
-import { convertToTitleCase } from '../utils/utils'
+import { convertToTitleCase, hasAnyRole } from '../utils/utils'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
 import HmppsManageUsersClient, { NomisUserResult, User } from '../data/hmppsManageUsersClient'
@@ -49,6 +49,11 @@ export default class UserService {
     const { authorities: roles = [] } = jwtDecode(token) as { authorities?: string[] }
 
     return roles.map(role => role.replace('ROLE_', ''))
+  }
+
+  async isUserALO(user: User): Promise<boolean> {
+    const userRoles = await this.getUserRoles(user.token)
+    return hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)
   }
 
   async getUserWithSession(req: Request, token: string): Promise<UserDetails> {

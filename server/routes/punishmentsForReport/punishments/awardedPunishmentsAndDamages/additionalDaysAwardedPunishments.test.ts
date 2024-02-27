@@ -61,7 +61,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getAwardedPunishmentsAndDamages.mockResolvedValue(awardedPunishmentsAndDamages as never)
   const locations = testData.residentialLocations()
   locationService.getLocationsForUser.mockResolvedValue(locations)
-  userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  userService.isUserALO.mockResolvedValue(true)
 })
 
 afterEach(() => {
