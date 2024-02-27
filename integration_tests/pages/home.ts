@@ -11,7 +11,7 @@ export default class Home extends Page {
 
   sectionBreak = (): PageElement => cy.get('[data-qa="section-break"]')
 
-  viewScheduledHearingsCard = (): PageElement => cy.get('a').contains('Hearings')
+  viewScheduledHearingsCard = (): PageElement => cy.get('a').contains('Schedule hearings')
 
   startANewReportLink = (): PageElement => cy.get('a').contains('Start a new report')
 
@@ -35,5 +35,5 @@ export default class Home extends Page {
 
   dataInsightsLink = (): PageElement => cy.get('[data-qa="data-insights"]')
 
-  enterOutcomesCard = (): PageElement => cy.get('a').contains('Hearings and enter outcomes')
+  enterOutcomesCard = (): PageElement => cy.get('a').contains('Manage hearings and enter outcomes')
 }
