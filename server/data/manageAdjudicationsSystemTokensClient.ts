@@ -80,7 +80,7 @@ export type Dis5PrintSupport = {
 }
 
 export interface Dis5AdjudicationsAndMoneyPrintSupport extends Dis5PrintSupport {
-  damageObligations?: DamageObligation[]
+  damageObligationsList?: DamageObligation[]
   balances?: Balances
 }
 

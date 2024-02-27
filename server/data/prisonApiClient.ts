@@ -75,6 +75,7 @@ export interface Balances {
   cash: number
   savings: number
   currency: string
+  damageObligations: number
 }
 
 export enum SanctionStatus {

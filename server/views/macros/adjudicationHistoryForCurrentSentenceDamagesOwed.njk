@@ -1,23 +1,24 @@
 {% macro adjudicationHistoryForCurrentSentenceDamagesOwed(adjudicationHistoryForCurrentSentenceData) %}
   <div class='govuk-!-margin-left-8 govuk-!-margin-right-8 break-inside-avoid'>
     <h2 class="govuk-!-margin-top-8">Money owed for damages</h2>
-    {% if adjudicationHistoryForCurrentSentenceData.damageObligations | length %}
+    {% if adjudicationHistoryForCurrentSentenceData.damageObligationsList | length %}
+    <p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} currently owes £{{ adjudicationHistoryForCurrentSentenceData.damageObligations }}</p>
       <table>
         <tr>
-          <th>Charge number</th>
-          <th>Dates</th>
-          <th>Amount</th>
-          <th>Paid</th>
-          <th>Left to pay</th>
+          <th class="">Charge number</th>
+          <th class="">Dates</th>
+          <th class="moneyOwedColumnWidth25">Amount</th>
+          <th class="moneyOwedColumnWidth10">Paid</th>
+          <th class="moneyOwedColumnWidth20">Left to pay</th>
         </tr>
-        {% for damage in adjudicationHistoryForCurrentSentenceData.damageObligations %}
-          {% set amountLeftToPay = (amountToPay - amountPaid) %}
+        {% for damage in adjudicationHistoryForCurrentSentenceData.damageObligationsList %}
+          {% set amountLeftToPay = (damage.amountToPay - damage.amountPaid) %}
           <tr>
-            <td>{{ damage.referenceNumber }}</td>
-            <td>{{ damage.startDateTime | formatTimestampTo('D MMMM YYYY') }} to {{ damage.endDateTime | formatTimestampTo('D MMMM YYYY') }}</td>
-            <td>£{{ amountToPay }}</td>
-            <td>£{{ amountPaid }}</td>
-            <td>£{{ amountLeftToPay }}</td>
+            <td class="moneyOwedColumnWidth20">{{ damage.referenceNumber }}</td>
+            <td class="moneyOwedColumnWidth25">{{ damage.startDateTime | formatTimestampTo('D MMMM YYYY') }} to {{ damage.endDateTime | formatTimestampTo('D MMMM YYYY') }}</td>
+            <td class="moneyOwedColumnWidth20">£{{ damage.amountToPay }}</td>
+            <td class="moneyOwedColumnWidth10">£{{ damage.amountPaid }}</td>
+            <td class="moneyOwedColumnWidth20">£{{ amountLeftToPay }}</td>
           </tr>
         {% endfor %}
       </table>
