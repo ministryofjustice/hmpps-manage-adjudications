@@ -56,6 +56,27 @@ export interface OffenderBannerInfo {
   prisonerName: string
 }
 
+export interface DamageObligation {
+  id: number
+  offenderNo: string
+  referenceNumber: string
+  startDateTime: string
+  endDateTime: string
+  prisonId: string
+  amountToPay: number
+  amountPaid: number
+  status: string
+  comment: string
+  currency: string
+}
+
+export interface Balances {
+  spends: number
+  cash: number
+  savings: number
+  currency: string
+}
+
 export enum SanctionStatus {
   IMMEDIATE = 'IMMEDIATE',
   PROSPECTIVE = 'PROSPECTIVE',
@@ -163,6 +184,18 @@ export default class PrisonApiClient {
   async validateCharge(chargeNumber: string, status: SanctionStatus, offenderNo: string): Promise<{ status: number }> {
     return this.restClient.get({
       path: `/api/adjudications/adjudication/${chargeNumber}/sanction/${status}/${offenderNo}/validate`,
+    })
+  }
+
+  async getDamageObligation(offenderNo: string): Promise<DamageObligation[]> {
+    return this.restClient.get({
+      path: `/api/offenders/${offenderNo}/damage-obligations?status=ACTIVE`,
+    })
+  }
+
+  async getBalances(bookingId: number): Promise<Balances> {
+    return this.restClient.get({
+      path: `/api/bookings/${bookingId}/balances`,
     })
   }
 }

@@ -48,7 +48,7 @@
 					<p class="govuk-body">Sentenced on: </p>
 				</dt>
 				<dd class="govuk-summary-list__value">
-					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.sentenceStartDate | formatTimestampTo('D MMMM YYYY') or 'Not known' }}</p>
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.sentenceStartDate | formatTimestampTo('D MMMM YYYY') or 'Not applicable' }}</p>
 				</dd>
 			</div>
 			<div class="govuk-summary-list__row">
@@ -56,7 +56,7 @@
 					<p class="govuk-body">Automatic release date (ARD): </p>
 				</dt>
 				<dd class="govuk-summary-list__value">
-					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.autoReleaseDate | formatTimestampTo('D MMMM YYYY') or 'Not known' }}</p>
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.autoReleaseDate | formatTimestampTo('D MMMM YYYY') or 'Not applicable' }}</p>
 				</dd>
 			</div>
 			<div class="govuk-summary-list__row">
@@ -64,7 +64,7 @@
 					<p class="govuk-body">Conditional release date (CRD): </p>
 				</dt>
 				<dd class="govuk-summary-list__value">
-					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.conditionalReleaseDate | formatTimestampTo('D MMMM YYYY') or 'Not known' }}</p>
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.conditionalReleaseDate | formatTimestampTo('D MMMM YYYY') or 'Not applicable' }}</p>
 				</dd>
 			</div>
 			<div class="govuk-summary-list__row">
@@ -72,7 +72,7 @@
 					<p class="govuk-body">Non parole date (NPD): </p>
 				</dt>
 				<dd class="govuk-summary-list__value">
-					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.nonParoleDate | formatTimestampTo('D MMMM YYYY') or 'Not known' }}</p>
+					<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.nonParoleDate | formatTimestampTo('D MMMM YYYY') or 'Not applicable' }}</p>
 				</dd>
 			</div>
 		</dl>
@@ -104,7 +104,7 @@
 			<p class="govuk-body">Date of next incentive level review: {{ adjudicationHistoryForCurrentSentenceData.incentiveNextReviewDate | formatTimestampTo('D MMMM YYYY') }}</p>
 		</div>
 
-		<div class="break-inside-avoid">
+		<div class="break-inside-avoid govuk-!-padding-top-5">
 			<h2>Employment and pay</h2>
 			<div class='adjudication-pdf-section-sentence-details'>
 				<div class='adjudication-pdf-section-sentence-details__item'>
@@ -116,21 +116,11 @@
 					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
 				</div>
 			</div>
-			<div class='adjudication-pdf-section-sentence-details'>
-				<div class='adjudication-pdf-section-sentence-details__item'>
-					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Spends</p>
-					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-				</div>
-				<div class='adjudication-pdf-section-sentence-details__item'>
-					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Private cash</p>
-					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-				</div>
-			</div>
-			<div class='adjudication-pdf-section-sentence-details'>
-				<div class='adjudication-pdf-section-sentence-details__item'>
-					<p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Savings account</p>
-					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
-				</div>
+			<div class="break-inside-avoid govuk-!-padding-top-5">
+			<h2>Prisoner money</h2>
+			<p class="govuk-body">Spends: £{{ adjudicationHistoryForCurrentSentenceData.spends }}</p>
+			<p class="govuk-body">Private cash: £{{ adjudicationHistoryForCurrentSentenceData.cash }}</p>
+			<p class="govuk-body">Savings account: £{{ adjudicationHistoryForCurrentSentenceData.savings }}</p>
 			</div>
 		</div>
 	</div>

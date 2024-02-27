@@ -42,10 +42,10 @@ div.adjudication-pdf {
   }
   dt {
     display: table-cell;
-    width: 100%;
   }
   dd {
     display: table-cell;
+    padding-left: 20px;
   }
 }
 
@@ -447,9 +447,6 @@ div.adjudication-pdf {
 
 .lastReportedOffenceSummary__row {
   width: 100%;
-}
-.lastReportedOffenceSummary__key {
-  width: 90% !important;
 }
 
 .prisonerDetails-key {

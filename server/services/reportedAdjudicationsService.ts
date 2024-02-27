@@ -3,6 +3,7 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { OffenderBannerInfo } from '../data/prisonApiClient'
 import ManageAdjudicationsSystemTokensClient, {
   AgencyReportCounts,
+  Dis5AdjudicationsAndMoneyPrintSupport,
 } from '../data/manageAdjudicationsSystemTokensClient'
 import CuriousApiService from './curiousApiService'
 import {
@@ -295,6 +296,7 @@ export default class ReportedAdjudicationsService {
       isYouthOffender: adjudicationData.reportedAdjudication.isYouthOffender,
       prisonName: prisoner.agencyId,
       nonParoleDate: prisoner.sentenceDetail.nonParoleDate,
+      bookingId: prisoner.bookingId,
     }
   }
 
@@ -1325,8 +1327,24 @@ export default class ReportedAdjudicationsService {
     return results
   }
 
-  async getDis5Data(chargeNumber: string, user: User) {
+  async getDis5Data(
+    chargeNumber: string,
+    prisonerNumber: string,
+    bookingId: number,
+    user: User
+  ): Promise<Dis5AdjudicationsAndMoneyPrintSupport> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    return new ManageAdjudicationsSystemTokensClient(token, user).getDataForDis5(chargeNumber)
+
+    const [adjudicationsData, damageObligations, balances] = await Promise.all([
+      new ManageAdjudicationsSystemTokensClient(token, user).getDataForDis5(chargeNumber),
+      new PrisonApiClient(token).getDamageObligation(prisonerNumber),
+      new PrisonApiClient(token).getBalances(bookingId),
+    ])
+
+    return {
+      ...adjudicationsData,
+      ...damageObligations,
+      balances,
+    }
   }
 }
