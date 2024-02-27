@@ -7,9 +7,11 @@ import LocationService from '../../../../services/locationService'
 import TestData from '../../../testutils/testData'
 import { formatTimestampToDate } from '../../../../utils/utils'
 import { AwardedPunishmentsAndDamages, ReportedAdjudicationStatus } from '../../../../data/ReportedAdjudicationResult'
+import UserService from '../../../../services/userService'
 
 jest.mock('../../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../../services/locationService.ts')
+jest.mock('../../../../services/userService.ts')
 
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -19,6 +21,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
+const userService = new UserService(null, null) as jest.Mocked<UserService>
 const testData = new TestData() as jest.Mocked<TestData>
 
 let app: Express
@@ -39,6 +42,7 @@ beforeEach(() => {
       damagesOwedAmount: '£200',
       additionalDays: 0,
       prospectiveAdditionalDays: 0,
+      reportHref: adjudicationUrls.punishmentsAndDamages.urls.review('12345'),
     },
     {
       chargeNumber: '12345',
@@ -51,12 +55,14 @@ beforeEach(() => {
       punishmentCount: 0,
       additionalDays: 0,
       prospectiveAdditionalDays: 0,
+      reportHref: adjudicationUrls.punishmentsAndDamages.urls.review('12345'),
     },
   ]
   reportedAdjudicationsService.getAwardedPunishmentsAndDamages.mockResolvedValue(awardedPunishmentsAndDamages as never)
 
   const locations = testData.residentialLocations()
   locationService.getLocationsForUser.mockResolvedValue(locations)
+  userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 })
 
 afterEach(() => {

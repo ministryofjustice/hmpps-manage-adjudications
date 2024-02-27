@@ -7,29 +7,35 @@ import FinancialAwardedPunishmentsAndDamagesRoutes from './financialAwardedPunis
 import AdditionalDaysAwardedPunishmentsRoutes from './additionalDaysAwardedPunishments'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import LocationService from '../../../../services/locationService'
+import UserService from '../../../../services/userService'
 
 export default function awardedPunishmentsAndDamagesRoutes({
   reportedAdjudicationsService,
   locationService,
+  userService,
 }: {
   reportedAdjudicationsService: ReportedAdjudicationsService
   locationService: LocationService
+  userService: UserService
 }): Router {
   const router = express.Router()
 
   const awardedPunishmentsAndDamagesRoute = new AwardedPunishmentsAndDamagesRoutes(
     reportedAdjudicationsService,
-    locationService
+    locationService,
+    userService
   )
 
   const financialAwardedPunishmentsAndDamagesRoute = new FinancialAwardedPunishmentsAndDamagesRoutes(
     reportedAdjudicationsService,
-    locationService
+    locationService,
+    userService
   )
 
   const additionalDaysAwardedPunishmentsRoute = new AdditionalDaysAwardedPunishmentsRoutes(
     reportedAdjudicationsService,
-    locationService
+    locationService,
+    userService
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))

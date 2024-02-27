@@ -38,7 +38,7 @@
     {% endset -%}
 
     {% set punishmentsLinkHtml %}
-      <a href="{{ adjudicationUrls.punishmentsAndDamages.urls.review(result.chargeNumber) }}" class="govuk-link" data-qa="view-punishments-link-{{ resultNumber }}">View punishments<span class="govuk-visually-hidden"> for {{ result.chargeNumber }}</span></a>
+      <a href="{{ result.reportHref }}" class="govuk-link" data-qa="view-punishments-link-{{ resultNumber }}">View punishments<span class="govuk-visually-hidden"> for {{ result.chargeNumber }}</span></a>
     {% endset -%}
 
     {% set rows = (rows.push([
