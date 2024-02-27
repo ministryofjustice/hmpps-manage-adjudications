@@ -96,7 +96,7 @@ export default class adjudicationHistoryForCurrentSentenceData {
     this.nonParoleDate = confirmedOnReportData.nonParoleDate
     this.acctAlertPresent = prisonerSearchDis5Data.acctAlertPresent
     this.csipAlertPresent = prisonerSearchDis5Data.csipAlertPresent
-    this.damageObligationsList = dis5Data.damageObligationsList
+    this.damageObligationsList = dis5Data.damageObligations
     this.spends = dis5Data.balances.spends
     this.savings = dis5Data.balances.savings
     this.cash = dis5Data.balances.cash

@@ -27,7 +27,6 @@ export default class Dis5Pdf {
       adjudicationDetails.bookingId,
       user
     )
-
     const adjudicationHistoryForCurrentSentenceData = new AdjudicationHistoryForCurrentSentenceData(
       chargeNumber,
       adjudicationDetails,
