@@ -14,11 +14,13 @@ import {
 } from '../../../../utils/adjudicationFilterHelper'
 import LocationService from '../../../../services/locationService'
 import { PrisonLocation } from '../../../../data/PrisonLocationResult'
+import UserService from '../../../../services/userService'
 
 export default class AdditionalDaysAwardedPunishmentsRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly locationService: LocationService
+    private readonly locationService: LocationService,
+    private readonly userService: UserService
   ) {}
 
   private renderView = async (
@@ -62,9 +64,11 @@ export default class AdditionalDaysAwardedPunishmentsRoutes {
     )
     const filter = awardedPunishmentsAndDamagesFilterFromUiFilter(uiFilter)
     const possibleLocations = await this.locationService.getLocationsForUser(user)
+    const userIsALO = await this.userService.isUserALO(user)
     const results = await this.reportedAdjudicationsService.getAwardedPunishmentsAndDamages(
       filter,
       possibleLocations,
+      userIsALO,
       user
     )
     const filteredResults = results.filter(result => result.additionalDays > 0 || result.prospectiveAdditionalDays > 0)

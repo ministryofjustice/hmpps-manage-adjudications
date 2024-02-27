@@ -1145,6 +1145,7 @@ export default class ReportedAdjudicationsService {
   async getAwardedPunishmentsAndDamages(
     filter: AwardedPunishmentsAndDamagesFilter,
     possibleLocations: Location[],
+    userIsALO: boolean,
     user: User
   ): Promise<AwardedPunishmentsAndDamages[]> {
     const hearingForDateByChargeNumber = new Map(
@@ -1173,7 +1174,8 @@ export default class ReportedAdjudicationsService {
         this.buildAwardedPunishmentsAndDamages(
           reportedAdjudicationResult,
           hearingForDateByChargeNumber,
-          prisonerDetails
+          prisonerDetails,
+          userIsALO
         )
     )
 
@@ -1206,7 +1208,8 @@ export default class ReportedAdjudicationsService {
   private buildAwardedPunishmentsAndDamages(
     adj: ReportedAdjudicationResult,
     hearingForDateByChargeNumber: Map<string, any>,
-    prisonerDetails: Map<string, PrisonerSimpleResult>
+    prisonerDetails: Map<string, PrisonerSimpleResult>,
+    userIsALO: boolean
   ): AwardedPunishmentsAndDamages {
     const adjudication = adj.reportedAdjudication
     const hearingForAdjudication = hearingForDateByChargeNumber.get(adjudication.chargeNumber)
@@ -1261,6 +1264,9 @@ export default class ReportedAdjudicationsService {
       damagesOwedAmount,
       additionalDays,
       prospectiveAdditionalDays,
+      reportHref: userIsALO
+        ? adjudicationUrls.punishmentsAndDamages.urls.review(adjudication.chargeNumber)
+        : adjudicationUrls.punishmentsAndDamages.urls.report(adjudication.chargeNumber),
     }
   }
 

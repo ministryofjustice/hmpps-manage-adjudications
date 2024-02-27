@@ -347,7 +347,7 @@ export default function routes(
 
   router.use(
     adjudicationUrls.awardedPunishmentsAndDamages.root,
-    awardedPunishmentsAndDamagesRoutes({ reportedAdjudicationsService, locationService })
+    awardedPunishmentsAndDamagesRoutes({ reportedAdjudicationsService, locationService, userService })
   )
 
   router.use(
