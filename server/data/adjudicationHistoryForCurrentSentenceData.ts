@@ -52,13 +52,15 @@ export default class adjudicationHistoryForCurrentSentenceData {
 
   csipAlertPresent: boolean
 
-  damageObligations: DamageObligation[]
+  damageObligationsList: DamageObligation[]
 
   spends: number
 
   savings: number
 
   cash: number
+
+  damageObligations: number
 
   constructor(
     chargeNumber: string,
@@ -94,9 +96,10 @@ export default class adjudicationHistoryForCurrentSentenceData {
     this.nonParoleDate = confirmedOnReportData.nonParoleDate
     this.acctAlertPresent = prisonerSearchDis5Data.acctAlertPresent
     this.csipAlertPresent = prisonerSearchDis5Data.csipAlertPresent
-    this.damageObligations = dis5Data.damageObligations
+    this.damageObligationsList = dis5Data.damageObligationsList
     this.spends = dis5Data.balances.spends
     this.savings = dis5Data.balances.savings
     this.cash = dis5Data.balances.cash
+    this.damageObligations = dis5Data.balances.damageObligations
   }
 }

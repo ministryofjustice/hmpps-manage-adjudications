@@ -88,7 +88,7 @@ const dis5Data = {
       },
     },
   ],
-  damageObligations: [
+  damageObligationsList: [
     {
       id: 1,
       offenderNo: 'H5123BY',
@@ -107,6 +107,7 @@ const dis5Data = {
     savings: 10,
     cash: 10,
     spends: 100,
+    damageObligations: 100,
   },
 }
 beforeEach(() => {
@@ -158,7 +159,8 @@ describe('GET /dis5', () => {
           conditionalReleaseDate: undefined,
           nonParoleDate: undefined,
           csipAlertPresent: undefined,
-          damageObligations: [
+          sentenceStartDate: undefined,
+          damageObligationsList: [
             {
               id: 1,
               offenderNo: 'H5123BY',
@@ -177,7 +179,7 @@ describe('GET /dis5', () => {
           savings: 10,
           spends: 100,
           cash: 10,
-
+          damageObligations: 100,
           chargesWithSuspendedPunishments: [
             {
               chargeNumber: 'MDI-000010',
