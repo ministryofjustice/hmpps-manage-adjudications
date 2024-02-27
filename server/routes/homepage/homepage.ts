@@ -85,7 +85,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     },
     {
       id: 'hearings-and-enter-outcomes',
-      heading: 'Hearings and enter outcomes',
+      heading: 'Manage hearings and enter outcomes',
       href: adjudicationUrls.viewScheduledHearings.root,
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
