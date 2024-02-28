@@ -36,6 +36,7 @@ export default class HearingCheckYourAnswersPage {
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { adjudicator, plea, finding } = req.query
+
     // if the data has been lost, they need to restart this journey
     if (!plea || !adjudicator || !finding) {
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
@@ -66,7 +67,7 @@ export default class HearingCheckYourAnswersPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { user } = res.locals
-    const { plea, adjudicator } = req.query
+    const { plea, adjudicator, finding } = req.query
 
     // if the plea or adjudicator has been lost, they need to restart this journey
     if (!plea || !adjudicator) return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
@@ -94,7 +95,11 @@ export default class HearingCheckYourAnswersPage {
       }
       return res.redirect(adjudicationUrls.awardPunishments.urls.start(chargeNumber))
     } catch (postError) {
-      res.locals.redirectUrl = adjudicationUrls.hearingsCheckAnswers.urls.start(chargeNumber)
+      res.locals.redirectUrl = url.format({
+        pathname: adjudicationUrls.hearingsCheckAnswers.urls.start(chargeNumber),
+        query: { adjudicator: String(adjudicator), plea: String(plea), finding: String(finding) },
+      })
+
       throw postError
     }
   }
