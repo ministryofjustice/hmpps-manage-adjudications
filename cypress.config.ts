@@ -110,6 +110,7 @@ export default defineConfig({
         stubGetAllDraftAdjudicationsForUser: adjudications.stubGetAllDraftAdjudicationsForUser,
         stubGetYourReportedAdjudications: adjudications.stubGetYourReportedAdjudications,
         stubGetAllReportedAdjudications: adjudications.stubGetAllReportedAdjudications,
+        stubGetTransferredAdjudications: adjudications.stubGetTransferredAdjudications,
         stubCreateDraftFromCompleteAdjudication: adjudications.stubCreateDraftFromCompleteAdjudication,
         stubGetOffenceRule: adjudications.stubGetOffenceRule,
         stubGetAllOffenceRules: adjudications.stubGetAllOffenceRules,

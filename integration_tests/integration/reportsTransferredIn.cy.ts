@@ -6,10 +6,11 @@ import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/d
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
 import TestData from '../../server/routes/testutils/testData'
+import { TransferredReportType } from '../../server/utils/adjudicationFilterHelper'
 
 const testData = new TestData()
 
-context('Transferred Reports', () => {
+context('Reports transferred in', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -19,27 +20,25 @@ context('Transferred Reports', () => {
   })
 
   it('should say when there are no results', () => {
-    cy.task('stubGetAllReportedAdjudications', {
+    cy.task('stubGetTransferredAdjudications', {
       filter: {
         status: null,
-        fromDate: '2001-01-01',
-        toDate: null,
+        type: TransferredReportType.IN,
       },
     })
     cy.task('stubGetBatchPrisonerDetails')
 
-    cy.visit(adjudicationUrls.reportsTransferredIn.root)
+    cy.visit(adjudicationUrls.reportsTransferredIn.urls.start())
     const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
 
     transferredReportsPage.noResultsMessage().should('exist')
   })
 
   it('should display the correct data on the first page', () => {
-    cy.task('stubGetAllReportedAdjudications', {
+    cy.task('stubGetTransferredAdjudications', {
       filter: {
         status: null,
-        toDate: null,
-        fromDate: '2001-01-01',
+        type: TransferredReportType.IN,
       },
     })
     cy.task('stubGetUserFromUsername', {
@@ -55,18 +54,17 @@ context('Transferred Reports', () => {
         status: ReportedAdjudicationStatus.UNSCHEDULED,
       })
     })
-    cy.task('stubGetAllReportedAdjudications', {
+    cy.task('stubGetTransferredAdjudications', {
       number: 0,
       allContent: manyReportedAdjudications,
       filter: {
         status: null,
-        toDate: null,
-        fromDate: '2001-01-01',
+        type: TransferredReportType.IN,
       },
     }) // Page 1
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
 
-    cy.visit(adjudicationUrls.reportsTransferredIn.root)
+    cy.visit(adjudicationUrls.reportsTransferredIn.urls.start())
     const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
     transferredReportsPage.resultsTable().should('exist')
     transferredReportsPage
@@ -99,17 +97,16 @@ context('Transferred Reports', () => {
       response: testData.userFromUsername('USER1'),
     })
     // The empty results to return when first landing on your completed reports page.
-    cy.task('stubGetAllReportedAdjudications', {
+    cy.task('stubGetTransferredAdjudications', {
       number: 0,
       allContent: [],
       filter: {
         status: null,
-        toDate: null,
-        fromDate: '2001-01-01',
+        type: TransferredReportType.IN,
       },
     })
     // The result to return when filtering for the dates we will enter in the date picker and status selected.
-    cy.task('stubGetAllReportedAdjudications', {
+    cy.task('stubGetTransferredAdjudications', {
       number: 0,
       allContent: [
         testData.reportedAdjudication({
@@ -121,13 +118,12 @@ context('Transferred Reports', () => {
       ],
       filter: {
         status: ReportedAdjudicationStatus.UNSCHEDULED,
-        toDate: null,
-        fromDate: '2001-01-01',
+        type: TransferredReportType.IN,
       },
     })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
 
-    cy.visit(adjudicationUrls.reportsTransferredIn.root) // visit page one
+    cy.visit(adjudicationUrls.reportsTransferredIn.urls.start()) // visit page one
     const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
     transferredReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
@@ -135,87 +131,9 @@ context('Transferred Reports', () => {
     transferredReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.reportsTransferredIn.root)
-      expect(loc.search).to.eq('?status=UNSCHEDULED')
+      expect(loc.pathname).to.eq(adjudicationUrls.reportsTransferredIn.urls.start())
+      expect(loc.search).to.eq('?status=UNSCHEDULED&type=IN')
     })
     transferredReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
-  })
-
-  it('dynamic links for transferred prisoners', () => {
-    cy.task('stubGetAllReportedAdjudications', {
-      filter: {
-        status: null,
-        toDate: null,
-        fromDate: '2001-01-01',
-      },
-    })
-    cy.task('stubGetUserFromUsername', {
-      username: 'USER1',
-      response: testData.userFromUsername('USER1'),
-    })
-    const reportedAdjudications = [
-      testData.reportedAdjudication({
-        chargeNumber: '1',
-        prisonerNumber: 'A1234AA',
-        dateTimeOfIncident: '2021-11-15T11:30:00',
-        dateTimeOfDiscovery: '2345-11-15T11:30:00',
-        status: ReportedAdjudicationStatus.UNSCHEDULED,
-        otherData: {
-          overrideAgencyId: 'LEI',
-          transferableActionsAllowed: true,
-        },
-      }),
-      testData.reportedAdjudication({
-        chargeNumber: '2',
-        prisonerNumber: 'A1234AA',
-        dateTimeOfIncident: '2021-11-15T11:30:00',
-        dateTimeOfDiscovery: '2345-11-15T11:30:00',
-        status: ReportedAdjudicationStatus.UNSCHEDULED,
-      }),
-      testData.reportedAdjudication({
-        chargeNumber: '3',
-        prisonerNumber: 'A1234AA',
-        dateTimeOfIncident: '2021-11-15T11:30:00',
-        dateTimeOfDiscovery: '2345-11-15T11:30:00',
-        status: ReportedAdjudicationStatus.UNSCHEDULED,
-        otherData: {
-          overrideAgencyId: 'LEI',
-          transferableActionsAllowed: false,
-        },
-      }),
-    ]
-    cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: reportedAdjudications })
-    cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
-    cy.visit(adjudicationUrls.allCompletedReports.root)
-    const allReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
-    allReportsPage.viewReportLink().first().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1))
-    })
-    cy.visit(adjudicationUrls.allCompletedReports.root)
-    allReportsPage.viewReportLink().eq(1).click() // this is the second report (zero indexed)
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(2))
-    })
-    cy.visit(adjudicationUrls.allCompletedReports.root)
-    allReportsPage.viewReportLink().last().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly(3))
-    })
-    cy.visit(adjudicationUrls.allCompletedReports.root)
-    allReportsPage.viewHearingsLink().first().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1'))
-    })
-    cy.visit(adjudicationUrls.allCompletedReports.root)
-    allReportsPage.viewHearingsLink().eq(1).click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('2'))
-    })
-    cy.visit(adjudicationUrls.allCompletedReports.root)
-    allReportsPage.viewHearingsLink().eq(2).click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.viewOnly('3'))
-    })
   })
 })

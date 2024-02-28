@@ -9,6 +9,7 @@ import {
   IssueStatus,
   ReportedAdjudicationStatus,
 } from '../../server/data/ReportedAdjudicationResult'
+import { TransferredReportType, transferredStatuses } from '../../server/utils/adjudicationFilterHelper'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -280,6 +281,48 @@ const stubGetAllReportedAdjudications = stubGetReportedAdjudications('/adjudicat
 const stubGetYourReportedAdjudications = stubGetReportedAdjudications(
   '/adjudications/reported-adjudications/my-reports'
 )
+
+const stubGetTransferredAdjudications = ({
+  number = 0,
+  size = 20,
+  allContent = [],
+  filter = {
+    status: null,
+    type: 'ALL',
+  },
+}: {
+  number: number
+  size: number
+  allContent: unknown[]
+  filter: {
+    status: ReportedAdjudicationStatus
+    type: 'ALL'
+  }
+}): SuperAgentRequest => {
+  const apiRequest = {
+    size,
+    number,
+  }
+  const apiResponse = apiPageResponseFrom(apiRequest, allContent)
+  const path =
+    `/adjudications/reported-adjudications/transfer-reports?page=${number}&size=${size}` +
+    `${(filter.status && `&status=${filter.status}`) || `&status=${transferredStatuses}`}` +
+    `${(filter.type && `&type=${filter.type}`) || `&type=${TransferredReportType.ALL}`}`
+
+  return stubFor({
+    request: {
+      method: 'GET',
+      url: path,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: apiResponse,
+    },
+  })
+}
 
 const stubCreateDraftFromCompleteAdjudication = ({
   chargeNumber,
@@ -1238,4 +1281,5 @@ export default {
   stubCreateGovReferral,
   stubGetAllOffenceRules,
   stubPrisonerActivePunishments,
+  stubGetTransferredAdjudications,
 }
