@@ -33,6 +33,7 @@ import { ContinueReportApiFilter } from '../routes/continueReport/continueReport
 import { ActivePunishment, PunishmentData, PunishmentDataWithSchedule, SuspendedPunishment } from './PunishmentResult'
 import { User } from './hmppsManageUsersClient'
 import { Balances, DamageObligation } from './prisonApiClient'
+import { transferredStatuses } from '../utils/adjudicationFilterHelper'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string
@@ -180,9 +181,7 @@ export default class ManageAdjudicationsSystemTokensClient {
         `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
         `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
         `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
-        `${(filter.transfersOnly && `&transfersOnly=${true}`) || ''}`
-
+        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
       return this.restClient.get({
         path,
       })

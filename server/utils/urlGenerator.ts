@@ -5,6 +5,7 @@ import {
   AwardedPunishmentsAndDamagesUiFilter,
   DISUiFilter,
   PrintDISFormsUiFilter,
+  TransferredAdjudicationFilter,
   TransfersUiFilter,
   UiFilter,
 } from './adjudicationFilterHelper'
@@ -269,25 +270,53 @@ const adjudicationUrls = {
       filter: (filter: UiFilter) =>
         url.format({
           pathname: adjudicationUrls.allCompletedReports.root,
-          query: { ...filter, transfersOnly: false },
+          query: { ...filter },
         }),
     },
     matchers: {
       start: '/',
     },
   },
-  allTransferredReports: {
-    root: '/all-transferred-reports',
+  reportsTransferredIn: {
+    root: '/transferred-reports',
     urls: {
-      start: () => adjudicationUrls.allTransferredReports.root,
-      filter: (filter: TransfersUiFilter) =>
+      start: () => `${adjudicationUrls.reportsTransferredIn.root}/in`,
+      filter: (filter: TransferredAdjudicationFilter) =>
         url.format({
-          pathname: adjudicationUrls.allTransferredReports.root,
-          query: { ...filter, transfersOnly: true },
+          pathname: `${adjudicationUrls.reportsTransferredIn.root}/in`,
+          query: { ...filter },
         }),
     },
     matchers: {
-      start: '/',
+      start: '/in',
+    },
+  },
+  reportsTransferredAll: {
+    root: '/transferred-reports',
+    urls: {
+      start: () => `${adjudicationUrls.reportsTransferredIn.root}/all`,
+      filter: (filter: TransfersUiFilter) =>
+        url.format({
+          pathname: `${adjudicationUrls.reportsTransferredIn.root}/all`,
+          query: { ...filter },
+        }),
+    },
+    matchers: {
+      start: '/all',
+    },
+  },
+  reportsTransferredOut: {
+    root: '/transferred-reports',
+    urls: {
+      start: () => `${adjudicationUrls.reportsTransferredIn.root}/out`,
+      filter: (filter: TransfersUiFilter) =>
+        url.format({
+          pathname: `${adjudicationUrls.reportsTransferredIn.root}/out`,
+          query: { ...filter },
+        }),
+    },
+    matchers: {
+      start: '/out',
     },
   },
   continueReport: {

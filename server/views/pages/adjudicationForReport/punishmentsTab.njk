@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
-{% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
+{% from "../../macros/tabHeaders/adjudicationTabHeader.njk" import adjudicationTabHeader %}
 {% from "../../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
 {% from "../../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
 {% from "../../macros/punishmentCommentTable.njk" import punishmentCommentTable %}
@@ -23,7 +23,7 @@
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
 
-  {{ adjudicationTabHeaderSingular(chargeNumber, reviewStatus, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
+  {{ adjudicationTabHeader(chargeNumber, reviewStatus, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'punishments', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
 
   {% if chargeProved or (corrupted and punishments.length) %}
 

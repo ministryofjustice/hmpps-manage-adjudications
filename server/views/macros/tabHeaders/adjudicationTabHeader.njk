@@ -1,8 +1,8 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
-{% from "../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
+{% from "../../partials/prisonerPlaybackSection.njk" import prisonerPlaybackSection %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
-{% macro adjudicationTabHeaderSingular(chargeNumber, status, reviewStatusText, prisoner, activeTab, reportHref, hearingsHref, punishmentsHref, formsHref, showHearings = true, showFormsTab = false) %}
+{% macro adjudicationTabHeader(chargeNumber, status, reviewStatusText, prisoner, activeTab, reportHref, hearingsHref, punishmentsHref, formsHref, showHearings = true, showFormsTab = false) %}
     {% set items = [{
       text: 'Report',
       href: reportHref,

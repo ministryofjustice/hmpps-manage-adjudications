@@ -28,6 +28,11 @@ import {
 import { User } from './hmppsManageUsersClient'
 import { ApiPageRequest, ApiPageResponse } from './ApiData'
 import { momentDateToApi } from '../utils/utils'
+import {
+  TransferredAdjudicationFilter,
+  TransferredReportType,
+  transferredStatuses,
+} from '../utils/adjudicationFilterHelper'
 
 export type OutcomeInfo = {
   code: OutcomeCode
@@ -115,8 +120,7 @@ export default class ManageAdjudicationsUserTokensClient {
         `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
         `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
         `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
-        `${(filter.transfersOnly && `&transfersOnly=${true}`) || ''}`
+        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
 
       return this.restClient.get({
         path,
@@ -124,6 +128,19 @@ export default class ManageAdjudicationsUserTokensClient {
     }
 
   getAllCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/reports')
+
+  async getTransferredAdjudications(
+    filter: TransferredAdjudicationFilter,
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudication>> {
+    const path =
+      `/reported-adjudications/transfer-reports?page=${pageRequest.number}&size=${pageRequest.size}` +
+      `${(filter.status && `&status=${filter.status}`) || `&status=${transferredStatuses}`}` +
+      `${(filter.type && `&type=${filter.type}`) || `&type=${TransferredReportType.ALL}`}`
+    return this.restClient.get({
+      path,
+    })
+  }
 
   async aloAmendOffenceDetails(draftId: number, offenceDetails: OffenceDetails): Promise<ReportedAdjudication> {
     return this.restClient.post({

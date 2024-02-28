@@ -2,7 +2,7 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "../../macros/adjudicationTabHeaderSingular.njk" import adjudicationTabHeaderSingular %}
+{% from "../../macros/tabHeaders/adjudicationTabHeader.njk" import adjudicationTabHeader %}
 {% from "../../macros/transferBanner.njk" import transferBanner%}
 
 {% from "../../partials/hearingDetailsVariations/outcomeTable.njk" import outcomeTable %}
@@ -21,7 +21,7 @@
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
 
-  {{ adjudicationTabHeaderSingular(chargeNumber, reviewStatus, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'hearings', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
+  {{ adjudicationTabHeader(chargeNumber, reviewStatus, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'hearings', reportHref, hearingsHref, punishmentsHref, formsHref, true, showFormsTab) }}
 
   {% if schedulingNotAvailable %}
     {% include "../../partials/hearingDetailsVariations/emptyState.njk" %}

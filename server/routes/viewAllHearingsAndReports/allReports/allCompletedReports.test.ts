@@ -109,7 +109,7 @@ describe('POST /all-completed-reports', () => {
       })
       .expect(
         'Location',
-        `${adjudicationUrls.allCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&transfersOnly=false`
+        `${adjudicationUrls.allCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW`
       )
   })
   it('should render the not found page without the correct role', () => {

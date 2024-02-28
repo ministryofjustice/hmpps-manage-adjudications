@@ -6,6 +6,7 @@ import ReportedAdjudicationsService from '../../../services/reportedAdjudication
 import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { TransferredReportType } from '../../../utils/adjudicationFilterHelper'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
@@ -48,7 +49,7 @@ beforeEach(() => {
     },
   })
 
-  reportedAdjudicationsService.getAllCompletedAdjudications.mockResolvedValue({
+  reportedAdjudicationsService.getTransferredAdjudicationReports.mockResolvedValue({
     size: 20,
     number: 0,
     totalElements: 2,
@@ -60,11 +61,11 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe('GET /all-completed-reports', () => {
+describe('GET', () => {
   it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
-      .get(adjudicationUrls.allTransferredReports.root)
+      .get(adjudicationUrls.reportsTransferredIn.urls.start())
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -74,7 +75,7 @@ describe('GET /all-completed-reports', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 
     return request(app)
-      .get(adjudicationUrls.allTransferredReports.root)
+      .get(adjudicationUrls.reportsTransferredIn.urls.start())
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Adjudications')
@@ -87,7 +88,7 @@ describe('GET /all-completed-reports', () => {
       transferReviewTotal: 2,
     })
     return request(app)
-      .get(adjudicationUrls.allTransferredReports.root)
+      .get(adjudicationUrls.reportsTransferredIn.urls.start())
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Smith, John - G6123VU')
@@ -104,16 +105,17 @@ describe('POST /all-transferred-reports', () => {
   it('should redirect with the correct filter parameters', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
-      .post(adjudicationUrls.allTransferredReports.root)
+      .post(adjudicationUrls.reportsTransferredIn.urls.start())
       .send({
         status: ReportedAdjudicationStatus.ADJOURNED,
+        type: TransferredReportType.IN,
       })
-      .expect('Location', `${adjudicationUrls.allTransferredReports.root}?status=ADJOURNED&transfersOnly=true`)
+      .expect('Location', `${adjudicationUrls.reportsTransferredIn.urls.start()}?status=ADJOURNED&type=IN`)
   })
   it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
-      .post(adjudicationUrls.allTransferredReports.root)
+      .post(adjudicationUrls.reportsTransferredIn.urls.start())
       .expect(res => {
         expect(res.text).toContain('Page not found')
       })

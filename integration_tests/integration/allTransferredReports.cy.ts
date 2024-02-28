@@ -1,4 +1,4 @@
-import AllTransferReportsPage from '../pages/allReportsFromTransfers'
+import reportsTransferredInPage from '../pages/allReportsFromTransfers'
 import AllCompletedReportsPage from '../pages/allReports'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
@@ -24,13 +24,12 @@ context('Transferred Reports', () => {
         status: null,
         fromDate: '2001-01-01',
         toDate: null,
-        transfersOnly: true,
       },
     })
     cy.task('stubGetBatchPrisonerDetails')
 
-    cy.visit(adjudicationUrls.allTransferredReports.root)
-    const transferredReportsPage: AllTransferReportsPage = Page.verifyOnPage(AllTransferReportsPage)
+    cy.visit(adjudicationUrls.reportsTransferredIn.root)
+    const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
 
     transferredReportsPage.noResultsMessage().should('exist')
   })
@@ -41,7 +40,6 @@ context('Transferred Reports', () => {
         status: null,
         toDate: null,
         fromDate: '2001-01-01',
-        transfersOnly: true,
       },
     })
     cy.task('stubGetUserFromUsername', {
@@ -64,13 +62,12 @@ context('Transferred Reports', () => {
         status: null,
         toDate: null,
         fromDate: '2001-01-01',
-        transfersOnly: true,
       },
     }) // Page 1
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
 
-    cy.visit(adjudicationUrls.allTransferredReports.root)
-    const transferredReportsPage: AllTransferReportsPage = Page.verifyOnPage(AllTransferReportsPage)
+    cy.visit(adjudicationUrls.reportsTransferredIn.root)
+    const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
     transferredReportsPage.resultsTable().should('exist')
     transferredReportsPage
       .resultsTable()
@@ -109,7 +106,6 @@ context('Transferred Reports', () => {
         status: null,
         toDate: null,
         fromDate: '2001-01-01',
-        transfersOnly: true,
       },
     })
     // The result to return when filtering for the dates we will enter in the date picker and status selected.
@@ -127,21 +123,20 @@ context('Transferred Reports', () => {
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         toDate: null,
         fromDate: '2001-01-01',
-        transfersOnly: true,
       },
     })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
 
-    cy.visit(adjudicationUrls.allTransferredReports.root) // visit page one
-    const transferredReportsPage: AllTransferReportsPage = Page.verifyOnPage(AllTransferReportsPage)
+    cy.visit(adjudicationUrls.reportsTransferredIn.root) // visit page one
+    const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
     transferredReportsPage.noResultsMessage().should('contain', 'No completed reports.')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     transferredReportsPage.uncheckAllCheckboxes()
     transferredReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.allTransferredReports.root)
-      expect(loc.search).to.eq('?status=UNSCHEDULED&transfersOnly=true')
+      expect(loc.pathname).to.eq(adjudicationUrls.reportsTransferredIn.root)
+      expect(loc.search).to.eq('?status=UNSCHEDULED')
     })
     transferredReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
   })
@@ -152,7 +147,6 @@ context('Transferred Reports', () => {
         status: null,
         toDate: null,
         fromDate: '2001-01-01',
-        transfersOnly: true,
       },
     })
     cy.task('stubGetUserFromUsername', {
@@ -193,33 +187,33 @@ context('Transferred Reports', () => {
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: reportedAdjudications })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
     cy.visit(adjudicationUrls.allCompletedReports.root)
-    const transferredReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
-    transferredReportsPage.viewReportLink().first().click()
+    const allReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
+    allReportsPage.viewReportLink().first().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(1))
     })
     cy.visit(adjudicationUrls.allCompletedReports.root)
-    transferredReportsPage.viewReportLink().eq(1).click() // this is the second report (zero indexed)
+    allReportsPage.viewReportLink().eq(1).click() // this is the second report (zero indexed)
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.review(2))
     })
     cy.visit(adjudicationUrls.allCompletedReports.root)
-    transferredReportsPage.viewReportLink().last().click()
+    allReportsPage.viewReportLink().last().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly(3))
     })
     cy.visit(adjudicationUrls.allCompletedReports.root)
-    transferredReportsPage.viewHearingsLink().first().click()
+    allReportsPage.viewHearingsLink().first().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1'))
     })
     cy.visit(adjudicationUrls.allCompletedReports.root)
-    transferredReportsPage.viewHearingsLink().eq(1).click()
+    allReportsPage.viewHearingsLink().eq(1).click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('2'))
     })
     cy.visit(adjudicationUrls.allCompletedReports.root)
-    transferredReportsPage.viewHearingsLink().eq(2).click()
+    allReportsPage.viewHearingsLink().eq(2).click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.viewOnly('3'))
     })

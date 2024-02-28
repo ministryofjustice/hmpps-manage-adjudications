@@ -62,7 +62,7 @@ context('Home page', () => {
   it('should link to the correct location - view all reports (review reports link)', () => {
     const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
       'DD/MM/YYYY'
-    )}&status=AWAITING_REVIEW&transfersOnly=false`
+    )}&status=AWAITING_REVIEW`
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.reviewReportsLink().click()
@@ -74,7 +74,7 @@ context('Home page', () => {
   it('should link to the correct location - view all reports (schedule reports link)', () => {
     const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
       'DD/MM/YYYY'
-    )}&status=UNSCHEDULED&status=ADJOURNED&status=REFER_INAD&transfersOnly=false`
+    )}&status=UNSCHEDULED&status=ADJOURNED&status=REFER_INAD`
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.scheduleHearingsLink().click()

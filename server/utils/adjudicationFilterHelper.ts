@@ -25,16 +25,19 @@ const error: { [key in ErrorType]: FormError } = {
   },
 }
 
+export type TransferredAdjudicationFilter = {
+  status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  type: TransferredReportType
+}
+
 export type UiFilter = {
   fromDate: string
   toDate: string
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
-  transfersOnly?: boolean
 }
 
 export type TransfersUiFilter = {
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
-  transfersOnly?: boolean
 }
 
 export type DISUiFilter = {
@@ -78,14 +81,12 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
     fromDate: req.query.fromDate as string,
     toDate: req.query.toDate as string,
     status: req.query.status as ReportedAdjudicationStatus,
-    transfersOnly: req.query.transfersOnly as unknown as boolean,
   }
 }
 
 export const uiTransfersFilterFromRequest = (req: Request): TransfersUiFilter => {
   return {
     status: req.query.status as ReportedAdjudicationStatus,
-    transfersOnly: req.query.transfersOnly as unknown as boolean,
   }
 }
 
@@ -151,7 +152,6 @@ export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
     fromDate: uiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
     toDate: uiFilter.toDate || momentDateToDatePicker(moment()),
     status: uiFilter.status || allStatuses,
-    transfersOnly: uiFilter.transfersOnly,
   }
 }
 
@@ -250,11 +250,10 @@ export const DISFormfilterFromUiFilter = (filter: DISUiFilter) => {
   }
 }
 
-export const transfersFilterFromUiFilter = (filter: TransfersUiFilter) => {
+export const transfersFilterFromUiFilter = (filter: TransfersUiFilter, transferType: TransferredReportType) => {
   return {
-    fromDate: datePickerDateToMoment('01/01/2001'),
     status: filter.status || transferredStatuses,
-    transfersOnly: true,
+    type: transferType,
   }
 }
 
@@ -358,4 +357,10 @@ export const transferredAdjudicationStatuses = (filter: TransfersUiFilter) => {
       checked: itemCheckBoxMatch(filter.status, key as ReportedAdjudicationStatus),
     }
   })
+}
+
+export enum TransferredReportType {
+  IN = 'IN',
+  OUT = 'OUT',
+  ALL = 'ALL',
 }

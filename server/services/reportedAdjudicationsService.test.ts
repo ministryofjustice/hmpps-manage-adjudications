@@ -192,7 +192,6 @@ describe('reportedAdjudicationsService', () => {
           fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
           toDate: moment('01/09/2021', 'DD/MM/YYYY'),
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          transfersOnly: false,
         },
         {
           size: 20,
@@ -401,7 +400,6 @@ describe('reportedAdjudicationsService', () => {
           fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
           toDate: moment('01/01/2021', 'DD/MM/YYYY'),
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          transfersOnly: false,
         },
         {
           size: 20,

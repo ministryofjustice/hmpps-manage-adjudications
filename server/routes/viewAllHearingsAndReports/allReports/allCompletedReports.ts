@@ -38,10 +38,6 @@ export default class AllCompletedReportsRoutes {
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
       ),
-      viewScheduledHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
-      viewAllCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
-      viewTransferredReportsHref: adjudicationUrls.allTransferredReports.urls.start(),
-      activeTab: 'viewCompletedReports',
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
       activeCaseloadName: res.locals.user.meta.description || 'your active caseload',
@@ -53,7 +49,7 @@ export default class AllCompletedReportsRoutes {
       const filter = filterFromUiFilter(uiFilter)
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,
-        { ...filter, transfersOnly: false },
+        { ...filter },
         pageRequestFrom(20, +req.query.pageNumber || 1)
       )
       return this.renderView(req, res, uiFilter, results, [])
@@ -68,7 +64,7 @@ export default class AllCompletedReportsRoutes {
         return this.renderView(
           req,
           res,
-          { ...uiFilter, transfersOnly: false },
+          { ...uiFilter },
           { size: 20, number: 0, totalElements: 0, content: [] },
           errors
         )

@@ -27,7 +27,7 @@
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
  
-  {{ transfersFilter(filter, checkboxes, errors, adjudicationUrls.allTransferredReports.urls.start(), csrfToken) }}
+  {{ transfersFilter(filter, checkboxes, errors, adjudicationUrls.reportsTransferredIn.urls.start(), csrfToken) }}
 
   {% include '../../partials/reportsList.njk' %}
 
