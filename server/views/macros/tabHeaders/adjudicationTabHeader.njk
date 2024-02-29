@@ -39,9 +39,9 @@
   <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatusText }}</h2>
 
   {% if status == ReportedAdjudicationStatus.INVALID_OUTCOME %}
-    {% include "../partials/invalidReportGuidance/invalidOutcome.njk" %}
+    {% include "../../partials/invalidReportGuidance/invalidOutcome.njk" %}
   {% elif status == ReportedAdjudicationStatus.INVALID_ADA %}
-    {% include "../partials/invalidReportGuidance/invalidADA.njk" %}
+    {% include "../../partials/invalidReportGuidance/invalidADA.njk" %}
   {% endif %}
 
   <div class="prisonerPlaybackSection">
