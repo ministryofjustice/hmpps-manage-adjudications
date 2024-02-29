@@ -86,6 +86,8 @@ describe('GET', () => {
     reportedAdjudicationsService.getAgencyReportCounts.mockResolvedValue({
       reviewTotal: 100,
       transferReviewTotal: 2,
+      transferOutTotal: 2,
+      transferAllTotal: 4,
     })
     return request(app)
       .get(adjudicationUrls.reportsTransferredIn.urls.start())

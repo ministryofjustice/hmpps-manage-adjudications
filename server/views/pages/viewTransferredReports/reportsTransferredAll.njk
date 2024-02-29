@@ -27,10 +27,10 @@
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  {{ transfersTabHeader('in', transferCountAll, transferCountIn, transferCountOut) }}
+  {{ transfersTabHeader('all', transferCountAll, transferCountIn, transferCountOut) }}
  
-  {{ transfersFilter(filter, checkboxes, errors, adjudicationUrls.reportsTransferredIn.urls.start(), csrfToken) }}
+  {{ transfersFilter(filter, checkboxes, errors, adjudicationUrls.reportsTransferredAll.urls.start(), csrfToken) }}
 
-  {% include '../../partials/transfersInReportsList.njk' %}
+  {% include '../../partials/transfersAllReportsList.njk' %}
 
   {% endblock %}

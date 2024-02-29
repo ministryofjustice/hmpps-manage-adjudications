@@ -294,10 +294,10 @@ const adjudicationUrls = {
   reportsTransferredAll: {
     root: '/transferred-reports',
     urls: {
-      start: () => `${adjudicationUrls.reportsTransferredIn.root}/all`,
+      start: () => `${adjudicationUrls.reportsTransferredAll.root}/all`,
       filter: (filter: TransfersUiFilter) =>
         url.format({
-          pathname: `${adjudicationUrls.reportsTransferredIn.root}/all`,
+          pathname: `${adjudicationUrls.reportsTransferredAll.root}/all`,
           query: { ...filter },
         }),
     },
@@ -308,10 +308,10 @@ const adjudicationUrls = {
   reportsTransferredOut: {
     root: '/transferred-reports',
     urls: {
-      start: () => `${adjudicationUrls.reportsTransferredIn.root}/out`,
+      start: () => `${adjudicationUrls.reportsTransferredOut.root}/out`,
       filter: (filter: TransfersUiFilter) =>
         url.format({
-          pathname: `${adjudicationUrls.reportsTransferredIn.root}/out`,
+          pathname: `${adjudicationUrls.reportsTransferredOut.root}/out`,
           query: { ...filter },
         }),
     },

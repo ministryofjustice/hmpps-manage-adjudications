@@ -38,6 +38,7 @@ export type UiFilter = {
 
 export type TransfersUiFilter = {
   status: ReportedAdjudicationStatus | ReportedAdjudicationStatus[]
+  type?: TransferredReportType
 }
 
 export type DISUiFilter = {
@@ -87,6 +88,7 @@ export const uiFilterFromRequest = (req: Request): UiFilter => {
 export const uiTransfersFilterFromRequest = (req: Request): TransfersUiFilter => {
   return {
     status: req.query.status as ReportedAdjudicationStatus,
+    type: req.query.type as TransferredReportType,
   }
 }
 
@@ -166,8 +168,10 @@ export const fillInDISFormFilterDefaults = (DISUiFilter: DISUiFilter): DISUiFilt
 }
 
 export const fillInTransfersDefaults = (uiFilter: TransfersUiFilter): TransfersUiFilter => {
+  const availableStatuses = getAvailableStatuses(uiFilter.type)
   return {
-    status: uiFilter.status || transferredStatuses,
+    status: uiFilter.status || availableStatuses,
+    type: uiFilter.type,
   }
 }
 
@@ -252,7 +256,7 @@ export const DISFormfilterFromUiFilter = (filter: DISUiFilter) => {
 
 export const transfersFilterFromUiFilter = (filter: TransfersUiFilter, transferType: TransferredReportType) => {
   return {
-    status: filter.status || transferredStatuses,
+    status: filter.status || transferredInStatuses,
     type: transferType,
   }
 }
@@ -342,15 +346,30 @@ export const punishmentCheckboxes = (filter: AdjudicationHistoryUiFilter) => {
   })
 }
 
-export const transferredStatuses = [
+export const transferredInStatuses = [
   ReportedAdjudicationStatus.UNSCHEDULED,
   ReportedAdjudicationStatus.REFER_INAD,
   ReportedAdjudicationStatus.REFER_POLICE,
   ReportedAdjudicationStatus.ADJOURNED,
 ]
 
-export const transferredAdjudicationStatuses = (filter: TransfersUiFilter) => {
-  return transferredStatuses.map(key => {
+export const transferredOutStatuses = [ReportedAdjudicationStatus.AWAITING_REVIEW, ReportedAdjudicationStatus.SCHEDULED]
+
+export const transferredAllStatuses = [...transferredInStatuses, ...transferredOutStatuses]
+
+const getAvailableStatuses = (transferType: TransferredReportType) => {
+  if (transferType === TransferredReportType.IN) {
+    return transferredInStatuses
+  }
+  if (transferType === TransferredReportType.OUT) {
+    return transferredOutStatuses
+  }
+  return transferredAllStatuses
+}
+
+export const transferredAdjudicationStatuses = (filter: TransfersUiFilter, transferType: TransferredReportType) => {
+  const availableStatuses = getAvailableStatuses(transferType)
+  return availableStatuses.map(key => {
     return {
       value: key,
       text: reportedAdjudicationStatusDisplayName(key as ReportedAdjudicationStatus),

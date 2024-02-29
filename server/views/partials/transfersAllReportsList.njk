@@ -11,21 +11,15 @@
         {% endset -%}
       {% endif %}
 
-      {% if completedReport.status | statusNotAwaitingRejectedReturned %}
-        {% if completedReport.transferableActionsAllowed == false %}
-          {% set viewHearinglLinkHtml %}
-          <a href="{{ adjudicationUrls.hearingDetails.urls.viewOnly(completedReport.chargeNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span></a>
-          {% endset %}
-        {% else %}
-          {% set viewHearinglLinkHtml %}
-          <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.chargeNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span></a>
-          {% endset %}
-          {% endif %}
-        {% else %}
-          {% set viewHearinglLinkHtml = null %}
-        {% endif %}
+      {% set transferInfo %}
+       {% if completedReport.status === ReportedAdjudicationStatus.AWAITING_REVIEW or completedReport.status === ReportedAdjudicationStatus.SCHEDULED %}
+       <p class="govuk-body govuk-!-margin-bottom-0">Out</p><p class="govuk-body transferAgencyInfoGrey">{{ completedReport.overrideAgencyName }}</p>
+       {% else %}
+        <p class="govuk-body govuk-!-margin-bottom-0">In</p><p class="govuk-body transferAgencyInfoGrey">{{ completedReport.originatingAgencyName }}</p>
+       {% endif %}
+      {% endset %}
 
-        {% set rows = (rows.push([
+    {% set rows = (rows.push([
       { text: completedReport.chargeNumber },
       { text: completedReport.formattedDateTimeOfDiscovery,
         attributes: {
@@ -34,8 +28,7 @@
       },
       { text: completedReport.displayName + " - " + completedReport.prisonerNumber },
       { text: completedReport.statusDisplayName },
-      { text: completedReport.formattedDateTimeOfScheduledHearing },
-      { html: viewHearinglLinkHtml, classes: 'hearingsAndReferrals' },
+      { html: transferInfo },
       { html: viewCompletedReportlLinkHtml, classes: 'viewReport' }
     ]), rows) %}
       {% endfor %}
@@ -54,15 +47,14 @@
         },
         { text: "Name and prison number" },
         { text: "Status" },
-        { text: "Latest scheduled hearing" },
-        { html: "<span class='govuk-visually-hidden'>Link to hearings and referrals</span>" },
+        { text: "Transfer details" },
         { html: "<span class='govuk-visually-hidden'>Link to adjudication report</span>" }
       ],
       rows: rows,
-      attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
+      attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }
     }) }}
         </div>
         {{ mojPagination(pagination) }}
       {% else %}
-        <p class="govuk-!-padding-top-3" data-qa="no-results-message">{{ noResultsMessage }}</p>
+        <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no reports for people transferred in or out.</p>
       {% endif %}

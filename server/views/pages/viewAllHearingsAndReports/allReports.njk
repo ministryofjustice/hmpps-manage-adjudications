@@ -5,8 +5,8 @@
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "../../macros/adjudicationFilter.njk" import adjudicationFilter %}
 
- 
-{% set title %} Reports from {{activeCaseloadName |safe }} {% endset %}
+{% set title %} Reports from {{activeCaseloadName |safe }}
+{% endset %}
 
 {% block pageTitle %}
   {{ title }} - Digital Prison Services
@@ -25,9 +25,10 @@
   {% endif %}
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
- 
+
   {{ adjudicationFilter(filter, checkboxes, errors, adjudicationUrls.allCompletedReports.urls.start(), csrfToken, maxDate) }}
 
+  {% set noResultsMessage = "No completed reports." %}
   {% include '../../partials/reportsList.njk' %}
 
-  {% endblock %}
+{% endblock %}
