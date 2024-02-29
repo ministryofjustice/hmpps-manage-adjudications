@@ -33,7 +33,6 @@ import { ContinueReportApiFilter } from '../routes/continueReport/continueReport
 import { ActivePunishment, PunishmentData, PunishmentDataWithSchedule, SuspendedPunishment } from './PunishmentResult'
 import { User } from './hmppsManageUsersClient'
 import { Balances, DamageObligation } from './prisonApiClient'
-import { transferredStatuses } from '../utils/adjudicationFilterHelper'
 
 export interface IncidentDetailsEnhanced extends IncidentDetails {
   prisonerNumber: string

@@ -1,5 +1,4 @@
 import reportsTransferredInPage from '../pages/allReportsFromTransfers'
-import AllCompletedReportsPage from '../pages/allReports'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
