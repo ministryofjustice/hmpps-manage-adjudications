@@ -61,7 +61,7 @@ import {
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
-import { AwardedPunishmentsAndDamagesFilter } from '../utils/adjudicationFilterHelper'
+import { AwardedPunishmentsAndDamagesFilter, TransferredAdjudicationFilter } from '../utils/adjudicationFilterHelper'
 import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
 import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
@@ -361,6 +361,41 @@ export default class ReportedAdjudicationsService {
       filter,
       pageRequest
     )
+    const prisonerDetails = new Map(
+      (
+        await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
+      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
+    )
+
+    const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
+    const reporterNamesAndUsernames =
+      (await Promise.all(
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+      )) || []
+    const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
+
+    return this.mapData(pageResponse, reportedAdjudication => {
+      const enhancedAdjudication = this.enhanceReportedAdjudication(
+        reportedAdjudication,
+        prisonerDetails.get(reportedAdjudication.prisonerNumber),
+        reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId)
+      )
+      return {
+        ...enhancedAdjudication,
+      }
+    })
+  }
+
+  async getTransferredAdjudicationReports(
+    user: User,
+    filter: TransferredAdjudicationFilter,
+    pageRequest: ApiPageRequest
+  ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
+    const pageResponse = await new ManageAdjudicationsUserTokensClient(user).getTransferredAdjudications(
+      filter,
+      pageRequest
+    )
+
     const prisonerDetails = new Map(
       (
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))

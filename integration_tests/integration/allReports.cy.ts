@@ -214,7 +214,7 @@ context('All Completed Reports', () => {
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
-      expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED&transfersOnly=false')
+      expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
   })
@@ -260,16 +260,14 @@ context('All Completed Reports', () => {
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
-      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&transfersOnly=false')
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
     allCompletedReportsPage.paginationLink(2).first().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       // We expect the initial filter parameters to have been passed through on the links.
-      expect(loc.search).to.eq(
-        '?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&transfersOnly=false&pageNumber=2'
-      )
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&pageNumber=2')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
     allCompletedReportsPage.resultsTable().should('exist')
@@ -347,16 +345,14 @@ context('All Completed Reports', () => {
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
-      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=SCHEDULED&transfersOnly=false')
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=SCHEDULED')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
     allCompletedReportsPage.paginationLink(2).first().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       // We expect the initial filter parameters to have been passed through on the links.
-      expect(loc.search).to.eq(
-        '?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=SCHEDULED&transfersOnly=false&pageNumber=2'
-      )
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=SCHEDULED&pageNumber=2')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
     allCompletedReportsPage.resultsTable().should('exist')
@@ -419,9 +415,7 @@ context('All Completed Reports', () => {
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
-      expect(loc.search).to.eq(
-        '?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&status=SCHEDULED&transfersOnly=false'
-      )
+      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&status=SCHEDULED')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 5 of 5 results')
     allCompletedReportsPage.resultsTable().should('exist')

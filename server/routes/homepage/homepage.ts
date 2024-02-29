@@ -5,6 +5,7 @@ import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import { TransferredReportType } from '../../utils/adjudicationFilterHelper'
 
 type TaskType = {
   id: string
@@ -60,7 +61,6 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
             fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
             toDate: momentDateToDatePicker(moment()),
             status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-            transfersOnly: false,
           }),
           id: 'review-reports',
         },
@@ -71,14 +71,14 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     {
       id: 'transfers',
       heading: `Reports from transfers in (${transferReviewTotal})`,
-      href: adjudicationUrls.allTransferredReports.urls.filter({
+      href: adjudicationUrls.reportsTransferredIn.urls.filter({
         status: [
           ReportedAdjudicationStatus.UNSCHEDULED,
           ReportedAdjudicationStatus.REFER_POLICE,
           ReportedAdjudicationStatus.ADJOURNED,
           ReportedAdjudicationStatus.REFER_INAD,
         ],
-        transfersOnly: true,
+        type: TransferredReportType.IN,
       }),
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
@@ -100,7 +100,6 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
               ReportedAdjudicationStatus.ADJOURNED,
               ReportedAdjudicationStatus.REFER_INAD,
             ],
-            transfersOnly: false,
           }),
           id: 'schedule-hearings',
         },

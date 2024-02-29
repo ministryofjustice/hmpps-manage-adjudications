@@ -1,0 +1,28 @@
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+
+{% macro transfersTabHeader(chargeNumber, activeTab, allTransfersHref, transferInHref, transferOutHref) %}
+    {% set items = [{
+      text: 'All',
+      href: allTransfersHref,
+      attributes: { 'data-qa': 'allTransfersTab' },
+      active: activeTab === 'all'
+    } , {
+      text: 'To review after a transfer in',
+      href: transferInHref,
+      attributes: { 'data-qa': 'transferInTab' },
+      active: activeTab === 'transferIn'
+    }, {
+      text: 'To update for a transfer out',
+      href: transferOutHref,
+      attributes: { 'data-qa': 'transferOutTab' }, 
+      active: activeTab === 'transferOut'
+    }]
+   %}
+
+  <div class="govuk-!-margin-top-5">
+    {{ mojSubNavigation({
+      items: items,
+      classes: "govuk-!-margin-bottom-3"
+    }) }}
+  </div>
+{% endmacro %}

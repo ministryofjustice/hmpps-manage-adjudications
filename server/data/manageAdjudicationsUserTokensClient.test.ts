@@ -70,7 +70,6 @@ describe('manageAdjudicationsSystemTokensClient', () => {
           fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
           toDate: moment('01/01/2021', 'DD/MM/YYYY'),
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
-          transfersOnly: false,
         },
         request
       )

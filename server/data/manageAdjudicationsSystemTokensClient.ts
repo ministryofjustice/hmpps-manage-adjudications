@@ -180,9 +180,7 @@ export default class ManageAdjudicationsSystemTokensClient {
         `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
         `${(filter.fromDate && `&startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
         `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}` +
-        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}` +
-        `${(filter.transfersOnly && `&transfersOnly=${true}`) || ''}`
-
+        `${(filter.status && `&status=${filter.status}`) || `&status=${allStatuses}`}`
       return this.restClient.get({
         path,
       })

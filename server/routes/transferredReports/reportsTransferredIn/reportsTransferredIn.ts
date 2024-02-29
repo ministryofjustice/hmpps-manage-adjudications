@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../../utils/mojPagination/pagination'
-import { formatDateForDatePicker, hasAnyRole } from '../../../utils/utils'
+import { hasAnyRole } from '../../../utils/utils'
 import { ReportedAdjudicationEnhanced } from '../../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../../data/ApiData'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
@@ -9,6 +9,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import {
   fillInTransfersDefaults,
   transferredAdjudicationStatuses,
+  TransferredReportType,
   transfersFilterFromUiFilter,
   TransfersUiFilter,
   transfersUiFilterFromBody,
@@ -16,7 +17,7 @@ import {
 } from '../../../utils/adjudicationFilterHelper'
 import { FormError } from '../../../@types/template'
 
-export default class AllTransferredReportsRoutes {
+export default class ReportsTransferredInRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly userService: UserService
@@ -29,7 +30,7 @@ export default class AllTransferredReportsRoutes {
     results: ApiPageResponse<ReportedAdjudicationEnhanced>,
     errors: FormError[]
   ): Promise<void> => {
-    return res.render(`pages/viewAllHearingsAndReports/allTransferredReports`, {
+    return res.render(`pages/viewTransferredReports/reportsTransferredIn.njk`, {
       allCompletedReports: results,
       filter,
       checkboxes: transferredAdjudicationStatuses(filter),
@@ -37,21 +38,15 @@ export default class AllTransferredReportsRoutes {
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
       ),
-      viewScheduledHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),
-      viewAllCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
-      viewTransferredReportsHref: adjudicationUrls.allTransferredReports.urls.start(),
-      activeTab: 'viewTransferredReports',
       errors,
-      maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
-      activeCaseloadName: res.locals.user.meta.description || 'your active caseload',
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
       const uiFilter = fillInTransfersDefaults(uiTransfersFilterFromRequest(req))
-      const filter = transfersFilterFromUiFilter(uiFilter)
-      const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
+      const filter = transfersFilterFromUiFilter(uiFilter, TransferredReportType.IN)
+      const results = await this.reportedAdjudicationsService.getTransferredAdjudicationReports(
         res.locals.user,
         filter,
         pageRequestFrom(20, +req.query.pageNumber || 1)
@@ -63,7 +58,8 @@ export default class AllTransferredReportsRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
       const uiFilter = transfersUiFilterFromBody(req)
-      return res.redirect(adjudicationUrls.allTransferredReports.urls.filter(uiFilter))
+      const filter = transfersFilterFromUiFilter(uiFilter, TransferredReportType.IN)
+      return res.redirect(adjudicationUrls.reportsTransferredIn.urls.filter(filter))
     })
   }
 
