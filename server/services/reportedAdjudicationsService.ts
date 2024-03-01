@@ -580,10 +580,12 @@ export default class ReportedAdjudicationsService {
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
     const reportingOfficer = (reporterName && convertToTitleCase(reporterName)) || ''
+
     const latestSheduledHearingDate =
       reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED
         ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
         : null
+
     return {
       ...reportedAdjudication,
       displayName,
