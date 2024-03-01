@@ -61,11 +61,7 @@ import {
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
-import {
-  AwardedPunishmentsAndDamagesFilter,
-  TransferredAdjudicationFilter,
-  TransferredReportType,
-} from '../utils/adjudicationFilterHelper'
+import { AwardedPunishmentsAndDamagesFilter, TransferredAdjudicationFilter } from '../utils/adjudicationFilterHelper'
 import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
 import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'

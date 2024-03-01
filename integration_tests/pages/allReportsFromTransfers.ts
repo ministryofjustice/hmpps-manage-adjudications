@@ -18,13 +18,11 @@ export default class AllTransferReportsPage extends Page {
 
   paginationResults = (): PageElement => cy.get('.moj-pagination__results').first()
 
-  resultsTable = (): PageElement => cy.get('[data-qa="complete-adjudications-results-table"]')
+  resultsTable = (): PageElement => cy.get('[data-qa="results-table"]')
 
   uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck({ force: true })
 
   checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value, { force: true })
 
   viewReportLink = () => cy.get('[data-qa="view-report-link"]')
-
-  viewHearingsLink = () => cy.get('[data-qa="view-edit-hearing-link"]')
 }

@@ -5,7 +5,7 @@ import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/d
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
 import TestData from '../../server/routes/testutils/testData'
-import { TransferredReportType } from '../../server/utils/adjudicationFilterHelper'
+import { TransferredReportType, transferredInStatuses } from '../../server/utils/adjudicationFilterHelper'
 
 const testData = new TestData()
 
@@ -15,13 +15,14 @@ context('Reports transferred in', () => {
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+    cy.task('stubGetAgency', { agencyId: 'LEI', response: { agencyId: 'LEI', description: 'LEICESTER (HMP)' } })
     cy.signIn()
   })
 
   it('should say when there are no results', () => {
     cy.task('stubGetTransferredAdjudications', {
       filter: {
-        status: null,
+        status: transferredInStatuses,
         type: TransferredReportType.IN,
       },
     })
@@ -36,7 +37,7 @@ context('Reports transferred in', () => {
   it('should display the correct data on the first page', () => {
     cy.task('stubGetTransferredAdjudications', {
       filter: {
-        status: null,
+        status: transferredInStatuses,
         type: TransferredReportType.IN,
       },
     })
@@ -57,7 +58,7 @@ context('Reports transferred in', () => {
       number: 0,
       allContent: manyReportedAdjudications,
       filter: {
-        status: null,
+        status: transferredInStatuses,
         type: TransferredReportType.IN,
       },
     }) // Page 1
@@ -74,7 +75,7 @@ context('Reports transferred in', () => {
         expect($headings.get(1).innerText).to.contain('Discovery date and time')
         expect($headings.get(2).innerText).to.contain('Name and prison number')
         expect($headings.get(3).innerText).to.contain('Status')
-        expect($headings.get(4).innerText).to.contain('Latest scheduled hearing')
+        expect($headings.get(4).innerText).to.contain('Transferred from')
         expect($headings.get(5) === undefined)
       })
     transferredReportsPage
@@ -85,8 +86,8 @@ context('Reports transferred in', () => {
         expect($data.get(1).innerText).to.contain('15 November 2345 - 11:30')
         expect($data.get(2).innerText).to.contain('Potter, Harry - A1234AA')
         expect($data.get(3).innerText).to.contain('Unscheduled')
-        expect($data.get(4).innerText).to.equal('-')
-        expect($data.get(6).innerText).to.contain('View report')
+        expect($data.get(4).innerText).to.equal('Moorland (HMP & YOI)')
+        expect($data.get(5).innerText).to.contain('View report')
       })
   })
 
@@ -100,7 +101,7 @@ context('Reports transferred in', () => {
       number: 0,
       allContent: [],
       filter: {
-        status: null,
+        status: transferredInStatuses,
         type: TransferredReportType.IN,
       },
     })
@@ -124,7 +125,7 @@ context('Reports transferred in', () => {
 
     cy.visit(adjudicationUrls.reportsTransferredIn.urls.start()) // visit page one
     const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
-    transferredReportsPage.noResultsMessage().should('contain', 'No completed reports.')
+    transferredReportsPage.noResultsMessage().should('contain', 'There are no reports from transfers in to review.')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     transferredReportsPage.uncheckAllCheckboxes()
     transferredReportsPage.checkCheckboxWithValue('UNSCHEDULED')

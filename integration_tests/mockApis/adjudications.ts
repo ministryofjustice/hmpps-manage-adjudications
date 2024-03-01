@@ -287,7 +287,7 @@ const stubGetTransferredAdjudications = ({
   size = 20,
   allContent = [],
   filter = {
-    status: null,
+    status: transferredInStatuses,
     type: 'ALL',
   },
 }: {
@@ -295,7 +295,7 @@ const stubGetTransferredAdjudications = ({
   size: number
   allContent: unknown[]
   filter: {
-    status: ReportedAdjudicationStatus
+    status: ReportedAdjudicationStatus[]
     type: 'ALL'
   }
 }): SuperAgentRequest => {
@@ -307,7 +307,7 @@ const stubGetTransferredAdjudications = ({
   const path =
     `/adjudications/reported-adjudications/transfer-reports?page=${number}&size=${size}` +
     `${(filter.status && `&status=${filter.status}`) || `&status=${transferredInStatuses}`}` +
-    `${(filter.type && `&type=${filter.type}`) || `&type=${TransferredReportType.ALL}`}`
+    `${filter.type && `&type=${filter.type}`}`
 
   return stubFor({
     request: {
