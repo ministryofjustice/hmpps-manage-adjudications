@@ -11,6 +11,12 @@ export default class AllTransferReportsPage extends Page {
 
   previousLink = (): PageElement => this.paginationLinks().contains('Previous')
 
+  transferredReportsAllTab = (): PageElement => cy.get('[data-qa="allTransfersTab"]')
+
+  transferredReportsInTab = (): PageElement => cy.get('[data-qa="transferInTab"]')
+
+  transferredReportsOutTab = (): PageElement => cy.get('[data-qa="transferOutTab"]')
+
   nextLink = (): PageElement => this.paginationLinks().contains('Next')
 
   paginationLink = (number: number): PageElement =>

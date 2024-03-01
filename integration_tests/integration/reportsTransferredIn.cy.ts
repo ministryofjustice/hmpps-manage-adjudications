@@ -16,6 +16,9 @@ context('Reports transferred in', () => {
     cy.task('stubAuthUser')
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.task('stubGetAgency', { agencyId: 'LEI', response: { agencyId: 'LEI', description: 'LEICESTER (HMP)' } })
+    cy.task('stubGetAgencyReportCounts', {
+      response: { reviewTotal: 10, transferReviewTotal: 3, transferOutTotal: 1, transferAllTotal: 4 },
+    })
     cy.signIn()
   })
 
@@ -67,6 +70,9 @@ context('Reports transferred in', () => {
     cy.visit(adjudicationUrls.reportsTransferredIn.urls.start())
     const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
     transferredReportsPage.resultsTable().should('exist')
+    transferredReportsPage.transferredReportsAllTab().contains('All (4)')
+    transferredReportsPage.transferredReportsInTab().contains('To review after a transfer in (3)')
+    transferredReportsPage.transferredReportsOutTab().contains('To update for a transfer out (1)')
     transferredReportsPage
       .resultsTable()
       .find('th')
@@ -96,7 +102,7 @@ context('Reports transferred in', () => {
       username: 'USER1',
       response: testData.userFromUsername('USER1'),
     })
-    // The empty results to return when first landing on your completed reports page.
+    // The empty results to return when first landing on the page.
     cy.task('stubGetTransferredAdjudications', {
       number: 0,
       allContent: [],
@@ -105,7 +111,7 @@ context('Reports transferred in', () => {
         type: TransferredReportType.IN,
       },
     })
-    // The result to return when filtering for the dates we will enter in the date picker and status selected.
+    // The result to return when filtering for the status selected.
     cy.task('stubGetTransferredAdjudications', {
       number: 0,
       allContent: [

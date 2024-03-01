@@ -13,8 +13,6 @@ import {
   AdjudicationHistoryBookingType,
   AdjudicationHistoryPunishmentTypeFilter,
 } from '../data/AdjudicationHistoryData'
-// eslint-disable-next-line import/no-cycle
-import adjudicationUrls from './urlGenerator'
 
 enum ErrorType {
   FROM_DATE_AFTER_TO_DATE = 'FROM_DATE_AFTER_TO_DATE',
@@ -97,8 +95,8 @@ export const uiTransfersFilterFromRequest = (req: Request): TransfersUiFilter =>
 
 const getTransferTypeFromPath = (req: Request) => {
   const { path } = req.route
-  if (path === adjudicationUrls.reportsTransferredIn.matchers.start) return TransferredReportType.IN
-  if (path === adjudicationUrls.reportsTransferredOut.matchers.start) return TransferredReportType.OUT
+  if (path === '/in') return TransferredReportType.IN
+  if (path === '/out') return TransferredReportType.OUT
   return TransferredReportType.ALL
 }
 

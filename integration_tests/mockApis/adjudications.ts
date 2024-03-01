@@ -9,7 +9,7 @@ import {
   IssueStatus,
   ReportedAdjudicationStatus,
 } from '../../server/data/ReportedAdjudicationResult'
-import { TransferredReportType, transferredInStatuses } from '../../server/utils/adjudicationFilterHelper'
+import { transferredInStatuses } from '../../server/utils/adjudicationFilterHelper'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
