@@ -5,7 +5,12 @@ import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { TransferredReportType } from '../../utils/adjudicationFilterHelper'
+import {
+  TransferredReportType,
+  transferredOutStatuses,
+  transferredInStatuses,
+  transferredAllStatuses,
+} from '../../utils/adjudicationFilterHelper'
 
 type TaskType = {
   id: string
@@ -79,26 +84,14 @@ const createTasks = (
       id: 'transfers',
       heading: `Reports for people transferred in or out (${transferAllTotal})`,
       href: adjudicationUrls.reportsTransferredAll.urls.filter({
-        status: [
-          ReportedAdjudicationStatus.UNSCHEDULED,
-          ReportedAdjudicationStatus.REFER_POLICE,
-          ReportedAdjudicationStatus.ADJOURNED,
-          ReportedAdjudicationStatus.REFER_INAD,
-          ReportedAdjudicationStatus.AWAITING_REVIEW,
-          ReportedAdjudicationStatus.SCHEDULED,
-        ],
+        status: transferredAllStatuses,
         type: TransferredReportType.ALL,
       }),
       links: [
         {
           text: `To review after a transfer in (${transferReviewTotal})`,
           href: adjudicationUrls.reportsTransferredIn.urls.filter({
-            status: [
-              ReportedAdjudicationStatus.UNSCHEDULED,
-              ReportedAdjudicationStatus.REFER_POLICE,
-              ReportedAdjudicationStatus.ADJOURNED,
-              ReportedAdjudicationStatus.REFER_INAD,
-            ],
+            status: transferredInStatuses,
             type: TransferredReportType.IN,
           }),
           id: 'transfers-in',
@@ -106,7 +99,7 @@ const createTasks = (
         {
           text: `To update for a transfer out (${transferOutTotal})`,
           href: adjudicationUrls.reportsTransferredOut.urls.filter({
-            status: [ReportedAdjudicationStatus.AWAITING_REVIEW, ReportedAdjudicationStatus.SCHEDULED],
+            status: transferredOutStatuses,
             type: TransferredReportType.OUT,
           }),
           id: 'transfers-out',
