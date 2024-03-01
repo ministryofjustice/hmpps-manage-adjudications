@@ -5,7 +5,12 @@ import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../utils/utils'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import { TransferredReportType } from '../../utils/adjudicationFilterHelper'
+import {
+  TransferredReportType,
+  transferredOutStatuses,
+  transferredInStatuses,
+  transferredAllStatuses,
+} from '../../utils/adjudicationFilterHelper'
 
 type TaskType = {
   id: string
@@ -23,7 +28,14 @@ type taskLinks = {
   id: string
 }
 
-const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCaseloadName: string): TaskType[] => {
+const createTasks = (
+  reviewTotal: number,
+  transferReviewTotal: number,
+  transferOutTotal: number,
+  transferAllTotal: number,
+  hearingsToScheduleTotal: number,
+  activeCaseloadName: string
+): TaskType[] => {
   return [
     {
       id: 'start-a-new-report',
@@ -70,16 +82,29 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
     },
     {
       id: 'transfers',
-      heading: `Reports from transfers in (${transferReviewTotal})`,
-      href: adjudicationUrls.reportsTransferredIn.urls.filter({
-        status: [
-          ReportedAdjudicationStatus.UNSCHEDULED,
-          ReportedAdjudicationStatus.REFER_POLICE,
-          ReportedAdjudicationStatus.ADJOURNED,
-          ReportedAdjudicationStatus.REFER_INAD,
-        ],
-        type: TransferredReportType.IN,
+      heading: `Reports for people transferred in or out (${transferAllTotal})`,
+      href: adjudicationUrls.reportsTransferredAll.urls.filter({
+        status: transferredAllStatuses,
+        type: TransferredReportType.ALL,
       }),
+      links: [
+        {
+          text: `To review after a transfer in (${transferReviewTotal})`,
+          href: adjudicationUrls.reportsTransferredIn.urls.filter({
+            status: transferredInStatuses,
+            type: TransferredReportType.IN,
+          }),
+          id: 'transfers-in',
+        },
+        {
+          text: `To update for a transfer out (${transferOutTotal})`,
+          href: adjudicationUrls.reportsTransferredOut.urls.filter({
+            status: transferredOutStatuses,
+            type: TransferredReportType.OUT,
+          }),
+          id: 'transfers-out',
+        },
+      ],
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
     },
@@ -91,7 +116,7 @@ const createTasks = (reviewTotal: number, transferReviewTotal: number, activeCas
       enabled: true,
       links: [
         {
-          text: 'Schedule hearings',
+          text: `Hearings to be scheduled (${hearingsToScheduleTotal})`,
           href: adjudicationUrls.allCompletedReports.urls.filter({
             fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
             toDate: momentDateToDatePicker(moment()),
@@ -145,9 +170,16 @@ export default class HomepageRoutes {
       this.userService.getUserRoles(user.token),
       this.reportedAdjudicationsService.getAgencyReportCounts(user),
     ])
-    const { reviewTotal, transferReviewTotal } = counts
+    const { reviewTotal, transferReviewTotal, hearingsToScheduleTotal, transferOutTotal, transferAllTotal } = counts
     const userCaseloadName = user.meta?.description || null
-    const enabledTasks = createTasks(reviewTotal, transferReviewTotal, userCaseloadName).filter(task => task.enabled)
+    const enabledTasks = createTasks(
+      reviewTotal,
+      transferReviewTotal,
+      transferOutTotal,
+      transferAllTotal,
+      hearingsToScheduleTotal,
+      userCaseloadName
+    ).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
 
     const disRelatedTasksPredicate = (task: TaskType) =>
@@ -155,9 +187,14 @@ export default class HomepageRoutes {
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !disRelatedTasksPredicate(task)
     )
-    const disRelatedTasks = createTasks(reviewTotal, transferReviewTotal, userCaseloadName).filter(
-      disRelatedTasksPredicate
-    )
+    const disRelatedTasks = createTasks(
+      reviewTotal,
+      transferReviewTotal,
+      transferOutTotal,
+      transferAllTotal,
+      hearingsToScheduleTotal,
+      userCaseloadName
+    ).filter(disRelatedTasksPredicate)
 
     const dataInsightsTask = {
       id: 'data-insights',

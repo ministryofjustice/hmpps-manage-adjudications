@@ -84,6 +84,7 @@ describe('GET /all-completed-reports', () => {
       transferReviewTotal: 2,
       transferOutTotal: 2,
       transferAllTotal: 4,
+      hearingsToScheduleTotal: 0,
     })
     return request(app)
       .get(adjudicationUrls.allCompletedReports.root)

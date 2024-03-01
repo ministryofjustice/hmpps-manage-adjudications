@@ -61,6 +61,7 @@ beforeEach(() => {
     transferReviewTotal: 2,
     transferOutTotal: 2,
     transferAllTotal: 4,
+    hearingsToScheduleTotal: 0,
   })
 })
 

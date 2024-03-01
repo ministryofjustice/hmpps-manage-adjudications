@@ -46,6 +46,7 @@ export type AgencyReportCounts = {
   transferReviewTotal: number
   transferOutTotal: number
   transferAllTotal: number
+  hearingsToScheduleTotal: number
 }
 
 export type ConsecutiveAdditionalDaysReport = {
