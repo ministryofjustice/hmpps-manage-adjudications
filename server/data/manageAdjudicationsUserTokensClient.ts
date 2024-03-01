@@ -31,7 +31,7 @@ import { momentDateToApi } from '../utils/utils'
 import {
   TransferredAdjudicationFilter,
   TransferredReportType,
-  transferredStatuses,
+  transferredInStatuses,
 } from '../utils/adjudicationFilterHelper'
 
 export type OutcomeInfo = {
@@ -135,7 +135,7 @@ export default class ManageAdjudicationsUserTokensClient {
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const path =
       `/reported-adjudications/transfer-reports?page=${pageRequest.number}&size=${pageRequest.size}` +
-      `${(filter.status && `&status=${filter.status}`) || `&status=${transferredStatuses}`}` +
+      `${(filter.status && `&status=${filter.status}`) || `&status=${transferredInStatuses}`}` +
       `${(filter.type && `&type=${filter.type}`) || `&type=${TransferredReportType.ALL}`}`
     return this.restClient.get({
       path,

@@ -11,20 +11,6 @@
         {% endset -%}
       {% endif %}
 
-      {% if completedReport.status | statusNotAwaitingRejectedReturned %}
-        {% if completedReport.transferableActionsAllowed == false %}
-          {% set viewHearinglLinkHtml %}
-          <a href="{{ adjudicationUrls.hearingDetails.urls.viewOnly(completedReport.chargeNumber) }}" class="govuk-link" data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span></a>
-          {% endset %}
-        {% else %}
-          {% set viewHearinglLinkHtml %}
-          <a href="{{ adjudicationUrls.hearingDetails.urls.review(completedReport.chargeNumber) }}" class="govuk-link " data-qa="view-edit-hearing-link">Hearings and referrals<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span></a>
-          {% endset %}
-          {% endif %}
-        {% else %}
-          {% set viewHearinglLinkHtml = null %}
-        {% endif %}
-
         {% set rows = (rows.push([
       { text: completedReport.chargeNumber },
       { text: completedReport.formattedDateTimeOfDiscovery,
@@ -34,8 +20,7 @@
       },
       { text: completedReport.displayName + " - " + completedReport.prisonerNumber },
       { text: completedReport.statusDisplayName },
-      { text: completedReport.formattedDateTimeOfScheduledHearing },
-      { html: viewHearinglLinkHtml, classes: 'hearingsAndReferrals' },
+      { text: completedReport.originatingAgencyName or completedReport.originatingAgencyId },
       { html: viewCompletedReportlLinkHtml, classes: 'viewReport' }
     ]), rows) %}
       {% endfor %}
@@ -54,15 +39,14 @@
         },
         { text: "Name and prison number" },
         { text: "Status" },
-        { text: "Latest scheduled hearing" },
-        { html: "<span class='govuk-visually-hidden'>Link to hearings and referrals</span>" },
+        { text: "Transferred from" },
         { html: "<span class='govuk-visually-hidden'>Link to adjudication report</span>" }
       ],
       rows: rows,
-      attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
+      attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }
     }) }}
         </div>
         {{ mojPagination(pagination) }}
       {% else %}
-        <p class="govuk-!-padding-top-3" data-qa="no-results-message">{{ noResultsMessage }}</p>
+        <p class="govuk-!-padding-top-3" data-qa="no-results-message">There are no reports from transfers in to review.</p>
       {% endif %}

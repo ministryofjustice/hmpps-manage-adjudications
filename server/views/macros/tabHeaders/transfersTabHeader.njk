@@ -1,21 +1,21 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 
-{% macro transfersTabHeader(chargeNumber, activeTab, allTransfersHref, transferInHref, transferOutHref) %}
+{% macro transfersTabHeader(activeTab, transferCountAll, transferCountIn, transferCountOut) %}
     {% set items = [{
-      text: 'All',
-      href: allTransfersHref,
+      text: 'All ('+ transferCountAll +')',
+      href: adjudicationUrls.reportsTransferredAll.urls.start(),
       attributes: { 'data-qa': 'allTransfersTab' },
       active: activeTab === 'all'
     } , {
-      text: 'To review after a transfer in',
-      href: transferInHref,
+      text: 'To review after a transfer in (' + transferCountIn +')',
+      href: adjudicationUrls.reportsTransferredIn.urls.start(),
       attributes: { 'data-qa': 'transferInTab' },
-      active: activeTab === 'transferIn'
+      active: activeTab === 'in'
     }, {
-      text: 'To update for a transfer out',
-      href: transferOutHref,
+      text: 'To update for a transfer out (' + transferCountOut + ')',
+      href: adjudicationUrls.reportsTransferredOut.urls.start(),
       attributes: { 'data-qa': 'transferOutTab' }, 
-      active: activeTab === 'transferOut'
+      active: activeTab === 'out'
     }]
    %}
 

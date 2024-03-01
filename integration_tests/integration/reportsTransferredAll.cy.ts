@@ -1,38 +1,37 @@
-import reportsTransferredInPage from '../pages/allReportsFromTransfers'
+import reportsTransferredAllPage from '../pages/allReportsFromTransfers'
 import Page from '../pages/page'
 import { generateRange } from '../../server/utils/utils'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import AdjudicationsFilter from '../pages/adjudicationsFilter'
 import TestData from '../../server/routes/testutils/testData'
-import { TransferredReportType, transferredInStatuses } from '../../server/utils/adjudicationFilterHelper'
+import { TransferredReportType, transferredAllStatuses } from '../../server/utils/adjudicationFilterHelper'
 
 const testData = new TestData()
 
-context('Reports transferred in', () => {
+context('Reports transferred out', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.task('stubGetAgency', { agencyId: 'LEI', response: { agencyId: 'LEI', description: 'LEICESTER (HMP)' } })
+    cy.signIn()
     cy.task('stubGetAgencyReportCounts', {
       response: { reviewTotal: 10, transferReviewTotal: 3, transferOutTotal: 1, transferAllTotal: 4 },
     })
-    cy.signIn()
   })
 
   it('should say when there are no results', () => {
     cy.task('stubGetTransferredAdjudications', {
       filter: {
-        status: transferredInStatuses,
-        type: TransferredReportType.IN,
+        status: transferredAllStatuses,
+        type: TransferredReportType.ALL,
       },
     })
     cy.task('stubGetBatchPrisonerDetails')
-
-    cy.visit(adjudicationUrls.reportsTransferredIn.urls.start())
-    const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
+    cy.visit(adjudicationUrls.reportsTransferredAll.urls.start())
+    const transferredReportsPage: reportsTransferredAllPage = Page.verifyOnPage(reportsTransferredAllPage)
 
     transferredReportsPage.noResultsMessage().should('exist')
   })
@@ -40,8 +39,8 @@ context('Reports transferred in', () => {
   it('should display the correct data on the first page', () => {
     cy.task('stubGetTransferredAdjudications', {
       filter: {
-        status: transferredInStatuses,
-        type: TransferredReportType.IN,
+        status: transferredAllStatuses,
+        type: TransferredReportType.ALL,
       },
     })
     cy.task('stubGetUserFromUsername', {
@@ -61,14 +60,14 @@ context('Reports transferred in', () => {
       number: 0,
       allContent: manyReportedAdjudications,
       filter: {
-        status: transferredInStatuses,
-        type: TransferredReportType.IN,
+        status: transferredAllStatuses,
+        type: TransferredReportType.ALL,
       },
     }) // Page 1
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
 
-    cy.visit(adjudicationUrls.reportsTransferredIn.urls.start())
-    const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
+    cy.visit(adjudicationUrls.reportsTransferredAll.urls.start())
+    const transferredReportsPage: reportsTransferredAllPage = Page.verifyOnPage(reportsTransferredAllPage)
     transferredReportsPage.resultsTable().should('exist')
     transferredReportsPage.transferredReportsAllTab().contains('All (4)')
     transferredReportsPage.transferredReportsInTab().contains('To review after a transfer in (3)')
@@ -81,7 +80,7 @@ context('Reports transferred in', () => {
         expect($headings.get(1).innerText).to.contain('Discovery date and time')
         expect($headings.get(2).innerText).to.contain('Name and prison number')
         expect($headings.get(3).innerText).to.contain('Status')
-        expect($headings.get(4).innerText).to.contain('Transferred from')
+        expect($headings.get(4).innerText).to.contain('Transfer details')
         expect($headings.get(5) === undefined)
       })
     transferredReportsPage
@@ -92,7 +91,7 @@ context('Reports transferred in', () => {
         expect($data.get(1).innerText).to.contain('15 November 2345 - 11:30')
         expect($data.get(2).innerText).to.contain('Potter, Harry - A1234AA')
         expect($data.get(3).innerText).to.contain('Unscheduled')
-        expect($data.get(4).innerText).to.equal('Moorland (HMP & YOI)')
+        expect($data.get(4).innerText).to.equal('In\n\nMoorland (HMP & YOI)')
         expect($data.get(5).innerText).to.contain('View report')
       })
   })
@@ -107,8 +106,8 @@ context('Reports transferred in', () => {
       number: 0,
       allContent: [],
       filter: {
-        status: transferredInStatuses,
-        type: TransferredReportType.IN,
+        status: transferredAllStatuses,
+        type: TransferredReportType.ALL,
       },
     })
     // The result to return when filtering for the status selected.
@@ -119,27 +118,48 @@ context('Reports transferred in', () => {
           chargeNumber: '1',
           prisonerNumber: 'A1234AA',
           dateTimeOfIncident: '2022-01-01T11:30:00',
+          status: ReportedAdjudicationStatus.SCHEDULED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2030-01-04T09:00:00',
+              id: 987,
+              locationId: 2,
+            }),
+          ],
+        }),
+        testData.reportedAdjudication({
+          chargeNumber: '1',
+          prisonerNumber: 'A1234AA',
+          dateTimeOfIncident: '2022-01-01T11:30:00',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2030-01-04T09:00:00',
+              id: 987,
+              locationId: 2,
+            }),
+          ],
         }),
       ],
       filter: {
-        status: ReportedAdjudicationStatus.UNSCHEDULED,
-        type: TransferredReportType.IN,
+        status: [ReportedAdjudicationStatus.UNSCHEDULED, ReportedAdjudicationStatus.SCHEDULED],
+        type: TransferredReportType.ALL,
       },
     })
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
 
-    cy.visit(adjudicationUrls.reportsTransferredIn.urls.start()) // visit page one
-    const transferredReportsPage: reportsTransferredInPage = Page.verifyOnPage(reportsTransferredInPage)
-    transferredReportsPage.noResultsMessage().should('contain', 'There are no reports from transfers in to review.')
+    cy.visit(adjudicationUrls.reportsTransferredAll.urls.start()) // visit page one
+    const transferredReportsPage: reportsTransferredAllPage = Page.verifyOnPage(reportsTransferredAllPage)
+    transferredReportsPage.noResultsMessage().should('contain', 'There are no reports for people transferred in or out')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     transferredReportsPage.uncheckAllCheckboxes()
+    transferredReportsPage.checkCheckboxWithValue('SCHEDULED')
     transferredReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     adjudicationsFilter.applyButton().click()
     cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.reportsTransferredIn.urls.start())
-      expect(loc.search).to.eq('?status=UNSCHEDULED&type=IN')
+      expect(loc.pathname).to.eq(adjudicationUrls.reportsTransferredAll.urls.start())
+      expect(loc.search).to.eq('?status=UNSCHEDULED&status=SCHEDULED&type=ALL')
     })
-    transferredReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
+    transferredReportsPage.paginationResults().should('have.text', 'Showing 1 to 2 of 2 results')
   })
 })

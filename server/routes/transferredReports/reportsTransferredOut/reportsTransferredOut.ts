@@ -18,7 +18,7 @@ import {
 import { FormError } from '../../../@types/template'
 import { AgencyReportCounts } from '../../../data/manageAdjudicationsSystemTokensClient'
 
-export default class ReportsTransferredInRoutes {
+export default class ReportsTransferredOutRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly userService: UserService
@@ -32,10 +32,10 @@ export default class ReportsTransferredInRoutes {
     transferCount: AgencyReportCounts,
     errors: FormError[]
   ): Promise<void> => {
-    return res.render(`pages/viewTransferredReports/reportsTransferredIn.njk`, {
+    return res.render(`pages/viewTransferredReports/reportsTransferredOut.njk`, {
       allCompletedReports: results,
       filter,
-      checkboxes: transferredAdjudicationStatuses(filter, TransferredReportType.IN),
+      checkboxes: transferredAdjudicationStatuses(filter, TransferredReportType.OUT),
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
@@ -51,7 +51,7 @@ export default class ReportsTransferredInRoutes {
     const { user } = res.locals
     return this.validateRoles(req, res, async () => {
       const uiFilter = fillInTransfersDefaults(uiTransfersFilterFromRequest(req))
-      const filter = transfersFilterFromUiFilter(uiFilter, TransferredReportType.IN)
+      const filter = transfersFilterFromUiFilter(uiFilter, TransferredReportType.OUT)
       const [results, transferCount] = await Promise.all([
         this.reportedAdjudicationsService.getTransferredAdjudicationReports(
           user,
@@ -60,6 +60,7 @@ export default class ReportsTransferredInRoutes {
         ),
         this.reportedAdjudicationsService.getAgencyReportCounts(user),
       ])
+
       return this.renderView(req, res, uiFilter, results, transferCount, [])
     })
   }
@@ -67,8 +68,8 @@ export default class ReportsTransferredInRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     return this.validateRoles(req, res, async () => {
       const uiFilter = transfersUiFilterFromBody(req)
-      const filter = transfersFilterFromUiFilter(uiFilter, TransferredReportType.IN)
-      return res.redirect(adjudicationUrls.reportsTransferredIn.urls.filter(filter))
+      const filter = transfersFilterFromUiFilter(uiFilter, TransferredReportType.OUT)
+      return res.redirect(adjudicationUrls.reportsTransferredOut.urls.filter(filter))
     })
   }
 
