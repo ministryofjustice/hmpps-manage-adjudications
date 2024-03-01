@@ -26,6 +26,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getAgencyReportCounts.mockResolvedValue({
     transferReviewTotal: 1,
     reviewTotal: 1,
+    hearingsToScheduleTotal: 0,
   })
 })
 

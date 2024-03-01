@@ -44,6 +44,7 @@ export interface IncidentDetailsEnhanced extends IncidentDetails {
 export type AgencyReportCounts = {
   reviewTotal: number
   transferReviewTotal: number
+  hearingsToScheduleTotal: number
 }
 
 export type ConsecutiveAdditionalDaysReport = {

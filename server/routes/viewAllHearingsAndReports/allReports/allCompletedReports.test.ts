@@ -82,6 +82,7 @@ describe('GET /all-completed-reports', () => {
     reportedAdjudicationsService.getAgencyReportCounts.mockResolvedValue({
       reviewTotal: 100,
       transferReviewTotal: 2,
+      hearingsToScheduleTotal: 0,
     })
     return request(app)
       .get(adjudicationUrls.allCompletedReports.root)

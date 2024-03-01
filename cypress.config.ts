@@ -60,6 +60,7 @@ export default defineConfig({
               response: {
                 reviewTotal: 2,
                 transferReviewTotal: 1,
+                hearingsToScheduleTotal: 1,
               },
             }),
             prisonApi.stubUserCaseloads(userCaseLoads),
