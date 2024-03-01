@@ -402,6 +402,15 @@ export default class ReportedAdjudicationsService {
       ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
     )
 
+    const uniqueAgencyIds = [
+      ...new Set(
+        pageResponse.content.reduce<string[]>((acc, obj) => [...acc, obj.originatingAgencyId, obj.overrideAgencyId], [])
+      ),
+    ]
+    const agencyIdsAndNames =
+      (await Promise.all([...uniqueAgencyIds].map(agencyId => this.locationService.getAgency(agencyId, user)))) || []
+    const agencyNameByIdMap = new Map(agencyIdsAndNames.map(a => [a.agencyId, a.description]))
+
     const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
     const reporterNamesAndUsernames =
       (await Promise.all(
@@ -413,7 +422,9 @@ export default class ReportedAdjudicationsService {
       const enhancedAdjudication = this.enhanceReportedAdjudication(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
-        reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId)
+        reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId),
+        agencyNameByIdMap.get(reportedAdjudication.originatingAgencyId),
+        agencyNameByIdMap.get(reportedAdjudication.overrideAgencyId)
       )
       return {
         ...enhancedAdjudication,
@@ -548,14 +559,28 @@ export default class ReportedAdjudicationsService {
     }
   }
 
+  async getTransferAgencyDetails(reportedAdjudication: ReportedAdjudication, user: User) {
+    const [originatingAgencyName, overrideAgencyName] = await Promise.all([
+      (await this.locationService.getAgency(reportedAdjudication.originatingAgencyId, user))?.description,
+      (await this.locationService.getAgency(reportedAdjudication.overrideAgencyId, user))?.description,
+    ])
+    return {
+      originatingAgencyName,
+      overrideAgencyName,
+    }
+  }
+
   enhanceReportedAdjudication(
     reportedAdjudication: ReportedAdjudication,
     prisonerResult: PrisonerSimpleResult,
-    reporterName: string
+    reporterName: string,
+    originatingAgencyName?: string,
+    overrideAgencyName?: string
   ): ReportedAdjudicationEnhanced {
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
     const reportingOfficer = (reporterName && convertToTitleCase(reporterName)) || ''
+
     const latestSheduledHearingDate =
       reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED
         ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
@@ -566,6 +591,8 @@ export default class ReportedAdjudicationsService {
       displayName,
       friendlyName,
       reportingOfficer,
+      originatingAgencyName,
+      overrideAgencyName,
       dateTimeOfIncident: reportedAdjudication.incidentDetails.dateTimeOfIncident,
       formattedDateTimeOfIncident: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfIncident,

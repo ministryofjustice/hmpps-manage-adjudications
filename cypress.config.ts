@@ -60,6 +60,8 @@ export default defineConfig({
               response: {
                 reviewTotal: 2,
                 transferReviewTotal: 1,
+                transferOutTotal: 1,
+                transferAllTotal: 1,
                 hearingsToScheduleTotal: 1,
               },
             }),

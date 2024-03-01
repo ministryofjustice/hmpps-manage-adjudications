@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class AllTransferReportsPage extends Page {
   constructor() {
-    super('Reports from transfers in')
+    super('Reports for people transferred in or out')
   }
 
   noResultsMessage = (): PageElement => cy.get('[data-qa="no-results-message"]')
@@ -11,6 +11,12 @@ export default class AllTransferReportsPage extends Page {
 
   previousLink = (): PageElement => this.paginationLinks().contains('Previous')
 
+  transferredReportsAllTab = (): PageElement => cy.get('[data-qa="allTransfersTab"]')
+
+  transferredReportsInTab = (): PageElement => cy.get('[data-qa="transferInTab"]')
+
+  transferredReportsOutTab = (): PageElement => cy.get('[data-qa="transferOutTab"]')
+
   nextLink = (): PageElement => this.paginationLinks().contains('Next')
 
   paginationLink = (number: number): PageElement =>
@@ -18,13 +24,11 @@ export default class AllTransferReportsPage extends Page {
 
   paginationResults = (): PageElement => cy.get('.moj-pagination__results').first()
 
-  resultsTable = (): PageElement => cy.get('[data-qa="complete-adjudications-results-table"]')
+  resultsTable = (): PageElement => cy.get('[data-qa="results-table"]')
 
   uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck({ force: true })
 
   checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value, { force: true })
 
   viewReportLink = () => cy.get('[data-qa="view-report-link"]')
-
-  viewHearingsLink = () => cy.get('[data-qa="view-edit-hearing-link"]')
 }

@@ -55,6 +55,14 @@ beforeEach(() => {
     totalElements: 2,
     content: [adjudicationOne, adjudicationTwo],
   })
+
+  reportedAdjudicationsService.getAgencyReportCounts.mockResolvedValue({
+    reviewTotal: 100,
+    transferReviewTotal: 2,
+    transferOutTotal: 2,
+    transferAllTotal: 4,
+    hearingsToScheduleTotal: 0,
+  })
 })
 
 afterEach(() => {
@@ -65,7 +73,7 @@ describe('GET', () => {
   it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
-      .get(adjudicationUrls.reportsTransferredIn.urls.start())
+      .get(adjudicationUrls.reportsTransferredOut.urls.start())
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -75,31 +83,26 @@ describe('GET', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 
     return request(app)
-      .get(adjudicationUrls.reportsTransferredIn.urls.start())
+      .get(adjudicationUrls.reportsTransferredOut.urls.start())
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Adjudications')
+        expect(res.text).toContain('Reports for people transferred in or out')
       })
   })
   it('should load the correct details', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-    reportedAdjudicationsService.getAgencyReportCounts.mockResolvedValue({
-      reviewTotal: 100,
-      transferReviewTotal: 2,
-      transferOutTotal: 2,
-      transferAllTotal: 4,
-      hearingsToScheduleTotal: 0,
-    })
+
     return request(app)
-      .get(adjudicationUrls.reportsTransferredIn.urls.start())
+      .get(adjudicationUrls.reportsTransferredOut.urls.start())
       .expect('Content-Type', /html/)
       .expect(response => {
+        expect(response.text).toContain('All (4)')
+        expect(response.text).toContain('To review after a transfer in (2)')
+        expect(response.text).toContain('To update for a transfer out (2)')
         expect(response.text).toContain('Smith, John - G6123VU')
         expect(response.text).toContain('15 November 2021 - 11:45')
-        expect(response.text).toContain('Adjourned')
         expect(response.text).toContain('Moriarty, James - G6174VU')
         expect(response.text).toContain('15 November 2021 - 11:30')
-        expect(response.text).toContain('Adjourned')
       })
   })
 })
@@ -108,17 +111,17 @@ describe('POST /all-transferred-reports', () => {
   it('should redirect with the correct filter parameters', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     return request(app)
-      .post(adjudicationUrls.reportsTransferredIn.urls.start())
+      .post(adjudicationUrls.reportsTransferredOut.urls.start())
       .send({
         status: ReportedAdjudicationStatus.ADJOURNED,
-        type: TransferredReportType.IN,
+        type: TransferredReportType.OUT,
       })
-      .expect('Location', `${adjudicationUrls.reportsTransferredIn.urls.start()}?status=ADJOURNED&type=IN`)
+      .expect('Location', `${adjudicationUrls.reportsTransferredOut.urls.start()}?status=ADJOURNED&type=OUT`)
   })
   it('should render the not found page without the correct role', () => {
     userService.getUserRoles.mockResolvedValue([])
     return request(app)
-      .post(adjudicationUrls.reportsTransferredIn.urls.start())
+      .post(adjudicationUrls.reportsTransferredOut.urls.start())
       .expect(res => {
         expect(res.text).toContain('Page not found')
       })

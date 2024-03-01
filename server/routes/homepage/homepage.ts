@@ -26,8 +26,10 @@ type taskLinks = {
 const createTasks = (
   reviewTotal: number,
   transferReviewTotal: number,
-  activeCaseloadName: string,
-  hearingsToScheduleTotal: number
+  transferOutTotal: number,
+  transferAllTotal: number,
+  hearingsToScheduleTotal: number,
+  activeCaseloadName: string
 ): TaskType[] => {
   return [
     {
@@ -75,16 +77,41 @@ const createTasks = (
     },
     {
       id: 'transfers',
-      heading: `Reports from transfers in (${transferReviewTotal})`,
-      href: adjudicationUrls.reportsTransferredIn.urls.filter({
+      heading: `Reports for people transferred in or out (${transferAllTotal})`,
+      href: adjudicationUrls.reportsTransferredAll.urls.filter({
         status: [
           ReportedAdjudicationStatus.UNSCHEDULED,
           ReportedAdjudicationStatus.REFER_POLICE,
           ReportedAdjudicationStatus.ADJOURNED,
           ReportedAdjudicationStatus.REFER_INAD,
+          ReportedAdjudicationStatus.AWAITING_REVIEW,
+          ReportedAdjudicationStatus.SCHEDULED,
         ],
-        type: TransferredReportType.IN,
+        type: TransferredReportType.ALL,
       }),
+      links: [
+        {
+          text: `To review after a transfer in (${transferReviewTotal})`,
+          href: adjudicationUrls.reportsTransferredIn.urls.filter({
+            status: [
+              ReportedAdjudicationStatus.UNSCHEDULED,
+              ReportedAdjudicationStatus.REFER_POLICE,
+              ReportedAdjudicationStatus.ADJOURNED,
+              ReportedAdjudicationStatus.REFER_INAD,
+            ],
+            type: TransferredReportType.IN,
+          }),
+          id: 'transfers-in',
+        },
+        {
+          text: `To update for a transfer out (${transferOutTotal})`,
+          href: adjudicationUrls.reportsTransferredOut.urls.filter({
+            status: [ReportedAdjudicationStatus.AWAITING_REVIEW, ReportedAdjudicationStatus.SCHEDULED],
+            type: TransferredReportType.OUT,
+          }),
+          id: 'transfers-out',
+        },
+      ],
       roles: ['ADJUDICATIONS_REVIEWER'],
       enabled: true,
     },
@@ -150,13 +177,15 @@ export default class HomepageRoutes {
       this.userService.getUserRoles(user.token),
       this.reportedAdjudicationsService.getAgencyReportCounts(user),
     ])
-    const { reviewTotal, transferReviewTotal, hearingsToScheduleTotal } = counts
+    const { reviewTotal, transferReviewTotal, hearingsToScheduleTotal, transferOutTotal, transferAllTotal } = counts
     const userCaseloadName = user.meta?.description || null
     const enabledTasks = createTasks(
       reviewTotal,
       transferReviewTotal,
-      userCaseloadName,
-      hearingsToScheduleTotal
+      transferOutTotal,
+      transferAllTotal,
+      hearingsToScheduleTotal,
+      userCaseloadName
     ).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
 
@@ -168,8 +197,10 @@ export default class HomepageRoutes {
     const disRelatedTasks = createTasks(
       reviewTotal,
       transferReviewTotal,
-      userCaseloadName,
-      hearingsToScheduleTotal
+      transferOutTotal,
+      transferAllTotal,
+      hearingsToScheduleTotal,
+      userCaseloadName
     ).filter(disRelatedTasksPredicate)
 
     const dataInsightsTask = {

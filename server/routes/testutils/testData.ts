@@ -67,6 +67,7 @@ export default class TestData {
     dateTimeOfIssue = null,
     createdByUserId = 'USER1',
     originatingAgencyId = 'MDI',
+    overrideAgencyId = 'LEI',
     createdOnBehalfOfOfficer = null,
     createdOnBehalfOfReason = null,
     otherData,
@@ -97,6 +98,7 @@ export default class TestData {
     dateTimeOfIssue?: string
     createdByUserId?: string
     originatingAgencyId?: string
+    overrideAgencyId?: string
     createdOnBehalfOfOfficer?: string
     createdOnBehalfOfReason?: string
     otherData?: any
@@ -134,6 +136,7 @@ export default class TestData {
       issuingOfficer,
       dateTimeOfIssue,
       originatingAgencyId,
+      overrideAgencyId,
       createdOnBehalfOfOfficer,
       createdOnBehalfOfReason,
       ...otherData,

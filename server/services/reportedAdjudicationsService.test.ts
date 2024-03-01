@@ -1232,6 +1232,7 @@ describe('reportedAdjudicationsService', () => {
         chargeNumber: '123',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
+        overrideAgencyId: null,
         otherData: {
           transferableActionsAllowed: true,
         },
