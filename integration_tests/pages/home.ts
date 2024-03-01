@@ -13,6 +13,10 @@ export default class Home extends Page {
 
   viewScheduledHearingsCard = (): PageElement => cy.get('a').contains('Hearings to be scheduled')
 
+  transfersInCard = (): PageElement => cy.get('a').contains('transfer in')
+
+  transfersOutCard = (): PageElement => cy.get('a').contains('transfer out')
+
   startANewReportLink = (): PageElement => cy.get('a').contains('Start a new report')
 
   continueAReportLink = (): PageElement => cy.get('a').contains('Continue a report')
