@@ -5,7 +5,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set title = "Awarded punishments and damages" %}
+{% set title = "View hearing outcomes" %}
 
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
@@ -33,12 +33,8 @@
   {% for result in results %}
     {% set resultNumber = loop.index %}
 
-    {% set printLinkHtml %}
-      <a href="{{ adjudicationUrls.printPdf.urls.dis7(result.chargeNumber) }}" class="govuk-link" data-qa="print-report-link-{{ resultNumber }}">Print DIS7<span class="govuk-visually-hidden"> for {{ result.chargeNumber }}</span></a>
-    {% endset -%}
-
-    {% set punishmentsLinkHtml %}
-      <a href="{{ result.reportHref }}" class="govuk-link" data-qa="view-punishments-link-{{ resultNumber }}">View punishments<span class="govuk-visually-hidden"> for {{ result.chargeNumber }}</span></a>
+    {% set actionLinkHtml %}
+      <a href="{{ result.reportHref.link }}" class="govuk-link" data-qa="action-link-{{ resultNumber }}">{{ result.reportHref.text }}<span class="govuk-visually-hidden"> for {{ result.chargeNumber }}</span></a>
     {% endset -%}
 
     {% set rows = (rows.push([
@@ -50,8 +46,7 @@
       { text: result.caution },
       { text: result.punishmentCount | showDefault('-') },
       { text: result.damagesOwedAmount | showDefault('-') },
-      { html: printLinkHtml },
-      { html: punishmentsLinkHtml }
+      { html: actionLinkHtml }
     ]), rows) %}
   {% endfor %}
 
@@ -73,7 +68,6 @@
           { text: "Caution" },
           { text: "Punishments awarded" },
           { text: "Damages" },
-          { text: "" },
           { text: "" }
         ],
         rows: rows,
@@ -81,7 +75,7 @@
       }) }}
     </div>
   {% else %}
-    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No scheduled hearings</p>
+    <p class="govuk-!-padding-top-3" data-qa="no-results-message">{{ emptyStateText }}</p>
   {% endif %}
 
 {% endblock %}

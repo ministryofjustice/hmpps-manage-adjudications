@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class Home extends Page {
   constructor() {
-    super('Awarded punishments and damages')
+    super('View hearing outcomes')
   }
 
   allAwardedPunishmentsAndDamagesTab = (): PageElement => cy.get('[data-qa="allAwardedPunishmentsAndDamagesTab"]')
@@ -20,10 +20,7 @@ export default class Home extends Page {
 
   clearLink = (): PageElement => cy.get('[data-qa="clear-filter"]')
 
-  viewReportLink = (resultNumber: number): PageElement => cy.get(`[data-qa="print-report-link-${resultNumber}"]`)
-
-  viewPunishmentsLink = (resultNumber: number): PageElement =>
-    cy.get(`[data-qa="view-punishments-link-${resultNumber}"]`)
+  actionLink = (resultNumber: number): PageElement => cy.get(`[data-qa="action-link-${resultNumber}"]`)
 
   resultsTable = (): PageElement => cy.get('[data-qa="awarded-punishments-and-damages-results-table"]')
 

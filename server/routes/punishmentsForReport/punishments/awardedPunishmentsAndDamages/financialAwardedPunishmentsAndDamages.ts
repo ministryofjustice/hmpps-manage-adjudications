@@ -54,6 +54,7 @@ export default class FinancialAwardedPunishmentsAndDamagesRoutes {
       additionalDaysAwardedPunishmentsHref,
       activeTab: 'financialAwardedPunishmentsAndDamages',
       errors,
+      emptyStateText: 'There are no hearings for this date where a financial punishment was given.',
     })
   }
 

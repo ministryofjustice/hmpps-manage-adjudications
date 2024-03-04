@@ -242,7 +242,6 @@ context('Awarded punishments and damages', () => {
         expect($headings.get(6).innerText).to.contain('Punishments awarded')
         expect($headings.get(7).innerText).to.contain('Damages')
         expect($headings.get(8).innerText).to.contain('')
-        expect($headings.get(9).innerText).to.contain('')
       })
 
     awardedPunishmentsAndDamagesPage
@@ -257,56 +256,41 @@ context('Awarded punishments and damages', () => {
         expect($data.get(5).innerText).to.contain('No')
         expect($data.get(6).innerText).to.contain('3')
         expect($data.get(7).innerText).to.contain('£200')
-        expect($data.get(8).innerText).to.contain('Print DIS7')
-        expect($data.get(9).innerText).to.contain('View punishments')
+        expect($data.get(8).innerText).to.contain('View punishments')
 
-        expect($data.get(10).innerText).to.contain('12346')
-        expect($data.get(11).innerText).to.contain('Ray, Tony - P3785CP')
-        expect($data.get(12).innerText).to.contain('A-2-001')
-        expect($data.get(13).innerText).to.contain('26 August 2023 - 10:00')
-        expect($data.get(14).innerText).to.contain('Dismissed')
-        expect($data.get(15).innerText).to.contain('No')
-        expect($data.get(16).innerText).to.contain('0')
-        expect($data.get(17).innerText).to.contain('-')
-        expect($data.get(18).innerText).to.contain('Print DIS7')
-        expect($data.get(19).innerText).to.contain('View punishments')
+        expect($data.get(9).innerText).to.contain('12346')
+        expect($data.get(10).innerText).to.contain('Ray, Tony - P3785CP')
+        expect($data.get(11).innerText).to.contain('A-2-001')
+        expect($data.get(12).innerText).to.contain('26 August 2023 - 10:00')
+        expect($data.get(13).innerText).to.contain('Dismissed')
+        expect($data.get(14).innerText).to.contain('No')
+        expect($data.get(15).innerText).to.contain('0')
+        expect($data.get(16).innerText).to.contain('-')
+        expect($data.get(17).innerText).to.contain('View hearings')
 
-        expect($data.get(20).innerText).to.contain('12347')
-        expect($data.get(21).innerText).to.contain('Smith, David - G6345BY')
-        expect($data.get(22).innerText).to.contain('MDI-1-001')
-        expect($data.get(23).innerText).to.contain('26 August 2023 - 10:50')
-        expect($data.get(24).innerText).to.contain('Charge proved')
-        expect($data.get(25).innerText).to.contain('Yes')
-        expect($data.get(26).innerText).to.contain('1')
-        expect($data.get(27).innerText).to.contain('-')
-        expect($data.get(28).innerText).to.contain('Print DIS7')
-        expect($data.get(29).innerText).to.contain('View punishments')
+        expect($data.get(18).innerText).to.contain('12347')
+        expect($data.get(19).innerText).to.contain('Smith, David - G6345BY')
+        expect($data.get(20).innerText).to.contain('MDI-1-001')
+        expect($data.get(21).innerText).to.contain('26 August 2023 - 10:50')
+        expect($data.get(22).innerText).to.contain('Charge proved')
+        expect($data.get(23).innerText).to.contain('Yes')
+        expect($data.get(24).innerText).to.contain('1')
+        expect($data.get(25).innerText).to.contain('-')
+        expect($data.get(26).innerText).to.contain('View punishments')
       })
 
     awardedPunishmentsAndDamagesPage
-      .viewReportLink(1)
-      .should('have.attr', 'href')
-      .and('include', `${adjudicationUrls.printPdf.urls.dis7('12345')}`)
-    awardedPunishmentsAndDamagesPage
-      .viewPunishmentsLink(1)
+      .actionLink(1)
       .should('have.attr', 'href')
       .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12345')}`)
 
     awardedPunishmentsAndDamagesPage
-      .viewReportLink(2)
+      .actionLink(2)
       .should('have.attr', 'href')
-      .and('include', `${adjudicationUrls.printPdf.urls.dis7('12346')}`)
-    awardedPunishmentsAndDamagesPage
-      .viewPunishmentsLink(2)
-      .should('have.attr', 'href')
-      .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12346')}`)
+      .and('include', `${adjudicationUrls.hearingDetails.urls.review('12346')}`)
 
     awardedPunishmentsAndDamagesPage
-      .viewReportLink(3)
-      .should('have.attr', 'href')
-      .and('include', `${adjudicationUrls.printPdf.urls.dis7('12347')}`)
-    awardedPunishmentsAndDamagesPage
-      .viewPunishmentsLink(3)
+      .actionLink(3)
       .should('have.attr', 'href')
       .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12347')}`)
   })
@@ -558,12 +542,12 @@ context('Awarded punishments and damages - Financial', () => {
       })
 
     financialAwardedPunishmentsAndDamagesPage
-      .viewPunishmentsLink(1)
+      .actionLink(1)
       .should('have.attr', 'href')
       .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12345')}`)
 
     financialAwardedPunishmentsAndDamagesPage
-      .viewPunishmentsLink(2)
+      .actionLink(2)
       .should('have.attr', 'href')
       .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12346')}`)
   })
@@ -804,12 +788,12 @@ context('Awarded punishments and damages - Additional days', () => {
       })
 
     additionalDaysAwardedPunishmentsPage
-      .viewPunishmentsLink(1)
+      .actionLink(1)
       .should('have.attr', 'href')
       .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12345')}`)
 
     additionalDaysAwardedPunishmentsPage
-      .viewPunishmentsLink(2)
+      .actionLink(2)
       .should('have.attr', 'href')
       .and('include', `${adjudicationUrls.punishmentsAndDamages.urls.review('12346')}`)
   })

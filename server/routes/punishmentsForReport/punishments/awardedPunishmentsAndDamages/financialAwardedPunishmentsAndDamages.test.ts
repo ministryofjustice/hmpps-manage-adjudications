@@ -42,7 +42,7 @@ beforeEach(() => {
       damagesOwedAmount: '£200',
       additionalDays: 0,
       prospectiveAdditionalDays: 0,
-      reportHref: adjudicationUrls.punishmentsAndDamages.urls.review('12345'),
+      reportHref: { link: adjudicationUrls.punishmentsAndDamages.urls.review('12345'), text: 'View punishments' },
     },
     {
       chargeNumber: '12345',
@@ -55,7 +55,7 @@ beforeEach(() => {
       punishmentCount: 0,
       additionalDays: 0,
       prospectiveAdditionalDays: 0,
-      reportHref: adjudicationUrls.punishmentsAndDamages.urls.review('12345'),
+      reportHref: { link: adjudicationUrls.punishmentsAndDamages.urls.review('12345'), text: 'View punishments' },
     },
   ]
   reportedAdjudicationsService.getAwardedPunishmentsAndDamages.mockResolvedValue(awardedPunishmentsAndDamages as never)
@@ -76,7 +76,7 @@ describe('GET /awarded-punishments-and-damages/financial', () => {
         .get(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Awarded punishments and damages')
+          expect(response.text).toContain('View hearing outcomes')
           expect(response.text).toContain('Smith, James G7234VB')
         })
     })
@@ -90,7 +90,7 @@ describe('GET /awarded-punishments-and-damages/financial', () => {
         )
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Awarded punishments and damages')
+          expect(response.text).toContain('View hearing outcomes')
           expect(response.text).toContain('Smith, James G7234VB')
         })
     })
@@ -105,8 +105,8 @@ describe('GET /awarded-punishments-and-damages/financial', () => {
         .get(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(response.text).toContain('Awarded punishments and damages')
-          expect(response.text).toContain('No scheduled hearings')
+          expect(response.text).toContain('View hearing outcomes')
+          expect(response.text).toContain('There are no hearings for this date where a financial punishment was given.')
         })
     })
   })

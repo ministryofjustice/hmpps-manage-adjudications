@@ -149,8 +149,9 @@ const createTasks = (
     },
     {
       id: 'awarded-punishments-and-damages',
-      heading: 'Awarded punishments and damages',
-      description: '',
+      heading: 'View hearing outcomes',
+      description:
+        'View the outcomes of adjudication hearings. Where a charge was proved, check details of punishments given and money owed for damages.',
       href: adjudicationUrls.awardedPunishmentsAndDamages.root,
       roles: [],
       enabled: true,
@@ -183,7 +184,7 @@ export default class HomepageRoutes {
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
 
     const disRelatedTasksPredicate = (task: TaskType) =>
-      task.description?.includes('DIS') || task.heading.includes('Awarded punishments and damages')
+      task.description?.includes('DIS') || task.heading.includes('View hearing outcomes')
     const reporterTasks = enabledTasks.filter(
       task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !disRelatedTasksPredicate(task)
     )

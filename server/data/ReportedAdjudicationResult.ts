@@ -265,5 +265,5 @@ export type AwardedPunishmentsAndDamages = {
   damagesOwedAmount?: string
   additionalDays: number
   prospectiveAdditionalDays: number
-  reportHref: string
+  reportHref: { link: string; text: string }
 }

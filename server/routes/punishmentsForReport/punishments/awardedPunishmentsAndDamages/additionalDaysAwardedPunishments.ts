@@ -54,6 +54,7 @@ export default class AdditionalDaysAwardedPunishmentsRoutes {
       additionalDaysAwardedPunishmentsHref,
       activeTab: 'additionalDaysAwardedPunishments',
       errors,
+      emptyStateText: 'There are no hearings for this date where added days were given.',
     })
   }
 

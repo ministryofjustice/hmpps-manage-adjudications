@@ -1266,6 +1266,23 @@ export default class ReportedAdjudicationsService {
     return awardedPunishmentsAndDamages
   }
 
+  private getActionLinkForAwardedPunishmentsAndDamages = (adjudication: ReportedAdjudication, userIsALO: boolean) => {
+    if (adjudication.status === ReportedAdjudicationStatus.CHARGE_PROVED) {
+      if (userIsALO)
+        return {
+          link: adjudicationUrls.punishmentsAndDamages.urls.review(adjudication.chargeNumber),
+          text: 'View punishments',
+        }
+      return {
+        link: adjudicationUrls.punishmentsAndDamages.urls.report(adjudication.chargeNumber),
+        text: 'View punishments',
+      }
+    }
+    if (userIsALO)
+      return { link: adjudicationUrls.hearingDetails.urls.review(adjudication.chargeNumber), text: 'View hearings' }
+    return { link: adjudicationUrls.hearingDetails.urls.report(adjudication.chargeNumber), text: 'View hearings' }
+  }
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
   private buildAwardedPunishmentsAndDamages(
     adj: ReportedAdjudicationResult,
@@ -1310,6 +1327,8 @@ export default class ReportedAdjudicationsService {
       }
     })
 
+    const actionLink = this.getActionLinkForAwardedPunishmentsAndDamages(adjudication, userIsALO)
+
     return {
       chargeNumber: adjudication.chargeNumber,
       nameAndNumber: hearingForAdjudication.nameAndNumber,
@@ -1326,9 +1345,7 @@ export default class ReportedAdjudicationsService {
       damagesOwedAmount,
       additionalDays,
       prospectiveAdditionalDays,
-      reportHref: userIsALO
-        ? adjudicationUrls.punishmentsAndDamages.urls.review(adjudication.chargeNumber)
-        : adjudicationUrls.punishmentsAndDamages.urls.report(adjudication.chargeNumber),
+      reportHref: actionLink,
     }
   }
 
