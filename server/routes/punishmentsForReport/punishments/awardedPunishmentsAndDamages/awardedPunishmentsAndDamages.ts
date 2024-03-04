@@ -54,6 +54,7 @@ export default class AwardedPunishmentsAndDamagesRoutes {
       additionalDaysAwardedPunishmentsHref,
       activeTab: 'allAwardedPunishmentsAndDamages',
       errors,
+      emptyStateText: 'There are no hearing outcomes for this date.',
     })
   }
 

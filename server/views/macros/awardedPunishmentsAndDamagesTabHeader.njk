@@ -3,17 +3,17 @@
 
 {% macro awardedPunishmentsAndDamagesTabHeader(activeTab, allAwardedPunishmentsAndDamagesHref, financialAwardedPunishmentsAndDamagesHref, additionalDaysAwardedPunishmentsHref) %}
   {% set items = [{
-      text: 'All',
+      text: 'All outcomes',
       href: allAwardedPunishmentsAndDamagesHref,
       attributes: { 'data-qa': 'allAwardedPunishmentsAndDamagesTab' },
       active: activeTab === 'allAwardedPunishmentsAndDamages'
     } , {
-      text: 'Financial',
+      text: 'Financial punishments',
       href: financialAwardedPunishmentsAndDamagesHref,
       attributes: { 'data-qa': 'financialAwardedPunishmentsAndDamagesTab' },
       active: activeTab === 'financialAwardedPunishmentsAndDamages'
     }, {
-      text: 'Additional days',
+      text: 'Added days',
       href: additionalDaysAwardedPunishmentsHref,
       attributes: { 'data-qa': 'additionalDaysAwardedPunishmentsTab' },
       active: activeTab === 'additionalDaysAwardedPunishments'
