@@ -614,10 +614,14 @@ export default class ReportedAdjudicationsService {
         ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
         : null
 
-    const reportLink =
-      reportedAdjudication.transferableActionsAllowed === false || reportPageType === ReportPageType.REPORTER
-        ? adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.chargeNumber)
-        : adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.chargeNumber)
+    let reportLink = null
+    if (reportedAdjudication.transferableActionsAllowed === false) {
+      reportLink = adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.chargeNumber)
+    } else if (reportPageType === ReportPageType.REPORTER) {
+      reportLink = adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.chargeNumber)
+    } else {
+      reportLink = adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.chargeNumber)
+    }
 
     const incidentLocation =
       incidentLocationName && incidentLocationName ? `${incidentLocationName}, ${originatingAgencyName}` : null
