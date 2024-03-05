@@ -5,7 +5,6 @@ import UserService from '../../../services/userService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
-import LocationService from '../../../services/locationService'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
@@ -20,7 +19,6 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 const userService = new UserService(null, null) as jest.Mocked<UserService>
-const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
 let app: Express
 
