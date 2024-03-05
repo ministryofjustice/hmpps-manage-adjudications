@@ -374,11 +374,28 @@ export default class ReportedAdjudicationsService {
       )) || []
     const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
 
+    const incidentLocationIdsInPage = new Set(pageResponse.content.map(adj => adj.incidentDetails.locationId))
+    const locationIdsAndNames =
+      (await Promise.all(
+        [...incidentLocationIdsInPage].map(location => this.locationService.getIncidentLocation(location, user))
+      )) || []
+    const locationNameByIdMap = new Map(
+      locationIdsAndNames.map(location => [location.locationId, location.userDescription])
+    )
+
+    const uniqueAgencyIds = new Set(pageResponse.content.map(adj => adj.originatingAgencyId))
+    const agencyIdsAndNames =
+      (await Promise.all([...uniqueAgencyIds].map(agencyId => this.locationService.getAgency(agencyId, user)))) || []
+    const agencyNameByIdMap = new Map(agencyIdsAndNames.map(a => [a.agencyId, a.description]))
+
     return this.mapData(pageResponse, reportedAdjudication => {
       const enhancedAdjudication = this.enhanceReportedAdjudication(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
-        reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId)
+        reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId),
+        agencyNameByIdMap.get(reportedAdjudication.originatingAgencyId),
+        null,
+        locationNameByIdMap.get(reportedAdjudication.incidentDetails.locationId)
       )
       return {
         ...enhancedAdjudication,
@@ -575,7 +592,8 @@ export default class ReportedAdjudicationsService {
     prisonerResult: PrisonerSimpleResult,
     reporterName: string,
     originatingAgencyName?: string,
-    overrideAgencyName?: string
+    overrideAgencyName?: string,
+    incidentLocationName?: string
   ): ReportedAdjudicationEnhanced {
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
@@ -585,6 +603,13 @@ export default class ReportedAdjudicationsService {
       reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED
         ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
         : null
+
+    const reportLink =
+      reportedAdjudication.transferableActionsAllowed === false
+        ? adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.chargeNumber)
+        : adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.chargeNumber)
+
+    const incidentLocation = `${incidentLocationName}, ${originatingAgencyName}`
 
     return {
       ...reportedAdjudication,
@@ -606,6 +631,8 @@ export default class ReportedAdjudicationsService {
       statusDisplayName: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
       formattedDateTimeOfScheduledHearing:
         formatTimestampToDate(latestSheduledHearingDate, 'D MMMM YYYY - HH:mm') || ' - ',
+      reportLink,
+      incidentLocation,
     }
   }
 

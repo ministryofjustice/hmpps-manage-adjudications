@@ -1,42 +1,126 @@
-#statusFilterBox {
-    margin-top:-50px;
-    margin-left: 2.5em;
+.adjudication-report-side-filter {
+    background-color: #f3f2f1;
+    padding: 30px 15px;
+}
+.adjudication-report-card-list {
+    &__top-border {
+        margin: 10px 0 30px 0;
+    }
+}
+.adjudication-reports-no-entries {
+    li {
+        margin-left:10px;
+    }
+}
 
-    .horizontal-form, .govuk-form-group {
-        margin-bottom: 0px!important;
+.adjudication-report-card-list-item {
+    padding-bottom: 30px;
+    border-bottom: 1px solid govuk-colour('dark-grey');
+    margin-bottom: 30px;
+  
+    &__title {
+      font-size: 24px;
+      font-weight: bold;
+      color: $govuk-text-colour;
+      margin-bottom: 10px;
     }
 
-    .statusFilterCheckboxes {
-        height: 200px;
+    &__header {
         display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
+        justify-content:space-between;
     }
 
-    .govuk-checkboxes__label {
-        padding: 8px 15px 8px 1px;
-        max-width:fit-content;
+    &__status {
+        margin-bottom: 10px;
     }
+ 
+    &__notes {
+      font-size: 19px;
+      font-weight: 300;
+      color: $govuk-text-colour;
+      margin-bottom: 10px;
+      max-width: 670px;
+      word-break: break-word;
+  
+      @media (max-width: 1152px) {
+        max-width: 570px;
+      }
+      @media (max-width: 1000px) {
+        max-width: 380px;
+      }
+    }
+
+    &__metadata-group {
+      margin-bottom: 10px;
+    }
+
+    &__metadata {
+      font-size: 19px;
+      font-weight: 300;
+      color: $govuk-text-colour;
+      margin-bottom: 5px;
+    }
+
+    &__location {
+      font-size: 19px;
+      font-weight: 300;
+      color: $govuk-secondary-text-colour;
+      margin-bottom: 0;
+    }
+  
+    &__link {
+      white-space: nowrap;
+  
+      a {
+        display: block;
+      }
+  
+      a + a {
+        margin-top: 20px;
+      }
+    }
+}
+
+
+// old styling before refresh
+#statusFilterBox {
+  margin-top:-50px;
+  margin-left: 2.5em;
+
+  .horizontal-form, .govuk-form-group {
+      margin-bottom: 0px!important;
+  }
+
+  .statusFilterCheckboxes {
+      height: 200px;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+  }
+
+  .govuk-checkboxes__label {
+      padding: 8px 15px 8px 1px;
+      max-width:fit-content;
+  }
 }
 
 .date-of-discovery-input {
-    max-width: 7.5em!important;
+  max-width: 7.5em!important;
 }
 
 .displayFlex {
-    display: flex;
+  display: flex;
 }
 
 .hearingsAndReferrals {
-    width: 181px;
+  width: 181px;
 }
 
 .viewReport {
-    width: 96px;
+  width: 96px;
 }
 
 .transfers-filter-checkboxes {
-    .govuk-checkboxes__label {
-        max-width:fit-content;
-    }
-}
+  .govuk-checkboxes__label {
+      max-width:fit-content;
+  }}

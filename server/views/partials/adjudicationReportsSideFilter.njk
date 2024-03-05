@@ -1,0 +1,60 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+<form method="POST" novalidate="novalidate" class="adjudication-report-side-filter">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+  <h2 class="govuk-heading-m">Filter</h2>
+  <div class="govuk-form-group">
+    <h3 class="govuk-heading-s">Date of discovery</h3>
+    {{ hmppsDatepicker({
+          id: 'fromDate[date]',
+          name: 'fromDate[date]',
+          label: {
+              text: "Date from",
+              classes: "govuk-heading-s"
+          },
+          value: filter.fromDate,
+          dataQa: 'fromDate',
+          errorMessage: errors | findErrors(['fromDate[date]']),
+          maxDate: maxDate
+      }) }}
+
+    {{ hmppsDatepicker({
+        id: 'toDate[date]',
+        name: 'toDate[date]',
+        label: {
+            text: "Date to",
+            classes: "govuk-heading-s"
+        },
+        value: filter.toDate,
+        dataQa: 'toDate',
+        maxDate: maxDate
+    }) }}
+    <h3 class="govuk-heading-s govuk-!-margin-top-6">Status</h3>
+    <div id="status-checkboxes">
+      {{ govukCheckboxes({
+          name: "status",
+          classes: "govuk-checkboxes--small",
+          fieldset: {
+            legend: {
+              text: "",
+              isPageHeading: false,
+              classes: ""
+            }
+          },
+          items: statuses
+        }) }}
+    </div>
+
+  </div>
+  {{ govukButton({
+    text: "Apply",
+    preventDoubleClick: true,
+    attributes: { "data-qa": "apply-filter-button" }
+}) }}
+  <div>
+    <a href="{{ adjudicationUrls.allCompletedReports.urls.start() }}" class="govuk-link govuk-link--no-visited-state">Clear</a>
+  </div>
+</form>
