@@ -80,6 +80,12 @@ export type ConvertedEvidence = {
   other: EvidenceDetails[]
 }
 
+const enum ReportPageType {
+  ALO = 'ALO',
+  REPORTER = 'REPORTER',
+  TRANSFERS = 'TRANSFERS',
+}
+
 export default class ReportedAdjudicationsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
@@ -344,7 +350,8 @@ export default class ReportedAdjudicationsService {
       const enhancedAdjudication = this.enhanceReportedAdjudication(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
-        null
+        null,
+        ReportPageType.REPORTER
       )
       return {
         ...enhancedAdjudication,
@@ -393,6 +400,7 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
         reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId),
+        ReportPageType.ALO,
         agencyNameByIdMap.get(reportedAdjudication.originatingAgencyId),
         null,
         locationNameByIdMap.get(reportedAdjudication.incidentDetails.locationId)
@@ -440,6 +448,7 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
         reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId),
+        ReportPageType.TRANSFERS,
         agencyNameByIdMap.get(reportedAdjudication.originatingAgencyId),
         agencyNameByIdMap.get(reportedAdjudication.overrideAgencyId)
       )
@@ -591,6 +600,7 @@ export default class ReportedAdjudicationsService {
     reportedAdjudication: ReportedAdjudication,
     prisonerResult: PrisonerSimpleResult,
     reporterName: string,
+    reportPageType: ReportPageType,
     originatingAgencyName?: string,
     overrideAgencyName?: string,
     incidentLocationName?: string
@@ -605,19 +615,20 @@ export default class ReportedAdjudicationsService {
         : null
 
     const reportLink =
-      reportedAdjudication.transferableActionsAllowed === false
+      reportedAdjudication.transferableActionsAllowed === false || reportPageType === ReportPageType.REPORTER
         ? adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.chargeNumber)
         : adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.chargeNumber)
 
-    const incidentLocation = `${incidentLocationName}, ${originatingAgencyName}`
+    const incidentLocation =
+      incidentLocationName && incidentLocationName ? `${incidentLocationName}, ${originatingAgencyName}` : null
 
     return {
       ...reportedAdjudication,
       displayName,
       friendlyName,
       reportingOfficer,
-      originatingAgencyName,
-      overrideAgencyName,
+      originatingAgencyName: originatingAgencyName || null,
+      overrideAgencyName: overrideAgencyName || null,
       dateTimeOfIncident: reportedAdjudication.incidentDetails.dateTimeOfIncident,
       formattedDateTimeOfIncident: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfIncident,

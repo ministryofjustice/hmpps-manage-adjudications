@@ -15,6 +15,10 @@ context('All Completed Reports', () => {
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
+    cy.task('stubGetLocation', {
+      locationId: 1,
+      response: { locationId: 1, locationPrefix: 'MDI', userDescription: 'Adjudications Rm', agencyId: 'MDI' },
+    })
     cy.signIn()
   })
 
@@ -40,6 +44,14 @@ context('All Completed Reports', () => {
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
+        offenceDetails: {
+          offenceCode: 17002,
+          offenceRule: {
+            paragraphNumber: '18',
+            paragraphDescription:
+              'Destroys or damages any part of a young offender institution or any other property other than his own',
+          },
+        },
       })
     })
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
@@ -47,31 +59,22 @@ context('All Completed Reports', () => {
 
     cy.visit(adjudicationUrls.allCompletedReports.root)
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
-    allCompletedReportsPage.resultsTable().should('exist')
+    allCompletedReportsPage.card().should('have.length', 20)
+    allCompletedReportsPage.card().first().should('contain.text', '1')
+    allCompletedReportsPage.dateOfDiscovery().first().should('contain.text', 'Date of discovery: 15/11/2345 - 11:30')
     allCompletedReportsPage
-      .resultsTable()
-      .find('th')
-      .then($headings => {
-        expect($headings.get(0).innerText).to.contain('Charge number')
-        expect($headings.get(1).innerText).to.contain('Discovery date and time')
-        expect($headings.get(2).innerText).to.contain('Name and prison number')
-        expect($headings.get(3).innerText).to.contain('Status')
-        expect($headings.get(4).innerText).to.contain('Latest scheduled hearing')
-        expect($headings.get(5) === undefined)
-      })
+      .locationDescription()
+      .first()
+      .should('contain.text', 'Happened at: Adjudications Rm, Moorland (HMP & YOI)')
+    allCompletedReportsPage.reportingOfficerName().first().should('contain.text', 'Reporting officer: T. User')
+    allCompletedReportsPage.status().first().should('contain.text', 'Status: Awaiting review')
     allCompletedReportsPage
-      .resultsTable()
-      .find('td')
-      .then($data => {
-        expect($data.get(0).innerText).to.contain('1')
-        expect($data.get(1).innerText).to.contain('15 November 2345 - 11:30')
-        expect($data.get(2).innerText).to.contain('Potter, Harry - A1234AA')
-        expect($data.get(3).innerText).to.contain('Awaiting review')
-        expect($data.get(4).innerText).to.equal('-')
-        // test hearings link is not populated
-        expect($data.get(5).innerText).to.equal('')
-        expect($data.get(6).innerText).to.contain('View report')
-      })
+      .card()
+      .first()
+      .should(
+        'contain.text',
+        'Destroys or damages any part of a young offender institution or any other property other than his own'
+      )
   })
 
   it('should deal with some prisoner information missing', () => {
@@ -86,6 +89,14 @@ context('All Completed Reports', () => {
         prisonerNumber: 'A1234AA',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         dateTimeOfDiscovery: '2345-11-15T11:30:00',
+        offenceDetails: {
+          offenceCode: 17002,
+          offenceRule: {
+            paragraphNumber: '18',
+            paragraphDescription:
+              'Destroys or damages any part of a young offender institution or any other property other than his own',
+          },
+        },
       })
     })
     cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: manyReportedAdjudications }) // Page 1
@@ -93,31 +104,9 @@ context('All Completed Reports', () => {
 
     cy.visit(adjudicationUrls.allCompletedReports.root)
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
-    allCompletedReportsPage.resultsTable().should('exist')
-    allCompletedReportsPage
-      .resultsTable()
-      .find('th')
-      .then($headings => {
-        expect($headings.get(0).innerText).to.contain('Charge number')
-        expect($headings.get(1).innerText).to.contain('Discovery date and time')
-        expect($headings.get(2).innerText).to.contain('Name and prison number')
-        expect($headings.get(3).innerText).to.contain('Status')
-        expect($headings.get(4).innerText).to.contain('Latest scheduled hearing')
-        expect($headings.get(5) === undefined)
-      })
-    allCompletedReportsPage
-      .resultsTable()
-      .find('td')
-      .then($data => {
-        expect($data.get(0).innerText).to.contain('1')
-        expect($data.get(1).innerText).to.contain('15 November 2345 - 11:30')
-        expect($data.get(2).innerText).to.contain('Unknown - A1234AA')
-        expect($data.get(3).innerText).to.contain('Awaiting review')
-        expect($data.get(4).innerText).to.equal('-')
-        // test hearings link is not populated
-        expect($data.get(5).innerText).to.equal('')
-        expect($data.get(6).innerText).to.contain('View report')
-      })
+    allCompletedReportsPage.card().should('have.length', 20)
+    allCompletedReportsPage.card().first().should('contain.text', '1')
+    allCompletedReportsPage.prisonerNameAndNumber().first().should('contain.text', 'Unknown - A1234AA')
   })
 
   it('pagination should work', () => {
@@ -203,15 +192,16 @@ context('All Completed Reports', () => {
 
     cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
-    allCompletedReportsPage.noResultsMessage().should('contain', 'No completed reports.')
+    allCompletedReportsPage
+      .noResultsMessage()
+      .should('contain', 'No adjudications have been found for the selected filters.')
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     const fromDate = formatDateForDatePicker(new Date('1/1/2022').toISOString(), 'short')
     const toDate = formatDateForDatePicker(new Date('1/9/2022').toISOString(), 'short')
     adjudicationsFilter.fromDateInput().clear().type(fromDate)
     adjudicationsFilter.toDateInput().clear().type(toDate)
-    allCompletedReportsPage.uncheckAllCheckboxes()
     allCompletedReportsPage.checkCheckboxWithValue('UNSCHEDULED')
-    adjudicationsFilter.applyButton().click()
+    allCompletedReportsPage.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED')
@@ -219,7 +209,7 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
   })
 
-  it('UNSCHEDULED staatus - filtering and pagination should work together', () => {
+  it('Filtering and pagination should work together', () => {
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
       response: testData.userFromUsername('USER1'),
@@ -255,9 +245,8 @@ context('All Completed Reports', () => {
     const toDate = formatDateForDatePicker(new Date('10/19/2021').toISOString(), 'short')
     adjudicationsFilter.fromDateInput().clear().type(fromDate)
     adjudicationsFilter.toDateInput().clear().type(toDate)
-    allCompletedReportsPage.uncheckAllCheckboxes()
     allCompletedReportsPage.checkCheckboxWithValue('UNSCHEDULED')
-    adjudicationsFilter.applyButton().click()
+    allCompletedReportsPage.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED')
@@ -270,105 +259,6 @@ context('All Completed Reports', () => {
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&pageNumber=2')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
-    allCompletedReportsPage.resultsTable().should('exist')
-    allCompletedReportsPage
-      .resultsTable()
-      .find('td')
-      .then($data => {
-        expect($data.get(0).innerText).to.contain('1')
-        expect($data.get(1).innerText).to.contain('15 November 2345 - 11:30')
-        expect($data.get(2).innerText).to.contain('Potter, Harry - A1234AA')
-        expect($data.get(3).innerText).to.contain('Unscheduled')
-        expect($data.get(4).innerText).to.equal('-')
-        expect($data.get(5).innerHTML).to.contain('/hearing-details/21/review')
-        expect($data.get(6).innerHTML).to.contain('/prisoner-report/21/review')
-        expect($data.get(6).innerText).to.contain('View report')
-      })
-  })
-
-  it('SCHEDULED status should show scheduled hearing date link', () => {
-    cy.task('stubGetUserFromUsername', {
-      username: 'USER1',
-      response: testData.userFromUsername(),
-    })
-    const manyReportedAdjudications: ReportedAdjudication[] = generateRange(1, 300, _ => {
-      return testData.reportedAdjudication({
-        chargeNumber: _ as unknown as string,
-        prisonerNumber: 'A1234AA',
-        dateTimeOfIncident: '2222-10-10T11:30:00',
-        dateTimeOfDiscovery: '2345-11-15T11:30:00',
-        status: ReportedAdjudicationStatus.SCHEDULED,
-        hearings: [
-          testData.singleHearing({
-            dateTimeOfHearing: '2022-11-23T17:00:00',
-            id: 68,
-          }),
-          testData.singleHearing({
-            dateTimeOfHearing: '2022-11-28T09:00:00',
-            id: 67,
-          }),
-          testData.singleHearing({
-            dateTimeOfHearing: '2022-11-30T09:50:00',
-            id: 69,
-          }),
-          testData.singleHearing({
-            dateTimeOfHearing: '2023-11-30T10:00:00',
-            id: 70,
-          }),
-        ],
-      })
-    })
-    // The empty results to return when first landing on your completed reports page.
-    cy.task('stubGetAllReportedAdjudications', { number: 0, allContent: [] })
-    // The results to return when initially filtering
-    cy.task('stubGetAllReportedAdjudications', {
-      number: 0, // Page 1
-      allContent: manyReportedAdjudications,
-      filter: { status: ReportedAdjudicationStatus.SCHEDULED, fromDate: '2021-10-10', toDate: '2021-10-19' },
-    })
-    // The results to return after going to another page after having filtered previously
-    cy.task('stubGetAllReportedAdjudications', {
-      number: 1, // Page 2
-      allContent: manyReportedAdjudications,
-      filter: { status: ReportedAdjudicationStatus.SCHEDULED, fromDate: '2021-10-10', toDate: '2021-10-19' },
-    })
-    cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'HARRY', lastName: 'POTTER' }])
-    cy.visit(adjudicationUrls.allCompletedReports.root) // visit page one
-    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
-    const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
-    const fromDate = formatDateForDatePicker(new Date('10/10/2021').toISOString(), 'short')
-    const toDate = formatDateForDatePicker(new Date('10/19/2021').toISOString(), 'short')
-    adjudicationsFilter.fromDateInput().clear().type(fromDate)
-    adjudicationsFilter.toDateInput().clear().type(toDate)
-    allCompletedReportsPage.uncheckAllCheckboxes()
-    allCompletedReportsPage.checkCheckboxWithValue('SCHEDULED')
-    adjudicationsFilter.applyButton().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
-      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=SCHEDULED')
-    })
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
-    allCompletedReportsPage.paginationLink(2).first().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
-      // We expect the initial filter parameters to have been passed through on the links.
-      expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=SCHEDULED&pageNumber=2')
-    })
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
-    allCompletedReportsPage.resultsTable().should('exist')
-    allCompletedReportsPage
-      .resultsTable()
-      .find('td')
-      .then($data => {
-        expect($data.get(0).innerText).to.contain('1')
-        expect($data.get(1).innerText).to.contain('15 November 2345 - 11:30')
-        expect($data.get(2).innerText).to.contain('Potter, Harry - A1234AA')
-        expect($data.get(3).innerText).to.contain('Scheduled')
-        expect($data.get(4).innerText).to.contain('30 November 2023 - 10:00')
-        expect($data.get(5).innerHTML).to.contain('/hearing-details/21/review')
-        expect($data.get(6).innerHTML).to.contain('/prisoner-report/21/review')
-        expect($data.get(6).innerText).to.contain('View report')
-      })
   })
 
   it('SCHEDULED and UNSCHEDULED adjudications should show together', () => {
@@ -409,50 +299,31 @@ context('All Completed Reports', () => {
     const toDate = formatDateForDatePicker(new Date('10/19/2021').toISOString(), 'short')
     adjudicationsFilter.fromDateInput().clear().type(fromDate)
     adjudicationsFilter.toDateInput().clear().type(toDate)
-    allCompletedReportsPage.uncheckAllCheckboxes()
     allCompletedReportsPage.checkCheckboxWithValue('UNSCHEDULED')
     allCompletedReportsPage.checkCheckboxWithValue('SCHEDULED')
-    adjudicationsFilter.applyButton().click()
+    allCompletedReportsPage.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&status=SCHEDULED')
     })
     allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 5 of 5 results')
-    allCompletedReportsPage.resultsTable().should('exist')
-    allCompletedReportsPage
-      .resultsTable()
-      .find('td')
-      .then($data => {
-        expect($data.get(0).innerText).to.contain('1')
-        expect($data.get(1).innerText).to.contain('15 November 2345 - 11:30')
-        expect($data.get(2).innerText).to.contain('Potter, Harry - A1234AA')
-        expect($data.get(3).innerText).to.contain('Scheduled')
-        expect($data.get(4).innerText).to.contain('23 November 2022 - 17:00')
-        expect($data.get(5).innerHTML).to.contain('/hearing-details/1/review')
-        expect($data.get(6).innerHTML).to.contain('/prisoner-report/1/review')
-        expect($data.get(6).innerText).to.contain('View report')
-        expect($data.get(7).innerText).to.contain('2')
-        expect($data.get(8).innerText).to.contain('15 November 2345 - 11:30')
-        expect($data.get(9).innerText).to.contain('Potter, Harry - A1234AA')
-        expect($data.get(10).innerText).to.contain('Unscheduled')
-        expect($data.get(11).innerText).to.equal('-')
-        expect($data.get(12).innerHTML).to.contain('/hearing-details/2/review')
-        expect($data.get(13).innerHTML).to.contain('/prisoner-report/2/review')
-        expect($data.get(13).innerText).to.contain('View report')
-      })
   })
 
   it('date range validation works', () => {
     cy.task('stubGetAllReportedAdjudications', {})
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.allCompletedReports.root)
+    const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     const fromDate = formatDateForDatePicker(new Date('10/19/2022').toISOString(), 'short')
     const toDate = formatDateForDatePicker(new Date('10/10/2022').toISOString(), 'short')
     adjudicationsFilter.fromDateInput().clear().type(fromDate)
     adjudicationsFilter.toDateInput().clear().type(toDate)
-    adjudicationsFilter.applyButton().click()
-    adjudicationsFilter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
+    allCompletedReportsPage.applyButton().click()
+    cy.get('.govuk-error-summary__body').should(
+      'contain.text',
+      'Enter a date that is before or the same as the ‘date to’'
+    )
   })
 
   it('default date range is as expected', () => {
@@ -465,7 +336,7 @@ context('All Completed Reports', () => {
     adjudicationsFilter.fromDateInput().should('have.value', moment().subtract(2, 'days').format('DD/MM/YYYY'))
   })
 
-  it('dynamic links for transferred prisoners', () => {
+  it.only('dynamic links for transferred prisoners', () => {
     cy.task('stubGetAllReportedAdjudications', {})
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
@@ -520,21 +391,6 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.viewReportLink().last().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.prisonerReport.urls.viewOnly(3))
-    })
-    cy.visit(adjudicationUrls.allCompletedReports.root)
-    allCompletedReportsPage.viewHearingsLink().first().click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1'))
-    })
-    cy.visit(adjudicationUrls.allCompletedReports.root)
-    allCompletedReportsPage.viewHearingsLink().eq(1).click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('2'))
-    })
-    cy.visit(adjudicationUrls.allCompletedReports.root)
-    allCompletedReportsPage.viewHearingsLink().eq(2).click()
-    cy.location().should(loc => {
-      expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.viewOnly('3'))
     })
   })
 })

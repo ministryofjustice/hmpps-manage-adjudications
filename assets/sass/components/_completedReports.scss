@@ -1,6 +1,17 @@
 .adjudication-report-side-filter {
     background-color: #f3f2f1;
     padding: 30px 15px;
+    p {
+      margin-left: 20px;
+      margin-bottom: 0;
+    }
+    button {
+      margin-bottom: 0;
+    }
+    &__actions {
+      display: flex;
+      align-items: center;
+    }
 }
 .adjudication-report-card-list {
     &__top-border {

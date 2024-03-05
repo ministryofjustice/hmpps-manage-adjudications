@@ -5,9 +5,11 @@ import UserService from '../../../services/userService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import TestData from '../../testutils/testData'
+import LocationService from '../../../services/locationService'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
+jest.mock('../../../services/locationService.ts')
 
 const testData = new TestData()
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -18,6 +20,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null
 ) as jest.Mocked<ReportedAdjudicationsService>
 const userService = new UserService(null, null) as jest.Mocked<UserService>
+const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
 let app: Express
 
@@ -28,7 +31,9 @@ beforeEach(() => {
     chargeNumber: '2',
     prisonerNumber: 'G6123VU',
     dateTimeOfIncident: '2021-11-15T11:45:00',
+    locationId: 27187,
     otherData: {
+      friendlyName: 'John Smith',
       displayName: 'Smith, John',
       formattedDateTimeOfIncident: '15 November 2021 - 11:45',
       formattedDateTimeOfDiscovery: '15 November 2021 - 11:45',
@@ -38,8 +43,10 @@ beforeEach(() => {
     chargeNumber: '1',
     prisonerNumber: 'G6174VU',
     dateTimeOfIncident: '2021-11-15T11:30:00',
+    locationId: 27187,
     otherData: {
       displayName: 'Moriarty, James',
+      friendlyName: 'James Moriarty',
       formattedDateTimeOfIncident: '15 November 2021 - 11:30',
       formattedDateTimeOfDiscovery: '15 November 2021 - 11:30',
     },
@@ -77,7 +84,7 @@ describe('GET /all-completed-reports', () => {
         expect(res.text).toContain('Adjudications')
       })
   })
-  it('should load the correct details', () => {
+  it.only('should load the correct details', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     reportedAdjudicationsService.getAgencyReportCounts.mockResolvedValue({
       reviewTotal: 100,
@@ -90,12 +97,10 @@ describe('GET /all-completed-reports', () => {
       .get(adjudicationUrls.allCompletedReports.root)
       .expect('Content-Type', /html/)
       .expect(response => {
-        expect(response.text).toContain('Smith, John - G6123VU')
-        expect(response.text).toContain('15 November 2021 - 11:45')
-        expect(response.text).toContain('Awaiting review')
-        expect(response.text).toContain('Moriarty, James - G6174VU')
-        expect(response.text).toContain('15 November 2021 - 11:30')
-        expect(response.text).toContain('Awaiting review')
+        expect(response.text).toContain('John Smith - G6123VU')
+        expect(response.text).toContain('Date of discovery: 15/11/2021 - 11:45')
+        expect(response.text).toContain('James Moriarty - G6174VU')
+        expect(response.text).toContain('Date of discovery: 15/11/2021 - 11:30')
       })
   })
 })

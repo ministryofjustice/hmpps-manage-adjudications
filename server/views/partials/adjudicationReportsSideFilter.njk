@@ -49,12 +49,12 @@
     </div>
 
   </div>
+    <div class="adjudication-report-side-filter__actions">
   {{ govukButton({
     text: "Apply",
     preventDoubleClick: true,
     attributes: { "data-qa": "apply-filter-button" }
 }) }}
-  <div>
-    <a href="{{ adjudicationUrls.allCompletedReports.urls.start() }}" class="govuk-link govuk-link--no-visited-state">Clear</a>
+    <p class="govuk-body"><a href="{{ adjudicationUrls.allCompletedReports.urls.start() }}" class="govuk-link govuk-link--no-visited-state">Clear</a></p>
   </div>
 </form>

@@ -161,7 +161,7 @@ export const fillInDefaults = (uiFilter: UiFilter): UiFilter => {
   return {
     fromDate: uiFilter.fromDate || momentDateToDatePicker(moment().subtract(2, 'days')),
     toDate: uiFilter.toDate || momentDateToDatePicker(moment()),
-    status: uiFilter.status || allStatuses,
+    status: uiFilter.status,
   }
 }
 
