@@ -217,7 +217,6 @@ describe('reportedAdjudicationsService', () => {
             reportingOfficer: '',
             dateTimeOfIncident: '2021-01-01T11:45:00',
             dateTimeOfDiscovery: '2021-01-01T11:45:00',
-            reportLink: '/prisoner-report/2/report',
             overrideAgencyName: null,
             originatingAgencyName: null,
             incidentLocation: null,
@@ -241,7 +240,6 @@ describe('reportedAdjudicationsService', () => {
             reportingOfficer: '',
             dateTimeOfIncident: '2021-01-01T11:30:00',
             dateTimeOfDiscovery: '2021-01-01T11:30:00',
-            reportLink: '/prisoner-report/1/report',
             overrideAgencyName: null,
             originatingAgencyName: null,
             incidentLocation: null,
@@ -437,7 +435,6 @@ describe('reportedAdjudicationsService', () => {
             originatingAgencyName: 'Moorland (HMP & YOI)',
             incidentLocation: 'Adj, Moorland (HMP & YOI)',
             overrideAgencyName: null,
-            reportLink: '/prisoner-report/1524427/review',
           },
         }),
         testData.reportedAdjudication({
@@ -459,7 +456,6 @@ describe('reportedAdjudicationsService', () => {
             incidentLocation: 'Adj, Moorland (HMP & YOI)',
             originatingAgencyName: 'Moorland (HMP & YOI)',
             overrideAgencyName: null,
-            reportLink: '/prisoner-report/1524425/review',
           },
         }),
       ]

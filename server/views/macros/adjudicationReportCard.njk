@@ -1,9 +1,18 @@
 {% macro adjudicationReportCard(adjudication, uniqueListOfAgenciesForPrisoner) %}
+
+{% set reportLink %}
+  {% if adjudication.transferableActionsAllowed === false %}
+  {{ adjudicationUrls.prisonerReport.urls.viewOnly(adjudication.chargeNumber) }}
+  {% else %}
+  {{ adjudicationUrls.prisonerReport.urls.review(adjudication.chargeNumber) }}
+  {% endif %}
+{% endset %}
+
   <div class="adjudication-report-card-list-item" role="listitem" data-qa="adjudication-report-card">
     <div class="adjudication-report-card-list-item__content">
 
       <div class="adjudication-report-card-list-item__header">
-        <h2 class="adjudication-report-card-list-item__title govuk-heading-m" data-qa="report-link"><a href="{{ adjudication.reportLink }}">{{ adjudication.chargeNumber }}</a></h2>
+        <h2 class="adjudication-report-card-list-item__title govuk-heading-m"><a href="{{ reportLink }}" data-qa="report-link">{{ adjudication.chargeNumber }}</a></h2>
 
         <div class="adjudication-report-card-list-item__metadata-group">
           <p class="adjudication-report-card-list-item__metadata govuk-body" data-qa="date-of-discovery">Date of discovery: {{ adjudication.incidentDetails.dateTimeOfDiscovery | formatTimestampTo('DD/MM/YYYY - HH:mm') }}</p>

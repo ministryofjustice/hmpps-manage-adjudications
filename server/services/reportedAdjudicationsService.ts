@@ -614,15 +614,6 @@ export default class ReportedAdjudicationsService {
         ? reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
         : null
 
-    let reportLink = null
-    if (reportedAdjudication.transferableActionsAllowed === false) {
-      reportLink = adjudicationUrls.prisonerReport.urls.viewOnly(reportedAdjudication.chargeNumber)
-    } else if (reportPageType === ReportPageType.REPORTER) {
-      reportLink = adjudicationUrls.prisonerReport.urls.report(reportedAdjudication.chargeNumber)
-    } else {
-      reportLink = adjudicationUrls.prisonerReport.urls.review(reportedAdjudication.chargeNumber)
-    }
-
     const incidentLocation =
       incidentLocationName && incidentLocationName ? `${incidentLocationName}, ${originatingAgencyName}` : null
 
@@ -646,7 +637,6 @@ export default class ReportedAdjudicationsService {
       statusDisplayName: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
       formattedDateTimeOfScheduledHearing:
         formatTimestampToDate(latestSheduledHearingDate, 'D MMMM YYYY - HH:mm') || ' - ',
-      reportLink,
       incidentLocation,
     }
   }
