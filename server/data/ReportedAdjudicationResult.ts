@@ -72,6 +72,8 @@ export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   formattedDateTimeOfScheduledHearing: string
   originatingAgencyName?: string
   overrideAgencyName?: string
+  reportLink?: string
+  incidentLocation?: string
 }
 
 export interface ReportedAdjudicationEnhancedWithIssuingDetails extends ReportedAdjudication {

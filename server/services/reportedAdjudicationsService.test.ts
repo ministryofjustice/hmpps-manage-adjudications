@@ -217,6 +217,9 @@ describe('reportedAdjudicationsService', () => {
             reportingOfficer: '',
             dateTimeOfIncident: '2021-01-01T11:45:00',
             dateTimeOfDiscovery: '2021-01-01T11:45:00',
+            overrideAgencyName: null,
+            originatingAgencyName: null,
+            incidentLocation: null,
           },
         }),
         testData.reportedAdjudication({
@@ -237,6 +240,9 @@ describe('reportedAdjudicationsService', () => {
             reportingOfficer: '',
             dateTimeOfIncident: '2021-01-01T11:30:00',
             dateTimeOfDiscovery: '2021-01-01T11:30:00',
+            overrideAgencyName: null,
+            originatingAgencyName: null,
+            incidentLocation: null,
           },
         }),
       ]
@@ -368,12 +374,14 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'A5041DY',
           dateTimeOfIncident: '2021-11-30T14:10:00',
           incidentStatement: { statement: 'Something happened' },
+          locationId: 27187,
         }),
         testData.reportedAdjudication({
           chargeNumber: '1524425',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           incidentStatement: { statement: 'Something happened' },
+          locationId: 27187,
         }),
       ]
       const batchPrisonerDetails = [
@@ -413,6 +421,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'A5041DY',
           dateTimeOfIncident: '2021-11-30T14:10:00',
           incidentStatement: { statement: 'Something happened' },
+          locationId: 27187,
           otherData: {
             displayName: 'Willis, Michael',
             friendlyName: 'Michael Willis',
@@ -423,6 +432,9 @@ describe('reportedAdjudicationsService', () => {
             formattedDateTimeOfDiscovery: '30 November 2021 - 14:10',
             dateTimeOfDiscovery: '2021-11-30T14:10:00',
             reportingOfficer: '',
+            originatingAgencyName: 'Moorland (HMP & YOI)',
+            incidentLocation: 'Adj, Moorland (HMP & YOI)',
+            overrideAgencyName: null,
           },
         }),
         testData.reportedAdjudication({
@@ -430,6 +442,7 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           incidentStatement: { statement: 'Something happened' },
+          locationId: 27187,
           otherData: {
             displayName: 'Smith, Peter',
             friendlyName: 'Peter Smith',
@@ -440,6 +453,9 @@ describe('reportedAdjudicationsService', () => {
             formattedDateTimeOfDiscovery: '30 November 2021 - 14:00',
             dateTimeOfDiscovery: '2021-11-30T14:00:00',
             reportingOfficer: '',
+            incidentLocation: 'Adj, Moorland (HMP & YOI)',
+            originatingAgencyName: 'Moorland (HMP & YOI)',
+            overrideAgencyName: null,
           },
         }),
       ]

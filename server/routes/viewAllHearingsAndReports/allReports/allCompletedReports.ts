@@ -31,9 +31,9 @@ export default class AllCompletedReportsRoutes {
     errors: FormError[]
   ): Promise<void> =>
     res.render(`pages/viewAllHearingsAndReports/allReports`, {
-      allCompletedReports: results,
+      results,
       filter,
-      checkboxes: reportedAdjudicationStatuses(filter),
+      statuses: reportedAdjudicationStatuses(filter),
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
