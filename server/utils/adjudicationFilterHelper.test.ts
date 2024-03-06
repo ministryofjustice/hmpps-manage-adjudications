@@ -20,7 +20,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
       { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: false },
       { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: false },
-      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid added days', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -52,7 +52,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: true },
       { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: true },
       { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: true },
-      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: true },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid added days', checked: true },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -98,7 +98,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
       { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: false },
       { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: false },
-      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid added days', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -126,7 +126,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
       { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: false },
       { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: false },
-      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid added days', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',
@@ -154,7 +154,7 @@ describe('reportedAdjudicationStatuses', () => {
       { value: ReportedAdjudicationStatus.QUASHED, text: 'Quashed', checked: false },
       { value: ReportedAdjudicationStatus.INVALID_OUTCOME, text: 'Invalid outcome', checked: false },
       { value: ReportedAdjudicationStatus.INVALID_SUSPENDED, text: 'Invalid suspended', checked: false },
-      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid ADA', checked: false },
+      { value: ReportedAdjudicationStatus.INVALID_ADA, text: 'Invalid added days', checked: false },
     ]
     const filter = {
       fromDate: '22/11/2022',

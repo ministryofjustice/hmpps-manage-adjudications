@@ -1,12 +1,11 @@
 {% extends "../../partials/layout.njk" %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "../../macros/adjudicationFilter.njk" import adjudicationFilter %}
 
-{% set title %}Adjudications{% endset %}
+{% set title %}Reports from {{ activeCaseloadName | safe }}{% endset %}
 
 {% block pageTitle %}
   {{ title }} - Digital Prison Services
@@ -25,9 +24,6 @@
   {% endif %}
 
   <h1 class="govuk-heading-l">{{ title }}</h1>
-  
-  {{ govukInsetText({
-  text: "Reports from "+ activeCaseloadName | safe }) }}
 
     <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-quarter">

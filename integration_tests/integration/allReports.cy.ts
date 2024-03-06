@@ -15,10 +15,6 @@ context('All Completed Reports', () => {
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
-    cy.task('stubGetLocation', {
-      locationId: 1,
-      response: { locationId: 1, locationPrefix: 'MDI', userDescription: 'Adjudications Rm', agencyId: 'MDI' },
-    })
     cy.signIn()
   })
 
@@ -62,10 +58,6 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.card().should('have.length', 20)
     allCompletedReportsPage.card().first().should('contain.text', '1')
     allCompletedReportsPage.dateOfDiscovery().first().should('contain.text', 'Date of discovery: 15/11/2345 - 11:30')
-    allCompletedReportsPage
-      .locationDescription()
-      .first()
-      .should('contain.text', 'Happened at: Adjudications Rm, Moorland (HMP & YOI)')
     allCompletedReportsPage.reportingOfficerName().first().should('contain.text', 'Reporting officer: T. User')
     allCompletedReportsPage.status().first().should('contain.text', 'Status: Awaiting review')
     allCompletedReportsPage
