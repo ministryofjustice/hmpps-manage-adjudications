@@ -28,6 +28,7 @@ import {
   NotProceedReason,
   NextStep,
   QuashGuiltyFindingReason,
+  ReferGovReason,
 } from '../data/HearingAndOutcomeResult'
 import {
   convertPrivilegeDTypeDescriptionForDIS7,
@@ -502,4 +503,5 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addGlobal('PunishmentReasonForChange', PunishmentReasonForChange)
   njkEnv.addGlobal('PunishmentType', PunishmentType)
   njkEnv.addGlobal('AdjudicationHistoryBookingType', AdjudicationHistoryBookingType)
+  njkEnv.addGlobal('ReferGovReason', ReferGovReason)
 }

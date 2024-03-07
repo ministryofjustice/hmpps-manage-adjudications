@@ -59,7 +59,7 @@ describe('GET /reason-for-gov-referral', () => {
       .get(adjudicationUrls.govReasonForReferral.urls.edit('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('What is the reason for not having an independent adjudicator hearing?')
+        expect(res.text).toContain('Why has this case been referred back to the governor?')
       })
   })
 })

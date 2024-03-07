@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { FormError } from '../../../../@types/template'
 
 import UserService from '../../../../services/userService'
-import { HearingDetailsHistory } from '../../../../data/HearingAndOutcomeResult'
+import { HearingDetailsHistory, ReferGovReason } from '../../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
@@ -19,6 +19,7 @@ export enum PageRequestType {
 type PageData = {
   error?: FormError | FormError[]
   referralReason?: string
+  referGovReason?: ReferGovReason
 }
 
 class PageOptions {
@@ -42,12 +43,13 @@ export default class GovReasonForReferralPage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, referralReason } = pageData
+    const { error, referralReason, referGovReason } = pageData
     const { chargeNumber } = req.params
     return res.render(`pages/hearingOutcome/reasonForGovReferral.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       errors: error ? [error] : [],
       referralReason,
+      referGovReason,
     })
   }
 
@@ -69,6 +71,7 @@ export default class GovReasonForReferralPage {
     }
     return this.renderView(req, res, {
       referralReason: referralOutcome?.details,
+      referGovReason: referralOutcome?.referGovReason,
     })
   }
 
@@ -77,11 +80,12 @@ export default class GovReasonForReferralPage {
     const { chargeNumber } = req.params
     const { referralReason, referGovReason } = req.body
     const trimmedReferralReason = referralReason ? referralReason.trim() : null
-    const error = validateForm({ referralReason: trimmedReferralReason })
+    const error = validateForm({ referralReason: trimmedReferralReason, referGovReason })
     if (error)
       return this.renderView(req, res, {
         error,
         referralReason: trimmedReferralReason,
+        referGovReason,
       })
     try {
       if (this.pageOptions.isEdit()) {
