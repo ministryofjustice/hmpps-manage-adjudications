@@ -14,6 +14,7 @@ import {
   NotProceedReason,
   OutcomeCode,
   OutcomeHistory,
+  ReferGovReason,
   ReferralOutcomeCode,
 } from '../../server/data/HearingAndOutcomeResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
@@ -381,6 +382,7 @@ context('Inad refers to gov after hearing', () => {
       nextStepsInadPage.nextStepRadioButtons().find('input[value="refer_gov"]').click({ force: true })
       nextStepsInadPage.submitButton().click()
       const reasonForGovReferral = Page.verifyOnPage(ReasonForGovReferral)
+      reasonForGovReferral.referralRadios().find('input[value="OTHER"]').check()
       reasonForGovReferral.referralReason().type('This is the reason for referring to the governor')
       reasonForGovReferral.submitButton().click()
       Page.verifyOnPage(HearingReferralConfirmation)
@@ -462,6 +464,7 @@ context('Inad refers to gov after hearing', () => {
                   referralOutcome: testData.referralOutcome({
                     code: ReferralOutcomeCode.REFER_GOV,
                     details: 'This is the reason for referring to the governor',
+                    referGovReason: ReferGovReason.OTHER,
                   }),
                 },
               },
@@ -516,17 +519,17 @@ context('Inad refers to gov after hearing', () => {
         .govReferralTable()
         .find('dt')
         .then($summaryLabel => {
-          expect($summaryLabel.get(0).innerText).to.contain(
-            'What is the reason for not having an independent adjudicator hearing?'
-          )
-          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
+          expect($summaryLabel.get(0).innerText).to.contain('Why has this case been referred back to the governor?')
+          expect($summaryLabel.get(1).innerText).to.contain('Adjudicator’s comments about the referral')
+          expect($summaryLabel.get(2).innerText).to.contain('Outcome')
         })
       hearingTabPage
         .govReferralTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('This is the reason for referring to the governor')
-          expect($summaryData.get(1).innerText).to.contain('Schedule a hearing')
+          expect($summaryData.get(0).innerText).to.contain('Other')
+          expect($summaryData.get(1).innerText).to.contain('This is the reason for referring to the governor')
+          expect($summaryData.get(2).innerText).to.contain('Schedule a hearing')
         })
       hearingTabPage
         .hearingSummaryTable(2)

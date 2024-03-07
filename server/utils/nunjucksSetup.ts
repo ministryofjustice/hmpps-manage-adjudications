@@ -257,6 +257,19 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     }
   })
 
+  njkEnv.addFilter('convertReferGovReason', (referGovReason: ReferGovReason) => {
+    switch (referGovReason) {
+      case ReferGovReason.GOV_INQUIRY:
+        return 'For governor inquiry'
+      case ReferGovReason.REVIEW_FOR_REFER_POLICE:
+        return 'To review for police referral'
+      case ReferGovReason.OTHER:
+        return 'Other'
+      default:
+        return 'Not known'
+    }
+  })
+
   njkEnv.addFilter('convertQuashReason', (quashReason: QuashGuiltyFindingReason) => {
     switch (quashReason) {
       case QuashGuiltyFindingReason.APPEAL_UPHELD:

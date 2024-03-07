@@ -93,7 +93,16 @@
   {% set referToGovRows = [
     {
       key: {
-        text: 'What is the reason for not having an independent adjudicator hearing?'
+        text: 'Why has this case been referred back to the governor?'
+      },
+      value: {
+        text: referralDetails.referGovReason | convertReferGovReason
+      },
+      actions: reasonForReferralChangeLink
+    },
+        {
+      key: {
+        text: 'Adjudicator’s comments about the referral'
       },
       value: {
         text: referralDetails.details | hideIfUndefined

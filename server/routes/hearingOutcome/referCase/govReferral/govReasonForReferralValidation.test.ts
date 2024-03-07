@@ -6,7 +6,7 @@ describe('validateForm', () => {
     expect(
       validateForm({
         referralReason: "Referring back to the gov because I don't know what to do",
-        referGovReason: ReferGovReason.NOT_SERIOUS_FOR_INAD,
+        referGovReason: ReferGovReason.REVIEW_FOR_REFER_POLICE,
       })
     ).toBeNull()
   })

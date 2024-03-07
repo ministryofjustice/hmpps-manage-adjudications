@@ -2,8 +2,10 @@ import Page, { PageElement } from './page'
 
 export default class ReasonForGovReferral extends Page {
   constructor() {
-    super('What is the reason for not having an independent adjudicator hearing?')
+    super('Why has this case been referred back to the governor?')
   }
+
+  referralRadios = (): PageElement => cy.get('[data-qa="referGovReason-radio-buttons"]')
 
   referralReason = (): PageElement => cy.get('[data-qa="referral-reason"]')
 
