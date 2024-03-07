@@ -116,6 +116,7 @@ export type Outcome = {
   reason?: string
   quashedReason?: QuashGuiltyFindingReason
   canRemove?: boolean
+  referGovReason?: ReferGovReason
 }
 
 export type ReferralOutcome = {
@@ -124,13 +125,11 @@ export type ReferralOutcome = {
   details?: string
   reason?: NotProceedReason
   canRemove?: boolean
-  referGovReason?: ReferGovReason
 }
 
 export type OutcomeDetails = {
   outcome: Outcome
   referralOutcome?: ReferralOutcome
-  referGovReason?: ReferGovReason
 }
 
 export type OutcomeDetailsHistory = {

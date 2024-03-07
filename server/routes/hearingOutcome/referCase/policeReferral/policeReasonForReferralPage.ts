@@ -79,7 +79,7 @@ export default class ReasonForReferralPage {
     const { chargeNumber } = req.params
     const { referralReason } = req.body
 
-    const error = validateForm({ referralReason })
+    const error = validateForm({ referralReason, referGovReasonPresent: false })
     if (error)
       return this.renderView(req, res, {
         error,

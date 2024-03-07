@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomeCode } from '../../../data/HearingAndOutcomeResult'
+import { HearingOutcomeCode, ReferGovReason } from '../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
@@ -50,7 +50,7 @@ describe('GET /reason-for-referral', () => {
 })
 
 describe('POST /reason-for-referral', () => {
-  it('should successfully call the endpoint and redirect', () => {
+  it('should successfully call the endpoint and redirect - REFER_POLICE', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
@@ -68,6 +68,31 @@ describe('POST /reason-for-referral', () => {
           HearingOutcomeCode.REFER_POLICE,
           'Roxanne Red',
           '123',
+          undefined,
+          expect.anything()
+        )
+      )
+  })
+  it('should successfully call the endpoint and redirect - REFER_GOV', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.hearingReasonForReferral.urls.start(
+          '100'
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_GOV`
+      )
+      .send({
+        referralReason: '123',
+        referGovReason: ReferGovReason.GOV_INQUIRY,
+      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
+      .then(() =>
+        expect(hearingsService.createReferral).toHaveBeenCalledWith(
+          '100',
+          HearingOutcomeCode.REFER_GOV,
+          'Roxanne Red',
+          '123',
+          ReferGovReason.GOV_INQUIRY,
           expect.anything()
         )
       )
@@ -77,6 +102,7 @@ describe('POST /reason-for-referral', () => {
       .post(adjudicationUrls.hearingReasonForReferral.urls.start('100'))
       .send({
         referralReason: '123',
+        referGovReason: ReferGovReason.GOV_INQUIRY,
       })
       .expect(302)
       .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start('100'))
@@ -90,6 +116,7 @@ describe('POST /reason-for-referral', () => {
       )
       .send({
         referralReason: '123',
+        referGovReason: ReferGovReason.GOV_INQUIRY,
       })
       .expect(302)
       .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start('100'))
@@ -103,6 +130,7 @@ describe('POST /reason-for-referral', () => {
       )
       .send({
         referralReason: '123',
+        referGovReason: ReferGovReason.GOV_INQUIRY,
       })
       .expect(302)
       .expect('Location', adjudicationUrls.enterHearingOutcome.urls.start('100'))

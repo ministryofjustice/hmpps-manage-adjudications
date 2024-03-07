@@ -24,12 +24,14 @@ export default class HearingsService {
     hearingOutcome: HearingOutcomeCode,
     adjudicatorName: string,
     referralReason: string,
+    referGovReason: ReferGovReason,
     user: User
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
       code: hearingOutcome,
       details: referralReason,
+      referGovReason,
     }
     return new ManageAdjudicationsUserTokensClient(user).createReferral(chargeNumber, hearingOutcomeDetails)
   }
