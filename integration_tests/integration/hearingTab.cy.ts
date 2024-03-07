@@ -11,6 +11,7 @@ import {
   OutcomeCode,
   OutcomeHistory,
   QuashGuiltyFindingReason,
+  ReferGovReason,
   ReferralOutcomeCode,
 } from '../../server/data/HearingAndOutcomeResult'
 
@@ -317,6 +318,7 @@ const historyWithInAdReferringToGovThenHearing = [
       referralOutcome: testData.referralOutcome({
         code: ReferralOutcomeCode.REFER_GOV,
         details: 'reason for referring to the governor',
+        referGovReason: ReferGovReason.REVIEW_FOR_REFER_POLICE,
       }),
     },
   },
@@ -356,6 +358,7 @@ const historyWithInAdReferringToGovThenNotProceed = [
       referralOutcome: testData.referralOutcome({
         code: ReferralOutcomeCode.REFER_GOV,
         details: 'reason for referring to the governor',
+        referGovReason: ReferGovReason.GOV_INQUIRY,
       }),
     },
   },
@@ -388,6 +391,7 @@ const historyWithReferGovHearingOutcome = [
       outcome: testData.outcome({
         code: OutcomeCode.REFER_GOV,
         details: 'Needs the big guns',
+        referGovReason: ReferGovReason.REVIEW_FOR_REFER_POLICE,
       }),
       referralOutcome: testData.referralOutcome({
         code: ReferralOutcomeCode.NOT_PROCEED,
@@ -1959,17 +1963,17 @@ context('Hearing details page', () => {
         .govReferralTable()
         .find('dt')
         .then($summaryLabel => {
-          expect($summaryLabel.get(0).innerText).to.contain(
-            'What is the reason for not having an independent adjudicator hearing?'
-          )
-          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
+          expect($summaryLabel.get(0).innerText).to.contain('Why has this case been referred back to the governor?')
+          expect($summaryLabel.get(1).innerText).to.contain('Adjudicator’s comments about the referral')
+          expect($summaryLabel.get(2).innerText).to.contain('Outcome')
         })
       hearingTabPage
         .govReferralTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('reason for referring to the governor')
-          expect($summaryData.get(1).innerText).to.contain('Schedule a hearing')
+          expect($summaryData.get(0).innerText).to.contain('To review for police referral')
+          expect($summaryData.get(1).innerText).to.contain('reason for referring to the governor')
+          expect($summaryData.get(2).innerText).to.contain('Schedule a hearing')
         })
       hearingTabPage
         .hearingSummaryTable(2)
@@ -2016,17 +2020,17 @@ context('Hearing details page', () => {
         .govReferralTable()
         .find('dt')
         .then($summaryLabel => {
-          expect($summaryLabel.get(0).innerText).to.contain(
-            'What is the reason for not having an independent adjudicator hearing?'
-          )
-          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
+          expect($summaryLabel.get(0).innerText).to.contain('Why has this case been referred back to the governor?')
+          expect($summaryLabel.get(1).innerText).to.contain('Adjudicator’s comments about the referral')
+          expect($summaryLabel.get(2).innerText).to.contain('Outcome')
         })
       hearingTabPage
         .govReferralTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('reason for referring to the governor')
-          expect($summaryData.get(1).innerText).to.contain('Not proceed')
+          expect($summaryData.get(0).innerText).to.contain('For governor inquiry')
+          expect($summaryData.get(1).innerText).to.contain('reason for referring to the governor')
+          expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
         })
       hearingTabPage
         .notProceedTable()
@@ -2056,19 +2060,19 @@ context('Hearing details page', () => {
         .govReferralTable()
         .find('dt')
         .then($summaryLabel => {
-          expect($summaryLabel.get(0).innerText).to.contain(
-            'What is the reason for not having an independent adjudicator hearing?'
-          )
-          expect($summaryLabel.get(1).innerText).to.contain('Outcome')
-          expect($summaryLabel.get(2).innerText).to.contain('Reason for not proceeding')
+          expect($summaryLabel.get(0).innerText).to.contain('Why has this case been referred back to the governor?')
+          expect($summaryLabel.get(1).innerText).to.contain('Adjudicator’s comments about the referral')
+          expect($summaryLabel.get(2).innerText).to.contain('Outcome')
+          expect($summaryLabel.get(3).innerText).to.contain('Reason for not proceeding')
         })
       hearingTabPage
         .govReferralTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('Needs the big guns')
-          expect($summaryData.get(1).innerText).to.contain('Not proceed with the charge')
-          expect($summaryData.get(2).innerText).to.contain('Flawed notice of report\n\nReason for not proceeding')
+          expect($summaryData.get(0).innerText).to.contain('To review for police referral')
+          expect($summaryData.get(1).innerText).to.contain('Needs the big guns')
+          expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
+          expect($summaryData.get(3).innerText).to.contain('Flawed notice of report\n\nReason for not proceeding')
         })
       hearingTabPage.removeReferralButton().should('exist')
     })
