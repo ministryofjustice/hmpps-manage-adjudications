@@ -2,7 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class AllCompletedReportsPage extends Page {
   constructor() {
-    super('Adjudications')
+    super('Reports from')
   }
 
   noResultsMessage = (): PageElement => cy.get('[data-qa="adjudication-reports-no-entries"]')

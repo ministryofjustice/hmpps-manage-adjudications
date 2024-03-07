@@ -219,7 +219,6 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfDiscovery: '2021-01-01T11:45:00',
             overrideAgencyName: null,
             originatingAgencyName: null,
-            incidentLocation: null,
           },
         }),
         testData.reportedAdjudication({
@@ -242,7 +241,6 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfDiscovery: '2021-01-01T11:30:00',
             overrideAgencyName: null,
             originatingAgencyName: null,
-            incidentLocation: null,
           },
         }),
       ]
@@ -433,7 +431,6 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfDiscovery: '2021-11-30T14:10:00',
             reportingOfficer: '',
             originatingAgencyName: 'Moorland (HMP & YOI)',
-            incidentLocation: 'Adj, Moorland (HMP & YOI)',
             overrideAgencyName: null,
           },
         }),
@@ -453,7 +450,6 @@ describe('reportedAdjudicationsService', () => {
             formattedDateTimeOfDiscovery: '30 November 2021 - 14:00',
             dateTimeOfDiscovery: '2021-11-30T14:00:00',
             reportingOfficer: '',
-            incidentLocation: 'Adj, Moorland (HMP & YOI)',
             originatingAgencyName: 'Moorland (HMP & YOI)',
             overrideAgencyName: null,
           },

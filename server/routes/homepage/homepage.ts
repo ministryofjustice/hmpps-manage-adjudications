@@ -118,7 +118,7 @@ const createTasks = (
         {
           text: `Hearings to be scheduled (${hearingsToScheduleTotal})`,
           href: adjudicationUrls.allCompletedReports.urls.filter({
-            fromDate: momentDateToDatePicker(moment().subtract(7, 'days')),
+            fromDate: '01/01/2024',
             toDate: momentDateToDatePicker(moment()),
             status: [
               ReportedAdjudicationStatus.UNSCHEDULED,

@@ -518,7 +518,7 @@ context('Prisoner report - reviewer view', () => {
         .guidanceContent()
         .contains('An adjudication may have an ‘invalid outcome’ status because there is')
     })
-    it('should include the guidance details if invalid - invalid ADA', () => {
+    it('should include the guidance details if invalid - Invalid added days', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(500001))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
       prisonerReportPage.guidanceContent().should('exist')

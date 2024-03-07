@@ -232,7 +232,7 @@ export function reportedAdjudicationStatusDisplayName(status: ReportedAdjudicati
     case ReportedAdjudicationStatus.INVALID_SUSPENDED:
       return 'Invalid suspended'
     case ReportedAdjudicationStatus.INVALID_ADA:
-      return 'Invalid ADA'
+      return 'Invalid added days'
     default:
       return null
   }
