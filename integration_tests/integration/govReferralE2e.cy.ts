@@ -118,7 +118,8 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
         expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start('100'))
         expect(loc.search).to.eq('?adjudicator=John%20Smith&hearingOutcome=REFER_GOV')
       })
-      cy.get('h1').contains('What is the reason for not having an independent adjudicator hearing?')
+      cy.get('h1').contains('Why has this case been referred back to the governor?')
+      cy.get('[data-qa="referGovReason-radio-buttons"]').find('input[value="OTHER"]').check()
       cy.get('[data-qa="referral-reason"]').type('This is my reasoning for referring to the governor')
       cy.get('[data-qa="reason-for-referral-submit"]').click()
       const hearingReferralConfirmation = Page.verifyOnPage(HearingReferralConfirmation)
@@ -147,6 +148,7 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
                   outcome: testData.outcome({
                     code: OutcomeCode.REFER_GOV,
                     details: 'This is my reasoning for referring to the governor',
+                    referGovReason: ReferGovReason.OTHER,
                   }),
                 },
               },
@@ -189,6 +191,7 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
                   outcome: testData.outcome({
                     code: OutcomeCode.REFER_GOV,
                     details: 'This is my reasoning for referring to the governor',
+                    referGovReason: ReferGovReason.OTHER,
                   }),
                   referralOutcome: testData.referralOutcome({
                     code: ReferralOutcomeCode.NOT_PROCEED,
@@ -218,15 +221,21 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
         .govReferralTable()
         .find('dt')
         .then($summaryLabel => {
-          expect($summaryLabel.get(0).innerText).to.contain(
-            'What is the reason for not having an independent adjudicator hearing?'
-          )
+          expect($summaryLabel.get(0).innerText).to.contain('Why has this case been referred back to the governor?')
+          expect($summaryLabel.get(1).innerText).to.contain('Adjudicator’s comments about the referral')
+          expect($summaryLabel.get(2).innerText).to.contain('Outcome')
+          expect($summaryLabel.get(3).innerText).to.contain('Reason for not proceeding')
         })
       hearingTabPage
         .govReferralTable()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('This is my reasoning for referring to the governor')
+          expect($summaryData.get(0).innerText).to.contain('Other')
+          expect($summaryData.get(1).innerText).to.contain('This is my reasoning for referring to the governor')
+          expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
+          expect($summaryData.get(3).innerText).to.contain(
+            'Resolved in another way\n\nThis was resolved with a conversation'
+          )
         })
     })
   })

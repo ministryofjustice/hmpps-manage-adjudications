@@ -61,7 +61,6 @@ export default class GovReasonForReferralPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
     let referralOutcome = null
-    let referGovReason = null
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         chargeNumber,
@@ -69,11 +68,10 @@ export default class GovReasonForReferralPage {
         user
       )) as HearingDetailsHistory
       referralOutcome = lastOutcomeItem.outcome.referralOutcome
-      referGovReason = lastOutcomeItem.outcome.outcome.referGovReason
     }
     return this.renderView(req, res, {
       referralReason: referralOutcome?.details,
-      referGovReason,
+      referGovReason: referralOutcome?.referGovReason,
     })
   }
 

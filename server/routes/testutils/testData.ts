@@ -330,6 +330,7 @@ export default class TestData {
     code = ReferralOutcomeCode.PROSECUTION,
     details = null,
     reason = null,
+    referGovReason = null,
   }: {
     id?: number
     code?: ReferralOutcomeCode
@@ -342,6 +343,7 @@ export default class TestData {
       code,
       details,
       reason,
+      referGovReason,
     }
   }
 

@@ -125,6 +125,7 @@ export type ReferralOutcome = {
   details?: string
   reason?: NotProceedReason
   canRemove?: boolean
+  referGovReason?: ReferGovReason
 }
 
 export type OutcomeDetails = {
