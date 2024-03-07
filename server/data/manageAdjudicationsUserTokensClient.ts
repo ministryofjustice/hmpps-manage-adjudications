@@ -17,6 +17,7 @@ import {
   NotProceedReason,
   OutcomeCode,
   QuashGuiltyFindingReason,
+  ReferGovReason,
 } from './HearingAndOutcomeResult'
 import {
   PunishmentData,
@@ -38,6 +39,7 @@ export type OutcomeInfo = {
   code: OutcomeCode
   details?: string
   reason?: NotProceedReason
+  referGovReason?: ReferGovReason
 }
 
 export type HearingDismissedOutcomeDetails = {
@@ -69,6 +71,7 @@ export type AmendedHearingOutcomeData = {
   notProceedReason?: NotProceedReason
   details?: string
   plea?: HearingOutcomePlea
+  referGovReason?: ReferGovReason
 }
 
 export type AmendedOutcomeData = {
@@ -194,12 +197,14 @@ export default class ManageAdjudicationsUserTokensClient {
     chargeNumber: string,
     hearingOutcomeDetails: HearingOutcomeDetails
   ): Promise<ReportedAdjudicationResult> {
+    const { referGovReason } = hearingOutcomeDetails
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/hearing/outcome/referral`,
       data: {
         code: hearingOutcomeDetails.code,
         adjudicator: hearingOutcomeDetails.adjudicator,
         details: hearingOutcomeDetails.details,
+        ...(referGovReason && { referGovReason }),
       },
     })
   }
@@ -227,7 +232,7 @@ export default class ManageAdjudicationsUserTokensClient {
   async createGovReferral(chargeNumber: string, outcomeDetails: OutcomeInfo): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/outcome/refer-gov`,
-      data: { details: outcomeDetails.details },
+      data: { details: outcomeDetails.details, referGovReason: outcomeDetails.referGovReason },
     })
   }
 

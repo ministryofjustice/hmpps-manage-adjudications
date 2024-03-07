@@ -75,7 +75,7 @@ export default class GovReasonForReferralPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { chargeNumber } = req.params
-    const { referralReason } = req.body
+    const { referralReason, referGovReason } = req.body
     const trimmedReferralReason = referralReason ? referralReason.trim() : null
     const error = validateForm({ referralReason: trimmedReferralReason })
     if (error)
@@ -85,9 +85,9 @@ export default class GovReasonForReferralPage {
       })
     try {
       if (this.pageOptions.isEdit()) {
-        await this.outcomesService.editReferralOutcome(chargeNumber, trimmedReferralReason, user)
+        await this.outcomesService.editReferralOutcome(chargeNumber, trimmedReferralReason, referGovReason, user)
       } else {
-        await this.outcomesService.createGovReferral(chargeNumber, trimmedReferralReason, user)
+        await this.outcomesService.createGovReferral(chargeNumber, trimmedReferralReason, referGovReason, user)
       }
       return res.redirect(adjudicationUrls.hearingReferralConfirmation.urls.start(chargeNumber))
     } catch (postError) {

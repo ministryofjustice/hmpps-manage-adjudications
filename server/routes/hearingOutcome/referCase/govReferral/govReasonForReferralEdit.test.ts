@@ -6,6 +6,7 @@ import UserService from '../../../../services/userService'
 import OutcomesService from '../../../../services/outcomesService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import TestData from '../../../testutils/testData'
+import { ReferGovReason } from '../../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/outcomesService')
@@ -69,10 +70,18 @@ describe('POST /reason-for-gov-referral', () => {
       .post(adjudicationUrls.govReasonForReferral.urls.edit('100'))
       .send({
         referralReason: '123',
+        referGovReason: ReferGovReason.GOV_INQUIRY,
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
       .then(() => expect(outcomesService.createGovReferral).not.toHaveBeenCalled)
-      .then(() => expect(outcomesService.editReferralOutcome).toHaveBeenCalledWith('100', '123', expect.anything()))
+      .then(() =>
+        expect(outcomesService.editReferralOutcome).toHaveBeenCalledWith(
+          '100',
+          '123',
+          ReferGovReason.GOV_INQUIRY,
+          expect.anything()
+        )
+      )
   })
 })

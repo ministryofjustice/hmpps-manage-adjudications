@@ -3,6 +3,7 @@ import {
   HearingOutcomeCode,
   HearingOutcomePlea,
   NotProceedReason,
+  ReferGovReason,
 } from '../data/HearingAndOutcomeResult'
 
 import HmppsAuthClient from '../data/hmppsAuthClient'
@@ -155,11 +156,13 @@ export default class HearingsService {
     hearingOutcome: HearingOutcomeCode,
     referralReason: string,
     user: User,
-    adjudicator?: string
+    adjudicator?: string,
+    referGovReason?: ReferGovReason
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
       details: referralReason,
+      ...(referGovReason && { referGovReason }),
     }
     const status = this.getStatusFromHearingOutcomeCode(hearingOutcome)
     return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(chargeNumber, status, data)
