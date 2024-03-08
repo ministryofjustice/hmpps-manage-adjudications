@@ -36,6 +36,7 @@ export default class YourCompletedReportsRoutes {
       ),
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
+      clearHref: adjudicationUrls.yourCompletedReports.urls.start(),
     })
   }
 
