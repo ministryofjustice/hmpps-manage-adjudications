@@ -1,12 +1,18 @@
 import { FormError } from '../../../../@types/template'
+import { ReferGovReason } from '../../../../data/HearingAndOutcomeResult'
 
 type referralReasonForm = {
   referralReason: string
+  referGovReason: ReferGovReason
 }
 
 const errors: { [key: string]: FormError } = {
   MISSING_REASON: {
     href: '#referralReason',
+    text: 'Enter the adjudicator’s comments about the referral',
+  },
+  MISSING_GOV_REFERRAL_REASON: {
+    href: '#referGovReason',
     text: 'Enter the reason for the referral',
   },
   WORD_COUNT_EXCEEDED: {
@@ -15,7 +21,10 @@ const errors: { [key: string]: FormError } = {
   },
 }
 
-export default function validateForm({ referralReason }: referralReasonForm): FormError | null {
+export default function validateForm({ referralReason, referGovReason }: referralReasonForm): FormError | null {
+  if (!referGovReason) {
+    return errors.MISSING_GOV_REFERRAL_REASON
+  }
   if (!referralReason) {
     return errors.MISSING_REASON
   }

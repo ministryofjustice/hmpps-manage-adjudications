@@ -28,6 +28,7 @@ import {
   NotProceedReason,
   NextStep,
   QuashGuiltyFindingReason,
+  ReferGovReason,
 } from '../data/HearingAndOutcomeResult'
 import {
   convertPrivilegeDTypeDescriptionForDIS7,
@@ -250,6 +251,19 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
       case NotProceedReason.WITNESS_NOT_ATTEND:
         return 'Witness unable to attend'
       case NotProceedReason.OTHER:
+        return 'Other'
+      default:
+        return 'Not known'
+    }
+  })
+
+  njkEnv.addFilter('convertReferGovReason', (referGovReason: ReferGovReason) => {
+    switch (referGovReason) {
+      case ReferGovReason.GOV_INQUIRY:
+        return 'For governor inquiry'
+      case ReferGovReason.REVIEW_FOR_REFER_POLICE:
+        return 'To review for police referral'
+      case ReferGovReason.OTHER:
         return 'Other'
       default:
         return 'Not known'
@@ -502,4 +516,5 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addGlobal('PunishmentReasonForChange', PunishmentReasonForChange)
   njkEnv.addGlobal('PunishmentType', PunishmentType)
   njkEnv.addGlobal('AdjudicationHistoryBookingType', AdjudicationHistoryBookingType)
+  njkEnv.addGlobal('ReferGovReason', ReferGovReason)
 }

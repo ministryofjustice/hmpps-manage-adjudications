@@ -4,7 +4,7 @@ import { FormError } from '../../../@types/template'
 
 import HearingsService from '../../../services/hearingsService'
 import UserService from '../../../services/userService'
-import { HearingDetailsHistory, HearingOutcomeCode } from '../../../data/HearingAndOutcomeResult'
+import { HearingDetailsHistory, HearingOutcomeCode, ReferGovReason } from '../../../data/HearingAndOutcomeResult'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../utils/utils'
 import validateForm from './hearingReasonForReferralValidation'
@@ -21,6 +21,7 @@ type PageData = {
   referralReason?: string
   hearingOutcomeCode?: HearingOutcomeCode
   referGov?: boolean
+  referGovReason?: ReferGovReason
 }
 
 class PageOptions {
@@ -44,7 +45,7 @@ export default class HearingReasonForReferralPage {
   }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { error, referralReason, hearingOutcomeCode, referGov } = pageData
+    const { error, referralReason, hearingOutcomeCode, referGov, referGovReason } = pageData
     const { chargeNumber } = req.params
 
     return res.render(`pages/hearingOutcome/reasonForReferral.njk`, {
@@ -53,6 +54,7 @@ export default class HearingReasonForReferralPage {
       referralReason,
       hearingOutcomeCode,
       referGov,
+      referGovReason,
     })
   }
 
@@ -77,6 +79,7 @@ export default class HearingReasonForReferralPage {
     }
 
     let hearingOutcome = null
+    let referGovReason = null
     if (this.pageOptions.isEdit()) {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         chargeNumber,
@@ -88,11 +91,13 @@ export default class HearingReasonForReferralPage {
         user
       )) as HearingDetailsHistory
       hearingOutcome = lastOutcomeItem.hearing?.outcome
+      referGovReason = lastOutcomeItem.outcome?.outcome.referGovReason
     }
     return this.renderView(req, res, {
       referralReason: hearingOutcome?.details,
       hearingOutcomeCode: hearingOutcome?.code,
       referGov: req.query.hearingOutcome === HearingOutcomeCode.REFER_GOV,
+      referGovReason,
     })
   }
 
@@ -100,30 +105,34 @@ export default class HearingReasonForReferralPage {
     const { user } = res.locals
     const { chargeNumber } = req.params
     const { hearingOutcome, adjudicator } = req.query
-    const { referralReason, hearingOutcomeCode } = req.body
-
+    const { referralReason, hearingOutcomeCode, referGovReason } = req.body
     const isEdit = this.pageOptions.isEdit()
     const trimmedReferralReason = referralReason ? referralReason.trim() : null
 
-    const error = validateForm({ referralReason: trimmedReferralReason })
+    const error = validateForm({
+      referralReason: trimmedReferralReason,
+      referGovReasonPresent: hearingOutcome === HearingOutcomeCode.REFER_GOV,
+      referGovReason,
+    })
     if (error)
       return this.renderView(req, res, {
         error,
         referralReason: trimmedReferralReason,
         referGov: hearingOutcome === HearingOutcomeCode.REFER_GOV,
+        referGovReason,
       })
 
     try {
       if (isEdit) {
         // Use whatever code is in the query, if there, if not use data from api
         const outcomeCode = hearingOutcome || hearingOutcomeCode
-
         await this.hearingsService.editReferralHearingOutcome(
           chargeNumber,
           outcomeCode as HearingOutcomeCode,
           trimmedReferralReason,
           user,
-          adjudicator as string
+          adjudicator as string,
+          referGovReason
         )
       } else {
         // We need to check the data from previous page hasn't been lost/tampered with
@@ -135,6 +144,7 @@ export default class HearingReasonForReferralPage {
           hearingOutcome as HearingOutcomeCode,
           adjudicator as string,
           trimmedReferralReason,
+          referGovReason,
           user
         )
       }

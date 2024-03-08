@@ -3,8 +3,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set title = 'What is the reason for not having an independent adjudicator hearing?' if referGov else 'What is the reason for the referral?' %}
+{% set title = 'Why has this case been referred back to the governor?' if referGov else 'What is the reason for the referral?' %}
 
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
@@ -27,9 +28,38 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     <input id="hearingOutcomeCode" type="hidden" name="hearingOutcomeCode" value="{{ hearingOutcomeCode }}" />
 
+    {% if referGov %}
+      {{ govukRadios({
+    idPrefix: 'referGovReason',
+    id: 'referGovReason',
+    name: 'referGovReason',
+    attributes: { "data-qa": "referGovReason-radio-buttons" },
+    errorMessage: "referGovReason" | findError(errors),
+    items: [
+     {
+      value: ReferGovReason.REVIEW_FOR_REFER_POLICE,
+      text: "To review for police referral",
+      checked: referGovReason == ReferGovReason.REVIEW_FOR_REFER_POLICE
+     },
+     {
+      value: ReferGovReason.GOV_INQUIRY,
+      text: "For governor inquiry",
+      checked: referGovReason == ReferGovReason.GOV_INQUIRY
+     },
+     {
+      value: ReferGovReason.OTHER,
+      text: "Other",
+      checked: referGovReason == ReferGovReason.OTHER
+     }
+    ] })
+   }}
+    {% endif %}
+
+    {% set commentlabel %}{% if referGov %}Enter the adjudicator’s comments about the referral to the governor{% else %} Reason{% endif %}{% endset %}
+
     {{ govukCharacterCount({
       label: {
-        text: "Reason"
+        text: commentlabel
       },
       value: referralReason,
       classes: "govuk-input--width-30 govuk-!-margin-bottom-5",

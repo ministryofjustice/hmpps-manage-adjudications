@@ -4,6 +4,7 @@ import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import OutcomesService from '../../../../services/outcomesService'
+import { ReferGovReason } from '../../../../data/HearingAndOutcomeResult'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/outcomesService')
@@ -43,7 +44,7 @@ describe('GET /reason-for-gov-referral', () => {
       .get(adjudicationUrls.govReasonForReferral.urls.start('100'))
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('What is the reason for not having an independent adjudicator hearing?')
+        expect(res.text).toContain('Why has this case been referred back to the governor?')
       })
   })
 })
@@ -54,9 +55,17 @@ describe('POST /reason-for-gov-referral', () => {
       .post(adjudicationUrls.govReasonForReferral.urls.start('100'))
       .send({
         referralReason: '123',
+        referGovReason: ReferGovReason.GOV_INQUIRY,
       })
       .expect(302)
       .expect('Location', adjudicationUrls.hearingReferralConfirmation.urls.start('100'))
-      .then(() => expect(outcomesService.createGovReferral).toHaveBeenCalledWith('100', '123', expect.anything()))
+      .then(() =>
+        expect(outcomesService.createGovReferral).toHaveBeenCalledWith(
+          '100',
+          '123',
+          ReferGovReason.GOV_INQUIRY,
+          expect.anything()
+        )
+      )
   })
 })

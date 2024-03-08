@@ -85,6 +85,12 @@ export enum QuashGuiltyFindingReason {
   OTHER = 'OTHER',
 }
 
+export enum ReferGovReason {
+  REVIEW_FOR_REFER_POLICE = 'REVIEW_FOR_REFER_POLICE',
+  GOV_INQUIRY = 'GOV_INQUIRY',
+  OTHER = 'OTHER',
+}
+
 export type HearingDetails = {
   id?: number
   locationId: number
@@ -100,6 +106,7 @@ export type HearingOutcomeDetails = {
   details?: string
   reason?: HearingOutcomeAdjournReason
   plea?: HearingOutcomePlea
+  referGovReason?: ReferGovReason
 }
 
 export type Outcome = {
@@ -109,6 +116,7 @@ export type Outcome = {
   reason?: string
   quashedReason?: QuashGuiltyFindingReason
   canRemove?: boolean
+  referGovReason?: ReferGovReason
 }
 
 export type ReferralOutcome = {
@@ -117,6 +125,7 @@ export type ReferralOutcome = {
   details?: string
   reason?: NotProceedReason
   canRemove?: boolean
+  referGovReason?: ReferGovReason
 }
 
 export type OutcomeDetails = {

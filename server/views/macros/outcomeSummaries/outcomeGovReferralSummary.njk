@@ -1,8 +1,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro outcomeGovReferralSummary(chargeNumber, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false) %}
+{% macro outcomeGovReferralSummary(chargeNumber, outcome = {}, attributes = {}, changeLinksAvailable = false, readOnly = false, adjudicator = null) %}
   {% set outcomeDetails = outcome.outcome %}
   {% set referralDetails = outcome.referralOutcome %}
+  {% set adjudicator = outcome.hearing.outcome.adjudicator %}
 
   {% set reasonForReferralChangeLinkAvailable = false if outcome.referralOutcome or readOnly else changeLinksAvailable %}
   
@@ -10,9 +11,9 @@
     {% set reasonForReferralChangeLink = {
       items: [
         {
-          href: adjudicationUrls.hearingReasonForReferral.urls.edit(chargeNumber) + '?hearingOutcome=REFER_GOV', 
+          href: adjudicationUrls.hearingReasonForReferral.urls.edit(chargeNumber) + '?hearingOutcome=REFER_GOV&adjudicator='+adjudicator, 
           text: "Change",
-          visuallyHiddenText: ' reason for not having an independent adjudicator hearing',
+          visuallyHiddenText: ' reason for referring back to the governor',
           attributes: {"data-qa": "change-link-hearing-outcome-reason-for-referral" }
         }
       ]
@@ -22,10 +23,19 @@
   {% set rows = [
     {
       key: {
-        text: 'What is the reason for not having an independent adjudicator hearing?'
+        text: 'Why has this case been referred back to the governor?'
       },
       value: {
-        text: outcomeDetails.details
+        text: outcomeDetails.referGovReason | convertReferGovReason
+      },
+      actions: reasonForReferralChangeLink
+    },
+    {
+      key: {
+        text: 'Adjudicator’s comments about the referral'
+      },
+      value: {
+        text: outcomeDetails.details | hideIfUndefined
       },
       actions: reasonForReferralChangeLink
     }

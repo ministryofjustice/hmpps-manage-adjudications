@@ -168,17 +168,6 @@ context('Enter hearing outcome', () => {
     })
   })
   describe('Submits successfully - independent adjudicator hearing', () => {
-    it('goes to referral reason if police referral selected', () => {
-      cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
-      const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
-      enterHearingOutcomePage.inAdName().type('Roxanne Red')
-      enterHearingOutcomePage.radioButtons().find('input[value="REFER_POLICE"]').check({ force: true })
-      enterHearingOutcomePage.submitButton().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.start('101'))
-        expect(loc.search).to.eq('?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE')
-      })
-    })
     it('goes to referral reason if gov referral selected', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)

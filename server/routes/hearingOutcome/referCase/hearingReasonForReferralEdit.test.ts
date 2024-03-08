@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
-import { HearingOutcomeCode } from '../../../data/HearingAndOutcomeResult'
+import { HearingOutcomeCode, ReferGovReason } from '../../../data/HearingAndOutcomeResult'
 import TestData from '../../testutils/testData'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 
@@ -86,7 +86,31 @@ describe('POST /reason-for-referral', () => {
           HearingOutcomeCode.REFER_POLICE,
           '123',
           expect.anything(),
-          'Roxanne Red'
+          'Roxanne Red',
+          undefined
+        )
+      )
+  })
+  it('should successfully call the endpoint with the referGovReason if present', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.hearingReasonForReferral.urls.edit(
+          '100'
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_GOV`
+      )
+      .send({
+        referralReason: '123',
+        hearingOutcomeCode: HearingOutcomeCode.REFER_GOV,
+        referGovReason: ReferGovReason.GOV_INQUIRY,
+      })
+      .then(() =>
+        expect(hearingsService.editReferralHearingOutcome).toHaveBeenCalledWith(
+          '100',
+          HearingOutcomeCode.REFER_GOV,
+          '123',
+          expect.anything(),
+          'Roxanne Red',
+          ReferGovReason.GOV_INQUIRY
         )
       )
   })
@@ -103,6 +127,7 @@ describe('POST /reason-for-referral', () => {
           HearingOutcomeCode.REFER_INAD,
           '123',
           expect.anything(),
+          undefined,
           undefined
         )
       )
@@ -124,7 +149,8 @@ describe('POST /reason-for-referral', () => {
           HearingOutcomeCode.REFER_INAD,
           '123',
           expect.anything(),
-          'Roxanne Red'
+          'Roxanne Red',
+          undefined
         )
       )
   })

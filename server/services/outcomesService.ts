@@ -1,4 +1,9 @@
-import { NotProceedReason, OutcomeCode, QuashGuiltyFindingReason } from '../data/HearingAndOutcomeResult'
+import {
+  NotProceedReason,
+  OutcomeCode,
+  QuashGuiltyFindingReason,
+  ReferGovReason,
+} from '../data/HearingAndOutcomeResult'
 import { ReportedAdjudicationResult } from '../data/ReportedAdjudicationResult'
 import { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
@@ -42,10 +47,16 @@ export default class OutcomesService {
     return new ManageAdjudicationsUserTokensClient(user).createPoliceReferral(chargeNumber, outcomeDetails)
   }
 
-  async createGovReferral(chargeNumber: string, details: string, user: User): Promise<ReportedAdjudicationResult> {
+  async createGovReferral(
+    chargeNumber: string,
+    details: string,
+    referGovReason: ReferGovReason,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
     const outcomeDetails = {
       code: OutcomeCode.REFER_GOV,
       details,
+      referGovReason,
     }
     return new ManageAdjudicationsUserTokensClient(user).createGovReferral(chargeNumber, outcomeDetails)
   }
@@ -53,10 +64,12 @@ export default class OutcomesService {
   async editReferralOutcome(
     chargeNumber: string,
     referralReason: string,
-    user: User
+    user: User,
+    referGovReason?: ReferGovReason
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       details: referralReason,
+      ...(referGovReason && { referGovReason }),
     }
     return new ManageAdjudicationsUserTokensClient(user).amendOutcome(chargeNumber, data)
   }

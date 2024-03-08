@@ -27,6 +27,7 @@ import {
   OutcomeCode,
   OutcomeHistory,
   QuashGuiltyFindingReason,
+  ReferGovReason,
   ReferralOutcome,
   ReferralOutcomeCode,
 } from '../../data/HearingAndOutcomeResult'
@@ -303,12 +304,14 @@ export default class TestData {
     id = 1,
     code = OutcomeCode.REFER_POLICE,
     details = 'Some details',
+    referGovReason,
     reason,
     quashedReason,
   }: {
     id?: number
     code?: OutcomeCode
     details?: string
+    referGovReason?: ReferGovReason
     reason?: NotProceedReason
     quashedReason?: QuashGuiltyFindingReason
   }): Outcome => {
@@ -318,6 +321,7 @@ export default class TestData {
       details,
       reason,
       quashedReason,
+      referGovReason,
     }
   }
 
@@ -326,17 +330,20 @@ export default class TestData {
     code = ReferralOutcomeCode.PROSECUTION,
     details = null,
     reason = null,
+    referGovReason = null,
   }: {
     id?: number
     code?: ReferralOutcomeCode
     details?: string
     reason?: NotProceedReason
+    referGovReason?: ReferGovReason
   }): ReferralOutcome => {
     return {
       id,
       code,
       details,
       reason,
+      referGovReason,
     }
   }
 

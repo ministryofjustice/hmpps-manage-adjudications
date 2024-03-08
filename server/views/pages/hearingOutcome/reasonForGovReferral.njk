@@ -3,8 +3,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set title = 'What is the reason for not having an independent adjudicator hearing?' %}
+{% set title = 'Why has this case been referred back to the governor?' %}
 
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
@@ -22,15 +23,51 @@
         attributes: { "data-qa": "error-summary" }
       }) }}
   {% endif %}
-  <h1 class="govuk-heading-l two-thirds govuk-!-padding-left-0">{{ title }}</h1>
   <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+    {{ govukRadios({
+    idPrefix: 'referGovReason',
+    id: 'referGovReason',
+    name: 'referGovReason',
+    fieldset: {
+     legend: {
+       text: "Why has this case been referred back to the governor?",
+      classes: "govuk-fieldset__legend--l",
+       isPageHeading: true
+     }
+    },
+    attributes: { "data-qa": "referGovReason-radio-buttons" },
+    errorMessage: "referGovReason" | findError(errors),
+    items: [
+     {
+      value: ReferGovReason.REVIEW_FOR_REFER_POLICE,
+      text: "To review for police referral",
+      checked: referGovReason == ReferGovReason.REVIEW_FOR_REFER_POLICE
+     },
+     {
+      value: ReferGovReason.GOV_INQUIRY,
+      text: "For governor inquiry",
+      checked: referGovReason == ReferGovReason.GOV_INQUIRY
+     },
+     {
+      value: ReferGovReason.OTHER,
+      text: "Other",
+      checked: referGovReason == ReferGovReason.OTHER
+     }
+    ] })
+   }}
 
     {{ govukCharacterCount({
       value: referralReason,
       classes: "govuk-input--width-30 govuk-!-margin-bottom-5",
       rows: "6",
       id: "referralReason",
+      label: {
+        text: "Enter the adjudicator’s comments about the referral to the governor",
+        classes: "govuk-label--s",
+        isPageHeading: false
+      },
       name: "referralReason",
       attributes: {
         'data-qa': "referral-reason"
@@ -47,7 +84,9 @@
         classes: "govuk-button--submit govuk-!-margin-right-3",
         attributes: { "data-qa": "reason-for-gov-referral-submit" }
       }) }}
-      <p class="govuk-body govuk-!-margin-top-1"><a href="{{ cancelHref }}" class="govuk-link" data-qa="reason-for-gov-referral-cancel">Cancel</a></p>
+      <p class="govuk-body govuk-!-margin-top-1">
+        <a href="{{ cancelHref }}" class="govuk-link" data-qa="reason-for-gov-referral-cancel">Cancel</a>
+      </p>
     </div>
 
   </form>
