@@ -2,7 +2,7 @@ import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import EnterHearingOutcomePage from '../pages/enterHearingOutcome'
 import TestData from '../../server/routes/testutils/testData'
-import { OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
+import { HearingOutcomeCode, OutcomeHistory } from '../../server/data/HearingAndOutcomeResult'
 import { OicHearingType } from '../../server/data/ReportedAdjudicationResult'
 import SelectAssociatedStaff from '../pages/selectAssociatedStaff'
 
@@ -72,6 +72,7 @@ context('Enter hearing outcome', () => {
                 outcome: testData.hearingOutcome({
                   adjudicator: 'Jennifer Smith',
                   optionalItems: { details: 'A reason for referral' },
+                  code: HearingOutcomeCode.REFER_GOV,
                 }),
               }),
             },
@@ -117,7 +118,7 @@ context('Enter hearing outcome', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.edit('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.inAdName().should('have.value', 'Jennifer Smith')
-      enterHearingOutcomePage.radioButtons().find('input[value="REFER_POLICE"]').should('be.checked')
+      enterHearingOutcomePage.radioButtons().find('input[value="REFER_GOV"]').should('be.checked')
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.edit('100'))
@@ -157,7 +158,7 @@ context('Enter hearing outcome', () => {
       enterHearingOutcomePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingReasonForReferral.urls.edit('101'))
-        expect(loc.search).to.eq('?adjudicator=Judge%20Blue&hearingOutcome=REFER_POLICE')
+        expect(loc.search).to.eq('?adjudicator=Judge%20Blue&hearingOutcome=REFER_GOV')
       })
     })
     it('goes to correct endpoint if the radio button is changed, query values updated', () => {
