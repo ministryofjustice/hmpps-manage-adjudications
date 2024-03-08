@@ -8,9 +8,13 @@ type referralReasonForm = {
 }
 
 const errors: { [key: string]: FormError } = {
-  MISSING_REASON: {
+  MISSING_REASON_GOV_TYPE: {
     href: '#referralReason',
     text: 'Enter the adjudicator’s comments about the referral',
+  },
+  MISSING_REASON_POLICE_TYPE: {
+    href: '#referralReason',
+    text: 'Enter the reason for the referral',
   },
   MISSING_GOV_REFERRAL_REASON: {
     href: '#referGovReason',
@@ -29,9 +33,12 @@ export default function validateForm({
 }: referralReasonForm): FormError | null {
   if (referGovReasonPresent) {
     if (!referGovReason) return errors.MISSING_GOV_REFERRAL_REASON
+    if (!referralReason) {
+      return errors.MISSING_REASON_GOV_TYPE
+    }
   }
   if (!referralReason) {
-    return errors.MISSING_REASON
+    return errors.MISSING_REASON_POLICE_TYPE
   }
   if (referralReason.length > 4000) return errors.WORD_COUNT_EXCEEDED
 

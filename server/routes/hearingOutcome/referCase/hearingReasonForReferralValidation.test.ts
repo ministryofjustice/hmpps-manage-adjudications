@@ -1,3 +1,4 @@
+import { ReferGovReason } from '../../../data/HearingAndOutcomeResult'
 import { wordLimitExceedingString } from '../../../utils/utils'
 import validateForm from './hearingReasonForReferralValidation'
 
@@ -11,12 +12,24 @@ describe('validateForm', () => {
       })
     ).toBeNull()
   })
-  it('shows error when the reason is missing', () => {
+  it('shows error when the reason is missing - police referral', () => {
     expect(
       validateForm({
         referralReason: '',
         referGovReasonPresent: false,
         referGovReason: undefined,
+      })
+    ).toEqual({
+      href: '#referralReason',
+      text: 'Enter the reason for the referral',
+    })
+  })
+  it('shows error when the reason is missing - gov referral', () => {
+    expect(
+      validateForm({
+        referralReason: '',
+        referGovReasonPresent: true,
+        referGovReason: ReferGovReason.GOV_INQUIRY,
       })
     ).toEqual({
       href: '#referralReason',
