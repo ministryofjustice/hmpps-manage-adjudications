@@ -1,18 +1,22 @@
 {% macro adjudicationReportCard(adjudication, uniqueListOfAgenciesForPrisoner) %}
 
-{% set reportLink %}
+  {% set reportLink %}
   {% if adjudication.transferableActionsAllowed === false %}
-  {{ adjudicationUrls.prisonerReport.urls.viewOnly(adjudication.chargeNumber) }}
+    {{ adjudicationUrls.prisonerReport.urls.viewOnly(adjudication.chargeNumber) }}
+  {% elif adjudication.isReporterVersion %}
+    {{ adjudicationUrls.prisonerReport.urls.report(adjudication.chargeNumber) }}
   {% else %}
-  {{ adjudicationUrls.prisonerReport.urls.review(adjudication.chargeNumber) }}
+    {{ adjudicationUrls.prisonerReport.urls.review(adjudication.chargeNumber) }}
   {% endif %}
-{% endset %}
+  {% endset %}
 
   <div class="adjudication-report-card-list-item" role="listitem" data-qa="adjudication-report-card">
     <div class="adjudication-report-card-list-item__content">
 
       <div class="adjudication-report-card-list-item__header">
-        <h2 class="adjudication-report-card-list-item__title govuk-heading-m"><a href="{{ reportLink }}" data-qa="report-link">{{ adjudication.chargeNumber }}</a></h2>
+        <h2 class="adjudication-report-card-list-item__title govuk-heading-m">
+          <a href="{{ reportLink }}" data-qa="report-link">{{ adjudication.chargeNumber }}</a>
+        </h2>
 
         <div class="adjudication-report-card-list-item__metadata-group">
           <p class="adjudication-report-card-list-item__metadata govuk-body" data-qa="date-of-discovery">Date of discovery: {{ adjudication.incidentDetails.dateTimeOfDiscovery | formatTimestampTo('DD/MM/YYYY - HH:mm') }}</p>
@@ -21,9 +25,11 @@
 
       <p class="adjudication-report-card-list-item__notes govuk-body" data-qa="prisoner-name-number"><span class="govuk-!-font-weight-bold">{{ adjudication.friendlyName }} - {{ adjudication.prisonerNumber }}</span></p>
       <p class="adjudication-report-card-list-item__notes govuk-body" data-qa="offence-description">{{ adjudication.offenceDetails.offenceRule.paragraphDescription | safe }}</p>
-      <p class="adjudication-report-card-list-item__notes govuk-body" data-qa="reporting-officer-name"><span class="govuk-!-font-weight-bold">Reporting officer: </span>{{ adjudication.reportingOfficer | initialiseName }}</p>
-      <p class="adjudication-report-card-list-item__status govuk-body govuk-!-margin-right-6" data-qa="adjudication-status"><span class="govuk-!-font-weight-bold">Status:</span> {{ adjudication.status | reportedAdjudicationStatusDisplayName }}</p>
-      
+      {% if not adjudication.isReporterVersion %}
+        <p class="adjudication-report-card-list-item__notes govuk-body" data-qa="reporting-officer-name"><span class="govuk-!-font-weight-bold">Reporting officer: </span>{{ adjudication.reportingOfficer | initialiseName }}</p>
+      {% endif %}
+      <p class="adjudication-report-card-list-item__status govuk-body govuk-!-margin-right-6" data-qa="adjudication-status">
+        <span class="govuk-!-font-weight-bold">Status:</span> {{ adjudication.status | reportedAdjudicationStatusDisplayName }}</p>
     </div>
   </div>
 {% endmacro %}

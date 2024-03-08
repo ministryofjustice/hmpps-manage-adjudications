@@ -34,9 +34,10 @@ describe('GET /your-completed-reports', () => {
         prisonerNumber: 'G6123VU',
         dateTimeOfIncident: '2021-11-15T11:45:00',
         otherData: {
-          displayName: 'Smith, John',
+          friendlyName: 'John Smith',
           formattedDateTimeOfIncident: '15 November 2021 - 11:45',
           formattedDateTimeOfDiscovery: '15 November 2021 - 11:45',
+          isReporterVersion: true,
         },
       })
       const adjudicationTwo = testData.reportedAdjudication({
@@ -44,9 +45,10 @@ describe('GET /your-completed-reports', () => {
         prisonerNumber: 'G6174VU',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         otherData: {
-          displayName: 'Moriarty, James',
+          friendlyName: 'James Moriarty',
           formattedDateTimeOfIncident: '15 November 2021 - 11:30',
           formattedDateTimeOfDiscovery: '15 November 2021 - 11:30',
+          isReporterVersion: true,
         },
       })
       reportedAdjudicationsService.getYourCompletedAdjudications.mockResolvedValue({
@@ -63,11 +65,10 @@ describe('GET /your-completed-reports', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Your completed reports')
-          expect(res.text).toContain('Smith, John - G6123VU')
-          expect(res.text).toContain('15 November 2021 - 11:45')
-          expect(res.text).toContain('Awaiting review')
-          expect(res.text).toContain('Moriarty, James - G6174VU')
-          expect(res.text).toContain('15 November 2021 - 11:30')
+          expect(res.text).toContain('John Smith - G6123VU')
+          expect(res.text).toContain('Date of discovery: 15/11/2021 - 11:45')
+          expect(res.text).toContain('James Moriarty - G6174VU')
+          expect(res.text).toContain('Date of discovery: 15/11/2021 - 11:30')
         })
     })
   })
@@ -77,7 +78,7 @@ describe('GET /your-completed-reports', () => {
       reportedAdjudicationsService.getYourCompletedAdjudications.mockResolvedValue({
         size: 10,
         number: 0,
-        totalElements: 2,
+        totalElements: 0,
         content: [],
       })
     })
@@ -87,7 +88,7 @@ describe('GET /your-completed-reports', () => {
         .get(adjudicationUrls.yourCompletedReports.root)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('No completed reports.')
+          expect(res.text).toContain('No adjudications have been found for the selected filters.')
         })
     })
   })

@@ -348,6 +348,7 @@ export default class ReportedAdjudicationsService {
       )
       return {
         ...enhancedAdjudication,
+        isReporterVersion: true,
       }
     })
   }

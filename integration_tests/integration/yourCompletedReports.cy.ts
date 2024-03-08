@@ -80,7 +80,7 @@ context('Your Completed Reports', () => {
     yourCompletedReportsPage.paginationLink(16).should('not.exist')
   })
 
-  it('filtering should work - check table columns accordingly', () => {
+  it('filtering should work', () => {
     // The empty results to return when first landing on your completed reports page.
     cy.task('stubGetYourReportedAdjudications', { number: 0, allContent: [] })
     // The result to return when filtering for the dates we will enter in the date picker and status selected.
@@ -99,31 +99,21 @@ context('Your Completed Reports', () => {
     cy.task('stubGetBatchPrisonerDetails', [{ offenderNo: 'A1234AA', firstName: 'JAMES', lastName: 'MORIARTY' }])
     cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
     const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
-    yourCompletedReportsPage.noResultsMessage().should('contain', 'No completed reports.')
+    yourCompletedReportsPage
+      .noResultsMessage()
+      .should('contain', 'No adjudications have been found for the selected filters.')
     const filterAdjudication: AdjudicationsFilter = new AdjudicationsFilter()
     const fromDate = formatDateForDatePicker(new Date('1/1/2022').toISOString(), 'short')
     const toDate = formatDateForDatePicker(new Date('1/9/2022').toISOString(), 'short')
     filterAdjudication.fromDateInput().clear().type(fromDate)
     filterAdjudication.toDateInput().clear().type(toDate)
-    filterAdjudication.uncheckAllCheckboxes()
     filterAdjudication.checkCheckboxWithValue('UNSCHEDULED')
-    filterAdjudication.applyButton().click()
+    yourCompletedReportsPage.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED')
     })
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
-    yourCompletedReportsPage.resultsTable().should('exist')
-    yourCompletedReportsPage
-      .resultsTable()
-      .find('td')
-      .then($data => {
-        expect($data.get(0).innerText).to.contain('1')
-        expect($data.get(1).innerText).to.contain('1 January 2022 - 11:30')
-        expect($data.get(2).innerText).to.contain('Moriarty, James - A1234AA')
-        expect($data.get(3).innerText).to.contain('Unscheduled')
-        expect($data.get(4).innerText).to.contain('View report')
-      })
   })
 
   it('Should deal with some prisoner information missing', () => {
@@ -145,31 +135,25 @@ context('Your Completed Reports', () => {
     cy.task('stubGetBatchPrisonerDetails', [])
     cy.visit(adjudicationUrls.yourCompletedReports.root) // visit page one
     const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
-    yourCompletedReportsPage.noResultsMessage().should('contain', 'No completed reports.')
+    yourCompletedReportsPage
+      .noResultsMessage()
+      .should('contain', 'No adjudications have been found for the selected filters.')
     const filterAdjudication: AdjudicationsFilter = new AdjudicationsFilter()
     const fromDate = formatDateForDatePicker(new Date('1/1/2022').toISOString(), 'short')
     const toDate = formatDateForDatePicker(new Date('1/9/2022').toISOString(), 'short')
     filterAdjudication.fromDateInput().clear().type(fromDate)
     filterAdjudication.toDateInput().clear().type(toDate)
-    filterAdjudication.uncheckAllCheckboxes()
     filterAdjudication.checkCheckboxWithValue('UNSCHEDULED')
-    filterAdjudication.applyButton().click()
+    yourCompletedReportsPage.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED')
     })
     yourCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
-    yourCompletedReportsPage.resultsTable().should('exist')
-    yourCompletedReportsPage
-      .resultsTable()
-      .find('td')
-      .then($data => {
-        expect($data.get(0).innerText).to.contain('1')
-        expect($data.get(1).innerText).to.contain('1 January 2022 - 11:30')
-        expect($data.get(2).innerText).to.contain('Unknown - A1234AA')
-        expect($data.get(3).innerText).to.contain('Unscheduled')
-        expect($data.get(4).innerText).to.contain('View report')
-      })
+    yourCompletedReportsPage.dateOfDiscovery().should('have.text', 'Date of discovery: 01/01/2022 - 11:30')
+    yourCompletedReportsPage.viewReportLink().should('have.text', '1')
+    yourCompletedReportsPage.prisonerNameAndNumber().should('contain', 'Unknown - A1234AA')
+    yourCompletedReportsPage.status().should('contain', 'Unscheduled')
   })
 
   it('filtering and pagination should work together', () => {
@@ -204,9 +188,8 @@ context('Your Completed Reports', () => {
     const toDate = formatDateForDatePicker(new Date('10/19/2021').toISOString(), 'short')
     adjudicationsFilter.fromDateInput().clear().type(fromDate)
     adjudicationsFilter.toDateInput().clear().type(toDate)
-    adjudicationsFilter.uncheckAllCheckboxes()
     adjudicationsFilter.checkCheckboxWithValue('UNSCHEDULED')
-    adjudicationsFilter.applyButton().click()
+    yourCompletedReportsPage.applyButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.yourCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED')
@@ -225,13 +208,14 @@ context('Your Completed Reports', () => {
     cy.task('stubGetYourReportedAdjudications', {})
     cy.task('stubGetBatchPrisonerDetails')
     cy.visit(adjudicationUrls.yourCompletedReports.root)
+    const yourCompletedReportsPage: YourCompletedReportsPage = Page.verifyOnPage(YourCompletedReportsPage)
     const adjudicationsFilter: AdjudicationsFilter = new AdjudicationsFilter()
     const fromDate = formatDateForDatePicker(new Date('10/19/2022').toISOString(), 'short')
     const toDate = formatDateForDatePicker(new Date('10/10/2022').toISOString(), 'short')
     adjudicationsFilter.fromDateInput().clear().type(fromDate)
     adjudicationsFilter.toDateInput().clear().type(toDate)
-    adjudicationsFilter.applyButton().click()
-    adjudicationsFilter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
+    yourCompletedReportsPage.applyButton().click()
+    cy.get('.govuk-error-summary').should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
   })
 
   it('default date range is as expected', () => {

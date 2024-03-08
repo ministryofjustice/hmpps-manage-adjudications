@@ -41,6 +41,7 @@ export default class AllCompletedReportsRoutes {
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
       activeCaseloadName: res.locals.user.meta.description || 'your active caseload',
+      clearHref: adjudicationUrls.allCompletedReports.urls.start(),
     })
 
   view = async (req: Request, res: Response): Promise<void> => {

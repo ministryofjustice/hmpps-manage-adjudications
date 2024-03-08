@@ -82,7 +82,7 @@ describe('GET /all-completed-reports', () => {
         expect(res.text).toContain('Adjudications')
       })
   })
-  it.only('should load the correct details', () => {
+  it('should load the correct details', () => {
     userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
     reportedAdjudicationsService.getAgencyReportCounts.mockResolvedValue({
       reviewTotal: 100,
