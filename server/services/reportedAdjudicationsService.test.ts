@@ -219,6 +219,7 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfDiscovery: '2021-01-01T11:45:00',
             overrideAgencyName: null,
             originatingAgencyName: null,
+            isReporterVersion: true,
           },
         }),
         testData.reportedAdjudication({
@@ -241,6 +242,7 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfDiscovery: '2021-01-01T11:30:00',
             overrideAgencyName: null,
             originatingAgencyName: null,
+            isReporterVersion: true,
           },
         }),
       ]

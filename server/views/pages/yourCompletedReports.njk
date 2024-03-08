@@ -3,7 +3,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
-{% from "../macros/adjudicationFilter.njk" import adjudicationFilter %}
 
 {% set title = "Your completed reports" %}
 
@@ -24,52 +23,14 @@
       }) }}
   {% endif %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
-  {{ adjudicationFilter(filter, checkboxes, errors, adjudicationUrls.yourCompletedReports.urls.start(), csrfToken, maxDate) }}
-  {% set rows = [] %}
 
-  {% for completedReport in yourCompletedReports.content %}
-    {% set viewCompletedReportlLinkHtml %}
-      <a href="{{ adjudicationUrls.prisonerReport.urls.report(completedReport.chargeNumber) }}" class="govuk-link" data-qa="start-report-link">View report<span class="govuk-visually-hidden"> for {{ completedReport.friendlyName }}</span></a>
-    {% endset -%}
-    {% set rows = (rows.push([
-      { text: completedReport.chargeNumber },
-      { text: completedReport.formattedDateTimeOfDiscovery,
-        attributes: {
-        "data-sort-value": completedReport.dateTimeOfDiscovery
-      }
-      },
-      { text: completedReport.displayName + " - " + completedReport.prisonerNumber },
-      { text: completedReport.statusDisplayName },
-      { html: viewCompletedReportlLinkHtml }
-    ]), rows) %}
-  {% endfor %}
-
-  {% if rows | length %}
-    {{ mojPagination(pagination) }}
-  <div class="results-table">
-
-    {{ govukTable({
-      caption: "Completed adjudication reports, column headers with buttons are sortable",
-      captionClasses: "govuk-visually-hidden",
-      head: [
-        { text: "Charge number" },
-        { text: "Discovery date and time",
-          attributes: {
-          "aria-sort": "descending"
-        }
-        },
-        { text: 'Name and prison number' },
-        { text: "Status" },
-        { text: "" }
-      ],
-      rows: rows,
-      attributes: { "data-qa": "complete-adjudications-results-table", "data-module": "moj-sortable-table" }
-    }) }}
-
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+      {% include '../partials/adjudicationReportsSideFilter.njk' %}
+    </div>
+    <div class="govuk-grid-column-three-quarters ">
+      {% include '../partials/adjudicationReportSideList.njk' %}
+    </div>
   </div>
-    {{ mojPagination(pagination) }}
-  {% else %}
-    <p class="govuk-!-padding-top-3" data-qa="no-results-message">No completed reports.</p>
-  {% endif %}
 
 {% endblock %}

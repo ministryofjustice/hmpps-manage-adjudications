@@ -22,14 +22,14 @@ export default class YourCompletedReportsRoutes {
   private renderView = async (
     req: Request,
     res: Response,
-    uiFilter: UiFilter,
+    filter: UiFilter,
     results: ApiPageResponse<ReportedAdjudication>,
     errors: FormError[]
   ): Promise<void> => {
     return res.render(`pages/yourCompletedReports`, {
-      yourCompletedReports: results,
-      filter: uiFilter,
-      checkboxes: reportedAdjudicationStatuses(uiFilter),
+      results,
+      filter,
+      statuses: reportedAdjudicationStatuses(filter),
       pagination: mojPaginationFromPageResponse(
         results,
         new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
