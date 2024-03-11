@@ -124,6 +124,8 @@ const createTasks = (
               ReportedAdjudicationStatus.UNSCHEDULED,
               ReportedAdjudicationStatus.ADJOURNED,
               ReportedAdjudicationStatus.REFER_INAD,
+              ReportedAdjudicationStatus.REFER_GOV,
+              ReportedAdjudicationStatus.REFER_POLICE,
             ],
           }),
           id: 'schedule-hearings',
