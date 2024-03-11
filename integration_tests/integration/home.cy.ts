@@ -19,7 +19,7 @@ context('Home page - not reviewer', () => {
     homepage.continueAReportLink().should('exist')
     homepage.viewYourCompletedReportsLink().should('exist')
     homepage.viewAllReportsCard('Moorland (HMP & YOI)').should('not.exist')
-    homepage.viewScheduledHearingsCard().should('not.exist')
+    homepage.manageHearingsCard().should('not.exist')
     homepage.sectionBreak().should('exist')
     homepage.printCompletedDisFormsLink().should('exist')
     homepage.confirmDisHasBeenIssuedLink().should('exist')
@@ -36,15 +36,15 @@ context('Home page', () => {
     cy.signIn()
   })
 
-  it.only('should see all the tiles with the reviewer role', () => {
+  it('should see all the tiles with the reviewer role', () => {
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.startANewReportLink().should('exist')
     homepage.continueAReportLink().should('exist')
     homepage.viewYourCompletedReportsLink().should('exist')
     homepage.viewAllReportsCard('Moorland (HMP & YOI)').should('exist')
-    homepage.viewScheduledHearingsCard('Reports for people transferred').should('exist')
-    homepage.transfersInCard('Transfers').should('exist')
+    homepage.manageHearingsCard().should('exist')
+    homepage.transfersInCard().should('exist')
     homepage.transfersOutCard().should('exist')
     homepage.enterOutcomesCard().should('exist')
     homepage.sectionBreak().should('exist')
@@ -74,9 +74,9 @@ context('Home page', () => {
     })
   })
   it('should link to the correct location - view all reports (schedule reports link)', () => {
-    const filterString = `?fromDate=${moment().subtract(7, 'days').format('DD/MM/YYYY')}&toDate=${moment().format(
+    const filterString = `?fromDate=01%2F01%2F2024&toDate=${moment().format(
       'DD/MM/YYYY'
-    )}&status=UNSCHEDULED&status=ADJOURNED&status=REFER_INAD`
+    )}&status=UNSCHEDULED&status=ADJOURNED&status=REFER_INAD&status=REFER_GOV&status=REFER_POLICE`
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.scheduleHearingsLink().click()
@@ -85,10 +85,10 @@ context('Home page', () => {
       expect(loc.search).to.eq(filterString.replace(/\//g, '%2F'))
     })
   })
-  it('should link to the correct location - view scheduled hearings', () => {
+  it('should link to the correct location - Manage hearings and enter outcomes', () => {
     cy.visit(adjudicationUrls.homepage.root)
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
-    homepage.viewScheduledHearingsCard().click()
+    homepage.manageHearingsCard().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.viewScheduledHearings.urls.start())
     })
