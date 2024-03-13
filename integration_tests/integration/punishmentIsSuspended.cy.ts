@@ -50,7 +50,7 @@ context('Punishment - is it suspended?', () => {
     it('should go to correct page when suspended', () => {
       cy.visit(adjudicationUrls.punishmentIsSuspended.urls.start('100'))
       const punishmentIsSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentIsSuspendedPage.suspended().find('input[value="yes"]').check({ force: true })
+      punishmentIsSuspendedPage.suspended().find('input[value="yes"]').check()
       punishmentIsSuspendedPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishmentSuspendedUntil.urls.start('100'))
@@ -59,7 +59,7 @@ context('Punishment - is it suspended?', () => {
     it('should go to correct page when not suspended', () => {
       cy.visit(adjudicationUrls.punishmentIsSuspended.urls.start('100'))
       const punishmentIsSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentIsSuspendedPage.suspended().find('input[value="no"]').check({ force: true })
+      punishmentIsSuspendedPage.suspended().find('input[value="no"]').check()
       punishmentIsSuspendedPage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.whenWillPunishmentStart.urls.start('100'))

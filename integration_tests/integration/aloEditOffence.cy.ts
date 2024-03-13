@@ -260,20 +260,20 @@ context('Adult', () => {
       const ageOfPrisonerPage: AgeOfPrisonerPage = Page.verifyOnPage(AgeOfPrisonerPage)
       ageOfPrisonerPage.submitButton().click()
       const incidentRolePage: IncidentRoleEditPage = Page.verifyOnPage(IncidentRoleEditPage)
-      incidentRolePage.radioButtons().find('input[value="committed"]').check({ force: true })
+      incidentRolePage.radioButtons().find('input[value="committed"]').check()
       incidentRolePage.submitButton().click()
       const offenceCodeSelectionListPage = new OffenceCodeSelectionListPage('Which offence did John Smith commit?')
-      offenceCodeSelectionListPage.radio(test.radio).click({ force: true })
+      offenceCodeSelectionListPage.radio(test.radio).click()
       offenceCodeSelectionListPage.continue().click()
       if (test.radio2) {
         const questionPage = new OffenceCodeSelection(test.title)
-        questionPage.radio(test.radio2).check({ force: true })
+        questionPage.radio(test.radio2).check()
         if (test.radio === '1(a)') {
           questionPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
           questionPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
         }
         if (test.radio === '19') {
-          questionPage.radio('1-5-1-3').check({ force: true })
+          questionPage.radio('1-5-1-3').check()
           questionPage.victimOtherPersonSearchNameInput().type('Tony Robinson')
         }
         questionPage.continue().click()
@@ -398,14 +398,14 @@ context('YOI', () => {
       const ageOfPrisonerPage: AgeOfPrisonerPage = Page.verifyOnPage(AgeOfPrisonerPage)
       ageOfPrisonerPage.submitButton().click()
       const incidentRolePage: IncidentRoleEditPage = Page.verifyOnPage(IncidentRoleEditPage)
-      incidentRolePage.radioButtons().find('input[value="committed"]').check({ force: true })
+      incidentRolePage.radioButtons().find('input[value="committed"]').check()
       incidentRolePage.submitButton().click()
       const offenceCodeSelectionListPage = new OffenceCodeSelectionListPage('Which offence did John Smith commit?')
-      offenceCodeSelectionListPage.radio(test.radio).click({ force: true })
+      offenceCodeSelectionListPage.radio(test.radio).click()
       offenceCodeSelectionListPage.continue().click()
       if (test.radio2) {
         const questionPage = new OffenceCodeSelection(test.title)
-        questionPage.radio(test.radio2).check({ force: true })
+        questionPage.radio(test.radio2).check()
         if (test.radio === '5') {
           questionPage.victimOtherPersonSearchNameInput().type('James Robertson')
         }

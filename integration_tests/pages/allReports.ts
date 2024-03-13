@@ -32,7 +32,7 @@ export default class AllCompletedReportsPage extends Page {
 
   status = (): PageElement => cy.get('[data-qa="adjudication-status"]')
 
-  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value, { force: true })
+  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
 
   viewReportLink = () => cy.get('[data-qa="report-link"]')
 

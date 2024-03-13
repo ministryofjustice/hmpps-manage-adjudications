@@ -943,7 +943,7 @@ context('Hearing details page', () => {
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.reviewStatus().contains('Unscheduled')
       hearingTabPage.nextStepRadioLegend().contains('What is the next step for this adjudication?')
-      hearingTabPage.nextStepRadios().find('input[value="SCHEDULE_HEARING"]').click({ force: true })
+      hearingTabPage.nextStepRadios().find('input[value="SCHEDULE_HEARING"]').click()
       hearingTabPage.nextStepConfirmationButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.scheduleHearing.urls.start('1524497'))
@@ -954,7 +954,7 @@ context('Hearing details page', () => {
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.reviewStatus().contains('Unscheduled')
       hearingTabPage.nextStepRadioLegend().contains('What is the next step for this adjudication?')
-      hearingTabPage.nextStepRadios().find('input[value="REFER_POLICE"]').click({ force: true })
+      hearingTabPage.nextStepRadios().find('input[value="REFER_POLICE"]').click()
       hearingTabPage.nextStepConfirmationButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.reasonForReferral.urls.start('1524497'))
@@ -965,7 +965,7 @@ context('Hearing details page', () => {
       const hearingTabPage = Page.verifyOnPage(hearingTab)
       hearingTabPage.reviewStatus().contains('Unscheduled')
       hearingTabPage.nextStepRadioLegend().contains('What is the next step for this adjudication?')
-      hearingTabPage.nextStepRadios().find('input[value="NOT_PROCEED"]').click({ force: true })
+      hearingTabPage.nextStepRadios().find('input[value="NOT_PROCEED"]').click()
       hearingTabPage.nextStepConfirmationButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.reasonForNotProceeding.urls.start('1524497'))
@@ -1045,7 +1045,7 @@ context('Hearing details page', () => {
           historyWithPoliceReferAndReferralOutcome
         ),
       })
-      cy.get('[data-qa="radio-buttons-prosecution"]').find('input[value="yes"]').check({ force: true })
+      cy.get('[data-qa="radio-buttons-prosecution"]').find('input[value="yes"]').check()
       cy.get('[data-qa="prosecution-submit"]').click()
       hearingTabPage
         .policeReferralTable()

@@ -53,7 +53,7 @@ context('Adjourn the hearing', () => {
 
       hearingAdjourned.adjournReason().select('Request for legal advice approved')
       hearingAdjourned.adjournDetails().type('Some details')
-      hearingAdjourned.adjournPlea().find('input[value="GUILTY"]').check({ force: true })
+      hearingAdjourned.adjournPlea().find('input[value="GUILTY"]').check()
       hearingAdjourned.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))

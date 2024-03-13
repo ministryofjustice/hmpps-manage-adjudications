@@ -40,8 +40,8 @@ context('Plea and finding', () => {
         `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').click({ force: true })
-      hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').click({ force: true })
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').click()
+      hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').click()
 
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
@@ -53,8 +53,8 @@ context('Plea and finding', () => {
         `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="DISMISSED"]').click({ force: true })
-      hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').click({ force: true })
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="DISMISSED"]').click()
+      hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').click()
 
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
@@ -66,8 +66,8 @@ context('Plea and finding', () => {
         `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED"]').click({ force: true })
-      hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="UNFIT"]').click({ force: true })
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED"]').click()
+      hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="UNFIT"]').click()
 
       hearingPleaAndFindingPage.submitButton().click()
       cy.location().should(loc => {
@@ -79,7 +79,7 @@ context('Plea and finding', () => {
     it('shows correct error message if plea missing', () => {
       cy.visit(`${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}}?adjudicator=Tim`)
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
-      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').click({ force: true })
+      hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').click()
       hearingPleaAndFindingPage.submitButton().click()
       hearingPleaAndFindingPage
         .errorSummary()
@@ -91,7 +91,7 @@ context('Plea and finding', () => {
     it('shows correct error message if finding missing', () => {
       cy.visit(`${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Tim`)
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
-      hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').click({ force: true })
+      hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="GUILTY"]').click()
       hearingPleaAndFindingPage.submitButton().click()
       hearingPleaAndFindingPage
         .errorSummary()

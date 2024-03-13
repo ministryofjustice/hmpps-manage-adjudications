@@ -320,7 +320,7 @@ context('Prisoner report - reviewer view', () => {
     it('should go to the confirmation page if status is accepted and save is pressed and form is valid', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reviewStatus().find('input[value="accepted"]').check({ force: true })
+      prisonerReportPage.reviewStatus().find('input[value="accepted"]').check()
       prisonerReportPage.acceptedRejectDetail().should('exist')
       prisonerReportPage.reviewSubmit().click()
       cy.location().should(loc => {
@@ -330,7 +330,7 @@ context('Prisoner report - reviewer view', () => {
     it('should go to /all-completed-reports if status is rejected and save is pressed and form is valid', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reviewStatus().find('input[value="rejected"]').check({ force: true })
+      prisonerReportPage.reviewStatus().find('input[value="rejected"]').check()
       prisonerReportPage.reviewRejectReason().select('expired')
       prisonerReportPage.reviewRejectDetail().type('123')
       prisonerReportPage.reviewSubmit().click()
@@ -341,7 +341,7 @@ context('Prisoner report - reviewer view', () => {
     it('should go to /all-completed-reports if status is returned and save is pressed and form is valid', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reviewStatus().find('input[value="returned"]').check({ force: true })
+      prisonerReportPage.reviewStatus().find('input[value="returned"]').check()
       prisonerReportPage.reviewReportReason().select('offence')
       prisonerReportPage.reviewReportDetail().type('123')
       prisonerReportPage.reviewSubmit().click()
@@ -359,14 +359,14 @@ context('Prisoner report - reviewer view', () => {
     it('should display an error if rejected is selected without a reason and save is pressed', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reviewStatus().find('input[value="rejected"]').check({ force: true })
+      prisonerReportPage.reviewStatus().find('input[value="rejected"]').check()
       prisonerReportPage.reviewSubmit().click()
       cy.get('*[class^="govuk-error-message"]').contains('Enter a reason')
     })
     it('should display an error if returned is selected without a reason and save is pressed', () => {
       cy.visit(adjudicationUrls.prisonerReport.urls.review(12345))
       const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
-      prisonerReportPage.reviewStatus().find('input[value="returned"]').check({ force: true })
+      prisonerReportPage.reviewStatus().find('input[value="returned"]').check()
       prisonerReportPage.reviewSubmit().click()
       cy.get('*[class^="govuk-error-message"]').contains('Enter a reason')
     })

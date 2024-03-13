@@ -47,7 +47,7 @@ context('Select gender', () => {
   it('should redirect the user to the incident details if the page receives a valid submission', () => {
     cy.visit(adjudicationUrls.selectGender.url.start('G6415GD'))
     const selectGenderPage: SelectGender = Page.verifyOnPage(SelectGender)
-    selectGenderPage.radioMale().click({ force: true })
+    selectGenderPage.radioMale().click()
     selectGenderPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.start('G6415GD'))
@@ -105,7 +105,7 @@ context('Select gender edit', () => {
   it('should redirect the user to the check your answers page if the page receives a valid submission', () => {
     cy.visit(adjudicationUrls.selectGender.url.edit('G6415GD', 3456))
     const selectGenderPage: SelectGender = Page.verifyOnPage(SelectGender)
-    selectGenderPage.radioFemale().click({ force: true })
+    selectGenderPage.radioFemale().click()
     selectGenderPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.checkYourAnswers.urls.start(3456))
@@ -170,7 +170,7 @@ context('Selecting gender pathway - no gender on prisoners profile', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.selectGender.url.start('A1234AA'))
     })
     const selectGenderPage: SelectGender = Page.verifyOnPage(SelectGender)
-    selectGenderPage.radioFemale().click({ force: true })
+    selectGenderPage.radioFemale().click()
     selectGenderPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.incidentDetails.urls.start('A1234AA'))
