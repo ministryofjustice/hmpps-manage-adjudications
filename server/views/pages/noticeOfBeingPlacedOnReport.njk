@@ -7,8 +7,7 @@
         {{ noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) }}
         {% if noticeOfBeingPlacedOnReportData.isPrisonerCopy %}
             {{ noticeOfBeingPlacedOnReportLegal(noticeOfBeingPlacedOnReportData.chargeNumber) }}
-        {% else %}
-            {{ noticeOfBeingPlacedOnReportAdjournment(noticeOfBeingPlacedOnReportData.chargeNumber) }}
         {% endif %}
+        {{ noticeOfBeingPlacedOnReportAdjournment(noticeOfBeingPlacedOnReportData.chargeNumber) }}
     </div>
 {% endblock %}
