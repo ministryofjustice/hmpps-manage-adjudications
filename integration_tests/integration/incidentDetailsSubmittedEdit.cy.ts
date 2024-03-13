@@ -243,7 +243,7 @@ context('Incident details (edit after completion of report)', () => {
         )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
-      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click({ force: true })
+      incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()
       incidentDetailsPage.timeInputHoursDiscovery().clear()
       incidentDetailsPage.timeInputMinutesDiscovery().clear()
       incidentDetailsPage.timeInputHoursDiscovery().type('23')

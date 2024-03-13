@@ -95,7 +95,7 @@ context('Adjourn the hearing', () => {
 
       hearingAdjourned.adjournReason().select('Further evidence needed')
       hearingAdjourned.adjournDetails().type('updated details')
-      hearingAdjourned.adjournPlea().find('input[value="NOT_GUILTY"]').check({ force: true })
+      hearingAdjourned.adjournPlea().find('input[value="NOT_GUILTY"]').check()
       hearingAdjourned.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))
@@ -107,7 +107,7 @@ context('Adjourn the hearing', () => {
 
       hearingAdjourned.adjournReason().select('Further evidence needed')
       hearingAdjourned.adjournDetails().type('updated details')
-      hearingAdjourned.adjournPlea().find('input[value="NOT_GUILTY"]').check({ force: true })
+      hearingAdjourned.adjournPlea().find('input[value="NOT_GUILTY"]').check()
       hearingAdjourned.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('100'))

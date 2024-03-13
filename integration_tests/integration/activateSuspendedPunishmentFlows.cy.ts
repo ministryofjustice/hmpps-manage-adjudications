@@ -209,7 +209,7 @@ context('Suspended punishment schedule', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentStartDateChoice.urls.existing('100'))
       })
       const suspendedPunishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      suspendedPunishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check({ force: true })
+      suspendedPunishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
       suspendedPunishmentStartDateChoicePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentAutoDates.urls.existing('100'))
@@ -261,7 +261,7 @@ context('Suspended punishment schedule', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentStartDateChoice.urls.existing('100'))
       })
       const suspendedPunishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      suspendedPunishmentStartDateChoicePage.radioButtons().find('input[value="false"]').check({ force: true })
+      suspendedPunishmentStartDateChoicePage.radioButtons().find('input[value="false"]').check()
       suspendedPunishmentStartDateChoicePage.submitButton().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentStartDate.urls.existing('100'))

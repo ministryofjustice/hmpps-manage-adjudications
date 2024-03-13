@@ -58,10 +58,10 @@ context('Existing draft adjudication', () => {
   it('should go to the offence details page via the role and rule page - standard url', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.start(3456))
     const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    ageOfPrisonerPage.radioAdult().click({ force: true })
+    ageOfPrisonerPage.radioAdult().click()
     ageOfPrisonerPage.submitButton().click()
     const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
-    incidentRolePage.radioButtons().find('input[value="committed"]').check({ force: true })
+    incidentRolePage.radioButtons().find('input[value="committed"]').check()
     incidentRolePage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.detailsOfOffence.urls.start(3456))
@@ -71,10 +71,10 @@ context('Existing draft adjudication', () => {
   it('should go to the offence selection page via the role and rule page - url for resetting offences', () => {
     cy.visit(adjudicationUrls.ageOfPrisoner.urls.startWithResettingOffences(3456))
     const ageOfPrisonerPage: AgeOfPrisoner = Page.verifyOnPage(AgeOfPrisoner)
-    ageOfPrisonerPage.radioAdult().click({ force: true })
+    ageOfPrisonerPage.radioAdult().click()
     ageOfPrisonerPage.submitButton().click()
     const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
-    incidentRolePage.radioButtons().find('input[value="committed"]').check({ force: true })
+    incidentRolePage.radioButtons().find('input[value="committed"]').check()
     incidentRolePage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.offenceCodeSelection.urls.question(3456, 'committed', '1'))

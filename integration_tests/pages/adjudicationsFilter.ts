@@ -9,7 +9,7 @@ export default class AdjudicationsFilter {
 
   filterBar = () => cy.get('[data-qa="filter-bar"]')
 
-  uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck({ force: true })
+  uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck()
 
-  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value, { force: true })
+  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
 }

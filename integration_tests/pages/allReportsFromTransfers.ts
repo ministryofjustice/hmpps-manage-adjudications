@@ -26,9 +26,9 @@ export default class AllTransferReportsPage extends Page {
 
   resultsTable = (): PageElement => cy.get('[data-qa="results-table"]')
 
-  uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck({ force: true })
+  uncheckAllCheckboxes = () => cy.get('[type="checkbox"]').uncheck()
 
-  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value, { force: true })
+  checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
 
   viewReportLink = () => cy.get('[data-qa="view-report-link"]')
 }

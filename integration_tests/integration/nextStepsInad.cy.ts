@@ -53,7 +53,7 @@ context('What is the next step?', () => {
     it('redirects to schedule hearing when schedule hearing', () => {
       cy.visit(adjudicationUrls.nextStepsInad.urls.start('100'))
       const nextStepsInadPage = Page.verifyOnPage(NextStepsInadPage)
-      nextStepsInadPage.nextStepRadioButtons().find('input[value="schedule_hearing"]').check({ force: true })
+      nextStepsInadPage.nextStepRadioButtons().find('input[value="schedule_hearing"]').check()
       nextStepsInadPage.submitButton().click()
 
       cy.location().should(loc => {
@@ -63,7 +63,7 @@ context('What is the next step?', () => {
     it('redirects to not proceed reason when  Not proceed', () => {
       cy.visit(adjudicationUrls.nextStepsInad.urls.start('100'))
       const nextStepsInadPage = Page.verifyOnPage(NextStepsInadPage)
-      nextStepsInadPage.nextStepRadioButtons().find('input[value="not_proceed"]').check({ force: true })
+      nextStepsInadPage.nextStepRadioButtons().find('input[value="not_proceed"]').check()
 
       nextStepsInadPage.submitButton().click()
 
