@@ -138,7 +138,7 @@
     "@types/passport-oauth2": "^1.4.15",
     "@types/redis": "^2.8.32",
     "@types/superagent": "^8.1.4",
-    "@types/supertest": "^2.0.16",
+    "@types/supertest": "^6.0.2",
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
