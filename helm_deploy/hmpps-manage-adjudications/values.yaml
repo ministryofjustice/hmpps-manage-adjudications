@@ -70,7 +70,6 @@ gotenberg:
       "--chromium-ignore-certificate-errors",
       "--api-timeout=30s",
       "--pdfengines-engines=pdftk",
-      "--uno-listener-restart-threshold=0"
     ]
 
   ingress:
