@@ -111,7 +111,6 @@ context('Navigated to forms tab', () => {
     })
     it('should contain the required page elements for forms for hearing - no outcomes', () => {
       cy.visit(adjudicationUrls.forms.urls.view('100'))
-      cy.get('#tab_hearing-forms').click()
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
       formsTabPage
         .printLink('DIS3-auto')
