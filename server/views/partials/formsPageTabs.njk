@@ -13,8 +13,8 @@
 {% set noticePlacedOnReportHtml %}
 <h2 class="govuk-heading-m">Notice of being placed on report</h2>
 <ul class="govuk-list">
-  {{ formsLink('DIS 1 - Notice of being placed on report (PDF)', noticeOfBeingPlacedOnReportStaffHref) }}
-  {{ formsLink('DIS 1 and 2 - Notice of being placed on report and prisoner guidance (PDF)', noticeOfBeingPlacedOnReportPrisonerHref) }}
+  {{ formsLink('DIS 1 - Notice of being placed on report (PDF)', noticeOfBeingPlacedOnReportStaffHref, 'DIS1-staff') }}
+  {{ formsLink('DIS 1 and 2 - Notice of being placed on report and prisoner guidance (PDF)', noticeOfBeingPlacedOnReportPrisonerHref, 'DIS1-prisoner') }}
 </ul>
 
 <div>
@@ -73,28 +73,28 @@
 }) }}
 <h3 class="govuk-heading-m">Preparing for the hearing</h3>
 <p class="govuk-body">Adjudication history for current sentence - DIS 5:</p>
-<ul class="govuk-list">{{ formsLink('DIS 5 - print to fill in by hand (PDF)', adjudicationUrls.printPdf.urls.dis5(chargeNumber)) }}</ul>
+<ul class="govuk-list">{{ formsLink('DIS 5 - print to fill in by hand (PDF)', adjudicationUrls.printPdf.urls.dis5(chargeNumber), 'DIS5') }}</ul>
 <p class="govuk-body">Conduct report - DIS 6:</p>
 <ul class="govuk-list">
-  {{ formsLink('DIS 6 - print to fill in by hand (PDF)', adjudicationUrls.printPdf.urls.dis6(chargeNumber)) }}
-  {{ formsLink('DIS 6 - save to type into (PDF)', '/assets/pdf/DIS%206%20-%20input.pdf') }}
+  {{ formsLink('DIS 6 - print to fill in by hand (PDF)', adjudicationUrls.printPdf.urls.dis6(chargeNumber), 'DIS6-auto') }}
+  {{ formsLink('DIS 6 - save to type into (PDF)', '/assets/pdf/DIS%206%20-%20input.pdf', 'DIS6-type') }}
 </ul>
 <h3 class="govuk-heading-m">Running the hearing</h3>
 <p class="govuk-body">Record of adjudication hearing - DIS 3:</p>
 <ul class="govuk-list">
-  {{ formsLink('DIS 3 - print to fill in by hand (PDF)', adjudicationUrls.printPdf.urls.dis3(chargeNumber)) }}
-  {{ formsLink('DIS 3 - save to type into (PDF)', '/assets/pdf/DIS%203%20-%20input%20version.pdf') }}
+  {{ formsLink('DIS 3 - print to fill in by hand (PDF)', adjudicationUrls.printPdf.urls.dis3(chargeNumber), 'DIS3-auto') }}
+  {{ formsLink('DIS 3 - save to type into (PDF)', '/assets/pdf/DIS%203%20-%20input%20version.pdf', 'DIS3-type') }}
 </ul>
 <p class="govuk-body">Record adjudication hearing continuation sheet - DIS 4:</p>
 <ul class="govuk-list">
-  {{ formsLink('DIS 4 - print to fill in by hand (PDF)', adjudicationUrls.printPdf.urls.dis4(chargeNumber)) }}
-  {{ formsLink('DIS 4 - save to type into (PDF)', '/assets/pdf/DIS%204%20-%20input.pdf') }}
+  {{ formsLink('DIS 4 - print to fill in by hand (PDF)', adjudicationUrls.printPdf.urls.dis4(chargeNumber), 'DIS4-auto') }}
+  {{ formsLink('DIS 4 - save to type into (PDF)', '/assets/pdf/DIS%204%20-%20input.pdf', 'DIS4-type') }}
 </ul>
 <p class="govuk-body">Adjudication result - DIS 7:</p>
 <ul class="govuk-list">
-  {{ formsLink('DIS 7 - print to fill in by hand', adjudicationUrls.printPdf.urls.dis7Blank(chargeNumber)) }}
+  {{ formsLink('DIS 7 - print to fill in by hand', adjudicationUrls.printPdf.urls.dis7Blank(chargeNumber), 'DIS7-blank') }}
   {% if outcomesEntered %}
-    {{ formsLink('DIS 7 - print with punishment details (PDF)', adjudicationUrls.printPdf.urls.dis7(chargeNumber)) }}
+    {{ formsLink('DIS 7 - print with punishment details (PDF)', adjudicationUrls.printPdf.urls.dis7(chargeNumber), 'DIS7-auto') }}
   {% else %}
     <p class="govuk-body" data-qa="no-dis7-content">After entering the hearing outcome, a different DIS7 form for the prisoner<br> becomes available. It explains the punishment and how to ask for a review</p>
   {% endif %}
