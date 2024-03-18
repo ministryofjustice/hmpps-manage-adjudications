@@ -1,10 +1,10 @@
 {% extends "../../partials/layout.njk" %}
-{% from "../../macros/printLink.njk" import printLink %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "../../macros/tabHeaders/adjudicationTabHeader.njk" import adjudicationTabHeader %}
-{% from "../../macros/transferBanner.njk" import transferBanner%}
+{% from "../../macros/transferBanner.njk" import transferBanner %}
 
 {% set title = 'Print and issue forms' %}
 
@@ -22,9 +22,9 @@
 
   {{ adjudicationTabHeader(chargeNumber, reviewStatus, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'forms', reportHref, hearingsHref, punishmentsHref, formsHref, true, true) }}
 
-  <div class="adjudicationsSummary">
-    <h2 class="govuk-heading-s">Print forms</h2>
+  {% include '../../partials/formsPageTabs.njk' %}
 
+  {# <div class="adjudicationsSummary">
     {{ printLink('Notice of being placed on report - DIS 1 (PDF)', noticeOfBeingPlacedOnReportStaffHref, "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis12") }}
     {{ printLink('Notice of being placed on report and prisoner guidance - DIS 1 and 2 (PDF)', noticeOfBeingPlacedOnReportPrisonerHref, "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis12") }}
     {{ printLink('Record of adjudication hearing - DIS 3 (PDF)', adjudicationUrls.printPdf.urls.dis3(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis3") }}
@@ -85,6 +85,6 @@
         attributes: { "data-qa": "add-issue-date-time" }
       }) }}
     </div>
-  </div>
+  </div> #}
 
 {% endblock %}
