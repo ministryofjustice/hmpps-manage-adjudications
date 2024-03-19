@@ -18,7 +18,7 @@
 </ul>
 
 <div>
-  <h3 class="govuk-heading-s">Record of issuing notice of being placed on report</h3>
+  <h3 class="govuk-heading-s">Record of issuing notice of being placed on report to the prisoner</h3>
 
   {% set rows = [] %}
   {% for report in reports %}
@@ -96,7 +96,7 @@
   {% if outcomesEntered %}
     {{ formsLink('DIS 7 - print with punishment details (PDF)', adjudicationUrls.printPdf.urls.dis7(chargeNumber), 'DIS7-auto') }}
   {% else %}
-    <p class="govuk-body" data-qa="no-dis7-content">After entering the hearing outcome, a different DIS7 form for the prisoner<br> becomes available. It explains the punishment and how to ask for a review</p>
+    <p class="govuk-body" data-qa="no-dis7-content">After entering the hearing outcome, you can print a DIS 7 form with only details and explanations of the punishments given.</p>
   {% endif %}
 </ul>
 {% endset -%}
