@@ -1,10 +1,10 @@
 {% extends "../../partials/layout.njk" %}
-{% from "../../macros/printLink.njk" import printLink %}
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "../../macros/tabHeaders/adjudicationTabHeader.njk" import adjudicationTabHeader %}
-{% from "../../macros/transferBanner.njk" import transferBanner%}
+{% from "../../macros/transferBanner.njk" import transferBanner %}
 
 {% set title = 'Print and issue forms' %}
 
@@ -22,69 +22,6 @@
 
   {{ adjudicationTabHeader(chargeNumber, reviewStatus, reviewStatus | reportedAdjudicationStatusDisplayName, prisoner, 'forms', reportHref, hearingsHref, punishmentsHref, formsHref, true, true) }}
 
-  <div class="adjudicationsSummary">
-    <h2 class="govuk-heading-s">Print forms</h2>
-
-    {{ printLink('Notice of being placed on report - DIS 1 (PDF)', noticeOfBeingPlacedOnReportStaffHref, "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis12") }}
-    {{ printLink('Notice of being placed on report and prisoner guidance - DIS 1 and 2 (PDF)', noticeOfBeingPlacedOnReportPrisonerHref, "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis12") }}
-    {{ printLink('Record of adjudication hearing - DIS 3 (PDF)', adjudicationUrls.printPdf.urls.dis3(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis3") }}
-    {{ printLink('Record of adjudication hearing continuation sheet - DIS 4 (PDF)', adjudicationUrls.printPdf.urls.dis4(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis4") }}
-    {{ printLink('Adjudication history for current sentence - DIS 5 (PDF)', adjudicationUrls.printPdf.urls.dis5(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis5") }}
-    {{ printLink('Conduct report - DIS 6 (PDF)', adjudicationUrls.printPdf.urls.dis6(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-0", "_blank", "printDis6") }}
-    {{ printLink('Adjudication result - DIS 7 (PDF)', adjudicationUrls.printPdf.urls.dis7Blank(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-1", "_blank", "printDis7Blank") }}
-    {% if outcomesEntered %}
-    {{ printLink('Adjudication result with punishment details - DIS 7 (PDF)', adjudicationUrls.printPdf.urls.dis7(chargeNumber), "left", "govuk-!-padding-top-0 govuk-!-padding-right-0 govuk-!-padding-bottom-0 govuk-!-margin-top-0 govuk-!-margin-bottom-1", "_blank", "printDis7") }}
-    {% else %}
-    <p class="govuk-body" data-qa="no-dis7-content">After entering the hearing outcome, a different DIS7 form for the prisoner<br> becomes available. It explains the punishment and how to ask for a review</p>
-    {% endif %}
-  </div>
-
-  <div class="adjudicationsSummary">
-    <h2 class="govuk-heading-s">Record of issuing notice of being placed on report</h2>
-
-    {% set rows = [] %}
-    {% for report in reports %}
-      {% for disIssue in report.formattedDisIssueHistory %}
-        {% set rows = (rows.push([
-          { text: disIssue.formattedDateTimeOfIssue or ' - ' },
-          { text: disIssue.issuingOfficer or ' - ' }
-        ]), rows) %}
-      {% endfor %}
-
-      {% set rows = (rows.push([
-        { text: report.formattedDateTimeOfIssue or ' - ' },
-        { text: report.issuingOfficer or ' - ' }
-      ]), rows) %}
-    {% endfor %}
-
-    {% if rows | length %}
-      <div class="results-table">
-        {{ govukTable({
-          head: [
-            { text: "Issue date and time",
-              classes: 'confirmDISFormTable-lastIssued'
-            },
-            { text: "Issuing officer",
-              classes: 'confirmDISFormTable-officerName'
-            }
-          ],
-          rows: rows,
-          attributes: { "data-qa": "results-table", "data-module": "moj-sortable-table" }
-        }) }}
-      </div>
-    {% else %}
-      <p data-qa="no-results-message">After you’ve given the notice to the prisoner, add the date and time you did this. <br>
-        If someone else did this, they need to sign in and add it themselves.</p>
-    {% endif %}
-
-    <div>
-      {{ govukButton({
-        text: 'Add date and time',
-        classes: "govuk-button--secondary",
-        href: adjudicationUrls.addIssueDateTime.urls.start(chargeNumber) + '?referrer=' + adjudicationUrls.forms.urls.view(chargeNumber),
-        attributes: { "data-qa": "add-issue-date-time" }
-      }) }}
-    </div>
-  </div>
+  {% include '../../partials/formsPageTabs.njk' %}
 
 {% endblock %}

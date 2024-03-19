@@ -5,7 +5,7 @@ export default class FormsTabPage extends Page {
     super('Adjudication for charge')
   }
 
-  printLink = (disNumber: string): PageElement => cy.get(`[data-qa="printDis${disNumber}"]`)
+  printLink = (disName: string): PageElement => cy.get(`[data-qa="formsLink-${disName}"]`)
 
   noDis7Content = (): PageElement => cy.get('[data-qa="no-dis7-content"]')
 

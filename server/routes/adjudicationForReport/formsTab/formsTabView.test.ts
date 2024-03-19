@@ -53,7 +53,7 @@ describe('GET /print-issue-forms', () => {
       .get(adjudicationUrls.forms.urls.view('12345'))
       .expect('Content-Type', /html/)
       .expect(response => {
-        expect(response.text).toContain('Print forms')
+        expect(response.text).toContain('Notice of being placed on report')
         expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
         expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
       })

@@ -1,0 +1,7 @@
+{% macro formsLink(linkText = '', href='', formName='') %}
+  <li>
+    <p class="govuk-body"><a href="{{ href }}" target='_self' class="govuk-link forms-link govuk-!-display-none-print" data-qa="formsLink-{{formName}}">
+        {{ linkText }}
+      </a></p>
+  </li>
+{% endmacro %}

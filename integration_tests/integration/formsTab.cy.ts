@@ -96,70 +96,64 @@ context('Navigated to forms tab', () => {
   })
 
   describe('Loads', () => {
-    it('should contain the required page elements for report with no punishments', () => {
+    it('should contain the required page elements for DIS12 tab - no outcomes', () => {
       cy.visit(adjudicationUrls.forms.urls.view('100'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
       formsTabPage
-        .printLink('12')
+        .printLink('DIS1-staff')
         .should('have.attr', 'href')
-        .and('include', `${adjudicationUrls.printPdf.urls.dis12('100')}`)
+        .and('include', `${adjudicationUrls.printPdf.urls.dis12('100')}?copy=staff`)
       formsTabPage
-        .printLink('3')
+        .printLink('DIS1-prisoner')
+        .should('have.attr', 'href')
+        .and('include', `${adjudicationUrls.printPdf.urls.dis12('100')}?copy=prisoner`)
+      formsTabPage.addIssueButton().should('exist')
+    })
+    it('should contain the required page elements for forms for hearing - no outcomes', () => {
+      cy.visit(adjudicationUrls.forms.urls.view('100'))
+      const formsTabPage = Page.verifyOnPage(FormsTabPage)
+      formsTabPage
+        .printLink('DIS3-auto')
         .should('have.attr', 'href')
         .and('include', `${adjudicationUrls.printPdf.urls.dis3('100')}`)
       formsTabPage
-        .printLink('4')
+        .printLink('DIS3-type')
+        .should('have.attr', 'href')
+        .and('include', `/assets/pdf/DIS%203%20-%20input%20version.pdf`)
+      formsTabPage
+        .printLink('DIS4-auto')
         .should('have.attr', 'href')
         .and('include', `${adjudicationUrls.printPdf.urls.dis4('100')}`)
       formsTabPage
-        .printLink('5')
+        .printLink('DIS4-type')
+        .should('have.attr', 'href')
+        .and('include', `/assets/pdf/DIS%204%20-%20input.pdf`)
+      formsTabPage
+        .printLink('DIS5')
         .should('have.attr', 'href')
         .and('include', `${adjudicationUrls.printPdf.urls.dis5('100')}`)
       formsTabPage
-        .printLink('6')
+        .printLink('DIS6-auto')
         .should('have.attr', 'href')
         .and('include', `${adjudicationUrls.printPdf.urls.dis6('100')}`)
       formsTabPage
-        .printLink('7Blank')
+        .printLink('DIS6-type')
+        .should('have.attr', 'href')
+        .and('include', `/assets/pdf/DIS%206%20-%20input.pdf`)
+      formsTabPage
+        .printLink('DIS7-blank')
         .should('have.attr', 'href')
         .and('include', `${adjudicationUrls.printPdf.urls.dis7Blank('100')}`)
       formsTabPage.noDis7Content().should('exist')
-      formsTabPage.noResultsMessage().should('exist')
-      formsTabPage.addIssueButton().should('exist')
     })
-    it('should contain the required page elements for report with no punishments', () => {
+    it('should contain the required page elements - punishments present', () => {
       cy.visit(adjudicationUrls.forms.urls.view('101'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
       formsTabPage
-        .printLink('12')
-        .should('have.attr', 'href')
-        .and('include', `${adjudicationUrls.printPdf.urls.dis12('101')}`)
-      formsTabPage
-        .printLink('3')
-        .should('have.attr', 'href')
-        .and('include', `${adjudicationUrls.printPdf.urls.dis3('101')}`)
-      formsTabPage
-        .printLink('4')
-        .should('have.attr', 'href')
-        .and('include', `${adjudicationUrls.printPdf.urls.dis4('101')}`)
-      formsTabPage
-        .printLink('5')
-        .should('have.attr', 'href')
-        .and('include', `${adjudicationUrls.printPdf.urls.dis5('101')}`)
-      formsTabPage
-        .printLink('6')
-        .should('have.attr', 'href')
-        .and('include', `${adjudicationUrls.printPdf.urls.dis6('101')}`)
-      formsTabPage
-        .printLink('7Blank')
-        .should('have.attr', 'href')
-        .and('include', `${adjudicationUrls.printPdf.urls.dis7Blank('101')}`)
-      formsTabPage
-        .printLink('7')
+        .printLink('DIS7-auto')
         .should('have.attr', 'href')
         .and('include', `${adjudicationUrls.printPdf.urls.dis7('101')}`)
-      formsTabPage.noResultsMessage().should('exist')
-      formsTabPage.addIssueButton().should('exist')
+      formsTabPage.noDis7Content().should('not.exist')
     })
 
     it('should display table with records of issuing dis 1/2 to prisoner', () => {
@@ -173,12 +167,13 @@ context('Navigated to forms tab', () => {
 
       cy.visit(adjudicationUrls.forms.urls.view('100'))
       const formsTabPage = Page.verifyOnPage(FormsTabPage)
-      formsTabPage.printLink('12')
-      formsTabPage.printLink('3')
-      formsTabPage.printLink('4')
-      formsTabPage.printLink('5')
-      formsTabPage.printLink('6')
-      formsTabPage.printLink('7Blank')
+      formsTabPage.printLink('DIS1-staff')
+      formsTabPage.printLink('DIS1-prisoner')
+      formsTabPage.printLink('DIS3-auto')
+      formsTabPage.printLink('DIS4-auto')
+      formsTabPage.printLink('DIS5')
+      formsTabPage.printLink('DIS6-auto')
+      formsTabPage.printLink('DIS7-blank')
       formsTabPage.noResultsMessage().should('not.exist')
       formsTabPage
         .resultsTable()
