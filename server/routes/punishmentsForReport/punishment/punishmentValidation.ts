@@ -27,6 +27,10 @@ const errors: { [key: string]: FormError } = {
     href: '#otherPrivilege',
     text: 'Enter a privilege to be withdrawn',
   },
+  OTHER_PRIVILEGE_LENGTH: {
+    href: '#otherPrivilege',
+    text: 'The privilege must be less than 32 characters',
+  },
   MISSING_STOPPAGE_PERCENTAGE: {
     href: '#stoppagePercentage',
     text: 'Enter the percentage of earnings to be stopped',
@@ -62,8 +66,10 @@ export default function validateForm({
 
   if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE
 
-  if (punishmentType === PunishmentType.PRIVILEGE && privilegeType === PrivilegeType.OTHER && !otherPrivilege)
-    return errors.MISSING_OTHER_PRIVILEGE
+  if (punishmentType === PunishmentType.PRIVILEGE && privilegeType === PrivilegeType.OTHER) {
+    if (!otherPrivilege) return errors.MISSING_OTHER_PRIVILEGE
+    if (otherPrivilege.length > 32) return errors.OTHER_PRIVILEGE_LENGTH
+  }
 
   if (punishmentType === PunishmentType.EARNINGS && !stoppagePercentage) return errors.MISSING_STOPPAGE_PERCENTAGE
 

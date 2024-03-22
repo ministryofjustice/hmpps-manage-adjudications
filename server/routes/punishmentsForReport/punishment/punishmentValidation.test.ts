@@ -77,6 +77,18 @@ describe('validateForm', () => {
       text: 'Enter a privilege to be withdrawn',
     })
   })
+  it('show error when other privilege over 32 characters is added', () => {
+    expect(
+      validateForm({
+        punishmentType: PunishmentType.PRIVILEGE,
+        privilegeType: PrivilegeType.OTHER,
+        otherPrivilege: 'testing testing testing testing testing testing testing testing',
+      })
+    ).toEqual({
+      href: '#otherPrivilege',
+      text: 'The privilege must be less than 32 characters',
+    })
+  })
   it('shows error when stoppage percentage selected', () => {
     expect(
       validateForm({
