@@ -442,7 +442,7 @@ context('Details of offence', () => {
   })
 
   it('When an ALO has edited the offence, it should redirect back to the prisoner report page', () => {
-    cy.visit(`${adjudicationUrls.detailsOfOffence.urls.aloEdit(201)}?offenceCode=4001`)
+    cy.visit(`${adjudicationUrls.detailsOfOffence.urls.aloEdit(201)}?offenceCode=4001&victimPrisonersNumber=T3356FU`)
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage.saveAndContinue().click()
     cy.url().should('include', adjudicationUrls.prisonerReport.urls.review('12345'))
