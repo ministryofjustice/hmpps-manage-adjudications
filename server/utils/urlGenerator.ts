@@ -10,6 +10,20 @@ import {
   UiFilter,
 } from './adjudicationFilterHelper'
 
+const generateDetailsOfOffenceDeletePath = (draftId: number, offenceData: OffenceData) => {
+  const { victimOtherPersonsName, victimPrisonersNumber, victimStaffUsername, offenceCode } = offenceData
+  let queryPath = `?offenceCode=${offenceCode}`
+
+  if (victimOtherPersonsName && victimOtherPersonsName !== 'undefined')
+    queryPath += `&victimOtherPersonsName=${victimOtherPersonsName}`
+  if (victimPrisonersNumber && victimPrisonersNumber !== 'undefined')
+    queryPath += `&victimPrisonersNumber=${victimPrisonersNumber}`
+  if (victimStaffUsername && victimStaffUsername !== 'undefined')
+    queryPath += `&victimStaffUsername=${victimStaffUsername}`
+
+  return `${adjudicationUrls.detailsOfOffence.root}/${draftId}/delete${queryPath}`
+}
+
 const adjudicationUrls = {
   offenceCodeSelection: {
     root: '/offence-code-selection',
@@ -47,8 +61,7 @@ const adjudicationUrls = {
       modified: (draftId: number) => `${adjudicationUrls.detailsOfOffence.root}/${draftId}/modified`,
       add: (draftId: number) => `${adjudicationUrls.detailsOfOffence.root}/${draftId}/add`,
       aloAdd: (draftId: number) => `${adjudicationUrls.detailsOfOffence.root}/${draftId}/alo-add`,
-      delete: (draftId: number, offenceData: OffenceData) =>
-        `${adjudicationUrls.detailsOfOffence.root}/${draftId}/delete?offenceCode=${offenceData?.offenceCode}&victimOtherPersonsName=${offenceData?.victimOtherPersonsName}&victimPrisonersNumber=${offenceData?.victimPrisonersNumber}&victimStaffUsername=${offenceData?.victimStaffUsername}`,
+      delete: (draftId: number, offenceData: OffenceData) => generateDetailsOfOffenceDeletePath(draftId, offenceData),
       aloEdit: (draftId: number) => `${adjudicationUrls.detailsOfOffence.root}/${draftId}/aloEdit`,
     },
   },

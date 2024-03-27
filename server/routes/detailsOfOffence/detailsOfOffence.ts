@@ -102,13 +102,12 @@ export default class DetailsOfOffencePage {
       return this.redirectToNextPage(res, draftId)
     }
     const offenceData: OffenceData = { ...req.query }
-
     const { victimOtherPersonsName, victimPrisonersNumber, victimStaffUsername, offenceCode } = offenceData
 
     const offenceDetailsToSave = {
-      ...(victimOtherPersonsName && { victimOtherPersonsName }),
-      ...(victimPrisonersNumber && { victimPrisonersNumber }),
-      ...(victimStaffUsername && { victimStaffUsername }),
+      ...(victimOtherPersonsName && victimOtherPersonsName !== 'undefined' && { victimOtherPersonsName }),
+      ...(victimPrisonersNumber && victimPrisonersNumber !== 'undefined' && { victimPrisonersNumber }),
+      ...(victimStaffUsername && victimStaffUsername !== 'undefined' && { victimStaffUsername }),
       ...(offenceCode && { offenceCode: Number(offenceCode) }),
     }
 
