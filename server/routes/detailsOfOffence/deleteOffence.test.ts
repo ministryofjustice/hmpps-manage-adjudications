@@ -158,9 +158,7 @@ describe('POST /details-of-offence/102/delete/1', () => {
             .expect(302)
             .expect(
               'Location',
-              `${adjudicationUrls.detailsOfOffence.urls.modified(
-                102
-              )}?offenceCode=1&victimOtherPersonsName=&victimPrisonersNumber=G5512G&victimStaffUsername=`
+              `${adjudicationUrls.detailsOfOffence.urls.modified(102)}?offenceCode=1&victimPrisonersNumber=G5512G`
             )
         )
       )
