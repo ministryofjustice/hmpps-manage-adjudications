@@ -103,11 +103,13 @@ export default class DetailsOfOffencePage {
     }
     const offenceData: OffenceData = { ...req.query }
 
+    const { victimOtherPersonsName, victimPrisonersNumber, victimStaffUsername, offenceCode } = offenceData
+
     const offenceDetailsToSave = {
-      victimOtherPersonsName: offenceData?.victimOtherPersonsName,
-      victimPrisonersNumber: offenceData?.victimPrisonersNumber,
-      victimStaffUsername: offenceData?.victimStaffUsername,
-      offenceCode: Number(offenceData?.offenceCode),
+      ...(victimOtherPersonsName && { victimOtherPersonsName }),
+      ...(victimPrisonersNumber && { victimPrisonersNumber }),
+      ...(victimStaffUsername && { victimStaffUsername }),
+      ...(offenceCode && { offenceCode: Number(offenceCode) }),
     }
 
     if (this.pageOptions.isAloEdit()) {
