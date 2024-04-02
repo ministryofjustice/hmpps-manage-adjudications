@@ -9,6 +9,7 @@ import CuriousApiService from './curiousApiService'
 import {
   AdjudicationHistoryFilter,
   AwardedPunishmentsAndDamages,
+  ConfirmIssueInfo,
   FormattedDisIssue,
   IssueStatus,
   ReportedAdjudication,
@@ -461,7 +462,6 @@ export default class ReportedAdjudicationsService {
     const response = await this.getIssueDataForAdjudications(user, filter, filterUsingHearingDate)
     const { reportedAdjudications } = response
     const prisonerNumbers = reportedAdjudications.map(_ => _.prisonerNumber)
-
     const prisonerDetails = new Map(
       (await new PrisonApiClient(token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
         prisonerDetail.offenderNo,
@@ -618,18 +618,18 @@ export default class ReportedAdjudicationsService {
   }
 
   enhanceAdjudicationWithIssuingDetails(
-    reportedAdjudication: ReportedAdjudication,
+    adjudicationInfo: ReportedAdjudication | ConfirmIssueInfo,
     prisonerResult: PrisonerSimpleResult,
     issuingOfficerNameByUsernameMap: Map<string, string>,
     prisonersAlerts: Alert[] = []
   ): ReportedAdjudicationEnhancedWithIssuingDetails {
-    const issuingOfficerName = issuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
+    const issuingOfficerName = issuingOfficerNameByUsernameMap.get(adjudicationInfo.issuingOfficer)
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
     const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
     const prisonerLocation = formatLocation(prisonerResult?.assignedLivingUnitDesc) || 'Unknown'
-    const formsAlreadyIssued = !!reportedAdjudication?.dateTimeOfIssue
-    const firstHearingDateTime = reportedAdjudication.dateTimeOfFirstHearing
+    const formsAlreadyIssued = !!adjudicationInfo?.dateTimeOfIssue
+    const firstHearingDateTime = adjudicationInfo.dateTimeOfFirstHearing
 
     let relevantAlerts: AlertFlags[] = null
     if (prisonersAlerts) {
@@ -640,7 +640,7 @@ export default class ReportedAdjudicationsService {
     }
 
     const formattedDisIssueHistory: FormattedDisIssue[] = []
-    reportedAdjudication.disIssueHistory.map(disIssue => {
+    adjudicationInfo.disIssueHistory.map(disIssue => {
       const disIssueOfficerName = issuingOfficerNameByUsernameMap.get(disIssue.issuingOfficer)
       return formattedDisIssueHistory.push({
         issuingOfficer: getFormattedOfficerName(disIssueOfficerName && convertToTitleCase(disIssueOfficerName)) || '',
@@ -648,18 +648,19 @@ export default class ReportedAdjudicationsService {
       })
     })
 
+    const dateTimeOfDiscovery =
+      (adjudicationInfo as ReportedAdjudication).incidentDetails?.dateTimeOfDiscovery ||
+      (adjudicationInfo as ConfirmIssueInfo).dateTimeOfDiscovery
+
     return {
-      ...reportedAdjudication,
+      ...adjudicationInfo,
       displayName,
       friendlyName,
       issuingOfficer,
-      formattedDateTimeOfIssue: formatTimestampToDate(reportedAdjudication.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
+      formattedDateTimeOfIssue: formatTimestampToDate(adjudicationInfo.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
       prisonerLocation,
-      dateTimeOfDiscovery: reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
-      formattedDateTimeOfDiscovery: formatTimestampToDate(
-        reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
-        'D MMMM YYYY - HH:mm'
-      ),
+      dateTimeOfDiscovery,
+      formattedDateTimeOfDiscovery: formatTimestampToDate(dateTimeOfDiscovery, 'D MMMM YYYY - HH:mm'),
       formsAlreadyIssued,
       dateTimeOfFirstHearing: firstHearingDateTime,
       formattedDateTimeOfFirstHearing: formatTimestampToDate(firstHearingDateTime, 'D MMMM YYYY - HH:mm'),

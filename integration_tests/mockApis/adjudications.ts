@@ -687,7 +687,7 @@ const stubGetIssueDataFilteredOnDiscDate = ({
   response
 }): SuperAgentRequest => {
   const path =
-    `/adjudications/reported-adjudications/for-issue?` +
+    `/adjudications/reported-adjudications/for-issue/v2?` +
     `${(filter.fromDate && `startDate=${filter.fromDate}`) || ''}` +
     `${(filter.toDate && `&endDate=${filter.toDate}`) || ''}`
   return stubFor({

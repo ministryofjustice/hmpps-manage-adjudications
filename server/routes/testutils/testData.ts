@@ -592,6 +592,37 @@ export default class TestData {
 
   chartLastUpdatedResult = (value: ChartLastUpdatedResult) => value
 
+  confirmDISResponse = ({
+    chargeNumber,
+    prisonerNumber,
+    dateTimeOfDiscovery,
+    dateTimeOfIncident = dateTimeOfDiscovery,
+    issuingOfficer,
+    disIssueHistory = [],
+    dateTimeOfFirstHearing = '2024-03-25T11:00:00',
+    dateTimeOfIssue,
+  }: {
+    chargeNumber: string
+    prisonerNumber: string
+    dateTimeOfIncident?: string
+    dateTimeOfDiscovery: string
+    issuingOfficer?: string
+    dateTimeOfIssue?: string
+    disIssueHistory?: DisIssue[]
+    dateTimeOfFirstHearing?: string
+  }) => {
+    return {
+      chargeNumber,
+      prisonerNumber,
+      dateTimeOfIncident,
+      dateTimeOfDiscovery,
+      issuingOfficer,
+      dateTimeOfIssue,
+      disIssueHistory,
+      dateTimeOfFirstHearing,
+    }
+  }
+
   prisonerMovement = ({
     offenderNo = 'A1234AA',
     fromAgency = 'MDI',
