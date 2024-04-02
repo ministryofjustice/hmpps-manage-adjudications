@@ -76,7 +76,7 @@ export interface ReportedAdjudicationEnhanced extends ReportedAdjudication {
   incidentLocation?: string
 }
 
-export interface ReportedAdjudicationEnhancedWithIssuingDetails extends ReportedAdjudication {
+export type ReportedAdjudicationEnhancedWithIssuingDetails = {
   displayName: string
   friendlyName: string
   issuingOfficer: string
@@ -90,7 +90,7 @@ export interface ReportedAdjudicationEnhancedWithIssuingDetails extends Reported
   issueStatus?: IssueStatus
   relevantAlerts?: AlertFlags[]
   formattedDisIssueHistory?: FormattedDisIssue[]
-}
+} & { chargeNumber: string }
 
 export type AdjudicationHistoryFilter = {
   bookingType: AdjudicationHistoryBookingType
@@ -268,4 +268,15 @@ export type AwardedPunishmentsAndDamages = {
   additionalDays: number
   prospectiveAdditionalDays: number
   reportHref: { link: string; text: string }
+}
+
+export type ConfirmIssueInfo = {
+  chargeNumber: string
+  prisonerNumber: string
+  dateTimeOfIncident: string
+  dateTimeOfDiscovery: string
+  issuingOfficer: string
+  dateTimeOfIssue: string
+  disIssueHistory?: DisIssue[]
+  dateTimeOfFirstHearing: string
 }

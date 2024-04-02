@@ -33,6 +33,26 @@ const reportedAdjudication = testData.reportedAdjudication({
   ],
 })
 
+const disIssueInfo = [
+  testData.confirmDISResponse({
+    chargeNumber: '100',
+    prisonerNumber: 'G6123VU',
+    dateTimeOfIssue: '2022-12-05T15:00:00',
+    issuingOfficer: 'USER1',
+    dateTimeOfDiscovery: '2022-12-03T10:00:00',
+    disIssueHistory: [
+      {
+        issuingOfficer: 'USER1',
+        dateTimeOfIssue: '2022-12-03T13:00:00',
+      },
+      {
+        issuingOfficer: 'USER1',
+        dateTimeOfIssue: '2022-12-04T14:00:00',
+      },
+    ],
+  }),
+]
+
 const reportedAdjudication2 = testData.reportedAdjudication({
   chargeNumber: '101',
   prisonerNumber: 'G6123VU',
@@ -162,7 +182,7 @@ context('Navigated to forms tab', () => {
           fromDate: moment().subtract(6, 'months').format('YYYY-MM-DD'),
           toDate: moment().format('YYYY-MM-DD'),
         },
-        response: { reportedAdjudications: [reportedAdjudication] },
+        response: { reportedAdjudications: disIssueInfo },
       })
 
       cy.visit(adjudicationUrls.forms.urls.view('100'))

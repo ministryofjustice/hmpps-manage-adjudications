@@ -56,19 +56,19 @@ context('Confirm DIS forms have been issued', () => {
     filter.filterBar().should('contain.text', 'Enter a date that is before or the same as the ‘date to’')
   })
   it('has working links to add date and time of issue', () => {
-    const adjudicationResponse = [
-      testData.reportedAdjudication({
+    const response = [
+      testData.confirmDISResponse({
         chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
-        dateTimeOfIssue: '2022-12-05T15:00:00',
+        dateTimeOfDiscovery: '2024-03-25T11:00:00',
       }),
-
-      testData.reportedAdjudication({
+      testData.confirmDISResponse({
         chargeNumber: '23456',
         prisonerNumber: 'G7234VB',
+        dateTimeOfDiscovery: '2024-03-25T11:00:00',
       }),
     ]
-    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: response } })
     cy.task('stubGetBatchPrisonerDetails', [prisoners[0]])
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
@@ -79,20 +79,19 @@ context('Confirm DIS forms have been issued', () => {
     })
   })
   it('should have the required elements - reports present but not issued', () => {
-    const adjudicationResponse = [
-      testData.reportedAdjudication({
+    const response = [
+      testData.confirmDISResponse({
         chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
-        dateTimeOfIncident: '2022-12-05T11:11:00',
+        dateTimeOfDiscovery: '2022-12-05T11:11:00',
       }),
-      testData.reportedAdjudication({
+      testData.confirmDISResponse({
         chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
-        dateTimeOfIncident: '2022-12-06T12:10:00',
+        dateTimeOfDiscovery: '2022-12-06T12:10:00',
       }),
     ]
-
-    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: response } })
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
@@ -130,16 +129,16 @@ context('Confirm DIS forms have been issued', () => {
       })
   })
   it('should show the date and time of issuing, as the issuing officer if data is present, and contain a link to re-issue another date and time', () => {
-    const adjudicationResponse = [
-      testData.reportedAdjudication({
+    const response = [
+      testData.confirmDISResponse({
         chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
-        dateTimeOfIncident: '2022-12-05T11:11:00',
+        dateTimeOfDiscovery: '2022-12-05T11:11:00',
         issuingOfficer: 'TEST_GEN',
         dateTimeOfIssue: '2022-12-05T15:00:00',
       }),
     ]
-    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: response } })
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
@@ -158,16 +157,16 @@ context('Confirm DIS forms have been issued', () => {
       })
   })
   it('should handle if the prisoner details cannot be found', () => {
-    const adjudicationResponse = [
-      testData.reportedAdjudication({
+    const response = [
+      testData.confirmDISResponse({
         chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
-        dateTimeOfIncident: '2022-12-05T11:11:00',
+        dateTimeOfDiscovery: '2022-12-05T11:11:00',
         issuingOfficer: 'TEST_GEN',
         dateTimeOfIssue: '2022-12-05T15:00:00',
       }),
     ]
-    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: response } })
     cy.task('stubGetBatchPrisonerDetails', [])
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
@@ -186,27 +185,27 @@ context('Confirm DIS forms have been issued', () => {
       })
   })
   it('should filter on the parameters given - dates only', () => {
-    const adjudicationResponse = [
-      testData.reportedAdjudication({
+    const response = [
+      testData.confirmDISResponse({
         chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
-        dateTimeOfIncident: '2022-12-05T11:11:00',
+        dateTimeOfDiscovery: '2022-12-05T11:11:00',
         dateTimeOfIssue: '2022-12-05T15:00:00',
         issuingOfficer: 'TEST_GEN',
       }),
-      testData.reportedAdjudication({
+      testData.confirmDISResponse({
         chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
-        dateTimeOfIncident: '2022-12-05T12:10:00',
+        dateTimeOfDiscovery: '2022-12-05T12:10:00',
         issuingOfficer: 'TEST_GEN',
         dateTimeOfIssue: '2022-12-06T16:30:00',
       }),
     ]
     cy.task('stubGetBatchPrisonerDetails', prisoners)
-    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: response } })
     cy.task('stubGetIssueDataDiscDate', {
       filter: { fromDate: '2022-12-05', toDate: '2022-12-05', locationId: null },
-      response: { reportedAdjudications: [adjudicationResponse[0]] },
+      response: { reportedAdjudications: [response[0]] },
     })
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
@@ -222,28 +221,28 @@ context('Confirm DIS forms have been issued', () => {
     })
   })
   it('should filter on the parameters given - dates and location', () => {
-    const adjudicationResponse = [
-      testData.reportedAdjudication({
+    const response = [
+      testData.confirmDISResponse({
         chargeNumber: '12345',
         prisonerNumber: 'G7234VB',
-        dateTimeOfIncident: '2022-12-05T11:11:00',
+        dateTimeOfDiscovery: '2022-12-05T11:11:00',
         issuingOfficer: 'TEST_GEN',
         dateTimeOfIssue: '2022-12-05T15:00:00',
       }),
-      testData.reportedAdjudication({
+      testData.confirmDISResponse({
         chargeNumber: '23456',
         prisonerNumber: 'P3785CP',
-        dateTimeOfIncident: '2022-12-06T11:11:00',
+        dateTimeOfDiscovery: '2022-12-06T11:11:00',
         issuingOfficer: 'TEST_GEN',
         dateTimeOfIssue: '2022-12-06T16:30:00',
       }),
     ]
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     // initially returned data from api with only the default filters
-    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: adjudicationResponse } })
+    cy.task('stubGetIssueDataDiscDate', { response: { reportedAdjudications: response } })
     // the data returned once the filter has been set
     cy.task('stubGetIssueDataDiscDate', {
-      response: { reportedAdjudications: adjudicationResponse },
+      response: { reportedAdjudications: response },
       filter: { fromDate: '2022-12-04', toDate: '2022-12-06', locationId: 27102 },
     })
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)

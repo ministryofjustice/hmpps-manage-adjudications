@@ -195,7 +195,7 @@ export default class ManageAdjudicationsSystemTokensClient {
     filter: ReportedAdjudicationDISFormFilter
   ): Promise<ReportedAdjudicationsResult> {
     const path =
-      `/reported-adjudications/for-issue?` +
+      `/reported-adjudications/for-issue/v2?` +
       `${(filter.fromDate && `startDate=${momentDateToApi(filter.fromDate)}`) || ''}` +
       `${(filter.toDate && `&endDate=${momentDateToApi(filter.toDate)}`) || ''}`
     return this.restClient.get({
