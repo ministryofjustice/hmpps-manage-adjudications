@@ -128,7 +128,7 @@ describe('decisions', () => {
           offenceTitle: 'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)',
         },
       ]
-      const result = getOffenceInformation(allOffenceRules, false)
+      const result = getOffenceInformation(allOffenceRules, false, 1)
       expect(result).toEqual(expectedResult)
     })
     it('returns correctly formatted result for YOI offences', () => {
@@ -211,7 +211,7 @@ describe('decisions', () => {
           offenceTitle: 'Disobeys any lawful order, or failure to comply with any rule or regulation',
         },
       ]
-      const result = getOffenceInformation(allOffenceRules, true)
+      const result = getOffenceInformation(allOffenceRules, true, 1)
       expect(result).toEqual(expectedResult)
     })
   })

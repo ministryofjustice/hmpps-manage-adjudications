@@ -10,6 +10,8 @@ export class Answer {
 
   private readonly answerReplayText: string
 
+  private applicableVersions: number[]
+
   private answerOffenceCode: number
 
   private childQuestion: Question
@@ -18,7 +20,8 @@ export class Answer {
 
   private answerType: AnswerType = AnswerType.RADIO_SELECTION_ONLY
 
-  constructor(text: string | [string, string]) {
+  constructor(text: string | [string, string], applicableVersions: number[] = [1, 2]) {
+    this.applicableVersions = applicableVersions
     if (typeof text === 'string') {
       this.answerText = text
     } else if (text instanceof Array) {
@@ -32,6 +35,10 @@ export class Answer {
     const parentId = this.getParentQuestion()?.id() || 1
     const index = (this.getParentQuestion()?.getChildAnswers().indexOf(this) || 0) + 1
     return `${parentId}-${index}`
+  }
+
+  isApplicableVersion(version: number): boolean {
+    return this.applicableVersions.includes(version)
   }
 
   child(child: Question): Answer {

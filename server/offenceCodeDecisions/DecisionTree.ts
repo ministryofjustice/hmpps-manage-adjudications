@@ -17,27 +17,27 @@ const CHILD_9_Q = 'Being absent without authorisation, being in an unauthorised 
 
 // Adult
 export const adultQToOffencePara = [
-  { childQuestion: CHILD_1_Q, paras: ['1', '1(a)', '4', '5'] },
-  { childQuestion: CHILD_2_Q, paras: ['7', '8'] },
-  { childQuestion: CHILD_3_Q, paras: ['9', '10', '11', '12', '13', '14', '15', '24'] },
-  { childQuestion: CHILD_4_Q, paras: ['16', '17', '24(a)'] },
-  { childQuestion: CHILD_5_Q, paras: ['19', '20', '20(a)'] },
-  { childQuestion: CHILD_6_Q, paras: ['22', '23'] },
-  { childQuestion: CHILD_7_Q, paras: ['2'] },
-  { childQuestion: CHILD_8_Q, paras: ['3', '6'] },
-  { childQuestion: CHILD_9_Q, paras: ['18', '21'] },
+  { childQuestion: CHILD_1_Q, paras: ['1', '1(a)', '4', '5'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_2_Q, paras: ['7', '8'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_3_Q, paras: ['9', '10', '11', '12', '13', '14', '15', '24'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_4_Q, paras: ['16', '17', '24(a)'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_5_Q, paras: ['19', '20', '20(a)'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_6_Q, paras: ['22', '23'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_7_Q, paras: ['2'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_8_Q, paras: ['3', '6'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_9_Q, paras: ['18', '21'], applicableVersions: [1,2] },
 ]
 // YOI
 export const yoiQToOffencePara = [
-  { childQuestion: CHILD_1_Q, paras: ['1', '2', '5', '6'] },
-  { childQuestion: CHILD_2_Q, paras: ['8', '9'] },
-  { childQuestion: CHILD_3_Q, paras: ['10', '11', '12', '13', '14', '15', '16', '27'] },
-  { childQuestion: CHILD_4_Q, paras: ['17', '18', '19', '28'] },
-  { childQuestion: CHILD_5_Q, paras: ['21', '22', '23'] },
-  { childQuestion: CHILD_6_Q, paras: ['25'] },
-  { childQuestion: CHILD_7_Q, paras: ['3'] },
-  { childQuestion: CHILD_8_Q, paras: ['4', '7', '26'] },
-  { childQuestion: CHILD_9_Q, paras: ['20', '24'] },
+  { childQuestion: CHILD_1_Q, paras: ['1', '2', '5', '6'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_2_Q, paras: ['8', '9'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_3_Q, paras: ['10', '11', '12', '13', '14', '15', '16', '27'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_4_Q, paras: ['17', '18', '19', '28'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_5_Q, paras: ['21', '22', '23'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_6_Q, paras: ['25'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_7_Q, paras: ['3'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_8_Q, paras: ['4', '7', '26'], applicableVersions: [1,2] },
+  { childQuestion: CHILD_9_Q, paras: ['20', '24'], applicableVersions: [1,2] },
 ]
 
 const para1OverrideQuestionId = '99'
@@ -120,9 +120,10 @@ export const yoiParaToOffenceCode = [
 
 export const getOffenceInformation = (
   allOffenceRules: OffenceRule[],
-  isYouthOffender: boolean
+  isYouthOffender: boolean,
+  version: number,
 ): GroupedOffenceRulesAndTitles[] => {
-  const dataMap = isYouthOffender ? yoiQToOffencePara : adultQToOffencePara
+  const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(questions => questions.applicableVersions.includes(version))
   const offenceInformation = {}
   for (const offenceRule of allOffenceRules) {
     // Find the corresponding data from the dataMap based on the paragraph number
