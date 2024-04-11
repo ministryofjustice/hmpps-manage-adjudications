@@ -115,15 +115,12 @@ export default class OffenceCodeRoutes {
   submitDecision = async (req: Request, res: Response): Promise<void> => {
     const { incidentRole, draftId } = req.params
     const draftChargeId = Number(draftId)
-    const { selectedAnswerId, protectedCharacteristics, protectedCharacteristicPage } = req.body
+    const { selectedAnswerId } = req.body
     const offenceToAdd: OffenceData = { ...req.query }
 
     // Validation
-    if (!protectedCharacteristicPage && !selectedAnswerId) {
+    if (!selectedAnswerId) {
       return this.renderView(req, res, { errors: [error.MISSING_DECISION], draftId: draftChargeId, incidentRole })
-    }
-    if (protectedCharacteristicPage && (!protectedCharacteristics || !protectedCharacteristics.length)) {
-      return this.renderView(req, res, { errors: [error.MISSING_CHARACTERISTIC], draftId: draftChargeId, incidentRole })
     }
     const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
     const form = answerTypeHelper.formFromPost(req)
@@ -241,13 +238,7 @@ export default class OffenceCodeRoutes {
       }
     })
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
-    const renderProtectedCharactersisticsPage = false
 
-    if (renderProtectedCharactersisticsPage) {
-      return res.render(`pages/offenceCodeProtectedCharacteristics`, {
-        errors: errors || [],
-      })
-    }
     return res.render(`pages/offenceCodeDecisions`, {
       errors: errors || [],
       decisionForm: pageData,
