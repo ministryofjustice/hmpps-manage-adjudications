@@ -241,7 +241,7 @@ export default class OffenceCodeRoutes {
       }
     })
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
-    const renderProtectedCharactersisticsPage = true
+    const renderProtectedCharactersisticsPage = false
 
     if (renderProtectedCharactersisticsPage) {
       return res.render(`pages/offenceCodeProtectedCharacteristics`, {
