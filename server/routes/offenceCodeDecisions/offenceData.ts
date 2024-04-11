@@ -6,3 +6,15 @@ export type OffenceData = {
   victimOtherPersonsName?: string
   offenceCode?: string
 }
+
+export enum ProtectedCharacteristicsTypes {
+  AGE = 'AGE',
+  DISABILITY = 'DISABILITY',
+  GENDER_REASSIGN = 'GENDER_REASSIGN',
+  MARRIAGE_AND_CP = 'MARRIAGE_AND_CP',
+  PREGNANCY_AND_MAT = 'PREGNANCY_AND_MAT',
+  RACE = 'RACE',
+  RELIGION = 'RELIGION',
+  SEX = 'SEX',
+  SEX_ORIENTATION = 'SEX_ORIENTATION',
+}

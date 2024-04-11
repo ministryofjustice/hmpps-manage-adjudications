@@ -43,6 +43,7 @@ import {
 } from '../data/PunishmentResult'
 import { ApplicationInfo } from '../applicationInfo'
 import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
+import { ProtectedCharacteristicsTypes } from '../routes/offenceCodeDecisions/offenceData'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -517,4 +518,5 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addGlobal('PunishmentType', PunishmentType)
   njkEnv.addGlobal('AdjudicationHistoryBookingType', AdjudicationHistoryBookingType)
   njkEnv.addGlobal('ReferGovReason', ReferGovReason)
+  njkEnv.addGlobal('ProtectedCharacteristicsTypes', ProtectedCharacteristicsTypes)
 }

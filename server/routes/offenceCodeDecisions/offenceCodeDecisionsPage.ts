@@ -26,12 +26,17 @@ type PageData = { errors?: FormError[]; draftId: number; incidentRole: string } 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
   MISSING_DECISION = 'MISSING_DECISION',
+  MISSING_CHARACTERISTIC = 'MISSING_CHARACTERISTIC',
 }
 
 const error: { [key in ErrorType]: FormError } = {
   MISSING_DECISION: {
     href: '#selectedAnswerId',
     text: 'Select an option',
+  },
+  MISSING_CHARACTERISTIC: {
+    href: '#protectedCharacteristics',
+    text: 'Select at least one characteristic',
   },
 }
 
@@ -233,6 +238,7 @@ export default class OffenceCodeRoutes {
       }
     })
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
+
     return res.render(`pages/offenceCodeDecisions`, {
       errors: errors || [],
       decisionForm: pageData,
