@@ -1,0 +1,106 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set title = "Offence details" %}
+
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+      }) }}
+  {% endif %}
+
+{% set items =
+[
+    {
+      value: ProtectedCharacteristicsTypes.AGE,
+      text: "Age"
+    },
+    {
+      value: ProtectedCharacteristicsTypes.DISABILITY,
+      text: "Disability"
+    },
+    {
+      value: ProtectedCharacteristicsTypes.GENDER_REASSIGN,
+      text: "Gender reassignment"
+    },
+    {
+      value: ProtectedCharacteristicsTypes.MARRIAGE_AND_CP,
+      text: "Marriage and civil partnership"
+    },
+    {
+      value: ProtectedCharacteristicsTypes.PREGNANCY_AND_MAT,
+      text: "Pregnancy and maternity"
+    },
+    {
+      value: ProtectedCharacteristicsTypes.RACE,
+      text: "Race"
+    },
+    {
+      value: ProtectedCharacteristicsTypes.RELIGION,
+      text: "Reglion or belief"
+    },
+    {
+      value: ProtectedCharacteristicsTypes.SEX,
+      text: "Sex"
+    },
+    {
+      value: ProtectedCharacteristicsTypes.SEX_ORIENTATION,
+      text: "Sexual orientation"
+    }
+  ] %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+  <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-code-protected-characteristics-form">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <input type="hidden" name="protectedCharacteristicPage" value="true"/>
+
+    {{ govukCheckboxes({
+      name: "protectedCharacteristics",
+      id: "protectedCharacteristics",
+      fieldset: {
+        legend: {
+          text: "Select which protected characteristics were part of the reason for the incident",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
+      },
+      hint: {
+        text: "Select all that apply."
+      },
+      items: items,
+      attributes: { "data-qa": "checkboxes" },
+      errorMessage: "protectedCharacteristics" | findError(errors)
+    }) }}
+
+    {{ govukButton({
+        text: 'Continue',
+        type: "submit",
+        preventDoubleClick: true,
+        name: "protectedCharacteristicsSubmit",
+        classes: "govuk-button--submit govuk-!-margin-right-2",
+        attributes: { "data-qa": "offence-code-protected-characteristics-continue" }
+    }) }}
+
+    {{ govukButton({
+        text: 'Cancel',
+        classes: "govuk-button--secondary",
+        type: "submit",
+        name: "decisionFormCancel",
+        value: "decisionFormCancel",
+        attributes: { "data-qa": "offence-code-protected-characteristics-cancel" }
+    }) }}
+
+  </form>
+  </div></div>
+{% endblock %}

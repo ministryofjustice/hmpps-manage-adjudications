@@ -26,12 +26,17 @@ type PageData = { errors?: FormError[]; draftId: number; incidentRole: string } 
 // eslint-disable-next-line no-shadow
 enum ErrorType {
   MISSING_DECISION = 'MISSING_DECISION',
+  MISSING_CHARACTERISTIC = 'MISSING_CHARACTERISTIC',
 }
 
 const error: { [key in ErrorType]: FormError } = {
   MISSING_DECISION: {
     href: '#selectedAnswerId',
     text: 'Select an option',
+  },
+  MISSING_CHARACTERISTIC: {
+    href: '#protectedCharacteristics',
+    text: 'Select at least one characteristic',
   },
 }
 
@@ -110,12 +115,15 @@ export default class OffenceCodeRoutes {
   submitDecision = async (req: Request, res: Response): Promise<void> => {
     const { incidentRole, draftId } = req.params
     const draftChargeId = Number(draftId)
-    const { selectedAnswerId } = req.body
+    const { selectedAnswerId, protectedCharacteristics, protectedCharacteristicPage } = req.body
     const offenceToAdd: OffenceData = { ...req.query }
 
     // Validation
-    if (!selectedAnswerId) {
+    if (!protectedCharacteristicPage && !selectedAnswerId) {
       return this.renderView(req, res, { errors: [error.MISSING_DECISION], draftId: draftChargeId, incidentRole })
+    }
+    if (protectedCharacteristicPage && (!protectedCharacteristics || !protectedCharacteristics.length)) {
+      return this.renderView(req, res, { errors: [error.MISSING_CHARACTERISTIC], draftId: draftChargeId, incidentRole })
     }
     const answerTypeHelper = this.answerTypeHelper(selectedAnswerId)
     const form = answerTypeHelper.formFromPost(req)
@@ -233,6 +241,13 @@ export default class OffenceCodeRoutes {
       }
     })
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
+    const renderProtectedCharactersisticsPage = true
+
+    if (renderProtectedCharactersisticsPage) {
+      return res.render(`pages/offenceCodeProtectedCharacteristics`, {
+        errors: errors || [],
+      })
+    }
     return res.render(`pages/offenceCodeDecisions`, {
       errors: errors || [],
       decisionForm: pageData,
