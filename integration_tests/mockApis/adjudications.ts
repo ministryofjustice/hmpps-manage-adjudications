@@ -382,7 +382,7 @@ const stubGetAllOffenceRules = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/draft-adjudications/offence-rules?youthOffender=${isYouthOffender}&gender=${gender}`,
+      url: `/adjudications/draft-adjudications/offence-rules?youthOffender=${isYouthOffender}&gender=${gender}&version=1`,
     },
     response: {
       status: 200,
