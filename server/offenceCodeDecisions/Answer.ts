@@ -10,7 +10,7 @@ export class Answer {
 
   private readonly answerReplayText: string
 
-  private applicableVersions: number[]
+  private readonly applicableVersions: number[]
 
   private answerOffenceCode: number
 

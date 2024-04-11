@@ -15,29 +15,49 @@ const CHILD_7_Q = 'Detains another person'
 const CHILD_8_Q = 'Stopping someone who is not a prisoner from doing their job'
 const CHILD_9_Q = 'Being absent without authorisation, being in an unauthorised place, or failing to work correctly'
 
+class AloOffenceItem{
+  childQuestion: string
+  paras: string[]
+  private readonly applicableVersions: number[]
+
+  constructor(
+    childQuestion: string,
+    paras: string[],
+    applicableVersions: number[] = [1,2]
+  ) {
+    this.childQuestion = childQuestion
+    this.paras = paras
+    this.applicableVersions = applicableVersions
+  }
+
+  isApplicableVersion(version: number): boolean {
+    return this.applicableVersions.includes(version)
+  }
+}
+
 // Adult
 export const adultQToOffencePara = [
-  { childQuestion: CHILD_1_Q, paras: ['1', '1(a)', '4', '5'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_2_Q, paras: ['7', '8'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_3_Q, paras: ['9', '10', '11', '12', '13', '14', '15', '24'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_4_Q, paras: ['16', '17', '24(a)'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_5_Q, paras: ['19', '20', '20(a)'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_6_Q, paras: ['22', '23'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_7_Q, paras: ['2'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_8_Q, paras: ['3', '6'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_9_Q, paras: ['18', '21'], applicableVersions: [1,2] },
+  new AloOffenceItem(CHILD_1_Q,['1', '1(a)', '4', '5']),
+  new AloOffenceItem(CHILD_2_Q,['7', '8']),
+  new AloOffenceItem(CHILD_3_Q,['9', '10', '11', '12', '13', '14', '15', '24']),
+  new AloOffenceItem(CHILD_4_Q,['16', '17', '24(a)']),
+  new AloOffenceItem(CHILD_5_Q,['19', '20', '20(a)']),
+  new AloOffenceItem(CHILD_6_Q,['22', '23']),
+  new AloOffenceItem(CHILD_7_Q,['2']),
+  new AloOffenceItem(CHILD_8_Q,['3', '6']),
+  new AloOffenceItem(CHILD_9_Q,['18', '21']),
 ]
 // YOI
 export const yoiQToOffencePara = [
-  { childQuestion: CHILD_1_Q, paras: ['1', '2', '5', '6'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_2_Q, paras: ['8', '9'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_3_Q, paras: ['10', '11', '12', '13', '14', '15', '16', '27'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_4_Q, paras: ['17', '18', '19', '28'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_5_Q, paras: ['21', '22', '23'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_6_Q, paras: ['25'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_7_Q, paras: ['3'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_8_Q, paras: ['4', '7', '26'], applicableVersions: [1,2] },
-  { childQuestion: CHILD_9_Q, paras: ['20', '24'], applicableVersions: [1,2] },
+  new AloOffenceItem(CHILD_1_Q,['1', '2', '5', '6']),
+  new AloOffenceItem(CHILD_2_Q,['8', '9']),
+  new AloOffenceItem(CHILD_3_Q,['10', '11', '12', '13', '14', '15', '16', '27']),
+  new AloOffenceItem(CHILD_4_Q,['17', '18', '19', '28']),
+  new AloOffenceItem(CHILD_5_Q,['21', '22', '23']),
+  new AloOffenceItem(CHILD_6_Q,['25']),
+  new AloOffenceItem(CHILD_7_Q,['3']),
+  new AloOffenceItem(CHILD_8_Q,['4', '7', '26']),
+  new AloOffenceItem(CHILD_9_Q,['20', '24']),
 ]
 
 const para1OverrideQuestionId = '99'
@@ -123,7 +143,7 @@ export const getOffenceInformation = (
   isYouthOffender: boolean,
   version: number,
 ): GroupedOffenceRulesAndTitles[] => {
-  const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(questions => questions.applicableVersions.includes(version))
+  const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(question => question.isApplicableVersion(+version))
   const offenceInformation = {}
   for (const offenceRule of allOffenceRules) {
     // Find the corresponding data from the dataMap based on the paragraph number
