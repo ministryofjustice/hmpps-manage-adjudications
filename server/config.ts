@@ -143,5 +143,5 @@ export default {
   supportUrl: get('SUPPORT_URL', 'http://localhost:3003', requiredInProduction),
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
-  offenceVersion: get('OFFENCE_VERSION', 1),
+  offenceVersion: get('OFFENCE_VERSION', 1, { requireInProduction: false }),
 }
