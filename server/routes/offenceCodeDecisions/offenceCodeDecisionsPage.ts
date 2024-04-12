@@ -227,6 +227,7 @@ export default class OffenceCodeRoutes {
       draftChargeId,
       user
     )
+
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
     const question = this.decisions(questionId).findQuestionById(questionId)
     const pageTitle = question.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)

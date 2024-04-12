@@ -12,8 +12,8 @@ export function question(
   return new Question(title, overrideId)
 }
 
-export function answer(text: string | [string, string]) {
-  return new Answer(text)
+export function answer(text: string | [string, string], applicableVersions: number[] = [1, 2]) {
+  return new Answer(text, applicableVersions)
 }
 
 export const notEmpty = (it: unknown) => it !== undefined

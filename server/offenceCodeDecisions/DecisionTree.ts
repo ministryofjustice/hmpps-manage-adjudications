@@ -42,7 +42,8 @@ export const adultQToOffencePara = [
   new AloOffenceItem(CHILD_3_Q,['9', '10', '11', '12', '13', '14', '15', '24']),
   new AloOffenceItem(CHILD_4_Q,['16', '17', '24(a)']),
   new AloOffenceItem(CHILD_5_Q,['19', '20', '20(a)']),
-  new AloOffenceItem(CHILD_6_Q,['22', '23']),
+  new AloOffenceItem(CHILD_6_Q,['22', '23'], [1]),
+  new AloOffenceItem(CHILD_6_Q,['22', '23', '23(a)'], [2]),
   new AloOffenceItem(CHILD_7_Q,['2']),
   new AloOffenceItem(CHILD_8_Q,['3', '6']),
   new AloOffenceItem(CHILD_9_Q,['18', '21']),
@@ -54,7 +55,8 @@ export const yoiQToOffencePara = [
   new AloOffenceItem(CHILD_3_Q,['10', '11', '12', '13', '14', '15', '16', '27']),
   new AloOffenceItem(CHILD_4_Q,['17', '18', '19', '28']),
   new AloOffenceItem(CHILD_5_Q,['21', '22', '23']),
-  new AloOffenceItem(CHILD_6_Q,['25']),
+  new AloOffenceItem(CHILD_6_Q,['25'], [1]),
+  new AloOffenceItem(CHILD_6_Q,['25', '26(a)'], [2]),
   new AloOffenceItem(CHILD_7_Q,['3']),
   new AloOffenceItem(CHILD_8_Q,['4', '7', '26']),
   new AloOffenceItem(CHILD_9_Q,['20', '24']),
@@ -119,6 +121,7 @@ export const adultParaToOffenceCode = [
   { para: '3', offenceCode: '3001' },
   { para: '6', offenceCode: '6001' },
   { para: '21', offenceCode: '21001' },
+  { para: '23(a)', offenceCode: '2600124'}
 ]
 
 export const yoiParaToOffenceCode = [
@@ -136,6 +139,7 @@ export const yoiParaToOffenceCode = [
   { para: '4', offenceCode: '3001' },
   { para: '7', offenceCode: '6001' },
   { para: '24', offenceCode: '21001' },
+  { para: '26(a)', offenceCode: '2600124'}
 ]
 
 export const getOffenceInformation = (
@@ -511,6 +515,7 @@ export default question([
       question('What did the incident involve?')
         .child(answer('Disobeying any lawful order').offenceCode(22001))
         .child(answer('Failure to comply with any rule or regulation').offenceCode(23101))
+        .child(answer('Failure to comply with any payback punishment', [2]).offenceCode(2600124))
     )
   )
   .child(
