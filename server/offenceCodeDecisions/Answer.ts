@@ -20,7 +20,7 @@ export class Answer {
 
   private answerType: AnswerType = AnswerType.RADIO_SELECTION_ONLY
 
-  constructor(text: string | [string, string], applicableVersions: number[] = [1, 2]) {
+  constructor(text: string | [string, string], applicableVersions: number[]) {
     this.applicableVersions = applicableVersions
     if (typeof text === 'string') {
       this.answerText = text
