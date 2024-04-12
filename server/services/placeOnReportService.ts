@@ -39,6 +39,7 @@ import { ContinueReportApiFilter } from '../routes/continueReport/continueReport
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
+import config from '../config'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -459,7 +460,7 @@ export default class PlaceOnReportService {
   getAllOffenceRules = async (isYouthOffender: boolean, gender: PrisonerGender, user: User): Promise<OffenceRule[]> => {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const client = new ManageAdjudicationsSystemTokensClient(token, user)
-    return client.getAllOffenceRules(isYouthOffender, gender)
+    return client.getAllOffenceRules(isYouthOffender, gender, +config.offenceVersion)
   }
 
   async saveOffenceDetails(draftId: number, offenceDetails: OffenceDetails, user: User) {

@@ -371,11 +371,11 @@ describe('manageAdjudicationsSystemTokensClient', () => {
 
     it('returns the relevant rules', async () => {
       fakeManageAdjudicationsApi
-        .get(`/draft-adjudications/offence-rules?youthOffender=true&gender=MALE`)
+        .get(`/draft-adjudications/offence-rules?youthOffender=true&gender=MALE&version=1`)
         .matchHeader('authorization', `Bearer ${token}`)
         .matchHeader('Active-Caseload', user.meta.caseLoadId)
         .reply(200, result)
-      const response = await client.getAllOffenceRules(true, PrisonerGender.MALE)
+      const response = await client.getAllOffenceRules(true, PrisonerGender.MALE, 1)
       expect(response).toEqual(result)
     })
   })

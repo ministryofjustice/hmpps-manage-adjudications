@@ -16,6 +16,7 @@ import {
 } from '../../offenceCodeDecisions/DecisionTree'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { User } from '../../data/hmppsManageUsersClient'
+import config from '../../config'
 
 type PageData = {
   errors?: FormError[]
@@ -52,7 +53,11 @@ export default class OffenceListRoutes {
 
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
     const allOffenceRules = await this.getAllOffenceRules(draftAdjudication, user)
-    const offencesAndTitles = await getOffenceInformation(allOffenceRules, draftAdjudication.isYouthOffender)
+    const offencesAndTitles = await getOffenceInformation(
+      allOffenceRules,
+      draftAdjudication.isYouthOffender,
+      +config.offenceVersion
+    )
     const prisonerName = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
 
     return this.renderView(req, res, {

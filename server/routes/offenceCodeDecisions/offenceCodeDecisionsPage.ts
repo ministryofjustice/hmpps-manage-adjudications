@@ -20,6 +20,7 @@ import PrisonerOutsideEstablishmentDecisionHelper from './prisonerOutsideEstabli
 import PrisonerSearchService from '../../services/prisonerSearchService'
 import { OffenceData } from './offenceData'
 import { User } from '../../data/hmppsManageUsersClient'
+import config from '../../config'
 
 type PageData = { errors?: FormError[]; draftId: number; incidentRole: string } & DecisionForm
 
@@ -229,14 +230,17 @@ export default class OffenceCodeRoutes {
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)
     const question = this.decisions(questionId).findQuestionById(questionId)
     const pageTitle = question.getTitle().getProcessedText(placeholderValues, incidentRole as IncidentRole)
-    const answers = question.getChildAnswers().map(a => {
-      return {
-        id: a.id(),
-        label: a.getProcessedText(placeholderValues, false),
-        type: a.getType().toString(),
-        offenceCode: a.getOffenceCode(),
-      }
-    })
+    const answers = question
+      .getChildAnswers()
+      .filter(a => a.isApplicableVersion(+config.offenceVersion))
+      .map(a => {
+        return {
+          id: a.id(),
+          label: a.getProcessedText(placeholderValues, false),
+          type: a.getType().toString(),
+          offenceCode: a.getOffenceCode(),
+        }
+      })
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
 
     return res.render(`pages/offenceCodeDecisions`, {

@@ -229,9 +229,9 @@ export default class ManageAdjudicationsSystemTokensClient {
     })
   }
 
-  async getAllOffenceRules(isYouthOffender: boolean, gender: PrisonerGender): Promise<OffenceRule[]> {
+  async getAllOffenceRules(isYouthOffender: boolean, gender: PrisonerGender, version: number): Promise<OffenceRule[]> {
     return this.restClient.get({
-      path: `/draft-adjudications/offence-rules?youthOffender=${isYouthOffender}&gender=${gender}`,
+      path: `/draft-adjudications/offence-rules?youthOffender=${isYouthOffender}&gender=${gender}&version=${version}`,
     })
   }
 
