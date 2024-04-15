@@ -104,7 +104,7 @@ const offenceRules = [
   },
 ]
 
-context.skip('v2 offences', () => {
+context('v2 offences', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -139,7 +139,7 @@ context.skip('v2 offences', () => {
       },
     })
   })
-  it('failure to comply with payback offence', () => {
+  it('failure to comply with payback offence 23(a)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-6').check()
@@ -157,9 +157,40 @@ context.skip('v2 offences', () => {
         expect($summaryData.get(2).innerText).to.contain('Failure to comply with any payback punishment')
       })
   })
+
+  it.only('threatening, abusive or insulting behaviour 20(a)', () => {
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-5').check()
+    whatTypeOfOffencePage.continue().click()
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+    whatDidTheIncidentInvolve.radio('1-5-2').check()
+    whatTypeOfOffencePage.continue().click()
+    // now add the new path
+    const aggravateByProtectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    aggravateByProtectedCharacteristic.radio('1-5-2-1').check()
+    whatTypeOfOffencePage.continue().click()
+    // now this should lead to the new page
+    const whichProtectedCharacteristic = new OffenceCodeSelection(
+      'Select which protected characteristics were part of the reason for the incident'
+    )
+    whichProtectedCharacteristic.checkbox('SEX').check()
+    whatTypeOfOffencePage.continueCheckboxes().click()
+
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+
+    detailsOfOffencePage
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(2).innerText).to.contain('Failure to comply with any payback punishment')
+      })
+  })
 })
 
-context.skip('v2 offences ALO', () => {
+context('v2 offences ALO', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

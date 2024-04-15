@@ -502,11 +502,23 @@ export default question([
           )
         )
         .child(
-          answer('Threatening, abusive, or insulting behaviour').child(
-            question('Did the incident involve racist behaviour?')
+          answer('Threatening, abusive, or insulting behaviour').versionedChild([
+            question('Did the incident involve racist behaviour?', null, [1])
               .child(answer('Yes').offenceCode(20001))
-              .child(answer('No').offenceCode(20002))
-          )
+              .child(answer('No').offenceCode(20002)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(question('Which protected characteristic’s was the incident aggravated by?')
+                .child(answer('AGE').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
+                .child(answer('DISABILITY').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
+                .child(answer('GENDER_REASSIGN').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
+                .child(answer('MARRIAGE_AND_CP').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
+                .child(answer('PREGNANCY_AND_MAT').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
+                .child(answer('RACE').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
+                .child(answer('RELIGION').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
+                .child(answer('SEX').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
+                .child(answer('SEX_ORIENTATION').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))))
+              .child(answer('No').offenceCode(20002)) 
+          ])
         )
     )
   )

@@ -4,6 +4,7 @@ import { Answer } from './Answer'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 // eslint-disable-next-line import/no-cycle
 import { all, notEmpty } from './Decisions'
+import config from '../config'
 
 export default class Question {
   private parentAnswer: Answer
@@ -14,11 +15,15 @@ export default class Question {
 
   private readonly overrideId?: string
 
+  private readonly applicableVersions: number[]
+
   constructor(
     title: Title | string | (readonly (readonly [IncidentRole, string])[] | null),
-    overrideId?: string | null
+    overrideId?: string | null,
+    applicableVersions: number[] = [1, 2]
   ) {
     this.overrideId = overrideId
+    this.applicableVersions = applicableVersions
     if (title instanceof Title) {
       this.questionTitle = title
     } else if (typeof title === 'string') {
@@ -31,6 +36,10 @@ export default class Question {
   // The id is 1 when this is the top most question otherwise it is that of the parent answer.
   id(): string {
     return this.getParentAnswer()?.id() || this.overrideId || '1'
+  }
+
+  isApplicableVersion(version: number): boolean {
+    return this.applicableVersions.includes(version)
   }
 
   parent(parent: Answer) {
@@ -49,7 +58,7 @@ export default class Question {
   }
 
   getChildAnswers() {
-    return this.childAnswers
+    return this.childAnswers.filter(a => a.isApplicableVersion(+config.offenceVersion))
   }
 
   getParentAnswer() {
@@ -66,6 +75,35 @@ export default class Question {
     return this.findQuestionBy(question => question.id() === id)
   }
 
+  allCodes(): Array<number> {
+    return this.matchingAnswers(answer => !!answer.getOffenceCode()).map(answer => answer.getOffenceCode())
+  }
+
+  findAnswerByCode(offenceCode: number): Answer {
+    // TODO this will also need to take an optional list of protected characteristics when type checkboxes
+    return this.findAnswerBy(answer => answer.getOffenceCode() === offenceCode)
+  }
+
+  findAnswerById(id: string): Answer {
+    return this.findAnswerBy(answer => answer.id() === id)
+  }
+
+  toString(indent = 0, version = 1): string {
+    const padding = new Array(indent).join(' ')
+    let output = `${padding}Question Id: ${this.id()}`
+    if (this.getTitle()?.getTitles()) {
+      output = `${output}\r\n${this.getTitle().toString(indent)}`
+    }
+
+    if (this.getChildAnswers().length) {
+      output = `${output}\r\n${this.getChildAnswers()
+        .map(answer => answer.toString(indent + 4, version))
+        .join('\r\n')}`
+    }
+    return output
+  }
+
+  // note the below functions are only public for testing
   findQuestionBy(fn: (question: Question) => boolean): Question {
     const matching = this.matchingQuestions(fn)
     return this.uniqueOrThrow(matching)
@@ -91,33 +129,6 @@ export default class Question {
 
   matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
     return [].concat(...this.getChildAnswers().map(a => a.matchingAnswers(fn))).filter(notEmpty)
-  }
-
-  allCodes(): Array<number> {
-    return this.matchingAnswers(answer => !!answer.getOffenceCode()).map(answer => answer.getOffenceCode())
-  }
-
-  findAnswerByCode(offenceCode: number): Answer {
-    return this.findAnswerBy(answer => answer.getOffenceCode() === offenceCode)
-  }
-
-  findAnswerById(id: string): Answer {
-    return this.findAnswerBy(answer => answer.id() === id)
-  }
-
-  toString(indent = 0): string {
-    const padding = new Array(indent).join(' ')
-    let output = `${padding}Question Id: ${this.id()}`
-    if (this.getTitle()?.getTitles()) {
-      output = `${output}\r\n${this.getTitle().toString(indent)}`
-    }
-
-    if (this.getChildAnswers().length) {
-      output = `${output}\r\n${this.getChildAnswers()
-        .map(answer => answer.toString(indent + 4))
-        .join('\r\n')}`
-    }
-    return output
   }
 
   private uniqueOrThrow<T>(list: T[]): T {

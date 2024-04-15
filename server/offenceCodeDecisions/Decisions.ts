@@ -7,9 +7,10 @@ import { Answer } from './Answer'
 
 export function question(
   title: Title | string | (readonly (readonly [IncidentRole, string])[] | null),
-  overrideId?: string | null
+  overrideId?: string | null,
+  applicableVersions: number[] = [1, 2]
 ) {
-  return new Question(title, overrideId)
+  return new Question(title, overrideId, applicableVersions)
 }
 
 export function answer(text: string | [string, string], applicableVersions: number[] = [1, 2]) {

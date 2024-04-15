@@ -242,9 +242,11 @@ export default class OffenceCodeRoutes {
           offenceCode: a.getOffenceCode(),
         }
       })
-    const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
 
-    return res.render(`pages/offenceCodeDecisions`, {
+    const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
+    const checkBoxesOnly = answers.every(a => a.type === AnswerType.CHECKBOXES_ONLY)
+
+    return res.render(checkBoxesOnly ? 'pages/offenceCodeProtectedCharacteristics' : `pages/offenceCodeDecisions`, {
       errors: errors || [],
       decisionForm: pageData,
       selectedAnswerViewData,
