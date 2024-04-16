@@ -99,20 +99,23 @@ export default class OffenceCodeRoutes {
   }
 
   submitProtected = async (req: Request, res: Response): Promise<void> => {
-    // grabs selected
-    /*
-       const { incidentRole, draftId } = req.params
+    const { incidentRole, draftId } = req.params
     const draftChargeId = Number(draftId)
-    const { selectedAnswerId } = req.body -> array of keys [1-3-5-1,1-3-5-2]
-    const offenceToAdd: OffenceData = { ...req.query }
- 
-     */
-    // call the protected validation.
+    const { protectedCharacteristics } = req.body
+    // const offenceToAdd: OffenceData = { ...req.query }
+
+    if (!protectedCharacteristics) {
+      return this.renderView(req, res, { errors: [error.MISSING_CHARACTERISTIC], draftId: draftChargeId, incidentRole })
+    }
+
+    // data saved here
+
+    // just a placeholder redirect
+    return res.redirect('')
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-
     if (req.body.decisionFormCancel) {
       return this.cancel(req, res, this.pageOptions, user)
     }
@@ -121,6 +124,9 @@ export default class OffenceCodeRoutes {
     }
     if (req.body.searchUser) {
       return this.search(req, res)
+    }
+    if (req.body.protectedCharacteristicsSubmit) {
+      return this.submitProtected(req, res)
     }
     return this.submitDecision(req, res)
   }

@@ -186,9 +186,8 @@ context('v2 offences', () => {
     const whichProtectedCharacteristic = new OffenceCodeSelection(
       'Select which protected characteristics were part of the reason for the incident'
     )
-    // whichProtectedCharacteristic.radio('1-5-2-1-1').check()
-    // whatTypeOfOffencePage.continue().click()
     whichProtectedCharacteristic.checkbox('1-5-2-1-1').check()
+    whichProtectedCharacteristic.checkbox('1-5-2-1-2').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
 
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
@@ -390,8 +389,6 @@ context('v2 offences ALO', () => {
         const whichProtectedCharacteristic = new OffenceCodeSelection(
           'Select which protected characteristics were part of the reason for the incident'
         )
-        // whichProtectedCharacteristic.radio('1-5-2-1-1').check()
-        // whatTypeOfOffencePage.continue().click()
         whichProtectedCharacteristic.checkbox('1-5-2-1-1').check()
         whichProtectedCharacteristic.continueCheckboxes().click()
 
