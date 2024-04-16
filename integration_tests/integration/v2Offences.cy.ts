@@ -102,6 +102,16 @@ const offenceRules = [
     paragraphNumber: '26(a)',
     paragraphDescription: 'Failure to comply with any payback punishment',
   },
+  {
+    paragraphNumber: '23',
+    paragraphDescription:
+      'Uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
+  },
+  {
+    paragraphNumber: '20(a)',
+    paragraphDescription:
+      'Uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
+  },
 ]
 
 context('v2 offences', () => {
@@ -158,7 +168,7 @@ context('v2 offences', () => {
       })
   })
 
-  it.only('threatening, abusive or insulting behaviour 20(a)', () => {
+  it('threatening, abusive or insulting behaviour 20(a)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-5').check()
@@ -179,7 +189,7 @@ context('v2 offences', () => {
     // whichProtectedCharacteristic.radio('1-5-2-1-1').check()
     // whatTypeOfOffencePage.continue().click()
     whichProtectedCharacteristic.checkbox('1-5-2-1-1').check()
-    whatTypeOfOffencePage.continueCheckboxes().click()
+    whichProtectedCharacteristic.continueCheckboxes().click()
 
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
 
@@ -285,6 +295,7 @@ context('v2 offences ALO', () => {
       offenceCode: '2600124',
       isYouthOffender: false,
       chargeNumber: '12345',
+      additionalQuestion: false,
     },
     {
       testName: '2600124 > 26(a) ',
@@ -294,6 +305,29 @@ context('v2 offences ALO', () => {
       offenceCode: '2600124',
       isYouthOffender: true,
       chargeNumber: '123456',
+      additionalQuestion: false,
+    },
+    {
+      testName: '2600124 > 20(a) ',
+      radio: '20(a)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '2000124',
+      isYouthOffender: false,
+      chargeNumber: '12345',
+      additionalQuestion: true,
+      key: '1-5-2-1',
+    },
+    {
+      testName: '2600124 > 23 ',
+      radio: '23',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '2000124',
+      isYouthOffender: true,
+      chargeNumber: '123456',
+      additionalQuestion: true,
+      key: '1-5-2-1',
     },
   ].forEach(test => {
     it(test.testName, () => {
@@ -305,12 +339,28 @@ context('v2 offences ALO', () => {
             paragraphDescription: 'Failure to comply with any payback punishment',
           },
         })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 2000124,
+          response: {
+            paragraphNumber: '23',
+            paragraphDescription:
+              'Uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
+          },
+        })
       } else {
         cy.task('stubGetOffenceRule', {
           offenceCode: 2600124,
           response: {
             paragraphNumber: '23(a)',
             paragraphDescription: 'Failure to comply with any payback punishment',
+          },
+        })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 2000124,
+          response: {
+            paragraphNumber: '20(a)',
+            paragraphDescription:
+              'Uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
           },
         })
       }
@@ -328,10 +378,25 @@ context('v2 offences ALO', () => {
       const offenceCodeSelectionListPage = new OffenceCodeSelectionListPage('Which offence did John Smith commit?')
       offenceCodeSelectionListPage.radio(test.radio).click()
       offenceCodeSelectionListPage.continue().click()
+      if (!test.additionalQuestion) {
+        cy.location().should(loc => {
+          expect(loc.search).to.contain(`offenceCode=${test.offenceCode}`)
+        })
+      } else {
+        cy.location().should(loc => {
+          expect(loc.pathname).to.contain(`/${test.key}`)
+        })
+        // TODO then select something on this page and submit.
+        const whichProtectedCharacteristic = new OffenceCodeSelection(
+          'Select which protected characteristics were part of the reason for the incident'
+        )
+        // whichProtectedCharacteristic.radio('1-5-2-1-1').check()
+        // whatTypeOfOffencePage.continue().click()
+        whichProtectedCharacteristic.checkbox('1-5-2-1-1').check()
+        whichProtectedCharacteristic.continueCheckboxes().click()
 
-      cy.location().should(loc => {
-        expect(loc.search).to.contain(`offenceCode=${test.offenceCode}`)
-      })
+        const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+      }
     })
   })
 })

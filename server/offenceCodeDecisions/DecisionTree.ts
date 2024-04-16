@@ -35,6 +35,51 @@ class AloOffenceItem{
   }
 }
 
+class ParaToNextQuestion {
+  para: string
+  questionId: string
+  private readonly applicableVersions: number[]
+
+
+  constructor(
+    para: string,
+    questionId: string,
+    applicableVersions: number[] = [1,2]
+  ) {
+    this.para = para
+    this.questionId = questionId
+    this.applicableVersions = applicableVersions
+    }
+  
+    isApplicableVersion(version: number): boolean {
+      return this.applicableVersions.includes(version)
+    }
+  
+}
+
+class ParaToOffenceCode {
+  para: string
+  offenceCode: string
+  private readonly applicableVersions: number[]
+
+
+  constructor(
+    para: string,
+    offenceCode: string,
+    applicableVersions: number[] = [1,2]
+  ) {
+    this.para = para
+    this.offenceCode = offenceCode
+    this.applicableVersions = applicableVersions
+    }
+  
+    isApplicableVersion(version: number): boolean {
+      return this.applicableVersions.includes(version)
+    }
+ 
+
+}
+
 // Adult
 export const adultQToOffencePara = [
   new AloOffenceItem(CHILD_1_Q,['1', '1(a)', '4', '5']),
@@ -74,72 +119,77 @@ const adultPara23YoiPara26OverrideQuestionId = '91'
 const adultPara22YoiPara25OverrideQuestionId = '90'
 
 export const adultParaToNextQuestion = [
-  { para: '4', questionId: '1-1-2' },
-  { para: '5', questionId: '1-1-3' },
-  { para: '2', questionId: '1-7' },
-  { para: '19', questionId: '1-5-1' },
-  { para: '1', questionId: para1OverrideQuestionId },
-  { para: '1(a)', questionId: adultPara1aYoiPara2OverrideQuestionId },
-  { para: '7', questionId: adultPara7YoiPara8OverrideQuestionId },
-  { para: '8', questionId: adultPara8YoiPara9OverrideQuestionId },
-  { para: '9', questionId: adultPara9YoiPara10OverrideQuestionId },
-  { para: '12', questionId: adultPara12YoiPara13OverrideQuestionId },
-  { para: '24', questionId: adultPara24YoiPara27OverrideQuestionId },
-  { para: '18', questionId: adultPara18YoiPara20OverrideQuestionId },
-  { para: '23', questionId: adultPara23YoiPara26OverrideQuestionId },
-  { para: '22', questionId: adultPara22YoiPara25OverrideQuestionId },
+  new ParaToNextQuestion('4','1-1-2'),
+  new ParaToNextQuestion('5', '1-1-3' ),
+  new ParaToNextQuestion('2', '1-7' ),
+  new ParaToNextQuestion('19','1-5-1' ),
+  new ParaToNextQuestion('1', para1OverrideQuestionId ),
+  new ParaToNextQuestion('1(a)',adultPara1aYoiPara2OverrideQuestionId ),
+  new ParaToNextQuestion('7',adultPara7YoiPara8OverrideQuestionId ),
+  new ParaToNextQuestion('8',adultPara8YoiPara9OverrideQuestionId ),
+  new ParaToNextQuestion('9',adultPara9YoiPara10OverrideQuestionId ),
+  new ParaToNextQuestion('12',adultPara12YoiPara13OverrideQuestionId ),
+  new ParaToNextQuestion('24',adultPara24YoiPara27OverrideQuestionId ),
+  new ParaToNextQuestion('18',adultPara18YoiPara20OverrideQuestionId ),
+  new ParaToNextQuestion('23',adultPara23YoiPara26OverrideQuestionId ),
+  new ParaToNextQuestion('22',adultPara22YoiPara25OverrideQuestionId ),
+  new ParaToNextQuestion('20(a)','1-5-2-1', [2]),
 ]
 
 export const yoiParaToNextQuestion = [
-  { para: '5', questionId: '1-1-2' },
-  { para: '6', questionId: '1-1-3' },
-  { para: '3', questionId: '1-7' },
-  { para: '21', questionId: '1-5-1' },
-  { para: '1', questionId: para1OverrideQuestionId },
-  { para: '2', questionId: adultPara1aYoiPara2OverrideQuestionId },
-  { para: '8', questionId: adultPara7YoiPara8OverrideQuestionId },
-  { para: '9', questionId: adultPara8YoiPara9OverrideQuestionId },
-  { para: '10', questionId: adultPara9YoiPara10OverrideQuestionId },
-  { para: '13', questionId: adultPara12YoiPara13OverrideQuestionId },
-  { para: '27', questionId: adultPara24YoiPara27OverrideQuestionId },
-  { para: '20', questionId: adultPara18YoiPara20OverrideQuestionId },
-  { para: '26', questionId: adultPara23YoiPara26OverrideQuestionId },
-  { para: '25', questionId: adultPara22YoiPara25OverrideQuestionId },
+  new ParaToNextQuestion('5','1-1-2' ),
+  new ParaToNextQuestion('6','1-1-3' ),
+  new ParaToNextQuestion('3','1-7' ),
+  new ParaToNextQuestion('21','1-5-1' ),
+  new ParaToNextQuestion('1',para1OverrideQuestionId ),
+  new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionId ),
+  new ParaToNextQuestion('8',adultPara7YoiPara8OverrideQuestionId ),
+  new ParaToNextQuestion('9',adultPara8YoiPara9OverrideQuestionId ),
+  new ParaToNextQuestion('10',adultPara9YoiPara10OverrideQuestionId ),
+  new ParaToNextQuestion('13',adultPara12YoiPara13OverrideQuestionId ),
+  new ParaToNextQuestion('27',adultPara24YoiPara27OverrideQuestionId ),
+  new ParaToNextQuestion('20',adultPara18YoiPara20OverrideQuestionId ),
+  new ParaToNextQuestion('26',adultPara23YoiPara26OverrideQuestionId ),
+  new ParaToNextQuestion('25', adultPara22YoiPara25OverrideQuestionId),
+  new ParaToNextQuestion('23', '1-5-2-1', [2]),
+  
 ]
-
+//need to version these too...
 export const adultParaToOffenceCode = [
-  { para: '10', offenceCode: '10001' },
-  { para: '11', offenceCode: '11001' },
-  { para: '13', offenceCode: '13001' },
-  { para: '14', offenceCode: '14001' },
-  { para: '15', offenceCode: '15001' },
-  { para: '16', offenceCode: '16001' },
-  { para: '17', offenceCode: '17002' },
-  { para: '24(a)', offenceCode: '24101' },
-  { para: '20', offenceCode: '20002' },
-  { para: '20(a)', offenceCode: '20001' },
-  { para: '3', offenceCode: '3001' },
-  { para: '6', offenceCode: '6001' },
-  { para: '21', offenceCode: '21001' },
-  { para: '23(a)', offenceCode: '2600124'}
+  new ParaToOffenceCode('10','10001'),
+  new ParaToOffenceCode('11','11001' ),
+  new ParaToOffenceCode('13','13001' ),
+  new ParaToOffenceCode('14','14001' ),
+  new ParaToOffenceCode('15','15001' ),
+  new ParaToOffenceCode('16','16001' ),
+  new ParaToOffenceCode('17','17002' ),
+  new ParaToOffenceCode('24(a)','24101' ),
+  new ParaToOffenceCode('20','20002' ),
+  new ParaToOffenceCode('20(a)','20001', [1]),
+  new ParaToOffenceCode('3','3001' ),
+  new ParaToOffenceCode('6','6001' ),
+  new ParaToOffenceCode('21','21001' ),
+  new ParaToOffenceCode('23(a)','2600124'),
+  new ParaToOffenceCode('20(a)','2000124', [2])
 ]
 
 export const yoiParaToOffenceCode = [
-  { para: '11', offenceCode: '10001' },
-  { para: '12', offenceCode: '11001' },
-  { para: '14', offenceCode: '13001' },
-  { para: '15', offenceCode: '14001' },
-  { para: '16', offenceCode: '15001' },
-  { para: '17', offenceCode: '16001' },
-  { para: '18', offenceCode: '17002' },
-  { para: '19', offenceCode: '17001' },
-  { para: '28', offenceCode: '24101' },
-  { para: '22', offenceCode: '20002' },
-  { para: '23', offenceCode: '20001' },
-  { para: '4', offenceCode: '3001' },
-  { para: '7', offenceCode: '6001' },
-  { para: '24', offenceCode: '21001' },
-  { para: '26(a)', offenceCode: '2600124'}
+  new ParaToOffenceCode('11','10001' ),
+  new ParaToOffenceCode('12','11001' ),
+  new ParaToOffenceCode('14','13001' ),
+  new ParaToOffenceCode('15','14001' ),
+  new ParaToOffenceCode('16','15001' ),
+  new ParaToOffenceCode('17','16001' ),
+  new ParaToOffenceCode('18','17002' ),
+  new ParaToOffenceCode('19','17001' ),
+  new ParaToOffenceCode( '28','24101' ),
+  new ParaToOffenceCode('22','20002' ),
+  new ParaToOffenceCode('23','20001', [1] ),
+  new ParaToOffenceCode('4','3001' ),
+  new ParaToOffenceCode('7','6001' ),
+  new ParaToOffenceCode('24','21001' ),
+  new ParaToOffenceCode('26(a)','2600124'),
+  new ParaToOffenceCode('23','2000124', [2] ),
 ]
 
 export const getOffenceInformation = (
@@ -147,7 +197,7 @@ export const getOffenceInformation = (
   isYouthOffender: boolean,
   version: number,
 ): GroupedOffenceRulesAndTitles[] => {
-  const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(question => question.isApplicableVersion(+version))
+  const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(question => question.isApplicableVersion(version))
   const offenceInformation = {}
   for (const offenceRule of allOffenceRules) {
     // Find the corresponding data from the dataMap based on the paragraph number
@@ -201,8 +251,8 @@ export const getOffenceCodeFromParagraphNumber = (chosenParagraphNumber: string,
   return null
 }
 
-export const paragraphNumberToQuestionId = (paragraphNumber: string, isYoi: boolean) => {
-  const dataMap = isYoi ? yoiParaToNextQuestion : adultParaToNextQuestion
+export const paragraphNumberToQuestionId = (paragraphNumber: string, isYoi: boolean, version: number) => {
+  const dataMap = (isYoi ? yoiParaToNextQuestion : adultParaToNextQuestion).filter(q => q.isApplicableVersion(version))
   const matchingParaQuestion = dataMap.find(paraQuestion => paraQuestion.para === paragraphNumber)
   if (matchingParaQuestion) return matchingParaQuestion.questionId
   return null

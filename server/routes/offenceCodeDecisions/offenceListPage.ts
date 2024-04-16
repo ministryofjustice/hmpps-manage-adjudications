@@ -100,7 +100,11 @@ export default class OffenceListRoutes {
       : adultParaToNextQuestion
 
     if (paragraphToNextQuestionMap.some(mapItem => mapItem.para === selectedAnswerId)) {
-      const nextPageId = paragraphNumberToQuestionId(selectedAnswerId, draftAdjudication.isYouthOffender)
+      const nextPageId = paragraphNumberToQuestionId(
+        selectedAnswerId,
+        draftAdjudication.isYouthOffender,
+        +config.offenceVersion
+      )
       return res.redirect(adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(draftId, incidentRole, nextPageId))
     }
     const chosenOffenceCode = await getOffenceCodeFromParagraphNumber(
