@@ -176,7 +176,9 @@ context('v2 offences', () => {
     const whichProtectedCharacteristic = new OffenceCodeSelection(
       'Select which protected characteristics were part of the reason for the incident'
     )
-    whichProtectedCharacteristic.checkbox('SEX').check()
+    // whichProtectedCharacteristic.radio('1-5-2-1-1').check()
+    // whatTypeOfOffencePage.continue().click()
+    whichProtectedCharacteristic.checkbox('1-5-2-1-1').check()
     whatTypeOfOffencePage.continueCheckboxes().click()
 
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)

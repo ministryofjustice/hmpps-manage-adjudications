@@ -98,6 +98,18 @@ export default class OffenceCodeRoutes {
     return this.renderView(req, res, { draftId, incidentRole })
   }
 
+  submitProtected = async (req: Request, res: Response): Promise<void> => {
+    // grabs selected
+    /*
+       const { incidentRole, draftId } = req.params
+    const draftChargeId = Number(draftId)
+    const { selectedAnswerId } = req.body -> array of keys [1-3-5-1,1-3-5-2]
+    const offenceToAdd: OffenceData = { ...req.query }
+ 
+     */
+    // call the protected validation.
+  }
+
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
 
