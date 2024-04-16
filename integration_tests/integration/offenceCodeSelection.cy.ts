@@ -198,7 +198,7 @@ context('Offence details', () => {
     whatDidTheIncidentInvolve.radioLabelFromValue('1-1-1').contains('Assaulting someone')
   })
 
-  it.only('select a prisoner question', () => {
+  it('select a prisoner question', () => {
     const prisonerAnswerId = '1-1-1-1'
     const whoWasAssaultedQuestionId = '1-1-1'
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', whoWasAssaultedQuestionId))
