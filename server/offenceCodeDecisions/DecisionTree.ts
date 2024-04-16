@@ -4,6 +4,7 @@ import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 import { AnswerType as Type } from './Answer'
 import { answer, question } from './Decisions'
 import { GroupedOffenceRulesAndTitles, OffenceRule, offenceRuleAndTitle } from '../data/DraftAdjudicationResult'
+import { version } from 'os'
 
 const CHILD_1_Q = 'Assault, fighting, or endangering the health or personal safety of others'
 const CHILD_2_Q = 'Escape or failure to comply with temporary release conditions'
@@ -203,7 +204,7 @@ export const getOffenceInformation = (
   isYouthOffender: boolean,
   version: number,
 ): GroupedOffenceRulesAndTitles[] => {
-  const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(question => question.isApplicableVersion(version))
+  const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(q => q.isApplicableVersion(version))
   const offenceInformation = {}
   for (const offenceRule of allOffenceRules) {
     // Find the corresponding data from the dataMap based on the paragraph number
@@ -250,15 +251,15 @@ export const getOffenceInformation = (
   return groupedOffenceInformation
 }
 
-export const getOffenceCodeFromParagraphNumber = (chosenParagraphNumber: string, isYoi: boolean) => {
-  const dataMap = isYoi ? yoiParaToOffenceCode : adultParaToOffenceCode
+export const getOffenceCodeFromParagraphNumber = (chosenParagraphNumber: string, isYoi: boolean, version: number) => {
+  const dataMap = (isYoi ? yoiParaToOffenceCode : adultParaToOffenceCode).filter(code => code.isApplicableVersion(version))
   const matchingParagraphNumber = dataMap.find(paraOffenceCode => paraOffenceCode.para === chosenParagraphNumber)
   if (matchingParagraphNumber) return matchingParagraphNumber.offenceCode
   return null
 }
 
 export const paragraphNumberToQuestionId = (paragraphNumber: string, isYoi: boolean, version: number) => {
-  const dataMap = (isYoi ? yoiParaToNextQuestion : adultParaToNextQuestion).filter(q => q.isApplicableVersion(version))
+  const dataMap = paraToNextQuestion(isYoi, version)
   const matchingParaQuestion = dataMap.find(paraQuestion => paraQuestion.para === paragraphNumber)
   if (matchingParaQuestion) return matchingParaQuestion.questionId
   return null

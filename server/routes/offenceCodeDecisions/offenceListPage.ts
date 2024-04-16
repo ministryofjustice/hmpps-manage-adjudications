@@ -106,7 +106,8 @@ export default class OffenceListRoutes {
     }
     const chosenOffenceCode = await getOffenceCodeFromParagraphNumber(
       selectedAnswerId,
-      draftAdjudication.isYouthOffender
+      draftAdjudication.isYouthOffender,
+      +config.offenceVersion
     )
     return this.redirect(
       {
