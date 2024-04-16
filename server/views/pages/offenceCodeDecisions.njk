@@ -58,7 +58,7 @@
             conditional: {
                 html: decisionHtml
             },
-            checked: decisionForm.selectedAnswerId
+            checked: decisionForm.selectedAnswerId == answer.id
         }), items) %}
     {% endfor %}
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5" data-qa="offence-code-decision-form">
