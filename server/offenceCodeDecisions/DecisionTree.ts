@@ -81,7 +81,7 @@ class ParaToOffenceCode {
 }
 
 // Adult
-export const adultQToOffencePara = [
+const adultQToOffencePara = [
   new AloOffenceItem(CHILD_1_Q,['1', '1(a)', '4', '5']),
   new AloOffenceItem(CHILD_2_Q,['7', '8']),
   new AloOffenceItem(CHILD_3_Q,['9', '10', '11', '12', '13', '14', '15', '24']),
@@ -94,7 +94,7 @@ export const adultQToOffencePara = [
   new AloOffenceItem(CHILD_9_Q,['18', '21']),
 ]
 // YOI
-export const yoiQToOffencePara = [
+const yoiQToOffencePara = [
   new AloOffenceItem(CHILD_1_Q,['1', '2', '5', '6']),
   new AloOffenceItem(CHILD_2_Q,['8', '9']),
   new AloOffenceItem(CHILD_3_Q,['10', '11', '12', '13', '14', '15', '16', '27']),
@@ -118,7 +118,7 @@ const adultPara18YoiPara20OverrideQuestionId = '92'
 const adultPara23YoiPara26OverrideQuestionId = '91'
 const adultPara22YoiPara25OverrideQuestionId = '90'
 
-export const adultParaToNextQuestion = [
+const adultParaToNextQuestion = [
   new ParaToNextQuestion('4','1-1-2'),
   new ParaToNextQuestion('5', '1-1-3' ),
   new ParaToNextQuestion('2', '1-7' ),
@@ -136,7 +136,7 @@ export const adultParaToNextQuestion = [
   new ParaToNextQuestion('20(a)','1-5-2-1', [2]),
 ]
 
-export const yoiParaToNextQuestion = [
+const yoiParaToNextQuestion = [
   new ParaToNextQuestion('5','1-1-2' ),
   new ParaToNextQuestion('6','1-1-3' ),
   new ParaToNextQuestion('3','1-7' ),
@@ -154,7 +154,7 @@ export const yoiParaToNextQuestion = [
   new ParaToNextQuestion('23', '1-5-2-1', [2]),
 ]
 
-export const adultParaToOffenceCode = [
+const adultParaToOffenceCode = [
   new ParaToOffenceCode('10','10001'),
   new ParaToOffenceCode('11','11001' ),
   new ParaToOffenceCode('13','13001' ),
@@ -172,7 +172,7 @@ export const adultParaToOffenceCode = [
   new ParaToOffenceCode('20(a)','2000124', [2])
 ]
 
-export const yoiParaToOffenceCode = [
+const yoiParaToOffenceCode = [
   new ParaToOffenceCode('11','10001' ),
   new ParaToOffenceCode('12','11001' ),
   new ParaToOffenceCode('14','13001' ),
@@ -190,6 +190,13 @@ export const yoiParaToOffenceCode = [
   new ParaToOffenceCode('26(a)','2600124'),
   new ParaToOffenceCode('23','2000124', [2] ),
 ]
+
+export const paraToNextQuestion = (
+  isYouthOffender: boolean,
+  version: number,
+): ParaToNextQuestion[] => {
+  return (isYouthOffender ? yoiParaToNextQuestion : adultParaToNextQuestion).filter(q => q.isApplicableVersion(version))
+}
 
 export const getOffenceInformation = (
   allOffenceRules: OffenceRule[],
