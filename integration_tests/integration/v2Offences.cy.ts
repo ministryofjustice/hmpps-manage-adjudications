@@ -179,6 +179,7 @@ context('v2 offences', () => {
     // whichProtectedCharacteristic.radio('1-5-2-1-1').check()
     // whatTypeOfOffencePage.continue().click()
     whichProtectedCharacteristic.checkbox('1-5-2-1-1').check()
+    whichProtectedCharacteristic.checkbox('1-5-2-1-2').check()
     whatTypeOfOffencePage.continueCheckboxes().click()
 
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
