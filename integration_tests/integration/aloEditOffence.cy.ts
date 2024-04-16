@@ -105,6 +105,10 @@ const offenceRulesAdult = [
     paragraphDescription:
       'Is disrespectful to any officer, or any person (other than a prisoner) who is at the prison for the purpose of working there, or any person visiting a prison',
   },
+  {
+    paragraphNumber: '20(a)',
+    paragraphDescription: 'Uses threatening, abusive or insulting racist words or behaviour',
+  },
 ]
 
 const offenceRulesYoi = [
@@ -204,6 +208,13 @@ context('Adult', () => {
           'Is intoxicated as a consequence of consuming any alcoholic beverage (but subject to rule 52A)',
       },
     })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 20001,
+      response: {
+        paragraphNumber: '20(a)',
+        paragraphDescription: 'Uses threatening, abusive or insulting racist words or behaviour',
+      },
+    })
     cy.task('stubSaveYouthOffenderStatus', {
       id: '177',
       response: {},
@@ -249,6 +260,15 @@ context('Adult', () => {
       victimName: null,
       victimPN: null,
       offenceCode: '10001',
+    },
+    {
+      testName: '20001 - adult 20(a)',
+      radio: '20(a)',
+      radio2: null,
+      title: null,
+      victimName: null,
+      victimPN: null,
+      offenceCode: '20001',
     },
   ].forEach(test => {
     it(test.testName, () => {

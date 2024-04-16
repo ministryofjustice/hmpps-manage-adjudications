@@ -4,6 +4,7 @@ import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 import { AnswerType as Type } from './Answer'
 import { answer, question } from './Decisions'
 import { GroupedOffenceRulesAndTitles, OffenceRule, offenceRuleAndTitle } from '../data/DraftAdjudicationResult'
+import { version } from 'os'
 
 const CHILD_1_Q = 'Assault, fighting, or endangering the health or personal safety of others'
 const CHILD_2_Q = 'Escape or failure to comply with temporary release conditions'
@@ -81,7 +82,7 @@ class ParaToOffenceCode {
 }
 
 // Adult
-export const adultQToOffencePara = [
+const adultQToOffencePara = [
   new AloOffenceItem(CHILD_1_Q,['1', '1(a)', '4', '5']),
   new AloOffenceItem(CHILD_2_Q,['7', '8']),
   new AloOffenceItem(CHILD_3_Q,['9', '10', '11', '12', '13', '14', '15', '24']),
@@ -94,7 +95,7 @@ export const adultQToOffencePara = [
   new AloOffenceItem(CHILD_9_Q,['18', '21']),
 ]
 // YOI
-export const yoiQToOffencePara = [
+const yoiQToOffencePara = [
   new AloOffenceItem(CHILD_1_Q,['1', '2', '5', '6']),
   new AloOffenceItem(CHILD_2_Q,['8', '9']),
   new AloOffenceItem(CHILD_3_Q,['10', '11', '12', '13', '14', '15', '16', '27']),
@@ -118,7 +119,7 @@ const adultPara18YoiPara20OverrideQuestionId = '92'
 const adultPara23YoiPara26OverrideQuestionId = '91'
 const adultPara22YoiPara25OverrideQuestionId = '90'
 
-export const adultParaToNextQuestion = [
+const adultParaToNextQuestion = [
   new ParaToNextQuestion('4','1-1-2'),
   new ParaToNextQuestion('5', '1-1-3' ),
   new ParaToNextQuestion('2', '1-7' ),
@@ -136,7 +137,7 @@ export const adultParaToNextQuestion = [
   new ParaToNextQuestion('20(a)','1-5-2-1', [2]),
 ]
 
-export const yoiParaToNextQuestion = [
+const yoiParaToNextQuestion = [
   new ParaToNextQuestion('5','1-1-2' ),
   new ParaToNextQuestion('6','1-1-3' ),
   new ParaToNextQuestion('3','1-7' ),
@@ -154,7 +155,7 @@ export const yoiParaToNextQuestion = [
   new ParaToNextQuestion('23', '1-5-2-1', [2]),
 ]
 
-export const adultParaToOffenceCode = [
+const adultParaToOffenceCode = [
   new ParaToOffenceCode('10','10001'),
   new ParaToOffenceCode('11','11001' ),
   new ParaToOffenceCode('13','13001' ),
@@ -172,7 +173,7 @@ export const adultParaToOffenceCode = [
   new ParaToOffenceCode('20(a)','2000124', [2])
 ]
 
-export const yoiParaToOffenceCode = [
+const yoiParaToOffenceCode = [
   new ParaToOffenceCode('11','10001' ),
   new ParaToOffenceCode('12','11001' ),
   new ParaToOffenceCode('14','13001' ),
@@ -191,12 +192,19 @@ export const yoiParaToOffenceCode = [
   new ParaToOffenceCode('23','2000124', [2] ),
 ]
 
+export const paraToNextQuestion = (
+  isYouthOffender: boolean,
+  version: number,
+): ParaToNextQuestion[] => {
+  return (isYouthOffender ? yoiParaToNextQuestion : adultParaToNextQuestion).filter(q => q.isApplicableVersion(version))
+}
+
 export const getOffenceInformation = (
   allOffenceRules: OffenceRule[],
   isYouthOffender: boolean,
   version: number,
 ): GroupedOffenceRulesAndTitles[] => {
-  const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(question => question.isApplicableVersion(version))
+  const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(q => q.isApplicableVersion(version))
   const offenceInformation = {}
   for (const offenceRule of allOffenceRules) {
     // Find the corresponding data from the dataMap based on the paragraph number
@@ -243,15 +251,15 @@ export const getOffenceInformation = (
   return groupedOffenceInformation
 }
 
-export const getOffenceCodeFromParagraphNumber = (chosenParagraphNumber: string, isYoi: boolean) => {
-  const dataMap = isYoi ? yoiParaToOffenceCode : adultParaToOffenceCode
+export const getOffenceCodeFromParagraphNumber = (chosenParagraphNumber: string, isYoi: boolean, version: number) => {
+  const dataMap = (isYoi ? yoiParaToOffenceCode : adultParaToOffenceCode).filter(code => code.isApplicableVersion(version))
   const matchingParagraphNumber = dataMap.find(paraOffenceCode => paraOffenceCode.para === chosenParagraphNumber)
   if (matchingParagraphNumber) return matchingParagraphNumber.offenceCode
   return null
 }
 
 export const paragraphNumberToQuestionId = (paragraphNumber: string, isYoi: boolean, version: number) => {
-  const dataMap = (isYoi ? yoiParaToNextQuestion : adultParaToNextQuestion).filter(q => q.isApplicableVersion(version))
+  const dataMap = paraToNextQuestion(isYoi, version)
   const matchingParaQuestion = dataMap.find(paraQuestion => paraQuestion.para === paragraphNumber)
   if (matchingParaQuestion) return matchingParaQuestion.questionId
   return null
