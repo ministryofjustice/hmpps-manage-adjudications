@@ -102,6 +102,16 @@ const offenceRules = [
     paragraphNumber: '26(a)',
     paragraphDescription: 'Failure to comply with any payback punishment',
   },
+  {
+    paragraphNumber: '23',
+    paragraphDescription:
+      'Uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
+  },
+  {
+    paragraphNumber: '20(a)',
+    paragraphDescription:
+      'Uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
+  },
 ]
 
 context.skip('v2 offences', () => {
@@ -139,7 +149,7 @@ context.skip('v2 offences', () => {
       },
     })
   })
-  it('failure to comply with payback offence', () => {
+  it('failure to comply with payback offence 23(a)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-6').check()
@@ -156,6 +166,38 @@ context.skip('v2 offences', () => {
       .then($summaryData => {
         expect($summaryData.get(2).innerText).to.contain('Failure to comply with any payback punishment')
       })
+  })
+
+  it('threatening, abusive or insulting behaviour 20(a)', () => {
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-5').check()
+    whatTypeOfOffencePage.continue().click()
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+    whatDidTheIncidentInvolve.radio('1-5-2').check()
+    whatTypeOfOffencePage.continue().click()
+    // now add the new path
+    const aggravateByProtectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    aggravateByProtectedCharacteristic.radio('1-5-2-1').check()
+    whatTypeOfOffencePage.continue().click()
+    // now this should lead to the new page
+    const whichProtectedCharacteristic = new OffenceCodeSelection(
+      'Select which protected characteristics were part of the reason for the incident'
+    )
+    whichProtectedCharacteristic.checkbox('1-5-2-1-1').check()
+    whichProtectedCharacteristic.checkbox('1-5-2-1-2').check()
+    whichProtectedCharacteristic.continueCheckboxes().click()
+
+    /* const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+
+    detailsOfOffencePage
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(2).innerText).to.contain('Failure to comply with any payback punishment')
+      }) */
   })
 })
 
@@ -252,6 +294,7 @@ context.skip('v2 offences ALO', () => {
       offenceCode: '2600124',
       isYouthOffender: false,
       chargeNumber: '12345',
+      additionalQuestion: false,
     },
     {
       testName: '2600124 > 26(a) ',
@@ -261,6 +304,29 @@ context.skip('v2 offences ALO', () => {
       offenceCode: '2600124',
       isYouthOffender: true,
       chargeNumber: '123456',
+      additionalQuestion: false,
+    },
+    {
+      testName: '2600124 > 20(a) ',
+      radio: '20(a)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '2000124',
+      isYouthOffender: false,
+      chargeNumber: '12345',
+      additionalQuestion: true,
+      key: '1-5-2-1',
+    },
+    {
+      testName: '2600124 > 23 ',
+      radio: '23',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '2000124',
+      isYouthOffender: true,
+      chargeNumber: '123456',
+      additionalQuestion: true,
+      key: '1-5-2-1',
     },
   ].forEach(test => {
     it(test.testName, () => {
@@ -272,12 +338,28 @@ context.skip('v2 offences ALO', () => {
             paragraphDescription: 'Failure to comply with any payback punishment',
           },
         })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 2000124,
+          response: {
+            paragraphNumber: '23',
+            paragraphDescription:
+              'Uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
+          },
+        })
       } else {
         cy.task('stubGetOffenceRule', {
           offenceCode: 2600124,
           response: {
             paragraphNumber: '23(a)',
             paragraphDescription: 'Failure to comply with any payback punishment',
+          },
+        })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 2000124,
+          response: {
+            paragraphNumber: '20(a)',
+            paragraphDescription:
+              'Uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
           },
         })
       }
@@ -295,10 +377,22 @@ context.skip('v2 offences ALO', () => {
       const offenceCodeSelectionListPage = new OffenceCodeSelectionListPage('Which offence did John Smith commit?')
       offenceCodeSelectionListPage.radio(test.radio).click()
       offenceCodeSelectionListPage.continue().click()
+      if (!test.additionalQuestion) {
+        cy.location().should(loc => {
+          expect(loc.search).to.contain(`offenceCode=${test.offenceCode}`)
+        })
+      } else {
+        cy.location().should(loc => {
+          expect(loc.pathname).to.contain(`/${test.key}`)
+        })
+        const whichProtectedCharacteristic = new OffenceCodeSelection(
+          'Select which protected characteristics were part of the reason for the incident'
+        )
+        whichProtectedCharacteristic.checkbox('1-5-2-1-1').check()
+        whichProtectedCharacteristic.continueCheckboxes().click()
 
-      cy.location().should(loc => {
-        expect(loc.search).to.contain(`offenceCode=${test.offenceCode}`)
-      })
+        //  const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+      }
     })
   })
 })

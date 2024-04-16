@@ -8,13 +8,19 @@ export default class OffenceCodeSelection extends Page {
 
   radios = (): PageElement => cy.get('[data-qa="radio-buttons"]')
 
+  checkboxes = (): PageElement => cy.get('[data-qa="checkboxes"]')
+
   radio = (value: string) => this.radios().find(`input[value="${value}"]`)
+
+  checkbox = (value: string) => this.checkboxes().find(`input[value="${value}"]`)
 
   radioLabelFromValue = (value: string) => this.radio(value).siblings('label').should('have.length', 1)
 
   radioLabelFromText = (text: string) => cy.get('label').contains(text)
 
   continue = (): PageElement => cy.get('[data-qa="offence-code-decision-continue"]')
+
+  continueCheckboxes = (): PageElement => cy.get('[data-qa="offence-code-protected-characteristics-continue"]')
 
   cancel = (): PageElement => cy.get('[data-qa="offence-code-decision-cancel"]')
 

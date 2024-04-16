@@ -4,6 +4,7 @@ import Question from './Question'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 // eslint-disable-next-line import/no-cycle
 import { notEmpty } from './Decisions'
+import config from '../config'
 
 export class Answer {
   private readonly answerText: string
@@ -14,7 +15,7 @@ export class Answer {
 
   private answerOffenceCode: number
 
-  private childQuestion: Question
+  private childQuestion: Question[] = []
 
   private parentQuestion: Question
 
@@ -42,8 +43,14 @@ export class Answer {
   }
 
   child(child: Question): Answer {
-    this.childQuestion = child
+    this.childQuestion = [child]
     child.parent(this)
+    return this
+  }
+
+  versionedChild(child: Question[]): Answer {
+    this.childQuestion = child
+    child.forEach(c => c.parent(this))
     return this
   }
 
@@ -87,7 +94,7 @@ export class Answer {
   }
 
   getChildQuestion(): Question {
-    return this.childQuestion
+    return this.childQuestion.find(c => c.isApplicableVersion(+config.offenceVersion))
   }
 
   getChildAnswers(): Answer[] {
@@ -133,7 +140,7 @@ export class Answer {
     return childMatches
   }
 
-  toString(indent = 0): string {
+  toString(indent = 0, version = 1): string {
     const padding = new Array(indent).join(' ')
     let output = `${padding}Answer Id: ${this.id()}`
     if (this.getText()) {
@@ -143,7 +150,7 @@ export class Answer {
       output = `${output}\r\n${padding}Offence Code: ${this.getOffenceCode()}`
     }
     if (this.getChildQuestion()) {
-      output = `${output}\r\n${this.getChildQuestion().toString(indent + 4)}`
+      output = `${output}\r\n${this.getChildQuestion().toString(indent + 4, version)}`
     }
     return output
   }
@@ -167,4 +174,5 @@ export enum AnswerType {
   OFFICER = 'OFFICER',
   STAFF = 'STAFF',
   OTHER_PERSON = 'OTHER_PERSON',
+  CHECKBOXES_ONLY = 'CHECKBOXES_ONLY',
 }

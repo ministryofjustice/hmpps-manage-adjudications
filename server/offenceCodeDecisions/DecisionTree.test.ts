@@ -30,7 +30,7 @@ describe('decisions', () => {
   it('toString', () => {
     // Not a test but useful output
     // eslint-disable-next-line no-console
-    console.log(decisionTree.toString())
+    console.log(decisionTree.toString(0, 1))
   })
 
   it('no answers missing offence codes', () => {

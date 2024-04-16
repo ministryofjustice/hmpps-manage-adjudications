@@ -98,9 +98,24 @@ export default class OffenceCodeRoutes {
     return this.renderView(req, res, { draftId, incidentRole })
   }
 
+  submitProtected = async (req: Request, res: Response): Promise<void> => {
+    const { incidentRole, draftId } = req.params
+    const draftChargeId = Number(draftId)
+    const { protectedCharacteristics } = req.body
+    // const offenceToAdd: OffenceData = { ...req.query }
+
+    if (!protectedCharacteristics) {
+      return this.renderView(req, res, { errors: [error.MISSING_CHARACTERISTIC], draftId: draftChargeId, incidentRole })
+    }
+
+    // data saved here
+
+    // just a placeholder redirect
+    return res.redirect('')
+  }
+
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-
     if (req.body.decisionFormCancel) {
       return this.cancel(req, res, this.pageOptions, user)
     }
@@ -109,6 +124,9 @@ export default class OffenceCodeRoutes {
     }
     if (req.body.searchUser) {
       return this.search(req, res)
+    }
+    if (req.body.protectedCharacteristicsSubmit) {
+      return this.submitProtected(req, res)
     }
     return this.submitDecision(req, res)
   }
@@ -242,9 +260,11 @@ export default class OffenceCodeRoutes {
           offenceCode: a.getOffenceCode(),
         }
       })
-    const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
 
-    return res.render(`pages/offenceCodeDecisions`, {
+    const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
+    const checkBoxesOnly = answers.every(a => a.type === AnswerType.CHECKBOXES_ONLY)
+
+    return res.render(checkBoxesOnly ? 'pages/offenceCodeProtectedCharacteristics' : `pages/offenceCodeDecisions`, {
       errors: errors || [],
       decisionForm: pageData,
       selectedAnswerViewData,

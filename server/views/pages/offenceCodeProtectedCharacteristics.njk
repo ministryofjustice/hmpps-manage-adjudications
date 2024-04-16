@@ -19,45 +19,15 @@
       }) }}
   {% endif %}
 
-{% set items =
-[
-    {
-      value: ProtectedCharacteristicsTypes.AGE,
-      text: "Age"
-    },
-    {
-      value: ProtectedCharacteristicsTypes.DISABILITY,
-      text: "Disability"
-    },
-    {
-      value: ProtectedCharacteristicsTypes.GENDER_REASSIGN,
-      text: "Gender reassignment"
-    },
-    {
-      value: ProtectedCharacteristicsTypes.MARRIAGE_AND_CP,
-      text: "Marriage and civil partnership"
-    },
-    {
-      value: ProtectedCharacteristicsTypes.PREGNANCY_AND_MAT,
-      text: "Pregnancy and maternity"
-    },
-    {
-      value: ProtectedCharacteristicsTypes.RACE,
-      text: "Race"
-    },
-    {
-      value: ProtectedCharacteristicsTypes.RELIGION,
-      text: "Reglion or belief"
-    },
-    {
-      value: ProtectedCharacteristicsTypes.SEX,
-      text: "Sex"
-    },
-    {
-      value: ProtectedCharacteristicsTypes.SEX_ORIENTATION,
-      text: "Sexual orientation"
-    }
-  ] %}
+  {% set items = [] %}
+
+  {% for answer in answers %}
+    {% set items = (items.push({
+      value: answer.id,
+      text: answer.label,
+      attributes: { offenceCode: answer.offenceCode }
+    }), items) %}
+  {% endfor %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -88,6 +58,7 @@
         type: "submit",
         preventDoubleClick: true,
         name: "protectedCharacteristicsSubmit",
+        value: "protectedCharacteristicsSubmit",
         classes: "govuk-button--submit govuk-!-margin-right-2",
         attributes: { "data-qa": "offence-code-protected-characteristics-continue" }
     }) }}
