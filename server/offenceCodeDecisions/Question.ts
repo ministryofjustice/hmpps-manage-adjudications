@@ -56,10 +56,7 @@ export default class Question {
   versionedChild(child: Answer[]) {
     child.forEach(c => {
       this.childAnswers.push(c)
-      // TODO this needs further review when rendering multiple versions
-      // if (c.isApplicableVersion(+config.offenceVersion)) {
       c.parent(this)
-      // }
     })
 
     return this
