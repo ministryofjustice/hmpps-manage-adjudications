@@ -86,7 +86,8 @@ const adultQToOffencePara = [
   new AloOffenceItem(CHILD_1_Q,['1', '1(a)', '4', '5']),
   new AloOffenceItem(CHILD_2_Q,['7', '8']),
   new AloOffenceItem(CHILD_3_Q,['9', '10', '11', '12', '13', '14', '15', '24']),
-  new AloOffenceItem(CHILD_4_Q,['16', '17', '24(a)']),
+  new AloOffenceItem(CHILD_4_Q,['16', '17', '24(a)'], [1]),
+  new AloOffenceItem(CHILD_4_Q,['16', '17', '17(a)', '24(a)'], [2]),
   new AloOffenceItem(CHILD_5_Q,['19', '20', '20(a)']),
   new AloOffenceItem(CHILD_6_Q,['22', '23'], [1]),
   new AloOffenceItem(CHILD_6_Q,['22', '23', '23(a)'], [2]),
@@ -135,6 +136,7 @@ const adultParaToNextQuestion = [
   new ParaToNextQuestion('23',adultPara23YoiPara26OverrideQuestionId ),
   new ParaToNextQuestion('22',adultPara22YoiPara25OverrideQuestionId ),
   new ParaToNextQuestion('20(a)','1-5-2-1', [2]),
+  new ParaToNextQuestion('17(a)','1-4-2', [2]),
 ]
 
 const yoiParaToNextQuestion = [
@@ -153,6 +155,7 @@ const yoiParaToNextQuestion = [
   new ParaToNextQuestion('26',adultPara23YoiPara26OverrideQuestionId ),
   new ParaToNextQuestion('25', adultPara22YoiPara25OverrideQuestionId),
   new ParaToNextQuestion('23', '1-5-2-1', [2]),
+  new ParaToNextQuestion('19','1-4-2', [2]),
 ]
 
 const adultParaToOffenceCode = [
@@ -170,7 +173,8 @@ const adultParaToOffenceCode = [
   new ParaToOffenceCode('6','6001' ),
   new ParaToOffenceCode('21','21001' ),
   new ParaToOffenceCode('23(a)','2600124'),
-  new ParaToOffenceCode('20(a)','2000124', [2])
+  new ParaToOffenceCode('20(a)', '2000124', [2]),
+  new ParaToOffenceCode('17(a)', '1700124', [2])
 ]
 
 const yoiParaToOffenceCode = [
@@ -190,6 +194,7 @@ const yoiParaToOffenceCode = [
   new ParaToOffenceCode('24','21001' ),
   new ParaToOffenceCode('26(a)','2600124'),
   new ParaToOffenceCode('23','2000124', [2] ),
+  new ParaToOffenceCode('19', '1700124', [2])
 ]
 
 export const paraToNextQuestion = (
@@ -264,6 +269,17 @@ export const paragraphNumberToQuestionId = (paragraphNumber: string, isYoi: bool
   if (matchingParaQuestion) return matchingParaQuestion.questionId
   return null
 }
+
+const protectedCharacteristicsQuestion = (offenceCode: number) => question('Select which protected characteristics were part of the reason for the incident')
+.child(answer('Age').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer('Disability').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer('Gender reassignment').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer('Marriage and civil partnership').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer('Pregnancy and maternity').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer('Race').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer('Reglion or belief').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer('Sex').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer('Sexual orientation').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
 export default question([
@@ -515,11 +531,14 @@ export default question([
       question('What did the incident involve?')
         .child(answer('Sets fire to any part of the prison or any property').offenceCode(16001))
         .child(
-          answer('Destroys part of the prison or someone else’s property').child(
-            question('Was the incident racially aggravated?')
+          answer('Destroys part of the prison or someone else’s property').versionedChild([
+            question('Was the incident racially aggravated?', null, [1])
               .child(answer('Yes').offenceCode(17001))
-              .child(answer('No').offenceCode(17002))
-          )
+              .child(answer('No').offenceCode(17002)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(1700124)))
+              .child(answer('No').offenceCode(17002)) 
+          ])
         )
         .child(answer('Displays or draws abusive or racist images').offenceCode(24101))
     )
@@ -564,16 +583,7 @@ export default question([
               .child(answer('Yes').offenceCode(20001))
               .child(answer('No').offenceCode(20002)),
             question('Was the incident aggravated by a protected characteristic?', null, [2])
-              .child(answer('Yes').child(question('Select which protected characteristics were part of the reason for the incident')
-                .child(answer('Age').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
-                .child(answer('Disability').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
-                .child(answer('Gender reassignment').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
-                .child(answer('Marriage and civil partnership').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
-                .child(answer('Pregnancy and maternity').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
-                .child(answer('Race').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
-                .child(answer('Reglion or belief').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
-                .child(answer('Sex').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))
-                .child(answer('Sexual orientation').type(Type.CHECKBOXES_ONLY).offenceCode(2000124))))
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(2000124)))
               .child(answer('No').offenceCode(20002)) 
           ])
         )
@@ -652,7 +662,8 @@ export default question([
         .child(answer('Being in an unauthorised place').offenceCode(18002))
         .child(answer('Failing to work correctly').offenceCode(21001))
     )
-  )
+)
+  
 
 export const paragraph1 = question('Who was assaulted?', para1OverrideQuestionId)
   .child(
