@@ -486,10 +486,10 @@ export default question([
   ],
   [Role.INCITED, `What type of offence did ${Text.PRISONER_FULL_NAME} incite another prisoner to commit?`],
 ])
-  .versionedChild([
+.versionedChild([
     answer(CHILD_1_Q, [1]).child(versionedQuestion1Answers),
     answer(CHILD_1_Q_V2, [2]).child(versionedQuestion1Answers),
-   ])
+   ]) 
   .child(
     answer(CHILD_2_Q).child(
       question('What did the incident involve?')
@@ -616,8 +616,9 @@ export default question([
     )
   )
   .versionedChild(
-    [answer(CHILD_6_Q, [1]).child(versionedQuestion6Answers),
-    //  answer(CHILD_6_Q_V2, [2]).child(versionedQuestion6Answers)
+    [
+      answer(CHILD_6_Q, [1]).child(versionedQuestion6Answers),
+      answer(CHILD_6_Q_V2, [2]).child(versionedQuestion6Answers)
     ])
   .child(
     answer(CHILD_7_Q).child(

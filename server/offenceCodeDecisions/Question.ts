@@ -7,7 +7,7 @@ import { all, notEmpty } from './Decisions'
 import config from '../config'
 
 export default class Question {
-  private parentAnswer: Answer
+  private parentAnswer: Answer[] = []
 
   private childAnswers: Answer[] = []
 
@@ -43,7 +43,7 @@ export default class Question {
   }
 
   parent(parent: Answer) {
-    this.parentAnswer = parent
+    this.parentAnswer.push(parent)
     return this
   }
 
@@ -55,9 +55,13 @@ export default class Question {
 
   versionedChild(child: Answer[]) {
     child.forEach(c => {
-      c.parent(this)
       this.childAnswers.push(c)
+      // TODO this needs further review when rendering multiple versions
+      // if (c.isApplicableVersion(+config.offenceVersion)) {
+      c.parent(this)
+      // }
     })
+
     return this
   }
 
@@ -70,7 +74,7 @@ export default class Question {
   }
 
   getParentAnswer() {
-    return this.parentAnswer
+    return this.parentAnswer.find(a => a.isApplicableVersion(+config.offenceVersion))
   }
 
   allIds(): string[] {
@@ -108,6 +112,7 @@ export default class Question {
         .map(answer => answer.toString(indent + 4, version))
         .join('\r\n')}`
     }
+
     return output
   }
 
