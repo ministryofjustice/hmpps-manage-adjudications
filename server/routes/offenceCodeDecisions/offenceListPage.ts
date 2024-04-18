@@ -93,7 +93,6 @@ export default class OffenceListRoutes {
     }
 
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
-
     const paragraphToNextQuestionMap = paraToNextQuestion(draftAdjudication.isYouthOffender, +config.offenceVersion)
 
     if (paragraphToNextQuestionMap.some(mapItem => mapItem.para === selectedAnswerId)) {
