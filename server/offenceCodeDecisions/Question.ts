@@ -53,6 +53,14 @@ export default class Question {
     return this
   }
 
+  versionedChild(child: Answer[]) {
+    child.forEach(c => {
+      c.parent(this)
+      this.childAnswers.push(c)
+    })
+    return this
+  }
+
   getTitle() {
     return this.questionTitle
   }

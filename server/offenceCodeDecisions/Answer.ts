@@ -34,6 +34,11 @@ export class Answer {
   // if not we assume its id would be 1. Note indexes are 1 based.
   id() {
     const parentId = this.getParentQuestion()?.id() || 1
+
+    if (this.getParentQuestion()?.getChildAnswers().indexOf(this) === -1) {
+      console.log(this)
+    }
+
     const index = (this.getParentQuestion()?.getChildAnswers().indexOf(this) || 0) + 1
     return `${parentId}-${index}`
   }

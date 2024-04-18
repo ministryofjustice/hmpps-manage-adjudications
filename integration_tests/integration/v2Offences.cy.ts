@@ -132,9 +132,33 @@ const offenceRules = [
     paragraphDescription:
       'displays, attaches or draws on any part of a young offender institution, or on any other property,  threatening, abusive or insulting words, drawings, symbols or other material, which  demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them  sharing a protected characteristic',
   },
+  {
+    paragraphNumber: '1(b)',
+    paragraphDescription: 'commits any sexual assault',
+  },
+  {
+    paragraphNumber: '2(a)',
+    paragraphDescription: 'commits any sexual assault',
+  },
+  {
+    paragraphNumber: '1(c)',
+    paragraphDescription: 'exposes himself, or commits any other indecent or obscene act',
+  },
+  {
+    paragraphNumber: '2(b)',
+    paragraphDescription: 'exposes himself, or commits any other indecent or obscene act',
+  },
+  {
+    paragraphNumber: '1(d)',
+    paragraphDescription: 'sexually harasses any person',
+  },
+  {
+    paragraphNumber: '2(c)',
+    paragraphDescription: 'sexually harasses any person',
+  },
 ]
 
-context.skip('v2 offences', () => {
+context('v2 offences', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -166,6 +190,27 @@ context.skip('v2 offences', () => {
       response: {
         paragraphNumber: '23(a)',
         paragraphDescription: 'Failure to comply with any payback punishment',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 102224,
+      response: {
+        paragraphNumber: '1(b)',
+        paragraphDescription: 'commits any sexual assault',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 102324,
+      response: {
+        paragraphNumber: '1(c)',
+        paragraphDescription: 'exposes himself, or commits any other indecent or obscene act',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 102424,
+      response: {
+        paragraphNumber: '1(d)',
+        paragraphDescription: 'sexually harasses any person',
       },
     })
   })
@@ -280,9 +325,89 @@ context.skip('v2 offences', () => {
         expect($summaryData.get(2).innerText).to.contain('causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic')
       }) */
   })
+  it('commits any sexual assault- 1(b)', () => {
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-1').check()
+    whatTypeOfOffencePage.continue().click()
+
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+    whatDidTheIncidentInvolve.radio('1-1-4').check()
+    whatTypeOfOffencePage.continue().click()
+
+    // now this should lead to the new page
+    const whatDidTheIncidentInvolve2 = new OffenceCodeSelection('What happened?')
+    whatDidTheIncidentInvolve2.radio('1-1-4-1').check()
+    whatDidTheIncidentInvolve2.continue().click()
+
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+
+    detailsOfOffencePage
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(2).innerText).to.contain('Sexual offence or obscene act')
+        expect($summaryData.get(3).innerText).to.contain('Sexual assault')
+        expect($summaryData.get(4).innerText).to.contain('commits any sexual assault')
+      })
+  })
+  it('exposes himself, or commits any other indecent or obscene act- 1(c)', () => {
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-1').check()
+    whatTypeOfOffencePage.continue().click()
+
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+    whatDidTheIncidentInvolve.radio('1-1-4').check()
+    whatTypeOfOffencePage.continue().click()
+
+    // now this should lead to the new page
+    const whatDidTheIncidentInvolve2 = new OffenceCodeSelection('What happened?')
+    whatDidTheIncidentInvolve2.radio('1-1-4-2').check()
+    whatDidTheIncidentInvolve2.continue().click()
+
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+
+    detailsOfOffencePage
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(2).innerText).to.contain('Sexual offence or obscene act')
+        expect($summaryData.get(3).innerText).to.contain('Exposes themselves or any other indecent or obscene act')
+        expect($summaryData.get(4).innerText).to.contain(
+          'exposes himself, or commits any other indecent or obscene act'
+        )
+      })
+  })
+  it('sexually harasses any person- 1(d)', () => {
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-1').check()
+    whatTypeOfOffencePage.continue().click()
+
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+    whatDidTheIncidentInvolve.radio('1-1-4').check()
+    whatTypeOfOffencePage.continue().click()
+
+    // now this should lead to the new page
+    const whatDidTheIncidentInvolve2 = new OffenceCodeSelection('What happened?')
+    whatDidTheIncidentInvolve2.radio('1-1-4-3').check()
+    whatDidTheIncidentInvolve2.continue().click()
+
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+
+    detailsOfOffencePage
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(2).innerText).to.contain('Sexual offence or obscene act')
+        expect($summaryData.get(3).innerText).to.contain('Sexually harasses any person')
+        expect($summaryData.get(4).innerText).to.contain('sexually harasses any person')
+      })
+  })
 })
 
-context.skip('v2 offences ALO', () => {
+context('v2 offences ALO', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -453,6 +578,60 @@ context.skip('v2 offences ALO', () => {
       additionalQuestion: true,
       key: ['1-4-3'],
     },
+    {
+      testName: '102224 > 1(b) ',
+      radio: '1(b)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '102224',
+      isYouthOffender: false,
+      chargeNumber: '12345',
+    },
+    {
+      testName: '102224 > 2(a) ',
+      radio: '2(a)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '102224',
+      isYouthOffender: true,
+      chargeNumber: '123456',
+    },
+    {
+      testName: '102324 > 1(c) ',
+      radio: '1(c)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '102324',
+      isYouthOffender: false,
+      chargeNumber: '12345',
+    },
+    {
+      testName: '102324 > 2(b) ',
+      radio: '2(b)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '102324',
+      isYouthOffender: true,
+      chargeNumber: '123456',
+    },
+    {
+      testName: '102424 > 1(d) ',
+      radio: '1(d)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '102424',
+      isYouthOffender: false,
+      chargeNumber: '12345',
+    },
+    {
+      testName: '102424 > 2(c) ',
+      radio: '2(c)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '102424',
+      isYouthOffender: true,
+      chargeNumber: '123456',
+    },
   ].forEach(test => {
     it(test.testName, () => {
       if (test.isYouthOffender) {
@@ -487,6 +666,27 @@ context.skip('v2 offences ALO', () => {
               'displays, attaches or draws on any part of a young offender institution, or on any other property,  threatening, abusive or insulting words, drawings, symbols or other material, which  demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them  sharing a protected characteristic',
           },
         })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 102224,
+          response: {
+            paragraphNumber: '2(a)',
+            paragraphDescription: 'commits any sexual assault',
+          },
+        })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 102324,
+          response: {
+            paragraphNumber: '2(b)',
+            paragraphDescription: 'exposes himself, or commits any other indecent or obscene act',
+          },
+        })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 102424,
+          response: {
+            paragraphNumber: '2(c)',
+            paragraphDescription: 'sexually harasses any person',
+          },
+        })
       } else {
         cy.task('stubGetOffenceRule', {
           offenceCode: 2600124,
@@ -517,6 +717,27 @@ context.skip('v2 offences ALO', () => {
             paragraphNumber: '24(a)',
             paragraphDescription:
               'displays, attaches or draws on any part of a young offender institution, or on any other property,  threatening, abusive or insulting words, drawings, symbols or other material, which  demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them  sharing a protected characteristic',
+          },
+        })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 102224,
+          response: {
+            paragraphNumber: '1(b)',
+            paragraphDescription: 'commits any sexual assault',
+          },
+        })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 102324,
+          response: {
+            paragraphNumber: '1(c)',
+            paragraphDescription: 'exposes himself, or commits any other indecent or obscene act',
+          },
+        })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 102424,
+          response: {
+            paragraphNumber: '1(d)',
+            paragraphDescription: 'sexually harasses any person',
           },
         })
       }
