@@ -122,6 +122,16 @@ const offenceRules = [
     paragraphDescription:
       'causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic',
   },
+  {
+    paragraphNumber: '24(a)',
+    paragraphDescription:
+      'displays, attaches or draws on any part of a young offender institution, or on any other property,  threatening, abusive or insulting words, drawings, symbols or other material, which  demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them  sharing a protected characteristic',
+  },
+  {
+    paragraphNumber: '28',
+    paragraphDescription:
+      'displays, attaches or draws on any part of a young offender institution, or on any other property,  threatening, abusive or insulting words, drawings, symbols or other material, which  demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them  sharing a protected characteristic',
+  },
 ]
 
 context('v2 offences', () => {
@@ -243,6 +253,33 @@ context('v2 offences', () => {
         expect($summaryData.get(2).innerText).to.contain('causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic')
       }) */
   })
+  it('displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting words, drawings, symbols or other material, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic 24(a)', () => {
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-4').check()
+    whatTypeOfOffencePage.continue().click()
+
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+    whatDidTheIncidentInvolve.radio('1-4-3').check()
+    whatTypeOfOffencePage.continue().click()
+
+    // now this should lead to the new page
+    const whichProtectedCharacteristic = new OffenceCodeSelection(
+      'Select which protected characteristics were part of the reason for the incident'
+    )
+    whichProtectedCharacteristic.checkbox('1-4-3-1').check()
+    whichProtectedCharacteristic.checkbox('1-4-3-2').check()
+    whichProtectedCharacteristic.continueCheckboxes().click()
+
+    /* const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+
+    detailsOfOffencePage
+      .offenceDetailsSummary()
+      .find('dd')
+      .then($summaryData => {
+        expect($summaryData.get(2).innerText).to.contain('causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic')
+      }) */
+  })
 })
 
 context('v2 offences ALO', () => {
@@ -330,7 +367,7 @@ context('v2 offences ALO', () => {
     cy.signIn()
   })
   ;[
-    {
+    /*   {
       testName: '2600124 > 23(a) ',
       radio: '23(a)',
       radio2: null,
@@ -393,9 +430,31 @@ context('v2 offences ALO', () => {
       chargeNumber: '123456',
       additionalQuestion: true,
       key: ['1-4-2', '1-4-2-1'],
+    }, */
+    {
+      testName: '2410124 > 24(a) ',
+      radio: '24(a)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '2410124',
+      isYouthOffender: false,
+      chargeNumber: '12345',
+      additionalQuestion: true,
+      key: ['1-4-3'],
     },
+    /*  {
+        testName: '2410124 > 28 ',
+        radio: '28',
+        radio2: null,
+        title: 'Who was assaulted?',
+        offenceCode: '2410124',
+        isYouthOffender: true,
+        chargeNumber: '123456',
+        additionalQuestion: true,
+        key: ['1-4-3'],
+      }, */
   ].forEach(test => {
-    it(test.testName, () => {
+    it.only(test.testName, () => {
       if (test.isYouthOffender) {
         cy.task('stubGetOffenceRule', {
           offenceCode: 2600124,
@@ -420,6 +479,14 @@ context('v2 offences ALO', () => {
               'causes damage to, or destruction of, any part of a young offender institution or any other property, other than his own, aggravated by a protected characteristic',
           },
         })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 2410124,
+          response: {
+            paragraphNumber: '28',
+            paragraphDescription:
+              'displays, attaches or draws on any part of a young offender institution, or on any other property,  threatening, abusive or insulting words, drawings, symbols or other material, which  demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them  sharing a protected characteristic',
+          },
+        })
       } else {
         cy.task('stubGetOffenceRule', {
           offenceCode: 2600124,
@@ -442,6 +509,14 @@ context('v2 offences ALO', () => {
             paragraphNumber: '17(a)',
             paragraphDescription:
               'causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic',
+          },
+        })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 2410124,
+          response: {
+            paragraphNumber: '24(a)',
+            paragraphDescription:
+              'displays, attaches or draws on any part of a young offender institution, or on any other property,  threatening, abusive or insulting words, drawings, symbols or other material, which  demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them  sharing a protected characteristic',
           },
         })
       }

@@ -136,7 +136,8 @@ const adultParaToNextQuestion = [
   new ParaToNextQuestion('23',adultPara23YoiPara26OverrideQuestionId ),
   new ParaToNextQuestion('22',adultPara22YoiPara25OverrideQuestionId ),
   new ParaToNextQuestion('20(a)','1-5-2-1', [2]),
-  new ParaToNextQuestion('17(a)','1-4-2', [2]),
+  new ParaToNextQuestion('17(a)', '1-4-2', [2]),
+  new ParaToNextQuestion('14(a)','1-4-3-1', [2]),
 ]
 
 const yoiParaToNextQuestion = [
@@ -156,6 +157,7 @@ const yoiParaToNextQuestion = [
   new ParaToNextQuestion('25', adultPara22YoiPara25OverrideQuestionId),
   new ParaToNextQuestion('23', '1-5-2-1', [2]),
   new ParaToNextQuestion('19','1-4-2', [2]),
+  new ParaToNextQuestion('28','1-4-3-1', [2]),
 ]
 
 const adultParaToOffenceCode = [
@@ -166,7 +168,7 @@ const adultParaToOffenceCode = [
   new ParaToOffenceCode('15','15001' ),
   new ParaToOffenceCode('16','16001' ),
   new ParaToOffenceCode('17','17002' ),
-  new ParaToOffenceCode('24(a)','24101' ),
+  new ParaToOffenceCode('24(a)','24101', [1] ),
   new ParaToOffenceCode('20','20002' ),
   new ParaToOffenceCode('20(a)','20001', [1]),
   new ParaToOffenceCode('3','3001' ),
@@ -174,7 +176,8 @@ const adultParaToOffenceCode = [
   new ParaToOffenceCode('21','21001' ),
   new ParaToOffenceCode('23(a)','2600124'),
   new ParaToOffenceCode('20(a)', '2000124', [2]),
-  new ParaToOffenceCode('17(a)', '1700124', [2])
+  new ParaToOffenceCode('17(a)', '1700124', [2]),
+  new ParaToOffenceCode('24(a)', '2410124', [2])
 ]
 
 const yoiParaToOffenceCode = [
@@ -186,7 +189,7 @@ const yoiParaToOffenceCode = [
   new ParaToOffenceCode('17','16001' ),
   new ParaToOffenceCode('18','17002' ),
   new ParaToOffenceCode('19','17001' ),
-  new ParaToOffenceCode( '28','24101' ),
+  new ParaToOffenceCode('28','24101', [1] ),
   new ParaToOffenceCode('22','20002' ),
   new ParaToOffenceCode('23','20001', [1] ),
   new ParaToOffenceCode('4','3001' ),
@@ -194,7 +197,8 @@ const yoiParaToOffenceCode = [
   new ParaToOffenceCode('24','21001' ),
   new ParaToOffenceCode('26(a)','2600124'),
   new ParaToOffenceCode('23','2000124', [2] ),
-  new ParaToOffenceCode('19', '1700124', [2])
+  new ParaToOffenceCode('19', '1700124', [2]),
+  new ParaToOffenceCode('28', '2410124', [2])
 ]
 
 export const paraToNextQuestion = (
@@ -540,7 +544,9 @@ export default question([
               .child(answer('No').offenceCode(17002)) 
           ])
         )
-        .child(answer('Displays or draws abusive or racist images').offenceCode(24101))
+        .child(answer('Displays or draws abusive or racist images', [1]).offenceCode(24101))
+        .child(answer('Displays or draws abusive images aggravated by a protected characteristic', [2])
+              .child(protectedCharacteristicsQuestion(2410124)))
     )
   )
   .child(

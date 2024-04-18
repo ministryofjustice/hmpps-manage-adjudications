@@ -93,7 +93,6 @@ export default class OffenceListRoutes {
     }
 
     const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
-
     const paragraphToNextQuestionMap = paraToNextQuestion(draftAdjudication.isYouthOffender, +config.offenceVersion)
 
     if (paragraphToNextQuestionMap.some(mapItem => mapItem.para === selectedAnswerId)) {
@@ -104,11 +103,13 @@ export default class OffenceListRoutes {
       )
       return res.redirect(adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(draftId, incidentRole, nextPageId))
     }
+    console.log('here?')
     const chosenOffenceCode = await getOffenceCodeFromParagraphNumber(
       selectedAnswerId,
       draftAdjudication.isYouthOffender,
       +config.offenceVersion
     )
+    console.log('there?')
     return this.redirect(
       {
         pathname: adjudicationUrls.detailsOfOffence.urls.aloAdd(draftId),
