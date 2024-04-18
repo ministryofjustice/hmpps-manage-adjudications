@@ -137,7 +137,7 @@ const adultParaToNextQuestion = [
   new ParaToNextQuestion('22',adultPara22YoiPara25OverrideQuestionId ),
   new ParaToNextQuestion('20(a)','1-5-2-1', [2]),
   new ParaToNextQuestion('17(a)', '1-4-2', [2]),
-  new ParaToNextQuestion('14(a)','1-4-3-1', [2]),
+  new ParaToNextQuestion('24(a)','1-4-3', [2]),
 ]
 
 const yoiParaToNextQuestion = [
@@ -157,7 +157,7 @@ const yoiParaToNextQuestion = [
   new ParaToNextQuestion('25', adultPara22YoiPara25OverrideQuestionId),
   new ParaToNextQuestion('23', '1-5-2-1', [2]),
   new ParaToNextQuestion('19','1-4-2', [2]),
-  new ParaToNextQuestion('28','1-4-3-1', [2]),
+  new ParaToNextQuestion('28','1-4-3', [2]),
 ]
 
 const adultParaToOffenceCode = [

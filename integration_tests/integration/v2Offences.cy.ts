@@ -367,7 +367,7 @@ context('v2 offences ALO', () => {
     cy.signIn()
   })
   ;[
-    /*   {
+    {
       testName: '2600124 > 23(a) ',
       radio: '23(a)',
       radio2: null,
@@ -430,7 +430,7 @@ context('v2 offences ALO', () => {
       chargeNumber: '123456',
       additionalQuestion: true,
       key: ['1-4-2', '1-4-2-1'],
-    }, */
+    },
     {
       testName: '2410124 > 24(a) ',
       radio: '24(a)',
@@ -442,19 +442,19 @@ context('v2 offences ALO', () => {
       additionalQuestion: true,
       key: ['1-4-3'],
     },
-    /*  {
-        testName: '2410124 > 28 ',
-        radio: '28',
-        radio2: null,
-        title: 'Who was assaulted?',
-        offenceCode: '2410124',
-        isYouthOffender: true,
-        chargeNumber: '123456',
-        additionalQuestion: true,
-        key: ['1-4-3'],
-      }, */
+    {
+      testName: '2410124 > 28 ',
+      radio: '28',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '2410124',
+      isYouthOffender: true,
+      chargeNumber: '123456',
+      additionalQuestion: true,
+      key: ['1-4-3'],
+    },
   ].forEach(test => {
-    it.only(test.testName, () => {
+    it(test.testName, () => {
       if (test.isYouthOffender) {
         cy.task('stubGetOffenceRule', {
           offenceCode: 2600124,
