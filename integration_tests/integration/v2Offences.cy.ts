@@ -407,6 +407,154 @@ context('v2 offences', () => {
   })
 })
 
+context.only('v2 offences - assault 1(a)', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.task('stubAuthUser')
+    cy.signIn()
+    // Committed draft
+    cy.task('stubGetDraftAdjudication', {
+      id: 100,
+      response: {
+        draftAdjudication: testData.draftAdjudication({
+          id: 100,
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2021-11-03T13:10:00',
+        }),
+      },
+    })
+    // Prisoner
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6415GD',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6415GD',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
+    })
+    // Offence rules
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 2600124,
+      response: {
+        paragraphNumber: '1(a)',
+        paragraphDescription: 'commits any assault aggravated by a protected characteristic',
+      },
+    })
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G5512G',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G5512G',
+        firstName: 'PAUL',
+        lastName: 'WRIGHT',
+      }),
+    })
+    // Prison officer victim
+    cy.task('stubGetUserFromUsername', {
+      username: 'AOWENS',
+      response: testData.userFromUsername('AOWENS'),
+    })
+    cy.task('stubGetEmail', {
+      username: 'AOWENS',
+      response: testData.emailFromUsername('AOWENS'),
+    })
+    // Staff victim
+    cy.task('stubGetUserFromUsername', {
+      username: 'CSTANLEY',
+      response: testData.userFromUsername('CSTANLEY'),
+    })
+    cy.task('stubGetEmail', {
+      username: 'CSTANLEY',
+      response: testData.emailFromUsername('CSTANLEY'),
+    })
+    cy.task('stubSearchPrisonerDetails', {
+      prisonerNumber: 'G7123CI',
+    })
+  })
+  ;[
+    {
+      testName: '1(a) -prisoner',
+      code: '1',
+    },
+    {
+      testName: '1(a) - prison officer',
+      code: '2',
+    },
+    {
+      testName: '1(a) - staff member',
+      code: '3',
+    },
+    {
+      testName: '1(a) - external prisoner',
+      code: '4',
+    },
+    {
+      testName: '1(a) - someone else',
+      code: '5',
+    },
+  ].forEach(test => {
+    it(test.testName, () => {
+      cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
+      const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+      whatTypeOfOffencePage.radio('1-1').check()
+      whatTypeOfOffencePage.continue().click()
+
+      const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+      whatDidTheIncidentInvolve.radio('1-1-1').check()
+      whatTypeOfOffencePage.continue().click()
+
+      const whoWasAssaultedPage = new OffenceCodeSelection('Who was assaulted?')
+      whatTypeOfOffencePage.radio(`1-1-1-${test.code}`).check()
+
+      // who was assaulted
+      switch (test.code) {
+        case '1':
+          whoWasAssaultedPage.simulateReturnFromPrisonerSearch(100, '1-1-1', `1-1-1-${test.code}`, 'G5512G')
+          break
+        case '2':
+          whoWasAssaultedPage.simulateReturnFromStaffSearch(100, `1-1-1`, `1-1-1-${test.code}`, 'AOWENS')
+          break
+        case '3':
+          whoWasAssaultedPage.simulateReturnFromStaffSearch(100, '1-1-1', `1-1-1-${test.code}`, 'CSTANLEY')
+          break
+        case '4':
+          whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
+          whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type('G7123CI')
+          break
+        case '5':
+          whoWasAssaultedPage.victimOtherPersonSearchNameInput().type('James Peterson')
+          break
+        default:
+      }
+      whoWasAssaultedPage.continue().click()
+
+      // now add the new path
+      const aggravateByProtectedCharacteristic = new OffenceCodeSelection(
+        'Was the incident aggravated by a protected characteristic?'
+      )
+      aggravateByProtectedCharacteristic.radio(`1-1-1-${test.code}-1`).check()
+      whatTypeOfOffencePage.continue().click()
+
+      // now this should lead to the new page
+      const whichProtectedCharacteristic = new OffenceCodeSelection(
+        'Select which protected characteristics were part of the reason for the incident'
+      )
+      whichProtectedCharacteristic.checkbox(`1-1-1-${test.code}-1-1`).check()
+      whichProtectedCharacteristic.checkbox(`1-1-1-${test.code}-1-2`).check()
+      whichProtectedCharacteristic.continueCheckboxes().click()
+
+      /* const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    
+        detailsOfOffencePage
+          .offenceDetailsSummary()
+          .find('dd')
+          .then($summaryData => {
+            expect($summaryData.get(2).innerText).to.contain('causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic')
+          }) */
+    })
+  })
+})
+
 context('v2 offences ALO', () => {
   beforeEach(() => {
     cy.task('reset')

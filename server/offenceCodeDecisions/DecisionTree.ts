@@ -317,20 +317,27 @@ const versionedQuestion1Answers =  question('What did the incident involve?')
       .child(
         answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
           .type(Type.PRISONER)
-          .child(
-            question('Was the incident a racially aggravated assault?')
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
               .child(answer('Yes').offenceCode(1001))
-              .child(answer('No').offenceCode(1002))
-          )
+              .child(answer('No').offenceCode(1002)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(100124)))
+              .child(answer('No').offenceCode(1002))    
+          ])
       )
       .child(
         answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
           .type(Type.OFFICER)
-          .child(
-            question('Was the incident a racially aggravated assault?')
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
               .child(answer('Yes').offenceCode(1003))
-              .child(answer('No').offenceCode(1004))
-          )
+              .child(answer('No').offenceCode(1004)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(100324)))
+              .child(answer('No').offenceCode(1004))    
+            
+          ])
       )
       .child(
         answer([
@@ -338,11 +345,14 @@ const versionedQuestion1Answers =  question('What did the incident involve?')
           `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
         ])
           .type(Type.STAFF)
-          .child(
-            question('Was the incident a racially aggravated assault?')
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
               .child(answer('Yes').offenceCode(1005))
-              .child(answer('No').offenceCode(1006))
-          )
+              .child(answer('No').offenceCode(1006)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(100524)))
+              .child(answer('No').offenceCode(1006))                
+          ])
       )
       .child(
         answer([
@@ -350,11 +360,14 @@ const versionedQuestion1Answers =  question('What did the incident involve?')
           `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
         ])
           .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
-          .child(
-            question('Was the incident a racially aggravated assault?')
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
               .child(answer('Yes').offenceCode(1021))
-              .child(answer('No').offenceCode(1022))
-          )
+              .child(answer('No').offenceCode(1022)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(102124)))
+              .child(answer('No').offenceCode(1022))                
+          ])
       )
       .child(
         answer([
@@ -362,11 +375,14 @@ const versionedQuestion1Answers =  question('What did the incident involve?')
           `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`,
         ])
           .type(Type.OTHER_PERSON)
-          .child(
-            question('Was the incident a racially aggravated assault?')
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
               .child(answer('Yes').offenceCode(1007))
-              .child(answer('No').offenceCode(1008))
-          )
+              .child(answer('No').offenceCode(1008)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(100724)))
+              .child(answer('No').offenceCode(1008))               
+          ])
       )
   )
 )
