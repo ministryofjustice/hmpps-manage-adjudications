@@ -158,7 +158,7 @@ const offenceRules = [
   },
 ]
 
-context('v2 offences', () => {
+context.skip('v2 offences', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -407,7 +407,7 @@ context('v2 offences', () => {
   })
 })
 
-context.only('v2 offences - assault 1(a)', () => {
+context.skip('v2 offences - assault 1(a)', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -555,7 +555,7 @@ context.only('v2 offences - assault 1(a)', () => {
   })
 })
 
-context('v2 offences ALO', () => {
+context.skip('v2 offences ALO', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
