@@ -4,14 +4,15 @@ import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 import { AnswerType as Type } from './Answer'
 import { answer, question } from './Decisions'
 import { GroupedOffenceRulesAndTitles, OffenceRule, offenceRuleAndTitle } from '../data/DraftAdjudicationResult'
-import { version } from 'os'
 
 const CHILD_1_Q = 'Assault, fighting, or endangering the health or personal safety of others'
+const CHILD_1_Q_V2 = 'Assault, fighting, endangering the health or personal safety of others or sexually assault, expose or harass someone'
 const CHILD_2_Q = 'Escape or failure to comply with temporary release conditions'
 const CHILD_3_Q = 'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)'
 const CHILD_4_Q = 'Sets fire to, or damages, the prison or any property'
 const CHILD_5_Q = 'Disrespectful, threatening, abusive, or insulting behaviour'
-const CHILD_6_Q = 'Disobeys any lawful order, or failure to comply with any rule or regulation'
+const CHILD_6_Q = 'Disobeys any lawful order, or failure to comply with any rule or regulation' 
+const CHILD_6_Q_V2 = 'Disobeys any lawful order, or failure to comply with any rule or regulation including any payback punishment' 
 const CHILD_7_Q = 'Detains another person'
 const CHILD_8_Q = 'Stopping someone who is not a prisoner from doing their job'
 const CHILD_9_Q = 'Being absent without authorisation, being in an unauthorised place, or failing to work correctly'
@@ -83,27 +84,29 @@ class ParaToOffenceCode {
 
 // Adult
 const adultQToOffencePara = [
-  new AloOffenceItem(CHILD_1_Q,['1', '1(a)', '4', '5']),
+  new AloOffenceItem(CHILD_1_Q,['1', '1(a)', '4', '5'], [1]),
+  new AloOffenceItem(CHILD_1_Q_V2,['1', '1(a)', '4', '5', '1(b)', '1(c)', '1(d)'], [2]),
   new AloOffenceItem(CHILD_2_Q,['7', '8']),
   new AloOffenceItem(CHILD_3_Q,['9', '10', '11', '12', '13', '14', '15', '24']),
   new AloOffenceItem(CHILD_4_Q,['16', '17', '24(a)'], [1]),
   new AloOffenceItem(CHILD_4_Q,['16', '17', '17(a)', '24(a)'], [2]),
   new AloOffenceItem(CHILD_5_Q,['19', '20', '20(a)']),
   new AloOffenceItem(CHILD_6_Q,['22', '23'], [1]),
-  new AloOffenceItem(CHILD_6_Q,['22', '23', '23(a)'], [2]),
+  new AloOffenceItem(CHILD_6_Q_V2,['22', '23', '23(a)'], [2]),
   new AloOffenceItem(CHILD_7_Q,['2']),
   new AloOffenceItem(CHILD_8_Q,['3', '6']),
   new AloOffenceItem(CHILD_9_Q,['18', '21']),
 ]
 // YOI
 const yoiQToOffencePara = [
-  new AloOffenceItem(CHILD_1_Q,['1', '2', '5', '6']),
+  new AloOffenceItem(CHILD_1_Q,['1', '2', '5', '6'], [1]),
+  new AloOffenceItem(CHILD_1_Q_V2,['1', '2', '5', '6', '2(a)', '2(b)', '2(c)'], [2]),
   new AloOffenceItem(CHILD_2_Q,['8', '9']),
   new AloOffenceItem(CHILD_3_Q,['10', '11', '12', '13', '14', '15', '16', '27']),
   new AloOffenceItem(CHILD_4_Q,['17', '18', '19', '28']),
   new AloOffenceItem(CHILD_5_Q,['21', '22', '23']),
   new AloOffenceItem(CHILD_6_Q,['25'], [1]),
-  new AloOffenceItem(CHILD_6_Q,['25', '26(a)'], [2]),
+  new AloOffenceItem(CHILD_6_Q_V2,['25', '26(a)'], [2]),
   new AloOffenceItem(CHILD_7_Q,['3']),
   new AloOffenceItem(CHILD_8_Q,['4', '7', '26']),
   new AloOffenceItem(CHILD_9_Q,['20', '24']),
@@ -119,6 +122,7 @@ const adultPara24YoiPara27OverrideQuestionId = '93'
 const adultPara18YoiPara20OverrideQuestionId = '92'
 const adultPara23YoiPara26OverrideQuestionId = '91'
 const adultPara22YoiPara25OverrideQuestionId = '90'
+const adultPara1aYoiPara2OverrideQuestionIdV2 = '89'
 
 const adultParaToNextQuestion = [
   new ParaToNextQuestion('4','1-1-2'),
@@ -126,7 +130,8 @@ const adultParaToNextQuestion = [
   new ParaToNextQuestion('2', '1-7' ),
   new ParaToNextQuestion('19','1-5-1' ),
   new ParaToNextQuestion('1', para1OverrideQuestionId ),
-  new ParaToNextQuestion('1(a)',adultPara1aYoiPara2OverrideQuestionId ),
+  new ParaToNextQuestion('1(a)',adultPara1aYoiPara2OverrideQuestionId, [1] ),
+  new ParaToNextQuestion('1(a)',adultPara1aYoiPara2OverrideQuestionIdV2, [2] ),
   new ParaToNextQuestion('7',adultPara7YoiPara8OverrideQuestionId ),
   new ParaToNextQuestion('8',adultPara8YoiPara9OverrideQuestionId ),
   new ParaToNextQuestion('9',adultPara9YoiPara10OverrideQuestionId ),
@@ -146,7 +151,8 @@ const yoiParaToNextQuestion = [
   new ParaToNextQuestion('3','1-7' ),
   new ParaToNextQuestion('21','1-5-1' ),
   new ParaToNextQuestion('1',para1OverrideQuestionId ),
-  new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionId ),
+  new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionId, [1] ),
+  new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionIdV2, [2] ),
   new ParaToNextQuestion('8',adultPara7YoiPara8OverrideQuestionId ),
   new ParaToNextQuestion('9',adultPara8YoiPara9OverrideQuestionId ),
   new ParaToNextQuestion('10',adultPara9YoiPara10OverrideQuestionId ),
@@ -177,7 +183,10 @@ const adultParaToOffenceCode = [
   new ParaToOffenceCode('23(a)','2600124'),
   new ParaToOffenceCode('20(a)', '2000124', [2]),
   new ParaToOffenceCode('17(a)', '1700124', [2]),
-  new ParaToOffenceCode('24(a)', '2410124', [2])
+  new ParaToOffenceCode('24(a)', '2410124', [2]),
+  new ParaToOffenceCode('1(b)', '102224', [2]),
+  new ParaToOffenceCode('1(c)', '102324', [2]),
+  new ParaToOffenceCode('1(d)', '102424', [2]),
 ]
 
 const yoiParaToOffenceCode = [
@@ -198,7 +207,10 @@ const yoiParaToOffenceCode = [
   new ParaToOffenceCode('26(a)','2600124'),
   new ParaToOffenceCode('23','2000124', [2] ),
   new ParaToOffenceCode('19', '1700124', [2]),
-  new ParaToOffenceCode('28', '2410124', [2])
+  new ParaToOffenceCode('28', '2410124', [2]),
+  new ParaToOffenceCode('2(a)', '102224', [2]),
+  new ParaToOffenceCode('2(b)', '102324', [2]),
+  new ParaToOffenceCode('2(c)', '102424', [2]),
 ]
 
 export const paraToNextQuestion = (
@@ -283,7 +295,205 @@ const protectedCharacteristicsQuestion = (offenceCode: number) => question('Sele
 .child(answer('Race').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
 .child(answer('Reglion or belief').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
 .child(answer('Sex').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
-.child(answer('Sexual orientation').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+  .child(answer('Sexual orientation').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+
+const versionedQuestion6Answers =  question('What did the incident involve?')
+.child(answer('Disobeying any lawful order').offenceCode(22001))
+.child(answer('Failure to comply with any rule or regulation').offenceCode(23101))
+  .child(answer('Failure to comply with any payback punishment', [2]).offenceCode(2600124))
+
+const versionedQuestion1Answers =  question('What did the incident involve?')
+.child(
+  answer('Assaulting someone').child(
+    question([
+      [Role.COMMITTED, 'Who was assaulted?'],
+      [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to assault?`],
+      [
+        Role.ASSISTED,
+        `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,
+      ],
+      [
+        Role.INCITED,
+        `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,
+      ],
+    ])
+      .child(
+        answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
+          .type(Type.PRISONER)
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
+              .child(answer('Yes').offenceCode(1001))
+              .child(answer('No').offenceCode(1002)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(100124)))
+              .child(answer('No').offenceCode(1002))    
+          ])
+      )
+      .child(
+        answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
+          .type(Type.OFFICER)
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
+              .child(answer('Yes').offenceCode(1003))
+              .child(answer('No').offenceCode(1004)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(100324)))
+              .child(answer('No').offenceCode(1004))    
+            
+          ])
+      )
+      .child(
+        answer([
+          'A member of staff who is not a prison officer',
+          `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
+        ])
+          .type(Type.STAFF)
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
+              .child(answer('Yes').offenceCode(1005))
+              .child(answer('No').offenceCode(1006)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(100524)))
+              .child(answer('No').offenceCode(1006))                
+          ])
+      )
+      .child(
+        answer([
+          'A prisoner who’s left this establishment',
+          `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
+        ])
+          .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
+              .child(answer('Yes').offenceCode(1021))
+              .child(answer('No').offenceCode(1022)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(102124)))
+              .child(answer('No').offenceCode(1022))                
+          ])
+      )
+      .child(
+        answer([
+          'A person not listed above',
+          `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`,
+        ])
+          .type(Type.OTHER_PERSON)
+          .versionedChild([
+            question('Was the incident a racially aggravated assault?', null, [1])
+              .child(answer('Yes').offenceCode(1007))
+              .child(answer('No').offenceCode(1008)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(100724)))
+              .child(answer('No').offenceCode(1008))               
+          ])
+      )
+  )
+)
+.child(
+  answer('Fighting with someone').child(
+    question([
+      [Role.COMMITTED, `Who did ${Text.PRISONER_FULL_NAME} fight with?`],
+      [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to fight with?`],
+      [
+        Role.ASSISTED,
+        `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to fight with?`,
+      ],
+      [
+        Role.INCITED,
+        `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to fight with?`,
+      ],
+    ])
+      .child(
+        answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
+          .type(Type.PRISONER)
+          .offenceCode(4001)
+      )
+      .child(
+        answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
+          .type(Type.OFFICER)
+          .offenceCode(4002)
+      )
+      .child(
+        answer([
+          'A member of staff who is not a prison officer',
+          `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
+        ])
+          .type(Type.STAFF)
+          .offenceCode(4003)
+      )
+      .child(
+        answer([
+          'A prisoner who’s left this establishment',
+          `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
+        ])
+          .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
+          .offenceCode(4004)
+      )
+      .child(
+        answer([
+          'A person not listed above',
+          `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`,
+        ])
+          .type(Type.OTHER_PERSON)
+          .offenceCode(4005)
+      )
+  )
+)
+.child(
+  answer('Endangering the health or personal safety of someone').child(
+    question([
+      [Role.COMMITTED, `Who did ${Text.PRISONER_FULL_NAME} endanger?`],
+      [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to endanger?`],
+      [
+        Role.ASSISTED,
+        `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to endanger?`,
+      ],
+      [
+        Role.INCITED,
+        `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to endanger?`,
+      ],
+    ])
+      .child(
+        answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
+          .type(Type.PRISONER)
+          .offenceCode(5001)
+      )
+      .child(
+        answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
+          .type(Type.OFFICER)
+          .offenceCode(5002)
+      )
+      .child(
+        answer([
+          'A member of staff who is not a prison officer',
+          `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
+        ])
+          .type(Type.STAFF)
+          .offenceCode(5003)
+      )
+      .child(
+        answer([
+          'A prisoner who’s left this establishment',
+          `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
+        ])
+          .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
+          .offenceCode(5004)
+      )
+      .child(
+        answer([
+          'A person not listed above',
+          `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`,
+        ])
+          .type(Type.OTHER_PERSON)
+          .offenceCode(5005)
+      )
+  ))
+  .child(answer('Sexual offence or obscene act', [2]).child(
+      question('What happened?')
+        .child(answer('Sexual assault').offenceCode(102224))
+        .child(answer('Exposes themselves or any other indecent or obscene act').offenceCode(102324))
+        .child(answer('Sexually harasses any person').offenceCode(102424))))
+
 
 // This decision tree is created from a spreadsheet that is linked to in JIRA ticket NN-3935.
 export default question([
@@ -295,181 +505,10 @@ export default question([
   ],
   [Role.INCITED, `What type of offence did ${Text.PRISONER_FULL_NAME} incite another prisoner to commit?`],
 ])
-  .child(
-    answer(CHILD_1_Q).child(
-      question('What did the incident involve?')
-        .child(
-          answer('Assaulting someone').child(
-            question([
-              [Role.COMMITTED, 'Who was assaulted?'],
-              [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to assault?`],
-              [
-                Role.ASSISTED,
-                `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,
-              ],
-              [
-                Role.INCITED,
-                `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to assault?`,
-              ],
-            ])
-              .child(
-                answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
-                  .type(Type.PRISONER)
-                  .child(
-                    question('Was the incident a racially aggravated assault?')
-                      .child(answer('Yes').offenceCode(1001))
-                      .child(answer('No').offenceCode(1002))
-                  )
-              )
-              .child(
-                answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
-                  .type(Type.OFFICER)
-                  .child(
-                    question('Was the incident a racially aggravated assault?')
-                      .child(answer('Yes').offenceCode(1003))
-                      .child(answer('No').offenceCode(1004))
-                  )
-              )
-              .child(
-                answer([
-                  'A member of staff who is not a prison officer',
-                  `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
-                ])
-                  .type(Type.STAFF)
-                  .child(
-                    question('Was the incident a racially aggravated assault?')
-                      .child(answer('Yes').offenceCode(1005))
-                      .child(answer('No').offenceCode(1006))
-                  )
-              )
-              .child(
-                answer([
-                  'A prisoner who’s left this establishment',
-                  `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
-                ])
-                  .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
-                  .child(
-                    question('Was the incident a racially aggravated assault?')
-                      .child(answer('Yes').offenceCode(1021))
-                      .child(answer('No').offenceCode(1022))
-                  )
-              )
-              .child(
-                answer([
-                  'A person not listed above',
-                  `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`,
-                ])
-                  .type(Type.OTHER_PERSON)
-                  .child(
-                    question('Was the incident a racially aggravated assault?')
-                      .child(answer('Yes').offenceCode(1007))
-                      .child(answer('No').offenceCode(1008))
-                  )
-              )
-          )
-        )
-        .child(
-          answer('Fighting with someone').child(
-            question([
-              [Role.COMMITTED, `Who did ${Text.PRISONER_FULL_NAME} fight with?`],
-              [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to fight with?`],
-              [
-                Role.ASSISTED,
-                `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to fight with?`,
-              ],
-              [
-                Role.INCITED,
-                `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to fight with?`,
-              ],
-            ])
-              .child(
-                answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
-                  .type(Type.PRISONER)
-                  .offenceCode(4001)
-              )
-              .child(
-                answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
-                  .type(Type.OFFICER)
-                  .offenceCode(4002)
-              )
-              .child(
-                answer([
-                  'A member of staff who is not a prison officer',
-                  `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
-                ])
-                  .type(Type.STAFF)
-                  .offenceCode(4003)
-              )
-              .child(
-                answer([
-                  'A prisoner who’s left this establishment',
-                  `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
-                ])
-                  .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
-                  .offenceCode(4004)
-              )
-              .child(
-                answer([
-                  'A person not listed above',
-                  `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`,
-                ])
-                  .type(Type.OTHER_PERSON)
-                  .offenceCode(4005)
-              )
-          )
-        )
-        .child(
-          answer('Endangering the health or personal safety of someone').child(
-            question([
-              [Role.COMMITTED, `Who did ${Text.PRISONER_FULL_NAME} endanger?`],
-              [Role.ATTEMPTED, `Who did ${Text.PRISONER_FULL_NAME} attempt to endanger?`],
-              [
-                Role.ASSISTED,
-                `Who did ${Text.PRISONER_FULL_NAME} assist ${Text.ASSOCIATED_PRISONER_FULL_NAME} to endanger?`,
-              ],
-              [
-                Role.INCITED,
-                `Who did ${Text.PRISONER_FULL_NAME} incite ${Text.ASSOCIATED_PRISONER_FULL_NAME} to endanger?`,
-              ],
-            ])
-              .child(
-                answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
-                  .type(Type.PRISONER)
-                  .offenceCode(5001)
-              )
-              .child(
-                answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
-                  .type(Type.OFFICER)
-                  .offenceCode(5002)
-              )
-              .child(
-                answer([
-                  'A member of staff who is not a prison officer',
-                  `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
-                ])
-                  .type(Type.STAFF)
-                  .offenceCode(5003)
-              )
-              .child(
-                answer([
-                  'A prisoner who’s left this establishment',
-                  `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
-                ])
-                  .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
-                  .offenceCode(5004)
-              )
-              .child(
-                answer([
-                  'A person not listed above',
-                  `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`,
-                ])
-                  .type(Type.OTHER_PERSON)
-                  .offenceCode(5005)
-              )
-          )
-        )
-    )
-  )
+.versionedChild([
+    answer(CHILD_1_Q, [1]).child(versionedQuestion1Answers),
+    answer(CHILD_1_Q_V2, [2]).child(versionedQuestion1Answers),
+   ]) 
   .child(
     answer(CHILD_2_Q).child(
       question('What did the incident involve?')
@@ -595,14 +634,11 @@ export default question([
         )
     )
   )
-  .child(
-    answer(CHILD_6_Q).child(
-      question('What did the incident involve?')
-        .child(answer('Disobeying any lawful order').offenceCode(22001))
-        .child(answer('Failure to comply with any rule or regulation').offenceCode(23101))
-        .child(answer('Failure to comply with any payback punishment', [2]).offenceCode(2600124))
-    )
-  )
+  .versionedChild(
+    [
+      answer(CHILD_6_Q, [1]).child(versionedQuestion6Answers),
+      answer(CHILD_6_Q_V2, [2]).child(versionedQuestion6Answers)
+    ])
   .child(
     answer(CHILD_7_Q).child(
       question([
@@ -702,7 +738,41 @@ export const paragraph1 = question('Who was assaulted?', para1OverrideQuestionId
     answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`])
       .type(Type.OTHER_PERSON)
       .offenceCode(1008)
-  )
+)
+  
+export const paragraph1AV2 = question('Who was assaulted, aggravated by a protected characteristic?', adultPara1aYoiPara2OverrideQuestionIdV2)
+.child(
+  answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
+    .type(Type.PRISONER)
+    .child(protectedCharacteristicsQuestion(100124))
+)
+.child(
+  answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
+    .type(Type.OFFICER)
+    .child(protectedCharacteristicsQuestion(100324))
+)
+.child(
+  answer([
+    'A member of staff who is not a prison officer',
+    `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
+  ])
+    .type(Type.STAFF)
+    .child(protectedCharacteristicsQuestion(100524))
+)
+.child(
+  answer([
+    'A prisoner who’s left this establishment',
+    `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
+  ])
+    .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
+    .child(protectedCharacteristicsQuestion(102124))
+)
+.child(
+  answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`])
+    .type(Type.OTHER_PERSON)
+    .child(protectedCharacteristicsQuestion(100724))
+) 
+
 
 export const paragraph1A = question('Who was assaulted?', adultPara1aYoiPara2OverrideQuestionId)
   .child(

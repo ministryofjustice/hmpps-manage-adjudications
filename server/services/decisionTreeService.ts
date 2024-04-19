@@ -8,6 +8,7 @@ import PrisonerResult from '../data/prisonerResult'
 import { DraftAdjudication, IncidentRole, OffenceDetails, OffenceRule } from '../data/DraftAdjudicationResult'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
+import config from '../config'
 
 export type AnswerData = {
   victimOtherPersonsName?: string
@@ -35,7 +36,9 @@ export default class DecisionTreeService {
       return this.decisionTree
     }
 
-    const additionalQuestion = this.additionalQuestions.filter(question => key.startsWith(question.id()))
+    const additionalQuestion = this.additionalQuestions.filter(
+      question => key.startsWith(question.id()) && question.isApplicableVersion(+config.offenceVersion)
+    )
 
     if (additionalQuestion.length === 0) {
       return this.decisionTree
