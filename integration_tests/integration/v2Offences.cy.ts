@@ -27,7 +27,7 @@ const originalDraftTestOne = {
       },
     },
     offenceDetails: {
-      offenceCode: 1001,
+      offenceCode: 1002,
       offenceRule: {
         paragraphNumber: '1',
         paragraphDescription: 'Commits any assault',
@@ -43,7 +43,7 @@ const reportedAdjudicationTestOne = testData.reportedAdjudication({
   locationId: 25538,
   incidentRole: {},
   offenceDetails: {
-    offenceCode: 1021,
+    offenceCode: 1022,
     offenceRule: {
       paragraphNumber: '1(a)',
       paragraphDescription: 'Commits any racially aggravated assault',
@@ -68,7 +68,7 @@ const yoiOriginalDraftTestOne = {
       },
     },
     offenceDetails: {
-      offenceCode: 1001,
+      offenceCode: 1002,
       offenceRule: {
         paragraphNumber: '1',
         paragraphDescription: 'Commits any assault',
@@ -85,7 +85,7 @@ const yoiReportedAdjudicationTestOne = testData.reportedAdjudication({
   locationId: 25538,
   incidentRole: {},
   offenceDetails: {
-    offenceCode: 1021,
+    offenceCode: 1022,
     offenceRule: {
       paragraphNumber: '1(a)',
       paragraphDescription: 'Commits any racially aggravated assault',
@@ -155,6 +155,14 @@ const offenceRules = [
   {
     paragraphNumber: '2(c)',
     paragraphDescription: 'sexually harasses any person',
+  },
+  {
+    paragraphNumber: '2',
+    paragraphDescription: 'commits any assault aggravated by a protected characteristic',
+  },
+  {
+    paragraphNumber: '1(a)',
+    paragraphDescription: 'commits any assault aggravated by a protected characteristic',
   },
 ]
 
@@ -780,6 +788,30 @@ context.skip('v2 offences ALO', () => {
       isYouthOffender: true,
       chargeNumber: '123456',
     },
+    {
+      testName: '100724 > 1(a) ',
+      radio: '1(a)',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '100724',
+      isYouthOffender: false,
+      chargeNumber: '12345',
+      additionalQuestion: true,
+      key: ['89-5', '89-5'],
+      skipProtectedYesNo: true,
+    },
+    {
+      testName: '100724 > 2 ',
+      radio: '2',
+      radio2: null,
+      title: 'Who was assaulted?',
+      offenceCode: '100724',
+      isYouthOffender: true,
+      chargeNumber: '123456',
+      additionalQuestion: true,
+      key: ['89-5', '89-5'],
+      skipProtectedYesNo: true,
+    },
   ].forEach(test => {
     it(test.testName, () => {
       if (test.isYouthOffender) {
@@ -835,6 +867,13 @@ context.skip('v2 offences ALO', () => {
             paragraphDescription: 'sexually harasses any person',
           },
         })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 100724,
+          response: {
+            paragraphNumber: '2',
+            paragraphDescription: 'commits any assault aggravated by a protected characteristic',
+          },
+        })
       } else {
         cy.task('stubGetOffenceRule', {
           offenceCode: 2600124,
@@ -888,6 +927,13 @@ context.skip('v2 offences ALO', () => {
             paragraphDescription: 'sexually harasses any person',
           },
         })
+        cy.task('stubGetOffenceRule', {
+          offenceCode: 100724,
+          response: {
+            paragraphNumber: '1(a)',
+            paragraphDescription: 'commits any assault aggravated by a protected characteristic',
+          },
+        })
       }
 
       cy.visit(adjudicationUrls.prisonerReport.urls.review(test.chargeNumber))
@@ -912,13 +958,21 @@ context.skip('v2 offences ALO', () => {
           cy.location().should(loc => {
             expect(loc.pathname).to.contain(`/${test.key}`)
           })
-        } else {
+        } else if (test.skipProtectedYesNo !== true) {
           const aggravateByProtectedCharacteristic = new OffenceCodeSelection(
             'Was the incident aggravated by a protected characteristic?'
           )
           aggravateByProtectedCharacteristic.radio(`${test.key[0]}-1`).check()
           test.key.shift()
           aggravateByProtectedCharacteristic.continue().click()
+        } else {
+          const whoWasAssaulted = new OffenceCodeSelection(
+            'Who was assaulted, aggravated by a protected characteristic?'
+          )
+          whoWasAssaulted.radio(`${test.key[0]}`).check()
+          whoWasAssaulted.victimOtherPersonSearchNameInput().type('James Peterson')
+          test.key.shift()
+          whoWasAssaulted.continue().click()
         }
         const whichProtectedCharacteristic = new OffenceCodeSelection(
           'Select which protected characteristics were part of the reason for the incident'

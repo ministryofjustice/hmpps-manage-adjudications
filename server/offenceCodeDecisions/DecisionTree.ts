@@ -122,6 +122,7 @@ const adultPara24YoiPara27OverrideQuestionId = '93'
 const adultPara18YoiPara20OverrideQuestionId = '92'
 const adultPara23YoiPara26OverrideQuestionId = '91'
 const adultPara22YoiPara25OverrideQuestionId = '90'
+const adultPara1aYoiPara2OverrideQuestionIdV2 = '89'
 
 const adultParaToNextQuestion = [
   new ParaToNextQuestion('4','1-1-2'),
@@ -129,7 +130,8 @@ const adultParaToNextQuestion = [
   new ParaToNextQuestion('2', '1-7' ),
   new ParaToNextQuestion('19','1-5-1' ),
   new ParaToNextQuestion('1', para1OverrideQuestionId ),
-  new ParaToNextQuestion('1(a)',adultPara1aYoiPara2OverrideQuestionId ),
+  new ParaToNextQuestion('1(a)',adultPara1aYoiPara2OverrideQuestionId, [1] ),
+  new ParaToNextQuestion('1(a)',adultPara1aYoiPara2OverrideQuestionIdV2, [2] ),
   new ParaToNextQuestion('7',adultPara7YoiPara8OverrideQuestionId ),
   new ParaToNextQuestion('8',adultPara8YoiPara9OverrideQuestionId ),
   new ParaToNextQuestion('9',adultPara9YoiPara10OverrideQuestionId ),
@@ -149,7 +151,8 @@ const yoiParaToNextQuestion = [
   new ParaToNextQuestion('3','1-7' ),
   new ParaToNextQuestion('21','1-5-1' ),
   new ParaToNextQuestion('1',para1OverrideQuestionId ),
-  new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionId ),
+  new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionId, [1] ),
+  new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionIdV2, [2] ),
   new ParaToNextQuestion('8',adultPara7YoiPara8OverrideQuestionId ),
   new ParaToNextQuestion('9',adultPara8YoiPara9OverrideQuestionId ),
   new ParaToNextQuestion('10',adultPara9YoiPara10OverrideQuestionId ),
@@ -735,9 +738,43 @@ export const paragraph1 = question('Who was assaulted?', para1OverrideQuestionId
     answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`])
       .type(Type.OTHER_PERSON)
       .offenceCode(1008)
-  )
+)
+  
+export const paragraph1AV2 = question('Who was assaulted, aggravated by a protected characteristic?', adultPara1aYoiPara2OverrideQuestionIdV2)
+.child(
+  answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
+    .type(Type.PRISONER)
+    .child(protectedCharacteristicsQuestion(100124))
+)
+.child(
+  answer(['A prison officer', `A prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`])
+    .type(Type.OFFICER)
+    .child(protectedCharacteristicsQuestion(100324))
+)
+.child(
+  answer([
+    'A member of staff who is not a prison officer',
+    `A member of staff who is not a prison officer - ${Text.VICTIM_STAFF_FULL_NAME}`,
+  ])
+    .type(Type.STAFF)
+    .child(protectedCharacteristicsQuestion(100524))
+)
+.child(
+  answer([
+    'A prisoner who’s left this establishment',
+    `A prisoner who's left this establishment - ${Text.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}`,
+  ])
+    .type(Type.PRISONER_OUTSIDE_ESTABLISHMENT)
+    .child(protectedCharacteristicsQuestion(102124))
+)
+.child(
+  answer(['A person not listed above', `Another person not listed above - ${Text.VICTIM_OTHER_PERSON_FULL_NAME}`])
+    .type(Type.OTHER_PERSON)
+    .child(protectedCharacteristicsQuestion(100724))
+) 
 
-export const paragraph1A = question('Who was assaulted?', adultPara1aYoiPara2OverrideQuestionId)
+
+export const paragraph1A = question('Who was assaulted ?', adultPara1aYoiPara2OverrideQuestionId)
   .child(
     answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
       .type(Type.PRISONER)

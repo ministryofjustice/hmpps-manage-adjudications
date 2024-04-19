@@ -19,6 +19,7 @@ import decisionTree, {
   paragraph18,
   paragraph23,
   paragraph22,
+  paragraph1AV2,
 } from '../offenceCodeDecisions/DecisionTree'
 import DamagesSessionService from './damagesSessionService'
 import EvidenceSessionService from './evidenceSessionService'
@@ -58,6 +59,7 @@ const decisionTreeService = new DecisionTreeService(
   [
     paragraph1,
     paragraph1A,
+    paragraph1AV2,
     paragraph7,
     paragraph8,
     paragraph9,
