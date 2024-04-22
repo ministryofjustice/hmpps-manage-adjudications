@@ -66,8 +66,8 @@ export default class Question {
     return this.questionTitle
   }
 
-  getChildAnswers() {
-    return this.childAnswers.filter(a => a.isApplicableVersion(+config.offenceVersion))
+  getChildAnswers(overrideVersion: number = null) {
+    return this.childAnswers.filter(a => a.isApplicableVersion(overrideVersion || +config.offenceVersion))
   }
 
   getParentAnswer() {
@@ -89,8 +89,20 @@ export default class Question {
   }
 
   findAnswerByCode(offenceCode: number): Answer {
-    // TODO this will also need to take an optional list of protected characteristics when type checkboxes
-    return this.findAnswerBy(answer => answer.getOffenceCode() === offenceCode)
+    const answer = this.findAnswerBy(a => a.getOffenceCode() === offenceCode)
+    return answer || this.findAnswerByCodeForPreviousVersions(offenceCode)
+  }
+
+  private findAnswerByCodeForPreviousVersions(offenceCode: number): Answer {
+    /* eslint-disable no-plusplus */
+    for (let version = +config.offenceVersion - 1; version > 0; version--) {
+      const answer = this.findAnswerBy(a => a.getOffenceCode() === offenceCode, version)
+      if (answer !== null) {
+        return answer
+      }
+    }
+
+    throw new Error(`unable to find answer for ${offenceCode}`)
   }
 
   findAnswerById(id: string): Answer {
@@ -132,13 +144,15 @@ export default class Question {
     return matches
   }
 
-  findAnswerBy(fn: (answer: Answer) => boolean): Answer {
-    const matching = this.matchingAnswers(fn)
+  findAnswerBy(fn: (answer: Answer) => boolean, overrideVersion: number = null): Answer {
+    const matching = this.matchingAnswers(fn, overrideVersion)
     return this.uniqueOrThrow(matching)
   }
 
-  matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
-    return [].concat(...this.getChildAnswers().map(a => a.matchingAnswers(fn))).filter(notEmpty)
+  matchingAnswers(fn: (answer: Answer) => boolean, overrideVersion: number = null): Answer[] {
+    return []
+      .concat(...this.getChildAnswers(overrideVersion).map(a => a.matchingAnswers(fn, overrideVersion)))
+      .filter(notEmpty)
   }
 
   private uniqueOrThrow<T>(list: T[]): T {

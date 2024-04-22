@@ -93,12 +93,12 @@ export class Answer {
     return this.parentQuestion
   }
 
-  getChildQuestion(): Question {
-    return this.childQuestion.find(c => c.isApplicableVersion(+config.offenceVersion))
+  getChildQuestion(overrideVersion: number = null): Question {
+    return this.childQuestion.find(c => c.isApplicableVersion(overrideVersion || +config.offenceVersion))
   }
 
-  getChildAnswers(): Answer[] {
-    return this.getChildQuestion()?.getChildAnswers() || []
+  getChildAnswers(overrideVersion: number = null): Answer[] {
+    return this.getChildQuestion(overrideVersion)?.getChildAnswers(overrideVersion) || []
   }
 
   getQuestionsAndAnswersToGetHere(): { question: Question; answer: Answer }[] {
@@ -130,9 +130,11 @@ export class Answer {
     return this.uniqueOrThrow(matching)
   }
 
-  matchingAnswers(fn: (answer: Answer) => boolean): Answer[] {
+  matchingAnswers(fn: (answer: Answer) => boolean, overrideVersion: number = null): Answer[] {
     const childMatches = []
-      .concat(...this.getChildAnswers().map(childAnswer => childAnswer.matchingAnswers(fn)))
+      .concat(
+        ...this.getChildAnswers(overrideVersion).map(childAnswer => childAnswer.matchingAnswers(fn, overrideVersion))
+      )
       .filter(notEmpty)
     if (fn(this)) {
       childMatches.push(this)

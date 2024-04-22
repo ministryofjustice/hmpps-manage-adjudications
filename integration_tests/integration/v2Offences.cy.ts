@@ -27,7 +27,7 @@ const originalDraftTestOne = {
       },
     },
     offenceDetails: {
-      offenceCode: 1002,
+      offenceCode: 1001,
       offenceRule: {
         paragraphNumber: '1',
         paragraphDescription: 'Commits any assault',
@@ -68,7 +68,7 @@ const yoiOriginalDraftTestOne = {
       },
     },
     offenceDetails: {
-      offenceCode: 1002,
+      offenceCode: 1001,
       offenceRule: {
         paragraphNumber: '1',
         paragraphDescription: 'Commits any assault',
