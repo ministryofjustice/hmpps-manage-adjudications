@@ -126,6 +126,11 @@ export const getFullDate = (dateTimeString: string, format = 'D MMMM YYYY'): str
   return getDateOrTime(dateTimeString, format)
 }
 
+export const getLastMonthText = (): string => {
+  const lastMonthDate = moment().subtract(1, 'M')
+  return `${lastMonthDate.format('MMMM')} ${lastMonthDate.format('YYYY')}`
+}
+
 export const getTime = (dateTimeString: string, format = 'HH:mm'): string => {
   return getDateOrTime(dateTimeString, format)
 }

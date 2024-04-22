@@ -16,6 +16,7 @@ import {
   convertSubmittedDateTimeToDateObject,
   getFullDate,
   agencyIdToName,
+  getLastMonthText,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -286,5 +287,18 @@ describe('agencyIdToName', () => {
     ]
     const result = agencyIdToName('MDI', establishmentInfo)
     expect(result).toEqual('Moorland')
+  })
+
+  describe('getLastMonthText', () => {
+    it('Returns the previous month and correct year - simple date', () => {
+      Date.now = jest.fn(() => new Date('2020-11-01T12:40:00.000Z').getTime())
+      const result = getLastMonthText()
+      expect(result).toEqual('October 2020')
+    })
+    it('Returns the previous month and correct year - more complicated date', () => {
+      Date.now = jest.fn(() => new Date('2020-01-01T12:40:00.000Z').getTime())
+      const result = getLastMonthText()
+      expect(result).toEqual('December 2019')
+    })
   })
 })

@@ -11,7 +11,7 @@ import {
   produceHorizontalBarsChart,
   produceVerticalBarsAndLineCharts,
 } from '../chartService'
-import { getFullDate } from '../../../utils/utils'
+import { getFullDate, getLastMonthText } from '../../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -36,6 +36,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
     const lastModifiedDate = getFullDate(
       (await this.chartApiService.getLastModifiedChart(username, '1a')).lastModifiedDate
     )
+    const lastMonthText = getLastMonthText()
     const chartSettingMap = {}
 
     chartSettingMap['1a'] = await produceVerticalBarsAndLineCharts(
@@ -62,7 +63,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       '1c',
       username,
       agencyId,
-      'Number of people placed on report in the past 30 days',
+      `Number of people placed on report in ${lastMonthText}`,
       '',
       'This is approximately',
       'of your population over this period.',

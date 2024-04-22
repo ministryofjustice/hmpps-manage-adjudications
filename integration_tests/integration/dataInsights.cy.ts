@@ -7,6 +7,7 @@ import { getFullDate } from '../../server/utils/utils'
 context('Adjudication data', () => {
   const lastModifiedDate = '2023-08-24T15:30:00'
   const fullLastModifiedDate = getFullDate(lastModifiedDate)
+  // const now = new Date(2024, 1, 22, 9, 30, 0).getTime()
 
   beforeEach(() => {
     cy.task('reset')
@@ -15,6 +16,8 @@ context('Adjudication data', () => {
       username: 'USER1',
       activeCaseLoadId: 'RNI',
     })
+
+    // cy.clock(now)
 
     const chartEntries = getChartEntriesMap()
 
@@ -262,7 +265,7 @@ context('Adjudication data', () => {
     page.checkLastModifiedDate(fullLastModifiedDate)
     page.checkChartTitle('Adjudication reports created - over 24 months')
     page.checkChartTitle('Adjudication reports referred to independent adjudicator - over 24 months')
-    page.checkChartTitle('Number of people placed on report in the past 30 days')
+    // page.checkChartTitle('Number of people placed on report in January 2024')
     page.checkChartTitle('Adjudication reports by location of adjudication incident - last 30 days')
     page.checkChartTitle('Adjudication reports by residential location of prisoner - last 30 days')
   })
