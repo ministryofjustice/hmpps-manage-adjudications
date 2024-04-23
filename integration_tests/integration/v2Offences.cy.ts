@@ -1066,9 +1066,10 @@ context.skip('v2 offences ALO', () => {
 
         const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
         detailsOfOffence.saveAndContinue().click()
-        // cy.url().should('include', adjudicationUrls.prisonerReport.urls.review('12345'))
-        // this seems wrong but maybe how tests work TBC
-        cy.url().should('include', adjudicationUrls.detailsOfDamages.urls.start(test.isYouthOffender ? '1777' : '177'))
+        cy.url().should(
+          'include',
+          adjudicationUrls.prisonerReport.urls.review(test.isYouthOffender ? '123456' : '12345')
+        )
       }
     })
   })

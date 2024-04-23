@@ -119,7 +119,9 @@ export default class OffenceCodeRoutes {
 
     return this.redirect(
       {
-        pathname: adjudicationUrls.detailsOfOffence.urls.add(draftChargeId),
+        pathname: this.pageOptions.isAloEdit()
+          ? adjudicationUrls.detailsOfOffence.urls.aloAdd(draftChargeId)
+          : adjudicationUrls.detailsOfOffence.urls.add(draftChargeId),
         query: {
           ...updatedOffenceData,
           protectedCharacteristics,
