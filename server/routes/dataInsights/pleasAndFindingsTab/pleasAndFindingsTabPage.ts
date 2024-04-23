@@ -6,12 +6,11 @@ import { AgencyId } from '../../../data/PrisonLocationResult'
 import {
   ALL_DATA_FILTER,
   ChartDetailsResult,
-  ChartEntryDuoLine,
   ChartEntryHorizontalBar,
   ChartEntryLine,
 } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
-import { produceDuoVerticalBarsCharts, produceLinesCharts } from '../chartService'
+import { produceLinesCharts } from '../chartService'
 import { getFullDate } from '../../../utils/utils'
 
 type PageData = {
@@ -44,7 +43,7 @@ export default class PleasAndFindingsTabPage {
       '5a',
       username,
       agencyId,
-      'Pleas given - current month and previous 12 months',
+      'Hearing pleas given - current month and previous 12 months',
       'This chart shows the numbers of each plea given over time. Are there any insights or trends which can inform any actions?',
       await this.chartApiService.getChart(username, agencyId, '5a'),
       ALL_DATA_FILTER,
@@ -57,38 +56,13 @@ export default class PleasAndFindingsTabPage {
       '5b',
       username,
       agencyId,
-      'Findings - current month and previous 12 months',
-      'This chart shows the numbers of each finding over time. Are there any insights or trends which can inform any actions?',
+      'Hearing findings - current month and previous 12 months',
+      'This chart shows the numbers of each recorded finding over time. Are there any insights or trends which can inform any actions?',
       await this.chartApiService.getChart(username, agencyId, '5b'),
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.finding },
       { source: (row: ChartEntryHorizontalBar) => row.count },
       'Count'
-    )
-
-    chartSettingMap['5c'] = await produceDuoVerticalBarsCharts(
-      '5c',
-      username,
-      agencyId,
-      'Adjudications resolved with more than one hearing - current month and previous 12 months',
-      'Use this chart to understand and monitor how many adjudications are adjourned after first hearing. Are these levels as low as you would want, suggesting it only happens when warranted?',
-      await this.chartApiService.getChart(username, agencyId, '5c'),
-      [
-        {
-          label: '1 hearing',
-          countSource: { source: (row: ChartEntryDuoLine) => row.count_one },
-          propSource: { source: (row: ChartEntryDuoLine) => row.prop_one },
-        },
-        {
-          label: 'More than 1 hearing',
-          countSource: { source: (row: ChartEntryDuoLine) => row.count_more },
-          propSource: { source: (row: ChartEntryDuoLine) => row.prop_more },
-        },
-      ],
-      { source: (row: ChartEntryLine) => Math.trunc(row.proportion * 100) },
-      { source: (row: ChartEntryDuoLine) => `${row.year}-${row.month}` },
-      { source: (row: ChartEntryDuoLine) => row.count },
-      'Percentage'
     )
 
     return res.render(`pages/dataInsights/pleasAndFindingsTab.njk`, {

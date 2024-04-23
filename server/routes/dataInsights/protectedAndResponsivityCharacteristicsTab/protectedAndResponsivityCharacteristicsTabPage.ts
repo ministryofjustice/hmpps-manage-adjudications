@@ -8,7 +8,7 @@ import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabs
 import { getUniqueItems, produceHorizontalBarsChart } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import DropDownEntry from '../dropDownEntry'
-import { getFullDate } from '../../../utils/utils'
+import { getFullDate, getLastMonthText } from '../../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -52,6 +52,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const { username } = user
     const agencyId: AgencyId = user.meta.caseLoadId
 
+    const lastMonthText = getLastMonthText()
     const chartSettingMap = {}
 
     const chartDetails2a = await this.chartApiService.getChart(username, agencyId, '2a')
@@ -70,7 +71,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       '2a',
       username,
       agencyId,
-      'Overview of prisoners in the establishment - last 30 days',
+      `Overview of prisoners in the establishment - ${lastMonthText}`,
       'This chart shows the recent numbers of prisoners in your establishment in each sub-group of the selected characteristic. It provides context and a comparison for the subsequent charts.',
       '',
       chartDetails2a,
@@ -94,7 +95,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       '2b',
       username,
       agencyId,
-      'Adjudication reports by protected or responsivity characteristic - last 30 days',
+      `Adjudication reports by protected or responsivity characteristic - ${lastMonthText}`,
       'Use this chart to see adjudication reports by this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       await this.chartApiService.getChart(username, agencyId, '2b'),
@@ -123,7 +124,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       '2d',
       username,
       agencyId,
-      'Adjudication offence type by protected or responsivity characteristic - last 30 days',
+      `Adjudication offence type by protected or responsivity characteristic - ${lastMonthText}`,
       'Select an offence type to explore differences within this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       chartDetails2d,
@@ -155,7 +156,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       '2e',
       username,
       agencyId,
-      'Punishment by protected or responsivity characteristic - last 30 days',
+      `Punishment by protected or responsivity characteristic - ${lastMonthText}`,
       'Select a punishment type to explore differences within this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       chartDetails2e,
@@ -191,7 +192,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       '2f',
       username,
       agencyId,
-      'Plea by protected or responsivity characteristic - last 30 days',
+      `Plea by protected or responsivity characteristic - ${lastMonthText}`,
       'Select a plea to explore differences within this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       chartDetails2f,
@@ -223,7 +224,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       '2g',
       username,
       agencyId,
-      'Finding by protected or responsivity characteristic - last 30 days',
+      `Finding by protected or responsivity characteristic - ${lastMonthText}`,
       'Select a finding to explore differences within this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
       '',
       chartDetails2g,

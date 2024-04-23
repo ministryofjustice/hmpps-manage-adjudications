@@ -1,3 +1,4 @@
+import moment from 'moment'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import Page from '../pages/page'
 import DataInsightsPage from '../pages/dataInsights'
@@ -7,6 +8,8 @@ import { getFullDate } from '../../server/utils/utils'
 context('Adjudication data', () => {
   const lastModifiedDate = '2023-08-24T15:30:00'
   const fullLastModifiedDate = getFullDate(lastModifiedDate)
+  const lastMonthDate = moment().subtract(1, 'M')
+  const calculatedDate = `${lastMonthDate.format('MMMM')} ${lastMonthDate.format('YYYY')}`
 
   beforeEach(() => {
     cy.task('reset')
@@ -262,7 +265,7 @@ context('Adjudication data', () => {
     page.checkLastModifiedDate(fullLastModifiedDate)
     page.checkChartTitle('Adjudication reports created - over 24 months')
     page.checkChartTitle('Adjudication reports referred to independent adjudicator - over 24 months')
-    page.checkChartTitle('Number of people placed on report in the past 30 days')
+    page.checkChartTitle(`Number of people placed on report in ${calculatedDate}`)
     page.checkChartTitle('Adjudication reports by location of adjudication incident - last 30 days')
     page.checkChartTitle('Adjudication reports by residential location of prisoner - last 30 days')
   })
@@ -314,12 +317,12 @@ context('Adjudication data', () => {
     page.checkLastModifiedDate(fullLastModifiedDate)
     page.selectCharacteristic().should('exist')
     page.showResultsButton().should('exist')
-    page.checkChartTitle('Overview of prisoners in the establishment - last 30 days')
-    page.checkChartTitle('Adjudication reports by protected or responsivity characteristic - last 30 days')
-    page.checkChartTitle('Adjudication offence type by protected or responsivity characteristic - last 30 days')
-    page.checkChartTitle('Punishment by protected or responsivity characteristic - last 30 days')
-    page.checkChartTitle('Plea by protected or responsivity characteristic - last 30 days')
-    page.checkChartTitle('Finding by protected or responsivity characteristic - last 30 days')
+    page.checkChartTitle(`Overview of prisoners in the establishment - ${calculatedDate}`)
+    page.checkChartTitle(`Adjudication reports by protected or responsivity characteristic - ${calculatedDate}`)
+    page.checkChartTitle(`Adjudication offence type by protected or responsivity characteristic - ${calculatedDate}`)
+    page.checkChartTitle(`Punishment by protected or responsivity characteristic - ${calculatedDate}`)
+    page.checkChartTitle(`Plea by protected or responsivity characteristic - ${calculatedDate}`)
+    page.checkChartTitle(`Finding by protected or responsivity characteristic - ${calculatedDate}`)
   }
 
   it('should contain the required page elements /data-insights/offence-type', () => {
@@ -347,9 +350,8 @@ context('Adjudication data', () => {
     const page: DataInsightsPage = Page.verifyOnPage(DataInsightsPage)
     page.checkOnPage()
     page.checkLastModifiedDate(fullLastModifiedDate)
-    page.checkChartTitle('Pleas given - current month and previous 12 months')
-    page.checkChartTitle('Findings - current month and previous 12 months')
-    page.checkChartTitle('Adjudications resolved with more than one hearing - current month and previous 12 months')
+    page.checkChartTitle('Hearing pleas given - current month and previous 12 months')
+    page.checkChartTitle('Hearing findings - current month and previous 12 months')
   })
 })
 
