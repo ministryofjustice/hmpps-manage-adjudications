@@ -225,11 +225,11 @@ describe('POST /details-of-offence/100', () => {
   it('should save the offence', async () => {
     const agent = request.agent(app)
     return agent
-      .get(adjudicationUrls.detailsOfOffence.urls.modified(100))
+      .get(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1`)
       .expect(200)
       .then(() =>
         agent
-          .post(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1&victimPrisonersNumber=G5512G`)
+          .post(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1&victimPrisonersNumber=G5512G&=`)
           .then(() =>
             expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(
               100,
@@ -289,7 +289,7 @@ describe('POST /details-of-offence - ALO edits offence', () => {
   it('should call the correct endpoint with the session data', () => {
     const agent = request.agent(app)
     return agent
-      .get(adjudicationUrls.detailsOfOffence.urls.aloEdit(102))
+      .get(`${adjudicationUrls.detailsOfOffence.urls.aloEdit(102)}?offenceCode=1`)
       .expect(200)
       .then(() =>
         agent

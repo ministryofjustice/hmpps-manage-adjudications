@@ -114,10 +114,17 @@ export default class OffenceCodeRoutes {
       typeof protectedCharacteristics === 'string' ? protectedCharacteristics : protectedCharacteristics[0]
     )
     const form = answerTypeHelper.formFromPost(req)
+
     const updatedOffenceData = answerTypeHelper.updatedOffenceData(offenceToAdd, form)
 
     return this.redirect(
-      { pathname: adjudicationUrls.detailsOfOffence.urls.add(draftChargeId), query: updatedOffenceData },
+      {
+        pathname: adjudicationUrls.detailsOfOffence.urls.add(draftChargeId),
+        query: {
+          ...updatedOffenceData,
+          protectedCharacteristics,
+        },
+      },
       res
     )
   }
@@ -295,7 +302,7 @@ export default class OffenceCodeRoutes {
     )
   }
 
-  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
+  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string | string[] } }, res: Response) {
     return res.redirect(url.format(urlQuery))
   }
 

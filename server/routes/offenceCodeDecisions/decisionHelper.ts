@@ -55,6 +55,7 @@ export default class DecisionHelper {
       victimPrisonersNumber: currentAnswers?.victimPrisonersNumber,
       victimStaffUsername: currentAnswers?.victimStaffUsername,
       offenceCode: `${this.decision(form.selectedAnswerId).findAnswerById(form.selectedAnswerId).getOffenceCode()}`,
+      protectedCharacteristics: [],
     }
   }
 

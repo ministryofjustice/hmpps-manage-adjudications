@@ -4,6 +4,7 @@ import { IncidentRole as Role } from '../incidentRole/IncidentRole'
 import { AnswerType as Type } from './Answer'
 import { answer, question } from './Decisions'
 import { GroupedOffenceRulesAndTitles, OffenceRule, offenceRuleAndTitle } from '../data/DraftAdjudicationResult'
+import { ProtectedCharacteristicsTypes, getProtectedCharacteristicsTitle } from '../routes/offenceCodeDecisions/offenceData'
 
 const CHILD_1_Q = 'Assault, fighting, or endangering the health or personal safety of others'
 const CHILD_1_Q_V2 = 'Assault, fighting, endangering the health or personal safety of others or sexually assault, expose or harass someone'
@@ -287,15 +288,15 @@ export const paragraphNumberToQuestionId = (paragraphNumber: string, isYoi: bool
 }
 
 const protectedCharacteristicsQuestion = (offenceCode: number) => question('Select which protected characteristics were part of the reason for the incident')
-.child(answer('Age').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
-.child(answer('Disability').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
-.child(answer('Gender reassignment').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
-.child(answer('Marriage and civil partnership').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
-.child(answer('Pregnancy and maternity').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
-.child(answer('Race').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
-.child(answer('Reglion or belief').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
-.child(answer('Sex').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
-  .child(answer('Sexual orientation').type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer(getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes.AGE)).type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer(getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes.DISABILITY)).type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer(getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes.GENDER_REASSIGN)).type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer(getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes.MARRIAGE_AND_CP)).type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer(getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes.PREGNANCY_AND_MAT)).type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer(getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes.RACE)).type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer(getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes.RELIGION)).type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+.child(answer(getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes.SEX)).type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
+  .child(answer(getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes.SEX_ORIENTATION)).type(Type.CHECKBOXES_ONLY).offenceCode(offenceCode))
 
 const versionedQuestion6Answers =  question('What did the incident involve?')
 .child(answer('Disobeying any lawful order').offenceCode(22001))
