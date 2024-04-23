@@ -123,7 +123,9 @@ export default class DetailsOfOffencePage {
       ...(victimStaffUsername && victimStaffUsername !== 'undefined' && { victimStaffUsername }),
       ...(offenceCode && { offenceCode: Number(offenceCode) }),
       ...(protectedCharacteristics && {
-        protectedCharacteristics: protectedCharacteristics.map(m => ProtectedCharacteristicsTypes[m]),
+        protectedCharacteristics: protectedCharacteristics.map(pc =>
+          getProtectedCharacteristicsTypeByIndex(+protectedCharacteristics[pc].slice(-1))
+        ),
       }),
     }
 
