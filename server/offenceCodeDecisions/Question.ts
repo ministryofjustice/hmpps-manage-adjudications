@@ -1,6 +1,6 @@
 import Title from './Title'
 // eslint-disable-next-line import/no-cycle
-import { Answer } from './Answer'
+import { Answer, AnswerType } from './Answer'
 import { IncidentRole } from '../incidentRole/IncidentRole'
 // eslint-disable-next-line import/no-cycle
 import { all, notEmpty } from './Decisions'
@@ -146,6 +146,9 @@ export default class Question {
 
   findAnswerBy(fn: (answer: Answer) => boolean, overrideVersion: number = null): Answer {
     const matching = this.matchingAnswers(fn, overrideVersion)
+    if (matching.length !== 0 && matching.every(answer => answer.getType() === AnswerType.CHECKBOXES_ONLY)) {
+      return matching[0]
+    }
     return this.uniqueOrThrow(matching)
   }
 
