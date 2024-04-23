@@ -122,7 +122,9 @@ export default class DetailsOfOffencePage {
       ...(victimPrisonersNumber && victimPrisonersNumber !== 'undefined' && { victimPrisonersNumber }),
       ...(victimStaffUsername && victimStaffUsername !== 'undefined' && { victimStaffUsername }),
       ...(offenceCode && { offenceCode: Number(offenceCode) }),
-      ...(protectedCharacteristics && protectedCharacteristics),
+      ...(protectedCharacteristics && {
+        protectedCharacteristics: protectedCharacteristics.map(m => ProtectedCharacteristicsTypes[m]),
+      }),
     }
 
     if (this.pageOptions.isAloEdit()) {
