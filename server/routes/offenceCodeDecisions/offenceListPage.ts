@@ -20,6 +20,7 @@ import config from '../../config'
 type PageData = {
   errors?: FormError[]
   draftId: number
+  chargeNumber: string
   incidentRole: string
   offencesAndTitles?: GroupedOffenceRulesAndTitles[]
   prisonerName?: string
@@ -61,6 +62,7 @@ export default class OffenceListRoutes {
 
     return this.renderView(req, res, {
       draftId,
+      chargeNumber: draftAdjudication.chargeNumber,
       incidentRole,
       offencesAndTitles,
       prisonerName: prisonerName.friendlyName,
@@ -69,8 +71,7 @@ export default class OffenceListRoutes {
   }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
-    const { errors, offencesAndTitles, prisonerName } = pageData
-    const draftId = Number(req.params.draftId)
+    const { errors, offencesAndTitles, prisonerName, chargeNumber } = pageData
 
     return res.render(`pages/offenceList.njk`, {
       errors: errors || [],
@@ -78,7 +79,7 @@ export default class OffenceListRoutes {
       offencesAndTitles,
       pageData,
       prisonerName,
-      cancelButtonHref: adjudicationUrls.prisonerReport.urls.review(draftId),
+      cancelButtonHref: adjudicationUrls.prisonerReport.urls.review(chargeNumber),
     })
   }
 
@@ -87,12 +88,17 @@ export default class OffenceListRoutes {
     const { selectedAnswerId } = req.body
     const draftId = Number(req.params.draftId)
     const { incidentRole } = req.params
+    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
 
     if (!selectedAnswerId) {
-      return this.renderView(req, res, { errors: [error.MISSING_DECISION], draftId, incidentRole })
+      return this.renderView(req, res, {
+        errors: [error.MISSING_DECISION],
+        draftId,
+        incidentRole,
+        chargeNumber: draftAdjudication.chargeNumber,
+      })
     }
 
-    const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(draftId, user)
     const paragraphToNextQuestionMap = paraToNextQuestion(draftAdjudication.isYouthOffender, +config.offenceVersion)
 
     if (paragraphToNextQuestionMap.some(mapItem => mapItem.para === selectedAnswerId)) {
