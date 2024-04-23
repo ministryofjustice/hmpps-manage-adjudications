@@ -221,6 +221,31 @@ context.skip('v2 offences', () => {
         paragraphDescription: 'sexually harasses any person',
       },
     })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 2000124,
+      response: {
+        paragraphNumber: '20(a)',
+        paragraphDescription:
+          'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 1700124,
+      response: {
+        paragraphNumber: '17(a)',
+        paragraphDescription:
+          'causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 2410124,
+      response: {
+        paragraphNumber: '24(a)',
+        paragraphDescription:
+          'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
+      },
+    })
+    // 2410124
   })
   it('failure to comply with payback offence 23(a)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
@@ -264,14 +289,16 @@ context.skip('v2 offences', () => {
     whichProtectedCharacteristic.checkbox('1-5-2-1-2').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
 
-    /* const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
 
     detailsOfOffencePage
       .offenceDetailsSummary()
       .find('dd')
       .then($summaryData => {
-        expect($summaryData.get(2).innerText).to.contain('Failure to comply with any payback punishment')
-      }) */
+        expect($summaryData.get(5).innerText).to.contain(
+          'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic'
+        )
+      })
   })
   it('causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic 17(a)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
@@ -297,14 +324,16 @@ context.skip('v2 offences', () => {
     whichProtectedCharacteristic.checkbox('1-4-2-1-2').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
 
-    /* const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
 
     detailsOfOffencePage
       .offenceDetailsSummary()
       .find('dd')
       .then($summaryData => {
-        expect($summaryData.get(2).innerText).to.contain('causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic')
-      }) */
+        expect($summaryData.get(5).innerText).to.contain(
+          'causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic'
+        )
+      })
   })
   it('displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting words, drawings, symbols or other material, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic 24(a)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
@@ -324,14 +353,16 @@ context.skip('v2 offences', () => {
     whichProtectedCharacteristic.checkbox('1-4-3-2').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
 
-    /* const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
 
     detailsOfOffencePage
       .offenceDetailsSummary()
       .find('dd')
       .then($summaryData => {
-        expect($summaryData.get(2).innerText).to.contain('causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic')
-      }) */
+        expect($summaryData.get(4).innerText).to.contain(
+          'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic'
+        )
+      })
   })
   it('commits any sexual assault- 1(b)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
@@ -443,7 +474,35 @@ context.skip('v2 offences - assault 1(a)', () => {
     })
     // Offence rules
     cy.task('stubGetOffenceRule', {
-      offenceCode: 2600124,
+      offenceCode: 100124,
+      response: {
+        paragraphNumber: '1(a)',
+        paragraphDescription: 'commits any assault aggravated by a protected characteristic',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 100324,
+      response: {
+        paragraphNumber: '1(a)',
+        paragraphDescription: 'commits any assault aggravated by a protected characteristic',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 100524,
+      response: {
+        paragraphNumber: '1(a)',
+        paragraphDescription: 'commits any assault aggravated by a protected characteristic',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 102124,
+      response: {
+        paragraphNumber: '1(a)',
+        paragraphDescription: 'commits any assault aggravated by a protected characteristic',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
+      offenceCode: 100724,
       response: {
         paragraphNumber: '1(a)',
         paragraphDescription: 'commits any assault aggravated by a protected characteristic',
@@ -551,14 +610,17 @@ context.skip('v2 offences - assault 1(a)', () => {
       whichProtectedCharacteristic.checkbox(`1-1-1-${test.code}-1-2`).check()
       whichProtectedCharacteristic.continueCheckboxes().click()
 
-      /* const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
-    
-        detailsOfOffencePage
-          .offenceDetailsSummary()
-          .find('dd')
-          .then($summaryData => {
-            expect($summaryData.get(2).innerText).to.contain('causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic')
-          }) */
+      const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+
+      detailsOfOffencePage
+        .offenceDetailsSummary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(5).innerText).to.contain('Age')
+          expect($summaryData.get(6).innerText).to.contain(
+            'commits any assault aggravated by a protected characteristic'
+          )
+        })
     })
   })
 })
@@ -817,6 +879,7 @@ context.skip('v2 offences ALO', () => {
       if (test.isYouthOffender) {
         cy.task('stubGetOffenceRule', {
           offenceCode: 2600124,
+          isYouthOffender: true,
           response: {
             paragraphNumber: '26(a)',
             paragraphDescription: 'Failure to comply with any payback punishment',
@@ -824,6 +887,7 @@ context.skip('v2 offences ALO', () => {
         })
         cy.task('stubGetOffenceRule', {
           offenceCode: 2000124,
+          isYouthOffender: true,
           response: {
             paragraphNumber: '23',
             paragraphDescription:
@@ -832,6 +896,7 @@ context.skip('v2 offences ALO', () => {
         })
         cy.task('stubGetOffenceRule', {
           offenceCode: 1700124,
+          isYouthOffender: true,
           response: {
             paragraphNumber: '19',
             paragraphDescription:
@@ -840,6 +905,7 @@ context.skip('v2 offences ALO', () => {
         })
         cy.task('stubGetOffenceRule', {
           offenceCode: 2410124,
+          isYouthOffender: true,
           response: {
             paragraphNumber: '28',
             paragraphDescription:
@@ -848,6 +914,7 @@ context.skip('v2 offences ALO', () => {
         })
         cy.task('stubGetOffenceRule', {
           offenceCode: 102224,
+          isYouthOffender: true,
           response: {
             paragraphNumber: '2(a)',
             paragraphDescription: 'commits any sexual assault',
@@ -855,6 +922,7 @@ context.skip('v2 offences ALO', () => {
         })
         cy.task('stubGetOffenceRule', {
           offenceCode: 102324,
+          isYouthOffender: true,
           response: {
             paragraphNumber: '2(b)',
             paragraphDescription: 'exposes himself, or commits any other indecent or obscene act',
@@ -862,6 +930,7 @@ context.skip('v2 offences ALO', () => {
         })
         cy.task('stubGetOffenceRule', {
           offenceCode: 102424,
+          isYouthOffender: true,
           response: {
             paragraphNumber: '2(c)',
             paragraphDescription: 'sexually harasses any person',
@@ -869,6 +938,7 @@ context.skip('v2 offences ALO', () => {
         })
         cy.task('stubGetOffenceRule', {
           offenceCode: 100724,
+          isYouthOffender: true,
           response: {
             paragraphNumber: '2',
             paragraphDescription: 'commits any assault aggravated by a protected characteristic',
@@ -980,7 +1050,7 @@ context.skip('v2 offences ALO', () => {
         whichProtectedCharacteristic.checkbox(`${test.key[0]}-1`).check()
         whichProtectedCharacteristic.continueCheckboxes().click()
 
-        //  const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+        Page.verifyOnPage(DetailsOfOffence)
       }
     })
   })

@@ -8,6 +8,7 @@ import { IncidentRole } from '../../incidentRole/IncidentRole'
 import { DecisionForm } from './decisionForm'
 import Question from '../../offenceCodeDecisions/Question'
 import PrisonerDecisionHelper from './prisonerDecisionHelper'
+import ProtectedCharacterisiticsDecisionHelper from './protectedCharacteristicsDecisionHelper'
 import DecisionHelper from './decisionHelper'
 import StaffDecisionHelper from './staffDecisionHelper'
 import OfficerDecisionHelper from './officerDecisionHelper'
@@ -77,6 +78,7 @@ export default class OffenceCodeRoutes {
     [AnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
     [AnswerType.OTHER_PERSON, new OtherPersonDecisionHelper(this.decisionTreeService)],
     [AnswerType.RADIO_SELECTION_ONLY, new DecisionHelper(this.decisionTreeService)],
+    [AnswerType.CHECKBOXES_ONLY, new ProtectedCharacterisiticsDecisionHelper(this.decisionTreeService)],
   ])
 
   view = async (req: Request, res: Response): Promise<void> => {
@@ -102,16 +104,22 @@ export default class OffenceCodeRoutes {
     const { incidentRole, draftId } = req.params
     const draftChargeId = Number(draftId)
     const { protectedCharacteristics } = req.body
-    // const offenceToAdd: OffenceData = { ...req.query }
+    const offenceToAdd: OffenceData = { ...req.query }
 
     if (!protectedCharacteristics) {
       return this.renderView(req, res, { errors: [error.MISSING_CHARACTERISTIC], draftId: draftChargeId, incidentRole })
     }
 
-    // data saved here
+    const answerTypeHelper = this.answerTypeHelper(
+      typeof protectedCharacteristics === 'string' ? protectedCharacteristics : protectedCharacteristics[0]
+    )
+    const form = answerTypeHelper.formFromPost(req)
+    const updatedOffenceData = answerTypeHelper.updatedOffenceData(offenceToAdd, form)
 
-    // just a placeholder redirect
-    return res.redirect('')
+    return this.redirect(
+      { pathname: adjudicationUrls.detailsOfOffence.urls.add(draftChargeId), query: updatedOffenceData },
+      res
+    )
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
