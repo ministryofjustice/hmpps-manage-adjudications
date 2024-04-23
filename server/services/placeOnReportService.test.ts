@@ -6,7 +6,6 @@ import adjudicationUrls from '../utils/urlGenerator'
 import { PrisonerGender } from '../data/DraftAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
-import { ProtectedCharacteristicsTypes } from '../routes/offenceCodeDecisions/offenceData'
 
 const testData = new TestData()
 
