@@ -139,6 +139,9 @@ export default class DetailsOfOffencePage {
 
   getOffences = (req: Request, draftAdjudication: DraftAdjudication): OffenceData => {
     if (this.pageOptions.displaySessionData() || this.pageOptions.isAloEdit()) {
+      if (Object.keys(req.query).length === 0) {
+        return {}
+      }
       const protectedCharacteristicEnums: ProtectedCharacteristicsTypes[] = []
       if (req.query.protectedCharacteristics && typeof req.query.protectedCharacteristics !== 'string') {
         const protectedCharacteristics = (req.query.protectedCharacteristics ?? []) as string[]

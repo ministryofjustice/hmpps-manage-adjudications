@@ -122,10 +122,10 @@ describe('POST /details-of-offence/102/delete validation', () => {
 })
 
 describe('POST /details-of-offence/102/delete/1', () => {
-  it.skip('should remove the offence when selecting yes', async () => {
+  it('should remove the offence when selecting yes', async () => {
     const agent = request.agent(app)
     return agent
-      .get(`${adjudicationUrls.detailsOfOffence.urls.start(102)}?offenceCode=1`) // This call will populate the session, which we need for the delete page.
+      .get(adjudicationUrls.detailsOfOffence.urls.start(102)) // This call will populate the session, which we need for the delete page.
       .expect(res => expect(res.text).toContain('Committed: A_prisoner_first_name A_prisoner_last_name'))
       .then(() =>
         agent.get(adjudicationUrls.detailsOfOffence.urls.delete(102, offenceData)).then(() =>

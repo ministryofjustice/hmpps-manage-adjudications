@@ -225,7 +225,7 @@ describe('POST /details-of-offence/100', () => {
   it('should save the offence', async () => {
     const agent = request.agent(app)
     return agent
-      .get(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1`)
+      .get(adjudicationUrls.detailsOfOffence.urls.modified(100))
       .expect(200)
       .then(() =>
         agent
@@ -289,7 +289,7 @@ describe('POST /details-of-offence - ALO edits offence', () => {
   it('should call the correct endpoint with the session data', () => {
     const agent = request.agent(app)
     return agent
-      .get(`${adjudicationUrls.detailsOfOffence.urls.aloEdit(102)}?offenceCode=1`)
+      .get(adjudicationUrls.detailsOfOffence.urls.aloEdit(102))
       .expect(200)
       .then(() =>
         agent
