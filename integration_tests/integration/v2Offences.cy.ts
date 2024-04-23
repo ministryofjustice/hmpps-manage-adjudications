@@ -1050,7 +1050,7 @@ context.skip('v2 offences ALO', () => {
         whichProtectedCharacteristic.checkbox(`${test.key[0]}-1`).check()
         whichProtectedCharacteristic.continueCheckboxes().click()
 
-        const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+        Page.verifyOnPage(DetailsOfOffence)
       }
     })
   })
