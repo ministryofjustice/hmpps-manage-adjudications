@@ -151,11 +151,9 @@ export default class DetailsOfOffencePage {
       if (req.query.protectedCharacteristics && typeof req.query.protectedCharacteristics !== 'string') {
         const protectedCharacteristics = (req.query.protectedCharacteristics ?? []) as string[]
         /* eslint-disable no-plusplus */
-        for (let pc = 1; pc < protectedCharacteristics.length; pc++) {
-          protectedCharacteristicEnums.push(
-            getProtectedCharacteristicsTypeByIndex(+protectedCharacteristics[pc].slice(-1))
-          )
-        }
+        protectedCharacteristics.forEach(pc => {
+          protectedCharacteristicEnums.push(getProtectedCharacteristicsTypeByIndex(+pc.slice(-1)))
+        })
       }
 
       return {

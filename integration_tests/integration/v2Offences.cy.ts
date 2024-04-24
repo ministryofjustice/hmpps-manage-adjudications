@@ -348,8 +348,8 @@ context.skip('v2 offences', () => {
     const whichProtectedCharacteristic = new OffenceCodeSelection(
       'Select which protected characteristics were part of the reason for the incident'
     )
-    whichProtectedCharacteristic.checkbox('1-4-3-1').check()
     whichProtectedCharacteristic.checkbox('1-4-3-2').check()
+    whichProtectedCharacteristic.checkbox('1-4-3-8').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
 
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
@@ -358,6 +358,7 @@ context.skip('v2 offences', () => {
       .offenceDetailsSummary()
       .find('dd')
       .then($summaryData => {
+        expect($summaryData.get(3).innerText).to.contain('Disability, Sex')
         expect($summaryData.get(4).innerText).to.contain(
           'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic'
         )

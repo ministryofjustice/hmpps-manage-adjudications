@@ -161,7 +161,7 @@ export default class DecisionTreeService {
     protectedCharacteristics: string[]
   ) {
     return this.getDecisionTree(null)
-      .findAnswerByCode(offenceCode)
+      .findAnswerByCode(offenceCode, protectedCharacteristics && protectedCharacteristics[0])
       .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole, prisonerView, protectedCharacteristics)
   }
 }
