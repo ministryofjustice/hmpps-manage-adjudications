@@ -229,7 +229,7 @@ describe('POST /details-of-offence/100', () => {
       .expect(200)
       .then(() =>
         agent
-          .post(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1&victimPrisonersNumber=G5512G&=`)
+          .post(`${adjudicationUrls.detailsOfOffence.urls.modified(100)}?offenceCode=1&victimPrisonersNumber=G5512G`)
           .then(() =>
             expect(placeOnReportService.saveOffenceDetails).toHaveBeenCalledWith(
               100,
