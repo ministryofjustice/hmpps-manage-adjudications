@@ -96,7 +96,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       username,
       agencyId,
       `Adjudication reports by protected or responsivity characteristic - ${lastMonthText}`,
-      'Use this chart to see adjudication reports by this characteristic. Are there any imbalances you might want to explore? You can use the overview of prisoners chart for context.',
+      'Use this chart to explore any imbalances in adjudication reports by this characteristic. You can use the overview of prisoners chart for context, but note that the overview shows the number of people, not the number of reports. A prisoner may have more than one report',
       '',
       await this.chartApiService.getChart(username, agencyId, '2b'),
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
