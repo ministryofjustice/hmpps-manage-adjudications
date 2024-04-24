@@ -24,6 +24,7 @@ generic-service:
     FRONTEND_COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
     MAINTENANCE_MODE: false
     ENVIRONMENT_NAME: 'PRE-PRODUCTION'
+    OFFENCE_VERSION: 1
 
   allowlist:
     groups:
