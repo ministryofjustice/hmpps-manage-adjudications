@@ -5,7 +5,11 @@ import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
-import { OffenceData } from '../offenceCodeDecisions/offenceData'
+import {
+  OffenceData,
+  ProtectedCharacteristicsTypes,
+  getProtectedCharacteristicsTypeByIndex,
+} from '../offenceCodeDecisions/offenceData'
 
 export enum PageRequestType {
   OFFENCES_FROM_API,
@@ -53,6 +57,7 @@ export default class DetailsOfOffencePage {
         prisoner,
       })
     }
+
     const isYouthOffender = draftAdjudication.isYouthOffender || false
     const reportedChargeNumber = draftAdjudication.chargeNumber
     const { gender } = draftAdjudication
@@ -63,8 +68,10 @@ export default class DetailsOfOffencePage {
       offenceCode,
       placeHolderValues,
       incidentRole,
-      false
+      false,
+      offence.protectedCharacteristics
     )
+
     const offenceToDisplay = {
       questionsAndAnswers,
       incidentRule: draftAdjudication.incidentRole?.offenceRule,
@@ -102,13 +109,25 @@ export default class DetailsOfOffencePage {
       return this.redirectToNextPage(res, draftId)
     }
     const offenceData: OffenceData = { ...req.query }
-    const { victimOtherPersonsName, victimPrisonersNumber, victimStaffUsername, offenceCode } = offenceData
+    const {
+      victimOtherPersonsName,
+      victimPrisonersNumber,
+      victimStaffUsername,
+      offenceCode,
+      protectedCharacteristics,
+    } = offenceData
 
     const offenceDetailsToSave = {
       ...(victimOtherPersonsName && victimOtherPersonsName !== 'undefined' && { victimOtherPersonsName }),
       ...(victimPrisonersNumber && victimPrisonersNumber !== 'undefined' && { victimPrisonersNumber }),
       ...(victimStaffUsername && victimStaffUsername !== 'undefined' && { victimStaffUsername }),
       ...(offenceCode && { offenceCode: Number(offenceCode) }),
+      ...(protectedCharacteristics &&
+        protectedCharacteristics.length !== 0 && {
+          protectedCharacteristics: protectedCharacteristics.map(pc =>
+            getProtectedCharacteristicsTypeByIndex(+pc.slice(-1))
+          ),
+        }),
     }
 
     if (this.pageOptions.isAloEdit()) {
@@ -125,7 +144,22 @@ export default class DetailsOfOffencePage {
 
   getOffences = (req: Request, draftAdjudication: DraftAdjudication): OffenceData => {
     if (this.pageOptions.displaySessionData() || this.pageOptions.isAloEdit()) {
-      return { ...req.query }
+      if (Object.keys(req.query).length === 0) {
+        return {}
+      }
+      const protectedCharacteristicEnums: ProtectedCharacteristicsTypes[] = []
+      if (req.query.protectedCharacteristics && typeof req.query.protectedCharacteristics !== 'string') {
+        const protectedCharacteristics = (req.query.protectedCharacteristics ?? []) as string[]
+        /* eslint-disable no-plusplus */
+        protectedCharacteristics.forEach(pc => {
+          protectedCharacteristicEnums.push(getProtectedCharacteristicsTypeByIndex(+pc.slice(-1)))
+        })
+      }
+
+      return {
+        ...req.query,
+        protectedCharacteristics: protectedCharacteristicEnums,
+      }
     }
     const { offenceDetails } = draftAdjudication
     return offenceDetails
@@ -134,6 +168,7 @@ export default class DetailsOfOffencePage {
           victimPrisonersNumber: offenceDetails.victimPrisonersNumber,
           victimStaffUsername: offenceDetails.victimStaffUsername,
           offenceCode: `${offenceDetails.offenceCode}`,
+          protectedCharacteristics: offenceDetails.protectedCharacteristics,
         }
       : {}
   }

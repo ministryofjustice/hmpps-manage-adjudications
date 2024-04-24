@@ -245,7 +245,6 @@ context.skip('v2 offences', () => {
           'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
       },
     })
-    // 2410124
   })
   it('failure to comply with payback offence 23(a)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
@@ -349,8 +348,8 @@ context.skip('v2 offences', () => {
     const whichProtectedCharacteristic = new OffenceCodeSelection(
       'Select which protected characteristics were part of the reason for the incident'
     )
-    whichProtectedCharacteristic.checkbox('1-4-3-1').check()
     whichProtectedCharacteristic.checkbox('1-4-3-2').check()
+    whichProtectedCharacteristic.checkbox('1-4-3-8').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
 
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
@@ -359,6 +358,7 @@ context.skip('v2 offences', () => {
       .offenceDetailsSummary()
       .find('dd')
       .then($summaryData => {
+        expect($summaryData.get(3).innerText).to.contain('Disability, Sex')
         expect($summaryData.get(4).innerText).to.contain(
           'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic'
         )
@@ -537,6 +537,10 @@ context.skip('v2 offences - assault 1(a)', () => {
     cy.task('stubSearchPrisonerDetails', {
       prisonerNumber: 'G7123CI',
     })
+    cy.task('stubSaveOffenceDetails', {
+      draftId: 100,
+      response: {},
+    })
   })
   ;[
     {
@@ -616,11 +620,14 @@ context.skip('v2 offences - assault 1(a)', () => {
         .offenceDetailsSummary()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(5).innerText).to.contain('Age')
+          expect($summaryData.get(5).innerText).to.contain('Age, Disability')
           expect($summaryData.get(6).innerText).to.contain(
             'commits any assault aggravated by a protected characteristic'
           )
         })
+
+      detailsOfOffencePage.saveAndContinue().click()
+      cy.url().should('include', adjudicationUrls.detailsOfDamages.urls.start('100'))
     })
   })
 })
@@ -705,6 +712,14 @@ context.skip('v2 offences ALO', () => {
     cy.task('stubAloAmendOffenceDetails', {
       draftId: 1777,
       response: yoiReportedAdjudicationTestOne,
+    })
+    cy.task('stubSaveOffenceDetails', {
+      draftId: 177,
+      response: {},
+    })
+    cy.task('stubSaveOffenceDetails', {
+      draftId: 1777,
+      response: {},
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.signIn()
@@ -1050,7 +1065,12 @@ context.skip('v2 offences ALO', () => {
         whichProtectedCharacteristic.checkbox(`${test.key[0]}-1`).check()
         whichProtectedCharacteristic.continueCheckboxes().click()
 
-        Page.verifyOnPage(DetailsOfOffence)
+        const detailsOfOffence = Page.verifyOnPage(DetailsOfOffence)
+        detailsOfOffence.saveAndContinue().click()
+        cy.url().should(
+          'include',
+          adjudicationUrls.prisonerReport.urls.review(test.isYouthOffender ? '123456' : '12345')
+        )
       }
     })
   })

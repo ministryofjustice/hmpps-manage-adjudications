@@ -5,6 +5,10 @@ import { IncidentRole } from '../incidentRole/IncidentRole'
 // eslint-disable-next-line import/no-cycle
 import { all, notEmpty } from './Decisions'
 import config from '../config'
+import {
+  ProtectedCharacteristicsTypes,
+  getProtectedCharacteristicsTitle,
+} from '../routes/offenceCodeDecisions/offenceData'
 
 export default class Question {
   private parentAnswer: Answer[] = []
@@ -88,15 +92,18 @@ export default class Question {
     return this.matchingAnswers(answer => !!answer.getOffenceCode()).map(answer => answer.getOffenceCode())
   }
 
-  findAnswerByCode(offenceCode: number): Answer {
-    const answer = this.findAnswerBy(a => a.getOffenceCode() === offenceCode)
+  findAnswerByCode(offenceCode: number, firstProtectedCharacteristic: string = null): Answer {
+    const answer = this.findAnswerBy(a => a.getOffenceCode() === offenceCode, null, firstProtectedCharacteristic)
     return answer || this.findAnswerByCodeForPreviousVersions(offenceCode)
   }
 
-  private findAnswerByCodeForPreviousVersions(offenceCode: number): Answer {
+  private findAnswerByCodeForPreviousVersions(
+    offenceCode: number,
+    firstProtectedCharacteristic: string = null
+  ): Answer {
     /* eslint-disable no-plusplus */
     for (let version = +config.offenceVersion - 1; version > 0; version--) {
-      const answer = this.findAnswerBy(a => a.getOffenceCode() === offenceCode, version)
+      const answer = this.findAnswerBy(a => a.getOffenceCode() === offenceCode, version, firstProtectedCharacteristic)
       if (answer !== null) {
         return answer
       }
@@ -144,10 +151,19 @@ export default class Question {
     return matches
   }
 
-  findAnswerBy(fn: (answer: Answer) => boolean, overrideVersion: number = null): Answer {
+  findAnswerBy(
+    fn: (answer: Answer) => boolean,
+    overrideVersion: number = null,
+    firstProtectedCharacteristic: string = null
+  ): Answer {
     const matching = this.matchingAnswers(fn, overrideVersion)
-    if (matching.length !== 0 && matching.every(answer => answer.getType() === AnswerType.CHECKBOXES_ONLY)) {
-      return matching[0]
+    if (
+      firstProtectedCharacteristic &&
+      matching.length !== 0 &&
+      matching.every(answer => answer.getType() === AnswerType.CHECKBOXES_ONLY)
+    ) {
+      const titleToMatch = getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes[firstProtectedCharacteristic])
+      return matching.find(a => a.getText() === titleToMatch)
     }
     return this.uniqueOrThrow(matching)
   }

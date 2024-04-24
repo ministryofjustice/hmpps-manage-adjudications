@@ -5,6 +5,7 @@ export type OffenceData = {
   victimPrisonersNumber?: string
   victimOtherPersonsName?: string
   offenceCode?: string
+  protectedCharacteristics?: string[]
 }
 
 export enum ProtectedCharacteristicsTypes {
@@ -17,4 +18,33 @@ export enum ProtectedCharacteristicsTypes {
   RELIGION = 'RELIGION',
   SEX = 'SEX',
   SEX_ORIENTATION = 'SEX_ORIENTATION',
+}
+
+export const getProtectedCharacteristicsTypeByIndex = (index: number): ProtectedCharacteristicsTypes => {
+  return Object.values(ProtectedCharacteristicsTypes)[index - 1]
+}
+
+export const getProtectedCharacteristicsTitle = (pc: ProtectedCharacteristicsTypes): string => {
+  switch (pc) {
+    case ProtectedCharacteristicsTypes.AGE:
+      return 'Age'
+    case ProtectedCharacteristicsTypes.DISABILITY:
+      return 'Disability'
+    case ProtectedCharacteristicsTypes.GENDER_REASSIGN:
+      return 'Gender reassignment'
+    case ProtectedCharacteristicsTypes.MARRIAGE_AND_CP:
+      return 'Marriage and civil partnership'
+    case ProtectedCharacteristicsTypes.PREGNANCY_AND_MAT:
+      return 'Pregnancy and maternity'
+    case ProtectedCharacteristicsTypes.RACE:
+      return 'Race'
+    case ProtectedCharacteristicsTypes.RELIGION:
+      return 'Reglion or belief'
+    case ProtectedCharacteristicsTypes.SEX:
+      return 'Sex'
+    case ProtectedCharacteristicsTypes.SEX_ORIENTATION:
+      return 'Sexual orientation'
+    default:
+      return ''
+  }
 }

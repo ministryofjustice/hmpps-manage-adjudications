@@ -1,3 +1,5 @@
+import { ProtectedCharacteristicsTypes } from '../routes/offenceCodeDecisions/offenceData'
+
 export type IncidentDetails = {
   locationId: number
   dateTimeOfIncident: string
@@ -36,6 +38,7 @@ export type OffenceDetails = {
   victimOtherPersonsName?: string
   victimPrisonersNumber?: string
   victimStaffUsername?: string
+  protectedCharacteristics?: ProtectedCharacteristicsTypes[]
 }
 
 export type DraftAdjudication = {

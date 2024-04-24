@@ -111,7 +111,13 @@ export default class DecisionTreeService {
     const answerData = await this.answerDataDetails(offenceData, user)
     const offenceCode = Number(offenceData.offenceCode)
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
-    const questionsAndAnswers = this.questionsAndAnswers(offenceCode, placeHolderValues, incidentRoleEnum, prisonerView)
+    const questionsAndAnswers = this.questionsAndAnswers(
+      offenceCode,
+      placeHolderValues,
+      incidentRoleEnum,
+      prisonerView,
+      offenceData.protectedCharacteristics
+    )
     return {
       questionsAndAnswers,
       incidentRule: incidentRole.offenceRule,
@@ -151,10 +157,14 @@ export default class DecisionTreeService {
     offenceCode: number,
     placeHolderValues: PlaceholderValues,
     incidentRole: IncidentRoleEnum,
-    prisonerView: boolean
+    prisonerView: boolean,
+    protectedCharacteristics: string[]
   ) {
     return this.getDecisionTree(null)
-      .findAnswerByCode(offenceCode)
-      .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole, prisonerView)
+      .findAnswerByCode(
+        offenceCode,
+        protectedCharacteristics && protectedCharacteristics.length > 0 && protectedCharacteristics[0]
+      )
+      .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole, prisonerView, protectedCharacteristics)
   }
 }

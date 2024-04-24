@@ -28,7 +28,7 @@ export default class AddOffenceRoutes {
     )
   }
 
-  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
+  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string | string[] } }, res: Response) {
     return res.redirect(url.format(urlQuery))
   }
 }

@@ -40,7 +40,8 @@ export default class DeleteOffenceRoutes {
       Number(offenceData.offenceCode),
       placeHolderValues,
       incidentRole,
-      false
+      false,
+      offenceData.protectedCharacteristics
     )
 
     const offenceToDisplay = {
@@ -81,7 +82,7 @@ export default class DeleteOffenceRoutes {
     )
   }
 
-  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string } }, res: Response) {
+  private redirect(urlQuery: { pathname: string; query?: { [key: string]: string | string[] } }, res: Response) {
     return res.redirect(url.format(urlQuery))
   }
 }

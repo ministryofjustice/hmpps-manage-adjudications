@@ -5,6 +5,10 @@ import { IncidentRole } from '../incidentRole/IncidentRole'
 // eslint-disable-next-line import/no-cycle
 import { notEmpty } from './Decisions'
 import config from '../config'
+import {
+  getProtectedCharacteristicsTitle,
+  ProtectedCharacteristicsTypes,
+} from '../routes/offenceCodeDecisions/offenceData'
 
 export class Answer {
   private readonly answerText: string
@@ -115,14 +119,28 @@ export class Answer {
   getProcessedQuestionsAndAnswersToGetHere(
     placeHolderValues: PlaceholderValues,
     incidentRole: IncidentRole,
-    prisonerView: boolean
+    prisonerView: boolean,
+    protectedCharacteristics: string[]
   ): { question: string; answer: string }[] {
-    return this.getQuestionsAndAnswersToGetHere().map(questionAndAnswer => {
+    const questionsAndAnswers = this.getQuestionsAndAnswersToGetHere().map(questionAndAnswer => {
       return {
         question: questionAndAnswer.question.getTitle().getProcessedText(placeHolderValues, incidentRole),
         answer: questionAndAnswer.answer.getProcessedReplayText(placeHolderValues, prisonerView),
       }
     })
+    if (protectedCharacteristics) {
+      protectedCharacteristics.forEach(pc => {
+        const pcEnum = ProtectedCharacteristicsTypes[pc]
+        const pcTitle = getProtectedCharacteristicsTitle(pcEnum)
+        if (!questionsAndAnswers[questionsAndAnswers.length - 1].answer.includes(pcTitle)) {
+          questionsAndAnswers[questionsAndAnswers.length - 1].answer = questionsAndAnswers[
+            questionsAndAnswers.length - 1
+          ].answer.concat(`, ${pcTitle}`)
+        }
+      })
+    }
+
+    return questionsAndAnswers
   }
 
   findAnswerBy(fn: (answer: Answer) => boolean): Answer {
