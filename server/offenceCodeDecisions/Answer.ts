@@ -128,14 +128,16 @@ export class Answer {
         answer: questionAndAnswer.answer.getProcessedReplayText(placeHolderValues, prisonerView),
       }
     })
-    /* eslint-disable no-plusplus */
     if (protectedCharacteristics) {
-      for (let pc = 0; pc < protectedCharacteristics.length; pc++) {
-        const pcEnum = ProtectedCharacteristicsTypes[protectedCharacteristics[pc]]
-        questionsAndAnswers[questionsAndAnswers.length - 1].answer = questionsAndAnswers[
-          questionsAndAnswers.length - 1
-        ].answer.concat(`, ${getProtectedCharacteristicsTitle(pcEnum)}`)
-      }
+      protectedCharacteristics.forEach(pc => {
+        const pcEnum = ProtectedCharacteristicsTypes[pc]
+        const pcTitle = getProtectedCharacteristicsTitle(pcEnum)
+        if (!questionsAndAnswers[questionsAndAnswers.length - 1].answer.includes(pcTitle)) {
+          questionsAndAnswers[questionsAndAnswers.length - 1].answer = questionsAndAnswers[
+            questionsAndAnswers.length - 1
+          ].answer.concat(`, ${pcTitle}`)
+        }
+      })
     }
 
     return questionsAndAnswers
