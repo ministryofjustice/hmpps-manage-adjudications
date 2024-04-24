@@ -122,11 +122,12 @@ export default class DetailsOfOffencePage {
       ...(victimPrisonersNumber && victimPrisonersNumber !== 'undefined' && { victimPrisonersNumber }),
       ...(victimStaffUsername && victimStaffUsername !== 'undefined' && { victimStaffUsername }),
       ...(offenceCode && { offenceCode: Number(offenceCode) }),
-      ...(protectedCharacteristics && {
-        protectedCharacteristics: protectedCharacteristics.map(pc =>
-          getProtectedCharacteristicsTypeByIndex(+protectedCharacteristics[pc].slice(-1))
-        ),
-      }),
+      ...(protectedCharacteristics &&
+        protectedCharacteristics.length !== 0 && {
+          protectedCharacteristics: protectedCharacteristics.map(pc =>
+            getProtectedCharacteristicsTypeByIndex(+pc.slice(-1))
+          ),
+        }),
     }
 
     if (this.pageOptions.isAloEdit()) {
