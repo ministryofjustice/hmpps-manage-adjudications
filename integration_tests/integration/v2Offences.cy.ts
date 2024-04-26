@@ -452,6 +452,12 @@ context.only('v2 offences', () => {
         expect($summaryData.get(4).innerText).to.contain('sexually harasses any person')
       })
   })
+  /* it('delete offence from session', () => {
+      
+  })
+  it('delete offence from draft', () => {
+
+  }) */
 })
 
 context.skip('v2 offences - assault 1(a)', () => {

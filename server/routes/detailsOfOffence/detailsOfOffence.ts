@@ -206,7 +206,7 @@ export default class DetailsOfOffencePage {
       }
     } else if (draftAdjudication) {
       draftAdjudication.offenceDetails?.protectedCharacteristics?.forEach(pc => {
-        protectedCharacteristics.push(`${Object.keys(ProtectedCharacteristicsTypes).indexOf(pc)}`)
+        protectedCharacteristics.push(`${Object.keys(ProtectedCharacteristicsTypes).indexOf(pc) + 1}`)
       })
     }
     return protectedCharacteristics

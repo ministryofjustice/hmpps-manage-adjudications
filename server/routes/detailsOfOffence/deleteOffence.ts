@@ -4,7 +4,7 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { FormError } from '../../@types/template'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { OffenceData } from '../offenceCodeDecisions/offenceData'
+import { OffenceData, getProtectedCharacteristicsTypeByIndex } from '../offenceCodeDecisions/offenceData'
 import PlaceOnReportService from '../../services/placeOnReportService'
 
 // eslint-disable-next-line no-shadow
@@ -37,9 +37,13 @@ export default class DeleteOffenceRoutes {
     const protectedCharacteristics: string[] = []
     if (offenceData.protectedCharacteristics) {
       if (typeof offenceData.protectedCharacteristics !== 'string') {
-        protectedCharacteristics.push(...offenceData.protectedCharacteristics)
+        offenceData.protectedCharacteristics.forEach(pc => {
+          protectedCharacteristics.push(getProtectedCharacteristicsTypeByIndex(+pc.slice(-1)))
+        })
       } else {
-        protectedCharacteristics.push(offenceData.protectedCharacteristics)
+        protectedCharacteristics.push(
+          getProtectedCharacteristicsTypeByIndex(+req.query.protectedCharacteristics.toString().slice(-1))
+        )
       }
     }
 
