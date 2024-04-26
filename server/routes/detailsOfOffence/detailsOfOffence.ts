@@ -88,7 +88,10 @@ export default class DetailsOfOffencePage {
       isYouthOffender,
       offenceData: offence,
       deleteOffenceLinkHidden: this.pageOptions.isAloEdit(),
-      deleteOffenceHref: adjudicationUrls.detailsOfOffence.urls.delete(draftId, offence),
+      deleteOffenceHref: adjudicationUrls.detailsOfOffence.urls.delete(draftId, {
+        ...offence,
+        protectedCharacteristics: this.convertProtectedCharacteristics(req),
+      }),
     })
   }
 
@@ -109,16 +112,7 @@ export default class DetailsOfOffencePage {
       return this.redirectToNextPage(res, draftId)
     }
 
-    const protectedCharacteristics: string[] = []
-
-    if (req.query.protectedCharacteristics) {
-      if (typeof req.query.protectedCharacteristics !== 'string') {
-        ;(req.query.protectedCharacteristics as string[]).forEach(pc => protectedCharacteristics.push(pc))
-      } else {
-        protectedCharacteristics.push(req.query.protectedCharacteristics)
-      }
-    }
-
+    const protectedCharacteristics = this.convertProtectedCharacteristics(req)
     const offenceData: OffenceData = { ...req.query }
     const { victimOtherPersonsName, victimPrisonersNumber, victimStaffUsername, offenceCode } = offenceData
 
@@ -198,5 +192,18 @@ export default class DetailsOfOffencePage {
 
   redirectToNextPage = (res: Response, draftId: number) => {
     return res.redirect(adjudicationUrls.detailsOfDamages.urls.start(draftId))
+  }
+
+  private convertProtectedCharacteristics = (req: Request): string[] => {
+    const protectedCharacteristics: string[] = []
+
+    if (req.query.protectedCharacteristics) {
+      if (typeof req.query.protectedCharacteristics !== 'string') {
+        ;(req.query.protectedCharacteristics as string[]).forEach(pc => protectedCharacteristics.push(pc))
+      } else {
+        protectedCharacteristics.push(req.query.protectedCharacteristics)
+      }
+    }
+    return protectedCharacteristics
   }
 }
