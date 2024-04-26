@@ -90,7 +90,7 @@ export default class DetailsOfOffencePage {
       deleteOffenceLinkHidden: this.pageOptions.isAloEdit(),
       deleteOffenceHref: adjudicationUrls.detailsOfOffence.urls.delete(draftId, {
         ...offence,
-        protectedCharacteristics: this.convertProtectedCharacteristics(req),
+        protectedCharacteristics: this.convertProtectedCharacteristics(req, draftAdjudication),
       }),
     })
   }
@@ -194,15 +194,20 @@ export default class DetailsOfOffencePage {
     return res.redirect(adjudicationUrls.detailsOfDamages.urls.start(draftId))
   }
 
-  private convertProtectedCharacteristics = (req: Request): string[] => {
+  private convertProtectedCharacteristics = (req: Request, draftAdjudication: DraftAdjudication = null): string[] => {
     const protectedCharacteristics: string[] = []
-
-    if (req.query.protectedCharacteristics) {
-      if (typeof req.query.protectedCharacteristics !== 'string') {
-        ;(req.query.protectedCharacteristics as string[]).forEach(pc => protectedCharacteristics.push(pc))
-      } else {
-        protectedCharacteristics.push(req.query.protectedCharacteristics)
+    if (this.pageOptions.displaySessionData() || this.pageOptions.isAloEdit()) {
+      if (req.query.protectedCharacteristics) {
+        if (typeof req.query.protectedCharacteristics !== 'string') {
+          ;(req.query.protectedCharacteristics as string[]).forEach(pc => protectedCharacteristics.push(pc))
+        } else {
+          protectedCharacteristics.push(req.query.protectedCharacteristics)
+        }
       }
+    } else if (draftAdjudication) {
+      draftAdjudication.offenceDetails?.protectedCharacteristics?.forEach(pc => {
+        protectedCharacteristics.push(`${Object.keys(ProtectedCharacteristicsTypes).indexOf(pc)}`)
+      })
     }
     return protectedCharacteristics
   }
