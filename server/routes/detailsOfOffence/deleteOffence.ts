@@ -85,11 +85,16 @@ export default class DeleteOffenceRoutes {
     if (confirmDelete === 'yes') {
       return res.redirect(adjudicationUrls.detailsOfOffence.urls.modified(draftId))
     }
+
     const offenceData: OffenceData = { ...req.query }
+    const protectedCharacteristics: string[] = []
+    if (offenceData.protectedCharacteristics) {
+      protectedCharacteristics.push(...offenceData.protectedCharacteristics.toString().split(','))
+    }
     return this.redirect(
       {
         pathname: adjudicationUrls.detailsOfOffence.urls.modified(draftId),
-        query: offenceData,
+        query: { ...offenceData, protectedCharacteristics },
       },
       res
     )
