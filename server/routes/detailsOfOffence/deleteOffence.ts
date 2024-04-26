@@ -34,6 +34,15 @@ export default class DeleteOffenceRoutes {
       await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
 
     const offenceData: OffenceData = { ...req.query }
+    const protectedCharacteristics: string[] = []
+    if (offenceData.protectedCharacteristics) {
+      if (typeof offenceData.protectedCharacteristics !== 'string') {
+        protectedCharacteristics.push(...offenceData.protectedCharacteristics)
+      } else {
+        protectedCharacteristics.push(offenceData.protectedCharacteristics)
+      }
+    }
+
     const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
     const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
@@ -41,7 +50,7 @@ export default class DeleteOffenceRoutes {
       placeHolderValues,
       incidentRole,
       false,
-      offenceData.protectedCharacteristics // TODO this is incorrect now i think.
+      protectedCharacteristics
     )
 
     const offenceToDisplay = {

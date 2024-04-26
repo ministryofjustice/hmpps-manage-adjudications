@@ -199,7 +199,7 @@ export default class DetailsOfOffencePage {
     if (this.pageOptions.displaySessionData() || this.pageOptions.isAloEdit()) {
       if (req.query.protectedCharacteristics) {
         if (typeof req.query.protectedCharacteristics !== 'string') {
-          ;(req.query.protectedCharacteristics as string[]).forEach(pc => protectedCharacteristics.push(pc))
+          protectedCharacteristics.push(...(req.query.protectedCharacteristics as string[]))
         } else {
           protectedCharacteristics.push(req.query.protectedCharacteristics)
         }
