@@ -108,26 +108,30 @@ export default class DetailsOfOffencePage {
     if (this.pageOptions.displayApiData()) {
       return this.redirectToNextPage(res, draftId)
     }
+
+    const protectedCharacteristics: string[] = []
+
+    if (req.query.protectedCharacteristics) {
+      if (typeof req.query.protectedCharacteristics !== 'string') {
+        ;(req.query.protectedCharacteristics as string[]).forEach(pc => protectedCharacteristics.push(pc))
+      } else {
+        protectedCharacteristics.push(req.query.protectedCharacteristics)
+      }
+    }
+
     const offenceData: OffenceData = { ...req.query }
-    const {
-      victimOtherPersonsName,
-      victimPrisonersNumber,
-      victimStaffUsername,
-      offenceCode,
-      protectedCharacteristics,
-    } = offenceData
+    const { victimOtherPersonsName, victimPrisonersNumber, victimStaffUsername, offenceCode } = offenceData
 
     const offenceDetailsToSave = {
       ...(victimOtherPersonsName && victimOtherPersonsName !== 'undefined' && { victimOtherPersonsName }),
       ...(victimPrisonersNumber && victimPrisonersNumber !== 'undefined' && { victimPrisonersNumber }),
       ...(victimStaffUsername && victimStaffUsername !== 'undefined' && { victimStaffUsername }),
       ...(offenceCode && { offenceCode: Number(offenceCode) }),
-      ...(protectedCharacteristics &&
-        protectedCharacteristics.length !== 0 && {
-          protectedCharacteristics: protectedCharacteristics.map(pc =>
-            getProtectedCharacteristicsTypeByIndex(+pc.slice(-1))
-          ),
-        }),
+      ...(protectedCharacteristics.length !== 0 && {
+        protectedCharacteristics: protectedCharacteristics.map(pc =>
+          getProtectedCharacteristicsTypeByIndex(+pc.slice(-1))
+        ),
+      }),
     }
 
     if (this.pageOptions.isAloEdit()) {
@@ -154,6 +158,10 @@ export default class DetailsOfOffencePage {
         protectedCharacteristics.forEach(pc => {
           protectedCharacteristicEnums.push(getProtectedCharacteristicsTypeByIndex(+pc.slice(-1)))
         })
+      } else if (req.query.protectedCharacteristics) {
+        protectedCharacteristicEnums.push(
+          getProtectedCharacteristicsTypeByIndex(+req.query.protectedCharacteristics.toString().slice(-1))
+        )
       }
 
       return {

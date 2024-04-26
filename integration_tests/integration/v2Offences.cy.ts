@@ -166,7 +166,7 @@ const offenceRules = [
   },
 ]
 
-context.skip('v2 offences', () => {
+context.only('v2 offences', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -244,6 +244,10 @@ context.skip('v2 offences', () => {
         paragraphDescription:
           'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
       },
+    })
+    cy.task('stubSaveOffenceDetails', {
+      draftId: 100,
+      response: {},
     })
   })
   it('failure to comply with payback offence 23(a)', () => {
@@ -333,8 +337,10 @@ context.skip('v2 offences', () => {
           'causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic'
         )
       })
+
+    detailsOfOffencePage.saveAndContinue().click()
   })
-  it('displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting words, drawings, symbols or other material, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic 24(a)', () => {
+  it.only('displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting words, drawings, symbols or other material, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic 24(a)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
     const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
     whatTypeOfOffencePage.radio('1-4').check()
@@ -349,7 +355,6 @@ context.skip('v2 offences', () => {
       'Select which protected characteristics were part of the reason for the incident'
     )
     whichProtectedCharacteristic.checkbox('1-4-3-2').check()
-    whichProtectedCharacteristic.checkbox('1-4-3-8').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
 
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
@@ -358,11 +363,14 @@ context.skip('v2 offences', () => {
       .offenceDetailsSummary()
       .find('dd')
       .then($summaryData => {
-        expect($summaryData.get(3).innerText).to.contain('Disability, Sex')
+        expect($summaryData.get(3).innerText).to.contain('Disability')
         expect($summaryData.get(4).innerText).to.contain(
           'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic'
         )
       })
+
+    detailsOfOffencePage.saveAndContinue().click()
+    cy.url().should('include', adjudicationUrls.detailsOfDamages.urls.start('100'))
   })
   it('commits any sexual assault- 1(b)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))

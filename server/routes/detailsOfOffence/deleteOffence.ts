@@ -41,7 +41,7 @@ export default class DeleteOffenceRoutes {
       placeHolderValues,
       incidentRole,
       false,
-      offenceData.protectedCharacteristics
+      offenceData.protectedCharacteristics // TODO this is incorrect now i think.
     )
 
     const offenceToDisplay = {
