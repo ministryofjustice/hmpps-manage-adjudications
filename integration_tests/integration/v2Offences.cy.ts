@@ -8,6 +8,7 @@ import ReviewerEditOffencesWarningPage from '../pages/reviewerEditOffencesWarnin
 import AgeOfPrisonerPage from '../pages/ageofPrisonerSubmittedEdit'
 import IncidentRoleEditPage from '../pages/incidentRoleSubmittedEdit'
 import OffenceCodeSelectionListPage from '../pages/offenceCodeSelectionList'
+import { ProtectedCharacteristicsTypes } from '../../server/routes/offenceCodeDecisions/offenceData'
 
 const testData = new TestData()
 
@@ -183,6 +184,20 @@ context.skip('v2 offences', () => {
         }),
       },
     })
+    cy.task('stubGetDraftAdjudication', {
+      id: 101,
+      response: {
+        draftAdjudication: testData.draftAdjudication({
+          id: 101,
+          prisonerNumber: 'G6415GD',
+          dateTimeOfIncident: '2021-11-03T13:10:00',
+          offenceDetails: {
+            offenceCode: 2410124,
+            protectedCharacteristics: [ProtectedCharacteristicsTypes.DISABILITY],
+          },
+        }),
+      },
+    })
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
@@ -244,6 +259,10 @@ context.skip('v2 offences', () => {
         paragraphDescription:
           'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
       },
+    })
+    cy.task('stubSaveOffenceDetails', {
+      draftId: 100,
+      response: {},
     })
   })
   it('failure to comply with payback offence 23(a)', () => {
@@ -333,6 +352,8 @@ context.skip('v2 offences', () => {
           'causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic'
         )
       })
+
+    detailsOfOffencePage.saveAndContinue().click()
   })
   it('displays, attaches or draws on any part of a prison, or on any other property, threatening, abusive or insulting words, drawings, symbols or other material, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic 24(a)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
@@ -349,7 +370,6 @@ context.skip('v2 offences', () => {
       'Select which protected characteristics were part of the reason for the incident'
     )
     whichProtectedCharacteristic.checkbox('1-4-3-2').check()
-    whichProtectedCharacteristic.checkbox('1-4-3-8').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
 
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
@@ -358,11 +378,14 @@ context.skip('v2 offences', () => {
       .offenceDetailsSummary()
       .find('dd')
       .then($summaryData => {
-        expect($summaryData.get(3).innerText).to.contain('Disability, Sex')
+        expect($summaryData.get(3).innerText).to.contain('Disability')
         expect($summaryData.get(4).innerText).to.contain(
           'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic'
         )
       })
+
+    detailsOfOffencePage.saveAndContinue().click()
+    cy.url().should('include', adjudicationUrls.detailsOfDamages.urls.start('100'))
   })
   it('commits any sexual assault- 1(b)', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
@@ -443,6 +466,47 @@ context.skip('v2 offences', () => {
         expect($summaryData.get(3).innerText).to.contain('Sexually harasses any person')
         expect($summaryData.get(4).innerText).to.contain('sexually harasses any person')
       })
+  })
+  it('delete offence from session', () => {
+    cy.visit(adjudicationUrls.offenceCodeSelection.urls.question(100, 'committed', '1'))
+    const whatTypeOfOffencePage = new OffenceCodeSelection('What type of offence did John Smith commit?')
+    whatTypeOfOffencePage.radio('1-4').check()
+    whatTypeOfOffencePage.continue().click()
+
+    const whatDidTheIncidentInvolve = new OffenceCodeSelection('What did the incident involve')
+    whatDidTheIncidentInvolve.radio('1-4-3').check()
+    whatTypeOfOffencePage.continue().click()
+
+    // now this should lead to the new page
+    const whichProtectedCharacteristic = new OffenceCodeSelection(
+      'Select which protected characteristics were part of the reason for the incident'
+    )
+    whichProtectedCharacteristic.checkbox('1-4-3-2').check()
+    whichProtectedCharacteristic.continueCheckboxes().click()
+
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.deleteLink(1).click()
+
+    cy.url().should(
+      'include',
+      adjudicationUrls.detailsOfOffence.urls.delete(100, {
+        offenceCode: '2410124',
+        protectedCharacteristics: ['1-4-3-2'],
+      })
+    )
+  })
+  it('delete offence from draft', () => {
+    cy.visit(adjudicationUrls.detailsOfOffence.urls.start(101))
+    const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
+    detailsOfOffencePage.deleteLink(1).click()
+
+    cy.url().should(
+      'include',
+      adjudicationUrls.detailsOfOffence.urls.delete(101, {
+        offenceCode: '2410124',
+        protectedCharacteristics: ['2'],
+      })
+    )
   })
 })
 
@@ -1051,9 +1115,7 @@ context.skip('v2 offences ALO', () => {
           test.key.shift()
           aggravateByProtectedCharacteristic.continue().click()
         } else {
-          const whoWasAssaulted = new OffenceCodeSelection(
-            'Who was assaulted, aggravated by a protected characteristic?'
-          )
+          const whoWasAssaulted = new OffenceCodeSelection('Who was assaulted?')
           whoWasAssaulted.radio(`${test.key[0]}`).check()
           whoWasAssaulted.victimOtherPersonSearchNameInput().type('James Peterson')
           test.key.shift()

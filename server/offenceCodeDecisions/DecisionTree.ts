@@ -741,7 +741,7 @@ export const paragraph1 = question('Who was assaulted?', para1OverrideQuestionId
       .offenceCode(1008)
 )
   
-export const paragraph1AV2 = question('Who was assaulted, aggravated by a protected characteristic?', adultPara1aYoiPara2OverrideQuestionIdV2)
+export const paragraph1AV2 = question('Who was assaulted?', adultPara1aYoiPara2OverrideQuestionIdV2)
 .child(
   answer(['A prisoner in this establishment', `Another prisoner - ${Text.VICTIM_PRISONER_FULL_NAME}`])
     .type(Type.PRISONER)

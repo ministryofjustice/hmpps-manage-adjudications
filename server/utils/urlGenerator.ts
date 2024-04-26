@@ -11,7 +11,8 @@ import {
 } from './adjudicationFilterHelper'
 
 const generateDetailsOfOffenceDeletePath = (draftId: number, offenceData: OffenceData) => {
-  const { victimOtherPersonsName, victimPrisonersNumber, victimStaffUsername, offenceCode } = offenceData
+  const { victimOtherPersonsName, victimPrisonersNumber, victimStaffUsername, offenceCode, protectedCharacteristics } =
+    offenceData
   let queryPath = `?offenceCode=${offenceCode}`
 
   if (victimOtherPersonsName && victimOtherPersonsName !== 'undefined')
@@ -20,6 +21,7 @@ const generateDetailsOfOffenceDeletePath = (draftId: number, offenceData: Offenc
     queryPath += `&victimPrisonersNumber=${victimPrisonersNumber}`
   if (victimStaffUsername && victimStaffUsername !== 'undefined')
     queryPath += `&victimStaffUsername=${victimStaffUsername}`
+  if (protectedCharacteristics) queryPath += `&protectedCharacteristics=${protectedCharacteristics}`
 
   return `${adjudicationUrls.detailsOfOffence.root}/${draftId}/delete${queryPath}`
 }

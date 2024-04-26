@@ -4,7 +4,7 @@ import DecisionTreeService from '../../services/decisionTreeService'
 import { getPlaceholderValues } from '../../offenceCodeDecisions/Placeholder'
 import { FormError } from '../../@types/template'
 import adjudicationUrls from '../../utils/urlGenerator'
-import { OffenceData } from '../offenceCodeDecisions/offenceData'
+import { OffenceData, getProtectedCharacteristicsTypeByIndex } from '../offenceCodeDecisions/offenceData'
 import PlaceOnReportService from '../../services/placeOnReportService'
 
 // eslint-disable-next-line no-shadow
@@ -34,6 +34,19 @@ export default class DeleteOffenceRoutes {
       await this.decisionTreeService.draftAdjudicationIncidentData(draftId, user)
 
     const offenceData: OffenceData = { ...req.query }
+    const protectedCharacteristics: string[] = []
+    if (offenceData.protectedCharacteristics) {
+      if (typeof offenceData.protectedCharacteristics !== 'string') {
+        offenceData.protectedCharacteristics.forEach(pc => {
+          protectedCharacteristics.push(getProtectedCharacteristicsTypeByIndex(+pc.slice(-1)))
+        })
+      } else {
+        protectedCharacteristics.push(
+          getProtectedCharacteristicsTypeByIndex(+req.query.protectedCharacteristics.toString().slice(-1))
+        )
+      }
+    }
+
     const answerData = await this.decisionTreeService.answerDataDetails(offenceData, user)
     const placeHolderValues = getPlaceholderValues(prisoner, associatedPrisoner, answerData)
     const questionsAndAnswers = this.decisionTreeService.questionsAndAnswers(
@@ -41,7 +54,7 @@ export default class DeleteOffenceRoutes {
       placeHolderValues,
       incidentRole,
       false,
-      offenceData.protectedCharacteristics
+      protectedCharacteristics
     )
 
     const offenceToDisplay = {
