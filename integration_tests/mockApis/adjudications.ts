@@ -178,7 +178,7 @@ const stubGetReportedAdjudication = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/adjudications/reported-adjudications/${id}/v2`,
+      url: `/adjudications/reported-adjudications/${id}/v2?includeActivated=true`,
     },
     response: {
       status: 200,
