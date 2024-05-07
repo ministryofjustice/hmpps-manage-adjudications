@@ -160,7 +160,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
       }
 
       fakeManageAdjudicationsApi
-        .get('/reported-adjudications/3/v2')
+        .get('/reported-adjudications/3/v2?includeActivated=true')
         .matchHeader('authorization', `Bearer ${token}`)
         .matchHeader('Active-Caseload', user.meta.caseLoadId)
         .reply(200, result)

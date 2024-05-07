@@ -169,7 +169,7 @@ export default class ManageAdjudicationsSystemTokensClient {
 
   async getReportedAdjudication(chargeNumber: string): Promise<ReportedAdjudicationResult> {
     return this.restClient.get({
-      path: `/reported-adjudications/${chargeNumber}/v2`,
+      path: `/reported-adjudications/${chargeNumber}/v2?includeActivated=true`,
     })
   }
 
