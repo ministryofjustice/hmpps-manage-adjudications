@@ -5,7 +5,7 @@ export default class PunishmentNumberOfDaysAdditionalDaysPage extends Page {
     super('Enter the number of additional days')
   }
 
-  days = (): PageElement => cy.get('input[id="days"]')
+  days = (): PageElement => cy.get('input[id="duration"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="submit"]')
 

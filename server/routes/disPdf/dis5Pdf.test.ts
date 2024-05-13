@@ -6,7 +6,7 @@ import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import TestData from '../testutils/testData'
 import Dis5Pdf from './dis5Pdf'
 import PrisonerSearchService from '../../services/prisonerSearchService'
-import { PunishmentType } from '../../data/PunishmentResult'
+import { PunishmentMeasurement, PunishmentType } from '../../data/PunishmentResult'
 import { Dis5AdjudicationsAndMoneyPrintSupport } from '../../data/manageAdjudicationsSystemTokensClient'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
@@ -71,7 +71,8 @@ const dis5Data = {
         {
           type: PunishmentType.EXCLUSION_WORK,
           schedule: {
-            days: 10,
+            duration: 10,
+            measurement: PunishmentMeasurement.DAYS,
             suspendedUntil: '2023-01-30',
           },
         },
@@ -82,7 +83,8 @@ const dis5Data = {
     {
       type: PunishmentType.EXCLUSION_WORK,
       schedule: {
-        days: 10,
+        duration: 10,
+        measurement: PunishmentMeasurement.DAYS,
         startDate: '2023-01-05',
         endDate: '2023-01-15',
       },
@@ -188,7 +190,8 @@ describe('GET /dis5', () => {
               suspendedPunishments: [
                 {
                   schedule: {
-                    days: 10,
+                    duration: 10,
+                    measurement: PunishmentMeasurement.DAYS,
                     suspendedUntil: '2023-01-30',
                   },
                   type: PunishmentType.EXCLUSION_WORK,
@@ -199,7 +202,8 @@ describe('GET /dis5', () => {
           existingPunishments: [
             {
               schedule: {
-                days: 10,
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
                 endDate: '2023-01-15',
                 startDate: '2023-01-05',
               },

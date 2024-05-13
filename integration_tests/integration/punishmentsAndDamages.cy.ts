@@ -59,7 +59,7 @@ context('Damages and punishments summary', () => {
               privilegeType: PrivilegeType.OTHER,
               otherPrivilege: 'chocolate',
               schedule: {
-                days: 10,
+                duration: 10,
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
@@ -68,7 +68,7 @@ context('Damages and punishments summary', () => {
               id: 352,
               type: PunishmentType.ADDITIONAL_DAYS,
               schedule: {
-                days: 5,
+                duration: 5,
               },
               consecutiveChargeNumber: '1525853',
               consecutiveReportAvailable: true,
@@ -131,7 +131,7 @@ context('Damages and punishments summary', () => {
               id: 1,
               type: PunishmentType.CAUTION,
               schedule: {
-                days: 0,
+                duration: 0,
               },
             },
             {
@@ -139,7 +139,7 @@ context('Damages and punishments summary', () => {
               redisId: 'xyz',
               type: PunishmentType.DAMAGES_OWED,
               schedule: {
-                days: 0,
+                duration: 0,
               },
               damagesOwedAmount: 50,
             },
@@ -220,7 +220,7 @@ context('Damages and punishments summary', () => {
               privilegeType: PrivilegeType.OTHER,
               otherPrivilege: 'games',
               schedule: {
-                days: 10,
+                duration: 10,
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
@@ -270,7 +270,7 @@ context('Damages and punishments summary', () => {
               privilegeType: PrivilegeType.OTHER,
               otherPrivilege: 'games',
               schedule: {
-                days: 10,
+                duration: 10,
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
@@ -341,7 +341,7 @@ context('Damages and punishments summary', () => {
               privilegeType: PrivilegeType.OTHER,
               otherPrivilege: 'chocolate',
               schedule: {
-                days: 10,
+                duration: 10,
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
@@ -378,7 +378,7 @@ context('Damages and punishments summary', () => {
               type: PunishmentType.DAMAGES_OWED,
               damagesOwedAmount: 100,
               schedule: {
-                days: 0,
+                duration: 0,
               },
             },
           ],
@@ -609,7 +609,7 @@ context('Reporter view', () => {
               privilegeType: PrivilegeType.OTHER,
               otherPrivilege: 'chocolate',
               schedule: {
-                days: 10,
+                duration: 10,
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
@@ -646,7 +646,7 @@ context('Reporter view', () => {
               id: 1,
               type: PunishmentType.CAUTION,
               schedule: {
-                days: 0,
+                duration: 0,
               },
             },
             {
@@ -654,7 +654,7 @@ context('Reporter view', () => {
               redisId: 'xyz',
               type: PunishmentType.DAMAGES_OWED,
               schedule: {
-                days: 0,
+                duration: 0,
               },
               damagesOwedAmount: 50,
             },
@@ -710,7 +710,7 @@ context('Reporter view', () => {
               privilegeType: PrivilegeType.OTHER,
               otherPrivilege: 'games',
               schedule: {
-                days: 10,
+                duration: 10,
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
@@ -719,7 +719,7 @@ context('Reporter view', () => {
               id: 352,
               type: PunishmentType.ADDITIONAL_DAYS,
               schedule: {
-                days: 5,
+                duration: 5,
               },
               consecutiveChargeNumber: '1525853',
               consecutiveReportAvailable: true,

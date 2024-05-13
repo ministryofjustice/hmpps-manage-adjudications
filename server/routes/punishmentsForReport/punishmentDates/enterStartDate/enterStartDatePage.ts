@@ -73,9 +73,9 @@ export default class PunishmentStartDatePage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { startDate } = req.body
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
     const type = PunishmentType[punishmentType as string]
-    const numberOfDays = Number(days)
+    const numberOfDays = Number(duration)
 
     const error = validateForm({
       startDate,
@@ -93,7 +93,7 @@ export default class PunishmentStartDatePage {
         privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
-        days: numberOfDays,
+        duration: numberOfDays,
         startDate: datePickerToApi(startDate),
         endDate: calculatePunishmentEndDate(startDate, numberOfDays, 'YYYY-MM-DD'),
       }
@@ -114,7 +114,7 @@ export default class PunishmentStartDatePage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage,
-        days,
+        duration,
         startDate,
       } as ParsedUrlQueryInput,
     })

@@ -455,8 +455,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   })
 
   njkEnv.addFilter('adjudicationHistoryPunishments', punishment => {
-    const { days, suspendedUntil } = punishment.schedule
-    const numberOfDaysPhrasing = days > 1 ? `${days} days` : `${days} day`
+    const { duration, suspendedUntil } = punishment.schedule
+    const numberOfDaysPhrasing = duration > 1 ? `${duration} days` : `${duration} day`
     const suspendedAddition = suspendedUntil
       ? `- suspended until ${formatTimestampTo(suspendedUntil, 'DD/MM/YYYY')}`
       : ``

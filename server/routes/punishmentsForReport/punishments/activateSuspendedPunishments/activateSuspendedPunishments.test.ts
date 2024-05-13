@@ -19,7 +19,7 @@ const punishmentsOnSession = [
   {
     redisId: 'qwerty-123',
     type: PunishmentType.CONFINEMENT,
-    days: 5,
+    duration: 5,
     startDate: '2023-04-20',
     endDate: '2023-04-25',
   },
@@ -27,7 +27,7 @@ const punishmentsOnSession = [
     redisId: 'asdfg-123-erty',
     type: PunishmentType.PRIVILEGE,
     privilegeType: PrivilegeType.FACILITIES,
-    days: 10,
+    duration: 10,
     startDate: '2023-04-10',
     endDate: '2023-04-20',
   },
@@ -47,7 +47,7 @@ const suspendedPunishments = {
         activatedBy: '0',
         activatedFrom: '0',
         schedule: {
-          days: 5,
+          duration: 5,
           suspendedUntil: '2023-04-29',
         },
       },
@@ -61,7 +61,7 @@ const suspendedPunishments = {
         activatedBy: '0',
         activatedFrom: '0',
         schedule: {
-          days: 5,
+          duration: 5,
           suspendedUntil: '2023-05-20',
         },
       },
@@ -126,7 +126,7 @@ describe('POST', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentNumberOfDays.urls.existing(
           '100'
-        )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE&days=5`
+        )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE&duration=5`
       )
   })
 })

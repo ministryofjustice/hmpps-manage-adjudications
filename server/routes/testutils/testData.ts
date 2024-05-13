@@ -355,7 +355,7 @@ export default class TestData {
     otherPrivilege = 'lalalala',
     stoppagePercentage = 0,
     schedule = {
-      days: 10,
+      duration: 10,
       startDate: '2023-04-03',
       endDate: '2023-04-12',
       suspendedUntil: '2023-04-03',

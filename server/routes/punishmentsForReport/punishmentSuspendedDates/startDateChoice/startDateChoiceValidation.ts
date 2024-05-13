@@ -7,7 +7,7 @@ type PunishmentStartDateChoiceForm = {
   isYOI: boolean
   punishmentType: PunishmentType
   privilegeType?: PrivilegeType
-  days: number
+  duration: number
 }
 
 const errors: { [key: string]: FormError } = {
@@ -22,8 +22,8 @@ export default function validateForm({
   isYOI,
   punishmentType,
   privilegeType,
-  days,
+  duration,
 }: PunishmentStartDateChoiceForm): FormError | null {
   if (!immediate) return errors.MISSING_RADIO
-  return validatePunishmentDays(punishmentType, days, isYOI, privilegeType)
+  return validatePunishmentDays(punishmentType, duration, isYOI, privilegeType)
 }

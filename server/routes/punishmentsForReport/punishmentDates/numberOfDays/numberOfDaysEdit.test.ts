@@ -37,7 +37,7 @@ beforeEach(() => {
   })
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.EXCLUSION_WORK,
-    days: 10,
+    duration: 10,
     suspendedUntil: '4/4/2023',
   })
 })
@@ -92,7 +92,7 @@ describe('POST ', () => {
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
       )
       .send({
-        days: 2,
+        duration: 2,
       })
       .expect(302)
       .expect(
@@ -100,7 +100,7 @@ describe('POST ', () => {
         `${adjudicationUrls.punishmentIsSuspended.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=2`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=2`
       )
   })
 })

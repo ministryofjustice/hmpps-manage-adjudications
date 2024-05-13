@@ -5,7 +5,7 @@ export default class PunishmentNumberOfDaysPage extends Page {
     super('Enter the number of days this punishment will last')
   }
 
-  days = (): PageElement => cy.get('input[id="days"]')
+  days = (): PageElement => cy.get('input[id="duration"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="punishment-number-of-days-submit"]')
 

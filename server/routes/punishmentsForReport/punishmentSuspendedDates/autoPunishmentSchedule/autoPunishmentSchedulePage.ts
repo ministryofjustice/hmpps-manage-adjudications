@@ -11,7 +11,7 @@ import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult
 type PageData = {
   startDate?: string
   endDate?: string
-  days?: number
+  duration?: number
   type?: PunishmentType
   privilegeType?: PrivilegeType
   otherPrivilege?: string
@@ -28,7 +28,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
     const {
       startDate,
       endDate,
-      days,
+      duration,
       type,
       privilegeType,
       otherPrivilege,
@@ -48,7 +48,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage,
-        days,
+        duration,
         punishmentNumberToActivate,
         chargeNumberForSuspendedPunishment,
       } as ParsedUrlQueryInput,
@@ -61,7 +61,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage,
-        days,
+        duration,
         punishmentNumberToActivate,
         chargeNumberForSuspendedPunishment,
       } as ParsedUrlQueryInput,
@@ -75,7 +75,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
       startDate,
       endDate,
       type,
-      days,
+      duration,
       privilegeType,
       otherPrivilege,
       stoppagePercentage,
@@ -99,7 +99,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
     return this.renderView(req, res, {
       startDate: lastAddedPunishment.startDate,
       endDate: lastAddedPunishment.endDate,
-      days: lastAddedPunishment.days,
+      duration: lastAddedPunishment.duration,
       type: lastAddedPunishment.type,
       privilegeType: lastAddedPunishment.privilegeType,
       otherPrivilege: lastAddedPunishment.otherPrivilege,

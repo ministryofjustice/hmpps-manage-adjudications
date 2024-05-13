@@ -30,7 +30,7 @@ beforeEach(() => {
     type: PunishmentType.PRIVILEGE,
     PrivilegeType: PrivilegeType.OTHER,
     otherPrivilege: 'nintendo switch',
-    days: 10,
+    duration: 10,
     startDate: '4/4/2023',
     endDate: '14/4/2023',
   })
@@ -51,7 +51,7 @@ describe('GET', () => {
         `${adjudicationUrls.punishmentStartDate.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -67,7 +67,7 @@ describe('GET', () => {
         `${adjudicationUrls.punishmentStartDate.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -83,7 +83,7 @@ describe('POST ', () => {
         `${adjudicationUrls.punishmentStartDate.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .send({
         startDate: '13/12/2023',
@@ -93,7 +93,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6&startDate=13%2F12%2F2023`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=13%2F12%2F2023`
       )
       .then(() =>
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(
@@ -102,7 +102,7 @@ describe('POST ', () => {
             type: PunishmentType.PRIVILEGE,
             privilegeType: PrivilegeType.OTHER,
             otherPrivilege: 'nintendo switch',
-            days: 6,
+            duration: 6,
             startDate: '2023-12-13',
             endDate: '2023-12-18',
             stoppagePercentage: null,

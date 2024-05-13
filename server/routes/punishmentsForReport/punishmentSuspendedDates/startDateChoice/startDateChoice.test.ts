@@ -55,7 +55,7 @@ beforeEach(() => {
           id: 72,
           type: PunishmentType.CONFINEMENT,
           schedule: {
-            days: 10,
+            duration: 10,
             suspendedUntil: '30/5/2023',
           },
         },
@@ -67,7 +67,7 @@ beforeEach(() => {
           id: 73,
           type: PunishmentType.ADDITIONAL_DAYS,
           schedule: {
-            days: 5,
+            duration: 5,
             suspendedUntil: '30/5/2023',
           },
         },
@@ -79,7 +79,7 @@ beforeEach(() => {
           id: 74,
           type: PunishmentType.PROSPECTIVE_DAYS,
           schedule: {
-            days: 3,
+            duration: 3,
             suspendedUntil: '18/5/2023',
           },
         },
@@ -134,7 +134,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(
           '100'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
       )
   })
   it('redirects to the enter start date page if user does not select another date', () => {
@@ -152,7 +152,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentStartDate.urls.existing(
           '100'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&days=&startDate=&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
       )
   })
 })

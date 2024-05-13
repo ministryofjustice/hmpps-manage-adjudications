@@ -124,7 +124,7 @@ export default class PunishmentPage {
     if ([PunishmentType.CAUTION, PunishmentType.DAMAGES_OWED].includes(punishmentType)) {
       const punishmentData = {
         type: punishmentType,
-        days: 0,
+        duration: 0,
         damagesOwedAmount,
       }
       if (this.pageOptions.isEdit()) {

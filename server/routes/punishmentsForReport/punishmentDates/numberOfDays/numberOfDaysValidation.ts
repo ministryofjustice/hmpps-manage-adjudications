@@ -4,30 +4,30 @@ import validatePunishmentDays from '../../punishments/punishmentDaysValidator'
 
 type PunishmentScheduleForm = {
   punishmentType: PunishmentType
-  days: number
+  duration: number
   isYOI: boolean
   privilegeType?: PrivilegeType
 }
 
 const errors: { [key: string]: FormError } = {
   MISSING_DAYS: {
-    href: '#days',
+    href: '#duration',
     text: 'Enter how many days the punishment will last',
   },
   DAYS_TOO_FEW: {
-    href: '#days',
+    href: '#duration',
     text: 'Enter one or more days',
   },
 }
 
 export default function validateForm({
   punishmentType,
-  days,
+  duration,
   isYOI,
   privilegeType,
 }: PunishmentScheduleForm): FormError | null {
-  if (Number.isInteger(days) && days <= 0) return errors.DAYS_TOO_FEW
-  if (days === undefined || days === null || !days) return errors.MISSING_DAYS
+  if (Number.isInteger(duration) && duration <= 0) return errors.DAYS_TOO_FEW
+  if (duration === undefined || duration === null || !duration) return errors.MISSING_DAYS
 
-  return validatePunishmentDays(punishmentType, days, isYOI, privilegeType)
+  return validatePunishmentDays(punishmentType, duration, isYOI, privilegeType)
 }

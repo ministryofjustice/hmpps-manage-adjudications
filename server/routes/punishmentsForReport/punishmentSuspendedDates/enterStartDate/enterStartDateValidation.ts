@@ -5,7 +5,7 @@ import validatePunishmentDays from '../../punishments/punishmentDaysValidator'
 type startDateDateForm = {
   startDate?: string
   punishmentType?: PunishmentType
-  days?: number
+  duration?: number
   isYOI?: boolean
   privilegeType: PrivilegeType
 }
@@ -20,10 +20,10 @@ const errors: { [key: string]: FormError } = {
 export default function validateForm({
   startDate,
   punishmentType,
-  days,
+  duration,
   isYOI,
   privilegeType,
 }: startDateDateForm): FormError | null {
   if (!startDate) return errors.MISSING_DATE
-  return validatePunishmentDays(punishmentType, days, isYOI, privilegeType)
+  return validatePunishmentDays(punishmentType, duration, isYOI, privilegeType)
 }

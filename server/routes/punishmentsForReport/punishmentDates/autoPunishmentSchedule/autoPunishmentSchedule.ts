@@ -12,7 +12,7 @@ import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult
 type PageData = {
   startDate?: string
   endDate?: string
-  days?: number
+  duration?: number
   type?: PunishmentType
   privilegeType?: PrivilegeType
   otherPrivilege?: string
@@ -29,7 +29,7 @@ export default class AutoPunishmentSchedulePage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { startDate, endDate, days, type, privilegeType, otherPrivilege, stoppagePercentage, redisId } = pageData
+    const { startDate, endDate, duration, type, privilegeType, otherPrivilege, stoppagePercentage, redisId } = pageData
 
     const startDateChangeHref = url.format({
       pathname: adjudicationUrls.punishmentStartDate.urls.edit(chargeNumber, redisId),
@@ -38,7 +38,7 @@ export default class AutoPunishmentSchedulePage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage,
-        days,
+        duration,
       } as ParsedUrlQueryInput,
     })
 
@@ -49,7 +49,7 @@ export default class AutoPunishmentSchedulePage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage,
-        days,
+        duration,
       } as ParsedUrlQueryInput,
     })
     return res.render(`pages/autoPunishmentSchedule.njk`, {
@@ -60,7 +60,7 @@ export default class AutoPunishmentSchedulePage {
       startDate,
       endDate,
       type,
-      days,
+      duration,
       privilegeType,
       otherPrivilege,
       stoppagePercentage,
@@ -84,7 +84,7 @@ export default class AutoPunishmentSchedulePage {
     return this.renderView(req, res, {
       startDate: lastAddedPunishment.startDate,
       endDate: lastAddedPunishment.endDate,
-      days: lastAddedPunishment.days,
+      duration: lastAddedPunishment.duration,
       type: lastAddedPunishment.type,
       privilegeType: lastAddedPunishment.privilegeType,
       otherPrivilege: lastAddedPunishment.otherPrivilege,

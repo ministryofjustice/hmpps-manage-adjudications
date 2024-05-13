@@ -58,14 +58,14 @@ context('Display active punishments', () => {
           {
             chargeNumber: 1,
             punishmentType: PunishmentType.CONFINEMENT,
-            days: 10,
+            duration: 10,
             startDate: '2024-01-10',
             lastDay: '2024-01-20',
           },
           {
             chargeNumber: 1,
             punishmentType: PunishmentType.EARNINGS,
-            days: 10,
+            duration: 10,
             startDate: '2024-01-10',
             lastDay: '2024-01-20',
             stoppagePercentage: 20,

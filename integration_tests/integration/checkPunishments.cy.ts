@@ -55,7 +55,7 @@ context('Check punishments', () => {
               id: 14,
               type: PunishmentType.CONFINEMENT,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-13',
               },
             },
@@ -81,7 +81,7 @@ context('Check punishments', () => {
               id: 14,
               type: PunishmentType.CONFINEMENT,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-13',
               },
             },
@@ -101,7 +101,7 @@ context('Check punishments', () => {
               id: 14,
               type: PunishmentType.CONFINEMENT,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-13',
               },
             },
@@ -112,7 +112,7 @@ context('Check punishments', () => {
               schedule: {
                 startDate: '2023-04-13',
                 endDate: '2023-04-15',
-                days: 2,
+                duration: 2,
               },
             },
           ],
@@ -131,7 +131,7 @@ context('Check punishments', () => {
               id: 14,
               type: PunishmentType.CONFINEMENT,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-13',
               },
             },
@@ -142,7 +142,7 @@ context('Check punishments', () => {
               schedule: {
                 startDate: '2023-04-13',
                 endDate: '2023-04-15',
-                days: 2,
+                duration: 2,
               },
             },
           ],

@@ -75,7 +75,7 @@ export default class DamagesAmountPage {
 
     const punishmentData = {
       type: PunishmentType.DAMAGES_OWED,
-      days: 0,
+      duration: 0,
       damagesOwedAmount,
     }
 

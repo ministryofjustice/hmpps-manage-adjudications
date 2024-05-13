@@ -6,7 +6,7 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.PROSPECTIVE_DAYS,
-        days: 10,
+        duration: 10,
         isYOI: false,
       })
     ).toBeNull()
@@ -16,7 +16,7 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.ADDITIONAL_DAYS,
-        days: 10,
+        duration: 10,
         isYOI: false,
       })
     ).toBeNull()
@@ -25,11 +25,11 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
-        days: null,
+        duration: null,
         isYOI: false,
       })
     ).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Enter how many days the punishment will last',
     })
   })
@@ -37,11 +37,11 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
-        days: 0,
+        duration: 0,
         isYOI: false,
       })
     ).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Enter one or more days',
     })
   })
@@ -49,11 +49,11 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
-        days: 11,
+        duration: 11,
         isYOI: true,
       })
     ).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Cellular confinement cannot be more than 10 days for an offence under YOI rules',
     })
   })

@@ -75,14 +75,14 @@ describe('POST number of additional days page', () => {
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`
       )
       .send({
-        days: 10,
+        duration: 10,
       })
       .expect(302)
       .expect(
         'Location',
         `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.start(
           '100'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`
       )
   })
 })

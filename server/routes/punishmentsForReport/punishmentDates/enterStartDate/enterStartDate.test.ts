@@ -42,7 +42,7 @@ describe('GET', () => {
       .get(
         `${adjudicationUrls.punishmentStartDate.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -57,7 +57,7 @@ describe('GET', () => {
       .get(
         `${adjudicationUrls.punishmentStartDate.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -72,7 +72,7 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.punishmentStartDate.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .send({
         startDate: '13/12/2023',
@@ -82,7 +82,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6&startDate=13%2F12%2F2023`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=13%2F12%2F2023`
       )
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
@@ -91,7 +91,7 @@ describe('POST ', () => {
             type: PunishmentType.PRIVILEGE,
             privilegeType: PrivilegeType.OTHER,
             otherPrivilege: 'nintendo switch',
-            days: 6,
+            duration: 6,
             startDate: '2023-12-13',
             endDate: '2023-12-18',
             stoppagePercentage: null,

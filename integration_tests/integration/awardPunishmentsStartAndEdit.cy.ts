@@ -28,7 +28,7 @@ const susPun = [
       activatedBy: '0',
       activatedFrom: '0',
       schedule: {
-        days: 5,
+        duration: 5,
         suspendedUntil: '2023-04-29',
       },
     },
@@ -41,7 +41,7 @@ const susPun = [
       activatedBy: '0',
       activatedFrom: '0',
       schedule: {
-        days: 5,
+        duration: 5,
         suspendedUntil: '2023-04-29',
       },
     },
@@ -54,7 +54,7 @@ const susPun = [
       activatedBy: '0',
       activatedFrom: '0',
       schedule: {
-        days: 5,
+        duration: 5,
         suspendedUntil: '2023-04-29',
       },
     },
@@ -123,7 +123,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
                 id: 765,
                 type: PunishmentType.EXTRA_WORK,
                 schedule: {
-                  days: 10,
+                  duration: 10,
                   startDate: '2023-10-30',
                   endDate: '2023-11-08',
                 },
@@ -133,7 +133,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
                 id: 761,
                 type: PunishmentType.ADDITIONAL_DAYS,
                 schedule: {
-                  days: 10,
+                  duration: 10,
                 },
                 canRemove: false,
               },
@@ -183,7 +183,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
               type: PunishmentType.PRIVILEGE,
               privilegeType: PrivilegeType.CANTEEN,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-29',
               },
             },
@@ -203,7 +203,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
             id: 70,
             type: PunishmentType.PROSPECTIVE_DAYS,
             schedule: {
-              days: 10,
+              duration: 10,
             },
           },
         },
@@ -215,7 +215,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
             id: 71,
             consecutiveChargeNumber: '111',
             schedule: {
-              days: 5,
+              duration: 5,
             },
           },
         },

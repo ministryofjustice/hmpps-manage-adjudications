@@ -40,7 +40,7 @@ context('which punishment will it be consecutive to page', () => {
             id: 70,
             type: PunishmentType.ADDITIONAL_DAYS,
             schedule: {
-              days: 10,
+              duration: 10,
             },
           },
         },
@@ -52,7 +52,7 @@ context('which punishment will it be consecutive to page', () => {
             id: 71,
             consecutiveChargeNumber: '111',
             schedule: {
-              days: 5,
+              duration: 5,
             },
           },
         },
@@ -88,7 +88,9 @@ context('which punishment will it be consecutive to page', () => {
   describe('Loads', () => {
     it('should contain the required page elements', () => {
       cy.visit(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS&days=5`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(
+          '100'
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`
       )
       const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
       whichPunishmentConsecutiveToPage.table().should('exist')
@@ -98,7 +100,9 @@ context('which punishment will it be consecutive to page', () => {
     })
     it('should contain the required page elements - no data', () => {
       cy.visit(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('101')}?punishmentType=ADDITIONAL_DAYS&days=5`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(
+          '101'
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`
       )
       const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
       whichPunishmentConsecutiveToPage.table().should('not.exist')
@@ -108,7 +112,9 @@ context('which punishment will it be consecutive to page', () => {
     })
     it('should have the correct details in the table', () => {
       cy.visit(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS&days=5`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(
+          '100'
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`
       )
       const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
       whichPunishmentConsecutiveToPage
@@ -127,7 +133,9 @@ context('which punishment will it be consecutive to page', () => {
     })
     it('goes back to award punishments page if return link clicked', () => {
       cy.visit(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS&days=5`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(
+          '100'
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`
       )
       const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
       whichPunishmentConsecutiveToPage.cancelLink().click()
@@ -135,7 +143,9 @@ context('which punishment will it be consecutive to page', () => {
     })
     it('goes to the award punishment page if the activate button is clicked', () => {
       cy.visit(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS&days=5`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(
+          '100'
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`
       )
       const whichPunishmentConsecutiveToPage = Page.verifyOnPage(WhichPunishmentConsecutiveToPage)
       whichPunishmentConsecutiveToPage.selectButton().first().click()

@@ -58,7 +58,7 @@ describe('GET', () => {
       .get(
         `${adjudicationUrls.whenWillPunishmentStart.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -84,7 +84,7 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.whenWillPunishmentStart.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .send({
         immediate: 'true',
@@ -94,7 +94,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6&startDate=03%2F09%2F2023`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=03%2F09%2F2023`
       )
   })
   it('redirects to the enter start date page if user does not select another date', () => {
@@ -102,7 +102,7 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.whenWillPunishmentStart.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .send({
         immediate: 'false',
@@ -112,7 +112,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.punishmentStartDate.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6&startDate=`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=`
       )
   })
 })

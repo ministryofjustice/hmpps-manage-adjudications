@@ -30,7 +30,7 @@ beforeEach(() => {
     type: PunishmentType.PRIVILEGE,
     PrivilegeType: PrivilegeType.OTHER,
     otherPrivilege: 'nintendo switch',
-    days: 10,
+    duration: 10,
     suspendedUntil: '4/4/2023',
   })
 })
@@ -50,7 +50,7 @@ describe('GET', () => {
         `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -66,7 +66,7 @@ describe('GET', () => {
         `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -82,7 +82,7 @@ describe('POST ', () => {
         `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .send({
         suspendedUntil: '13/12/2023',
@@ -96,7 +96,7 @@ describe('POST ', () => {
             type: PunishmentType.PRIVILEGE,
             privilegeType: PrivilegeType.OTHER,
             otherPrivilege: 'nintendo switch',
-            days: 6,
+            duration: 6,
             suspendedUntil: '2023-12-13',
             stoppagePercentage: null,
           },
