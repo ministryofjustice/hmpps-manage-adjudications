@@ -9,7 +9,7 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import { User } from '../../../../data/hmppsManageUsersClient'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
-import { PrivilegeType, PunishmentMeasurement, PunishmentType } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
