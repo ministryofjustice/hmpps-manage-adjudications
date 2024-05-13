@@ -144,4 +144,5 @@ export default {
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   offenceVersion: get('OFFENCE_VERSION', 1, requiredInProduction),
+  paybackAndRehabFlag: get('PAYBACK_REHAB_FLAG', false, requiredInProduction),
 }
