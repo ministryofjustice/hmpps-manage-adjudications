@@ -5,7 +5,7 @@ import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import { DIS7Data } from '../../data/ConfirmedOnReportData'
 import TestData from '../testutils/testData'
 import Dis7Pdf from './dis7Pdf'
-import { PunishmentType } from '../../data/PunishmentResult'
+import { PunishmentMeasurement, PunishmentType } from '../../data/PunishmentResult'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
@@ -46,7 +46,8 @@ const suspendedPunishments = [
     privilegeType: null,
     schedule: {
       suspendedUntil: '2022-01-01T00:00',
-      days: 20,
+      duration: 20,
+      measurement: PunishmentMeasurement.DAYS,
     },
   }),
 ]

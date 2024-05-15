@@ -69,7 +69,9 @@ context('Punishment - Enter the date the punishment will start', () => {
   describe('saves successfully and redirects', () => {
     it('should go to correct page when date is entered', () => {
       cy.visit(
-        `${adjudicationUrls.punishmentStartDate.urls.start('100')}?punishmentType=PRIVILEGES&privilegeType=TV&days=10`
+        `${adjudicationUrls.punishmentStartDate.urls.start(
+          '100'
+        )}?punishmentType=PRIVILEGES&privilegeType=TV&duration=10`
       )
       const punishmentStartDatePage = Page.verifyOnPage(PunishmentStartDatePage)
       const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')

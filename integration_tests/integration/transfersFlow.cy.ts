@@ -158,7 +158,7 @@ context('Transfers flow', () => {
               privilegeType: PrivilegeType.OTHER,
               otherPrivilege: 'chocolate',
               schedule: {
-                days: 10,
+                duration: 10,
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
@@ -404,7 +404,7 @@ context('Transfers flow', () => {
               privilegeType: PrivilegeType.OTHER,
               otherPrivilege: 'chocolate',
               schedule: {
-                days: 10,
+                duration: 10,
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },

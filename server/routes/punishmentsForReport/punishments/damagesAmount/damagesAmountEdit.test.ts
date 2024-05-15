@@ -20,7 +20,7 @@ beforeEach(() => {
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.DAMAGES_OWED,
     damagesOwedAmount: 100,
-    days: 0,
+    duration: 0,
     redisId: 'xyz',
   })
 })

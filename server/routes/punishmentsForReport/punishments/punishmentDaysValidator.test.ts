@@ -8,7 +8,7 @@ describe('validateForm', () => {
 
   it('shows error when additional days above max', () => {
     expect(validateForm(PunishmentType.ADDITIONAL_DAYS, 43, false)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Number of additional days cannot be more than 42',
     })
   })
@@ -19,7 +19,7 @@ describe('validateForm', () => {
 
   it('shows error when prospective days above max', () => {
     expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, 43, false)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Number of prospective additional days cannot be more than 42',
     })
   })
@@ -30,7 +30,7 @@ describe('validateForm', () => {
 
   it('shows error when earnings days above max for adult', () => {
     expect(validateForm(PunishmentType.EARNINGS, 85, false)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Days for stoppage of earnings cannot be more than 84 for an offence under Adult rules',
     })
   })
@@ -41,7 +41,7 @@ describe('validateForm', () => {
 
   it('shows error when earnings days above max for YOI', () => {
     expect(validateForm(PunishmentType.EARNINGS, 43, true)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Days for stoppage of earnings cannot be more than 42 for an offence under YOI rules',
     })
   })
@@ -52,7 +52,7 @@ describe('validateForm', () => {
 
   it('shows error when exclusion work days above max for adult', () => {
     expect(validateForm(PunishmentType.EXCLUSION_WORK, 22, false)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Days for exclusion from associated work cannot be more than 21 for an offence under Adult rules',
     })
   })
@@ -63,7 +63,7 @@ describe('validateForm', () => {
 
   it('shows error when confinement days above max for adult', () => {
     expect(validateForm(PunishmentType.CONFINEMENT, 22, false)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Cellular confinement cannot be more than 21 days for an offence under Adult rules',
     })
   })
@@ -74,7 +74,7 @@ describe('validateForm', () => {
 
   it('shows error when confinement days above max for YOI', () => {
     expect(validateForm(PunishmentType.CONFINEMENT, 11, true)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: 'Cellular confinement cannot be more than 10 days for an offence under YOI rules',
     })
   })
@@ -85,7 +85,7 @@ describe('validateForm', () => {
 
   it('shows error when privilege days above max for adult', () => {
     expect(validateForm(PunishmentType.PRIVILEGE, 43, false, PrivilegeType.CANTEEN)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: `Days for loss of ${convertPrivilegeType(
         PrivilegeType.CANTEEN
       )} cannot be more than 42 days for an offence under Adult rules`,
@@ -94,14 +94,14 @@ describe('validateForm', () => {
 
   it('shows error when privilege other days above max for adult', () => {
     expect(validateForm(PunishmentType.PRIVILEGE, 43, false, PrivilegeType.OTHER)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: `Days for loss of privilege cannot be more than 42 days for an offence under Adult rules`,
     })
   })
 
   it('shows error when privilege other days above max for adult', () => {
     expect(validateForm(PunishmentType.PRIVILEGE, 22, true, PrivilegeType.OTHER)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: `Days for loss of privilege cannot be more than 21 days for an offence under YOI rules`,
     })
   })
@@ -112,7 +112,7 @@ describe('validateForm', () => {
 
   it('shows error when privilege days above max for YOI', () => {
     expect(validateForm(PunishmentType.PRIVILEGE, 22, true, PrivilegeType.CANTEEN)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: `Days for loss of ${convertPrivilegeType(
         PrivilegeType.CANTEEN
       )} cannot be more than 21 days for an offence under YOI rules`,
@@ -125,7 +125,7 @@ describe('validateForm', () => {
 
   it('shows error when removal wing above max for adult', () => {
     expect(validateForm(PunishmentType.REMOVAL_WING, 29, false)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: `Days for removal from wing or unit cannot be more than 28 days for an offence under Adult rules`,
     })
   })
@@ -136,7 +136,7 @@ describe('validateForm', () => {
 
   it('shows error when removal wing above max for YOI', () => {
     expect(validateForm(PunishmentType.REMOVAL_WING, 22, true)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: `Days for removal from wing or unit cannot be more than 21 days for an offence under YOI rules`,
     })
   })
@@ -147,7 +147,7 @@ describe('validateForm', () => {
 
   it('shows error when removal activity above max for YOI', () => {
     expect(validateForm(PunishmentType.REMOVAL_ACTIVITY, 22, true)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: `Days for removal from activity cannot be more than 21 days for an offence under YOI rules`,
     })
   })
@@ -158,7 +158,7 @@ describe('validateForm', () => {
 
   it('shows error when extra work above max for YOI', () => {
     expect(validateForm(PunishmentType.EXTRA_WORK, 22, true)).toEqual({
-      href: '#days',
+      href: '#duration',
       text: `Days for extra work cannot be more than 21 days for an offence under YOI rules`,
     })
   })

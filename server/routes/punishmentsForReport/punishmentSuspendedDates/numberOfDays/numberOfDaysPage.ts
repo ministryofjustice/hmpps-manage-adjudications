@@ -21,7 +21,7 @@ import validateForm from './numberOfDaysValidation'
 
 type PageData = {
   error?: FormError
-  days?: number
+  duration?: number
 }
 
 export enum PageRequestType {
@@ -51,12 +51,12 @@ export default class SuspendedPunishmentNumberOfDaysPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, days } = pageData
+    const { error, duration } = pageData
 
     return res.render(`pages/punishmentNumberOfDays.njk`, {
       errors: error ? [error] : [],
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
-      days,
+      duration,
     })
   }
 
@@ -67,19 +67,19 @@ export default class SuspendedPunishmentNumberOfDaysPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const { days } = req.query
+    const { duration } = req.query
     let punishmentDays = null
-    if (days != null) {
-      punishmentDays = Number(days)
+    if (duration != null) {
+      punishmentDays = Number(duration)
     }
 
-    return this.renderView(req, res, { days: punishmentDays })
+    return this.renderView(req, res, { duration: punishmentDays })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { user } = res.locals
-    const { days } = req.body
+    const { duration } = req.body
     const {
       punishmentNumberToActivate,
       punishmentType,
@@ -89,7 +89,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
       chargeNumberForSuspendedPunishment,
     } = req.query
     const type = PunishmentType[punishmentType as string]
-    const trimmedDays = days ? Number(String(days).trim()) : null
+    const trimmedDays = duration ? Number(String(duration).trim()) : null
     const isYOI = await this.getYoiInfo(chargeNumber, user)
 
     const isTypeAdditionalDays = [PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(
@@ -97,13 +97,13 @@ export default class SuspendedPunishmentNumberOfDaysPage {
     )
 
     const error = validateForm({
-      days,
+      duration,
       punishmentType: type,
       isYOI,
       privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
     })
 
-    if (error) return this.renderView(req, res, { error, days })
+    if (error) return this.renderView(req, res, { error, duration })
 
     if (isTypeAdditionalDays) {
       try {
@@ -115,7 +115,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
         if (punishmentToUpdate.length) {
           const { punishment } = punishmentToUpdate[0]
           const activatedFromChargeNumber = punishmentToUpdate[0].chargeNumber
-          const updatedPunishment = this.updatePunishment(punishment, days, activatedFromChargeNumber)
+          const updatedPunishment = this.updatePunishment(punishment, duration, activatedFromChargeNumber)
           if (this.pageOptions.isEdit()) {
             await this.punishmentsService.updateSessionPunishment(
               req,
@@ -142,7 +142,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
           privilegeType,
           otherPrivilege,
           stoppagePercentage,
-          days: trimmedDays,
+          duration: trimmedDays,
           punishmentNumberToActivate,
           chargeNumberForSuspendedPunishment,
         } as ParsedUrlQueryInput,
@@ -166,7 +166,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
 
   updatePunishment(
     existingPunishment: SuspendedPunishment,
-    days: number,
+    duration: number,
     activatedFromChargeNumber: string
   ): PunishmentData {
     const activePunishment = {
@@ -174,7 +174,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
       redisId: uuidv4(),
       activatedFrom: activatedFromChargeNumber,
       schedule: {
-        days,
+        duration,
         suspendedUntil: null as never,
         startDate: null as never,
         endDate: null as never,

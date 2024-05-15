@@ -28,7 +28,7 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.EXCLUSION_WORK,
-    days: 10,
+    duration: 10,
     suspendedUntil: '4/4/2023',
   })
 })
@@ -48,7 +48,7 @@ describe('GET', () => {
         `${adjudicationUrls.punishmentIsSuspended.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -64,7 +64,7 @@ describe('GET', () => {
         `${adjudicationUrls.punishmentIsSuspended.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -80,7 +80,7 @@ describe('POST ', () => {
         `${adjudicationUrls.punishmentIsSuspended.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .send({
         suspended: 'no',
@@ -91,7 +91,7 @@ describe('POST ', () => {
         `${adjudicationUrls.punishmentStartDate.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
   })
   it('redirects to the suspended until date page if the user selects yes', () => {
@@ -100,7 +100,7 @@ describe('POST ', () => {
         `${adjudicationUrls.punishmentIsSuspended.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
       .send({
         suspended: 'yes',
@@ -111,7 +111,7 @@ describe('POST ', () => {
         `${adjudicationUrls.punishmentSuspendedUntil.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=6`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
       )
   })
 })

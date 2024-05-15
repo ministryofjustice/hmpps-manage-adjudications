@@ -90,7 +90,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
       privilegeType,
       otherPrivilege,
       stoppagePercentage,
-      days,
+      duration,
       chargeNumberForSuspendedPunishment,
     } = req.query
     const suspendedPunishmentIdToActivate = Number(punishmentNumberToActivate)
@@ -101,7 +101,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
       isYOI,
       punishmentType: punishmentType ? PunishmentType[punishmentType as string] : null,
       privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
-      days: Number(days),
+      duration: Number(duration),
     })
 
     if (error)
@@ -115,7 +115,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
     if (immediate === 'true') {
       const lastHearingDateTime = await this.getLastHearingDate(chargeNumber, user)
       lastHearingDate = formatTimestampToDate(lastHearingDateTime)
-      const numberOfDays = Number(days)
+      const numberOfDays = Number(duration)
       try {
         if (this.pageOptions.isExistingOrExistingEdit()) {
           const { suspendedPunishments } = await this.punishmentsService.getSuspendedPunishmentDetails(
@@ -161,7 +161,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
           privilegeType,
           otherPrivilege,
           stoppagePercentage,
-          days,
+          duration,
           startDate: lastHearingDate,
           punishmentNumberToActivate,
           chargeNumberForSuspendedPunishment,
@@ -190,7 +190,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
 
   updatePunishment(
     existingPunishment: SuspendedPunishment,
-    days: number,
+    duration: number,
     startDate: string,
     activatedFromChargeNumber: string
   ): PunishmentData {
@@ -199,9 +199,9 @@ export default class PunishmentSuspendedStartDateChoicePage {
       redisId: uuidv4(),
       activatedFrom: activatedFromChargeNumber,
       schedule: {
-        days,
+        duration,
         startDate: startDate ? datePickerToApi(startDate) : null,
-        endDate: calculatePunishmentEndDate(startDate, days, 'YYYY-MM-DD'),
+        endDate: calculatePunishmentEndDate(startDate, duration, 'YYYY-MM-DD'),
         suspendedUntil: null as never,
       },
     }

@@ -51,7 +51,7 @@ context('Add additional days punishments', () => {
               type: PunishmentType.PRIVILEGE,
               privilegeType: PrivilegeType.MONEY,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-29',
               },
             },

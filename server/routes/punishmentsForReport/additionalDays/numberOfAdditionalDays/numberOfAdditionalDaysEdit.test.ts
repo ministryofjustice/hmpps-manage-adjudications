@@ -31,7 +31,7 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.ADDITIONAL_DAYS,
-    days: 10,
+    duration: 10,
     suspendedUntil: '4/4/2023',
   })
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
@@ -83,7 +83,7 @@ describe('POST number of additional days page', () => {
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`
       )
       .send({
-        days: 10,
+        duration: 10,
       })
       .expect(302)
       .expect(
@@ -91,7 +91,7 @@ describe('POST number of additional days page', () => {
         `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(
           '100',
           'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`
       )
   })
 })

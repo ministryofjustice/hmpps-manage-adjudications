@@ -83,14 +83,14 @@ describe('POST ', () => {
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
       )
       .send({
-        days: 2,
+        duration: 2,
       })
       .expect(302)
       .expect(
         'Location',
         `${adjudicationUrls.punishmentIsSuspended.urls.start(
           '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&days=2`
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=2`
       )
   })
 })

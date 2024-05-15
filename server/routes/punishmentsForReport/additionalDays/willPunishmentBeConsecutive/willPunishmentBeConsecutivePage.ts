@@ -72,7 +72,7 @@ export default class WillPunishmentBeConsecutivePage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { consecutive } = req.body
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
     const type = PunishmentType[punishmentType as string]
 
     const error = validateForm({
@@ -103,7 +103,7 @@ export default class WillPunishmentBeConsecutivePage {
         privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
-        days: Number(days),
+        duration: Number(duration),
       }
 
       if (this.pageOptions.isEdit()) {

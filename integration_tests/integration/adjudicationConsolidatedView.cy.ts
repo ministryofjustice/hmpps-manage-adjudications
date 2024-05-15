@@ -194,7 +194,7 @@ const punishmentsChoc = [
     privilegeType: PrivilegeType.OTHER,
     otherPrivilege: 'chocolate',
     schedule: {
-      days: 10,
+      duration: 10,
       startDate: '2023-04-10',
       endDate: '2023-04-20',
     },
@@ -205,7 +205,7 @@ const punishmentsCautionDamages = [
     id: 1,
     type: PunishmentType.CAUTION,
     schedule: {
-      days: 0,
+      duration: 0,
     },
   },
   {
@@ -213,7 +213,7 @@ const punishmentsCautionDamages = [
     redisId: 'xyz',
     type: PunishmentType.DAMAGES_OWED,
     schedule: {
-      days: 0,
+      duration: 0,
     },
     damagesOwedAmount: 50,
   },

@@ -31,6 +31,11 @@ export enum PunishmentReasonForChange {
   GOV_OR_DIRECTOR = 'GOV_OR_DIRECTOR',
 }
 
+export enum PunishmentMeasurement {
+  DAYS,
+  HOURS,
+}
+
 export type PunishmentData = {
   id?: number
   redisId?: string
@@ -38,7 +43,8 @@ export type PunishmentData = {
   privilegeType?: PrivilegeType
   otherPrivilege?: string
   stoppagePercentage?: number
-  days: number
+  duration?: number
+  measurement?: PunishmentMeasurement
   startDate?: string
   endDate?: string
   suspendedUntil?: string
@@ -50,7 +56,8 @@ export type PunishmentData = {
 }
 
 export type PunishmentSchedule = {
-  days: number
+  duration?: number
+  measurement?: PunishmentMeasurement
   startDate?: string
   endDate?: string
   suspendedUntil?: string
@@ -229,12 +236,13 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     damagesOwedAmount,
     canRemove,
   } = punishment
-  const { days, startDate, endDate, suspendedUntil } = schedule
+  const { duration, measurement, startDate, endDate, suspendedUntil } = schedule
   return {
     id,
     redisId,
     type,
-    days,
+    duration,
+    measurement,
     canRemove,
     ...(privilegeType && { privilegeType }),
     ...(otherPrivilege && { otherPrivilege }),
@@ -259,7 +267,8 @@ export type ActivePunishment = {
   punishmentType: PunishmentType
   privilegeType?: PrivilegeType
   otherPrivilege?: string
-  days?: number
+  duration?: number
+  measurement?: PunishmentMeasurement
   startDate: string
   lastDay?: string
   amount?: number

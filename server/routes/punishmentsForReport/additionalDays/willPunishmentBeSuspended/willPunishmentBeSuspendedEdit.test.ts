@@ -20,7 +20,7 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.ADDITIONAL_DAYS,
-    days: 5,
+    duration: 5,
     suspendedUntil: '4/4/2023',
   })
 })
@@ -62,7 +62,7 @@ describe('POST punishment-suspended page', () => {
         `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(
           '100',
           'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=5`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=5`
       )
       .send({
         suspended: 'yes',
@@ -73,7 +73,7 @@ describe('POST punishment-suspended page', () => {
         `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.edit(
           '100',
           'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=5`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=5`
       )
   })
   it('should redirect - not suspended', () => {
@@ -82,7 +82,7 @@ describe('POST punishment-suspended page', () => {
         `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(
           '100',
           'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=6`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=6`
       )
       .send({
         suspended: 'no',
@@ -93,7 +93,7 @@ describe('POST punishment-suspended page', () => {
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
           '100',
           'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=6`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=6`
       )
   })
 })

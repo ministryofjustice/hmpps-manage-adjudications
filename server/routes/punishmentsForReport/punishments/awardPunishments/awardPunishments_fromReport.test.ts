@@ -20,7 +20,7 @@ const punishmentsOnServer = [
     otherPrivilege: null as null,
     stoppagePercentage: 10,
     schedule: {
-      days: 1,
+      duration: 1,
       suspendedUntil: null as null,
       startDate: '2023-04-10',
       endDate: '2023-04-11',

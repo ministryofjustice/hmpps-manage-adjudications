@@ -76,10 +76,10 @@ export default class PunishmentSuspendedStartDatePage {
     const { chargeNumber } = req.params
     const { user } = res.locals
     const { startDate } = req.body
-    const { punishmentType, privilegeType, days, punishmentNumberToActivate } = req.query
+    const { punishmentType, privilegeType, duration, punishmentNumberToActivate } = req.query
 
     const type = PunishmentType[punishmentType as string]
-    const numberOfDays = Number(days)
+    const numberOfDays = Number(duration)
     const suspendedPunishmentIdToActivate = Number(punishmentNumberToActivate)
 
     const isYOI = await this.getYoiInfo(chargeNumber, user)
@@ -89,7 +89,7 @@ export default class PunishmentSuspendedStartDatePage {
       isYOI,
       punishmentType: type,
       privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
-      days: Number(days),
+      duration: Number(duration),
     })
 
     if (error)
@@ -146,7 +146,7 @@ export default class PunishmentSuspendedStartDatePage {
 
   updatePunishment(
     existingPunishment: SuspendedPunishment,
-    days: number,
+    duration: number,
     startDate: string,
     activatedFromChargeNumber: string
   ): PunishmentData {
@@ -155,9 +155,9 @@ export default class PunishmentSuspendedStartDatePage {
       redisId: uuidv4(),
       activatedFrom: activatedFromChargeNumber,
       schedule: {
-        days,
+        duration,
         startDate: startDate ? datePickerToApi(startDate) : null,
-        endDate: calculatePunishmentEndDate(startDate, days, 'YYYY-MM-DD'),
+        endDate: calculatePunishmentEndDate(startDate, duration, 'YYYY-MM-DD'),
         suspendedUntil: null as never,
       },
     }

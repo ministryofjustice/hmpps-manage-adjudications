@@ -6,7 +6,7 @@ import UserService from '../../../services/userService'
 import HearingsService from '../../../services/hearingsService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import TestData from '../../testutils/testData'
-import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentMeasurement, PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/hearingsService')
@@ -110,7 +110,8 @@ describe('POST', () => {
             privilegeType: PrivilegeType.OTHER,
             otherPrivilege: 'chocolate',
             schedule: {
-              days: 10,
+              duration: 10,
+              measurement: PunishmentMeasurement.DAYS,
               startDate: '2023-04-10',
               endDate: '2023-04-20',
             },

@@ -23,7 +23,7 @@ beforeEach(() => {
   punishmentsService.getSessionPunishment.mockResolvedValue({
     consecutiveChargeNumber: '99',
     type: PunishmentType.ADDITIONAL_DAYS,
-    days: 10,
+    duration: 10,
   })
   punishmentsService.getPrisonerDetails.mockResolvedValue(
     testData.prisonerResultSummary({
@@ -71,7 +71,7 @@ describe('POST', () => {
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
           '100',
           'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`
       )
       .send({
         consecutive: 'yes',
@@ -82,7 +82,7 @@ describe('POST', () => {
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(
           '100',
           'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10&consecutive=yes`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10&consecutive=yes`
       )
   })
   it('should save and redirect if the no radio is chosen', () => {
@@ -91,7 +91,7 @@ describe('POST', () => {
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
           '100',
           uuidv4()
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&days=10`
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`
       )
       .send({
         consecutive: 'no',
@@ -101,7 +101,7 @@ describe('POST', () => {
           expect.anything(),
           {
             type: PunishmentType.ADDITIONAL_DAYS,
-            days: 10,
+            duration: 10,
             otherPrivilege: null,
             privilegeType: null,
             stoppagePercentage: null,

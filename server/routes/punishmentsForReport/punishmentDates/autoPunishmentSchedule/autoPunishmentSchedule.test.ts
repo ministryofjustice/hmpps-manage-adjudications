@@ -29,14 +29,14 @@ beforeEach(() => {
   punishmentsService.getAllSessionPunishments.mockResolvedValue([
     {
       type: PunishmentType.DAMAGES_OWED,
-      days: 0,
+      duration: 0,
       amount: 50,
     },
     {
       type: PunishmentType.PRIVILEGE,
       PrivilegeType: PrivilegeType.OTHER,
       otherPrivilege: 'nintendo switch',
-      days: 10,
+      duration: 10,
       startDate: '2023-04-10',
       endDate: '2023-04-19',
     },

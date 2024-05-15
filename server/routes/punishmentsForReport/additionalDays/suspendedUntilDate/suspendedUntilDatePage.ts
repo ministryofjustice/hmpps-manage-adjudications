@@ -71,7 +71,7 @@ export default class SuspendedUntilDateAdditionalDaysPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { suspendedUntil } = req.body
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
     const type = PunishmentType[punishmentType as string]
 
     const error = validateForm({
@@ -90,7 +90,7 @@ export default class SuspendedUntilDateAdditionalDaysPage {
         privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
-        days: Number(days),
+        duration: Number(duration),
         suspendedUntil: suspendedUntil ? datePickerToApi(suspendedUntil) : null,
       }
 

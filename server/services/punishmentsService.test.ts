@@ -74,7 +74,7 @@ describe('PunishmentsService', () => {
           privilegeType: PrivilegeType.CANTEEN,
           otherPrivilege: 'lalalala',
           stoppagePercentage: 0,
-          days: 0,
+          duration: 0,
           startDate: '2023-04-03',
           endDate: '2023-04-03',
           suspendedUntil: '2023-04-03',
@@ -106,7 +106,7 @@ describe('PunishmentsService', () => {
         privilegeType: PrivilegeType.CANTEEN,
         otherPrivilege: 'lalalala',
         stoppagePercentage: 0,
-        days: 0,
+        duration: 0,
         startDate: '2023-04-03',
         endDate: '2023-04-03',
         suspendedUntil: '2023-04-03',
@@ -141,12 +141,12 @@ describe('PunishmentsService', () => {
             id: 73,
             type: 'PRIVILEGE',
             privilegeType: 'CANTEEN',
-            schedule: { days: 10, suspendedUntil: '2023-05-31' },
+            schedule: { duration: 10, suspendedUntil: '2023-05-31' },
           },
         },
         {
           chargeNumber: 1525601,
-          punishment: { days: 2, suspendedUntil: '2023-05-31' },
+          punishment: { duration: 2, suspendedUntil: '2023-05-31' },
         },
       ]
       getReportedAdjudication.mockResolvedValue({

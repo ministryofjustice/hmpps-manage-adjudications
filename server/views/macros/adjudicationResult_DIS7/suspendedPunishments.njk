@@ -1,8 +1,8 @@
 {% macro suspendedPunishments(adjudicationResultReportData) %}
   <h2 class="dis7-header">Suspended punishments</h2>
   {% for punishment in adjudicationResultReportData.suspendedPunishments %}
-    {% set punishmentLength = punishment.schedule.days + ' days' if punishment.schedule.days > 1 else 
-      punishment.schedule.days + ' day' %}
+    {% set punishmentLength = punishment.schedule.duration + ' days' if punishment.schedule.duration > 1 else 
+      punishment.schedule.duration + ' day' %}
     <div class="dis7-punishment-container">
       <div class="break-inside-avoid">
           <h3 class="govuk-body dis7-subheader">Suspended: {{ punishment.type | convertPunishmentForDISForm(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }} - {{ punishmentLength }}</h3>

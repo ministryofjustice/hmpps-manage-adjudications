@@ -19,7 +19,7 @@ const punishmentsOnSession = [
     redisId: 'asdfg-123-erty',
     type: PunishmentType.PRIVILEGE,
     privilegeType: PrivilegeType.FACILITIES,
-    days: 10,
+    duration: 10,
     startDate: '2023-04-10',
     endDate: '2023-04-20',
   },

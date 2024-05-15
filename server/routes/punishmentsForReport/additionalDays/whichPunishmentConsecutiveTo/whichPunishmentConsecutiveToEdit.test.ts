@@ -23,7 +23,7 @@ const consecutivePunishments = [
       id: 1,
       type: PunishmentType.ADDITIONAL_DAYS,
       schedule: {
-        days: 5,
+        duration: 5,
       },
     },
   },
@@ -34,7 +34,7 @@ const consecutivePunishments = [
       id: 2,
       type: PunishmentType.ADDITIONAL_DAYS,
       schedule: {
-        days: 2,
+        duration: 2,
       },
       consecutiveChargeNumber: '99',
       consecutiveReportAvailable: true,
@@ -101,7 +101,7 @@ describe('POST', () => {
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(
           '100',
           uuidv4()
-        )}?punishmentType=ADDITIONAL_DAYS&days=5`
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`
       )
       .send({
         select: 'consecutive-report-101',
@@ -111,7 +111,7 @@ describe('POST', () => {
           expect.anything(),
           {
             type: PunishmentType.ADDITIONAL_DAYS,
-            days: 5,
+            duration: 5,
             consecutiveChargeNumber: '101',
             otherPrivilege: null,
             privilegeType: null,

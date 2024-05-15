@@ -13,7 +13,7 @@ import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult
 
 type PageData = {
   error?: FormError
-  days?: number
+  duration?: number
 }
 
 export enum PageRequestType {
@@ -48,12 +48,12 @@ export default class NumberOfAdditionalDaysPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, days } = pageData
+    const { error, duration } = pageData
 
     return res.render(`pages/numberOfAdditionalDays.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
-      days,
+      duration,
     })
   }
 
@@ -69,7 +69,7 @@ export default class NumberOfAdditionalDaysPage {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
 
       return this.renderView(req, res, {
-        days: sessionData.days,
+        duration: sessionData.duration,
       })
     }
 
@@ -79,15 +79,15 @@ export default class NumberOfAdditionalDaysPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { chargeNumber } = req.params
-    const { days } = req.body
+    const { duration } = req.body
     const { punishmentType, privilegeType } = req.query
     const type = PunishmentType[punishmentType as string]
 
-    const trimmedDays = days ? Number(String(days).trim()) : null
+    const trimmedDays = duration ? Number(String(duration).trim()) : null
 
     const isYOI = await this.getYoiInfo(chargeNumber, user)
     const error = validateForm({
-      days: trimmedDays,
+      duration: trimmedDays,
       punishmentType: type,
       isYOI,
       privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
@@ -96,14 +96,14 @@ export default class NumberOfAdditionalDaysPage {
     if (error)
       return this.renderView(req, res, {
         error,
-        days: trimmedDays,
+        duration: trimmedDays,
       })
 
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req)
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-        query: { ...req.query, days: trimmedDays },
+        query: { ...req.query, duration: trimmedDays },
       })
     )
   }

@@ -5,7 +5,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import adjudicationUrls from '../../utils/urlGenerator'
 import TestData from '../testutils/testData'
 import PunishmentsService from '../../services/punishmentsService'
-import { PunishmentType } from '../../data/PunishmentResult'
+import { PunishmentMeasurement, PunishmentType } from '../../data/PunishmentResult'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/punishmentsService.ts')
@@ -37,7 +37,8 @@ beforeEach(() => {
     {
       chargeNumber: '1',
       punishmentType: PunishmentType.EARNINGS,
-      days: 10,
+      duration: 10,
+      measurement: PunishmentMeasurement.DAYS,
       startDate: '2024-01-10',
       lastDay: '2024-01-20',
       stoppagePercentage: 20,

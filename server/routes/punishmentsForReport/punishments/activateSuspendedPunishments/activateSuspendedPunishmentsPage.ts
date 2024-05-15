@@ -60,13 +60,13 @@ export default class ActivateSuspendedPunishmentsPage {
       user
     )
     const punishmentType = punishmentToActivate[0].punishment.type
-    const { days } = punishmentToActivate[0].punishment.schedule
+    const { duration } = punishmentToActivate[0].punishment.schedule
 
     const redirectUrl = this.getRedirectUrl(chargeNumber)
     return res.redirect(
       url.format({
         pathname: redirectUrl,
-        query: { punishmentNumberToActivate, punishmentType, days },
+        query: { punishmentNumberToActivate, punishmentType, duration },
       })
     )
   }

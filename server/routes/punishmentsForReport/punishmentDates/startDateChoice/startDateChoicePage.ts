@@ -81,7 +81,7 @@ export default class PunishmentStartDateChoicePage {
     const { chargeNumber } = req.params
     const { immediate } = req.body
     const { user } = res.locals
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, days } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
     const type = PunishmentType[punishmentType as string]
 
     const error = validateForm({
@@ -99,14 +99,14 @@ export default class PunishmentStartDateChoicePage {
       const lastHearingDateTime = await this.getLastHearingDate(chargeNumber, user)
       lastHearingDate = formatTimestampToDate(lastHearingDateTime)
       const startDate = datePickerToApi(lastHearingDate)
-      const numberOfDays = Number(days)
+      const numberOfDays = Number(duration)
       try {
         const punishmentData = {
           type,
           privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
           otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
           stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
-          days: numberOfDays,
+          duration: numberOfDays,
           startDate,
           endDate: calculatePunishmentEndDate(lastHearingDate, numberOfDays, 'YYYY-MM-DD'),
         }
@@ -130,7 +130,7 @@ export default class PunishmentStartDateChoicePage {
           privilegeType,
           otherPrivilege,
           stoppagePercentage,
-          days,
+          duration,
           startDate: lastHearingDate,
         } as ParsedUrlQueryInput,
       })

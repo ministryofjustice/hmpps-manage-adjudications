@@ -1329,10 +1329,10 @@ export default class ReportedAdjudicationsService {
     let prospectiveAdditionalDays = 0
     adjudication.punishments.forEach(punishment => {
       if (punishment.type === PunishmentType.ADDITIONAL_DAYS) {
-        additionalDays += punishment.schedule.days
+        additionalDays += punishment.schedule.duration
       }
       if (punishment.type === PunishmentType.PROSPECTIVE_DAYS) {
-        prospectiveAdditionalDays += punishment.schedule.days
+        prospectiveAdditionalDays += punishment.schedule.duration
       }
     })
 

@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro autoPunishmentScheduleSummary(startDate, days, endDate, startDateChangeHref, daysChangeHref) %}
+{% macro autoPunishmentScheduleSummary(startDate, duration, endDate, startDateChangeHref, daysChangeHref) %}
 {% set startDateChangeLink = {
   items: [
           {
@@ -39,7 +39,7 @@
         text: "Number of days"
       },
       value: {
-        text: days
+        text: duration
       },
     actions: daysChangeLink
     },

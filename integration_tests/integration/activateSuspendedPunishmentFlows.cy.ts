@@ -22,7 +22,7 @@ const susPun = [
       activatedBy: 0,
       activatedFrom: 0,
       schedule: {
-        days: 5,
+        duration: 5,
         suspendedUntil: '2023-04-29',
       },
     },
@@ -36,7 +36,7 @@ const susPun = [
       activatedBy: 0,
       activatedFrom: 0,
       schedule: {
-        days: 5,
+        duration: 5,
         suspendedUntil: '2023-04-29',
       },
     },
@@ -50,7 +50,7 @@ const susPun = [
       activatedBy: 0,
       activatedFrom: 0,
       schedule: {
-        days: 5,
+        duration: 5,
         suspendedUntil: '2023-04-29',
       },
     },
@@ -106,7 +106,7 @@ context('Suspended punishment schedule', () => {
               type: PunishmentType.PRIVILEGE,
               privilegeType: PrivilegeType.MONEY,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-29',
               },
             },
@@ -126,7 +126,7 @@ context('Suspended punishment schedule', () => {
               id: 71,
               type: PunishmentType.ADDITIONAL_DAYS,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-29',
               },
             },
@@ -146,7 +146,7 @@ context('Suspended punishment schedule', () => {
               id: 71,
               type: PunishmentType.PROSPECTIVE_DAYS,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-29',
               },
             },
@@ -167,7 +167,7 @@ context('Suspended punishment schedule', () => {
               id: 71,
               type: PunishmentType.PROSPECTIVE_DAYS,
               schedule: {
-                days: 5,
+                duration: 5,
                 suspendedUntil: '2023-04-29',
               },
             },
@@ -201,7 +201,7 @@ context('Suspended punishment schedule', () => {
       activateSuspendedPunishmentsPage.activatePunishmentButton().first().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentNumberOfDays.urls.existing('100'))
-        expect(loc.search).to.eq('?punishmentNumberToActivate=71&punishmentType=PRIVILEGE&days=5')
+        expect(loc.search).to.eq('?punishmentNumberToActivate=71&punishmentType=PRIVILEGE&duration=5')
       })
       const suspendedPunishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
       suspendedPunishmentNumberOfDaysPage.submitButton().click()
@@ -253,7 +253,7 @@ context('Suspended punishment schedule', () => {
       activateSuspendedPunishmentsPage.activatePunishmentButton().first().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.suspendedPunishmentNumberOfDays.urls.existing('100'))
-        expect(loc.search).to.eq('?punishmentNumberToActivate=71&punishmentType=PRIVILEGE&days=5')
+        expect(loc.search).to.eq('?punishmentNumberToActivate=71&punishmentType=PRIVILEGE&duration=5')
       })
       const suspendedPunishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
       suspendedPunishmentNumberOfDaysPage.submitButton().click()

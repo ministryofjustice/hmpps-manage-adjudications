@@ -14,7 +14,7 @@ import validateForm from './numberOfDaysValidation'
 
 type PageData = {
   error?: FormError
-  days?: number
+  duration?: number
 }
 
 export enum PageRequestType {
@@ -44,12 +44,12 @@ export default class PunishmentNumberOfDaysPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, days } = pageData
+    const { error, duration } = pageData
 
     return res.render(`pages/punishmentNumberOfDays.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
-      days,
+      duration,
     })
   }
 
@@ -64,7 +64,7 @@ export default class PunishmentNumberOfDaysPage {
     if (this.pageOptions.isEdit()) {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
       return this.renderView(req, res, {
-        days: sessionData?.days || null,
+        duration: sessionData?.duration || null,
       })
     }
 
@@ -74,15 +74,15 @@ export default class PunishmentNumberOfDaysPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { user } = res.locals
-    const { days } = req.body
+    const { duration } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.query
     const type = PunishmentType[punishmentType as string]
 
-    const trimmedDays = days ? Number(String(days).trim()) : null
+    const trimmedDays = duration ? Number(String(duration).trim()) : null
 
     const isYOI = await this.getYoiInfo(chargeNumber, user)
     const error = validateForm({
-      days: trimmedDays,
+      duration: trimmedDays,
       punishmentType: type,
       isYOI,
       privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
@@ -91,7 +91,7 @@ export default class PunishmentNumberOfDaysPage {
     if (error)
       return this.renderView(req, res, {
         error,
-        days: trimmedDays,
+        duration: trimmedDays,
       })
 
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req)
@@ -103,7 +103,7 @@ export default class PunishmentNumberOfDaysPage {
           privilegeType,
           otherPrivilege,
           stoppagePercentage,
-          days: trimmedDays,
+          duration: trimmedDays,
         } as ParsedUrlQueryInput,
       })
     )

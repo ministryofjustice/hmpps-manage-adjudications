@@ -37,8 +37,8 @@
       <p class="govuk-body">Punishment given: </p>
       <dl class="govuk-summary-list">
         {% for punishment in adjudicationHistoryForCurrentSentenceData.lastReportedOffence.punishments %}
-          {% set punishmentLength = punishment.schedule.days + ' days' if punishment.schedule.days > 1 else 
-            punishment.schedule.days + ' day' %}
+          {% set punishmentLength = punishment.schedule.duration + ' days' if punishment.schedule.duration > 1 else 
+            punishment.schedule.duration + ' day' %}
           <div class="govuk-summary-list__row lastReportedOffenceSummary__row">
             <dt class="govuk-summary-list__key lastReportedOffenceSummary__key">
               <p class="govuk-body">{{ punishment.type | convertPunishmentType(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}</p>

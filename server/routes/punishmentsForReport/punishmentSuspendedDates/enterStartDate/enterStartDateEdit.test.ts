@@ -54,7 +54,7 @@ beforeEach(() => {
           id: 72,
           type: PunishmentType.CONFINEMENT,
           schedule: {
-            days: 10,
+            duration: 10,
             suspendedUntil: '30/5/2023',
           },
         },
@@ -66,7 +66,7 @@ beforeEach(() => {
           id: 73,
           type: PunishmentType.ADDITIONAL_DAYS,
           schedule: {
-            days: 5,
+            duration: 5,
             suspendedUntil: '30/5/2023',
           },
         },
@@ -78,7 +78,7 @@ beforeEach(() => {
           id: 74,
           type: PunishmentType.PROSPECTIVE_DAYS,
           schedule: {
-            days: 3,
+            duration: 3,
             suspendedUntil: '18/5/2023',
           },
         },
@@ -124,7 +124,7 @@ describe('POST ', () => {
         `${adjudicationUrls.suspendedPunishmentStartDate.urls.edit(
           '100',
           'xyz'
-        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72&days=6&startDate=`
+        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72&duration=6&startDate=`
       )
       .send({
         startDate: '13/12/2023',
@@ -136,7 +136,7 @@ describe('POST ', () => {
           expect.anything(),
           expect.objectContaining({
             type: PunishmentType.CONFINEMENT,
-            days: 6,
+            duration: 6,
             startDate: '2023-12-13',
             endDate: '2023-12-18',
             id: 72,

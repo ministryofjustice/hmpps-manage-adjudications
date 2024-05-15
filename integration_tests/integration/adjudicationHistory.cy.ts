@@ -96,7 +96,7 @@ context('Adjudication history', () => {
         },
         punishments: [
           testData.punishmentWithSchedule({}),
-          testData.punishmentWithSchedule({ type: PunishmentType.ADDITIONAL_DAYS, schedule: { days: 1 } }),
+          testData.punishmentWithSchedule({ type: PunishmentType.ADDITIONAL_DAYS, schedule: { duration: 1 } }),
         ],
       })
     })
