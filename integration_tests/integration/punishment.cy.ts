@@ -68,9 +68,9 @@ context('Add a new punishment', () => {
     it('should show additional days and prospective additional days radios if the hearing is IA', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('101'))
       cy.get('#punishmentType-10').should('exist')
-      cy.get('[for="punishmentType-10"]').should('include.text', 'Additional days')
+      cy.get('[for="punishmentType-11"]').should('include.text', 'Additional days')
       cy.get('#punishmentType-11').should('exist')
-      cy.get('[for="punishmentType-11"]').should('include.text', 'Prospective additional days')
+      cy.get('[for="punishmentType-12"]').should('include.text', 'Prospective additional days')
     })
     it('should contain caution and damages radio buttons', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('101'))
