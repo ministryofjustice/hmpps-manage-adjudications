@@ -485,6 +485,17 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     )
   })
 
+  njkEnv.addFilter('punishmentDurationText', (duration, punishmentType) => {
+    const paybackPunishment = punishmentType === PunishmentType.PAYBACK
+    const emptyText = paybackPunishment ? 'Not entered' : '-'
+    if (!duration) return emptyText
+
+    if (paybackPunishment) {
+      return duration > 1 ? `${duration} hours` : `${duration} hour`
+    }
+    return duration > 1 ? `${duration} days` : `${duration} day`
+  })
+
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)

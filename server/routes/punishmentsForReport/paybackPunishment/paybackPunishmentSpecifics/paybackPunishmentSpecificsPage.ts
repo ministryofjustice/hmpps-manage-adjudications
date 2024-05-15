@@ -6,11 +6,12 @@ import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PunishmentType } from '../../../../data/PunishmentResult'
+import { PunishmentMeasurement, PunishmentType } from '../../../../data/PunishmentResult'
 import validateForm from './paybackPunishmentSpecificsValidation'
 
 type PageData = {
   error?: FormError
+  paybackPunishmentSpecifics?: string
 }
 
 export enum PageRequestType {
@@ -39,13 +40,14 @@ export default class PaybackPunishmentSpecificsPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error } = pageData
+    const { error, paybackPunishmentSpecifics } = pageData
 
     // const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
 
     return res.render(`pages/paybackPunishmentSpecifics.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
+      paybackPunishmentSpecifics,
     })
   }
 
@@ -58,8 +60,10 @@ export default class PaybackPunishmentSpecificsPage {
     }
 
     if (this.pageOptions.isEdit()) {
-      //   const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
-      //   return this.renderView(req, res, {})
+      const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
+      return this.renderView(req, res, {
+        paybackPunishmentSpecifics: sessionData?.duration ? 'YES' : 'NO',
+      })
     }
 
     return this.renderView(req, res, {})
@@ -79,6 +83,7 @@ export default class PaybackPunishmentSpecificsPage {
     if (paybackPunishmentSpecifics === 'NO') {
       const punishmentData = {
         type: PunishmentType.PAYBACK,
+        measurement: PunishmentMeasurement.HOURS,
         duration: null as never,
         lastDay: null as never,
       }

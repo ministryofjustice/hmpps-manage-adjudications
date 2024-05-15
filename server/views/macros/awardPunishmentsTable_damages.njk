@@ -30,8 +30,6 @@
 
   {% if rows.length %}
     <h2 class="govuk-heading-m">Damages</h2>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-three-quarters">
         {{ govukTable({
         head: [
           {
@@ -50,8 +48,6 @@
         rows: rows,
         attributes: {"data-qa": dataQa}
       }) }}
-      </div>
-    </div>
   {% endif %}
 
 {% endmacro %}
