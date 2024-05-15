@@ -3,6 +3,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentPage from '../pages/punishment'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
+import config from '../../server/config'
 
 const testData = new TestData()
 context('Add a new punishment', () => {
@@ -65,13 +66,23 @@ context('Add a new punishment', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
-    it('should show additional days and prospective additional days radios if the hearing is IA', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start('101'))
-      cy.get('#punishmentType-10').should('exist')
-      cy.get('[for="punishmentType-11"]').should('include.text', 'Additional days')
-      cy.get('#punishmentType-11').should('exist')
-      cy.get('[for="punishmentType-12"]').should('include.text', 'Prospective additional days')
-    })
+    if (config.paybackAndRehabFlag === 'true') {
+      it('should show additional days and prospective additional days radios if the hearing is IA', () => {
+        cy.visit(adjudicationUrls.punishment.urls.start('101'))
+        cy.get('#punishmentType-11').should('exist')
+        cy.get('[for="punishmentType-11"]').should('include.text', 'Additional days')
+        cy.get('#punishmentType-12').should('exist')
+        cy.get('[for="punishmentType-12"]').should('include.text', 'Prospective additional days')
+      })
+    } else {
+      it('should show additional days and prospective additional days radios if the hearing is IA', () => {
+        cy.visit(adjudicationUrls.punishment.urls.start('101'))
+        cy.get('#punishmentType-10').should('exist')
+        cy.get('[for="punishmentType-10"]').should('include.text', 'Additional days')
+        cy.get('#punishmentType-11').should('exist')
+        cy.get('[for="punishmentType-11"]').should('include.text', 'Prospective additional days')
+      })
+    }
     it('should contain caution and damages radio buttons', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('101'))
       cy.get('#punishmentType').should('exist')

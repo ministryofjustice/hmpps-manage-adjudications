@@ -8,6 +8,7 @@ import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { PrivilegeType, PunishmentDataWithSchedule, PunishmentType } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
+import config from '../../../config'
 
 type PageData = {
   error?: FormError
@@ -58,7 +59,6 @@ export default class PunishmentPage {
       this.punishmentsAlreadyAdded(sessionPunishments),
       this.cautionAlreadyAdded(sessionPunishments),
     ])
-
     return res.render(`pages/punishment.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
@@ -70,6 +70,7 @@ export default class PunishmentPage {
       damagesUnavailable,
       cautionUnavailable: punishmentsAlreadyAdded || cautionAlreadyAdded,
       damagesOwedAmount,
+      paybackPunishmentFlag: config.paybackAndRehabFlag === 'true',
     })
   }
 
