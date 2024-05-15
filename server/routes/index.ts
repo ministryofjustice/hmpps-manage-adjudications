@@ -67,6 +67,7 @@ import hearingCheckYourAnswersRoutes from './hearingOutcome/checkYourAnswers'
 import punishmentsAndDamagesRoutes from './adjudicationForReport/punishmentsTab'
 import PunishmentCommentRoutes from './punishmentsForReport/punishmentComment'
 import PunishmentRoutes from './punishmentsForReport/punishment'
+import paybackPunishmentSpecificsRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentSpecifics'
 import awardPunishmentsRoutes from './punishmentsForReport/punishments/awardPunishments'
 import numberOfAdditionalDaysRoutes from './punishmentsForReport/additionalDays/numberOfAdditionalDays'
 import willPunishmentBeSuspendedRoutes from './punishmentsForReport/additionalDays/willPunishmentBeSuspended'
@@ -325,6 +326,11 @@ export default function routes(
   )
   router.use(adjudicationUrls.punishmentComment.root, PunishmentCommentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
+
+  router.use(
+    adjudicationUrls.paybackPunishmentSpecifics.root,
+    paybackPunishmentSpecificsRoutes({ userService, punishmentsService })
+  )
 
   router.use(
     adjudicationUrls.numberOfAdditionalDays.root,

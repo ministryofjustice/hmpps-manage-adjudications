@@ -1,0 +1,79 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set title = "Do you have the details of the payback punishment?" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% set items = [
+    {
+        value: "YES",
+        text: "Yes",
+        checked: paybackPunishmentSpecifics === 'YES'
+    },
+    {
+        value: "NO",
+        text: "No",
+        checked: paybackPunishmentSpecifics === 'NO',
+        hint: {
+            text: "You can return to this report to enter the details once you have them"
+        }
+    }
+] %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+        {{ govukRadios({
+    idPrefix: 'paybackPunishmentSpecifics',
+    id: 'paybackPunishmentSpecifics',
+    name: 'paybackPunishmentSpecifics',
+    attributes: { "data-qa": "radio-buttons-payback-punishment" },
+    errorMessage: "paybackPunishmentSpecifics" | findError(errors),
+    items: items,
+    hint: {
+    text: "This includes what the punishment involves, when it needs to be completed by, and how many hours it will last"
+  },
+    fieldset: {
+    legend: {
+      text: title,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  }
+ }) }}
+      
+      <div class="govuk-button-group">
+        {{ govukButton({
+              text: 'Continue',
+              type: "submit",
+              preventDoubleClick: true,
+              classes: "govuk-button--submit govuk-!-margin-right-3",
+              attributes: { "data-qa": "punishment-submit" }
+              }) }}
+
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to ‘Award punishments and add money for damages’</a>
+      </div>
+
+    </form>
+    </div>
+  </div>
+{% endblock %}

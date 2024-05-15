@@ -726,6 +726,30 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishment.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
+  paybackPunishmentSpecifics: {
+    root: '/payback-punishment-specifics',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.paybackPunishmentSpecifics.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.paybackPunishmentSpecifics.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  paybackPunishmentDuration: {
+    root: '/payback-punishment-duration',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.paybackPunishmentDuration.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.paybackPunishmentDuration.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
   punishmentNumberOfDays: {
     root: '/punishment-number-of-days',
     matchers: {

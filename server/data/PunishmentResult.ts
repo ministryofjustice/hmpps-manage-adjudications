@@ -12,6 +12,7 @@ export enum PunishmentType {
   PROSPECTIVE_DAYS = 'PROSPECTIVE_DAYS',
   CAUTION = 'CAUTION',
   DAMAGES_OWED = 'DAMAGES_OWED',
+  PAYBACK = 'PAYBACK',
 }
 
 export enum PrivilegeType {

@@ -171,8 +171,12 @@ export default class PunishmentPage {
     }
 
     if (this.pageOptions.isEdit()) {
+      if (punishmentType === PunishmentType.PAYBACK)
+        return adjudicationUrls.paybackPunishmentSpecifics.urls.edit(chargeNumber, req.params.redisId)
       return adjudicationUrls.punishmentNumberOfDays.urls.edit(chargeNumber, req.params.redisId)
     }
+    if (punishmentType === PunishmentType.PAYBACK)
+      return adjudicationUrls.paybackPunishmentSpecifics.urls.start(chargeNumber)
     return adjudicationUrls.punishmentNumberOfDays.urls.start(chargeNumber)
   }
 
