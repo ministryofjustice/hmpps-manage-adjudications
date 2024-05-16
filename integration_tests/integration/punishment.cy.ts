@@ -3,7 +3,6 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentPage from '../pages/punishment'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
-import config from '../../server/config'
 
 const testData = new TestData()
 context('Add a new punishment', () => {

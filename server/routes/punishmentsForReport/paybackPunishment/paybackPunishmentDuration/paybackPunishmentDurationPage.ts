@@ -9,6 +9,7 @@ import PunishmentsService from '../../../../services/punishmentsService'
 
 type PageData = {
   error?: FormError
+  duration?: number
 }
 
 export enum PageRequestType {
@@ -37,25 +38,29 @@ export default class PaybackPunishmentDurationPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error } = pageData
+    const { error, duration } = pageData
 
     return res.render(`pages/paybackPunishmentDuration.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
+      duration,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-    // const { chargeNumber, redisId } = req.params
+    const { chargeNumber, redisId } = req.params
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
     if (this.pageOptions.isEdit()) {
-      //   const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
-      return this.renderView(req, res, {})
+      const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
+
+      return this.renderView(req, res, {
+        duration: sessionData?.duration,
+      })
     }
 
     return this.renderView(req, res, {})
