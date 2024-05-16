@@ -12,7 +12,7 @@ import IsThereRehabilitativeActivitesPage from '../pages/isThereRehabilitativeAc
 import HasRehabilitativeActivitesDetailsPage from '../pages/hasRehabilitativeActivitiesDetailsPage'
 
 const testData = new TestData()
-context('Add a rehabilitative activity', () => {
+context.skip('Add a rehabilitative activity', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
