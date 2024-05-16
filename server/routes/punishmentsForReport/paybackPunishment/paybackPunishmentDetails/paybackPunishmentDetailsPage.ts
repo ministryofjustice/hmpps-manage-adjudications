@@ -4,10 +4,11 @@ import { Request, Response } from 'express'
 import { ParsedUrlQuery } from 'querystring'
 import { FormError } from '../../../../@types/template'
 import UserService from '../../../../services/userService'
-import { hasAnyRole } from '../../../../utils/utils'
+import { datePickerToApi, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import validateForm from './paybackPunishmentDetailsValidation'
+import { PunishmentType } from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -81,20 +82,19 @@ export default class PaybackPunishmentDetailsPage {
         paybackNotes,
       })
 
-    const redirectUrl = this.getRedirectUrl(chargeNumber, redisId)
-    const query = { duration, lastDay, paybackNotes } as ParsedUrlQuery
-    return res.redirect(
-      url.format({
-        pathname: redirectUrl,
-        query,
-      })
-    )
-  }
-
-  private getRedirectUrl = (chargeNumber: string, redisId: string) => {
-    if (this.pageOptions.isEdit()) {
-      return adjudicationUrls.paybackPunishmentDetails.urls.edit(chargeNumber, redisId)
+    const playbackPunishmentData = {
+      type: PunishmentType.PAYBACK,
+      endDate: datePickerToApi(String(lastDay)),
+      paybackNotes: String(paybackNotes),
+      duration: Number(duration),
     }
-    return adjudicationUrls.paybackPunishmentDetails.urls.start(chargeNumber)
+
+    if (this.pageOptions.isEdit()) {
+      await this.punishmentsService.updateSessionPunishment(req, playbackPunishmentData, chargeNumber, redisId)
+    } else {
+      await this.punishmentsService.addSessionPunishment(req, playbackPunishmentData, chargeNumber)
+    }
+
+    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

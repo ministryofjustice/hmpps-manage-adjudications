@@ -4,9 +4,12 @@ import TestData from '../../server/routes/testutils/testData'
 import PunishmentPage from '../pages/punishment'
 import PaybackPunishmentSpecifics from '../pages/paybackPunishmentSpecifics'
 import AwardedPunishments from '../pages/awardPunishments'
-import CheckPunishments from '../pages/checkPunishments'
+import PaybackPunishmentDurationPage from '../pages/paybackPunishmentDuration'
+import PaybackPunishmentCompletionDatePage from '../pages/paybackPunishmentCompletionDate'
+import PaybackPunishmentDetailsPage from '../pages/paybackPunishmentDetails'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import { PunishmentMeasurement, PunishmentType } from '../../server/data/PunishmentResult'
+import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
 context('Add a new payback punishment', () => {
@@ -65,7 +68,7 @@ context('Add a new payback punishment', () => {
     cy.signIn()
   })
   describe('Add a payback punishment with no information', () => {
-    it('should contain the required page elements', () => {
+    it('should add the payback punishment to the session and display correctly on the table on the awards page', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="PAYBACK"]').check()
@@ -79,18 +82,76 @@ context('Add a new payback punishment', () => {
         .find('td')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain('Payback punishment')
-          expect($summaryData.get(1).innerText).to.contain('Not entered')
+          expect($summaryData.get(1).innerText).to.contain('-')
           expect($summaryData.get(2).innerText).to.contain('Not entered')
           expect($summaryData.get(3).innerText).to.contain('Not entered')
           expect($summaryData.get(4).innerText).to.contain('-')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
-      awardedPunishments.continue().click()
-      const checkPunishments = Page.verifyOnPage(CheckPunishments)
-      checkPunishments.submitButton().click()
-      cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.review('100'))
-      })
+    })
+  })
+  describe('Add a new payback punishment with information', () => {
+    it('should follow the correct flow and display the information correctly in the awards page table - multiple hours', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.punishment().find('input[value="PAYBACK"]').check()
+      punishmentPage.submitButton().click()
+      const paybackPunishmentSpecifics = Page.verifyOnPage(PaybackPunishmentSpecifics)
+      paybackPunishmentSpecifics.punishmentSpecifics().find('input[value="YES"]').check()
+      paybackPunishmentSpecifics.submitButton().click()
+      const paybackPunishmentDuration = Page.verifyOnPage(PaybackPunishmentDurationPage)
+      paybackPunishmentDuration.durationInput().type('5')
+      paybackPunishmentDuration.submitButton().click()
+      const paybackPunishmentCompletionDate = Page.verifyOnPage(PaybackPunishmentCompletionDatePage)
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      paybackPunishmentCompletionDate.dateInput().type(date)
+      paybackPunishmentCompletionDate.submitButton().click()
+      const paybackPunishmentDetails = Page.verifyOnPage(PaybackPunishmentDetailsPage)
+      paybackPunishmentDetails.details().type('These are the details for this payback punishment')
+      paybackPunishmentDetails.submitButton().click()
+      const awardedPunishments = Page.verifyOnPage(AwardedPunishments)
+      awardedPunishments
+        .punishmentsTable()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Payback punishment')
+          expect($summaryData.get(1).innerText).to.contain('-')
+          expect($summaryData.get(2).innerText).to.contain('10 Oct 2030')
+          expect($summaryData.get(3).innerText).to.contain('5 hours')
+          expect($summaryData.get(4).innerText).to.contain('-')
+          expect($summaryData.get(5).innerText).to.contain('-')
+        })
+    })
+    it('should follow the correct flow and display the information correctly in the awards page table - single hour', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.punishment().find('input[value="PAYBACK"]').check()
+      punishmentPage.submitButton().click()
+      const paybackPunishmentSpecifics = Page.verifyOnPage(PaybackPunishmentSpecifics)
+      paybackPunishmentSpecifics.punishmentSpecifics().find('input[value="YES"]').check()
+      paybackPunishmentSpecifics.submitButton().click()
+      const paybackPunishmentDuration = Page.verifyOnPage(PaybackPunishmentDurationPage)
+      paybackPunishmentDuration.durationInput().type('1')
+      paybackPunishmentDuration.submitButton().click()
+      const paybackPunishmentCompletionDate = Page.verifyOnPage(PaybackPunishmentCompletionDatePage)
+      const date = formatDateForDatePicker(new Date('01/01/2028').toISOString(), 'short')
+      paybackPunishmentCompletionDate.dateInput().type(date)
+      paybackPunishmentCompletionDate.submitButton().click()
+      const paybackPunishmentDetails = Page.verifyOnPage(PaybackPunishmentDetailsPage)
+      paybackPunishmentDetails.details().type('These are the details for this payback punishment')
+      paybackPunishmentDetails.submitButton().click()
+      const awardedPunishments = Page.verifyOnPage(AwardedPunishments)
+      awardedPunishments
+        .punishmentsTable()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Payback punishment')
+          expect($summaryData.get(1).innerText).to.contain('-')
+          expect($summaryData.get(2).innerText).to.contain('1 Jan 2028')
+          expect($summaryData.get(3).innerText).to.contain('1 hour')
+          expect($summaryData.get(4).innerText).to.contain('-')
+          expect($summaryData.get(5).innerText).to.contain('-')
+        })
     })
   })
 })

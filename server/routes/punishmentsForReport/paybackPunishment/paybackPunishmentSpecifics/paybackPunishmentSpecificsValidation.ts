@@ -12,7 +12,7 @@ const errors: { [key: string]: FormError } = {
 }
 
 export default function validateForm({ paybackSpecificsChoice }: PunishmentForm): FormError | null {
-  if (!paybackSpecificsChoice) {
+  if (paybackSpecificsChoice === undefined) {
     return errors.MISSING_PAYBACK_CHOICE
   }
 
