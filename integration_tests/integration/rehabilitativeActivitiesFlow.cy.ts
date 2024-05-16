@@ -10,7 +10,6 @@ import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
 import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
 import IsThereRehabilitativeActivitesPage from '../pages/isThereRehabilitativeActivitiesPage'
 import HasRehabilitativeActivitesDetailsPage from '../pages/hasRehabilitativeActivitiesDetailsPage'
-import AwardPunishmentsPage from '../pages/awardPunishments'
 
 const testData = new TestData()
 context('Add a rehabilitative activity', () => {

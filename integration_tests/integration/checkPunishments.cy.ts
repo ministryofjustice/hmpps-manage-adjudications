@@ -54,6 +54,7 @@ context('Check punishments', () => {
             {
               id: 14,
               type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-13',
@@ -80,6 +81,7 @@ context('Check punishments', () => {
             {
               id: 14,
               type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-13',
@@ -100,6 +102,7 @@ context('Check punishments', () => {
             {
               id: 14,
               type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-13',
@@ -108,6 +111,7 @@ context('Check punishments', () => {
             {
               id: 15,
               type: PunishmentType.EARNINGS,
+              rehabilitativeActivities: [],
               stoppagePercentage: 25,
               schedule: {
                 startDate: '2023-04-13',
@@ -130,6 +134,7 @@ context('Check punishments', () => {
             {
               id: 14,
               type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-13',
@@ -138,6 +143,7 @@ context('Check punishments', () => {
             {
               id: 15,
               type: PunishmentType.EARNINGS,
+              rehabilitativeActivities: [],
               stoppagePercentage: 25,
               schedule: {
                 startDate: '2023-04-13',
