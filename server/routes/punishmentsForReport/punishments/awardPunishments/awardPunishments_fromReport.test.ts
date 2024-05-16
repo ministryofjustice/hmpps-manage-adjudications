@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../../testutils/appSetup'
 import PunishmentsService from '../../../../services/punishmentsService'
 import UserService from '../../../../services/userService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
-import { PunishmentType } from '../../../../data/PunishmentResult'
+import { PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 
 jest.mock('../../../../services/punishmentsService')
 jest.mock('../../../../services/userService')
@@ -19,6 +19,7 @@ const punishmentsOnServer = [
     privilegeType: null as null,
     otherPrivilege: null as null,
     stoppagePercentage: 10,
+    rehabilitativeActivities: [] as RehabilitativeActivity[],
     schedule: {
       duration: 1,
       suspendedUntil: null as null,

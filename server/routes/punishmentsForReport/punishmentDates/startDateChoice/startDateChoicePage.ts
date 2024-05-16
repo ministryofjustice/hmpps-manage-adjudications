@@ -10,7 +10,7 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import validateForm from './startDateChoiceValidation'
 import { User } from '../../../../data/hmppsManageUsersClient'
-import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -109,6 +109,7 @@ export default class PunishmentStartDateChoicePage {
           duration: numberOfDays,
           startDate,
           endDate: calculatePunishmentEndDate(lastHearingDate, numberOfDays, 'YYYY-MM-DD'),
+          rehabilitativeActivities: [] as RehabilitativeActivity[],
         }
         if (this.pageOptions.isEdit()) {
           await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)

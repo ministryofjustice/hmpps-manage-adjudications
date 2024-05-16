@@ -106,6 +106,7 @@ describe('POST ', () => {
             startDate: '2023-12-13',
             endDate: '2023-12-18',
             stoppagePercentage: null,
+            rehabilitativeActivities: [],
           },
           '100',
           'xyz'

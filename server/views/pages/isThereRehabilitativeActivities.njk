@@ -1,0 +1,93 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set title = "Is there a rehabilitative activity condition?" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+ {% set numberOfActivitiesHtml %}
+  {{ govukInput({
+      id: "numberOfActivities",
+      name: "numberOfActivities",
+      inputmode: "numeric",
+      value: numberOfActivities,
+      classes: "govuk-input--width-5",
+      attributes: { "data-qa": "number-of-activities" },
+      errorMessage: errors | findErrors(["numberOfActivities"]),
+      label: {
+          text: "Enter the number of rehabilitative activities"
+      }
+    }) }}
+  {% endset -%}
+
+
+{% set items = [
+    {
+        value: "YES",
+        text: "Yes",
+        checked: isThereRehabilitativeActivities === 'YES',
+        conditional: {
+           html: numberOfActivitiesHtml
+        }
+    },
+    {
+        value: "NO",
+        text: "No",
+        checked: isThereRehabilitativeActivities === 'NO'
+    }
+] %}
+
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+        {{ govukRadios({
+    idPrefix: 'isThereRehabilitativeActivities',
+    id: 'isThereRehabilitativeActivities',
+    name: 'isThereRehabilitativeActivities',
+    attributes: { "data-qa": "isThereRehabilitativeActivities-radios" },
+    errorMessage: "isThereRehabilitativeActivities" | findError(errors),
+    items: items,
+    fieldset: {
+    legend: {
+      text: title,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  }
+ }) }}
+      
+      <div class="govuk-button-group">
+        {{ govukButton({
+              text: 'Continue',
+              type: "submit",
+              preventDoubleClick: true,
+              classes: "govuk-button--submit govuk-!-margin-right-3",
+              attributes: { "data-qa": "punishment-submit" }
+              }) }}
+
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to ‘Award punishments and add money for damages’</a>
+      </div>
+
+    </form>
+    </div>
+  </div>
+{% endblock %}

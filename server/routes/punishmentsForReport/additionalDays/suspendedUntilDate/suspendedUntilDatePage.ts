@@ -7,7 +7,7 @@ import { hasAnyRole, apiDateToDatePicker, datePickerToApi } from '../../../../ut
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
-import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -92,6 +92,7 @@ export default class SuspendedUntilDateAdditionalDaysPage {
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         duration: Number(duration),
         suspendedUntil: suspendedUntil ? datePickerToApi(suspendedUntil) : null,
+        rehabilitativeActivities: [] as RehabilitativeActivity[],
       }
 
       if (this.pageOptions.isEdit()) {

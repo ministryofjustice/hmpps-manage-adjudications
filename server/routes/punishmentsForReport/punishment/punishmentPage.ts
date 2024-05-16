@@ -6,7 +6,12 @@ import { FormError } from '../../../@types/template'
 import UserService from '../../../services/userService'
 import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
-import { PrivilegeType, PunishmentDataWithSchedule, PunishmentType } from '../../../data/PunishmentResult'
+import {
+  PrivilegeType,
+  PunishmentDataWithSchedule,
+  PunishmentType,
+  RehabilitativeActivity,
+} from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 import config from '../../../config'
 
@@ -127,6 +132,7 @@ export default class PunishmentPage {
         type: punishmentType,
         duration: 0,
         damagesOwedAmount,
+        rehabilitativeActivities: [] as RehabilitativeActivity[],
       }
       if (this.pageOptions.isEdit()) {
         await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, redisId)

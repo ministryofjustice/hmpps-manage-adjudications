@@ -380,6 +380,7 @@ export default class TestData {
       stoppagePercentage,
       schedule,
       activatedFrom,
+      rehabilitativeActivities: [],
     }
   }
 

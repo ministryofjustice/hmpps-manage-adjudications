@@ -1,5 +1,10 @@
 import HmppsAuthClient from '../data/hmppsAuthClient'
-import { PrivilegeType, PunishmentReasonForChange, PunishmentType } from '../data/PunishmentResult'
+import {
+  PrivilegeType,
+  PunishmentReasonForChange,
+  PunishmentType,
+  RehabilitativeActivity,
+} from '../data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../data/ReportedAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 import PunishmentsService from './punishmentsService'
@@ -78,6 +83,7 @@ describe('PunishmentsService', () => {
           startDate: '2023-04-03',
           endDate: '2023-04-03',
           suspendedUntil: '2023-04-03',
+          rehabilitativeActivities: [] as RehabilitativeActivity[],
         },
       ]
       createPunishments.mockResolvedValue(
@@ -110,6 +116,7 @@ describe('PunishmentsService', () => {
         startDate: '2023-04-03',
         endDate: '2023-04-03',
         suspendedUntil: '2023-04-03',
+        rehabilitativeActivities: [] as RehabilitativeActivity[],
       }
       createPunishments.mockResolvedValue(
         testData.reportedAdjudication({

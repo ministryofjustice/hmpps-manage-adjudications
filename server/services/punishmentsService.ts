@@ -9,6 +9,7 @@ import {
   PunishmentDataWithSchedule,
   PunishmentReasonForChange,
   PunishmentType,
+  RehabilitativeActivity,
   SuspendedPunishmentDetails,
   SuspendedPunishmentResult,
   punishmentChangeReasonAndDetails,
@@ -66,16 +67,33 @@ export default class PunishmentsService {
     return reportedAdjudication
   }
 
-  addSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string) {
+  async addSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string): Promise<string> {
     this.createSessionForAdjudicationPunishmentIfNotExists(req, chargeNumber)
-    const newPunishment = { ...punishmentData, redisId: uuidv4() }
-    return req.session.punishments[chargeNumber].push(newPunishment)
+    const redisId = uuidv4()
+    const newPunishment = { ...punishmentData, redisId }
+    await req.session.punishments[chargeNumber].push(newPunishment)
+
+    return redisId
   }
 
   updateSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     this.deleteSessionPunishments(req, redisId, chargeNumber)
     const updatedPunishment = { ...punishmentData, redisId, id: punishment.id }
+
+    return req.session.punishments[chargeNumber].push(updatedPunishment)
+  }
+
+  addRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string, numberOfActivities: number) {
+    const activities = [] as RehabilitativeActivity[]
+    /* eslint-disable-next-line no-plusplus */
+    for (let i = 0; i < numberOfActivities; i++) {
+      activities.push({})
+    }
+
+    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+    this.deleteSessionPunishments(req, redisId, chargeNumber)
+    const updatedPunishment = { ...punishment, rehabilitativeActivities: activities, redisId, id: punishment.id }
 
     return req.session.punishments[chargeNumber].push(updatedPunishment)
   }

@@ -7,7 +7,7 @@ import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -104,6 +104,7 @@ export default class WillPunishmentBeConsecutivePage {
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         duration: Number(duration),
+        rehabilitativeActivities: [] as RehabilitativeActivity[],
       }
 
       if (this.pageOptions.isEdit()) {

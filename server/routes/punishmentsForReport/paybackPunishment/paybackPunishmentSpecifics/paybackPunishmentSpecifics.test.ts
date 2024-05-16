@@ -75,6 +75,7 @@ describe('POST', () => {
             measurement: PunishmentMeasurement.HOURS,
             duration: null,
             lastDay: null,
+            rehabilitativeActivities: [],
           },
           '100'
         )
