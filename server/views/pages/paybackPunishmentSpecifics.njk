@@ -4,16 +4,30 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "../macros/punishmentRadios.njk" import punishmentRadios %}
 
-{% set title = "Add a punishment" if damagesUnavailable else
-  "Add a punishment or money for damages" %}
+{% set title = "Do you have the details of the payback punishment?" %}
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
+
+{% set items = [
+    {
+        value: "YES",
+        text: "Yes",
+        checked: paybackPunishmentSpecifics === 'YES'
+    },
+    {
+        value: "NO",
+        text: "No",
+        checked: paybackPunishmentSpecifics === 'NO',
+        hint: {
+            text: "You can return to this report to enter the details once you have them"
+        }
+    }
+] %}
 
 {% block content %}
   {% if errors | length %}
@@ -23,10 +37,30 @@
       attributes: { "data-qa": "error-summary" }
     }) }}
   {% endif %}
-  <div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, isIndependentAdjudicatorHearing, damagesUnavailable, cautionUnavailable, errors, title, paybackPunishmentFlag) }}
+
+        {{ govukRadios({
+    idPrefix: 'paybackPunishmentSpecifics',
+    id: 'paybackPunishmentSpecifics',
+    name: 'paybackPunishmentSpecifics',
+    attributes: { "data-qa": "paybackPunishmentSpecifics-radios" },
+    errorMessage: "paybackPunishmentSpecifics" | findError(errors),
+    items: items,
+    hint: {
+    text: "This includes what the punishment involves, when it needs to be completed by, and how many hours it will last"
+  },
+    fieldset: {
+    legend: {
+      text: title,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  }
+ }) }}
+      
       <div class="govuk-button-group">
         {{ govukButton({
               text: 'Continue',
@@ -40,5 +74,6 @@
       </div>
 
     </form>
+    </div>
   </div>
 {% endblock %}

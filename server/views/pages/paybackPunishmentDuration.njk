@@ -2,12 +2,9 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "../macros/punishmentRadios.njk" import punishmentRadios %}
 
-{% set title = "Add a punishment" if damagesUnavailable else
-  "Add a punishment or money for damages" %}
+{% set title = "Enter how many hours this punishment will last" %}
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
@@ -26,17 +23,33 @@
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, isIndependentAdjudicatorHearing, damagesUnavailable, cautionUnavailable, errors, title, paybackPunishmentFlag) }}
+
+      {{ govukInput({
+        id: "duration",
+        name: "duration",
+        value: duration,
+        classes: "govuk-input--width-5",
+        errorMessage: errors | findErrors(["duration"]),
+        hint: {
+            text: "A payback punishment cannot be for more than 12 hours"
+        },
+        attributes: { "data-qa": "duration-input" }, 
+        label: {
+          text: title,
+          classes: "govuk-label--l",
+          isPageHeading: true
+        }
+      }) }}
+
       <div class="govuk-button-group">
         {{ govukButton({
-              text: 'Continue',
-              type: "submit",
-              preventDoubleClick: true,
-              classes: "govuk-button--submit govuk-!-margin-right-3",
-              attributes: { "data-qa": "punishment-submit" }
-              }) }}
-
-        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to ‘Award punishments and add money for damages’</a>
+          text: 'Continue',
+          type: "submit",
+          preventDoubleClick: true,
+          classes: "govuk-button--submit govuk-!-margin-right-3",
+          attributes: { "data-qa": "payback-punishment-duration-submit" }
+        }) }}
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='payback-punishment-duration-cancel'>Cancel</a>
       </div>
 
     </form>

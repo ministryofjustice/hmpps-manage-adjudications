@@ -12,6 +12,7 @@ export enum PunishmentType {
   PROSPECTIVE_DAYS = 'PROSPECTIVE_DAYS',
   CAUTION = 'CAUTION',
   DAMAGES_OWED = 'DAMAGES_OWED',
+  PAYBACK = 'PAYBACK',
 }
 
 export enum PrivilegeType {
@@ -216,6 +217,8 @@ export function convertPunishmentType(
       return 'Caution'
     case PunishmentType.DAMAGES_OWED:
       return 'Recovery of money for damages'
+    case PunishmentType.PAYBACK:
+      return 'Payback punishment'
     default:
       return null
   }

@@ -14,7 +14,8 @@
       .damagesAmount
       .urls
       .edit(chargeNumber, redisId)if data
-      .type === 'DAMAGES_OWED' else 
+      .type === PunishmentType
+      .DAMAGES_OWED else 
         adjudicationUrls
           .punishment
           .urls
@@ -30,6 +31,8 @@
       {% endif %}
     {% endif %}
 
+    {% set emptyText = 'Not entered' if data.type === PunishmentType.PAYBACK else '-' %}
+
     {% set rows = (rows.push(
       [
           {
@@ -37,15 +40,15 @@
             classes: "columnWidth30"
           },
           {
-            text: data.startDate | formatTimestampTo('D MMM YYYY') if data.startDate else '-',
+            text: data.startDate | formatTimestampTo('D MMM YYYY') if data.startDate else emptyText,
             classes: "columnWidth15"
           },
           {
-            text: data.endDate | formatTimestampTo('D MMM YYYY') if data.endDate else '-',
+            text: data.endDate | formatTimestampTo('D MMM YYYY') if data.endDate else emptyText,
             classes: "columnWidth15"
           },
           {
-            text: data.duration if data.duration > 0 else '-',
+            text: data.duration | punishmentDurationText(data.type),
             classes: "columnWidth12"
           },
           {
@@ -69,8 +72,6 @@
   {% endfor %}
 
   {% if rows.length %}
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-three-quarters">
         {{ govukTable({
         head: [
           {
@@ -83,7 +84,7 @@
             text: "Last day"
           },
           {
-            text: "Number of days"
+            text: "Duration"
           },
           {
             text: "Suspended until"
@@ -101,8 +102,6 @@
         rows: rows,
         attributes: {"data-qa": "punishments-table"}
       }) }}
-      </div>
-    </div>
   {% else %}
     <p class="govuk-body">There are currently no punishments for this adjudication. You can activate <br>existing suspended punishments and/or add new punishments.</p>
   {% endif %}
