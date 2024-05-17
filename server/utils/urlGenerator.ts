@@ -822,6 +822,26 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentSuspendedUntil.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
+  punishmentHasRehabilitativeActivities: {
+    root: '/punishment-has-rehabilitative-activities',
+    matchers: {
+      start: '/:chargeNumber/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.punishmentHasRehabilitativeActivities.root}/${chargeNumber}/${redisId}`,
+    },
+  },
+  doYouHaveTheRehabilitativeActivitiesDetails: {
+    root: '/punishment-has-rehabilitative-activities-details',
+    matchers: {
+      start: '/:chargeNumber/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.root}/${chargeNumber}/${redisId}`,
+    },
+  },
   whenWillPunishmentStart: {
     root: '/when-will-punishment-start',
     matchers: {

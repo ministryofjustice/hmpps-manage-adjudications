@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../../testutils/appSetup'
 import PunishmentsService from '../../../../services/punishmentsService'
 import UserService from '../../../../services/userService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
-import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 
 jest.mock('../../../../services/punishmentsService')
 jest.mock('../../../../services/userService')
@@ -24,6 +24,7 @@ const punishmentsOnSession = [
     suspendedUntil: null as null,
     startDate: '2023-04-10',
     endDate: '2023-04-11',
+    rehabilitativeActivities: [] as RehabilitativeActivity[],
   },
   {
     type: PunishmentType.PRIVILEGE,
@@ -34,6 +35,7 @@ const punishmentsOnSession = [
     suspendedUntil: null as null,
     startDate: '2023-04-10',
     endDate: '2023-04-20',
+    rehabilitativeActivities: [] as RehabilitativeActivity[],
   },
   {
     type: PunishmentType.CONFINEMENT,
@@ -44,6 +46,7 @@ const punishmentsOnSession = [
     suspendedUntil: '2023-04-28',
     startDate: null as null,
     endDate: null as null,
+    rehabilitativeActivities: [] as RehabilitativeActivity[],
   },
 ]
 

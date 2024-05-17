@@ -50,6 +50,7 @@ context('Add additional days punishments', () => {
               id: 71,
               type: PunishmentType.PRIVILEGE,
               privilegeType: PrivilegeType.MONEY,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-29',

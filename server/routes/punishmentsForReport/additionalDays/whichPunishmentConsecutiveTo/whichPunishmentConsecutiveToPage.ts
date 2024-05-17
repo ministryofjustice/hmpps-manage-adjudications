@@ -4,7 +4,7 @@ import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 
 export enum PageRequestType {
   CREATION,
@@ -69,6 +69,7 @@ export default class WhichPunishmentConsecutiveToPage {
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         duration: Number(duration),
         consecutiveChargeNumber: chargeNumberOfSelectedPunishment,
+        rehabilitativeActivities: [] as RehabilitativeActivity[],
       }
 
       if (this.pageOptions.isEdit()) {

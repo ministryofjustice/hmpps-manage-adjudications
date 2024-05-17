@@ -7,7 +7,8 @@ import { hasAnyRole, apiDateToDatePicker, datePickerToApi } from '../../../../ut
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
-import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
+import config from '../../../../config'
 
 type PageData = {
   error?: FormError
@@ -71,6 +72,7 @@ export default class SuspendedUntilDatePage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { suspendedUntil } = req.body
+    const { user } = res.locals
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
     const type = PunishmentType[punishmentType as string]
 
@@ -83,6 +85,7 @@ export default class SuspendedUntilDatePage {
         error,
         suspendedUntil,
       })
+    let { redisId } = req.params
 
     try {
       const punishmentData = {
@@ -92,16 +95,35 @@ export default class SuspendedUntilDatePage {
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         duration: Number(duration),
         suspendedUntil: suspendedUntil ? datePickerToApi(suspendedUntil) : null,
+        rehabilitativeActivities: [] as RehabilitativeActivity[],
       }
-
       if (this.pageOptions.isEdit()) {
         await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, req.params.redisId)
       } else {
-        await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
+        redisId = await this.punishmentsService.addSessionPunishment(req, punishmentData, chargeNumber)
       }
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
       throw postError
+    }
+
+    if (config.paybackAndRehabFlag === 'true') {
+      const isGovernerHearing = !(await this.punishmentsService.checkAdditionalDaysAvailability(chargeNumber, user))
+
+      if (
+        isGovernerHearing &&
+        [
+          PunishmentType.EARNINGS,
+          PunishmentType.CONFINEMENT,
+          PunishmentType.EXCLUSION_WORK,
+          PunishmentType.EXTRA_WORK,
+          PunishmentType.PRIVILEGE,
+          PunishmentType.REMOVAL_ACTIVITY,
+          PunishmentType.REMOVAL_WING,
+        ].includes(type)
+      ) {
+        return res.redirect(adjudicationUrls.punishmentHasRehabilitativeActivities.urls.start(chargeNumber, redisId))
+      }
     }
 
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))

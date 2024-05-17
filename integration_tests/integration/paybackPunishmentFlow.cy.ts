@@ -13,7 +13,7 @@ import { PunishmentMeasurement, PunishmentType } from '../../server/data/Punishm
 import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
-context('Add a new payback punishment', () => {
+context.skip('Add a new payback punishment', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

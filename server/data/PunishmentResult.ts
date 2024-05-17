@@ -54,6 +54,8 @@ export type PunishmentData = {
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
   canRemove?: boolean
+  canEdit?: boolean
+  rehabilitativeActivities: RehabilitativeActivity[]
 }
 
 export type PunishmentSchedule = {
@@ -77,6 +79,16 @@ export type PunishmentDataWithSchedule = {
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
   canRemove?: boolean
+  canEdit?: boolean
+  rehabilitativeActivities: RehabilitativeActivity[]
+}
+
+export type RehabilitativeActivity = {
+  id?: number
+  details?: string
+  monitor?: string
+  totalSessions?: number
+  endDate?: string
 }
 
 export interface PunishmentWithConvertedName extends PunishmentData {
@@ -238,6 +250,8 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     consecutiveReportAvailable,
     damagesOwedAmount,
     canRemove,
+    canEdit,
+    rehabilitativeActivities,
   } = punishment
   const { duration, measurement, startDate, endDate, suspendedUntil } = schedule
   return {
@@ -247,6 +261,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     duration,
     measurement,
     canRemove,
+    canEdit,
     ...(privilegeType && { privilegeType }),
     ...(otherPrivilege && { otherPrivilege }),
     ...(stoppagePercentage && { stoppagePercentage }),
@@ -257,6 +272,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     ...(consecutiveChargeNumber && { consecutiveChargeNumber }),
     ...(consecutiveReportAvailable && { consecutiveReportAvailable }),
     ...(damagesOwedAmount && { damagesOwedAmount }),
+    rehabilitativeActivities,
   }
 }
 

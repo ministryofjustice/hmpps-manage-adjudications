@@ -53,6 +53,7 @@ beforeEach(() => {
         punishment: {
           id: 72,
           type: PunishmentType.CONFINEMENT,
+          rehabilitativeActivities: [],
           schedule: {
             duration: 10,
             suspendedUntil: '30/5/2023',
@@ -65,6 +66,7 @@ beforeEach(() => {
         punishment: {
           id: 73,
           type: PunishmentType.ADDITIONAL_DAYS,
+          rehabilitativeActivities: [],
           schedule: {
             duration: 5,
             suspendedUntil: '30/5/2023',
@@ -77,6 +79,7 @@ beforeEach(() => {
         punishment: {
           id: 74,
           type: PunishmentType.PROSPECTIVE_DAYS,
+          rehabilitativeActivities: [],
           schedule: {
             duration: 3,
             suspendedUntil: '18/5/2023',

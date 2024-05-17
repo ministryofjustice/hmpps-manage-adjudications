@@ -5,7 +5,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% set title = "Do you have the details of the payback punishment?" %}
+{% set title = "Is there a rehabilitative activity condition?" %}
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
@@ -13,21 +13,38 @@
   {{ breadcrumb() }}
 {% endblock %}
 
+ {% set numberOfActivitiesHtml %}
+  {{ govukInput({
+      id: "numberOfActivities",
+      name: "numberOfActivities",
+      inputmode: "numeric",
+      value: numberOfActivities,
+      classes: "govuk-input--width-5",
+      attributes: { "data-qa": "number-of-activities" },
+      errorMessage: errors | findErrors(["numberOfActivities"]),
+      label: {
+          text: "Enter the number of rehabilitative activities"
+      }
+    }) }}
+  {% endset -%}
+
+
 {% set items = [
     {
         value: "YES",
         text: "Yes",
-        checked: paybackPunishmentSpecifics === 'YES'
+        checked: isThereRehabilitativeActivities === 'YES',
+        conditional: {
+           html: numberOfActivitiesHtml
+        }
     },
     {
         value: "NO",
         text: "No",
-        checked: paybackPunishmentSpecifics === 'NO',
-        hint: {
-            text: "You can return to this report to enter the details once you have them."
-        }
+        checked: isThereRehabilitativeActivities === 'NO'
     }
 ] %}
+
 
 {% block content %}
   {% if errors | length %}
@@ -43,15 +60,12 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
         {{ govukRadios({
-    idPrefix: 'paybackPunishmentSpecifics',
-    id: 'paybackPunishmentSpecifics',
-    name: 'paybackPunishmentSpecifics',
-    attributes: { "data-qa": "paybackPunishmentSpecifics-radios" },
-    errorMessage: "paybackPunishmentSpecifics" | findError(errors),
+    idPrefix: 'isThereRehabilitativeActivities',
+    id: 'isThereRehabilitativeActivities',
+    name: 'isThereRehabilitativeActivities',
+    attributes: { "data-qa": "isThereRehabilitativeActivities-radios" },
+    errorMessage: "isThereRehabilitativeActivities" | findError(errors),
     items: items,
-    hint: {
-    text: "This includes what the punishment involves, when it needs to be completed by, and how many hours it will last"
-  },
     fieldset: {
     legend: {
       text: title,

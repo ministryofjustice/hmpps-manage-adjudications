@@ -122,6 +122,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
               {
                 id: 765,
                 type: PunishmentType.EXTRA_WORK,
+                rehabilitativeActivities: [],
                 schedule: {
                   duration: 10,
                   startDate: '2023-10-30',
@@ -132,6 +133,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
               {
                 id: 761,
                 type: PunishmentType.ADDITIONAL_DAYS,
+                rehabilitativeActivities: [],
                 schedule: {
                   duration: 10,
                 },
@@ -182,6 +184,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
               id: 72,
               type: PunishmentType.PRIVILEGE,
               privilegeType: PrivilegeType.CANTEEN,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-29',

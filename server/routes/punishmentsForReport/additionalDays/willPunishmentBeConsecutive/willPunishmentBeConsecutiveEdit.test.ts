@@ -105,6 +105,7 @@ describe('POST', () => {
             otherPrivilege: null,
             privilegeType: null,
             stoppagePercentage: null,
+            rehabilitativeActivities: [],
           },
           '100',
           expect.anything()

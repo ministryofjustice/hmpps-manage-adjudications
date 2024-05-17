@@ -4,7 +4,7 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import UserService from '../../../../services/userService'
-import { PunishmentType } from '../../../../data/PunishmentResult'
+import { PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 import { FormError } from '../../../../@types/template'
 import validateForm from './damagesAmountValidation'
 
@@ -77,6 +77,7 @@ export default class DamagesAmountPage {
       type: PunishmentType.DAMAGES_OWED,
       duration: 0,
       damagesOwedAmount,
+      rehabilitativeActivities: [] as RehabilitativeActivity[],
     }
 
     try {

@@ -69,6 +69,8 @@ import PunishmentCommentRoutes from './punishmentsForReport/punishmentComment'
 import PunishmentRoutes from './punishmentsForReport/punishment'
 import paybackPunishmentSpecificsRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentSpecifics'
 import paybackPunishmentDurationRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentDuration'
+import isThereRehabilitativeActivitiesRoutes from './punishmentsForReport/rehabilitativeActivities/isThere'
+import HasRehabilitativeActivitiesDetailsRoutes from './punishmentsForReport/rehabilitativeActivities/hasDetails'
 import paybackPunishmentCompletionRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentCompletionDate'
 import PaybackPunishmentDetailsRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentDetails'
 import paybackPunishmentScheduleRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentSchedule'
@@ -339,6 +341,16 @@ export default function routes(
   router.use(
     adjudicationUrls.paybackPunishmentDuration.root,
     paybackPunishmentDurationRoutes({ userService, punishmentsService })
+  )
+
+  router.use(
+    adjudicationUrls.punishmentHasRehabilitativeActivities.root,
+    isThereRehabilitativeActivitiesRoutes({ userService })
+  )
+
+  router.use(
+    adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.root,
+    HasRehabilitativeActivitiesDetailsRoutes({ userService, punishmentsService })
   )
 
   router.use(

@@ -33,6 +33,8 @@
 
     {% set emptyText = 'Not entered' if data.type === PunishmentType.PAYBACK else '-' %}
 
+    {% set withRebabCondition = ' - with a rehabilitative activity condition' if data.rehabilitativeActivities | length else '' %}
+
     {% set rows = (rows.push(
       [
           {
@@ -52,7 +54,7 @@
             classes: "columnWidth12"
           },
           {
-            text: data.suspendedUntil | formatTimestampTo('D MMM YYYY') if data.suspendedUntil else '-',
+            text: data.suspendedUntil | formatTimestampTo('D MMM YYYY') + withRebabCondition if data.suspendedUntil else '-',
             classes: "columnWidth12"
           },
           {

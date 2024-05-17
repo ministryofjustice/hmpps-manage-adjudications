@@ -6,7 +6,7 @@ import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PunishmentMeasurement, PunishmentType } from '../../../../data/PunishmentResult'
+import { PunishmentMeasurement, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 import validateForm from './paybackPunishmentSpecificsValidation'
 
 type PageData = {
@@ -86,6 +86,7 @@ export default class PaybackPunishmentSpecificsPage {
         measurement: PunishmentMeasurement.HOURS,
         duration: null as never,
         lastDay: null as never,
+        rehabilitativeActivities: [] as RehabilitativeActivity[],
       }
       if (this.pageOptions.isEdit()) {
         await this.punishmentsService.updateSessionPunishment(req, punishmentData, chargeNumber, redisId)

@@ -6,7 +6,7 @@ import { datePickerToApi, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import validateForm from './paybackPunishmentDetailsValidation'
-import { PunishmentType } from '../../../../data/PunishmentResult'
+import { PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -85,6 +85,7 @@ export default class PaybackPunishmentDetailsPage {
       endDate: datePickerToApi(String(endDate)),
       paybackNotes: String(paybackNotes),
       duration: Number(duration),
+      rehabilitativeActivities: [] as RehabilitativeActivity[],
     }
 
     if (this.pageOptions.isEdit()) {

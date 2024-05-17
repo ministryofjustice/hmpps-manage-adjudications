@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PunishmentType } from '../../../../data/PunishmentResult'
+import { PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
@@ -21,6 +21,7 @@ const consecutivePunishments = [
     punishment: {
       id: 1,
       type: PunishmentType.ADDITIONAL_DAYS,
+      rehabilitativeActivities: [] as RehabilitativeActivity[],
       schedule: {
         duration: 5,
       },
@@ -32,6 +33,7 @@ const consecutivePunishments = [
     punishment: {
       id: 2,
       type: PunishmentType.ADDITIONAL_DAYS,
+      rehabilitativeActivities: [] as RehabilitativeActivity[],
       schedule: {
         duration: 2,
       },
@@ -110,6 +112,7 @@ describe('POST', () => {
             otherPrivilege: null,
             privilegeType: null,
             stoppagePercentage: null,
+            rehabilitativeActivities: [],
           },
           '100'
         )

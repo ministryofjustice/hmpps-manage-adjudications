@@ -89,6 +89,7 @@ describe('POST ', () => {
             duration: 6,
             suspendedUntil: '2023-12-13',
             stoppagePercentage: null,
+            rehabilitativeActivities: [],
           },
           '100'
         )

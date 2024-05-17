@@ -109,6 +109,7 @@ describe('POST', () => {
             type: PunishmentType.PRIVILEGE,
             privilegeType: PrivilegeType.OTHER,
             otherPrivilege: 'chocolate',
+            rehabilitativeActivities: [],
             schedule: {
               duration: 10,
               measurement: PunishmentMeasurement.DAYS,
