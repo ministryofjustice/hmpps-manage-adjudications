@@ -160,7 +160,7 @@ export default class PunishmentsService {
       let isThereRehabilitativeActivities: boolean = null
       let hasRehabilitativeActivitiesDetails: boolean = null
 
-      if (punishment.schedule.suspendedUntil !== null) {
+      if (punishment.schedule?.suspendedUntil) {
         isThereRehabilitativeActivities = punishment.rehabilitativeActivities.length > 0
         hasRehabilitativeActivitiesDetails = punishment.rehabilitativeActivities.some(ra => ra.details !== null)
       }
