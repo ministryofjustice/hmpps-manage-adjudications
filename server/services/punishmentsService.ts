@@ -162,7 +162,9 @@ export default class PunishmentsService {
 
       if (punishment.schedule?.suspendedUntil) {
         isThereRehabilitativeActivities = punishment.rehabilitativeActivities.length > 0
-        hasRehabilitativeActivitiesDetails = punishment.rehabilitativeActivities.some(ra => ra.details !== null)
+        if (isThereRehabilitativeActivities) {
+          hasRehabilitativeActivitiesDetails = punishment.rehabilitativeActivities.some(ra => ra.details !== null)
+        }
       }
 
       return {
