@@ -10,6 +10,7 @@ import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
 import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
 import IsThereRehabilitativeActivitesPage from '../pages/isThereRehabilitativeActivitiesPage'
 import HasRehabilitativeActivitesDetailsPage from '../pages/hasRehabilitativeActivitiesDetailsPage'
+import AwardPunishmentsPage from '../pages/awardPunishments'
 
 const testData = new TestData()
 context.skip('Add a rehabilitative activity', () => {
@@ -98,6 +99,11 @@ context.skip('Add a rehabilitative activity', () => {
       isTherePage.submitButton().click()
 
       isTherePage.errorSummary().contains('Enter the number of rehabilitative activities')
+
+      isTherePage.numberOfActivities().type('q')
+      isTherePage.submitButton().click()
+      isTherePage.errorSummary().contains('The total number of rehabilitative activities must be a number')
+
       isTherePage.numberOfActivities().type('10')
       isTherePage.submitButton().click()
 
@@ -105,10 +111,26 @@ context.skip('Add a rehabilitative activity', () => {
       hasPage.submitButton().click()
       hasPage.errorSummary().contains('Select yes if you have the details of the rehabilitative activity')
 
-      hasPage.detailsChoice().find('input[value="YES"]').click()
+      hasPage.detailsChoice().find('input[value="NO"]').click()
       hasPage.submitButton().click()
 
-      // TODO should check the page has the relevant - with rehab activity
+      const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+      awardPunishmentsPage
+        .punishmentsTable()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(4).innerText).to.contain('- with a rehabilitative activity condition')
+        })
+
+      awardPunishmentsPage.editPunishment().first().click()
+      punishmentPage.submitButton().click()
+      numberOfDaysPage.submitButton().click()
+      willPunishmentBeSuspendedPage.submitButton().click()
+      punishmentSuspendedUntilPage.submitButton().click()
+      isTherePage.rehabChoice().find('input[value="YES"]').should('be.checked')
+      isTherePage.numberOfActivities().should('have.value', '10')
+      isTherePage.submitButton().click()
+      hasPage.detailsChoice().find('input[value="NO"]').should('be.checked')
     })
   })
 })

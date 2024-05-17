@@ -100,6 +100,7 @@ context('Awarded punishments and damages', () => {
               id: 1,
               redisId: 'xyz',
               type: PunishmentType.DAMAGES_OWED,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 0,
               },
@@ -109,6 +110,7 @@ context('Awarded punishments and damages', () => {
               id: 2,
               redisId: 'xyz',
               type: PunishmentType.DAMAGES_OWED,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 0,
               },
@@ -118,6 +120,7 @@ context('Awarded punishments and damages', () => {
               id: 3,
               redisId: 'xyz',
               type: PunishmentType.PRIVILEGE,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 0,
               },
@@ -180,6 +183,7 @@ context('Awarded punishments and damages', () => {
               id: 1,
               redisId: 'xyz',
               type: PunishmentType.CAUTION,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 0,
               },
@@ -415,6 +419,7 @@ context('Awarded punishments and damages - Financial', () => {
               id: 1,
               redisId: 'xyz',
               type: PunishmentType.DAMAGES_OWED,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 0,
               },
@@ -424,6 +429,7 @@ context('Awarded punishments and damages - Financial', () => {
               id: 2,
               redisId: 'xyz',
               type: PunishmentType.EARNINGS,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 0,
               },
@@ -461,6 +467,7 @@ context('Awarded punishments and damages - Financial', () => {
               id: 1,
               redisId: 'xyz',
               type: PunishmentType.EARNINGS,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 0,
               },
@@ -672,6 +679,7 @@ context('Awarded punishments and damages - Additional days', () => {
               id: 1,
               redisId: 'xyz',
               type: PunishmentType.ADDITIONAL_DAYS,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 14,
               },
@@ -708,6 +716,7 @@ context('Awarded punishments and damages - Additional days', () => {
               id: 1,
               redisId: 'xyz',
               type: PunishmentType.PROSPECTIVE_DAYS,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 7,
               },

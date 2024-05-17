@@ -14,6 +14,10 @@ const errors: { [key: string]: FormError } = {
     href: '#numberOfActivities',
     text: 'Enter the number of rehabilitative activities',
   },
+  NOT_A_NUMBER: {
+    href: '#numberOfActivities',
+    text: 'The total number of rehabilitative activities must be a number',
+  },
 }
 
 export default function validateForm({ rehabChoice, numberOfActivities }: PunishmentForm): FormError | null {
@@ -23,6 +27,10 @@ export default function validateForm({ rehabChoice, numberOfActivities }: Punish
 
   if (rehabChoice === 'YES' && !numberOfActivities) {
     return errors.MISSING_NO_OF_ACTIVITIES
+  }
+
+  if (rehabChoice === 'YES' && Number.isNaN(Number(numberOfActivities))) {
+    return errors.NOT_A_NUMBER
   }
 
   return null

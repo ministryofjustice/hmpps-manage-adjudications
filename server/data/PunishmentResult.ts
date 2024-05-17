@@ -56,6 +56,8 @@ export type PunishmentData = {
   canRemove?: boolean
   canEdit?: boolean
   rehabilitativeActivities: RehabilitativeActivity[]
+  isThereRehabilitativeActivities?: boolean
+  hasRehabilitativeActivitiesDetails?: boolean
 }
 
 export type PunishmentSchedule = {

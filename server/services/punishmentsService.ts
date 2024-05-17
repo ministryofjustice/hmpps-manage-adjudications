@@ -79,12 +79,38 @@ export default class PunishmentsService {
   updateSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     this.deleteSessionPunishments(req, redisId, chargeNumber)
-    const updatedPunishment = { ...punishmentData, redisId, id: punishment.id }
+    const updatedPunishment = {
+      ...punishmentData,
+      isThereRehabilitativeActivities: punishment.isThereRehabilitativeActivities,
+      hasRehabilitativeActivitiesDetails: punishment.hasRehabilitativeActivitiesDetails,
+      rehabilitativeActivities: punishment.rehabilitativeActivities,
+      redisId,
+      id: punishment.id,
+    }
 
     return req.session.punishments[chargeNumber].push(updatedPunishment)
   }
 
-  addRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string, numberOfActivities: number) {
+  noRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string) {
+    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+    this.deleteSessionPunishments(req, redisId, chargeNumber)
+    const updatedPunishment = {
+      ...punishment,
+      isThereRehabilitativeActivities: false,
+      redisId,
+      id: punishment.id,
+    }
+
+    return req.session.punishments[chargeNumber].push(updatedPunishment)
+  }
+
+  addRehabilitativeActivities(
+    req: Request,
+    chargeNumber: string,
+    redisId: string,
+    numberOfActivities: number,
+    hasDetails: boolean
+  ) {
     const activities = [] as RehabilitativeActivity[]
     /* eslint-disable-next-line no-plusplus */
     for (let i = 0; i < numberOfActivities; i++) {
@@ -93,7 +119,14 @@ export default class PunishmentsService {
 
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     this.deleteSessionPunishments(req, redisId, chargeNumber)
-    const updatedPunishment = { ...punishment, rehabilitativeActivities: activities, redisId, id: punishment.id }
+    const updatedPunishment = {
+      ...punishment,
+      isThereRehabilitativeActivities: true,
+      hasRehabilitativeActivitiesDetails: hasDetails,
+      rehabilitativeActivities: activities,
+      redisId,
+      id: punishment.id,
+    }
 
     return req.session.punishments[chargeNumber].push(updatedPunishment)
   }
@@ -123,7 +156,12 @@ export default class PunishmentsService {
     this.createSessionForAdjudicationPunishmentIfNotExists(req, chargeNumber)
     // When we get the punishments back from the server, they've lost their redisId, so we assign new ones
     const punishments = punishmentData.map(punishment => {
-      return { ...punishment, redisId: uuidv4() }
+      return {
+        ...punishment,
+        isThereRehabilitativeActivities: punishment.rehabilitativeActivities.length > 0,
+        hasRehabilitativeActivitiesDetails: punishment.rehabilitativeActivities.some(ra => ra.details !== null),
+        redisId: uuidv4(),
+      }
     })
     req.session.punishments[chargeNumber] = punishments
   }

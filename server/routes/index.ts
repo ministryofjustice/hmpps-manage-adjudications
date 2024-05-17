@@ -345,7 +345,7 @@ export default function routes(
 
   router.use(
     adjudicationUrls.punishmentHasRehabilitativeActivities.root,
-    isThereRehabilitativeActivitiesRoutes({ userService })
+    isThereRehabilitativeActivitiesRoutes({ userService, punishmentsService })
   )
 
   router.use(

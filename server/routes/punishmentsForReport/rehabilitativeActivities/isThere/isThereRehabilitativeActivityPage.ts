@@ -7,6 +7,7 @@ import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import validateForm from './validation'
+import PunishmentsService from '../../../../services/punishmentsService'
 
 type PageData = {
   error?: FormError
@@ -15,7 +16,7 @@ type PageData = {
 }
 
 export default class IsThereRehabilitativeActivitiesPage {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
@@ -31,12 +32,25 @@ export default class IsThereRehabilitativeActivitiesPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+    const { chargeNumber, redisId } = req.params
+
+    const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
+
+    let isThereRehabilitativeActivities = null
+    let numberOfActivities = null
+
+    if (sessionData?.isThereRehabilitativeActivities === true) {
+      isThereRehabilitativeActivities = 'YES'
+      numberOfActivities = sessionData.rehabilitativeActivities.length
+    } else if (sessionData?.isThereRehabilitativeActivities === false) {
+      isThereRehabilitativeActivities = 'NO'
+    }
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, {})
+    return this.renderView(req, res, { isThereRehabilitativeActivities, numberOfActivities })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -61,6 +75,8 @@ export default class IsThereRehabilitativeActivitiesPage {
         })
       )
     }
+
+    await this.punishmentsService.noRehabilitativeActivities(req, chargeNumber, redisId)
 
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
