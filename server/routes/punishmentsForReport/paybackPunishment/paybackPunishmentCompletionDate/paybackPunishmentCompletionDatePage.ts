@@ -11,7 +11,7 @@ import validateForm from './paybackPunishmentCompletionDateValidation'
 
 type PageData = {
   error?: FormError
-  lastDay?: string
+  endDate?: string
 }
 
 export enum PageRequestType {
@@ -40,12 +40,12 @@ export default class PaybackPunishmentCompletionDatePage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, lastDay } = pageData
+    const { error, endDate } = pageData
 
     return res.render(`pages/paybackPunishmentCompletionDate.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
-      lastDay,
+      endDate: formatDateForDatePicker(endDate, 'short'),
       today: formatDateForDatePicker(new Date().toISOString(), 'short'),
     })
   }
@@ -62,7 +62,7 @@ export default class PaybackPunishmentCompletionDatePage {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
 
       return this.renderView(req, res, {
-        lastDay: sessionData?.lastDay,
+        endDate: sessionData?.endDate,
       })
     }
 
@@ -71,19 +71,19 @@ export default class PaybackPunishmentCompletionDatePage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, redisId } = req.params
-    const { lastDay } = req.body
+    const { endDate } = req.body
     const { duration } = req.query
 
-    const error = validateForm({ lastDay })
+    const error = validateForm({ endDate })
 
     if (error)
       return this.renderView(req, res, {
         error,
-        lastDay,
+        endDate,
       })
 
     const redirectUrl = this.getRedirectUrl(chargeNumber, redisId)
-    const query = { duration, lastDay } as ParsedUrlQuery
+    const query = { duration, endDate } as ParsedUrlQuery
     return res.redirect(
       url.format({
         pathname: redirectUrl,

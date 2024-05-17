@@ -71,6 +71,7 @@ import paybackPunishmentSpecificsRoutes from './punishmentsForReport/paybackPuni
 import paybackPunishmentDurationRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentDuration'
 import paybackPunishmentCompletionRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentCompletionDate'
 import PaybackPunishmentDetailsRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentDetails'
+import paybackPunishmentScheduleRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentSchedule'
 import awardPunishmentsRoutes from './punishmentsForReport/punishments/awardPunishments'
 import numberOfAdditionalDaysRoutes from './punishmentsForReport/additionalDays/numberOfAdditionalDays'
 import willPunishmentBeSuspendedRoutes from './punishmentsForReport/additionalDays/willPunishmentBeSuspended'
@@ -348,6 +349,11 @@ export default function routes(
   router.use(
     adjudicationUrls.paybackPunishmentDetails.root,
     PaybackPunishmentDetailsRoutes({ userService, punishmentsService })
+  )
+
+  router.use(
+    adjudicationUrls.paybackPunishmentSchedule.root,
+    paybackPunishmentScheduleRoutes({ userService, punishmentsService })
   )
 
   router.use(

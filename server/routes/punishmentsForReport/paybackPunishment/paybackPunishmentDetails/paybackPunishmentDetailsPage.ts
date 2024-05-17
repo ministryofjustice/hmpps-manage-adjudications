@@ -70,7 +70,7 @@ export default class PaybackPunishmentDetailsPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, redisId } = req.params
     const { paybackNotes } = req.body
-    const { duration, lastDay } = req.query
+    const { duration, endDate } = req.query
 
     const error = validateForm({ paybackNotes })
 
@@ -82,7 +82,7 @@ export default class PaybackPunishmentDetailsPage {
 
     const playbackPunishmentData = {
       type: PunishmentType.PAYBACK,
-      endDate: datePickerToApi(String(lastDay)),
+      endDate: datePickerToApi(String(endDate)),
       paybackNotes: String(paybackNotes),
       duration: Number(duration),
     }
@@ -93,6 +93,6 @@ export default class PaybackPunishmentDetailsPage {
       await this.punishmentsService.addSessionPunishment(req, playbackPunishmentData, chargeNumber)
     }
 
-    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    return res.redirect(adjudicationUrls.paybackPunishmentSchedule.urls.start(chargeNumber))
   }
 }

@@ -5,7 +5,7 @@ export default class PaybackPunishmentCompletionDatePage extends Page {
     super('When does this punishment need to be completed by?')
   }
 
-  dateInput = (): PageElement => cy.get('[data-qa="lastDay"]')
+  dateInput = (): PageElement => cy.get('[data-qa="endDate"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="payback-punishment-completion-date-submit"]')
 

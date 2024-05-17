@@ -27,18 +27,18 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
       {{ hmppsDatepicker({
-          id: 'lastDay',
-          name: 'lastDay',
+          id: 'endDate',
+          name: 'endDate',
           label: {
               text: title,
               classes: "govuk-label--l",
               isPageHeading: true
           },
           classes: 'hmpps-datepicker--fixed-width',
-          value: lastDay,
+          value: endDate,
           minDate: today,
-          dataQa: 'lastDay',
-          errorMessage: errors | findErrors(['lastDay'])
+          dataQa: 'endDate',
+          errorMessage: errors | findErrors(['endDate'])
       }) }}
 
       <div class="govuk-button-group">

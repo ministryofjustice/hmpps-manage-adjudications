@@ -7,6 +7,7 @@ import AwardedPunishments from '../pages/awardPunishments'
 import PaybackPunishmentDurationPage from '../pages/paybackPunishmentDuration'
 import PaybackPunishmentCompletionDatePage from '../pages/paybackPunishmentCompletionDate'
 import PaybackPunishmentDetailsPage from '../pages/paybackPunishmentDetails'
+import PaybackPunishmentSchedulePage from '../pages/paybackPunishmentSchedule'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import { PunishmentMeasurement, PunishmentType } from '../../server/data/PunishmentResult'
 import { formatDateForDatePicker } from '../../server/utils/utils'
@@ -109,6 +110,24 @@ context('Add a new payback punishment', () => {
       const paybackPunishmentDetails = Page.verifyOnPage(PaybackPunishmentDetailsPage)
       paybackPunishmentDetails.details().type('These are the details for this payback punishment')
       paybackPunishmentDetails.submitButton().click()
+      const paybackPunishmentSchedule = Page.verifyOnPage(PaybackPunishmentSchedulePage)
+      paybackPunishmentSchedule
+        .summary()
+        .find('dt')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Number of hours')
+          expect($summaryData.get(1).innerText).to.contain('Complete by')
+          expect($summaryData.get(2).innerText).to.contain('Details')
+        })
+      paybackPunishmentSchedule
+        .summary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('5')
+          expect($summaryData.get(2).innerText).to.contain('10 October 2030')
+          expect($summaryData.get(4).innerText).to.contain('These are the details for this payback punishment')
+        })
+      paybackPunishmentSchedule.continue().click()
       const awardedPunishments = Page.verifyOnPage(AwardedPunishments)
       awardedPunishments
         .punishmentsTable()
@@ -140,6 +159,24 @@ context('Add a new payback punishment', () => {
       const paybackPunishmentDetails = Page.verifyOnPage(PaybackPunishmentDetailsPage)
       paybackPunishmentDetails.details().type('These are the details for this payback punishment')
       paybackPunishmentDetails.submitButton().click()
+      const paybackPunishmentSchedule = Page.verifyOnPage(PaybackPunishmentSchedulePage)
+      paybackPunishmentSchedule
+        .summary()
+        .find('dt')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('Number of hours')
+          expect($summaryData.get(1).innerText).to.contain('Complete by')
+          expect($summaryData.get(2).innerText).to.contain('Details')
+        })
+      paybackPunishmentSchedule
+        .summary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('1')
+          expect($summaryData.get(2).innerText).to.contain('1 January 2028')
+          expect($summaryData.get(4).innerText).to.contain('These are the details for this payback punishment')
+        })
+      paybackPunishmentSchedule.continue().click()
       const awardedPunishments = Page.verifyOnPage(AwardedPunishments)
       awardedPunishments
         .punishmentsTable()
