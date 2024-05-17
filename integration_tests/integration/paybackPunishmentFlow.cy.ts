@@ -9,7 +9,6 @@ import PaybackPunishmentCompletionDatePage from '../pages/paybackPunishmentCompl
 import PaybackPunishmentDetailsPage from '../pages/paybackPunishmentDetails'
 import PaybackPunishmentSchedulePage from '../pages/paybackPunishmentSchedule'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
-import { PunishmentMeasurement, PunishmentType } from '../../server/data/PunishmentResult'
 import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
@@ -36,34 +35,6 @@ context.skip('Add a new payback punishment', () => {
             }),
           ],
         }),
-      },
-    })
-    cy.task('stubCreatePunishments', {
-      chargeNumber: 100,
-      response: {
-        reportedAdjudication: testData.reportedAdjudication({
-          chargeNumber: '100',
-          prisonerNumber: 'G6123VU',
-          status: ReportedAdjudicationStatus.CHARGE_PROVED,
-          hearings: [
-            testData.singleHearing({
-              dateTimeOfHearing: '2024-11-23T17:00:00',
-              id: 68,
-            }),
-          ],
-        }),
-        punishments: [
-          {
-            id: 14,
-            type: PunishmentType.PAYBACK,
-            schedule: {
-              duration: null,
-              measurement: PunishmentMeasurement.HOURS,
-              startDate: null,
-              lastDay: null,
-            },
-          },
-        ],
       },
     })
     cy.signIn()

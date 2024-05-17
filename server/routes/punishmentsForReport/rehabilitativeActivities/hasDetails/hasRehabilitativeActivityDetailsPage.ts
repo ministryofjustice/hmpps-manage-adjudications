@@ -1,5 +1,7 @@
 /* eslint-disable max-classes-per-file */
+import url from 'url'
 import { Request, Response } from 'express'
+import { ParsedUrlQuery } from 'querystring'
 import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
@@ -59,15 +61,23 @@ export default class HasRehabilitativeActivitiesDetailsPage {
         error,
       })
 
-    await this.punishmentsService.addRehabilitativeActivities(
+    if (hasRehabilitativeActivitiesDetails === 'YES') {
+      const redirectUrl = adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId)
+      const currentActivityNumber = '1'
+      return res.redirect(
+        url.format({
+          pathname: redirectUrl,
+          query: { numberOfActivities, currentActivityNumber } as ParsedUrlQuery,
+        })
+      )
+    }
+
+    await this.punishmentsService.addEmptyRehabilitativeActivities(
       req,
       chargeNumber,
       redisId,
-      Number(numberOfActivities),
-      hasRehabilitativeActivitiesDetails === 'YES'
+      Number(numberOfActivities)
     )
-
-    // everything is a No at present, Yes will go else where.
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }
