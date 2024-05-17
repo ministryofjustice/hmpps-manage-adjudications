@@ -156,7 +156,12 @@ export default class PunishmentsService {
     this.createSessionForAdjudicationPunishmentIfNotExists(req, chargeNumber)
     // When we get the punishments back from the server, they've lost their redisId, so we assign new ones
     const punishments = punishmentData.map(punishment => {
-      return { ...punishment, redisId: uuidv4() }
+      return {
+        ...punishment,
+        isThereRehabilitativeActivities: punishment.rehabilitativeActivities.length > 0,
+        hasRehabilitativeActivitiesDetails: punishment.rehabilitativeActivities.some(ra => ra.details !== null),
+        redisId: uuidv4(),
+      }
     })
     req.session.punishments[chargeNumber] = punishments
   }
