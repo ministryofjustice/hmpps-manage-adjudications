@@ -1,7 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import url from 'url'
 import { Request, Response } from 'express'
-import { ParsedUrlQuery } from 'querystring'
 import { FormError } from '../../../../@types/template'
 import UserService from '../../../../services/userService'
 import { datePickerToApi, hasAnyRole } from '../../../../utils/utils'
