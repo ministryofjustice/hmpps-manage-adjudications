@@ -28,12 +28,23 @@ export default class HasRehabilitativeActivitiesDetailsPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+    const { chargeNumber, redisId } = req.params
+
+    const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
+
+    let hasRehabilitativeActivitiesDetails = null
+
+    if (sessionData?.hasRehabilitativeActivitiesDetails === true) {
+      hasRehabilitativeActivitiesDetails = 'YES'
+    } else if (sessionData?.hasRehabilitativeActivitiesDetails === false) {
+      hasRehabilitativeActivitiesDetails = 'NO'
+    }
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, {})
+    return this.renderView(req, res, { hasRehabilitativeActivitiesDetails })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -48,7 +59,13 @@ export default class HasRehabilitativeActivitiesDetailsPage {
         error,
       })
 
-    await this.punishmentsService.addRehabilitativeActivities(req, chargeNumber, redisId, Number(numberOfActivities))
+    await this.punishmentsService.addRehabilitativeActivities(
+      req,
+      chargeNumber,
+      redisId,
+      Number(numberOfActivities),
+      hasRehabilitativeActivitiesDetails === 'YES'
+    )
 
     // everything is a No at present, Yes will go else where.
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))

@@ -79,12 +79,38 @@ export default class PunishmentsService {
   updateSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     this.deleteSessionPunishments(req, redisId, chargeNumber)
-    const updatedPunishment = { ...punishmentData, redisId, id: punishment.id }
+    const updatedPunishment = {
+      ...punishmentData,
+      isThereRehabilitativeActivities: punishment.isThereRehabilitativeActivities,
+      hasRehabilitativeActivitiesDetails: punishment.hasRehabilitativeActivitiesDetails,
+      rehabilitativeActivities: punishment.rehabilitativeActivities,
+      redisId,
+      id: punishment.id,
+    }
 
     return req.session.punishments[chargeNumber].push(updatedPunishment)
   }
 
-  addRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string, numberOfActivities: number) {
+  noRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string) {
+    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+    this.deleteSessionPunishments(req, redisId, chargeNumber)
+    const updatedPunishment = {
+      ...punishment,
+      isThereRehabilitativeActivities: false,
+      redisId,
+      id: punishment.id,
+    }
+
+    return req.session.punishments[chargeNumber].push(updatedPunishment)
+  }
+
+  addRehabilitativeActivities(
+    req: Request,
+    chargeNumber: string,
+    redisId: string,
+    numberOfActivities: number,
+    hasDetails: boolean
+  ) {
     const activities = [] as RehabilitativeActivity[]
     /* eslint-disable-next-line no-plusplus */
     for (let i = 0; i < numberOfActivities; i++) {
@@ -93,7 +119,14 @@ export default class PunishmentsService {
 
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     this.deleteSessionPunishments(req, redisId, chargeNumber)
-    const updatedPunishment = { ...punishment, rehabilitativeActivities: activities, redisId, id: punishment.id }
+    const updatedPunishment = {
+      ...punishment,
+      isThereRehabilitativeActivities: true,
+      hasRehabilitativeActivitiesDetails: hasDetails,
+      rehabilitativeActivities: activities,
+      redisId,
+      id: punishment.id,
+    }
 
     return req.session.punishments[chargeNumber].push(updatedPunishment)
   }
