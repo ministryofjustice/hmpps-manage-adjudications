@@ -1,0 +1,71 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro paybackPunishmentScheduleSummary(duration, endDate, paybackNotes, endDateChangeHref, durationChangeHref, detailsChangeHref) %}
+{% set endDateChangeLink = {
+  items: [
+          {
+            href: endDateChangeHref,
+            text: "Change",
+            visuallyHiddenText: ' punishment completion date',
+            attributes: {"data-qa": "change-link" }
+          }
+        ]
+    } %}
+
+{% set durationChangeLink = {
+  items: [
+          {
+            href: durationChangeHref,
+            text: "Change",
+            visuallyHiddenText: ' length of punishment',
+            attributes: {"data-qa": "change-link" }
+          }
+        ]
+    } %}
+
+{% set detailsChangeLink = {
+  items: [
+          {
+            href: detailsChangeHref,
+            text: "Change",
+            visuallyHiddenText: ' details of punishment',
+            attributes: {"data-qa": "change-link" }
+          }
+        ]
+    } %}
+
+  {{ govukSummaryList({
+    rows: [
+    {
+      key: {
+        text: "Number of hours"
+      },
+      value: {
+        text: duration
+      },
+      actions: durationChangeLink
+    },
+    {
+      key: {
+        text: "Complete by"
+      },
+      value: {
+        text: endDate | formatTimestampTo('D MMMM YYYY')
+      },
+    actions: endDateChangeLink 
+    },
+    {
+      key: {
+        text: "Details"
+      },
+      value: {
+        text: paybackNotes
+      },
+      actions: detailsChangeLink
+    }
+  ],
+    attributes: {
+    'data-qa': "payback-punishment-summary"
+  }
+}) }}
+{% endmacro %}

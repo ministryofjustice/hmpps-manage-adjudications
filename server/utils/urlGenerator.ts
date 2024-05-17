@@ -750,6 +750,42 @@ const adjudicationUrls = {
         `${adjudicationUrls.paybackPunishmentDuration.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
+  paybackPunishmentCompletionDate: {
+    root: '/payback-punishment-completion-date',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.paybackPunishmentCompletionDate.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.paybackPunishmentCompletionDate.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  paybackPunishmentDetails: {
+    root: '/payback-punishment-details',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.paybackPunishmentDetails.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.paybackPunishmentDetails.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  paybackPunishmentSchedule: {
+    root: '/payback-punishment-schedule',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.paybackPunishmentSchedule.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.paybackPunishmentSchedule.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
   punishmentNumberOfDays: {
     root: '/punishment-number-of-days',
     matchers: {

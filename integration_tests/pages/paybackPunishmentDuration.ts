@@ -5,7 +5,7 @@ export default class PaybackPunishmentDurationPage extends Page {
     super('Enter how many hours this punishment will last')
   }
 
-  punishment = (): PageElement => cy.get('[data-qa="duration-input"]')
+  durationInput = (): PageElement => cy.get('[data-qa="duration-input"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="payback-punishment-duration-submit"]')
 

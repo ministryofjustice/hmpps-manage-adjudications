@@ -1,16 +1,17 @@
 /* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
+import { ParsedUrlQuery } from 'querystring'
 import { FormError } from '../../../../@types/template'
 import UserService from '../../../../services/userService'
-import { hasAnyRole } from '../../../../utils/utils'
+import { formatDateForDatePicker, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
-import validateForm from './paybackPunishmentDurationValidation'
+import validateForm from './paybackPunishmentCompletionDateValidation'
 
 type PageData = {
   error?: FormError
-  duration?: number
+  endDate?: string
 }
 
 export enum PageRequestType {
@@ -26,7 +27,7 @@ class PageOptions {
   }
 }
 
-export default class PaybackPunishmentDurationPage {
+export default class PaybackPunishmentCompletionDatePage {
   pageOptions: PageOptions
 
   constructor(
@@ -39,12 +40,13 @@ export default class PaybackPunishmentDurationPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, duration } = pageData
+    const { error, endDate } = pageData
 
-    return res.render(`pages/paybackPunishmentDuration.njk`, {
+    return res.render(`pages/paybackPunishmentCompletionDate.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
-      duration,
+      endDate: formatDateForDatePicker(endDate, 'short'),
+      today: formatDateForDatePicker(new Date().toISOString(), 'short'),
     })
   }
 
@@ -60,7 +62,7 @@ export default class PaybackPunishmentDurationPage {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
 
       return this.renderView(req, res, {
-        duration: sessionData?.duration,
+        endDate: sessionData?.endDate,
       })
     }
 
@@ -69,29 +71,31 @@ export default class PaybackPunishmentDurationPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, redisId } = req.params
-    const { duration } = req.body
+    const { endDate } = req.body
+    const { duration } = req.query
 
-    const error = validateForm({ duration })
+    const error = validateForm({ endDate })
 
     if (error)
       return this.renderView(req, res, {
         error,
-        duration,
+        endDate,
       })
 
     const redirectUrl = this.getRedirectUrl(chargeNumber, redisId)
+    const query = { duration, endDate } as ParsedUrlQuery
     return res.redirect(
       url.format({
         pathname: redirectUrl,
-        query: { duration },
+        query,
       })
     )
   }
 
   private getRedirectUrl = (chargeNumber: string, redisId: string) => {
     if (this.pageOptions.isEdit()) {
-      return adjudicationUrls.paybackPunishmentCompletionDate.urls.edit(chargeNumber, redisId)
+      return adjudicationUrls.paybackPunishmentDetails.urls.edit(chargeNumber, redisId)
     }
-    return adjudicationUrls.paybackPunishmentCompletionDate.urls.start(chargeNumber)
+    return adjudicationUrls.paybackPunishmentDetails.urls.start(chargeNumber)
   }
 }
