@@ -85,7 +85,7 @@ export default class SuspendedUntilDatePage {
         error,
         suspendedUntil,
       })
-    let redisId = ''
+    let { redisId } = req.params
 
     try {
       const punishmentData = {
