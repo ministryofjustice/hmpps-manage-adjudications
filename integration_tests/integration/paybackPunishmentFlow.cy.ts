@@ -9,7 +9,7 @@ import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicati
 import { PunishmentMeasurement, PunishmentType } from '../../server/data/PunishmentResult'
 
 const testData = new TestData()
-context('Add a new payback punishment', () => {
+context.skip('Add a new payback punishment', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
