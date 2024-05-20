@@ -323,6 +323,12 @@ export default class ManageAdjudicationsUserTokensClient {
     })
   }
 
+  async deleteRehabilitativeActivity(chargeNumber: string, id: number): Promise<ReportedAdjudicationResult> {
+    return this.restClient.delete({
+      path: `/reported-adjudications/${chargeNumber}/punishments/rehabilitative-activity/${id}`,
+    })
+  }
+
   async getSuspendedPunishments(prisonerNumber: string, chargeNumber: string): Promise<SuspendedPunishmentResult[]> {
     return this.restClient.get({
       path: `/reported-adjudications/punishments/${prisonerNumber}/suspended/v2?chargeNumber=${chargeNumber}`,

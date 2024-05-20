@@ -161,6 +161,9 @@ context.skip('Add a rehabilitative activity', () => {
       isTherePage.submitButton().click()
       hasPage.detailsChoice().find('input[value="NO"]').should('be.checked')
     })
+    it('remove activity - plaeholder for now', () => {
+      cy.visit(adjudicationUrls.removeRehabilitativeActivity.urls.start('100', 1))
+    })
   })
   describe('Edit mode and session population', () => {
     it('it should set Rehab activities to No, and leave do you have details blank when switching to Yes', () => {
