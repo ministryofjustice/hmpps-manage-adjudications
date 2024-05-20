@@ -36,6 +36,7 @@ context('What is the reason for this change', () => {
             {
               id: 14,
               type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-13',

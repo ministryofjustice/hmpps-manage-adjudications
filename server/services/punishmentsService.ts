@@ -152,7 +152,7 @@ export default class PunishmentsService {
     return req.session?.punishments?.[chargeNumber]
   }
 
-  setAllSessionPunishments(req: Request, punishmentData: PunishmentDataWithSchedule[], chargeNumber: string) {
+  setAllSessionPunishments(req: Request, punishmentData: PunishmentData[], chargeNumber: string) {
     this.createSessionForAdjudicationPunishmentIfNotExists(req, chargeNumber)
 
     // When we get the punishments back from the server, they've lost their redisId, so we assign new ones
@@ -160,7 +160,7 @@ export default class PunishmentsService {
       let isThereRehabilitativeActivities: boolean = null
       let hasRehabilitativeActivitiesDetails: boolean = null
 
-      if (punishment.schedule?.suspendedUntil) {
+      if (punishment.suspendedUntil) {
         isThereRehabilitativeActivities = punishment.rehabilitativeActivities.length > 0
         if (isThereRehabilitativeActivities) {
           hasRehabilitativeActivitiesDetails = punishment.rehabilitativeActivities.some(ra => ra.details !== null)

@@ -39,6 +39,8 @@ export default class IsThereRehabilitativeActivitiesPage {
     let isThereRehabilitativeActivities = null
     let numberOfActivities = null
 
+    console.log(sessionData)
+
     if (sessionData?.isThereRehabilitativeActivities === true) {
       isThereRehabilitativeActivities = 'YES'
       numberOfActivities = sessionData.rehabilitativeActivities.length
