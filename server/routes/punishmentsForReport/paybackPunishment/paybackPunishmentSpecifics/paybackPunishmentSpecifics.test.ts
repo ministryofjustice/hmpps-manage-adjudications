@@ -74,7 +74,7 @@ describe('POST', () => {
             type: PunishmentType.PAYBACK,
             measurement: PunishmentMeasurement.HOURS,
             duration: null,
-            lastDay: null,
+            endDate: null,
             rehabilitativeActivities: [],
           },
           '100'

@@ -30,7 +30,7 @@ beforeEach(() => {
     type: PunishmentType.PAYBACK,
     measurement: PunishmentMeasurement.HOURS,
     duration: 8,
-    lastDay: '2025-01-01',
+    endDate: '2025-01-01',
   })
 })
 
@@ -80,7 +80,7 @@ describe('POST', () => {
             type: PunishmentType.PAYBACK,
             measurement: PunishmentMeasurement.HOURS,
             duration: null,
-            lastDay: null,
+            endDate: null,
             rehabilitativeActivities: [],
           },
           '100',

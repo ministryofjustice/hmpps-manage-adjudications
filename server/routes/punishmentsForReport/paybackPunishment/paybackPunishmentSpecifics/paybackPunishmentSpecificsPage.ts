@@ -85,7 +85,7 @@ export default class PaybackPunishmentSpecificsPage {
         type: PunishmentType.PAYBACK,
         measurement: PunishmentMeasurement.HOURS,
         duration: null as never,
-        lastDay: null as never,
+        endDate: null as never,
         rehabilitativeActivities: [] as RehabilitativeActivity[],
       }
       if (this.pageOptions.isEdit()) {

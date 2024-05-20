@@ -842,6 +842,16 @@ const adjudicationUrls = {
         `${adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.root}/${chargeNumber}/${redisId}`,
     },
   },
+  rehabilitativeActivityDetails: {
+    root: '/rehabilitative-activity-details',
+    matchers: {
+      start: '/:chargeNumber/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.rehabilitativeActivityDetails.root}/${chargeNumber}/${redisId}`,
+    },
+  },
   removeRehabilitativeActivity: {
     root: '/remove-rehabilitative-activity',
     matchers: {
