@@ -38,6 +38,35 @@ context.skip('Add a rehabilitative activity', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 101,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '101',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+          punishments: [
+            {
+              id: 14,
+              type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [],
+              canEdit: true,
+              schedule: {
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2024-11-23',
+              },
+            },
+          ],
+        }),
+      },
+    })
     cy.task('stubCreatePunishments', {
       chargeNumber: 100,
       response: {
@@ -131,6 +160,36 @@ context.skip('Add a rehabilitative activity', () => {
       isTherePage.numberOfActivities().should('have.value', '10')
       isTherePage.submitButton().click()
       hasPage.detailsChoice().find('input[value="NO"]').should('be.checked')
+    })
+  })
+  describe('Edit mode and session population', () => {
+    it('it should set Rehab activities to No, and leave do you have details blank when switching to Yes', () => {
+      cy.visit(adjudicationUrls.awardPunishments.urls.start('101'))
+      const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+      awardPunishmentsPage.editPunishment().first().click()
+
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.submitButton().click()
+
+      const numberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
+      numberOfDaysPage.submitButton().click()
+
+      const willPunishmentBeSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
+      willPunishmentBeSuspendedPage.submitButton().click()
+
+      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
+      punishmentSuspendedUntilPage.submitButton().click()
+
+      const isTherePage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
+      isTherePage.rehabChoice().find('input[value="NO"]').should('be.checked')
+      isTherePage.rehabChoice().find('input[value="YES"]').click()
+      isTherePage.numberOfActivities().type('10')
+      isTherePage.submitButton().click()
+
+      const hasPage = Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage)
+
+      hasPage.detailsChoice().find('input[value="NO"]').should('not.be.checked')
+      hasPage.detailsChoice().find('input[value="YES"]').should('not.be.checked')
     })
   })
 })
