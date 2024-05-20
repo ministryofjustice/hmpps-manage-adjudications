@@ -24,6 +24,7 @@ import {
   PunishmentDataWithSchedule,
   PunishmentReasonForChange,
   PunishmentType,
+  RehabilitativeActivity,
   SuspendedPunishmentResult,
 } from './PunishmentResult'
 import { User } from './hmppsManageUsersClient'
@@ -326,6 +327,17 @@ export default class ManageAdjudicationsUserTokensClient {
   async deleteRehabilitativeActivity(chargeNumber: string, id: number): Promise<ReportedAdjudicationResult> {
     return this.restClient.delete({
       path: `/reported-adjudications/${chargeNumber}/punishments/rehabilitative-activity/${id}`,
+    })
+  }
+
+  async editRehabilitativeActivity(
+    chargeNumber: string,
+    id: number,
+    rehabilitativeActivity: RehabilitativeActivity
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.put({
+      path: `/reported-adjudications/${chargeNumber}/punishments/rehabilitative-activity/${id}`,
+      data: { rehabilitativeActivity },
     })
   }
 

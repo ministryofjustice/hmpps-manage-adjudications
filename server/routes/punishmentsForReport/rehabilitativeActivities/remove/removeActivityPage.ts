@@ -3,13 +3,10 @@ import { Request, Response } from 'express'
 import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
-import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
+import PunishmentsService from '../../../../services/punishmentsService'
 
 export default class RemoveRehabilitativeActivityPage {
-  constructor(
-    private readonly userService: UserService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
-  ) {}
+  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {}
 
   private renderView = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
@@ -33,7 +30,7 @@ export default class RemoveRehabilitativeActivityPage {
     const { chargeNumber, id } = req.params
     const { user } = res.locals
 
-    await this.reportedAdjudicationsService.removeRehabilitativeActivity(chargeNumber, Number(id), user)
+    await this.punishmentsService.removeRehabilitativeActivity(chargeNumber, Number(id), user)
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

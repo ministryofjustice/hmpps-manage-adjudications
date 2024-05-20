@@ -68,6 +68,9 @@ export default class AwardPunishmentsPage {
 
     const cautionAdded = await this.hasCautionBeenAdded(punishments)
 
+    // Placeholder for when building table...
+    // const rehabActivities = await this.punishmentsService.getRehabActivities(chargeNumber, user)
+
     return res.render(`pages/awardPunishments.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       redirectAfterRemoveUrl,

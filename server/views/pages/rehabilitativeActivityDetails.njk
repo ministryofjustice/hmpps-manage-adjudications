@@ -7,6 +7,12 @@
 {% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
 
 {% set title = "Add details of the rehabilitative activity" %}
+{% set detailedTitle %}
+  Add details of the {{ currentActivityNumber | int | convertToWord }} rehabilitative activity: {{ currentActivityNumber }} of {{ numberOfActivities }}
+{% endset %}
+
+{% set pageHeader = title if isEdit else detailedTitle %}
+
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
@@ -27,7 +33,7 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-      <h1 class="govuk-heading-l">Add details of the {{ currentActivityNumber | int | convertToWord }} rehabilitative activity: {{ currentActivityNumber }} of {{ numberOfActivities }}</h1>
+      <h1 class="govuk-heading-l">{{ pageHeader }}</h1>
 
       <div class="govuk-grid-column-two-thirds">
         {{ govukTextarea({
