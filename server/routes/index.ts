@@ -48,7 +48,7 @@ import addDateAndTimeOfIssueRoutes from './addDateAndTimeOfIssue'
 
 import { Services } from '../services'
 import disPdfRoutes from './disPdf'
-import adjudicationUrls from '../utils/urlGenerator'
+
 import printCompletedDISFormsRoutes from './printCompletedDIS12Forms'
 import enterHearingOutcomeRoutes from './hearingOutcome/enterHearingOutcome'
 import hearingReasonForReferralRoutes from './hearingOutcome/referCase'
@@ -72,6 +72,7 @@ import paybackPunishmentDurationRoutes from './punishmentsForReport/paybackPunis
 import isThereRehabilitativeActivitiesRoutes from './punishmentsForReport/rehabilitativeActivities/isThere'
 import HasRehabilitativeActivitiesDetailsRoutes from './punishmentsForReport/rehabilitativeActivities/hasDetails'
 import rehabilitativeActivityDetailsRoutes from './punishmentsForReport/rehabilitativeActivities/activityDetails'
+import RemoveRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/remove'
 import paybackPunishmentCompletionRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentCompletionDate'
 import PaybackPunishmentDetailsRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentDetails'
 import paybackPunishmentScheduleRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentSchedule'
@@ -103,6 +104,7 @@ import autoPunishmentSuspendedScheduleRoutes from './punishmentsForReport/punish
 import adjudicationHistoryRoutes from './adjudicationHistory'
 import activePunishmentsRoutes from './activePunishments'
 import adjudicationConsolidatedViewRoutes from './adjudicationConsolidatedView'
+import adjudicationUrls from '../utils/urlGenerator'
 
 export default function routes(
   router: Router,
@@ -357,6 +359,11 @@ export default function routes(
   router.use(
     adjudicationUrls.rehabilitativeActivityDetails.root,
     rehabilitativeActivityDetailsRoutes({ userService, punishmentsService })
+  )
+
+  router.use(
+    adjudicationUrls.removeRehabilitativeActivity.root,
+    RemoveRehabilitativeActivityRoutes({ userService, reportedAdjudicationsService })
   )
 
   router.use(

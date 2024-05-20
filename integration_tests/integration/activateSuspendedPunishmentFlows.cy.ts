@@ -105,6 +105,7 @@ context('Suspended punishment schedule', () => {
               id: 71,
               type: PunishmentType.PRIVILEGE,
               privilegeType: PrivilegeType.MONEY,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-29',
@@ -125,6 +126,7 @@ context('Suspended punishment schedule', () => {
             {
               id: 71,
               type: PunishmentType.ADDITIONAL_DAYS,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-29',
@@ -145,6 +147,7 @@ context('Suspended punishment schedule', () => {
             {
               id: 71,
               type: PunishmentType.PROSPECTIVE_DAYS,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-29',
@@ -166,6 +169,7 @@ context('Suspended punishment schedule', () => {
             {
               id: 71,
               type: PunishmentType.PROSPECTIVE_DAYS,
+              rehabilitativeActivities: [],
               schedule: {
                 duration: 5,
                 suspendedUntil: '2023-04-29',

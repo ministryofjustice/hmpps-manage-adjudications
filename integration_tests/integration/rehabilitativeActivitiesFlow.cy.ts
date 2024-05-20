@@ -1,5 +1,5 @@
 import Page from '../pages/page'
-import adjudicationUrls from '../../server/utils/urlGenerator'
+
 import TestData from '../../server/routes/testutils/testData'
 import PunishmentPage from '../pages/punishment'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
@@ -12,6 +12,7 @@ import IsThereRehabilitativeActivitesPage from '../pages/isThereRehabilitativeAc
 import HasRehabilitativeActivitesDetailsPage from '../pages/hasRehabilitativeActivitiesDetailsPage'
 import RehabilitativeActivityDetailsPage from '../pages/rehabilitativeActivityDetails'
 import AwardPunishmentsPage from '../pages/awardPunishments'
+import adjudicationUrls from '../../server/utils/urlGenerator'
 
 const testData = new TestData()
 context.skip('Add a rehabilitative activity', () => {
@@ -35,6 +36,35 @@ context.skip('Add a rehabilitative activity', () => {
               dateTimeOfHearing: '2024-11-23T17:00:00',
               id: 68,
             }),
+          ],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 101,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '101',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+          punishments: [
+            {
+              id: 14,
+              type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [],
+              canEdit: true,
+              schedule: {
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2024-11-23',
+              },
+            },
           ],
         }),
       },
@@ -250,6 +280,39 @@ context.skip('Add a rehabilitative activity', () => {
           expect($summaryData.get(4).innerText).to.contain('10 Oct 2030 - with a rehabilitative activity condition')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
+      it('remove activity - plaeholder for now', () => {
+        cy.visit(adjudicationUrls.removeRehabilitativeActivity.urls.start('100', 1))
+      })
+    })
+    describe('Edit mode and session population', () => {
+      it('it should set Rehab activities to No, and leave do you have details blank when switching to Yes', () => {
+        cy.visit(adjudicationUrls.awardPunishments.urls.start('101'))
+        const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+        awardPunishmentsPage.editPunishment().first().click()
+
+        const punishmentPage = Page.verifyOnPage(PunishmentPage)
+        punishmentPage.submitButton().click()
+
+        const numberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
+        numberOfDaysPage.submitButton().click()
+
+        const willPunishmentBeSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
+        willPunishmentBeSuspendedPage.submitButton().click()
+
+        const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
+        punishmentSuspendedUntilPage.submitButton().click()
+
+        const isTherePage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
+        isTherePage.rehabChoice().find('input[value="NO"]').should('be.checked')
+        isTherePage.rehabChoice().find('input[value="YES"]').click()
+        isTherePage.numberOfActivities().type('10')
+        isTherePage.submitButton().click()
+
+        const hasPage = Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage)
+
+        hasPage.detailsChoice().find('input[value="NO"]').should('not.be.checked')
+        hasPage.detailsChoice().find('input[value="YES"]').should('not.be.checked')
+      })
     })
   })
 })

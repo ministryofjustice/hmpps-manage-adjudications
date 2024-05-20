@@ -852,6 +852,16 @@ const adjudicationUrls = {
         `${adjudicationUrls.rehabilitativeActivityDetails.root}/${chargeNumber}/${redisId}`,
     },
   },
+  removeRehabilitativeActivity: {
+    root: '/remove-rehabilitative-activity',
+    matchers: {
+      start: '/:chargeNumber/:id',
+    },
+    urls: {
+      start: (chargeNumber: string, id: number) =>
+        `${adjudicationUrls.removeRehabilitativeActivity.root}/${chargeNumber}/${id}`,
+    },
+  },
   whenWillPunishmentStart: {
     root: '/when-will-punishment-start',
     matchers: {
