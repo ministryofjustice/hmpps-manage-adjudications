@@ -146,7 +146,6 @@ export default class PunishmentsService {
       redisId,
       id: punishment.id,
     }
-
     return req.session.punishments[chargeNumber].push(updatedPunishment)
   }
 

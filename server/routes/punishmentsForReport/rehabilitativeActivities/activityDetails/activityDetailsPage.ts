@@ -1,12 +1,13 @@
 /* eslint-disable max-classes-per-file */
-// import url from 'url'
+import url from 'url'
 import { Request, Response } from 'express'
-// import { ParsedUrlQuery } from 'querystring'
+import { ParsedUrlQuery } from 'querystring'
 import UserService from '../../../../services/userService'
-import { formatDateForDatePicker, hasAnyRole } from '../../../../utils/utils'
+import { datePickerToApi, formatDateForDatePicker, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import PunishmentsService from '../../../../services/punishmentsService'
+import validateForm from './activityDetailsValidation'
 
 type PageData = {
   error?: FormError
@@ -47,24 +48,26 @@ export default class rehabilitativeActivityDetailsPage {
     return this.renderView(req, res, {})
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   submit = async (req: Request, res: Response): Promise<void> => {
     const { numberOfActivities, currentActivityNumber } = req.query
     const { chargeNumber, redisId } = req.params
-    const { activityDescription, monitorName, endDate, numberOfSessions } = req.query
-    // const error = validateForm({ hasDetails: hasRehabilitativeActivitiesDetails })
-    // if (error)
-    //   return this.renderView(req, res, {
-    //     error,
-    //   })
-    // Add these details to the session
+    const { activityDescription, monitorName, endDate, numberOfSessions } = req.body
+
+    const error = validateForm({ activityDescription, monitorName, endDate, numberOfSessions })
+    if (error)
+      return this.renderView(req, res, {
+        error,
+        activityDescription,
+        monitorName,
+        endDate,
+        numberOfSessions,
+      })
 
     const activityDetails = {
-      details: String(activityDescription),
-      monitor: String(monitorName),
-      endDate: String(endDate),
-      totalSessions: Number(numberOfSessions),
-      id: Number(currentActivityNumber), // not sure about this, ask Tim what he thinks, maybe needs to be uuid?
+      details: activityDescription,
+      monitor: monitorName,
+      endDate: endDate ? datePickerToApi(endDate) : null,
+      totalSessions: numberOfSessions ? Number(numberOfSessions) : null,
     }
     this.punishmentsService.addRehabilitativeActivity(
       req,
@@ -74,20 +77,14 @@ export default class rehabilitativeActivityDetailsPage {
       activityDetails
     )
 
-    // check the current activity number against total activity number, if there are more to add, reload the page with new current activity number
-    // currentActivityNumber = Number(currentActivityNumber)
-    // numberOfActivities = Number(numberOfActivities)
     if (currentActivityNumber === numberOfActivities) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
-    return res.redirect('')
-    // currentActivityNumber += 1
-    // return res.redirect(
-    //   url.format({
-    //     pathname: adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId),
-    //     // eslint-disable-next-line no-plusplus
-    //     query: { numberOfActivities, currentActivityNumber } as ParsedUrlQuery,
-    //   })
-    // )
+    return res.redirect(
+      url.format({
+        pathname: adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId),
+        query: { numberOfActivities, currentActivityNumber: String(+currentActivityNumber + 1) } as ParsedUrlQuery,
+      })
+    )
   }
 }
