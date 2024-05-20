@@ -4,7 +4,7 @@
   {% set rows = [] %}
   {% for data in dataArray %}
     {% set redisId = data.redisId %}
-    {% set punishmentLockedForEdit = data.canEdit === false %}
+    {% set punishmentLockedForEdit = data.canEdit === false or data.hasRehabilitativeActivitiesDetails == true %} 
     {% set punishmentLockedForRemove = data.canRemove === false %}
 
     {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}

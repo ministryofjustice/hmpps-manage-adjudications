@@ -407,4 +407,31 @@ export default class PunishmentsService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerActiveAdjudications(bookingId)
   }
+
+  async getRehabActivities(chargeNumber: string, user: User): Promise<RehabilitativeActivity[]> {
+    const punishments = await this.getPunishmentsFromServer(chargeNumber, user)
+    return punishments.map((punishment: PunishmentData) => punishment.rehabilitativeActivities).flat()
+  }
+
+  async getRehabActivity(chargeNumber: string, rehabActivityId: number, user: User): Promise<RehabilitativeActivity> {
+    const rehabActivities = await this.getRehabActivities(chargeNumber, user)
+    return rehabActivities.filter(rehabAct => rehabAct.id === rehabActivityId)[0]
+  }
+
+  async removeRehabilitativeActivity(
+    chargeNumber: string,
+    id: number,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsUserTokensClient(user).deleteRehabilitativeActivity(chargeNumber, id)
+  }
+
+  async editRehabilitativeActivity(
+    chargeNumber: string,
+    id: number,
+    rehabActivity: RehabilitativeActivity,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsUserTokensClient(user).editRehabilitativeActivity(chargeNumber, id, rehabActivity)
+  }
 }

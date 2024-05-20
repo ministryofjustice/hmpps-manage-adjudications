@@ -280,8 +280,11 @@ context.skip('Add a rehabilitative activity', () => {
           expect($summaryData.get(4).innerText).to.contain('10 Oct 2030 - with a rehabilitative activity condition')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
-      it('remove activity - plaeholder for now', () => {
+      it('remove activity - placeholder for now', () => {
         cy.visit(adjudicationUrls.removeRehabilitativeActivity.urls.start('100', 1))
+      })
+      it('edit activity - placeholder for now', () => {
+        cy.visit(adjudicationUrls.editRehabilitativeActivity.urls.start('100', 1))
       })
     })
     describe('Edit mode and session population', () => {

@@ -73,6 +73,7 @@ import isThereRehabilitativeActivitiesRoutes from './punishmentsForReport/rehabi
 import HasRehabilitativeActivitiesDetailsRoutes from './punishmentsForReport/rehabilitativeActivities/hasDetails'
 import rehabilitativeActivityDetailsRoutes from './punishmentsForReport/rehabilitativeActivities/activityDetails'
 import RemoveRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/remove'
+import EditRehabilitativeActivityPage from './punishmentsForReport/rehabilitativeActivities/edit'
 import paybackPunishmentCompletionRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentCompletionDate'
 import PaybackPunishmentDetailsRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentDetails'
 import paybackPunishmentScheduleRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentSchedule'
@@ -363,7 +364,12 @@ export default function routes(
 
   router.use(
     adjudicationUrls.removeRehabilitativeActivity.root,
-    RemoveRehabilitativeActivityRoutes({ userService, reportedAdjudicationsService })
+    RemoveRehabilitativeActivityRoutes({ userService, punishmentsService })
+  )
+
+  router.use(
+    adjudicationUrls.editRehabilitativeActivity.root,
+    EditRehabilitativeActivityPage({ userService, punishmentsService })
   )
 
   router.use(
