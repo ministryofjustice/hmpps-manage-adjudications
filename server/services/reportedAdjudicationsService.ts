@@ -1441,4 +1441,12 @@ export default class ReportedAdjudicationsService {
       balances,
     }
   }
+
+  async removeRehabilitativeActivity(
+    chargeNumber: string,
+    id: number,
+    user: User
+  ): Promise<ReportedAdjudicationResult> {
+    return new ManageAdjudicationsUserTokensClient(user).deleteRehabilitativeActivity(chargeNumber, id)
+  }
 }
