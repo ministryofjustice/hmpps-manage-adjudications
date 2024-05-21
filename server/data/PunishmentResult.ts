@@ -94,6 +94,7 @@ export type RehabilitativeActivity = {
   endDate?: string
   changeUrl?: string
   removeUrl?: string
+  canChangeOrRemove?: boolean
   suspendedPunishment?: PunishmentType
 }
 

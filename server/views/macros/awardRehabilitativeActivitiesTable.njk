@@ -27,11 +27,11 @@
             classes: "columnWidth30"
           },
           {
-            html: changeColumnValue,
+            html: changeColumnValue if data.canChangeOrRemove  else '',
             classes: "columnWidth12"
           },
           {
-            html: removeColumnValue,
+            html: removeColumnValue if data.canChangeOrRemove  else '',
             classes: "columnWidth12"
           }
       ]
