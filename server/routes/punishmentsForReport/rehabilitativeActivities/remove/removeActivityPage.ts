@@ -33,12 +33,16 @@ export default class RemoveRehabilitativeActivityPage {
 
     const rehabActivity = await this.punishmentsService.getRehabActivity(req, chargeNumber, redisId, +id)
 
-    return this.renderView(req, res, rehabActivity)
+    return this.renderView(req, res, {
+      activityDescription: rehabActivity.details,
+      monitorName: rehabActivity.monitor,
+      endDate: rehabActivity.endDate,
+      numberOfSessions: rehabActivity.totalSessions,
+    })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, redisId, id } = req.params
-    const { user } = res.locals
 
     await this.punishmentsService.removeRehabilitativeActivity(req, chargeNumber, redisId, +id)
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))

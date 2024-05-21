@@ -56,7 +56,6 @@ export default class editRehabilitativeActivityPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, redisId, id } = req.params
-    const { user } = res.locals
     const { activityDescription, monitorName, endDate, numberOfSessions } = req.body
 
     const error = validateForm({ activityDescription, monitorName, endDate, numberOfSessions })
