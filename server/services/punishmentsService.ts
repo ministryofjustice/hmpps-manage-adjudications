@@ -108,7 +108,7 @@ export default class PunishmentsService {
     const activities = [] as RehabilitativeActivity[]
     /* eslint-disable-next-line no-plusplus */
     for (let i = 0; i < numberOfActivities; i++) {
-      activities.push({})
+      activities.push({ sessionId: i })
     }
 
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
