@@ -86,11 +86,15 @@ export type PunishmentDataWithSchedule = {
 }
 
 export type RehabilitativeActivity = {
+  sessionId?: number
   id?: number
   details?: string
   monitor?: string
   totalSessions?: number
   endDate?: string
+  changeUrl?: string
+  removeUrl?: string
+  suspendedPunishment?: PunishmentType
 }
 
 export interface PunishmentWithConvertedName extends PunishmentData {

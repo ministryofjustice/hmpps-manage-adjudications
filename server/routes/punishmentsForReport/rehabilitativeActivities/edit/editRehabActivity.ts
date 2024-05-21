@@ -37,13 +37,13 @@ export default class editRehabilitativeActivityPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
-    const { chargeNumber, id } = req.params
+    const { chargeNumber, redisId, id } = req.params
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const rehabActivity = await this.punishmentsService.getRehabActivity(chargeNumber, +id, user)
+    const rehabActivity = await this.punishmentsService.getRehabActivity(req, chargeNumber, redisId, +id)
     const { details, monitor, totalSessions, endDate } = rehabActivity
 
     return this.renderView(req, res, {
@@ -55,7 +55,7 @@ export default class editRehabilitativeActivityPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    const { chargeNumber, id } = req.params
+    const { chargeNumber, redisId, id } = req.params
     const { user } = res.locals
     const { activityDescription, monitorName, endDate, numberOfSessions } = req.body
 
@@ -71,13 +71,13 @@ export default class editRehabilitativeActivityPage {
 
     const updatedRehabActivity = {
       activityDescription,
-      monitorName,
+      monitor: monitorName,
       endDate,
       numberOfSessions,
-      id: +id,
+      sessionId: +id,
     }
 
-    await this.punishmentsService.editRehabilitativeActivity(chargeNumber, Number(id), updatedRehabActivity, user)
+    await this.punishmentsService.editRehabilitativeActivity(req, chargeNumber, redisId, +id, updatedRehabActivity)
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

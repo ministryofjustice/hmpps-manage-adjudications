@@ -855,21 +855,21 @@ const adjudicationUrls = {
   removeRehabilitativeActivity: {
     root: '/remove-rehabilitative-activity',
     matchers: {
-      start: '/:chargeNumber/:id',
+      start: '/:chargeNumber/:redisId/:id',
     },
     urls: {
-      start: (chargeNumber: string, id: number) =>
-        `${adjudicationUrls.removeRehabilitativeActivity.root}/${chargeNumber}/${id}`,
+      start: (chargeNumber: string, redisId: string, id: number) =>
+        `${adjudicationUrls.removeRehabilitativeActivity.root}/${chargeNumber}/${redisId}/${id}`,
     },
   },
   editRehabilitativeActivity: {
     root: '/edit-rehabilitative-activity',
     matchers: {
-      start: '/:chargeNumber/:id',
+      start: '/:chargeNumber/:redisId/:id',
     },
     urls: {
-      start: (chargeNumber: string, id: number) =>
-        `${adjudicationUrls.editRehabilitativeActivity.root}/${chargeNumber}/${id}`,
+      start: (chargeNumber: string, redisId: string, id: number) =>
+        `${adjudicationUrls.editRehabilitativeActivity.root}/${chargeNumber}/${redisId}/${id}`,
     },
   },
   whenWillPunishmentStart: {

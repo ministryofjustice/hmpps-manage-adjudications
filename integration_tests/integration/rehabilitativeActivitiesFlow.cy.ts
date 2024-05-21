@@ -13,9 +13,10 @@ import HasRehabilitativeActivitesDetailsPage from '../pages/hasRehabilitativeAct
 import RehabilitativeActivityDetailsPage from '../pages/rehabilitativeActivityDetails'
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import adjudicationUrls from '../../server/utils/urlGenerator'
+import RemoveActivityPage from '../pages/removeActivityPage'
 
 const testData = new TestData()
-context.skip('Add a rehabilitative activity', () => {
+context('Add a rehabilitative activity', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -220,7 +221,7 @@ context.skip('Add a rehabilitative activity', () => {
           expect($summaryData.get(5).innerText).to.contain('-')
         })
     })
-    it('adds a rehab activity with information available - two activities', () => {
+    it.only('adds a rehab activity with information available - two activities', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
@@ -280,12 +281,27 @@ context.skip('Add a rehabilitative activity', () => {
           expect($summaryData.get(4).innerText).to.contain('10 Oct 2030 - with a rehabilitative activity condition')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
-      it('remove activity - placeholder for now', () => {
-        cy.visit(adjudicationUrls.removeRehabilitativeActivity.urls.start('100', 1))
-      })
-      it('edit activity - placeholder for now', () => {
-        cy.visit(adjudicationUrls.editRehabilitativeActivity.urls.start('100', 1))
-      })
+      // now grab the other taable.  remove one.  edit one.  see that it works.
+      awardedPunishments.removeActivity().first().click()
+      const removeActivityPage = Page.verifyOnPage(RemoveActivityPage)
+      removeActivityPage.submitButton().click()
+      awardedPunishments
+        .activitiesTable()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(3).innerText).to.contain('Tania Jones')
+        })
+      awardedPunishments.changeActivity().first().click()
+      const activityDetailsEdit = Page.verifyOnPage(RehabilitativeActivityDetailsPage)
+      activityDetailsEdit.monitorName().clear()
+      activityDetailsEdit.monitorName().type('Obi One')
+      activityDetailsEdit.submitButton().click()
+      awardedPunishments
+        .activitiesTable()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(3).innerText).to.contain('Obi One')
+        })
     })
     describe('Edit mode and session population', () => {
       it('it should set Rehab activities to No, and leave do you have details blank when switching to Yes', () => {

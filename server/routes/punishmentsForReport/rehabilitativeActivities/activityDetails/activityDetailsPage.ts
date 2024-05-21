@@ -68,6 +68,7 @@ export default class rehabilitativeActivityDetailsPage {
       monitor: monitorName,
       endDate: endDate ? datePickerToApi(endDate) : null,
       totalSessions: numberOfSessions ? Number(numberOfSessions) : null,
+      sessionId: +currentActivityNumber,
     }
     this.punishmentsService.addRehabilitativeActivity(
       req,

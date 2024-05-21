@@ -11,9 +11,15 @@ export default class AwardPunishmentsPage extends Page {
 
   punishmentsTable = (): PageElement => cy.get('[data-qa="punishments-table"]')
 
+  activitiesTable = (): PageElement => cy.get('[data-qa="rehabilitative-activities-table"]')
+
   editPunishment = (): PageElement => cy.get('[data-qa="edit-punishment"]')
 
   deletePunishment = (): PageElement => cy.get('[data-qa="delete-punishment"]')
+
+  changeActivity = (): PageElement => cy.get('[data-qa="edit-activity"]')
+
+  removeActivity = (): PageElement => cy.get('[data-qa="delete-activity"]')
 
   continue = (): PageElement => cy.get('[data-qa="punishments-continue"]')
 }
