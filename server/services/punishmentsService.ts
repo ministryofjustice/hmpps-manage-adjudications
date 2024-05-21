@@ -470,8 +470,8 @@ export default class PunishmentsService {
   async getRehabActivitiesFromSession(req: Request, chargeNumber: string): Promise<RehabilitativeActivity[]> {
     const activities: RehabilitativeActivity[] = []
     const punishments = await this.getAllSessionPunishments(req, chargeNumber)
-    punishments.forEach((p: PunishmentData) => {
-      p.rehabilitativeActivities.forEach((ra: RehabilitativeActivity) => {
+    punishments?.forEach((p: PunishmentData) => {
+      p.rehabilitativeActivities?.forEach((ra: RehabilitativeActivity) => {
         activities.push({
           ...ra,
           changeUrl: adjudicationUrls.editRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
