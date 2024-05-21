@@ -17,9 +17,14 @@ export default class RemoveRehabilitativeActivityPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
+    const { activityDescription, monitorName, endDate, numberOfSessions } = pageData
 
     return res.render(`pages/removeRehabilitativeActivity.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
+      activityDescription,
+      monitorName,
+      endDate,
+      numberOfSessions,
     })
   }
 
