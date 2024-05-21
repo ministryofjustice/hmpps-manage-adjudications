@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import UserService from '../../../../services/userService'
-import { formatDateForDatePicker, hasAnyRole } from '../../../../utils/utils'
+import { datePickerToApi, formatDateForDatePicker, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import PunishmentsService from '../../../../services/punishmentsService'
@@ -72,7 +72,7 @@ export default class editRehabilitativeActivityPage {
     const updatedRehabActivity = {
       activityDescription,
       monitor: monitorName,
-      endDate,
+      endDate: datePickerToApi(endDate),
       numberOfSessions,
       sessionId: +id,
     }

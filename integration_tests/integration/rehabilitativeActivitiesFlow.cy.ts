@@ -163,6 +163,12 @@ context('Add a rehabilitative activity', () => {
       isTherePage.numberOfActivities().should('have.value', '10')
       isTherePage.submitButton().click()
       hasPage.detailsChoice().find('input[value="NO"]').should('be.checked')
+      hasPage.submitButton().click()
+      awardPunishmentsPage.removeActivity().first().click()
+      const removeActivityPage = Page.verifyOnPage(RemoveActivityPage)
+      removeActivityPage.submitButton().click()
+      // TODO need to check table is now empty.  also need validation i think, ie perhaps you cant delete the last one.
+      // server will sort it out anyway.  ie set it to no conditions.
     })
     it('adds a rehab activity with information available - one activity', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
