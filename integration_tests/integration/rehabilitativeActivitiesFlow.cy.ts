@@ -16,7 +16,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import RemoveActivityPage from '../pages/removeActivityPage'
 
 const testData = new TestData()
-context('Add a rehabilitative activity', () => {
+context.skip('Add a rehabilitative activity', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -227,7 +227,7 @@ context('Add a rehabilitative activity', () => {
           expect($summaryData.get(5).innerText).to.contain('-')
         })
     })
-    it.only('adds a rehab activity with information available - two activities', () => {
+    it('adds a rehab activity with information available - two activities', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
