@@ -1,15 +1,15 @@
 import { FormError } from '../../../../@types/template'
 
 type ValidationForm = {
-  activityDescription: string
+  details: string
   monitorName: string
   endDate: string
-  numberOfSessions: number
+  totalSessions: number
 }
 
 const errors: { [key: string]: FormError } = {
   MISSING_DESCRIPTION: {
-    href: '#activityDescription',
+    href: '#details',
     text: 'Enter the activity the prisoner will be doing',
   },
   MISSING_NAME: {
@@ -21,19 +21,19 @@ const errors: { [key: string]: FormError } = {
     text: 'Enter when the activity should be completed by',
   },
   TYPE_SESSION_NUMBER: {
-    href: '#numberOfSessions',
+    href: '#totalSessions',
     text: 'Number of sessions must be a number',
   },
 }
 
 export default function validateForm({
-  activityDescription,
+  details,
   monitorName,
   endDate,
-  numberOfSessions,
+  totalSessions,
 }: ValidationForm): FormError | null {
-  if (numberOfSessions && Number.isNaN(numberOfSessions)) return errors.TYPE_SESSION_NUMBER
-  if (!activityDescription) return errors.MISSING_DESCRIPTION
+  if (totalSessions && Number.isNaN(totalSessions)) return errors.TYPE_SESSION_NUMBER
+  if (!details) return errors.MISSING_DESCRIPTION
   if (!monitorName) return errors.MISSING_NAME
   if (!endDate) return errors.MISSING_DATE
 

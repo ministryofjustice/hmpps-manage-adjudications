@@ -4,12 +4,17 @@ import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
+import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 
 type PageData = {
-  activityDescription?: string
+  details?: string
   monitorName?: string
   endDate?: string
-  numberOfSessions?: number
+  totalSessions?: number
+  type?: PunishmentType
+  stoppagePercentage?: number
+  privilegeType?: PrivilegeType
+  otherPrivilege?: string
 }
 
 export default class RemoveRehabilitativeActivityPage {
@@ -17,14 +22,19 @@ export default class RemoveRehabilitativeActivityPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { activityDescription, monitorName, endDate, numberOfSessions } = pageData
+    const { details, monitorName, endDate, totalSessions, type, stoppagePercentage, privilegeType, otherPrivilege } =
+      pageData
 
     return res.render(`pages/removeRehabilitativeActivity.njk`, {
-      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
-      activityDescription,
+      cancelLinkURL: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
+      details,
       monitorName,
       endDate,
-      numberOfSessions,
+      totalSessions,
+      type,
+      stoppagePercentage,
+      privilegeType,
+      otherPrivilege,
     })
   }
 
@@ -39,10 +49,14 @@ export default class RemoveRehabilitativeActivityPage {
     const rehabActivity = await this.punishmentsService.getRehabActivity(req, chargeNumber, redisId, +id)
 
     return this.renderView(req, res, {
-      activityDescription: rehabActivity.details,
+      details: rehabActivity.details,
       monitorName: rehabActivity.monitor,
       endDate: rehabActivity.endDate,
-      numberOfSessions: rehabActivity.totalSessions,
+      totalSessions: rehabActivity.totalSessions,
+      type: rehabActivity.type,
+      stoppagePercentage: rehabActivity.stoppagePercentage,
+      privilegeType: rehabActivity.privilegeType,
+      otherPrivilege: rehabActivity.otherPrivilege,
     })
   }
 
