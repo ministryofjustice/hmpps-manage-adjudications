@@ -11,28 +11,28 @@
     {% set rows = (rows.push(
       [
           {
-            html: data.suspendedPunishment,
-            classes: "columnWidth15"
+            html: data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege),
+            classes: "columnWidth20"
           },
           {
-            text: data.activityDetails,
+            text: data.details,
             classes: "columnWidth30"
           },
           {
-            text: "todo",
-            classes: "columnWidth30"
+            text: data.endDate | endDateSessionNumberText(data.totalSessions),
+            classes: "columnWidth20"
           },
           {
-            text:  data.monitor,
-            classes: "columnWidth30"
+            text:  data.monitor | initialiseName,
+            classes: "columnWidth17"
           },
           {
             html: changeColumnValue if data.canChangeOrRemove  else '',
-            classes: "columnWidth12"
+            classes: ""
           },
           {
             html: removeColumnValue if data.canChangeOrRemove  else '',
-            classes: "columnWidth12"
+            classes: ""
           }
       ]
     ), rows) %}
@@ -41,13 +41,13 @@
         {{ govukTable({
         head: [
           {
-            text: "Suspended punishment"
+            html: "Suspended <br>punishment"
           },
           {
-            text: "Activity details"
+            html: "Activity <br>details"
           },
           {
-            text: "End date and number of sessions"
+            html: "End date and <br>number of sessions"
           },
           {
             text: "Who is monitoring the prisoner"

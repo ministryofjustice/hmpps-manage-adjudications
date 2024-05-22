@@ -476,8 +476,11 @@ export default class PunishmentsService {
           ...ra,
           changeUrl: adjudicationUrls.editRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
           removeUrl: adjudicationUrls.removeRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
-          canChangeOrRemove: p.rehabilitativeActivitiesCompleted === null,
-          suspendedPunishment: p.type,
+          canChangeOrRemove: p.rehabilitativeActivitiesCompleted === undefined,
+          type: p.type,
+          stoppagePercentage: p.stoppagePercentage,
+          privilegeType: p.privilegeType,
+          otherPrivilege: p.otherPrivilege,
         })
       })
     })
@@ -492,8 +495,15 @@ export default class PunishmentsService {
   ): Promise<RehabilitativeActivity> {
     const sessionPunishment = this.getSessionPunishment(req, chargeNumber, redisId)
 
-    return sessionPunishment.rehabilitativeActivities.filter(
+    const rehabAct = sessionPunishment.rehabilitativeActivities.filter(
       (ra: RehabilitativeActivity) => ra.sessionId === sessionId
     )[0]
+    return {
+      ...rehabAct,
+      type: sessionPunishment.type,
+      stoppagePercentage: sessionPunishment.stoppagePercentage,
+      privilegeType: sessionPunishment.privilegeType,
+      otherPrivilege: sessionPunishment.otherPrivilege,
+    }
   }
 }

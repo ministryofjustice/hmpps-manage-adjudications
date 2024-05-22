@@ -106,7 +106,10 @@ export type RehabilitativeActivity = {
   changeUrl?: string
   removeUrl?: string
   canChangeOrRemove?: boolean
-  suspendedPunishment?: PunishmentType
+  type?: PunishmentType
+  privilegeType?: PrivilegeType
+  otherPrivilege?: string
+  stoppagePercentage?: number
 }
 
 export interface PunishmentWithConvertedName extends PunishmentData {

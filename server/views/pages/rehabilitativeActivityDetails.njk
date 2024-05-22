@@ -37,13 +37,13 @@
 
       <div class="govuk-grid-column-two-thirds">
         {{ govukTextarea({
-					name: "activityDescription",
-					id: "activityDescription",
+					name: "details",
+					id: "details",
 					attributes: {
-						'data-qa': 'activityDescription'
+						'data-qa': 'details'
 					},
-					errorMessage: errors | findErrors(['activityDescription']),
-					value: activityDescription,
+					errorMessage: errors | findErrors(['details']),
+					value: details,
 					label: {
 						text: "What is the activity?",
 						classes: "govuk-label--s",
@@ -87,14 +87,14 @@
 						classes: "govuk-label--s",
 						isPageHeading: false
 					},
-					id: "numberOfSessions",
-					name: "numberOfSessions",
-					value: numberOfSessions,
+					id: "totalSessions",
+					name: "totalSessions",
+					value: totalSessions,
           classes: "govuk-input--width-10",
           attributes: {
-						'data-qa': 'numberOfSessions'
+						'data-qa': 'totalSessions'
 					},
-					errorMessage: errors | findErrors(['numberOfSessions'])
+					errorMessage: errors | findErrors(['totalSessions'])
 				}) }}
 
         <div class="govuk-button-group">

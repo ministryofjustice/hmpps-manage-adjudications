@@ -7,13 +7,13 @@ export default class RehabilitativeActivityDetailsPage extends Page {
 
   fullTitle = (): PageElement => cy.get('h1')
 
-  activityDescription = (): PageElement => cy.get('[data-qa="activityDescription"]')
+  activityDescription = (): PageElement => cy.get('[data-qa="details"]')
 
   monitorName = (): PageElement => cy.get('[data-qa="monitorName"]')
 
   endDate = (): PageElement => cy.get('[data-qa="endDate"]')
 
-  numberOfSessions = (): PageElement => cy.get('[data-qa="numberOfSessions"]')
+  numberOfSessions = (): PageElement => cy.get('[data-qa="totalSessions"]')
 
   submitButton = (): PageElement => cy.get('[data-qa="submit"]')
 

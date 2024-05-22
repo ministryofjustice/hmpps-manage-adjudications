@@ -496,6 +496,12 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     return duration > 1 ? `${duration} days` : `${duration} day`
   })
 
+  njkEnv.addFilter('endDateSessionNumberText', (endDate, sessionNumber) => {
+    const formattedEndDate = formatTimestampTo(endDate, 'D MMM YYYY')
+    if (!sessionNumber || sessionNumber < 2) return formattedEndDate
+    return `${sessionNumber} sessions, ending on ${formattedEndDate}`
+  })
+
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('authUrl', config.apis.hmppsAuth.url)
   njkEnv.addGlobal('digitalPrisonServiceUrl', config.digitalPrisonServiceUrl)

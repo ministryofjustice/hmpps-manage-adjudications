@@ -11,10 +11,10 @@ import validateForm from './activityDetailsValidation'
 
 type PageData = {
   error?: FormError
-  activityDescription?: string
+  details?: string
   monitorName?: string
   endDate?: string
-  numberOfSessions?: string
+  totalSessions?: string
 }
 
 export default class rehabilitativeActivityDetailsPage {
@@ -22,7 +22,7 @@ export default class rehabilitativeActivityDetailsPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, activityDescription, monitorName, endDate, numberOfSessions } = pageData
+    const { error, details, monitorName, endDate, totalSessions } = pageData
     const { numberOfActivities, currentActivityNumber } = req.query
 
     return res.render(`pages/rehabilitativeActivityDetails.njk`, {
@@ -31,10 +31,10 @@ export default class rehabilitativeActivityDetailsPage {
       numberOfActivities,
       currentActivityNumber,
       today: formatDateForDatePicker(new Date().toISOString(), 'short'),
-      activityDescription,
+      details,
       monitorName,
       endDate,
-      numberOfSessions,
+      totalSessions,
     })
   }
 
@@ -51,23 +51,23 @@ export default class rehabilitativeActivityDetailsPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { numberOfActivities, currentActivityNumber } = req.query
     const { chargeNumber, redisId } = req.params
-    const { activityDescription, monitorName, endDate, numberOfSessions } = req.body
+    const { details, monitorName, endDate, totalSessions } = req.body
 
-    const error = validateForm({ activityDescription, monitorName, endDate, numberOfSessions })
+    const error = validateForm({ details, monitorName, endDate, totalSessions })
     if (error)
       return this.renderView(req, res, {
         error,
-        activityDescription,
+        details,
         monitorName,
         endDate,
-        numberOfSessions,
+        totalSessions,
       })
 
     const activityDetails = {
-      details: activityDescription,
+      details,
       monitor: monitorName,
       endDate: endDate ? datePickerToApi(endDate) : null,
-      totalSessions: numberOfSessions ? Number(numberOfSessions) : null,
+      totalSessions: totalSessions ? Number(totalSessions) : null,
       sessionId: +currentActivityNumber,
     }
     this.punishmentsService.addRehabilitativeActivity(

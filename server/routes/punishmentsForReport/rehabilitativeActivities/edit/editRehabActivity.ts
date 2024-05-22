@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import UserService from '../../../../services/userService'
-import { datePickerToApi, formatDateForDatePicker, hasAnyRole } from '../../../../utils/utils'
+import { apiDateToDatePicker, datePickerToApi, formatDateForDatePicker, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import PunishmentsService from '../../../../services/punishmentsService'
@@ -9,10 +9,10 @@ import validateForm from '../activityDetails/activityDetailsValidation'
 
 type PageData = {
   error?: FormError
-  activityDescription?: string
+  details?: string
   monitorName?: string
   endDate?: string
-  numberOfSessions?: number
+  totalSessions?: number
 }
 
 export default class editRehabilitativeActivityPage {
@@ -20,16 +20,16 @@ export default class editRehabilitativeActivityPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, activityDescription, monitorName, endDate, numberOfSessions } = pageData
+    const { error, details, monitorName, endDate, totalSessions } = pageData
 
     return res.render(`pages/rehabilitativeActivityDetails.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       today: formatDateForDatePicker(new Date().toISOString(), 'short'),
-      activityDescription,
+      details,
       monitorName,
       endDate,
-      numberOfSessions,
+      totalSessions,
       isEdit: true,
     })
   }
@@ -47,32 +47,32 @@ export default class editRehabilitativeActivityPage {
     const { details, monitor, totalSessions, endDate } = rehabActivity
 
     return this.renderView(req, res, {
-      activityDescription: details,
+      details,
       monitorName: monitor,
-      endDate,
-      numberOfSessions: totalSessions,
+      endDate: apiDateToDatePicker(endDate),
+      totalSessions,
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, redisId, id } = req.params
-    const { activityDescription, monitorName, endDate, numberOfSessions } = req.body
+    const { details, monitorName, endDate, totalSessions } = req.body
 
-    const error = validateForm({ activityDescription, monitorName, endDate, numberOfSessions })
+    const error = validateForm({ details, monitorName, endDate, totalSessions })
     if (error)
       return this.renderView(req, res, {
         error,
-        activityDescription,
+        details,
         monitorName,
         endDate,
-        numberOfSessions,
+        totalSessions,
       })
 
     const updatedRehabActivity = {
-      activityDescription,
+      details,
       monitor: monitorName,
       endDate: datePickerToApi(endDate),
-      numberOfSessions,
+      totalSessions,
       sessionId: +id,
     }
 
