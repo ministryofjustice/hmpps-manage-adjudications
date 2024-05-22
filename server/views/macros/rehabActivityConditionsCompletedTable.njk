@@ -1,6 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro rehabActivityConditionsCompletedTable(rehabActivities) %}
+{% macro rehabActivityConditionsCompletedTable(rehabActivities, readOnly) %}
   {% set rows = [] %}
   {% for data in rehabActivities %}
 
@@ -12,7 +12,7 @@
       {% elif data.rehabilitativeActivitiesCompleted %}
           {# TODO: do some conversion in njk set up with this data and NotCompletedOutcome when the flow is set up #}
           {% set finalColumnContent = data.rehabilitativeActivitiesCompleted %}
-      {% else %}
+      {% elif not readOnly %}
         {% set finalColumnContent = completeLink %}
       {% endif %}
 
@@ -40,7 +40,6 @@
       }
     ]), rows) %}
   {% endfor %}
-  <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
   {{ govukTable({
         head: [
           {

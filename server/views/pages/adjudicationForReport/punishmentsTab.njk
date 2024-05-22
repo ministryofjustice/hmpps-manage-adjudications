@@ -118,7 +118,8 @@
   {% endif %}
 
   {% if paybackAndRehabFlag and rehabActivities | length %}
-    {{ rehabActivityConditionsCompletedTable(rehabActivities) }} 
+    <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
+    {{ rehabActivityConditionsCompletedTable(rehabActivities, readOnly) }} 
   {% endif %}
 
 {% endblock %}
