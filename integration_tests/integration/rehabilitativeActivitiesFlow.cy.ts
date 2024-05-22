@@ -14,6 +14,7 @@ import RehabilitativeActivityDetailsPage from '../pages/rehabilitativeActivityDe
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import RemoveActivityPage from '../pages/removeActivityPage'
+import CompleteRehabilitativeActivity from '../pages/ completeRehabilitativeActivity'
 
 const testData = new TestData()
 context.skip('Add a rehabilitative activity', () => {
@@ -24,6 +25,14 @@ context.skip('Add a rehabilitative activity', () => {
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
       response: testData.userFromUsername(),
+    })
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6123VU',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6123VU',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 100,
@@ -100,6 +109,65 @@ context.skip('Add a rehabilitative activity', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 110,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '110',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+          punishments: [
+            {
+              id: 1,
+              type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [{ details: 'details' }],
+              canEdit: true,
+              schedule: {
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2024-11-23',
+              },
+            },
+          ],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 111,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '111',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+          punishments: [
+            {
+              id: 1,
+              type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [{ details: 'details' }],
+              canEdit: true,
+              rehabilitativeActivitiesCompleted: true,
+              schedule: {
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2024-11-23',
+              },
+            },
+          ],
+        }),
+      },
+    })
     cy.task('stubCreatePunishments', {
       chargeNumber: 100,
       response: {
@@ -134,6 +202,19 @@ context.skip('Add a rehabilitative activity', () => {
     cy.signIn()
   })
   describe('Add a rehabilitative activity with no information', () => {
+    it('stub to avoid merge conflict', () => {
+      cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('110', 1))
+
+      const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
+      completeActivityPage.submitButton().click()
+      completeActivityPage.errorSummary().contains('Select yes if John Smith completed the activity')
+    })
+    it('stub to avoid merge conflict - edit mode', () => {
+      cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('111', 1))
+
+      const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
+      completeActivityPage.completedChoice().find('input[value="YES"]').should('be.checked')
+    })
     it('should ask the user if a condition is associated', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
