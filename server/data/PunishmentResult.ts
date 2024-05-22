@@ -37,6 +37,13 @@ export enum PunishmentMeasurement {
   HOURS,
 }
 
+export enum NotCompletedOutcome {
+  FULL_ACTIVATE,
+  PARTIAL_ACTIVATE,
+  EXT_SUSPEND,
+  NO_ACTION,
+}
+
 export type PunishmentData = {
   id?: number
   redisId?: string
@@ -58,6 +65,8 @@ export type PunishmentData = {
   rehabilitativeActivities: RehabilitativeActivity[]
   isThereRehabilitativeActivities?: boolean
   hasRehabilitativeActivitiesDetails?: boolean
+  rehabilitativeActivitiesCompleted?: boolean
+  rehabilitativeActivitiesNotCompletedOutcome?: NotCompletedOutcome
 }
 
 export type PunishmentSchedule = {
@@ -83,14 +92,21 @@ export type PunishmentDataWithSchedule = {
   canRemove?: boolean
   canEdit?: boolean
   rehabilitativeActivities: RehabilitativeActivity[]
+  rehabilitativeActivitiesCompleted?: boolean
+  rehabilitativeActivitiesNotCompletedOutcome?: NotCompletedOutcome
 }
 
 export type RehabilitativeActivity = {
+  sessionId?: number
   id?: number
   details?: string
   monitor?: string
   totalSessions?: number
   endDate?: string
+  changeUrl?: string
+  removeUrl?: string
+  canChangeOrRemove?: boolean
+  suspendedPunishment?: PunishmentType
 }
 
 export interface PunishmentWithConvertedName extends PunishmentData {

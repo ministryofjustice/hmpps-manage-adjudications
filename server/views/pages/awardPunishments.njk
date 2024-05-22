@@ -2,6 +2,7 @@
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
+{% from "../macros/awardRehabilitativeActivitiesTable.njk" import awardRehabilitativeActivitiesTable %}
 {% from "../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
 
 {% set title = "Award punishments and add money for damages" %}
@@ -26,6 +27,9 @@
           <h2 class="govuk-heading-m">Punishments</h2>
         {% endif %}
         {{ awardPunishmentsTable(filteredPunishments.otherPunishments, redirectAfterRemoveUrl, chargeNumber, false, false) }}
+        {% if paybackAndRehabFlag and rehabActivities | length %}
+          {{ awardRehabilitativeActivitiesTable(rehabActivities) }} 
+        {% endif %}
       {% else %}
         <p class="govuk-body">There are currently no punishments or damages for this adjudication. You can activate <br>existing suspended punishments and add new punishments.</p>
       {% endif %}

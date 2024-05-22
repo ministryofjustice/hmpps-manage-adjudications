@@ -6,6 +6,7 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import UserService from '../../../../services/userService'
+import config from '../../../../config'
 
 export enum PageRequestType {
   PUNISHMENTS_FROM_API,
@@ -67,9 +68,7 @@ export default class AwardPunishmentsPage {
     const filteredPunishments = await this.punishmentsService.filteredPunishments(punishments)
 
     const cautionAdded = await this.hasCautionBeenAdded(punishments)
-
-    // Placeholder for when building table...
-    // const rehabActivities = await this.punishmentsService.getRehabActivities(chargeNumber, user)
+    const rehabActivities = await this.punishmentsService.getRehabActivitiesFromSession(req, chargeNumber)
 
     return res.render(`pages/awardPunishments.njk`, {
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
@@ -79,6 +78,8 @@ export default class AwardPunishmentsPage {
       filteredPunishments,
       cautionAdded,
       continueHref,
+      rehabActivities,
+      paybackAndRehabFlag: config.paybackAndRehabFlag === 'true',
     })
   }
 

@@ -108,7 +108,7 @@ export default class PunishmentsService {
     const activities = [] as RehabilitativeActivity[]
     /* eslint-disable-next-line no-plusplus */
     for (let i = 0; i < numberOfActivities; i++) {
-      activities.push({})
+      activities.push({ sessionId: i })
     }
 
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
@@ -149,6 +149,55 @@ export default class PunishmentsService {
     return req.session.punishments[chargeNumber].push(updatedPunishment)
   }
 
+  removeRehabilitativeActivity(req: Request, chargeNumber: string, redisId: string, sessionId: number) {
+    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+    this.deleteSessionPunishments(req, redisId, chargeNumber)
+
+    const updatedRehabActivityList = punishment.rehabilitativeActivities.filter(
+      (ra: RehabilitativeActivity) => ra.sessionId !== sessionId
+    )
+
+    const updatedPunishment = {
+      ...punishment,
+      isThereRehabilitativeActivities: true,
+      hasRehabilitativeActivitiesDetails: true,
+      rehabilitativeActivities: updatedRehabActivityList,
+      currentActivityNumber: sessionId,
+      redisId,
+      id: punishment.id,
+    }
+
+    return req.session.punishments[chargeNumber].push(updatedPunishment)
+  }
+
+  editRehabilitativeActivity(
+    req: Request,
+    chargeNumber: string,
+    redisId: string,
+    sessionId: number,
+    activityDetails: RehabilitativeActivity
+  ) {
+    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+    this.deleteSessionPunishments(req, redisId, chargeNumber)
+
+    const updatedRehabActivityList = [
+      ...punishment.rehabilitativeActivities.filter((ra: RehabilitativeActivity) => ra.sessionId !== sessionId),
+      activityDetails,
+    ]
+
+    const updatedPunishment = {
+      ...punishment,
+      isThereRehabilitativeActivities: true,
+      hasRehabilitativeActivitiesDetails: true,
+      rehabilitativeActivities: updatedRehabActivityList,
+      currentActivityNumber: sessionId,
+      redisId,
+      id: punishment.id,
+    }
+
+    return req.session.punishments[chargeNumber].push(updatedPunishment)
+  }
+
   async deleteSessionPunishments(req: Request, redisId: string, chargeNumber: string) {
     // get an array of the redisIds
     const redisIdArray = req.session.punishments?.[chargeNumber].map((punishment: PunishmentData) => punishment.redisId)
@@ -184,9 +233,14 @@ export default class PunishmentsService {
           hasRehabilitativeActivitiesDetails = punishment.rehabilitativeActivities.some(ra => ra.details !== null)
         }
       }
+      const sessionId = 0
+      const rehabilitativeActivities = punishment.rehabilitativeActivities.map(ra => {
+        return { ...ra, sessionId }
+      })
 
       return {
         ...punishment,
+        rehabilitativeActivities,
         isThereRehabilitativeActivities,
         hasRehabilitativeActivitiesDetails,
         redisId: uuidv4(),
@@ -413,25 +467,33 @@ export default class PunishmentsService {
     return punishments.map((punishment: PunishmentData) => punishment.rehabilitativeActivities).flat()
   }
 
-  async getRehabActivity(chargeNumber: string, rehabActivityId: number, user: User): Promise<RehabilitativeActivity> {
-    const rehabActivities = await this.getRehabActivities(chargeNumber, user)
-    return rehabActivities.filter(rehabAct => rehabAct.id === rehabActivityId)[0]
+  async getRehabActivitiesFromSession(req: Request, chargeNumber: string): Promise<RehabilitativeActivity[]> {
+    const activities: RehabilitativeActivity[] = []
+    const punishments = await this.getAllSessionPunishments(req, chargeNumber)
+    punishments?.forEach((p: PunishmentData) => {
+      p.rehabilitativeActivities?.forEach((ra: RehabilitativeActivity) => {
+        activities.push({
+          ...ra,
+          changeUrl: adjudicationUrls.editRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
+          removeUrl: adjudicationUrls.removeRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
+          canChangeOrRemove: p.rehabilitativeActivitiesCompleted === null,
+          suspendedPunishment: p.type,
+        })
+      })
+    })
+    return activities
   }
 
-  async removeRehabilitativeActivity(
+  async getRehabActivity(
+    req: Request,
     chargeNumber: string,
-    id: number,
-    user: User
-  ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsUserTokensClient(user).deleteRehabilitativeActivity(chargeNumber, id)
-  }
+    redisId: string,
+    sessionId: number
+  ): Promise<RehabilitativeActivity> {
+    const sessionPunishment = this.getSessionPunishment(req, chargeNumber, redisId)
 
-  async editRehabilitativeActivity(
-    chargeNumber: string,
-    id: number,
-    rehabActivity: RehabilitativeActivity,
-    user: User
-  ): Promise<ReportedAdjudicationResult> {
-    return new ManageAdjudicationsUserTokensClient(user).editRehabilitativeActivity(chargeNumber, id, rehabActivity)
+    return sessionPunishment.rehabilitativeActivities.filter(
+      (ra: RehabilitativeActivity) => ra.sessionId === sessionId
+    )[0]
   }
 }

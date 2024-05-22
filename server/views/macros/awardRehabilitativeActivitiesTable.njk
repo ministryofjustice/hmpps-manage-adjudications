@@ -1,0 +1,65 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro awardRehabilitativeActivitiesTable(rehabActivities) %}
+  {% set rows = [] %}
+  {% for data in rehabActivities %}
+
+   {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+data.changeUrl+'" data-qa="edit-activity" class="govuk-link">Change <span class="govuk-visually-hidden"></span></a></p>' %}
+   {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+data.removeUrl+'" data-qa="delete-activity" class="govuk-link">Remove <span class="govuk-visually-hidden"></span></a></p>' %}
+
+  
+    {% set rows = (rows.push(
+      [
+          {
+            html: data.suspendedPunishment,
+            classes: "columnWidth15"
+          },
+          {
+            text: data.activityDetails,
+            classes: "columnWidth30"
+          },
+          {
+            text: "todo",
+            classes: "columnWidth30"
+          },
+          {
+            text:  data.monitor,
+            classes: "columnWidth30"
+          },
+          {
+            html: changeColumnValue if data.canChangeOrRemove  else '',
+            classes: "columnWidth12"
+          },
+          {
+            html: removeColumnValue if data.canChangeOrRemove  else '',
+            classes: "columnWidth12"
+          }
+      ]
+    ), rows) %}
+  {% endfor %}
+
+        {{ govukTable({
+        head: [
+          {
+            text: "Suspended punishment"
+          },
+          {
+            text: "Activity details"
+          },
+          {
+            text: "End date and number of sessions"
+          },
+          {
+            text: "Who is monitoring the prisoner"
+          },
+          {
+            text: null
+          },
+          {
+            text: null
+          }
+        ],
+        rows: rows,
+        attributes: {"data-qa": "rehabilitative-activities-table"}
+      }) }}
+{% endmacro %}
