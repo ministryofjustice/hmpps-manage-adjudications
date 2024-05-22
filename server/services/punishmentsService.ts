@@ -476,7 +476,7 @@ export default class PunishmentsService {
           ...ra,
           changeUrl: adjudicationUrls.editRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
           removeUrl: adjudicationUrls.removeRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
-          canChangeOrRemove: true, // will update this with the punishment rehab completed flag.
+          canChangeOrRemove: p.rehabilitativeActivitiesCompleted === null,
           suspendedPunishment: p.type,
         })
       })
