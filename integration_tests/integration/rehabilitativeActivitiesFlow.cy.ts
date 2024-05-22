@@ -70,6 +70,36 @@ context.skip('Add a rehabilitative activity', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 102,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '102',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+          punishments: [
+            {
+              id: 14,
+              type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [{}],
+              canEdit: true,
+              rehabilitativeActivitiesCompleted: false,
+              schedule: {
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2024-11-23',
+              },
+            },
+          ],
+        }),
+      },
+    })
     cy.task('stubCreatePunishments', {
       chargeNumber: 100,
       response: {
@@ -154,6 +184,13 @@ context.skip('Add a rehabilitative activity', () => {
           expect($summaryData.get(4).innerText).to.contain('- with a rehabilitative activity condition')
         })
 
+      awardPunishmentsPage
+        .activitiesTable()
+        .find('tr')
+        .then(row => {
+          expect(row.length).to.eq(11)
+        })
+
       awardPunishmentsPage.editPunishment().first().click()
       punishmentPage.submitButton().click()
       numberOfDaysPage.submitButton().click()
@@ -167,8 +204,13 @@ context.skip('Add a rehabilitative activity', () => {
       awardPunishmentsPage.removeActivity().first().click()
       const removeActivityPage = Page.verifyOnPage(RemoveActivityPage)
       removeActivityPage.submitButton().click()
-      // TODO need to check table is now empty.  also need validation i think, ie perhaps you cant delete the last one.
-      // server will sort it out anyway.  ie set it to no conditions.
+
+      awardPunishmentsPage
+        .activitiesTable()
+        .find('tr')
+        .then(row => {
+          expect(row.length).to.eq(10)
+        })
     })
     it('adds a rehab activity with information available - one activity', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
@@ -287,7 +329,6 @@ context.skip('Add a rehabilitative activity', () => {
           expect($summaryData.get(4).innerText).to.contain('10 Oct 2030 - with a rehabilitative activity condition')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
-      // now grab the other taable.  remove one.  edit one.  see that it works.
       awardedPunishments.removeActivity().first().click()
       const removeActivityPage = Page.verifyOnPage(RemoveActivityPage)
       removeActivityPage.submitButton().click()
@@ -295,7 +336,7 @@ context.skip('Add a rehabilitative activity', () => {
         .activitiesTable()
         .find('td')
         .then($summaryData => {
-          expect($summaryData.get(3).innerText).to.contain('Tania Jones')
+          expect($summaryData.get(3).innerText).to.contain('T. Jones')
         })
       awardedPunishments.changeActivity().first().click()
       const activityDetailsEdit = Page.verifyOnPage(RehabilitativeActivityDetailsPage)
@@ -306,7 +347,7 @@ context.skip('Add a rehabilitative activity', () => {
         .activitiesTable()
         .find('td')
         .then($summaryData => {
-          expect($summaryData.get(3).innerText).to.contain('Obi One')
+          expect($summaryData.get(3).innerText).to.contain('O. One')
         })
     })
     describe('Edit mode and session population', () => {
@@ -337,6 +378,18 @@ context.skip('Add a rehabilitative activity', () => {
 
         hasPage.detailsChoice().find('input[value="NO"]').should('not.be.checked')
         hasPage.detailsChoice().find('input[value="YES"]').should('not.be.checked')
+      })
+      it('change and remove links should be disabled if the condition has a completed value set', () => {
+        cy.visit(adjudicationUrls.awardPunishments.urls.start('102'))
+        const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+
+        awardPunishmentsPage
+          .activitiesTable()
+          .find('td')
+          .then($summaryData => {
+            expect($summaryData.get(4).innerText).to.contain('')
+            expect($summaryData.get(5).innerText).to.contain('')
+          })
       })
     })
   })

@@ -273,6 +273,8 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     canRemove,
     canEdit,
     rehabilitativeActivities,
+    rehabilitativeActivitiesCompleted,
+    rehabilitativeActivitiesNotCompletedOutcome,
   } = punishment
   const { duration, measurement, startDate, endDate, suspendedUntil } = schedule
   return {
@@ -294,6 +296,8 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     ...(consecutiveReportAvailable && { consecutiveReportAvailable }),
     ...(damagesOwedAmount && { damagesOwedAmount }),
     rehabilitativeActivities,
+    rehabilitativeActivitiesCompleted,
+    rehabilitativeActivitiesNotCompletedOutcome,
   }
 }
 
