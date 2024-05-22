@@ -28,7 +28,8 @@
         {% endif %}
         {{ awardPunishmentsTable(filteredPunishments.otherPunishments, redirectAfterRemoveUrl, chargeNumber, false, false) }}
         {% if paybackAndRehabFlag and rehabActivities | length %}
-          {{ awardRehabilitativeActivitiesTable(rehabActivities) }} 
+         <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
+         {{ awardRehabilitativeActivitiesTable(rehabActivities) }} 
         {% endif %}
       {% else %}
         <p class="govuk-body">There are currently no punishments or damages for this adjudication. You can activate <br>existing suspended punishments and add new punishments.</p>
