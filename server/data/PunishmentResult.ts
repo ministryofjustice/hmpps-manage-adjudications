@@ -105,11 +105,15 @@ export type RehabilitativeActivity = {
   endDate?: string
   changeUrl?: string
   removeUrl?: string
+  completeUrl?: string
   canChangeOrRemove?: boolean
   type?: PunishmentType
   privilegeType?: PrivilegeType
   otherPrivilege?: string
   stoppagePercentage?: number
+  rehabilitativeActivitiesCompleted?: boolean
+  multipleActivitiesNotFirst?: boolean
+  multipleActivitiesNotLast?: boolean
 }
 
 export interface PunishmentWithConvertedName extends PunishmentData {

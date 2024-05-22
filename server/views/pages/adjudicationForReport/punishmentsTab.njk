@@ -7,7 +7,8 @@
 {% from "../../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
 {% from "../../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
 {% from "../../macros/punishmentCommentTable.njk" import punishmentCommentTable %}
-{% from "../../macros/transferBanner.njk" import transferBanner%}
+{% from "../../macros/transferBanner.njk" import transferBanner %}
+{% from "../../macros/rehabActivityConditionsCompletedTable.njk" import rehabActivityConditionsCompletedTable %}
 
 {% set title = 'Punishments and damages' %}
 
@@ -114,6 +115,10 @@
       </div>
 
     </div>
+  {% endif %}
+
+  {% if paybackAndRehabFlag and rehabActivities | length %}
+    {{ rehabActivityConditionsCompletedTable(rehabActivities) }} 
   {% endif %}
 
 {% endblock %}

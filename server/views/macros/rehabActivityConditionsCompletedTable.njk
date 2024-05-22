@@ -1,0 +1,65 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro rehabActivityConditionsCompletedTable(rehabActivities) %}
+  {% set rows = [] %}
+  {% for data in rehabActivities %}
+
+    {% set completeLink = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+data.completeUrl+'" data-qa="completed-activity" class="govuk-link">Enter if the activity was completed satisfactorily <span class="govuk-visually-hidden"></span></a></p>' %}
+
+      {% if data.multipleActivitiesNotFirst %}
+          {# should be empty here #}
+          {% set finalColumnContent = '' %} 
+      {% elif data.rehabilitativeActivitiesCompleted %}
+          {# TODO: do some conversion in njk set up with this data and NotCompletedOutcome when the flow is set up #}
+          {% set finalColumnContent = data.rehabilitativeActivitiesCompleted %}
+      {% else %}
+        {% set finalColumnContent = completeLink %}
+      {% endif %}
+
+    {% set rows = (rows.push([
+      {
+        html: '' if data.multipleActivitiesNotFirst else 
+          data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege),
+          classes: "columnWidth20 noBottomBorder" if data.multipleActivitiesNotLast else 
+            "columnWidth20"
+      }, {
+        text: data.details,
+        classes: "columnWidth20 noBottomBorder" if data.multipleActivitiesNotLast else 
+          "columnWidth20"
+      }, {
+        text: data.endDate | endDateSessionNumberText(data.totalSessions),
+        classes: "columnWidth20 noBottomBorder" if data.multipleActivitiesNotLast else 
+          "columnWidth20"
+      }, {
+        text: data.monitor | initialiseName,
+        classes: "columnWidth17 noBottomBorder" if data.multipleActivitiesNotLast else 
+          "columnWidth17"
+      }, {
+        html: finalColumnContent,
+          classes: "columnWidth20 noBottomBorder" if data.multipleActivitiesNotLast
+      }
+    ]), rows) %}
+  {% endfor %}
+  <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
+  {{ govukTable({
+        head: [
+          {
+            html: "Suspended <br>punishment"
+          },
+          {
+            html: "Activity <br>details"
+          },
+          {
+            html: "End date and <br>number of sessions"
+          },
+          {
+            text: "Who is monitoring the prisoner"
+          },
+          {
+            text: null
+          }
+        ],
+        rows: rows,
+        attributes: {"data-qa": "rehabilitative-activities-table"}
+      }) }}
+{% endmacro %}
