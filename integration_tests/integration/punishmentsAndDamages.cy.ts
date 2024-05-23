@@ -9,7 +9,12 @@ import {
   QuashGuiltyFindingReason,
 } from '../../server/data/HearingAndOutcomeResult'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
-import { PrivilegeType, PunishmentMeasurement, PunishmentType } from '../../server/data/PunishmentResult'
+import {
+  NotCompletedOutcome,
+  PrivilegeType,
+  PunishmentMeasurement,
+  PunishmentType,
+} from '../../server/data/PunishmentResult'
 
 const testData = new TestData()
 context('Damages and punishments summary', () => {
@@ -426,6 +431,8 @@ context('Damages and punishments summary', () => {
               },
               canRemove: true,
               canEdit: false,
+              rehabilitativeActivitiesCompleted: undefined,
+              rehabilitativeActivitiesNotCompletedOutcome: undefined,
               rehabilitativeActivities: [
                 {
                   id: 40,
@@ -451,12 +458,35 @@ context('Damages and punishments summary', () => {
               },
               canRemove: true,
               canEdit: false,
+              rehabilitativeActivitiesCompleted: true,
+              rehabilitativeActivitiesNotCompletedOutcome: undefined,
               rehabilitativeActivities: [
                 {
                   id: 42,
-                  details: 'Activity #1',
+                  details: 'Activity #3',
                   monitor: 'Jessica Jones',
                   endDate: '2024-05-31',
+                },
+              ],
+            },
+            {
+              id: 1841852,
+              type: PunishmentType.EXTRA_WORK,
+              schedule: {
+                duration: 1,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2025-05-28',
+              },
+              canRemove: true,
+              canEdit: false,
+              rehabilitativeActivitiesCompleted: false,
+              rehabilitativeActivitiesNotCompletedOutcome: NotCompletedOutcome.NO_ACTION,
+              rehabilitativeActivities: [
+                {
+                  id: 42,
+                  details: 'Activity #4',
+                  monitor: 'Jessica Jones',
+                  endDate: '2024-05-17',
                 },
               ],
             },
@@ -606,10 +636,15 @@ context('Damages and punishments summary', () => {
           expect($data.get(8).innerText).to.contains('T. Smith')
           expect($data.get(9).innerText).to.contains('')
           expect($data.get(10).innerText).to.contains('Cellular confinement')
-          expect($data.get(11).innerText).to.contains('Activity #1')
+          expect($data.get(11).innerText).to.contains('Activity #3')
           expect($data.get(12).innerText).to.contains('31 May 2024')
           expect($data.get(13).innerText).to.contains('J. Jones')
-          expect($data.get(14).innerText).to.contains('Enter if the activity was completed satisfactorily')
+          expect($data.get(14).innerText).to.contains('Yes')
+          expect($data.get(15).innerText).to.contains('Extra work')
+          expect($data.get(16).innerText).to.contains('Activity #4')
+          expect($data.get(17).innerText).to.contains('17 May 2024')
+          expect($data.get(18).innerText).to.contains('J. Jones')
+          expect($data.get(19).innerText).to.contains('No - no further action')
         })
     })
   })

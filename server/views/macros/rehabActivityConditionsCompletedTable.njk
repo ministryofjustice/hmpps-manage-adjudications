@@ -6,15 +6,25 @@
 
     {% set completeLink = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+data.completeUrl+'" data-qa="completed-activity" class="govuk-link">Enter if the activity was completed satisfactorily <span class="govuk-visually-hidden"></span></a></p>' %}
 
+    {% if data.rehabilitativeActivitiesCompleted === true %}
       {% if data.multipleActivitiesNotFirst %}
-          {# should be empty here #}
-          {% set finalColumnContent = '' %} 
-      {% elif data.rehabilitativeActivitiesCompleted %}
-          {# TODO: do some conversion in njk set up with this data and NotCompletedOutcome when the flow is set up #}
-          {% set finalColumnContent = data.rehabilitativeActivitiesCompleted %}
-      {% elif not readOnly %}
+        {% set finalColumnContent = '' %}
+      {% else %}
+        {% set finalColumnContent = 'Yes' %}
+      {% endif %}
+    {% elif data.rehabilitativeActivitiesCompleted === false %}
+      {% if data.multipleActivitiesNotFirst %}
+        {% set finalColumnContent = '' %}
+      {% else %}
+        {% set finalColumnContent = data.rehabilitativeActivitiesNotCompletedOutcome | convertNotCompletedOutcome %}
+      {% endif %}
+    {% else %}
+      {% if data.multipleActivitiesNotFirst or readOnly %}
+        {% set finalColumnContent = '' %}
+      {% else %}
         {% set finalColumnContent = completeLink %}
       {% endif %}
+    {% endif %}
 
     {% set rows = (rows.push([
       {
@@ -23,20 +33,20 @@
           classes: "columnWidth20 noBottomBorder" if data.multipleActivitiesNotLast else 
             "columnWidth20"
       }, {
-        text: data.details,
+        text: data.details or 'Not entered',
         classes: "columnWidth20 noBottomBorder" if data.multipleActivitiesNotLast else 
           "columnWidth20"
       }, {
-        text: data.endDate | endDateSessionNumberText(data.totalSessions),
+        text: data.endDate | endDateSessionNumberText(data.totalSessions)or 'Not entered',
         classes: "columnWidth20 noBottomBorder" if data.multipleActivitiesNotLast else 
           "columnWidth20"
       }, {
-        text: data.monitor | initialiseName,
+        text: data.monitor | initialiseName or 'Not entered',
         classes: "columnWidth17 noBottomBorder" if data.multipleActivitiesNotLast else 
           "columnWidth17"
       }, {
         html: finalColumnContent,
-          classes: "columnWidth20 noBottomBorder" if data.multipleActivitiesNotLast
+        classes: "columnWidth20 noBottomBorder" if data.multipleActivitiesNotLast
       }
     ]), rows) %}
   {% endfor %}
@@ -55,7 +65,7 @@
             text: "Who is monitoring the prisoner"
           },
           {
-            text: null
+            text: "Completed satisfactorily"
           }
         ],
         rows: rows,

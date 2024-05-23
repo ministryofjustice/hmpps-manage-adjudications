@@ -38,10 +38,10 @@ export enum PunishmentMeasurement {
 }
 
 export enum NotCompletedOutcome {
-  FULL_ACTIVATE,
-  PARTIAL_ACTIVATE,
-  EXT_SUSPEND,
-  NO_ACTION,
+  FULL_ACTIVATE = 'FULL_ACTIVATE',
+  PARTIAL_ACTIVATE = 'PARTIAL_ACTIVATE',
+  EXT_SUSPEND = 'EXT_SUSPEND',
+  NO_ACTION = 'NO_ACTION',
 }
 
 export type PunishmentData = {
@@ -112,6 +112,7 @@ export type RehabilitativeActivity = {
   otherPrivilege?: string
   stoppagePercentage?: number
   rehabilitativeActivitiesCompleted?: boolean
+  rehabilitativeActivitiesNotCompletedOutcome?: NotCompletedOutcome
   multipleActivitiesNotFirst?: boolean
   multipleActivitiesNotLast?: boolean
 }
@@ -219,6 +220,21 @@ export function convertPrivilegeDTypeDescriptionForDIS7Suspended(privilege: Priv
       return 'Your TV would be removed from your cell.'
     case PrivilegeType.GYM:
       return "You would lose the extra gym access you had under the prison incentives scheme. You'd still be able to exercise."
+    default:
+      return null
+  }
+}
+
+export function convertNotCompletedOutcome(notCompletedOutcome: NotCompletedOutcome) {
+  switch (notCompletedOutcome) {
+    case NotCompletedOutcome.EXT_SUSPEND:
+      return 'No - suspension end date extended'
+    case NotCompletedOutcome.FULL_ACTIVATE:
+      return 'No - suspended punishment activated'
+    case NotCompletedOutcome.NO_ACTION:
+      return 'No - no further action'
+    case NotCompletedOutcome.PARTIAL_ACTIVATE:
+      return 'No - part of the suspended punishment activated'
     default:
       return null
   }

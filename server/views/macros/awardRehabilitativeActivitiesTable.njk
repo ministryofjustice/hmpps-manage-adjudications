@@ -15,15 +15,15 @@
             classes: "columnWidth20"
           },
           {
-            text: data.details,
+            text: data.details or 'Not entered',
             classes: "columnWidth30"
           },
           {
-            text: data.endDate | endDateSessionNumberText(data.totalSessions),
+            text: data.endDate | endDateSessionNumberText(data.totalSessions) or 'Not entered',
             classes: "columnWidth20"
           },
           {
-            text:  data.monitor | initialiseName,
+            text:  data.monitor | initialiseName or 'Not entered',
             classes: "columnWidth17"
           },
           {

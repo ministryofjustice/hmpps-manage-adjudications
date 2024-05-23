@@ -476,7 +476,6 @@ export default class PunishmentsService {
     const activities: RehabilitativeActivity[] = []
     punishments?.forEach((p: PunishmentData) => {
       p.rehabilitativeActivities?.forEach((ra: RehabilitativeActivity, i: number) => {
-        console.log(ra)
         activities.push({
           ...ra,
           changeUrl: adjudicationUrls.editRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
@@ -484,6 +483,7 @@ export default class PunishmentsService {
           completeUrl: 'TODO',
           canChangeOrRemove: p.rehabilitativeActivitiesCompleted === undefined,
           rehabilitativeActivitiesCompleted: p.rehabilitativeActivitiesCompleted,
+          rehabilitativeActivitiesNotCompletedOutcome: p.rehabilitativeActivitiesNotCompletedOutcome,
           type: p.type,
           stoppagePercentage: p.stoppagePercentage,
           privilegeType: p.privilegeType,

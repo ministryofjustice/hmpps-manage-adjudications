@@ -31,6 +31,7 @@ import {
   ReferGovReason,
 } from '../data/HearingAndOutcomeResult'
 import {
+  convertNotCompletedOutcome,
   convertPrivilegeDTypeDescriptionForDIS7,
   convertPrivilegeDTypeDescriptionForDIS7Suspended,
   convertPrivilegeTypeForDIS7,
@@ -519,6 +520,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('reportedAdjudicationStatusDisplayName', reportedAdjudicationStatusDisplayName)
   njkEnv.addFilter('convertPunishmentType', convertPunishmentType)
   njkEnv.addFilter('toUpperCase', (input: string) => input.replace(/\b\w/g, match => match.toUpperCase()))
+  njkEnv.addFilter('convertNotCompletedOutcome', convertNotCompletedOutcome)
   njkEnv.addGlobal('IssueStatus', IssueStatus)
   njkEnv.addGlobal('OicHearingType', OicHearingType)
   njkEnv.addGlobal('ReportedAdjudicationStatus', ReportedAdjudicationStatus)
