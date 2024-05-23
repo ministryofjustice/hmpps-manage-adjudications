@@ -62,6 +62,7 @@ export default class HasRehabilitativeActivitiesDetailsPage {
       })
 
     if (hasRehabilitativeActivitiesDetails === 'YES') {
+      await this.punishmentsService.removeAnyRehabilitativeActivities(req, chargeNumber, redisId)
       const redirectUrl = adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId)
       const currentActivityNumber = '1'
       return res.redirect(
