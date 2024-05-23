@@ -23,7 +23,7 @@ export default class CompleteRehabilitativeActivityPage {
     const { prisonerName, activities, completed, error } = pageData
 
     return res.render(`pages/completeRehabilitativeActivity.njk`, {
-      cancelLinkURL: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
+      cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
       prisonerName,
       activities,
       completed,

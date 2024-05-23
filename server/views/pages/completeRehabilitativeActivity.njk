@@ -4,6 +4,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set title = "Confirm if the activity was completed" %}
 {% block pageTitle %}
@@ -12,7 +13,6 @@
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
-
 
 {% set items = [
     {
@@ -26,6 +26,28 @@
         checked: completed === 'NO'
     }
 ] %}
+
+    {% set rows = [] %}
+{% for activity in activities %}
+    {% set rows = (rows.push(
+      {
+        key: {
+          text: "Activity details"
+        },
+        value: {
+          text: activity.details
+        }
+      },
+      {
+        key: {
+          text: "End date and number of sessions"
+        },
+        value: {
+          text: activity.endDate | endDateSessionNumberText(activity.totalSessions) or 'Not entered'
+        }
+      }
+    ), rows) %}
+{% endfor %}
 
 
 {% block content %}
@@ -42,21 +64,27 @@
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
+          {{ govukSummaryList({
+            rows: rows,
+            classes: classes,
+            attributes: attributes
+          }) }}
+
         {{ govukRadios({
-    idPrefix: 'completed',
-    id: 'completed',
-    name: 'completed',
-    attributes: { "data-qa": "completed-radios" },
-    errorMessage: "completed" | findError(errors),
-    items: items,
-    fieldset: {
-    legend: {
-      text: "Did "+ prisonerName | safe +" complete the activity?",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  }
- }) }}
+          idPrefix: 'completed',
+          id: 'completed',
+          name: 'completed',
+          attributes: { "data-qa": "completed-radios" },
+          errorMessage: "completed" | findError(errors),
+          items: items,
+          fieldset: {
+          legend: {
+            text: "Did "+ prisonerName | safe +" complete the activity?",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--m"
+          }
+        }
+      }) }}
       
       <div class="govuk-button-group">
         {{ govukButton({
