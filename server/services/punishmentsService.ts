@@ -530,7 +530,7 @@ export default class PunishmentsService {
           ...ra,
           changeUrl: adjudicationUrls.editRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
           removeUrl: adjudicationUrls.removeRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
-          completeUrl: 'TODO',
+          completeUrl: adjudicationUrls.completeRehabilitativeActivity.urls.start(chargeNumber, p.id),
           canChangeOrRemove: p.rehabilitativeActivitiesCompleted === undefined,
           rehabilitativeActivitiesCompleted: p.rehabilitativeActivitiesCompleted,
           rehabilitativeActivitiesNotCompletedOutcome: p.rehabilitativeActivitiesNotCompletedOutcome,

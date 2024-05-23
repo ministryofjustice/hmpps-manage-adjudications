@@ -878,8 +878,8 @@ const adjudicationUrls = {
       start: '/:chargeNumber/:id',
     },
     urls: {
-      start: (chargeNumber: string, id: number) =>
-        `${adjudicationUrls.completeRehabilitativeActivity.root}/${chargeNumber}/${id}`,
+      start: (chargeNumber: string, punishmentId: number) =>
+        `${adjudicationUrls.completeRehabilitativeActivity.root}/${chargeNumber}/${punishmentId}`,
     },
   },
   whenWillPunishmentStart: {
