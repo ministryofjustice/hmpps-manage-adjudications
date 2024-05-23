@@ -43,7 +43,8 @@ export default class Dis5Pdf {
       {
         filename: `adjudication-history-for-current-sentence-${chargeNumber}.pdf`,
         pdfMargins,
-      }
+      },
+      config.paybackAndRehabFlag === 'true'
     )
   }
 }

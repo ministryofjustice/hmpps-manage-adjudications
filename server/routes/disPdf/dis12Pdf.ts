@@ -45,6 +45,7 @@ export default class Dis12Pdf {
       offences,
       nextHearingDateTime
     )
+
     res.renderPdf(
       `pages/noticeOfBeingPlacedOnReport`,
       { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
@@ -55,7 +56,8 @@ export default class Dis12Pdf {
       {
         filename: `notice-of-being-placed-on-report-${chargeNumber}.pdf`,
         pdfMargins,
-      }
+      },
+      config.paybackAndRehabFlag === 'true'
     )
   }
 }

@@ -28,7 +28,8 @@ export default class Dis4Pdf {
       {
         filename: `adjudication-hearing-continuation-${chargeNumber}.pdf`,
         pdfMargins,
-      }
+      },
+      config.paybackAndRehabFlag === 'true'
     )
   }
 }

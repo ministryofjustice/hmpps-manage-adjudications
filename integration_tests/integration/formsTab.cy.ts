@@ -139,7 +139,7 @@ context('Navigated to forms tab', () => {
       formsTabPage
         .printLink('DIS3-type')
         .should('have.attr', 'href')
-        .and('include', `/assets/pdf/DIS%203%20-%20input%20version.pdf`)
+        .and('include', `/assets/pdf/v1/DIS%203%20-%20input%20version.pdf`)
       formsTabPage
         .printLink('DIS4-auto')
         .should('have.attr', 'href')
@@ -147,7 +147,7 @@ context('Navigated to forms tab', () => {
       formsTabPage
         .printLink('DIS4-type')
         .should('have.attr', 'href')
-        .and('include', `/assets/pdf/DIS%204%20-%20input.pdf`)
+        .and('include', `/assets/pdf/v1/DIS%204%20-%20input.pdf`)
       formsTabPage
         .printLink('DIS5')
         .should('have.attr', 'href')
@@ -159,7 +159,7 @@ context('Navigated to forms tab', () => {
       formsTabPage
         .printLink('DIS6-type')
         .should('have.attr', 'href')
-        .and('include', `/assets/pdf/DIS%206%20-%20input.pdf`)
+        .and('include', `/assets/pdf/v1/DIS%206%20-%20input.pdf`)
       formsTabPage
         .printLink('DIS7-blank')
         .should('have.attr', 'href')
