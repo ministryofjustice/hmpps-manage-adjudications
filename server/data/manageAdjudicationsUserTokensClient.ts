@@ -20,6 +20,7 @@ import {
   ReferGovReason,
 } from './HearingAndOutcomeResult'
 import {
+  NotCompletedOutcome,
   PunishmentData,
   PunishmentDataWithSchedule,
   PunishmentReasonForChange,
@@ -382,6 +383,20 @@ export default class ManageAdjudicationsUserTokensClient {
   ): Promise<ConsecutiveAdditionalDaysReport[]> {
     return this.restClient.get({
       path: `/reported-adjudications/punishments/${prisonerNumber}/for-consecutive?type=${punishmentType}&chargeNumber=${chargeNumber}`,
+    })
+  }
+
+  async completeRehabilitativeActivity(
+    chargeNumber: string,
+    punishmentId: number,
+    completed: boolean,
+    outcome?: NotCompletedOutcome,
+    daysToActivate?: number,
+    suspendedUntil?: string
+  ): Promise<ReportedAdjudicationResult> {
+    return this.restClient.post({
+      path: `/reported-adjudications/${chargeNumber}/punishments/${punishmentId}/complete-rehabilitative-activity`,
+      data: { completed, outcome, daysToActivate, suspendedUntil },
     })
   }
 }

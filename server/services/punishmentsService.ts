@@ -4,6 +4,7 @@ import { Request } from 'express'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import {
   ActivePunishment,
+  NotCompletedOutcome,
   PunishmentComment,
   PunishmentData,
   PunishmentDataWithSchedule,
@@ -32,6 +33,13 @@ import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUser
 
 export interface SuspendedPunishmentDetailsWithStatus extends SuspendedPunishmentDetails {
   status: ReportedAdjudicationStatus
+}
+
+export interface ActivityDetails {
+  prisonerName: string
+  completed?: string
+  outcome?: NotCompletedOutcome
+  activities: RehabilitativeActivity[]
 }
 
 export default class PunishmentsService {
@@ -311,6 +319,48 @@ export default class PunishmentsService {
       suspendedPunishments,
       status: reportedAdjudication.status,
     }
+  }
+
+  async getRehabilitativeActivitiesCompletionDetails(
+    chargeNumber: string,
+    punishmentId: number,
+    user: User
+  ): Promise<ActivityDetails> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
+    const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
+    const punishment = reportedAdjudication.punishments?.filter(p => p.id === punishmentId)[0]
+    let completed: string = null
+    if (punishment.rehabilitativeActivitiesCompleted === true) {
+      completed = 'YES'
+    } else if (punishment.rehabilitativeActivitiesCompleted === false) {
+      completed = 'NO'
+    }
+    return {
+      prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
+      activities: punishment.rehabilitativeActivities,
+      completed,
+      outcome: punishment.rehabilitativeActivitiesNotCompletedOutcome,
+    }
+  }
+
+  async completeRehbailitativeActivity(
+    chargeNumber: string,
+    punishmentId: number,
+    completed: boolean,
+    user: User,
+    outcome?: NotCompletedOutcome,
+    daysToActivate?: number,
+    suspendedUntil?: string
+  ) {
+    new ManageAdjudicationsUserTokensClient(user).completeRehabilitativeActivity(
+      chargeNumber,
+      punishmentId,
+      completed,
+      outcome,
+      daysToActivate,
+      suspendedUntil
+    )
   }
 
   async getSuspendedPunishment(

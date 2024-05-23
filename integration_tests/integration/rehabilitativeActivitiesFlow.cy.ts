@@ -14,6 +14,7 @@ import RehabilitativeActivityDetailsPage from '../pages/rehabilitativeActivityDe
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import RemoveActivityPage from '../pages/removeActivityPage'
+import CompleteRehabilitativeActivity from '../pages/ completeRehabilitativeActivity'
 
 const testData = new TestData()
 context.skip('Add a rehabilitative activity', () => {
@@ -24,6 +25,14 @@ context.skip('Add a rehabilitative activity', () => {
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
       response: testData.userFromUsername(),
+    })
+    cy.task('stubGetPrisonerDetails', {
+      prisonerNumber: 'G6123VU',
+      response: testData.prisonerResultSummary({
+        offenderNo: 'G6123VU',
+        firstName: 'JOHN',
+        lastName: 'SMITH',
+      }),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 100,
@@ -70,6 +79,95 @@ context.skip('Add a rehabilitative activity', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 102,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '102',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+          punishments: [
+            {
+              id: 14,
+              type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [{}],
+              canEdit: true,
+              rehabilitativeActivitiesCompleted: false,
+              schedule: {
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2024-11-23',
+              },
+            },
+          ],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 110,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '110',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+          punishments: [
+            {
+              id: 1,
+              type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [{ details: 'details' }],
+              canEdit: true,
+              schedule: {
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2024-11-23',
+              },
+            },
+          ],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 111,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '111',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+          punishments: [
+            {
+              id: 1,
+              type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [{ details: 'details' }],
+              canEdit: true,
+              rehabilitativeActivitiesCompleted: true,
+              schedule: {
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2024-11-23',
+              },
+            },
+          ],
+        }),
+      },
+    })
     cy.task('stubCreatePunishments', {
       chargeNumber: 100,
       response: {
@@ -104,6 +202,19 @@ context.skip('Add a rehabilitative activity', () => {
     cy.signIn()
   })
   describe('Add a rehabilitative activity with no information', () => {
+    it('stub to avoid merge conflict', () => {
+      cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('110', 1))
+
+      const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
+      completeActivityPage.submitButton().click()
+      completeActivityPage.errorSummary().contains('Select yes if John Smith completed the activity')
+    })
+    it('stub to avoid merge conflict - edit mode', () => {
+      cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('111', 1))
+
+      const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
+      completeActivityPage.completedChoice().find('input[value="YES"]').should('be.checked')
+    })
     it('should ask the user if a condition is associated', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
@@ -154,6 +265,13 @@ context.skip('Add a rehabilitative activity', () => {
           expect($summaryData.get(4).innerText).to.contain('- with a rehabilitative activity condition')
         })
 
+      awardPunishmentsPage
+        .activitiesTable()
+        .find('tr')
+        .then(row => {
+          expect(row.length).to.eq(11)
+        })
+
       awardPunishmentsPage.editPunishment().first().click()
       punishmentPage.submitButton().click()
       numberOfDaysPage.submitButton().click()
@@ -167,8 +285,13 @@ context.skip('Add a rehabilitative activity', () => {
       awardPunishmentsPage.removeActivity().first().click()
       const removeActivityPage = Page.verifyOnPage(RemoveActivityPage)
       removeActivityPage.submitButton().click()
-      // TODO need to check table is now empty.  also need validation i think, ie perhaps you cant delete the last one.
-      // server will sort it out anyway.  ie set it to no conditions.
+
+      awardPunishmentsPage
+        .activitiesTable()
+        .find('tr')
+        .then(row => {
+          expect(row.length).to.eq(10)
+        })
     })
     it('adds a rehab activity with information available - one activity', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
@@ -287,7 +410,6 @@ context.skip('Add a rehabilitative activity', () => {
           expect($summaryData.get(4).innerText).to.contain('10 Oct 2030 - with a rehabilitative activity condition')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
-      // now grab the other taable.  remove one.  edit one.  see that it works.
       awardedPunishments.removeActivity().first().click()
       const removeActivityPage = Page.verifyOnPage(RemoveActivityPage)
       removeActivityPage.submitButton().click()
@@ -295,7 +417,7 @@ context.skip('Add a rehabilitative activity', () => {
         .activitiesTable()
         .find('td')
         .then($summaryData => {
-          expect($summaryData.get(3).innerText).to.contain('Tania Jones')
+          expect($summaryData.get(3).innerText).to.contain('T. Jones')
         })
       awardedPunishments.changeActivity().first().click()
       const activityDetailsEdit = Page.verifyOnPage(RehabilitativeActivityDetailsPage)
@@ -306,7 +428,7 @@ context.skip('Add a rehabilitative activity', () => {
         .activitiesTable()
         .find('td')
         .then($summaryData => {
-          expect($summaryData.get(3).innerText).to.contain('Obi One')
+          expect($summaryData.get(3).innerText).to.contain('O. One')
         })
     })
     describe('Edit mode and session population', () => {
@@ -337,6 +459,18 @@ context.skip('Add a rehabilitative activity', () => {
 
         hasPage.detailsChoice().find('input[value="NO"]').should('not.be.checked')
         hasPage.detailsChoice().find('input[value="YES"]').should('not.be.checked')
+      })
+      it('change and remove links should be disabled if the condition has a completed value set', () => {
+        cy.visit(adjudicationUrls.awardPunishments.urls.start('102'))
+        const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+
+        awardPunishmentsPage
+          .activitiesTable()
+          .find('td')
+          .then($summaryData => {
+            expect($summaryData.get(4).innerText).to.contain('')
+            expect($summaryData.get(5).innerText).to.contain('')
+          })
       })
     })
   })
