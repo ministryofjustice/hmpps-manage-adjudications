@@ -25,7 +25,8 @@ export default class Dis6Pdf {
       {
         filename: `conduct-report-${chargeNumber}.pdf`,
         pdfMargins,
-      }
+      },
+      config.paybackAndRehabFlag === 'true'
     )
   }
 }

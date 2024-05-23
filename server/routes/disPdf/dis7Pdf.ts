@@ -26,7 +26,8 @@ export default class Dis7Pdf {
       {
         filename: `adjudication-result-${chargeNumber}.pdf`,
         pdfMargins,
-      }
+      },
+      config.paybackAndRehabFlag === 'true'
     )
   }
 }
