@@ -512,25 +512,35 @@ export default class PunishmentsService {
     return new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerActiveAdjudications(bookingId)
   }
 
-  async getRehabActivities(chargeNumber: string, user: User): Promise<RehabilitativeActivity[]> {
+  async getRehabActivitiesFromServer(chargeNumber: string, user: User): Promise<RehabilitativeActivity[]> {
     const punishments = await this.getPunishmentsFromServer(chargeNumber, user)
-    return punishments.map((punishment: PunishmentData) => punishment.rehabilitativeActivities).flat()
+    return this.extendRehabActivities(punishments, chargeNumber)
   }
 
   async getRehabActivitiesFromSession(req: Request, chargeNumber: string): Promise<RehabilitativeActivity[]> {
-    const activities: RehabilitativeActivity[] = []
     const punishments = await this.getAllSessionPunishments(req, chargeNumber)
+    return this.extendRehabActivities(punishments, chargeNumber)
+  }
+
+  extendRehabActivities(punishments: PunishmentData[], chargeNumber: string): RehabilitativeActivity[] {
+    const activities: RehabilitativeActivity[] = []
     punishments?.forEach((p: PunishmentData) => {
-      p.rehabilitativeActivities?.forEach((ra: RehabilitativeActivity) => {
+      p.rehabilitativeActivities?.forEach((ra: RehabilitativeActivity, i: number) => {
         activities.push({
           ...ra,
           changeUrl: adjudicationUrls.editRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
           removeUrl: adjudicationUrls.removeRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
+          completeUrl: adjudicationUrls.completeRehabilitativeActivity.urls.start(chargeNumber, p.id),
           canChangeOrRemove: p.rehabilitativeActivitiesCompleted === undefined,
+          rehabilitativeActivitiesCompleted: p.rehabilitativeActivitiesCompleted,
+          rehabilitativeActivitiesNotCompletedOutcome: p.rehabilitativeActivitiesNotCompletedOutcome,
           type: p.type,
           stoppagePercentage: p.stoppagePercentage,
           privilegeType: p.privilegeType,
           otherPrivilege: p.otherPrivilege,
+          multipleActivitiesNotFirst: p.rehabilitativeActivities.length > 1 && i !== 0,
+          multipleActivitiesNotLast:
+            p.rehabilitativeActivities.length > 1 && i !== p.rehabilitativeActivities.length - 1,
         })
       })
     })

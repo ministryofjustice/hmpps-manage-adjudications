@@ -9,7 +9,12 @@ import {
   QuashGuiltyFindingReason,
 } from '../../server/data/HearingAndOutcomeResult'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
-import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
+import {
+  NotCompletedOutcome,
+  PrivilegeType,
+  PunishmentMeasurement,
+  PunishmentType,
+} from '../../server/data/PunishmentResult'
 
 const testData = new TestData()
 context('Damages and punishments summary', () => {
@@ -63,6 +68,7 @@ context('Damages and punishments summary', () => {
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
+              rehabilitativeActivities: [],
             },
             {
               id: 352,
@@ -72,6 +78,7 @@ context('Damages and punishments summary', () => {
               },
               consecutiveChargeNumber: '1525853',
               consecutiveReportAvailable: true,
+              rehabilitativeActivities: [],
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -133,6 +140,7 @@ context('Damages and punishments summary', () => {
               schedule: {
                 duration: 0,
               },
+              rehabilitativeActivities: [],
             },
             {
               id: 2,
@@ -142,6 +150,7 @@ context('Damages and punishments summary', () => {
                 duration: 0,
               },
               damagesOwedAmount: 50,
+              rehabilitativeActivities: [],
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -224,6 +233,7 @@ context('Damages and punishments summary', () => {
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
+              rehabilitativeActivities: [],
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -274,6 +284,7 @@ context('Damages and punishments summary', () => {
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
+              rehabilitativeActivities: [],
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -345,6 +356,7 @@ context('Damages and punishments summary', () => {
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
+              rehabilitativeActivities: [],
             },
           ],
         }),
@@ -380,6 +392,103 @@ context('Damages and punishments summary', () => {
               schedule: {
                 duration: 0,
               },
+              rehabilitativeActivities: [],
+            },
+          ],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1638,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '1638',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                }),
+              },
+            },
+          ],
+          punishments: [
+            {
+              id: 1841852,
+              type: PunishmentType.EXCLUSION_WORK,
+              schedule: {
+                duration: 3,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2025-05-31',
+              },
+              canRemove: true,
+              canEdit: false,
+              rehabilitativeActivitiesCompleted: undefined,
+              rehabilitativeActivitiesNotCompletedOutcome: undefined,
+              rehabilitativeActivities: [
+                {
+                  id: 40,
+                  details: 'Activity #1',
+                  monitor: 'Jessica Jones',
+                  endDate: '2024-05-31',
+                },
+                {
+                  id: 41,
+                  details: 'Activity #2',
+                  monitor: 'Ted Smith',
+                  endDate: '2024-05-31',
+                },
+              ],
+            },
+            {
+              id: 1841852,
+              type: PunishmentType.CONFINEMENT,
+              schedule: {
+                duration: 1,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2025-05-28',
+              },
+              canRemove: true,
+              canEdit: false,
+              rehabilitativeActivitiesCompleted: true,
+              rehabilitativeActivitiesNotCompletedOutcome: undefined,
+              rehabilitativeActivities: [
+                {
+                  id: 42,
+                  details: 'Activity #3',
+                  monitor: 'Jessica Jones',
+                  endDate: '2024-05-31',
+                },
+              ],
+            },
+            {
+              id: 1841852,
+              type: PunishmentType.EXTRA_WORK,
+              schedule: {
+                duration: 1,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2025-05-28',
+              },
+              canRemove: true,
+              canEdit: false,
+              rehabilitativeActivitiesCompleted: false,
+              rehabilitativeActivitiesNotCompletedOutcome: NotCompletedOutcome.NO_ACTION,
+              rehabilitativeActivities: [
+                {
+                  id: 42,
+                  details: 'Activity #4',
+                  monitor: 'Jessica Jones',
+                  endDate: '2024-05-17',
+                },
+              ],
             },
           ],
         }),
@@ -508,6 +617,36 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.removePunishmentCommentLink().should('not.exist')
       punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
+    it.skip('should show the rehab punishments table if there are any available', () => {
+      cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('1638'))
+      const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+      punishmentsAndDamagesPage.rehabActivitiesTable().should('exist')
+      punishmentsAndDamagesPage
+        .rehabActivitiesTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contains('Exclusion from associated work')
+          expect($data.get(1).innerText).to.contains('Activity #1')
+          expect($data.get(2).innerText).to.contains('31 May 2024')
+          expect($data.get(3).innerText).to.contains('J. Jones')
+          expect($data.get(4).innerText).to.contains('Enter if the activity was completed satisfactorily')
+          expect($data.get(5).innerText).to.contains('')
+          expect($data.get(6).innerText).to.contains('Activity #2')
+          expect($data.get(7).innerText).to.contains('31 May 2024')
+          expect($data.get(8).innerText).to.contains('T. Smith')
+          expect($data.get(9).innerText).to.contains('')
+          expect($data.get(10).innerText).to.contains('Cellular confinement')
+          expect($data.get(11).innerText).to.contains('Activity #3')
+          expect($data.get(12).innerText).to.contains('31 May 2024')
+          expect($data.get(13).innerText).to.contains('J. Jones')
+          expect($data.get(14).innerText).to.contains('Yes')
+          expect($data.get(15).innerText).to.contains('Extra work')
+          expect($data.get(16).innerText).to.contains('Activity #4')
+          expect($data.get(17).innerText).to.contains('17 May 2024')
+          expect($data.get(18).innerText).to.contains('J. Jones')
+          expect($data.get(19).innerText).to.contains('No - no further action')
+        })
+    })
   })
 
   describe('links', () => {
@@ -613,6 +752,7 @@ context('Reporter view', () => {
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
+              rehabilitativeActivities: [],
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -648,6 +788,7 @@ context('Reporter view', () => {
               schedule: {
                 duration: 0,
               },
+              rehabilitativeActivities: [],
             },
             {
               id: 2,
@@ -657,6 +798,7 @@ context('Reporter view', () => {
                 duration: 0,
               },
               damagesOwedAmount: 50,
+              rehabilitativeActivities: [],
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
@@ -714,6 +856,7 @@ context('Reporter view', () => {
                 startDate: '2023-04-10',
                 endDate: '2023-04-20',
               },
+              rehabilitativeActivities: [],
             },
             {
               id: 352,
@@ -723,9 +866,106 @@ context('Reporter view', () => {
               },
               consecutiveChargeNumber: '1525853',
               consecutiveReportAvailable: true,
+              rehabilitativeActivities: [],
             },
           ],
           punishmentComments: [testData.singlePunishmentComment({ createdByUserId: 'USER1' })],
+        }),
+      },
+    })
+    cy.task('stubGetReportedAdjudication', {
+      id: 1639,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '1639',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          prisonerNumber: 'G6415GD',
+          outcomes: [
+            {
+              hearing: testData.singleHearing({
+                dateTimeOfHearing: '2023-03-10T22:00:00',
+                outcome: testData.hearingOutcome({
+                  code: HearingOutcomeCode.COMPLETE,
+                }),
+              }),
+              outcome: {
+                outcome: testData.outcome({
+                  code: OutcomeCode.CHARGE_PROVED,
+                }),
+              },
+            },
+          ],
+          punishments: [
+            {
+              id: 1841852,
+              type: PunishmentType.EXCLUSION_WORK,
+              schedule: {
+                duration: 3,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2025-05-31',
+              },
+              canRemove: true,
+              canEdit: false,
+              rehabilitativeActivitiesCompleted: undefined,
+              rehabilitativeActivitiesNotCompletedOutcome: undefined,
+              rehabilitativeActivities: [
+                {
+                  id: 40,
+                  details: 'Activity #1',
+                  monitor: 'Jessica Jones',
+                  endDate: '2024-05-31',
+                },
+                {
+                  id: 41,
+                  details: 'Activity #2',
+                  monitor: 'Ted Smith',
+                  endDate: '2024-05-31',
+                },
+              ],
+            },
+            {
+              id: 1841852,
+              type: PunishmentType.CONFINEMENT,
+              schedule: {
+                duration: 1,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2025-05-28',
+              },
+              canRemove: true,
+              canEdit: false,
+              rehabilitativeActivitiesCompleted: true,
+              rehabilitativeActivitiesNotCompletedOutcome: undefined,
+              rehabilitativeActivities: [
+                {
+                  id: 42,
+                  details: 'Activity #3',
+                  monitor: 'Jessica Jones',
+                  endDate: '2024-05-31',
+                },
+              ],
+            },
+            {
+              id: 1841852,
+              type: PunishmentType.EXTRA_WORK,
+              schedule: {
+                duration: 1,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2025-05-28',
+              },
+              canRemove: true,
+              canEdit: false,
+              rehabilitativeActivitiesCompleted: false,
+              rehabilitativeActivitiesNotCompletedOutcome: NotCompletedOutcome.NO_ACTION,
+              rehabilitativeActivities: [
+                {
+                  id: 42,
+                  details: 'Activity #4',
+                  monitor: 'Jessica Jones',
+                  endDate: '2024-05-17',
+                },
+              ],
+            },
+          ],
         }),
       },
     })
@@ -797,5 +1037,35 @@ context('Reporter view', () => {
   it('should not have a hyperlink on the consecutive report content', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('102'))
     cy.get('[data-qa="consecutive-link"]').should('not.exist')
+  })
+  it.skip('should not show the link to complete an activity', () => {
+    cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('1639'))
+    const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
+    punishmentsAndDamagesPage.rehabActivitiesTable().should('exist')
+    punishmentsAndDamagesPage
+      .rehabActivitiesTable()
+      .find('td')
+      .then($data => {
+        expect($data.get(0).innerText).to.contains('Exclusion from associated work')
+        expect($data.get(1).innerText).to.contains('Activity #1')
+        expect($data.get(2).innerText).to.contains('31 May 2024')
+        expect($data.get(3).innerText).to.contains('J. Jones')
+        expect($data.get(4).innerText).to.contains('')
+        expect($data.get(5).innerText).to.contains('')
+        expect($data.get(6).innerText).to.contains('Activity #2')
+        expect($data.get(7).innerText).to.contains('31 May 2024')
+        expect($data.get(8).innerText).to.contains('T. Smith')
+        expect($data.get(9).innerText).to.contains('')
+        expect($data.get(10).innerText).to.contains('Cellular confinement')
+        expect($data.get(11).innerText).to.contains('Activity #3')
+        expect($data.get(12).innerText).to.contains('31 May 2024')
+        expect($data.get(13).innerText).to.contains('J. Jones')
+        expect($data.get(14).innerText).to.contains('Yes')
+        expect($data.get(15).innerText).to.contains('Extra work')
+        expect($data.get(16).innerText).to.contains('Activity #4')
+        expect($data.get(17).innerText).to.contains('17 May 2024')
+        expect($data.get(18).innerText).to.contains('J. Jones')
+        expect($data.get(19).innerText).to.contains('No - no further action')
+      })
   })
 })
