@@ -395,7 +395,7 @@ export default class ManageAdjudicationsUserTokensClient {
     suspendedUntil?: string
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
-      path: `/reported-adjudications/${chargeNumber}punishments/${punishmentId}/complete-rehabilitative-activity`,
+      path: `/reported-adjudications/${chargeNumber}/punishments/${punishmentId}/complete-rehabilitative-activity`,
       data: { completed, outcome, daysToActivate, suspendedUntil },
     })
   }
