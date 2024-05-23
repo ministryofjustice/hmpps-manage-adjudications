@@ -1050,7 +1050,7 @@ context('Reporter view', () => {
         expect($data.get(1).innerText).to.contains('Activity #1')
         expect($data.get(2).innerText).to.contains('31 May 2024')
         expect($data.get(3).innerText).to.contains('J. Jones')
-        expect($data.get(4).innerText).to.contains('')
+        expect($data.get(4).innerText).to.contains('Activity not complete yet')
         expect($data.get(5).innerText).to.contains('')
         expect($data.get(6).innerText).to.contains('Activity #2')
         expect($data.get(7).innerText).to.contains('31 May 2024')

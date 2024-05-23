@@ -6,24 +6,23 @@
 
     {% set completeLink = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+data.completeUrl+'" data-qa="completed-activity" class="govuk-link">Enter if the activity was completed satisfactorily <span class="govuk-visually-hidden"></span></a></p>' %}
 
+    {# Table logic for final column is based on whether the activities are completed, and their outcome. If not completed, either the link will show or #}
+    {# some holding content for reporters (readonly). Extra logic to overide this (below), in order to group the multiple activities together visually #}
     {% if data.rehabilitativeActivitiesCompleted === true %}
-      {% if data.multipleActivitiesNotFirst %}
-        {% set finalColumnContent = '' %}
-      {% else %}
         {% set finalColumnContent = 'Yes' %}
-      {% endif %}
     {% elif data.rehabilitativeActivitiesCompleted === false %}
-      {% if data.multipleActivitiesNotFirst %}
-        {% set finalColumnContent = '' %}
-      {% else %}
         {% set finalColumnContent = data.rehabilitativeActivitiesNotCompletedOutcome | convertNotCompletedOutcome %}
-      {% endif %}
     {% else %}
-      {% if data.multipleActivitiesNotFirst or readOnly %}
-        {% set finalColumnContent = '' %}
+      {% if readOnly %}
+          {% set finalColumnContent = 'Activity not complete yet' %}
       {% else %}
         {% set finalColumnContent = completeLink %}
-      {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {# override any of the above if they're not the first activity in a multiple activity condition #}
+    {% if data.multipleActivitiesNotFirst %}
+      {% set finalColumnContent = '' %}
     {% endif %}
 
     {% set rows = (rows.push([
