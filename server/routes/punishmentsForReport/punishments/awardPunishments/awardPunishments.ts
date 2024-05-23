@@ -71,7 +71,7 @@ export default class AwardPunishmentsPage {
     const rehabActivities = await this.punishmentsService.getRehabActivitiesFromSession(req, chargeNumber)
 
     return res.render(`pages/awardPunishments.njk`, {
-      cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
+      cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
       redirectAfterRemoveUrl,
       chargeNumber,
       punishments,
