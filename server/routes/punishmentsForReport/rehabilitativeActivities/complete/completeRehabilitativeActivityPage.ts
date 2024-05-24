@@ -73,7 +73,7 @@ export default class CompleteRehabilitativeActivityPage {
 
     if (completed === 'YES') {
       try {
-        await this.punishmentsService.completeRehbailitativeActivity(chargeNumber, +id, completed === 'YES', user)
+        await this.punishmentsService.completeRehabilitativeActivity(chargeNumber, +id, completed === 'YES', user)
         return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
@@ -81,6 +81,6 @@ export default class CompleteRehabilitativeActivityPage {
       }
     }
 
-    return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
+    return res.redirect(adjudicationUrls.incompleteRehabilitativeActivity.urls.start(chargeNumber, +id))
   }
 }

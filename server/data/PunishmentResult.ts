@@ -44,6 +44,13 @@ export enum NotCompletedOutcome {
   NO_ACTION = 'NO_ACTION',
 }
 
+export type IncompleteRehabActivity = {
+  completed: boolean
+  outcome: NotCompletedOutcome
+  daysToActivate: number
+  suspendedUntil: string
+}
+
 export type PunishmentData = {
   id?: number
   redisId?: string

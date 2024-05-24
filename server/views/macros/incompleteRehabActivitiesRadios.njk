@@ -1,0 +1,77 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
+
+
+{% macro incompleteRehabActivitiesRadios(outcome, errors, daysToActivate, suspendedUntil, prisonerName, today) %}
+  {% set daysToActivateHtml %}
+  {{ govukInput({
+      id: "daysToActivate",
+      name: "daysToActivate",
+      value: daysToActivate,
+      classes: "govuk-!-width-one-third",
+      attributes: { "data-qa": "days-to-activate" },
+      errorMessage: errors | findErrors(["daysToActivate"]),
+      label: {
+        text: "Enter the number of days for the punishment"
+      }
+    }) }}
+  {% endset -%}
+
+  {% set suspendedUntilHtml %}
+  {{ hmppsDatepicker({
+          id: 'suspendedUntil',
+          name: 'suspendedUntil',
+          label: {
+              text: "Enter the new date the suspended punishment will end"
+          },
+          classes: 'hmpps-datepicker--fixed-width',
+          value: suspendedUntil,
+          attributes: { "data-qa": "suspended-until" },
+          errorMessage: errors | findErrors(['suspendedUntil']),
+          minDate: today
+      }) }}
+  {% endset -%}
+
+  {% set radioButtonItems = [
+    {
+      value: NotCompletedOutcome.FULL_ACTIVATE,
+      text: "Activate it in full",
+      checked: outcome === NotCompletedOutcome.FULL_ACTIVATE
+    }, {
+      value: NotCompletedOutcome.PARTIAL_ACTIVATE,
+      text: "Activate it for a different number of days",
+      checked: outcome === NotCompletedOutcome.PARTIAL_ACTIVATE,
+      conditional: {
+        html: daysToActivateHtml
+      }
+    }, {
+      value: NotCompletedOutcome.EXT_SUSPEND,
+      text: "Suspend it for longer",
+      checked: outcome === NotCompletedOutcome.EXT_SUSPEND,
+      conditional: {
+        html: suspendedUntilHtml
+      }
+    }, {
+      value: NotCompletedOutcome.NO_ACTION,
+      text: "No action",
+      checked: outcome === NotCompletedOutcome.NO_ACTION
+    }
+  ] %}
+
+  {{ govukRadios({
+    idPrefix: 'outcome',
+    id: 'outcome',
+    name: 'outcome',
+    fieldset: {
+    legend: {
+      text: "Select what happens to " + prisonerName | possessive + " suspended punishment",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+    attributes: { "data-qa": "radio-buttons" },
+    errorMessage: "outcome" | findError(errors),
+    items: radioButtonItems  })
+  }}
+{% endmacro %}

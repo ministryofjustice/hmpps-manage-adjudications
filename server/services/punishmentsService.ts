@@ -40,6 +40,8 @@ export interface ActivityDetails {
   completed?: string
   outcome?: NotCompletedOutcome
   activities: RehabilitativeActivity[]
+  daysToActivate?: number
+  suspendedUntil?: string
 }
 
 export default class PunishmentsService {
@@ -341,10 +343,12 @@ export default class PunishmentsService {
       activities: punishment.rehabilitativeActivities,
       completed,
       outcome: punishment.rehabilitativeActivitiesNotCompletedOutcome,
+      daysToActivate: punishment.schedule.duration,
+      suspendedUntil: punishment.schedule.suspendedUntil,
     }
   }
 
-  async completeRehbailitativeActivity(
+  async completeRehabilitativeActivity(
     chargeNumber: string,
     punishmentId: number,
     completed: boolean,

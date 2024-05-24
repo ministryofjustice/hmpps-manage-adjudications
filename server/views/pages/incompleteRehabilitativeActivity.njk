@@ -1,0 +1,47 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "../macros/incompleteRehabActivitiesRadios.njk" import incompleteRehabActivitiesRadios %}
+
+{% set title = "Select what happens to the suspended punishment" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      
+      {{ incompleteRehabActivitiesRadios(outcome, errors, daysToActivate, suspendedUntil, prisonerName, today) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+              text: 'Continue',
+              type: "submit",
+              preventDoubleClick: true,
+              classes: "govuk-button--submit govuk-!-margin-right-3",
+              attributes: { "data-qa": "complete-activity-submit" }
+              }) }}
+
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='complete-activity-cancel'>Return to ‘punishments and damages’</a>
+      </div>
+
+    </form>
+    </div>
+  </div>
+{% endblock %}
