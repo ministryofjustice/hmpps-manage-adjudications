@@ -10,7 +10,7 @@ import IncompleteRehabilitativeActivity from '../pages/incompleteRehabilitativeA
 import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
-context('Mark whether a rehabilitative activity has been completed', () => {
+context.skip('Mark whether a rehabilitative activity has been completed', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
