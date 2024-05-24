@@ -14,7 +14,6 @@ import RehabilitativeActivityDetailsPage from '../pages/rehabilitativeActivityDe
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import RemoveActivityPage from '../pages/removeActivityPage'
-import CompleteRehabilitativeActivity from '../pages/ completeRehabilitativeActivity'
 
 const testData = new TestData()
 context.skip('Add a rehabilitative activity', () => {
@@ -202,19 +201,6 @@ context.skip('Add a rehabilitative activity', () => {
     cy.signIn()
   })
   describe('Add a rehabilitative activity with no information', () => {
-    it('stub to avoid merge conflict', () => {
-      cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('110', 1))
-
-      const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
-      completeActivityPage.submitButton().click()
-      completeActivityPage.errorSummary().contains('Select yes if John Smith completed the activity')
-    })
-    it('stub to avoid merge conflict - edit mode', () => {
-      cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('111', 1))
-
-      const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
-      completeActivityPage.completedChoice().find('input[value="YES"]').should('be.checked')
-    })
     it('should ask the user if a condition is associated', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)

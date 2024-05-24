@@ -1146,6 +1146,21 @@ const stubCreateGovReferral = ({ chargeNumber, response }): SuperAgentRequest =>
     },
   })
 
+const stubCompleteRehabActivity = ({ chargeNumber, punishmentId, response }): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: `/adjudications/reported-adjudications/${chargeNumber}/punishments/${punishmentId}/complete-rehabilitative-activity`,
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: response,
+    },
+  })
+
 const stubPrisonerActivePunishments = ({ bookingId, response }): SuperAgentRequest =>
   stubFor({
     request: {
@@ -1284,4 +1299,5 @@ export default {
   stubGetAllOffenceRules,
   stubPrisonerActivePunishments,
   stubGetTransferredAdjudications,
+  stubCompleteRehabActivity,
 }

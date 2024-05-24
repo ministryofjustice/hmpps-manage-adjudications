@@ -31,7 +31,7 @@ export default function validateForm({
     if (Number.isNaN(Number(daysToActivate))) {
       return {
         href: '#daysToActivate',
-        text: `The number of days for the punishment must be numerical`,
+        text: `The number of days for the punishment must be a number`,
       }
     }
     if (daysToActivate > 7) {

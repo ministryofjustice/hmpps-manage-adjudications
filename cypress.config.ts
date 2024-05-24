@@ -164,6 +164,7 @@ export default defineConfig({
         stubCreateGovReferral: adjudications.stubCreateGovReferral,
         stubGetPrisonerAdjudicationHistory: adjudications.stubGetPrisonerAdjudicationHistory,
         stubPrisonerActivePunishments: adjudications.stubPrisonerActivePunishments,
+        stubCompleteRehabActivity: adjudications.stubCompleteRehabActivity,
         stubFeComponents: feComponent.stubFeComponents,
       })
     },
