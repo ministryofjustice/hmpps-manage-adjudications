@@ -4,6 +4,7 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import UserService from '../../../../services/userService'
+import config from '../../../../config'
 
 export enum PageRequestType {
   CREATION,
@@ -46,6 +47,8 @@ export default class CheckPunishmentsPage {
       reasonForChange = this.punishmentsService.getReasonForChangePunishments(req, chargeNumber)
     }
 
+    const rehabActivities = await this.punishmentsService.getRehabActivitiesFromSession(req, chargeNumber)
+
     return res.render(`pages/checkPunishments.njk`, {
       chargeNumber,
       punishments,
@@ -53,6 +56,8 @@ export default class CheckPunishmentsPage {
       reasonForChange,
       changePunishmentLink: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
+      rehabActivities,
+      paybackAndRehabFlag: config.paybackAndRehabFlag === 'true',
     })
   }
 

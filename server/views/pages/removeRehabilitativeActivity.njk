@@ -37,7 +37,7 @@
                 text: "Activity details"
               },
               value: {
-                text: details
+                text: details or "Not entered"
               }
             },
             {
@@ -45,11 +45,7 @@
                 text: "End date and number of sessions"
               },
               value: {
-<<<<<<< Updated upstream
-                text: endDate | formatTimestampTo('D MMM YYYY')
-=======
                 text: endDate | endDateSessionNumberText(totalSessions) or 'Not entered'
->>>>>>> Stashed changes
               }
             },
             {
@@ -57,7 +53,7 @@
                 text: "Who is monitoring the prisoner"
               },
               value: {
-                text: monitorName | initialiseName
+                text: monitorName | initialiseName or "Not entered"
               }
             }
           ]

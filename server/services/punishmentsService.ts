@@ -107,6 +107,7 @@ export default class PunishmentsService {
     const updatedPunishment = {
       ...punishment,
       isThereRehabilitativeActivities: false,
+      rehabilitativeActivities: [],
       redisId,
       id: punishment.id,
     }
@@ -128,6 +129,21 @@ export default class PunishmentsService {
       isThereRehabilitativeActivities: true,
       hasRehabilitativeActivitiesDetails: false,
       rehabilitativeActivities: activities,
+      redisId,
+      id: punishment.id,
+    }
+
+    return req.session.punishments[chargeNumber].push(updatedPunishment)
+  }
+
+  removeAnyRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string) {
+    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+    this.deleteSessionPunishments(req, redisId, chargeNumber)
+    const updatedPunishment = {
+      ...punishment,
+      isThereRehabilitativeActivities: true,
+      hasRehabilitativeActivitiesDetails: true,
+      rehabilitativeActivities: [],
       redisId,
       id: punishment.id,
     }
