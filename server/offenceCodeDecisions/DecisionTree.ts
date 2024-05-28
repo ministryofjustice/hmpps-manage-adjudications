@@ -7,7 +7,8 @@ import { GroupedOffenceRulesAndTitles, OffenceRule, offenceRuleAndTitle } from '
 import { ProtectedCharacteristicsTypes, getProtectedCharacteristicsTitle } from '../routes/offenceCodeDecisions/offenceData'
 
 const CHILD_1_Q = 'Assault, fighting, or endangering the health or personal safety of others'
-const CHILD_1_Q_V2 = 'Assault, fighting, endangering the health or personal safety of others, or sexually assault, exposing themselves or harassing someone'
+const CHILD_1_Q_V2 =
+  'Assault, fighting, or endangering the health or personal safety of others, or sexual assault, exposing themselves or harassing someone'
 const CHILD_2_Q = 'Escape or failure to comply with temporary release conditions'
 const CHILD_3_Q = 'Possession of unauthorised articles, or drugs or alcohol related (including MDT charges)'
 const CHILD_4_Q = 'Sets fire to, or damages, the prison or any property'
