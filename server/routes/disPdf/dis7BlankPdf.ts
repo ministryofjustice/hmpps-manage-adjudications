@@ -17,10 +17,11 @@ export default class Dis7PdfBlank {
       ? 'Adjudication result – Young Offender (YOI Rule 55)'
       : 'Adjudication result – Adult (Prison Rule 51)'
     const adjudicationResultReportDataBlank = new AdjudicationResultReportDataBlank(chargeNumber, adjudicationDetails)
+    const latestVersion: boolean = config.paybackAndRehabFlag === 'true'
 
     res.renderPdf(
       `pages/adjudicationResultReportBlank`,
-      { adjudicationsUrl, data: adjudicationResultReportDataBlank },
+      { adjudicationsUrl, data: adjudicationResultReportDataBlank, latestVersion },
       `pages/adjudicationResultReportHeader`,
       { chargeNumber, header },
       `pages/adjudicationResultReportFooter`,
@@ -28,8 +29,7 @@ export default class Dis7PdfBlank {
       {
         filename: `adjudication-result-${chargeNumber}.pdf`,
         pdfMargins,
-      },
-      config.paybackAndRehabFlag === 'true'
+      }
     )
   }
 }

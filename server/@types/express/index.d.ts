@@ -57,8 +57,7 @@ export declare global {
         headerData: PdfHeaderData,
         footerView: string,
         footerData: PdfFooterData,
-        options: { filename: string; pdfMargins: PdfMargins },
-        latestVersion: boolean
+        options: { filename: string; pdfMargins: PdfMargins }
       ): void
     }
   }

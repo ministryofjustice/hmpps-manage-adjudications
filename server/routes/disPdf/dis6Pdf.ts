@@ -15,9 +15,11 @@ export default class Dis6Pdf {
 
     const conductReportData = new ConductReportData(chargeNumber, adjudicationDetails)
 
+    const latestVersion: boolean = config.paybackAndRehabFlag === 'true'
+
     res.renderPdf(
       `pages/conductReport`,
-      { adjudicationsUrl, conductReportData },
+      { adjudicationsUrl, conductReportData, latestVersion },
       `pages/conductReportHeader`,
       { chargeNumber },
       `pages/conductReportFooter`,
@@ -25,8 +27,7 @@ export default class Dis6Pdf {
       {
         filename: `conduct-report-${chargeNumber}.pdf`,
         pdfMargins,
-      },
-      config.paybackAndRehabFlag === 'true'
+      }
     )
   }
 }

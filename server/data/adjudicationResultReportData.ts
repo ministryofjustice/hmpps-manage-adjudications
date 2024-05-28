@@ -35,6 +35,8 @@ export default class adjudicationResultReportData {
 
   suspendedPunishmentsPresent: boolean
 
+  rehabActivitiesPresent: boolean
+
   constructor(chargeNumber: string, data: DIS7Data) {
     this.chargeNumber = chargeNumber
     this.prisonerDisplayName = convertToTitleCase(`${data.prisonerLastName}, ${data.prisonerFirstName}`)
@@ -52,5 +54,6 @@ export default class adjudicationResultReportData {
     this.punishments = data.punishments
     this.suspendedPunishments = data.suspendedPunishments
     this.suspendedPunishmentsPresent = data.suspendedPunishmentsPresent
+    this.rehabActivitiesPresent = data.rehabActivitiesPresent
   }
 }

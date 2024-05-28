@@ -208,6 +208,8 @@ export default class ReportedAdjudicationsService {
       punishment => punishment.schedule?.suspendedUntil
     )
 
+    const rehabActivities = suspendedPunishments.filter(susPun => susPun.rehabilitativeActivities)
+
     const adjudicatorName = await this.getAdjudicatorName(lastHearing, user)
 
     return {
@@ -234,6 +236,7 @@ export default class ReportedAdjudicationsService {
       punishments: activePunishmentsExcludingCautionAndDamages,
       suspendedPunishments,
       suspendedPunishmentsPresent: suspendedPunishments.length > 0,
+      rehabActivitiesPresent: rehabActivities.length > 0,
     }
   }
 

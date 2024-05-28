@@ -388,6 +388,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
           return 'Removal from activity'
         case PunishmentType.REMOVAL_WING:
           return 'Removal from wing or unit'
+        case PunishmentType.PAYBACK:
+          return 'Payback punishment'
         default:
           return null
       }
@@ -498,9 +500,12 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     return duration > 1 ? `${duration} days` : `${duration} day`
   })
 
-  njkEnv.addFilter('endDateSessionNumberText', (endDate, sessionNumber) => {
+  njkEnv.addFilter('endDateSessionNumberText', (endDate, sessionNumber, DISFormVersion = false) => {
     const formattedEndDate = formatTimestampTo(endDate, 'D MMM YYYY')
-    if (!sessionNumber || sessionNumber < 2) return formattedEndDate
+    if (!sessionNumber || sessionNumber < 2) {
+      if (DISFormVersion) return `ending on ${formattedEndDate}`
+      return formattedEndDate
+    }
     return `${sessionNumber} sessions, ending on ${formattedEndDate}`
   })
 

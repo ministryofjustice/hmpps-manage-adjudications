@@ -5,15 +5,13 @@
       punishment.schedule.duration + ' day' %}
     <div class="dis7-punishment-container">
       <div class="break-inside-avoid">
-          <h3 class="govuk-body dis7-subheader">Suspended: {{ punishment.type | convertPunishmentForDISForm(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }} - {{ punishmentLength }}</h3>
-          <p class="govuk-body">Suspended until: {{ punishment.schedule.suspendedUntil | formatTimestampTo('D MMMM YYYY') }}</p>
+        <h3 class="govuk-body dis7-subheader govuk-!-margin-right-1">Suspended: {{ punishment.type | convertPunishmentForDISForm(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }} - {{ punishmentLength }}</h3>
+        <p class="govuk-body">Suspended until: {{ punishment.schedule.suspendedUntil | formatTimestampTo('D MMMM YYYY') }}</p>
       </div>
       <div>
-          <p class="govuk-body">{{ punishment.type | punishmentExplanationsSuspended(punishment.stoppagePercentage, punishment.privilegeType) }}</p>
+        <p class="govuk-body">{{ punishment.type | punishmentExplanationsSuspended(punishment.stoppagePercentage, punishment.privilegeType) }}</p>
       </div>
     </div>
-    {% if not loop.last %}
-          <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
-    {% endif %}
+    <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
   {% endfor %}
 {% endmacro %}

@@ -1,0 +1,18 @@
+{% macro rehabilitativeActivityConditions(adjudicationResultReportData) %}
+    <div class="rehabActivityDetails">
+        <h2 class="dis7-header">
+            <strong>Details of any rehabilitative activity conditions</strong>
+        </h2>
+        {% for punishment in adjudicationResultReportData.suspendedPunishments %}
+            {% if punishment.rehabilitativeActivities.length %}
+                <p class="govuk-body"><strong>{{ punishment.type | convertPunishmentType(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}<strong></p>
+                {% for activity in punishment.rehabilitativeActivities %}
+                    <p class="govuk-body">
+                        <strong>Activity {{ loop.index }}:</strong>
+                        {{ activity.details }} - {{ activity.endDate | endDateSessionNumberText(activity.totalSessions, true) }}. Monitored by {{ activity.monitor }}</p>
+                        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endmacro %}
