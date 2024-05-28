@@ -49,7 +49,7 @@ export default class editRehabilitativeActivityPage {
     return this.renderView(req, res, {
       details,
       monitorName: monitor,
-      endDate: apiDateToDatePicker(endDate),
+      endDate: endDate ? apiDateToDatePicker(endDate) : null,
       totalSessions,
     })
   }

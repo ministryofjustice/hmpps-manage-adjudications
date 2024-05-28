@@ -100,6 +100,7 @@ export default class PunishmentsTabPage {
       userRoles,
       reportedAdjudication.status
     )
+
     const rehabActivities = await this.punishmentsService.getRehabActivitiesFromServer(chargeNumber, user)
     return res.render(`pages/adjudicationForReport/punishmentsTab.njk`, {
       prisoner,
