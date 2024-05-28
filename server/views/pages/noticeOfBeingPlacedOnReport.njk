@@ -1,12 +1,18 @@
 {% extends "../partials/pdfLayout.njk" %}
 {% from "../macros/noticeOfBeingPlacedOnReportDetails.njk" import noticeOfBeingPlacedOnReportDetails %}
 {% from "../macros/noticeOfBeingPlacedOnReportLegal.njk" import noticeOfBeingPlacedOnReportLegal %}
+{% from "../macros/noticeOfBeingPlacedOnReportLegal_v2.njk" import noticeOfBeingPlacedOnReportLegal_v2 %}
 {% from "../macros/noticeOfBeingPlacedOnReportAdjournment.njk" import noticeOfBeingPlacedOnReportAdjournment %}
+
 {% block content %}
     <div class='adjudication-pdf'>
         {{ noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) }}
         {% if noticeOfBeingPlacedOnReportData.isPrisonerCopy %}
-            {{ noticeOfBeingPlacedOnReportLegal(noticeOfBeingPlacedOnReportData.chargeNumber) }}
+            {% if latestVersion %}
+                {{ noticeOfBeingPlacedOnReportLegal_v2(noticeOfBeingPlacedOnReportData.chargeNumber) }}
+            {% else %}
+                {{ noticeOfBeingPlacedOnReportLegal(noticeOfBeingPlacedOnReportData.chargeNumber) }}
+            {% endif %}
         {% endif %}
         {{ noticeOfBeingPlacedOnReportAdjournment(noticeOfBeingPlacedOnReportData.chargeNumber) }}
     </div>
