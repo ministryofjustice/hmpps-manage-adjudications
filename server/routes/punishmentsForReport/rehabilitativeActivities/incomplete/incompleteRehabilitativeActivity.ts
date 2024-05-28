@@ -86,7 +86,7 @@ export default class IncompleteRehabilitativeActivityPage {
         user,
         outcome,
         +daysToActivate,
-        datePickerToApi(suspendedUntil)
+        suspendedUntil ? datePickerToApi(suspendedUntil) : null
       )
       return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
     } catch (postError) {
