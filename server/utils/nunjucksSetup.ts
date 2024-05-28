@@ -36,6 +36,7 @@ import {
   convertPrivilegeDTypeDescriptionForDIS7Suspended,
   convertPrivilegeTypeForDIS7,
   convertPunishmentType,
+  NotCompletedOutcome,
   PrivilegeType,
   PunishmentData,
   PunishmentReasonForChange,
@@ -538,4 +539,5 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addGlobal('AdjudicationHistoryBookingType', AdjudicationHistoryBookingType)
   njkEnv.addGlobal('ReferGovReason', ReferGovReason)
   njkEnv.addGlobal('ProtectedCharacteristicsTypes', ProtectedCharacteristicsTypes)
+  njkEnv.addGlobal('NotCompletedOutcome', NotCompletedOutcome)
 }

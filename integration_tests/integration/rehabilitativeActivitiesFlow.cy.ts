@@ -14,7 +14,6 @@ import RehabilitativeActivityDetailsPage from '../pages/rehabilitativeActivityDe
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import adjudicationUrls from '../../server/utils/urlGenerator'
 import RemoveActivityPage from '../pages/removeActivityPage'
-import CompleteRehabilitativeActivity from '../pages/ completeRehabilitativeActivity'
 
 const testData = new TestData()
 context.skip('Add a rehabilitative activity', () => {
@@ -202,113 +201,6 @@ context.skip('Add a rehabilitative activity', () => {
     cy.signIn()
   })
   describe('Add a rehabilitative activity with no information', () => {
-    it('stub to avoid merge conflict', () => {
-      cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('110', 1))
-
-      const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
-      completeActivityPage.submitButton().click()
-      completeActivityPage.errorSummary().contains('Select yes if John Smith completed the activity')
-    })
-    it('stub to avoid merge conflict - edit mode', () => {
-      cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('111', 1))
-
-      const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
-      completeActivityPage.completedChoice().find('input[value="YES"]').should('be.checked')
-    })
-    it('change a punishment from no details to has details clears session', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start('100'))
-      const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
-      punishmentPage.submitButton().click()
-
-      const numberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      numberOfDaysPage.days().type('10')
-      numberOfDaysPage.submitButton().click()
-
-      const willPunishmentBeSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      willPunishmentBeSuspendedPage.suspended().find('input[value="yes"]').click()
-      willPunishmentBeSuspendedPage.submitButton().click()
-
-      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
-      punishmentSuspendedUntilPage.suspendedUntil().type(date)
-      punishmentSuspendedUntilPage.submitButton().click()
-
-      const isTherePage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
-
-      isTherePage.rehabChoice().find('input[value="YES"]').click()
-      isTherePage.numberOfActivities().type('1')
-      isTherePage.submitButton().click()
-
-      const hasPage = Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage)
-
-      hasPage.detailsChoice().find('input[value="NO"]').click()
-      hasPage.submitButton().click()
-
-      const awardedPunishments = Page.verifyOnPage(AwardPunishmentsPage)
-      awardedPunishments.editPunishment().first().click()
-      punishmentPage.submitButton().click()
-      numberOfDaysPage.submitButton().click()
-      willPunishmentBeSuspendedPage.submitButton().click()
-      punishmentSuspendedUntilPage.submitButton().click()
-      isTherePage.submitButton().click()
-      hasPage.detailsChoice().find('input[value="YES"]').click()
-      hasPage.submitButton().click()
-      const activityDetails = Page.verifyOnPage(RehabilitativeActivityDetailsPage)
-      activityDetails.activityDescription().type('This is the activity description')
-      activityDetails.monitorName().type('Fred Jones')
-      const activityDate = formatDateForDatePicker(new Date('01/10/2030').toISOString(), 'short')
-      activityDetails.endDate().type(activityDate)
-      activityDetails.submitButton().click()
-
-      awardedPunishments
-        .activitiesTable()
-        .find('tr')
-        .then(row => {
-          expect(row.length).to.eq(2)
-        })
-    })
-    it('change a punishment from has rehab to doesnt have should clear session', () => {
-      cy.visit(adjudicationUrls.punishment.urls.start('100'))
-      const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
-      punishmentPage.submitButton().click()
-
-      const numberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      numberOfDaysPage.days().type('10')
-      numberOfDaysPage.submitButton().click()
-
-      const willPunishmentBeSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      willPunishmentBeSuspendedPage.suspended().find('input[value="yes"]').click()
-      willPunishmentBeSuspendedPage.submitButton().click()
-
-      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
-      punishmentSuspendedUntilPage.suspendedUntil().type(date)
-      punishmentSuspendedUntilPage.submitButton().click()
-
-      const isTherePage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
-
-      isTherePage.rehabChoice().find('input[value="YES"]').click()
-      isTherePage.numberOfActivities().type('1')
-      isTherePage.submitButton().click()
-
-      const hasPage = Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage)
-
-      hasPage.detailsChoice().find('input[value="NO"]').click()
-      hasPage.submitButton().click()
-
-      const awardedPunishments = Page.verifyOnPage(AwardPunishmentsPage)
-      awardedPunishments.editPunishment().first().click()
-      punishmentPage.submitButton().click()
-      numberOfDaysPage.submitButton().click()
-      willPunishmentBeSuspendedPage.submitButton().click()
-      punishmentSuspendedUntilPage.submitButton().click()
-      isTherePage.rehabChoice().find('input[value="NO"]').click()
-      isTherePage.submitButton().click()
-
-      awardedPunishments.activitiesTable().should('not.exist')
-    })
     it('should ask the user if a condition is associated', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)

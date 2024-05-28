@@ -45,7 +45,7 @@
                 text: "End date and number of sessions"
               },
               value: {
-                text: endDate | formatTimestampTo('D MMM YYYY') or "Not entered"
+                text: endDate | endDateSessionNumberText(totalSessions) or 'Not entered'
               }
             },
             {
