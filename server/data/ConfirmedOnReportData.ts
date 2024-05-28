@@ -54,4 +54,5 @@ export type DIS7Data = {
   punishments: PunishmentDataWithSchedule[]
   suspendedPunishments: PunishmentDataWithSchedule[]
   suspendedPunishmentsPresent: boolean
+  rehabActivitiesPresent: boolean
 }

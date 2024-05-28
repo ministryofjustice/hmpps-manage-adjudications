@@ -33,9 +33,11 @@ export default class Dis5Pdf {
       dis5Data,
       prisonerSearchDis5Data
     )
+    const latestVersion: boolean = config.paybackAndRehabFlag === 'true'
+
     res.renderPdf(
       `pages/adjudicationHistoryForCurrentSentence`,
-      { adjudicationsUrl, adjudicationHistoryForCurrentSentenceData },
+      { adjudicationsUrl, adjudicationHistoryForCurrentSentenceData, latestVersion },
       `pages/adjudicationHistoryForCurrentSentenceHeader`,
       { chargeNumber },
       `pages/adjudicationHistoryForCurrentSentenceFooter`,
@@ -43,8 +45,7 @@ export default class Dis5Pdf {
       {
         filename: `adjudication-history-for-current-sentence-${chargeNumber}.pdf`,
         pdfMargins,
-      },
-      config.paybackAndRehabFlag === 'true'
+      }
     )
   }
 }

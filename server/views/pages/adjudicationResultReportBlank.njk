@@ -1,12 +1,19 @@
 {% extends "../partials/pdfLayout.njk" %}
 {% from "../macros/adjudicationResultReportDetailsBlank.njk" import adjudicationResultReportDetailsBlank %}
+{% from "../macros/adjudicationResultReportDetailsBlank_v2.njk" import adjudicationResultReportDetailsBlank_v2 %}
 {% from "../macros/adjudicationResultReportLegal.njk" import adjudicationResultReportLegal %}
 
 {% block content %}
     <div class='adjudication-pdf dis7'>
         <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>  
         {% include '../partials/adjudicationResult_DIS7/prisonerBanner.njk' %}
-        {{ adjudicationResultReportDetailsBlank(data) }}
+
+        {% if latestVersion %}
+            {{ adjudicationResultReportDetailsBlank_v2(data) }}
+        {% else %}
+            {{ adjudicationResultReportDetailsBlank(data) }}
+        {% endif %}
+
         {{ adjudicationResultReportLegal(data) }}
        <div>
     </div>

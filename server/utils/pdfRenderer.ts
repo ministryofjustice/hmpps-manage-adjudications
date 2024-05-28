@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import GotenbergClient, { PdfMargins } from '../data/gotenbergClient'
 
-export type PdfPageData = { adjudicationsUrl: string } & Record<string, unknown>
+export type PdfPageData = { adjudicationsUrl: string } & Record<string, unknown> & Record<string, unknown>
 export type PdfHeaderData = Record<string, unknown>
 export type PdfFooterData = Record<string, unknown>
 

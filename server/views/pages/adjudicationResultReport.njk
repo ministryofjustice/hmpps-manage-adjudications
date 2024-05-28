@@ -5,31 +5,41 @@
 {% from "../macros/adjudicationResult_DIS7/punishments.njk" import punishments %}
 {% from "../macros/adjudicationResult_DIS7/suspendedPunishments.njk" import suspendedPunishments %}
 {% from "../macros/adjudicationResultReportDetails.njk" import adjudicationResultReportDetails %}
+{% from "../macros/adjudicationResultReportDetails_v2.njk" import adjudicationResultReportDetails_v2 %}
+{% from "../macros/adjudicationResult_DIS7/rehabilitativeActivityConditions.njk" import rehabilitativeActivityConditions %}
 
 {% block content %}
     <div class='adjudication-pdf dis7'>
-        <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>  
-        {% include '../partials/adjudicationResult_DIS7/prisonerBanner.njk' %}
+        <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+            {% include '../partials/adjudicationResult_DIS7/prisonerBanner.njk' %}
 
-         {% if data.cautionGiven %}
-            {% include '../partials/adjudicationResult_DIS7/caution.njk' %}
-        {% endif %}
+            {% if data.cautionGiven %}
+                {% include '../partials/adjudicationResult_DIS7/caution.njk' %}
+            {% endif %}
 
-        {% if data.punishments | length %}
-            {{ punishments(data) }}
-        {% endif %}
+            {% if data.punishments | length %}
+                    {{ punishments(data) }}
+            {% endif %}
 
-        {% if data.suspendedPunishmentsPresent %}
-            {{ suspendedPunishments(data)}}
-            {% include '../partials/adjudicationResult_DIS7/suspendedPunishmentInfo.njk' %}
-        {% endif %}
+            {% if data.suspendedPunishmentsPresent %}
+                {{ suspendedPunishments(data)}}
+                {% if latestVersion and data.rehabActivitiesPresent %}
+                    {{ rehabilitativeActivityConditions(data) }}
+                {% endif %}
+                {% include '../partials/adjudicationResult_DIS7/suspendedPunishmentInfo.njk' %}
+            {% endif %}
 
-        {% if data.damagesAmount %}
-            {{ damages(data) }}
-        {% endif %}
-        {{ adjudicationResultReportDetails(data) }}
-        {{ askForAReview(data) }}
-        {{ adjudicatorAndHearingDate(data) }} 
-       <div>
-    </div>
-{% endblock %}
+            {% if data.damagesAmount %}
+                {{ damages(data) }}
+            {% endif %}
+
+            {% if latestVersion %}
+                {{ adjudicationResultReportDetails_v2(data) }}
+            {% else %}
+                {{ adjudicationResultReportDetails(data) }}
+            {% endif %}
+
+            {{ askForAReview(data) }}
+            {{ adjudicatorAndHearingDate(data) }}
+            <div></div>
+        {% endblock %}

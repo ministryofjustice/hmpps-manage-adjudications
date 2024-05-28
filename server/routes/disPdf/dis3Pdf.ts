@@ -44,9 +44,10 @@ export default class Dis3Pdf {
       { photoVideo, baggedAndTagged, other },
       witnesses
     )
+    const latestVersion: boolean = config.paybackAndRehabFlag === 'true'
     res.renderPdf(
       `pages/prepareAndRecordAnAdjudicationHearing`,
-      { adjudicationsUrl, prepareAndRecordAnAdjudicationHearingData },
+      { adjudicationsUrl, prepareAndRecordAnAdjudicationHearingData, latestVersion },
       `pages/prepareAndRecordAnAdjudicationHearingHeader`,
       { chargeNumber },
       `pages/prepareAndRecordAnAdjudicationHearingFooter`,
@@ -54,8 +55,7 @@ export default class Dis3Pdf {
       {
         filename: `prepare-and-record-adjudication-hearing-${chargeNumber}.pdf`,
         pdfMargins,
-      },
-      config.paybackAndRehabFlag === 'true'
+      }
     )
   }
 }

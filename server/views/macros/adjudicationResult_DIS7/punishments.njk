@@ -1,14 +1,26 @@
 {% macro punishments(adjudicationResultReportData) %}
   <h2 class="dis7-header">Punishments</h2>
   {% for punishment in adjudicationResultReportData.punishments %}
-    {% set punishmentLength = punishment.schedule.duration + ' days' if punishment.schedule.duration > 1 else 
+
+    {% if punishment.type === PunishmentType.PAYBACK %}
+        {% if punishment.schedule.duration %}
+        {% set punishmentLength = punishment.schedule.duration + ' hours' if punishment.schedule.duration > 1 else 
+      punishment.schedule.duration + ' hour' %}
+      {% else %}
+      {% set punishmentLength = "Duration not entered" %}
+        {% endif %}
+    {% else %}
+        {% set punishmentLength = punishment.schedule.duration + ' days' if punishment.schedule.duration > 1 else 
       punishment.schedule.duration + ' day' %}
+    {% endif %}
+
+
     <div class="dis7-punishment-container">
       <div class="break-inside-avoid">
           <h3 class="govuk-body dis7-subheader">{{ punishment.type | convertPunishmentForDISForm(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }} - {{ punishmentLength }}</h3>
           {% if punishment.schedule.startDate %}
             <p class="govuk-body dis7-grouped-paragraph">First day: {{ punishment.schedule.startDate | formatTimestampTo('D MMMM YYYY') }}</p>
-            <p class="govuk-body">Last day: {{ punishment.schedule.endDate | formatTimestampTo('D MMMM YYYY') }}</p>
+            {% if punishment.schedule.endDate %}<p class="govuk-body">Last day: {{ punishment.schedule.endDate | formatTimestampTo('D MMMM YYYY') }}</p>{% endif %}
           {% endif %}
       </div>
       <div>

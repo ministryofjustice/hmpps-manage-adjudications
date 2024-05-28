@@ -1,0 +1,91 @@
+{% macro adjudicationResultReportDetails_v2(adjudicationResultReportData) %}
+    <div class='break-inside-avoid page-break-before-always'>
+        <div class='adjudication-pdf-section-sentence-details'>
+            <div class='adjudication-pdf-section-sentence-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>If this punishment is <strong>consecutive</strong> to<br/> others, list charge numbers</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-five-lines-high-third-width'>
+            </div>
+            <div class='adjudication-pdf-section-sentence-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>
+                    If this punishment is <strong>concurrent</strong> to<br/>
+                    others, list charge numbers
+                </p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-five-lines-high-third-width'>
+            </div>
+        </div>
+
+        <div class='break-inside-avoid'>
+            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>
+                Charge numbers of any existing suspended punishments, whether they have a non-offending or 
+                rehabilitative activity </br>condition, and any actions taken. This could be the 'activated the punishment', or 'no action', for example.
+            </p>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-five-lines-high-full-width'>
+        </div>
+
+        <div class='break-inside-avoid'>
+            <div class='adjudication-pdf-section-punishment-details-checkboxes'>
+                <div class='adjudication-pdf-section-punishment-details-checkboxes__item'>
+                    <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>
+                        It’s important that a record of the finding, punishment and any compensation requirement is<br/>
+                        recorded on Digital Prison Services (DPS) and the prisoner’s record, and that this paperwork is retained in<br/>
+                        line with data retention guidelines. Have you directed a member of staff to do this?
+                    </p>
+                </div>
+                <div class='adjudication-pdf-section-punishment-details-checkboxes__item govuk-!-margin-top-3'>
+                    <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> Yes</span>
+                    <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'> <span> No</span>
+                </div>
+            </div>
+        </div>
+
+        <div class='break-inside-avoid'>
+            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Adjudicator’s reasons for deciding punishment, where it’s outside published guidelines</p>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-five-lines-high-full-width'>
+        </div>
+
+        <div class='adjudication-pdf-section-signature-details'>
+            <div class='adjudication-pdf-section-signature-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Signature of adjudicator</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-half-width'>
+            </div>
+            <div class='adjudication-pdf-section-signature-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Name (BLOCK CAPITALS)</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-half-width'>
+            </div>
+        </div>
+        <div class='adjudication-pdf-section-signature-details'>
+            <div class='adjudication-pdf-section-signature-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-1'>Date (DD/MM/YYYY)</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+            </div>
+        </div>
+
+        <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
+
+        <div class='break-inside-avoid'>
+            <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>
+                A record of the finding, punishment and any compensation requirement has been recorded<br/>
+                on Digital Prison Services (DPS) and the prisoner’s record, and this paperwork is retained in line with data<br/>
+                retention guidelines.
+            </p>
+        </div>
+
+        <div class='adjudication-pdf-section-signature-details'>
+            <div class='adjudication-pdf-section-signature-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Signature of officer</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-half-width'>
+            </div>
+            <div class='adjudication-pdf-section-signature-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Name (BLOCK CAPITALS)</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-half-width'>
+            </div>
+        </div>
+        <div class='adjudication-pdf-section-signature-details'>
+            <div class='adjudication-pdf-section-signature-details__item'>
+                <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-1'>Date (DD/MM/YYYY)</p>
+                <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+            </div>
+        </div>
+    </div>
+
+{% endmacro %}
