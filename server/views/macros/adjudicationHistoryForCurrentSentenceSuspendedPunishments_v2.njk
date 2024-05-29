@@ -1,0 +1,48 @@
+{% macro adjudicationHistoryForCurrentSentenceSuspendedPunishments_v2(adjudicationHistoryForCurrentSentenceData) %}
+  <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
+    <h2>Suspended punishments</h2>
+    {% if adjudicationHistoryForCurrentSentenceData.chargesWithSuspendedPunishments | length %}
+      <p class="govuk-body">Charges with current suspended punishments: {{ adjudicationHistoryForCurrentSentenceData.chargesWithSuspendedPunishments | length }}</p>
+
+      {% for charge in adjudicationHistoryForCurrentSentenceData.chargesWithSuspendedPunishments %}
+        <div class="break-inside-avoid">
+          <h3 class="govuk-!-margin-top-8">Suspended punishment for charge {{ charge.chargeNumber }}</h3>
+          <p class="govuk-body">Date suspended punishment given: {{ charge.dateOfDiscovery | formatTimestampTo('D MMMM YYYY') }}.</p>
+          <p class="govuk-body">Offence: {{ charge.offenceDetails.offenceRule.paragraphDescription }}.</p>
+          <p class="govuk-body">Punishment given:</p>
+          <table class="punishment-table">
+            <tr>
+              <th class="punishment-table__item">Punishment</th>
+              <th class="punishment-table__item">Suspended to</th>
+              <th class="punishment-table__item">Rehabilitative activity</th>
+              <th class="punishment-table__item">Non-offending</th>
+            </tr>
+            {% for punishment in charge.suspendedPunishments %}
+              {% if punishment.type === PunishmentType.PAYBACK %}
+                      {% if punishment.schedule.duration %}
+                      {% set punishmentLength = punishment.schedule.duration + ' hours' if punishment.schedule.duration > 1 else 
+                    punishment.schedule.duration + ' hour' %}
+                    {% else %}
+                    {% set punishmentLength = "Duration not entered" %}
+                      {% endif %}
+                  {% else %}
+                      {% set punishmentLength = punishment.schedule.duration + ' days' if punishment.schedule.duration > 1 else 
+                    punishment.schedule.duration + ' day' %}
+                  {% endif %}
+              <tr>
+                <td>{{ punishment.type | convertPunishmentType(punishment.stoppagePercentage, punishment.privilegeType, punishment.otherPrivilege) }}: {{ punishmentLength }}</td>
+                <td>{{ punishment.schedule.suspendedUntil | formatTimestampTo('D MMMM YYYY') }}</td>
+                <td><input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'></td>
+                <td><input type='text' class='adjudication-pdf-input adjudication-pdf-input__square' {% if punishment.rehabilitativeActivities.length < 1 %}value="x"{% endif %}></td>
+              </tr>
+            {% endfor %}
+          </table>
+          <p class="govuk-body govuk-!-margin-top-6">Details of rehabilitative activities, if relevant</p>
+          <input type="text" class="adjudication-pdf-input-text-box-five-lines-high-full-width">
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} has no suspended punishments.</p>
+    {% endif %}
+  </div>
+{% endmacro %}
