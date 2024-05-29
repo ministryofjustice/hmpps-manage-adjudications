@@ -34,7 +34,7 @@
 
     {% set emptyText = 'Not entered' if data.type === PunishmentType.PAYBACK else '-' %}
 
-    {% set withRehabCondition = ' - with a rehabilitative activity condition' if data.rehabilitativeActivities | length and data.rehabilitativeActivitiesCompleted === null else '' %}
+    {% set withRehabCondition = ' - with a rehabilitative activity condition' if data.rehabilitativeActivities | length and data.rehabilitativeActivitiesCompleted !== 'undefined'  else '' %}
     {% set completedRehabNoText = '' %}
     {% if data.rehabilitativeActivitiesCompleted === false %}
      {% if data.rehabilitativeActivitiesNotCompletedOutcome === 'FULL_ACTIVATE' or data.rehabilitativeActivitiesNotCompletedOutcome === 'PARTIAL_ACTIVATE' %}

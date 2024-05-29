@@ -294,7 +294,7 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         .find('td')
         .then($data => {
           expect($data.get(0).innerText).to.contains(
-            '(activated after a breach of a rehabilitiative activity condition)'
+            '(activated after a breach of a rehabilitative activity condition)'
           )
         })
     })
@@ -360,7 +360,7 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         .find('td')
         .then($data => {
           expect($data.get(0).innerText).to.contains(
-            '(activated after a breach of a rehabilitiative activity condition)'
+            '(activated after a breach of a rehabilitative activity condition)'
           )
         })
     })
