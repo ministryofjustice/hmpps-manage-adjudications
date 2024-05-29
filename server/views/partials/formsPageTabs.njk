@@ -92,7 +92,7 @@
 </ul>
 <p class="govuk-body">Adjudication result - DIS 7:</p>
 <ul class="govuk-list">
-  {{ formsLink('DIS 7 - print to fill in by hand', adjudicationUrls.printPdf.urls.dis7Blank(chargeNumber), 'DIS7-blank') }}
+  {{ formsLink('DIS 7 - print to fill in by hand (PDF)', adjudicationUrls.printPdf.urls.dis7Blank(chargeNumber), 'DIS7-blank') }}
   {% if outcomesEntered %}
     {{ formsLink('DIS 7 - print with punishment details (PDF)', adjudicationUrls.printPdf.urls.dis7(chargeNumber), 'DIS7-auto') }}
   {% else %}
