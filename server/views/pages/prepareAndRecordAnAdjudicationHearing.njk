@@ -1,9 +1,16 @@
 {% extends "../partials/pdfLayout.njk" %}
 {% from "../macros/prepareAndRecordAnAdjudicationHearingPrepare.njk" import prepareAndRecordAnAdjudicationHearingPrepare %}
 {% from "../macros/prepareAndRecordAnAdjudicationHearingDetails.njk" import prepareAndRecordAnAdjudicationHearingDetails %}
+{% from "../macros/prepareAndRecordAnAdjudicationHearingPrepare_v2.njk" import prepareAndRecordAnAdjudicationHearingPrepare_v2 %}
+{% from "../macros/prepareAndRecordAnAdjudicationHearingDetails_v2.njk" import prepareAndRecordAnAdjudicationHearingDetails_v2 %}
 {% block content %}
   <div class='adjudication-pdf'>
-    {{ prepareAndRecordAnAdjudicationHearingPrepare(prepareAndRecordAnAdjudicationHearingData) }}
-    {{ prepareAndRecordAnAdjudicationHearingDetails(prepareAndRecordAnAdjudicationHearingData) }}
+    {% if latestVersion %}
+      {{ prepareAndRecordAnAdjudicationHearingPrepare_v2(prepareAndRecordAnAdjudicationHearingData) }}
+      {{ prepareAndRecordAnAdjudicationHearingDetails_v2(prepareAndRecordAnAdjudicationHearingData) }}
+    {% else %}
+      {{ prepareAndRecordAnAdjudicationHearingPrepare(prepareAndRecordAnAdjudicationHearingData) }}
+      {{ prepareAndRecordAnAdjudicationHearingDetails(prepareAndRecordAnAdjudicationHearingData) }}
+    {% endif %}
   </div>
 {% endblock %}
