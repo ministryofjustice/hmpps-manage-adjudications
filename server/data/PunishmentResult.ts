@@ -74,6 +74,7 @@ export type PunishmentData = {
   hasRehabilitativeActivitiesDetails?: boolean
   rehabilitativeActivitiesCompleted?: boolean
   rehabilitativeActivitiesNotCompletedOutcome?: NotCompletedOutcome
+  previousSuspendedUntilDate?: string
 }
 
 export type PunishmentSchedule = {
@@ -101,6 +102,7 @@ export type PunishmentDataWithSchedule = {
   rehabilitativeActivities: RehabilitativeActivity[]
   rehabilitativeActivitiesCompleted?: boolean
   rehabilitativeActivitiesNotCompletedOutcome?: NotCompletedOutcome
+  previousSuspendedUntilDate?: string
 }
 
 export type RehabilitativeActivity = {
@@ -302,6 +304,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     rehabilitativeActivities,
     rehabilitativeActivitiesCompleted,
     rehabilitativeActivitiesNotCompletedOutcome,
+    previousSuspendedUntilDate,
   } = punishment
   const { duration, measurement, startDate, endDate, suspendedUntil } = schedule
   return {
@@ -325,6 +328,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     rehabilitativeActivities,
     rehabilitativeActivitiesCompleted,
     rehabilitativeActivitiesNotCompletedOutcome,
+    previousSuspendedUntilDate,
   }
 }
 

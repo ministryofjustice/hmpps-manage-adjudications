@@ -223,6 +223,13 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         .then($data => {
           expect($data.get(4).innerText).to.contains('Yes')
         })
+
+      punishmentsAndDamagesPage
+        .awardPunishmentsTable()
+        .find('td')
+        .then($summaryData => {
+          expect($summaryData.get(4).innerText).to.not.contain('- with a rehabilitative activity condition')
+        })
     })
   })
   describe('Not completed', () => {
@@ -280,6 +287,15 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         .find('td')
         .then($data => {
           expect($data.get(4).innerText).to.contains('No - suspended punishment activated')
+        })
+
+      punishmentsAndDamagesPage
+        .awardPunishmentsTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contains(
+            '(activated after a breach of a rehabilitiative activity condition)'
+          )
         })
     })
     it('Validation 2', () => {
@@ -339,6 +355,14 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         .then($data => {
           expect($data.get(4).innerText).to.contains('No - part of the suspended punishment activated')
         })
+      punishmentsAndDamagesPage
+        .awardPunishmentsTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(0).innerText).to.contains(
+            '(activated after a breach of a rehabilitiative activity condition)'
+          )
+        })
     })
     it('Validation 3', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('110'))
@@ -353,7 +377,7 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
       incompleteRehabilitativeActivityPage.submitButton().click()
       completeActivityPage.errorSummary().contains('Enter the new date the suspended punishment will end')
     })
-    it('Partial activation', () => {
+    it('Extend suspended', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('110'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.rehabActivitiesTable().should('exist')
@@ -380,7 +404,8 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
                 rehabilitativeActivities: [{ details: 'details' }],
                 canEdit: true,
                 rehabilitativeActivitiesCompleted: false,
-                rehabilitativeActivitiesNotCompletedOutcome: NotCompletedOutcome.PARTIAL_ACTIVATE,
+                previousSuspendedUntilDate: '2030-10-01',
+                rehabilitativeActivitiesNotCompletedOutcome: NotCompletedOutcome.EXT_SUSPEND,
                 schedule: {
                   duration: 4,
                   measurement: PunishmentMeasurement.DAYS,
@@ -397,7 +422,13 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         .rehabActivitiesTable()
         .find('td')
         .then($data => {
-          expect($data.get(4).innerText).to.contains('No - part of the suspended punishment activated')
+          expect($data.get(4).innerText).to.contains('No - suspension end date extended')
+        })
+      punishmentsAndDamagesPage
+        .awardPunishmentsTable()
+        .find('td')
+        .then($data => {
+          expect($data.get(4).innerText).to.contains('(extended from 1 Oct 2030')
         })
     })
     it('No action', () => {
