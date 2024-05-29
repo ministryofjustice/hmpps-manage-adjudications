@@ -1,14 +1,19 @@
 {% extends "../partials/pdfLayout.njk" %}
 {% from "../macros/adjudicationHistoryForCurrentSentenceDetails.njk" import adjudicationHistoryForCurrentSentenceDetails %}
- {% from "../macros/adjudicationHistoryForCurrentSentencePreviousAdjudication.njk" import adjudicationHistoryForCurrentSentencePreviousAdjudication %}
+{% from "../macros/adjudicationHistoryForCurrentSentencePreviousAdjudication.njk" import adjudicationHistoryForCurrentSentencePreviousAdjudication %}
 {% from "../macros/adjudicationHistoryForCurrentSentenceExistingPunishments.njk" import adjudicationHistoryForCurrentSentenceExistingPunishments %}
 {% from "../macros/adjudicationHistoryForCurrentSentenceSuspendedPunishments.njk" import adjudicationHistoryForCurrentSentenceSuspendedPunishments %}
+{% from "../macros/adjudicationHistoryForCurrentSentenceSuspendedPunishments_v2.njk" import adjudicationHistoryForCurrentSentenceSuspendedPunishments_v2 %}
 {% from "../macros/adjudicationHistoryForCurrentSentenceDamagesOwed.njk" import adjudicationHistoryForCurrentSentenceDamagesOwed %}
 {% block content %}
     <div class='adjudication-pdf'>
         {{ adjudicationHistoryForCurrentSentenceDetails(adjudicationHistoryForCurrentSentenceData) }}
         {{ adjudicationHistoryForCurrentSentencePreviousAdjudication(adjudicationHistoryForCurrentSentenceData) }}
-        {{ adjudicationHistoryForCurrentSentenceSuspendedPunishments(adjudicationHistoryForCurrentSentenceData) }} 
+        {% if latestVersion %}
+            {{ adjudicationHistoryForCurrentSentenceSuspendedPunishments_v2(adjudicationHistoryForCurrentSentenceData) }}
+        {% else %}
+            {{ adjudicationHistoryForCurrentSentenceSuspendedPunishments(adjudicationHistoryForCurrentSentenceData) }}
+        {% endif %}
         {{ adjudicationHistoryForCurrentSentenceExistingPunishments(adjudicationHistoryForCurrentSentenceData) }}
         {{ adjudicationHistoryForCurrentSentenceDamagesOwed(adjudicationHistoryForCurrentSentenceData) }}
     </div>

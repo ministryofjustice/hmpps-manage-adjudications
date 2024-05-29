@@ -42,7 +42,7 @@
 			</div>
 		</div>
 
-		<dl class="govuk-summary-list govuk-!-margin-top-5">
+		<dl class="govuk-summary-list govuk-!-margin-top-3">
 			<div class="govuk-summary-list__row">
 				<dt class="govuk-summary-list__key prisonerDetails-key">
 					<p class="govuk-body">Sentenced on: </p>
@@ -88,7 +88,7 @@
 			</span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
 		</div>
 
-		<div class='break-inside-avoid govuk-!-padding-top-5'>
+		<div class='break-inside-avoid govuk-!-padding-top-3'>
 		<div class="govuk-!-margin-top-5 restricted-width">
 			<p class="govuk-body">{{ adjudicationHistoryForCurrentSentenceData.prisonerFriendlyName }} <span class="govuk-!-font-weight-bold">{% if adjudicationHistoryForCurrentSentenceData.acctAlertPresent %}does{% else %}does not{% endif %}</span> have an open Assessment, Care in Custody and Teamwork (ACCT), or an ACCT that has been closed in the last 3 months.</p>
 		</div>
@@ -97,14 +97,14 @@
 		</div>
 		</div>
 
-		<div class='break-inside-avoid govuk-!-padding-top-5'>
+		<div class='break-inside-avoid govuk-!-padding-top-3'>
 			<h2>Incentive level</h2>
 			<p class="govuk-body">Incentive level: {{ adjudicationHistoryForCurrentSentenceData.currentIncentiveLevel }}</p>
 			<p class="govuk-body">Date prisoner was put on that level: {{ adjudicationHistoryForCurrentSentenceData.currentIncentiveLevelDateTime | formatTimestampTo('D MMMM YYYY') }}</p>
 			<p class="govuk-body">Date of next incentive level review: {{ adjudicationHistoryForCurrentSentenceData.incentiveNextReviewDate | formatTimestampTo('D MMMM YYYY') }}</p>
 		</div>
 
-		<div class="break-inside-avoid govuk-!-padding-top-5">
+		<div class="break-inside-avoid govuk-!-padding-top-3">
 			<h2>Employment and pay</h2>
 			<div class='adjudication-pdf-section-sentence-details'>
 				<div class='adjudication-pdf-section-sentence-details__item'>
@@ -116,11 +116,11 @@
 					<input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-third-width'>
 				</div>
 			</div>
-			<div class="break-inside-avoid govuk-!-padding-top-5">
+			<div class="break-inside-avoid govuk-!-padding-top-3">
 			<h2>Prisoner money</h2>
-			<p class="govuk-body">Spends: £{{ adjudicationHistoryForCurrentSentenceData.spends }}</p>
-			<p class="govuk-body">Private cash: £{{ adjudicationHistoryForCurrentSentenceData.cash }}</p>
-			<p class="govuk-body">Savings account: £{{ adjudicationHistoryForCurrentSentenceData.savings }}</p>
+			<p class="govuk-body">Spends: £{{ adjudicationHistoryForCurrentSentenceData.spends.toFixed(2) }}</p>
+			<p class="govuk-body">Private cash: £{{ adjudicationHistoryForCurrentSentenceData.cash.toFixed(2) }}</p>
+			<p class="govuk-body">Savings account: £{{ adjudicationHistoryForCurrentSentenceData.savings.toFixed(2) }}</p>
 			</div>
 		</div>
 	</div>
