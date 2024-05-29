@@ -34,11 +34,11 @@
 
     {% set emptyText = 'Not entered' if data.type === PunishmentType.PAYBACK else '-' %}
 
-    {% set withRehabCondition = ' - with a rehabilitative activity condition' if data.rehabilitativeActivities | length and data.rehabilitativeActivitiesCompleted === null else '' %}
+    {% set withRehabCondition = ' - with a rehabilitative activity condition' if data.rehabilitativeActivities | length and not data.rehabilitativeActivitiesCompleted  else '' %}
     {% set completedRehabNoText = '' %}
     {% if data.rehabilitativeActivitiesCompleted === false %}
      {% if data.rehabilitativeActivitiesNotCompletedOutcome === 'FULL_ACTIVATE' or data.rehabilitativeActivitiesNotCompletedOutcome === 'PARTIAL_ACTIVATE' %}
-      {% set completedRehabNoText = ' (activated after a breach of a rehabilitiative activity condition)' %}
+      {% set completedRehabNoText = ' (activated after a breach of a rehabilitative activity condition)' %}
      {% endif %}
      {% if data.rehabilitativeActivitiesNotCompletedOutcome === 'EXT_SUSPEND' %}
       {% set withRehabCondition = ' (extended from '+ data.previousSuspendedUntilDate | formatTimestampTo('D MMM YYYY') +')' %}
