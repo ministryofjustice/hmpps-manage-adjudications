@@ -50,8 +50,8 @@ export default class IncompleteRehabilitativeActivityPage {
     return this.renderView(req, res, {
       prisonerName,
       outcome,
-      daysToActivate: outcome ? daysToActivate : undefined,
-      suspendedUntil: outcome ? apiDateToDatePicker(suspendedUntil) : undefined,
+      daysToActivate,
+      suspendedUntil: suspendedUntil ? apiDateToDatePicker(suspendedUntil) : null,
     })
   }
 
