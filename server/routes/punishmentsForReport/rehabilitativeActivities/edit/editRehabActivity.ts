@@ -58,7 +58,9 @@ export default class editRehabilitativeActivityPage {
     const { chargeNumber, redisId, id } = req.params
     const { details, monitorName, endDate, totalSessions } = req.body
 
-    const error = validateForm({ details, monitorName, endDate, totalSessions })
+    const { friendlyName } = await this.punishmentsService.getPrisonerDetails(chargeNumber, res.locals.user)
+
+    const error = validateForm({ prisonerName: friendlyName, details, monitorName, endDate, totalSessions })
     if (error)
       return this.renderView(req, res, {
         error,
