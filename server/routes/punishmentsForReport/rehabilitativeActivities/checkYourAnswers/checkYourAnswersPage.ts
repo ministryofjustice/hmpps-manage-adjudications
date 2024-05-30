@@ -90,8 +90,9 @@ export default class CheckYourAnswersCompleteRehabilitativeActivityPage {
         user,
         outcome,
         +daysToActivate,
-        suspendedUntil ? datePickerToApi(suspendedUntil) : null
+        suspendedUntil
       )
+      req.session.rehabCompletionInformation = null
       return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
