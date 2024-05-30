@@ -34,6 +34,7 @@ declare module 'express-session' {
     userDetails: UserDetails
     punishmentReasonForChange: { [key: string]; punishmentReasonForChange? }
     createdOnBehalfOf: { [key: string]; string? }
+    rehabCompletionInformation: { completed; suspendedUntil?; daysToActivate?; outcome? }
   }
 }
 

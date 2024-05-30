@@ -1,28 +1,56 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
+import moment from 'moment'
 import UserService from '../../../../services/userService'
 import { datePickerToApi, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { NotCompletedOutcome, RehabilitativeActivity } from '../../../../data/PunishmentResult'
+import { NotCompletedOutcome } from '../../../../data/PunishmentResult'
 
 type PageData = {
   completed?: string
   prisonerName: string
   outcome?: NotCompletedOutcome
   daysToActivate?: number
+  actualDays: number
   suspendedUntil?: string
 }
 
-export default class ConfirmCompleteRehabilitativeActivityPage {
+export default class CheckYourAnswersCompleteRehabilitativeActivityPage {
   constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { chargeNumber } = req.params
-    const { prisonerName, outcome, completed, daysToActivate, suspendedUntil } = pageData
+    const { chargeNumber, id } = req.params
+    const { prisonerName, outcome, completed, daysToActivate, suspendedUntil, actualDays } = pageData
+
+    let details = ''
+
+    if (!completed) {
+      switch (outcome) {
+        case NotCompletedOutcome.FULL_ACTIVATE:
+          details = `Activate it in full: ${actualDays} days`
+          break
+        case NotCompletedOutcome.PARTIAL_ACTIVATE:
+          details = `Activate for a different number of days: ${daysToActivate} days`
+          break
+        case NotCompletedOutcome.EXT_SUSPEND:
+          details = `Suspend it for longer: to ${moment(suspendedUntil).format('D MMM YYYY')}`
+          break
+        case NotCompletedOutcome.NO_ACTION:
+          details = 'No action'
+          break
+        default:
+          break
+      }
+    }
 
     return res.render(`pages/confirmRehabCompletion.njk`, {
       cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
+      prisonerName,
+      completed: completed ? 'Yes' : 'No',
+      details,
+      changeCompletedLink: adjudicationUrls.completeRehabilitativeActivity.urls.start(chargeNumber, +id),
+      changeOutcomeLink: adjudicationUrls.incompleteRehabilitativeActivity.urls.start(chargeNumber, +id),
     })
   }
 
@@ -35,33 +63,30 @@ export default class ConfirmCompleteRehabilitativeActivityPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const { completed, prisonerName } = await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(
-      chargeNumber,
-      +id,
-      user
-    )
+    const { completed, prisonerName, outcome, daysToActivate, suspendedUntil, actualDays } =
+      await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(req, chargeNumber, +id, user)
 
     return this.renderView(req, res, {
       prisonerName,
       completed,
+      daysToActivate,
+      suspendedUntil,
+      outcome,
+      actualDays,
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, id } = req.params
-    const { completed } = req.body
     const { user } = res.locals
-    const { outcome, daysToActivate, suspendedUntil } = req.body
+    const { completed, outcome, daysToActivate, suspendedUntil } =
+      await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(req, chargeNumber, +id, user)
 
     try {
-      if (completed === 'YES') {
-        await this.punishmentsService.completeRehabilitativeActivity(chargeNumber, +id, completed === 'YES', user)
-        return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
-      }
       await this.punishmentsService.completeRehabilitativeActivity(
         chargeNumber,
         +id,
-        false,
+        Boolean(completed),
         user,
         outcome,
         +daysToActivate,

@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import UserService from '../../../../services/userService'
-import ConfirmCompleteRehabilitativeActivityPage from './confirmPage'
+import CheckYourAnswersCompleteRehabilitativeActivityPage from './checkYourAnswersPage'
 import PunishmentsService from '../../../../services/punishmentsService'
 
-export default class ConfirmCompleteRehabilitativeActivityRoutes {
-  page: ConfirmCompleteRehabilitativeActivityPage
+export default class CheckYourAnswersompleteRehabilitativeActivityRoutes {
+  page: CheckYourAnswersCompleteRehabilitativeActivityPage
 
   constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
-    this.page = new ConfirmCompleteRehabilitativeActivityPage(userService, punishmentsService)
+    this.page = new CheckYourAnswersCompleteRehabilitativeActivityPage(userService, punishmentsService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

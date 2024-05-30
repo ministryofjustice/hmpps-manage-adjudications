@@ -892,14 +892,14 @@ const adjudicationUrls = {
         `${adjudicationUrls.incompleteRehabilitativeActivity.root}/${chargeNumber}/${punishmentId}`,
     },
   },
-  confirmCompleteRehabilitativeActivity: {
-    root: '/confirm-complete-rehabilitative-activity',
+  checkYourAnswersCompleteRehabilitativeActivity: {
+    root: '/check-your-answers-rehabilitative-activity',
     matchers: {
       start: '/:chargeNumber/:id',
     },
     urls: {
       start: (chargeNumber: string, punishmentId: number) =>
-        `${adjudicationUrls.confirmCompleteRehabilitativeActivity.root}/${chargeNumber}/${punishmentId}`,
+        `${adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.root}/${chargeNumber}/${punishmentId}`,
     },
   },
   whenWillPunishmentStart: {
