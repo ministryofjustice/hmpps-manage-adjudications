@@ -8,6 +8,7 @@ import CompleteRehabilitativeActivity from '../pages/completeRehabilitativeActiv
 import PunishmentsAndDamagesPage from '../pages/punishmentsAndDamages'
 import IncompleteRehabilitativeActivity from '../pages/incompleteRehabilitativeActivity'
 import { formatDateForDatePicker } from '../../server/utils/utils'
+import RehabCheckYourAnswerssPage from '../pages/rehabCheckYourAnswers'
 
 const testData = new TestData()
 context.skip('Mark whether a rehabilitative activity has been completed', () => {
@@ -181,6 +182,11 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
       cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('111', 1))
 
       const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
+      completeActivityPage.completedChoice().find('input[value="YES"]').click()
+      completeActivityPage.submitButton().click()
+      const checkYourAnswers = Page.verifyOnPage(RehabCheckYourAnswerssPage)
+      checkYourAnswers.completedChangeLink().last().click()
+
       completeActivityPage.completedChoice().find('input[value="YES"]').should('be.checked')
     })
     it('Should submit YES answer', () => {
@@ -215,6 +221,9 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         },
       })
       completeActivityPage.submitButton().click()
+
+      const checkYourAnswers = Page.verifyOnPage(RehabCheckYourAnswerssPage)
+      checkYourAnswers.submitButton().click()
 
       Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage
@@ -281,6 +290,9 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         },
       })
       incompleteRehabilitativeActivityPage.submitButton().click()
+      const checkYourAnswers = Page.verifyOnPage(RehabCheckYourAnswerssPage)
+      checkYourAnswers.submitButton().click()
+
       Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage
         .rehabActivitiesTable()
@@ -348,6 +360,8 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         },
       })
       incompleteRehabilitativeActivityPage.submitButton().click()
+      const checkYourAnswers = Page.verifyOnPage(RehabCheckYourAnswerssPage)
+      checkYourAnswers.submitButton().click()
       Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage
         .rehabActivitiesTable()
@@ -417,6 +431,9 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         },
       })
       incompleteRehabilitativeActivityPage.submitButton().click()
+      const checkYourAnswers = Page.verifyOnPage(RehabCheckYourAnswerssPage)
+      checkYourAnswers.submitButton().click()
+
       Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage
         .rehabActivitiesTable()
@@ -467,6 +484,8 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
         },
       })
       incompleteRehabilitativeActivityPage.submitButton().click()
+      const checkYourAnswers = Page.verifyOnPage(RehabCheckYourAnswerssPage)
+      checkYourAnswers.submitButton().click()
       Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage
         .rehabActivitiesTable()
@@ -478,20 +497,33 @@ context.skip('Mark whether a rehabilitative activity has been completed', () => 
     it('Edit - date', () => {
       cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('112', 1))
       const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
-      completeActivityPage.completedChoice().find('input[value="NO"]').should('be.checked')
+      completeActivityPage.completedChoice().find('input[value="NO"]').click()
       completeActivityPage.submitButton().click()
       const incompleteRehabilitativeActivityPage = Page.verifyOnPage(IncompleteRehabilitativeActivity)
+      incompleteRehabilitativeActivityPage.radios().find('input[value="EXT_SUSPEND"]').click()
+      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      incompleteRehabilitativeActivityPage.suspendedUntil().type(date)
+      incompleteRehabilitativeActivityPage.submitButton().click()
+      const checkYourAnswers = Page.verifyOnPage(RehabCheckYourAnswerssPage)
+      checkYourAnswers.outcomeChangeLink().last().click()
       incompleteRehabilitativeActivityPage.radios().find('input[value=EXT_SUSPEND]')
-      incompleteRehabilitativeActivityPage.suspendedUntil().should('contain.value', '23/11/2024')
+      incompleteRehabilitativeActivityPage.suspendedUntil().should('contain.value', '10/10/2030')
     })
     it('Edit - days', () => {
       cy.visit(adjudicationUrls.completeRehabilitativeActivity.urls.start('112', 1))
       const completeActivityPage = Page.verifyOnPage(CompleteRehabilitativeActivity)
-      completeActivityPage.completedChoice().find('input[value="NO"]').should('be.checked')
+      completeActivityPage.completedChoice().find('input[value="NO"]').click()
       completeActivityPage.submitButton().click()
       const incompleteRehabilitativeActivityPage = Page.verifyOnPage(IncompleteRehabilitativeActivity)
+
+      incompleteRehabilitativeActivityPage.radios().find('input[value="PARTIAL_ACTIVATE"]').click()
+      incompleteRehabilitativeActivityPage.daysToActivate().type('4')
+      incompleteRehabilitativeActivityPage.submitButton().click()
+
+      const checkYourAnswers = Page.verifyOnPage(RehabCheckYourAnswerssPage)
+      checkYourAnswers.outcomeChangeLink().last().click()
       incompleteRehabilitativeActivityPage.radios().find('input[value=PARTIAL_ACTIVATE]')
-      incompleteRehabilitativeActivityPage.daysToActivate().should('contain.value', '7')
+      incompleteRehabilitativeActivityPage.daysToActivate().should('contain.value', '4')
     })
   })
 })

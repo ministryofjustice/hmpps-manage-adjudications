@@ -22,11 +22,17 @@ export default class CompleteRehabilitativeActivityPage {
     const { chargeNumber } = req.params
     const { prisonerName, activities, completed, error } = pageData
 
+    let completedText = ''
+
+    if (completed) {
+      completedText = completed ? 'YES' : 'NO'
+    }
+
     return res.render(`pages/completeRehabilitativeActivity.njk`, {
       cancelHref: adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber),
       prisonerName,
       activities,
-      completed,
+      completed: completedText,
       errors: error ? [error] : [],
     })
   }
@@ -41,7 +47,7 @@ export default class CompleteRehabilitativeActivityPage {
     }
 
     const { completed, activities, prisonerName } =
-      await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(chargeNumber, +id, user)
+      await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(req, chargeNumber, +id, user)
 
     return this.renderView(req, res, {
       prisonerName,
@@ -56,6 +62,7 @@ export default class CompleteRehabilitativeActivityPage {
     const { user } = res.locals
 
     const { prisonerName, activities } = await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(
+      req,
       chargeNumber,
       +id,
       user
@@ -73,8 +80,10 @@ export default class CompleteRehabilitativeActivityPage {
 
     if (completed === 'YES') {
       try {
-        await this.punishmentsService.completeRehabilitativeActivity(chargeNumber, +id, completed === 'YES', user)
-        return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
+        this.punishmentsService.addCompletedRehabilitativeActivity(req, true)
+        return res.redirect(
+          adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.urls.start(chargeNumber, +id)
+        )
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
         throw postError

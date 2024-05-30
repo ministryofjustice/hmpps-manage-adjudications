@@ -892,6 +892,16 @@ const adjudicationUrls = {
         `${adjudicationUrls.incompleteRehabilitativeActivity.root}/${chargeNumber}/${punishmentId}`,
     },
   },
+  checkYourAnswersCompleteRehabilitativeActivity: {
+    root: '/check-your-answers-rehabilitative-activity',
+    matchers: {
+      start: '/:chargeNumber/:id',
+    },
+    urls: {
+      start: (chargeNumber: string, punishmentId: number) =>
+        `${adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.root}/${chargeNumber}/${punishmentId}`,
+    },
+  },
   whenWillPunishmentStart: {
     root: '/when-will-punishment-start',
     matchers: {

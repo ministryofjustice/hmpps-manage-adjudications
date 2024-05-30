@@ -44,7 +44,7 @@ export default class IncompleteRehabilitativeActivityPage {
     }
 
     const { prisonerName, outcome, daysToActivate, suspendedUntil } =
-      await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(chargeNumber, +id, user)
+      await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(req, chargeNumber, +id, user)
 
     // if there is an outcome already present, we know the user is editing, and so the number of days and suspended until dates have been updated already
     return this.renderView(req, res, {
@@ -61,6 +61,7 @@ export default class IncompleteRehabilitativeActivityPage {
     const { user } = res.locals
 
     const { prisonerName } = await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(
+      req,
       chargeNumber,
       +id,
       user
@@ -79,16 +80,14 @@ export default class IncompleteRehabilitativeActivityPage {
     }
 
     try {
-      await this.punishmentsService.completeRehabilitativeActivity(
-        chargeNumber,
-        +id,
+      this.punishmentsService.addCompletedRehabilitativeActivity(
+        req,
         false,
-        user,
         outcome,
-        +daysToActivate,
+        daysToActivate,
         suspendedUntil ? datePickerToApi(suspendedUntil) : null
       )
-      return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
+      return res.redirect(adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.urls.start(chargeNumber, +id))
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
       throw postError

@@ -42,6 +42,7 @@ export interface ActivityDetails {
   activities: RehabilitativeActivity[]
   daysToActivate?: number
   suspendedUntil?: string
+  actualDays: number
 }
 
 export default class PunishmentsService {
@@ -224,6 +225,21 @@ export default class PunishmentsService {
     return req.session.punishments[chargeNumber].push(updatedPunishment)
   }
 
+  addCompletedRehabilitativeActivity(
+    req: Request,
+    completed: boolean,
+    outcome?: NotCompletedOutcome,
+    daysToActivate?: number,
+    suspendedUntil?: string
+  ) {
+    req.session.rehabCompletionInformation = {
+      completed,
+      daysToActivate,
+      suspendedUntil,
+      outcome,
+    }
+  }
+
   async deleteSessionPunishments(req: Request, redisId: string, chargeNumber: string) {
     // get an array of the redisIds
     const redisIdArray = req.session.punishments?.[chargeNumber].map((punishment: PunishmentData) => punishment.redisId)
@@ -340,6 +356,7 @@ export default class PunishmentsService {
   }
 
   async getRehabilitativeActivitiesCompletionDetails(
+    req: Request,
     chargeNumber: string,
     punishmentId: number,
     user: User
@@ -347,20 +364,17 @@ export default class PunishmentsService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
+    const completedSessionData = req.session.rehabCompletionInformation
     const punishment = reportedAdjudication.punishments?.filter(p => p.id === punishmentId)[0]
-    let completed: string = null
-    if (punishment.rehabilitativeActivitiesCompleted === true) {
-      completed = 'YES'
-    } else if (punishment.rehabilitativeActivitiesCompleted === false) {
-      completed = 'NO'
-    }
+
     return {
       prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
       activities: punishment.rehabilitativeActivities,
-      completed,
-      outcome: punishment.rehabilitativeActivitiesNotCompletedOutcome,
-      daysToActivate: punishment.schedule.duration,
-      suspendedUntil: punishment.schedule.suspendedUntil,
+      completed: completedSessionData?.completed,
+      outcome: completedSessionData?.outcome,
+      daysToActivate: completedSessionData?.daysToActivate,
+      suspendedUntil: completedSessionData?.suspendedUntil,
+      actualDays: punishment.schedule.duration,
     }
   }
 

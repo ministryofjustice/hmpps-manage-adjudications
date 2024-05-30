@@ -1,0 +1,88 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+
+{% set title = "Check your answers" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+ {% set rows = [] %}
+ {% set rows = (rows.push(
+	 {
+      key: {
+        text: "Did " + prisonerName + " complete the activity?"
+      },
+      value: {
+        text: completed
+      },
+      actions: {
+        items: [
+          {
+            href: changeCompletedLink,
+            text: "Change",
+            visuallyHiddenText: "completed",
+            attributes: {"data-qa": "completed-change-link" }
+          }
+        ]
+      }
+    }
+	), rows) %}
+
+{% if completed === 'No' %}
+    {% set rows = (rows.push(
+	 {
+      key: {
+        text: "Select what happens to " + prisonerName | possessive + " suspended punishment"
+      },
+      value: {
+        text: details
+      },
+      actions: {
+        items: [
+          {
+            href: changeOutcomeLink,
+            text: "Change",
+            visuallyHiddenText: "outcome",
+            attributes: {"data-qa": "outcome-change-link" }
+          }
+        ]
+      }
+    }
+	), rows) %}
+{% endif %}
+ 
+
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+   <h1 class="govuk-heading-l">{{ title }}</h1>
+
+   
+   {{ govukSummaryList({rows: rows})  }}
+      
+      <div class="govuk-button-group">
+        {{ govukButton({
+              text: 'Confirm and submit',
+              type: "submit",
+              preventDoubleClick: true,
+              classes: "govuk-button--submit govuk-!-margin-right-3",
+              attributes: { "data-qa": "confirm-complete-activity-submit" }
+              }) }}
+
+        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='confirm-complete-activity-cancel'>Return to ‘punishments and damages’</a>
+      </div>
+
+    </form>
+    </div>
+  </div>
+{% endblock %}
