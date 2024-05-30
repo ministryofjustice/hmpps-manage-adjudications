@@ -2,7 +2,7 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import UserService from '../../../../services/userService'
-import { datePickerToApi, hasAnyRole } from '../../../../utils/utils'
+import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import { NotCompletedOutcome } from '../../../../data/PunishmentResult'
