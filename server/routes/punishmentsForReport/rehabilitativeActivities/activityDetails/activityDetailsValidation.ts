@@ -5,37 +5,39 @@ type ValidationForm = {
   monitorName: string
   endDate: string
   totalSessions: number
-}
-
-const errors: { [key: string]: FormError } = {
-  MISSING_DESCRIPTION: {
-    href: '#details',
-    text: 'Enter the activity the prisoner will be doing',
-  },
-  MISSING_NAME: {
-    href: '#monitorName',
-    text: 'Enter who is monitoring the prisoner on the activity',
-  },
-  MISSING_DATE: {
-    href: '#endDate',
-    text: 'Enter when the activity should be completed by',
-  },
-  TYPE_SESSION_NUMBER: {
-    href: '#totalSessions',
-    text: 'Number of sessions must be a number',
-  },
+  prisonerName: string
 }
 
 export default function validateForm({
+  prisonerName,
   details,
   monitorName,
   endDate,
   totalSessions,
 }: ValidationForm): FormError | null {
-  if (totalSessions && Number.isNaN(totalSessions)) return errors.TYPE_SESSION_NUMBER
-  if (!details) return errors.MISSING_DESCRIPTION
-  if (!monitorName) return errors.MISSING_NAME
-  if (!endDate) return errors.MISSING_DATE
+  if (totalSessions && !Number.isInteger(totalSessions))
+    return {
+      href: '#totalSessions',
+      text: 'Number of sessions must be a number',
+    }
+  if (!details) {
+    return {
+      href: '#details',
+      text: `Enter the activity ${prisonerName || 'the prisoner'} will be doing`,
+    }
+  }
+  if (!monitorName) {
+    return {
+      href: '#monitorName',
+      text: `Enter who is monitoring ${prisonerName || 'the prisoner'} on the activity`,
+    }
+  }
+  if (!endDate) {
+    return {
+      href: '#endDate',
+      text: 'Enter when the activity should be completed by',
+    }
+  }
 
   return null
 }
