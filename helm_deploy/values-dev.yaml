@@ -35,7 +35,6 @@ generic-service:
     MAINTENANCE_MODE: false
     ENVIRONMENT_NAME: 'DEV'
     OFFENCE_VERSION: 2
-    PAYBACK_REHAB_FLAG: true
 
   allowlist: null
 

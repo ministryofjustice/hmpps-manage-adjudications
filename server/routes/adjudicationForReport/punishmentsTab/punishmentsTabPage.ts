@@ -125,7 +125,6 @@ export default class PunishmentsTabPage {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
-      paybackAndRehabFlag: config.paybackAndRehabFlag === 'true',
       rehabActivities,
     })
   }

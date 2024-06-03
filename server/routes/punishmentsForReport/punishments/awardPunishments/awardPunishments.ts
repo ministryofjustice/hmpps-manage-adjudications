@@ -79,7 +79,6 @@ export default class AwardPunishmentsPage {
       cautionAdded,
       continueHref,
       rehabActivities,
-      paybackAndRehabFlag: config.paybackAndRehabFlag === 'true',
     })
   }
 

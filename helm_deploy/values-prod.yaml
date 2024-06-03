@@ -23,7 +23,6 @@ generic-service:
     FRONTEND_COMPONENT_API_URL: "https://frontend-components.hmpps.service.justice.gov.uk"
     MAINTENANCE_MODE: false
     OFFENCE_VERSION: 2
-    PAYBACK_REHAB_FLAG: true
 
 
   allowlist:

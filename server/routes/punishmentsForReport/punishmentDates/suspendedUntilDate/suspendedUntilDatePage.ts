@@ -107,23 +107,21 @@ export default class SuspendedUntilDatePage {
       throw postError
     }
 
-    if (config.paybackAndRehabFlag === 'true') {
-      const isGovernerHearing = !(await this.punishmentsService.checkAdditionalDaysAvailability(chargeNumber, user))
+    const isGovernerHearing = !(await this.punishmentsService.checkAdditionalDaysAvailability(chargeNumber, user))
 
-      if (
-        isGovernerHearing &&
-        [
-          PunishmentType.EARNINGS,
-          PunishmentType.CONFINEMENT,
-          PunishmentType.EXCLUSION_WORK,
-          PunishmentType.EXTRA_WORK,
-          PunishmentType.PRIVILEGE,
-          PunishmentType.REMOVAL_ACTIVITY,
-          PunishmentType.REMOVAL_WING,
-        ].includes(type)
-      ) {
-        return res.redirect(adjudicationUrls.punishmentHasRehabilitativeActivities.urls.start(chargeNumber, redisId))
-      }
+    if (
+      isGovernerHearing &&
+      [
+        PunishmentType.EARNINGS,
+        PunishmentType.CONFINEMENT,
+        PunishmentType.EXCLUSION_WORK,
+        PunishmentType.EXTRA_WORK,
+        PunishmentType.PRIVILEGE,
+        PunishmentType.REMOVAL_ACTIVITY,
+        PunishmentType.REMOVAL_WING,
+      ].includes(type)
+    ) {
+      return res.redirect(adjudicationUrls.punishmentHasRehabilitativeActivities.urls.start(chargeNumber, redisId))
     }
 
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))

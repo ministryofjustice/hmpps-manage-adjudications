@@ -173,7 +173,6 @@ describe('GET /all-completed-reports', () => {
             ],
           },
         },
-        latestVersion: false,
       },
       'pages/prepareAndRecordAnAdjudicationHearingHeader',
       { chargeNumber: '1524493' },

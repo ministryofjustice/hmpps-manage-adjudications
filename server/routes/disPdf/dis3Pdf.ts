@@ -44,10 +44,10 @@ export default class Dis3Pdf {
       { photoVideo, baggedAndTagged, other },
       witnesses
     )
-    const latestVersion: boolean = config.paybackAndRehabFlag === 'true'
+
     res.renderPdf(
       `pages/prepareAndRecordAnAdjudicationHearing`,
-      { adjudicationsUrl, prepareAndRecordAnAdjudicationHearingData, latestVersion },
+      { adjudicationsUrl, prepareAndRecordAnAdjudicationHearingData },
       `pages/prepareAndRecordAnAdjudicationHearingHeader`,
       { chargeNumber },
       `pages/prepareAndRecordAnAdjudicationHearingFooter`,

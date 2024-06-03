@@ -75,7 +75,6 @@ export default class PunishmentPage {
       damagesUnavailable,
       cautionUnavailable: punishmentsAlreadyAdded || cautionAlreadyAdded,
       damagesOwedAmount,
-      paybackPunishmentFlag: config.paybackAndRehabFlag === 'true',
     })
   }
 

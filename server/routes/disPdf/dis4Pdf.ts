@@ -17,11 +17,10 @@ export default class Dis4Pdf {
       chargeNumber,
       adjudicationDetails
     )
-    const latestVersion: boolean = config.paybackAndRehabFlag === 'true'
 
     res.renderPdf(
       `pages/adjudicationHearingContinuation`,
-      { adjudicationsUrl, adjudicationHearingContinuationData, latestVersion },
+      { adjudicationsUrl, adjudicationHearingContinuationData },
       `pages/adjudicationHearingContinuationHeader`,
       {},
       `pages/adjudicationHearingContinuationFooter`,

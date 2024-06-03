@@ -3,10 +3,6 @@
 {% from "../macros/conductReportDetails_v2.njk" import conductReportDetails_v2 %}
 {% block content %}
     <div class='adjudication-pdf'>
-        {% if latestVersion %}
-            {{ conductReportDetails_v2(conductReportData) }}
-        {% else %}
-            {{ conductReportDetails(conductReportData) }}
-        {% endif %}
+        {{ conductReportDetails_v2(conductReportData) }}
     </div>
 {% endblock %}

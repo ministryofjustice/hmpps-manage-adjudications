@@ -5,12 +5,7 @@
 {% from "../macros/prepareAndRecordAnAdjudicationHearingDetails_v2.njk" import prepareAndRecordAnAdjudicationHearingDetails_v2 %}
 {% block content %}
   <div class='adjudication-pdf'>
-    {% if latestVersion %}
-      {{ prepareAndRecordAnAdjudicationHearingPrepare_v2(prepareAndRecordAnAdjudicationHearingData) }}
-      {{ prepareAndRecordAnAdjudicationHearingDetails_v2(prepareAndRecordAnAdjudicationHearingData) }}
-    {% else %}
-      {{ prepareAndRecordAnAdjudicationHearingPrepare(prepareAndRecordAnAdjudicationHearingData) }}
-      {{ prepareAndRecordAnAdjudicationHearingDetails(prepareAndRecordAnAdjudicationHearingData) }}
-    {% endif %}
+    {{ prepareAndRecordAnAdjudicationHearingPrepare_v2(prepareAndRecordAnAdjudicationHearingData) }}
+    {{ prepareAndRecordAnAdjudicationHearingDetails_v2(prepareAndRecordAnAdjudicationHearingData) }}
   </div>
 {% endblock %}

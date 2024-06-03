@@ -41,11 +41,6 @@ export default class FormsTabRoute {
 
     const { path } = req.query
     const tabUrls = this.getTabUrls(path as string, chargeNumber)
-    let version = 'v1'
-
-    if (config.paybackAndRehabFlag === 'true') {
-      version = 'v2'
-    }
 
     return res.render(`pages/adjudicationForReport/formsTab`, {
       prisoner,
@@ -57,7 +52,6 @@ export default class FormsTabRoute {
       noticeOfBeingPlacedOnReportStaffHref: `${adjudicationUrls.printPdf.urls.dis12(chargeNumber)}?copy=staff`,
       ...tabUrls,
       outcomesEntered: reportedAdjudication.punishments?.length > 0,
-      version,
     })
   }
 

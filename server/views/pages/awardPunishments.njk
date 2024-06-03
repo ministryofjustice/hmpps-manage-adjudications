@@ -27,7 +27,7 @@
           <h2 class="govuk-heading-m">Punishments</h2>
         {% endif %}
         {{ awardPunishmentsTable(filteredPunishments.otherPunishments, redirectAfterRemoveUrl, chargeNumber, false, false) }}
-        {% if paybackAndRehabFlag and rehabActivities | length %}
+        {% if rehabActivities | length %}
          <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
          {{ awardRehabilitativeActivitiesTable(rehabActivities) }} 
         {% endif %}

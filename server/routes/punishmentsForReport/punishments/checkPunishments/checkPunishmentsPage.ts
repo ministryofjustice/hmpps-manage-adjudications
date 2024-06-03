@@ -57,7 +57,6 @@ export default class CheckPunishmentsPage {
       changePunishmentLink: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       cancelHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
       rehabActivities,
-      paybackAndRehabFlag: config.paybackAndRehabFlag === 'true',
     })
   }
 

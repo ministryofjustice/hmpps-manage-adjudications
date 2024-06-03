@@ -9,11 +9,7 @@
     <div class='adjudication-pdf'>
         {{ adjudicationHistoryForCurrentSentenceDetails(adjudicationHistoryForCurrentSentenceData) }}
         {{ adjudicationHistoryForCurrentSentencePreviousAdjudication(adjudicationHistoryForCurrentSentenceData) }}
-        {% if latestVersion %}
-            {{ adjudicationHistoryForCurrentSentenceSuspendedPunishments_v2(adjudicationHistoryForCurrentSentenceData) }}
-        {% else %}
-            {{ adjudicationHistoryForCurrentSentenceSuspendedPunishments(adjudicationHistoryForCurrentSentenceData) }}
-        {% endif %}
+        {{ adjudicationHistoryForCurrentSentenceSuspendedPunishments_v2(adjudicationHistoryForCurrentSentenceData) }}
         {{ adjudicationHistoryForCurrentSentenceExistingPunishments(adjudicationHistoryForCurrentSentenceData) }}
         {{ adjudicationHistoryForCurrentSentenceDamagesOwed(adjudicationHistoryForCurrentSentenceData) }}
     </div>

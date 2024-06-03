@@ -23,7 +23,7 @@
 
             {% if data.suspendedPunishmentsPresent %}
                 {{ suspendedPunishments(data)}}
-                {% if latestVersion and data.rehabActivitiesPresent %}
+                {% if data.rehabActivitiesPresent %}
                     {{ rehabilitativeActivityConditions(data) }}
                 {% endif %}
                 {% include '../partials/adjudicationResult_DIS7/suspendedPunishmentInfo.njk' %}
@@ -33,11 +33,7 @@
                 {{ damages(data) }}
             {% endif %}
 
-            {% if latestVersion %}
-                {{ adjudicationResultReportDetails_v2(data) }}
-            {% else %}
-                {{ adjudicationResultReportDetails(data) }}
-            {% endif %}
+            {{ adjudicationResultReportDetails_v2(data) }}
 
             {{ askForAReview(data) }}
             {{ adjudicatorAndHearingDate(data) }}
