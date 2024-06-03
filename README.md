@@ -64,3 +64,60 @@ And then either, run tests in headless mode with:
 Or run tests with the cypress UI:
 
 `npm run int-test-ui`
+
+### Guide around adding offences to the decision tree
+
+The offences are stored in the decisionTree.ts, and are either presented as a series of questions, across multiple pages, or as a single page
+with the questions grouped by paragraph.
+
+Its possible when policy changes, that some offences and their questions will be altered, amended, or a new series added, to go live on a specific date
+
+In order to meet this criteria the decisionTree now contains versioning.  The defaults will be all the versions.  To add a new version, add the new version to all of occurences of the 
+
+```applicableVersions: number[] ```
+
+For the standard decision tree (ie a sequence of pages) examples include adding a new final answer
+
+```
+      .child(
+          answer('Threatening, abusive, or insulting behaviour').versionedChild([
+            question('Did the incident involve racist behaviour?', null, [1])
+              .child(answer('Yes').offenceCode(20001))
+              .child(answer('No').offenceCode(20002)),
+            question('Was the incident aggravated by a protected characteristic?', null, [2])
+              .child(answer('Yes').child(protectedCharacteristicsQuestion(2000124)))
+              .child(answer('No').offenceCode(20002)) 
+          ])
+        )
+```
+
+adding a some new text in a question
+
+```
+answer(CHILD_1_Q, [1]).child(versionedQuestion1Answers),
+answer(CHILD_1_Q_V2, [2]).child(versionedQuestion1Answers),
+  ```
+
+  For the ALO versions, the versions will go in the config such as 
+
+```
+new AloOffenceItem(CHILD_1_Q,['1', '1(a)', '4', '5'], [1]),
+new AloOffenceItem(CHILD_1_Q_V2,['1', '1(a)', '4', '5', '1(b)', '1(c)', '1(d)'], [2]),
+  
+new AloOffenceItem(CHILD_1_Q,['1', '2', '5', '6'], [1]),
+new AloOffenceItem(CHILD_1_Q_V2,['1', '2', '5', '6', '2(a)', '2(b)', '2(c)'], [2]),
+```
+
+If they have additonal questions leading from this page the extra pages config can also be versioned
+
+```
+new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionId, [1] ),
+new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionIdV2, [2] ),
+```
+
+finally to map the config back to the correct offence codes, this can also be versioned such as 
+
+```
+new ParaToOffenceCode('24(a)','24101', [1] ),
+new ParaToOffenceCode('24(a)', '2410124', [2]),
+ ```
