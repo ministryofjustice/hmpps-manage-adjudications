@@ -5,7 +5,6 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../../utils/utils'
 import { DISFormfilterFromUiFilter } from '../../../utils/adjudicationFilterHelper'
-import config from '../../../config'
 
 export default class FormsTabRoute {
   constructor(

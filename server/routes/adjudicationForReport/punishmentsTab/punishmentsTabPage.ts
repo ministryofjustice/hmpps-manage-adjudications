@@ -6,7 +6,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
 import UserService from '../../../services/userService'
-import config from '../../../config'
 
 export enum PageRequestType {
   REPORTER,

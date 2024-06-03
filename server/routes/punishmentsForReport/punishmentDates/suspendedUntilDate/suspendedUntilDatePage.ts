@@ -8,7 +8,6 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
-import config from '../../../../config'
 
 type PageData = {
   error?: FormError

@@ -6,7 +6,6 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import UserService from '../../../../services/userService'
-import config from '../../../../config'
 
 export enum PageRequestType {
   PUNISHMENTS_FROM_API,
