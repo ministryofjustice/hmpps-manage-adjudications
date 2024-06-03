@@ -617,7 +617,7 @@ context('Damages and punishments summary', () => {
       punishmentsAndDamagesPage.removePunishmentCommentLink().should('not.exist')
       punishmentsAndDamagesPage.addPunishmentCommentButton().should('exist')
     })
-    it.skip('should show the rehab punishments table if there are any available', () => {
+    it('should show the rehab punishments table if there are any available', () => {
       cy.visit(adjudicationUrls.punishmentsAndDamages.urls.review('1638'))
       const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
       punishmentsAndDamagesPage.rehabActivitiesTable().should('exist')
@@ -1038,7 +1038,7 @@ context('Reporter view', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('102'))
     cy.get('[data-qa="consecutive-link"]').should('not.exist')
   })
-  it.skip('should not show the link to complete an activity', () => {
+  it('should not show the link to complete an activity', () => {
     cy.visit(adjudicationUrls.punishmentsAndDamages.urls.report('1639'))
     const punishmentsAndDamagesPage = Page.verifyOnPage(PunishmentsAndDamagesPage)
     punishmentsAndDamagesPage.rehabActivitiesTable().should('exist')

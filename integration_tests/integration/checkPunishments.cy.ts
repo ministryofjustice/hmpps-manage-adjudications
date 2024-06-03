@@ -14,6 +14,7 @@ import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDate
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import PunishmentStartDatePage from '../pages/punishmentStartDate'
 import { formatDateForDatePicker } from '../../server/utils/utils'
+import IsThereRehabilitativeActivitesPage from '../pages/isThereRehabilitativeActivitiesPage'
 
 const testData = new TestData()
 
@@ -207,6 +208,10 @@ context('Check punishments', () => {
       const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
       punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
+
+      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
+      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
+      rehabActivityConditionPage.submitButton().click()
 
       cy.get('[data-qa="punishments-table"]')
         .find('td')

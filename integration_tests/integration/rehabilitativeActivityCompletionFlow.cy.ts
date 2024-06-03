@@ -11,7 +11,7 @@ import { formatDateForDatePicker } from '../../server/utils/utils'
 import RehabCheckYourAnswerssPage from '../pages/rehabCheckYourAnswers'
 
 const testData = new TestData()
-context.skip('Mark whether a rehabilitative activity has been completed', () => {
+context('Mark whether a rehabilitative activity has been completed', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

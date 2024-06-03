@@ -16,7 +16,7 @@ import adjudicationUrls from '../../server/utils/urlGenerator'
 import RemoveActivityPage from '../pages/removeActivityPage'
 
 const testData = new TestData()
-context.skip('Add a rehabilitative activity', () => {
+context('Add a rehabilitative activity', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -309,11 +309,11 @@ context.skip('Add a rehabilitative activity', () => {
 
       const activityDetails = Page.verifyOnPage(RehabilitativeActivityDetailsPage)
       activityDetails.submitButton().click()
-      activityDetails.errorSummary().contains('Enter the activity the prisoner will be doing')
+      activityDetails.errorSummary().contains('Enter the activity John Smith will be doing')
 
       activityDetails.activityDescription().type('This is the activity description')
       activityDetails.submitButton().click()
-      activityDetails.errorSummary().contains('Enter who is monitoring the prisoner on the activity')
+      activityDetails.errorSummary().contains('Enter who is monitoring John Smith on the activity')
 
       activityDetails.monitorName().type('Fred Jones')
       activityDetails.submitButton().click()
