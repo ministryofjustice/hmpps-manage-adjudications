@@ -33,7 +33,6 @@ beforeEach(() => {
     duration: 10,
     suspendedUntil: '4/4/2023',
   })
-  punishmentsService.addSessionPunishment.mockResolvedValue('xyz')
 })
 
 afterEach(() => {
