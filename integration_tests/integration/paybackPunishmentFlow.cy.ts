@@ -12,7 +12,7 @@ import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicati
 import { formatDateForDatePicker } from '../../server/utils/utils'
 
 const testData = new TestData()
-context.skip('Add a new payback punishment', () => {
+context('Add a new payback punishment', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')

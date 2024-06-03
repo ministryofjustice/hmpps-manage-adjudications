@@ -65,7 +65,7 @@ context('Add a new punishment', () => {
         expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
     })
-    it.skip('should show additional days and prospective additional days radios if the hearing is IA', () => {
+    it('should show additional days and prospective additional days radios if the hearing is IA', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('101'))
       cy.get('#punishmentType-11').should('exist')
       cy.get('[for="punishmentType-11"]').should('include.text', 'Additional days')

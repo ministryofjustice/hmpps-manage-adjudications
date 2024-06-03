@@ -13,6 +13,7 @@ import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDate
 import WillPunishmentBeSuspendedPage from '../pages/willPunishmentBeSuspended'
 import WillPunishmentBeConsecutivePage from '../pages/willPunishmentBeConsective'
 import WhichPunishmentConsecutiveToPage from '../pages/whichPunishmentConsecutiveTo'
+import IsThereRehabilitativeActivitesPage from '../pages/isThereRehabilitativeActivitiesPage'
 import DamagesAmountPage from '../pages/damagesAmountOwed'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
@@ -250,6 +251,10 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
 
+      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
+      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
+      rehabActivityConditionPage.submitButton().click()
+
       awardPunishmentsPage.editPunishment().first().click()
       punishmentPage.punishment().find('input[value="CONFINEMENT"]').should('be.checked')
       punishmentPage.submitButton().click()
@@ -331,6 +336,10 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
 
+      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
+      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
+      rehabActivityConditionPage.submitButton().click()
+
       awardPunishmentsPage
         .punishmentsTable()
         .find('td')
@@ -369,6 +378,10 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
 
+      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
+      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
+      rehabActivityConditionPage.submitButton().click()
+
       awardPunishmentsPage
         .punishmentsTable()
         .find('td')
@@ -406,6 +419,10 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
       punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
+
+      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
+      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
+      rehabActivityConditionPage.submitButton().click()
 
       awardPunishmentsPage
         .punishmentsTable()
@@ -550,6 +567,10 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
       punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
+
+      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
+      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
+      rehabActivityConditionPage.submitButton().click()
 
       awardPunishmentsPage.newPunishment().click()
 
