@@ -24,7 +24,7 @@ export default class CompleteRehabilitativeActivityPage {
 
     let completedText = ''
 
-    if (completed) {
+    if ((completed ?? null) !== null) {
       completedText = completed ? 'YES' : 'NO'
     }
 
