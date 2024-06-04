@@ -91,7 +91,7 @@ For the standard decision tree (ie a sequence of pages) examples include adding 
         )
 ```
 
-adding a some new text in a question
+altering text in a question
 
 ```
 answer(CHILD_1_Q, [1]).child(versionedQuestion1Answers),
