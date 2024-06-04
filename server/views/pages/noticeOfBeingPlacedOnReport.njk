@@ -8,11 +8,7 @@
     <div class='adjudication-pdf'>
         {{ noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) }}
         {% if noticeOfBeingPlacedOnReportData.isPrisonerCopy %}
-            {% if latestVersion %}
-                {{ noticeOfBeingPlacedOnReportLegal_v2(noticeOfBeingPlacedOnReportData.chargeNumber) }}
-            {% else %}
-                {{ noticeOfBeingPlacedOnReportLegal(noticeOfBeingPlacedOnReportData.chargeNumber) }}
-            {% endif %}
+            {{ noticeOfBeingPlacedOnReportLegal_v2(noticeOfBeingPlacedOnReportData.chargeNumber) }}
         {% endif %}
         {{ noticeOfBeingPlacedOnReportAdjournment(noticeOfBeingPlacedOnReportData.chargeNumber) }}
     </div>

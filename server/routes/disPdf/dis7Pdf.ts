@@ -15,11 +15,10 @@ export default class Dis7Pdf {
 
     const adjudicationResultReportData = new AdjudicationResultReportData(chargeNumber, adjudicationDetails)
     const header = 'Result of your adjudication'
-    const latestVersion: boolean = config.paybackAndRehabFlag === 'true'
 
     res.renderPdf(
       `pages/adjudicationResultReport`,
-      { adjudicationsUrl, data: adjudicationResultReportData, latestVersion },
+      { adjudicationsUrl, data: adjudicationResultReportData },
       `pages/adjudicationResultReportHeader`,
       { chargeNumber, header },
       `pages/adjudicationResultReportFooter`,

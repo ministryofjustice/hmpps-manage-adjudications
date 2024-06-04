@@ -8,7 +8,6 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
-import config from '../../../../config'
 
 type PageData = {
   error?: FormError
@@ -107,23 +106,21 @@ export default class SuspendedUntilDatePage {
       throw postError
     }
 
-    if (config.paybackAndRehabFlag === 'true') {
-      const isGovernerHearing = !(await this.punishmentsService.checkAdditionalDaysAvailability(chargeNumber, user))
+    const isGovernerHearing = !(await this.punishmentsService.checkAdditionalDaysAvailability(chargeNumber, user))
 
-      if (
-        isGovernerHearing &&
-        [
-          PunishmentType.EARNINGS,
-          PunishmentType.CONFINEMENT,
-          PunishmentType.EXCLUSION_WORK,
-          PunishmentType.EXTRA_WORK,
-          PunishmentType.PRIVILEGE,
-          PunishmentType.REMOVAL_ACTIVITY,
-          PunishmentType.REMOVAL_WING,
-        ].includes(type)
-      ) {
-        return res.redirect(adjudicationUrls.punishmentHasRehabilitativeActivities.urls.start(chargeNumber, redisId))
-      }
+    if (
+      isGovernerHearing &&
+      [
+        PunishmentType.EARNINGS,
+        PunishmentType.CONFINEMENT,
+        PunishmentType.EXCLUSION_WORK,
+        PunishmentType.EXTRA_WORK,
+        PunishmentType.PRIVILEGE,
+        PunishmentType.REMOVAL_ACTIVITY,
+        PunishmentType.REMOVAL_WING,
+      ].includes(type)
+    ) {
+      return res.redirect(adjudicationUrls.punishmentHasRehabilitativeActivities.urls.start(chargeNumber, redisId))
     }
 
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))

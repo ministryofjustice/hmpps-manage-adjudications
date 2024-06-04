@@ -39,7 +39,7 @@
         <p class="govuk-body" data-qa="emptyState">No punishments have been awarded for this adjudication.</p>
       {% endif %}
 
-      {% if paybackAndRehabFlag and rehabActivities | length %}
+      {% if rehabActivities | length %}
          <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
          {{ awardRehabilitativeActivitiesTable(rehabActivities, true) }} 
       {% endif %}

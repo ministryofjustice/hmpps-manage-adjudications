@@ -211,7 +211,6 @@ describe('GET /dis5', () => {
             },
           ],
         },
-        latestVersion: false,
       },
       'pages/adjudicationHistoryForCurrentSentenceHeader',
       { chargeNumber: '1524493' },

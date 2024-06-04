@@ -13,7 +13,6 @@ import {
   RehabilitativeActivity,
 } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
-import config from '../../../config'
 
 type PageData = {
   error?: FormError
@@ -75,7 +74,6 @@ export default class PunishmentPage {
       damagesUnavailable,
       cautionUnavailable: punishmentsAlreadyAdded || cautionAlreadyAdded,
       damagesOwedAmount,
-      paybackPunishmentFlag: config.paybackAndRehabFlag === 'true',
     })
   }
 

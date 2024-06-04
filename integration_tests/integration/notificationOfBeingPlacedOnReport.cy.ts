@@ -25,6 +25,7 @@ context('Prisoner has been placed on report', () => {
             prisonerNumber: 'G6415GD',
             locationId: 25538,
             offenceDetails: { offenceCode: 1001 },
+            hearings: [testData.singleHearing({ dateTimeOfHearing: '2025-11-15T09:00:00' })],
           }),
         },
       },
@@ -71,7 +72,7 @@ context('Prisoner has been placed on report', () => {
   })
 
   it('The notification of being on report should present on the print report page', () => {
-    cy.request(adjudicationUrls.printPdf.urls.dis12('1524242')).should(res => {
+    cy.request(`${adjudicationUrls.printPdf.urls.dis12('1524242')}?copy=staff`).should(res => {
       expect(res.status).to.eq(200)
       expect(res.headers['content-disposition']).to.contain('notice-of-being-placed-on-report-1524242.pdf')
       expect(res.headers['content-type']).to.eq('application/pdf')

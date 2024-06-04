@@ -6,7 +6,6 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import PunishmentsService from '../../../services/punishmentsService'
 import { flattenPunishments } from '../../../data/PunishmentResult'
 import UserService from '../../../services/userService'
-import config from '../../../config'
 
 export enum PageRequestType {
   REPORTER,
@@ -125,7 +124,6 @@ export default class PunishmentsTabPage {
       transferBannerContent: getTransferBannerInfo.transferBannerContent,
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
-      paybackAndRehabFlag: config.paybackAndRehabFlag === 'true',
       rehabActivities,
     })
   }

@@ -25,7 +25,6 @@ generic-service:
     MAINTENANCE_MODE: false
     ENVIRONMENT_NAME: 'PRE-PRODUCTION'
     OFFENCE_VERSION: 2
-    PAYBACK_REHAB_FLAG: true
 
   allowlist:
     groups:

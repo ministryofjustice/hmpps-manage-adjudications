@@ -117,7 +117,7 @@
     </div>
   {% endif %}
 
-  {% if paybackAndRehabFlag and rehabActivities | length %}
+  {% if rehabActivities | length %}
     <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
     {{ rehabActivityConditionsCompletedTable(rehabActivities, readOnly) }} 
   {% endif %}

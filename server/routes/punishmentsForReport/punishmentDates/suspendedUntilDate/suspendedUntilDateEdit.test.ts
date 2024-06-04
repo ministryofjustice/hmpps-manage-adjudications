@@ -88,7 +88,7 @@ describe('POST ', () => {
         suspendedUntil: '13/12/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
+      .expect('Location', adjudicationUrls.punishmentHasRehabilitativeActivities.urls.start('100', 'xyz'))
       .then(() =>
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),

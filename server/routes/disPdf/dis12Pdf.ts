@@ -46,11 +46,9 @@ export default class Dis12Pdf {
       nextHearingDateTime
     )
 
-    const latestVersion: boolean = config.paybackAndRehabFlag === 'true'
-
     res.renderPdf(
       `pages/noticeOfBeingPlacedOnReport`,
-      { adjudicationsUrl, noticeOfBeingPlacedOnReportData, latestVersion },
+      { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
       `pages/noticeOfBeingPlacedOnReportHeader`,
       { chargeNumber },
       `pages/noticeOfBeingPlacedOnReportFooter`,

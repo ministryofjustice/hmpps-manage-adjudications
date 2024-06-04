@@ -33,11 +33,10 @@ export default class Dis5Pdf {
       dis5Data,
       prisonerSearchDis5Data
     )
-    const latestVersion: boolean = config.paybackAndRehabFlag === 'true'
 
     res.renderPdf(
       `pages/adjudicationHistoryForCurrentSentence`,
-      { adjudicationsUrl, adjudicationHistoryForCurrentSentenceData, latestVersion },
+      { adjudicationsUrl, adjudicationHistoryForCurrentSentenceData },
       `pages/adjudicationHistoryForCurrentSentenceHeader`,
       { chargeNumber },
       `pages/adjudicationHistoryForCurrentSentenceFooter`,

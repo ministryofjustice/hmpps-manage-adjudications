@@ -75,7 +75,6 @@ describe('GET /dis4', () => {
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
         },
-        latestVersion: false,
       },
       'pages/adjudicationHearingContinuationHeader',
       {},

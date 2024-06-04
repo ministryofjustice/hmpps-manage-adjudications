@@ -26,6 +26,7 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  punishmentsService.addSessionPunishment.mockResolvedValue('abc')
 })
 
 afterEach(() => {
@@ -78,7 +79,7 @@ describe('POST ', () => {
         suspendedUntil: '13/12/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
+      .expect('Location', adjudicationUrls.punishmentHasRehabilitativeActivities.urls.start('100', 'abc'))
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),
