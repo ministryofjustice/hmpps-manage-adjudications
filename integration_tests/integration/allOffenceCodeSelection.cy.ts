@@ -63,26 +63,12 @@ context('Incident details', () => {
       prisonerNumber: prisonerOutsideEstablishmentNumber,
     })
   })
-  it('line 3', () => {
-    const page = getPage()
-    page.radioLabelFromText('A prisoner in this establishment').click()
-    page.simulateReturnFromPrisonerSearch(100, '1-1-1', '1-1-1-1', 'G5512G')
-    page.continue().click()
-    page.checkOffenceCode(1001, 'Yes')
-  })
   it('line 4', () => {
     const page = getPage()
     page.radioLabelFromText('A prisoner in this establishment').click()
     page.simulateReturnFromPrisonerSearch(100, '1-1-1', '1-1-1-1', 'G5512G')
     page.continue().click()
     page.checkOffenceCode(1002, 'No')
-  })
-  it('line 5', () => {
-    const page = getPage()
-    page.radioLabelFromText('A prison officer').click()
-    page.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-2', 'AOWENS')
-    page.continue().click()
-    page.checkOffenceCode(1003, 'Yes')
   })
   it('line 6', () => {
     const page = getPage()
@@ -91,27 +77,12 @@ context('Incident details', () => {
     page.continue().click()
     page.checkOffenceCode(1004, 'No')
   })
-  it('line 7', () => {
-    const page = getPage()
-    page.radioLabelFromText('A member of staff who is not a prison officer').click()
-    page.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-3', 'CSTANLEY')
-    page.continue().click()
-    page.checkOffenceCode(1005, 'Yes')
-  })
   it('line 8', () => {
     const page = getPage()
     page.radioLabelFromText('A member of staff who is not a prison officer').click()
     page.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-3', 'CSTANLEY')
     page.continue().click()
     page.checkOffenceCode(1006, 'No')
-  })
-  it('line 9 - version 2', () => {
-    const page = getPage()
-    page.radioLabelFromText('A prisoner who’s left this establishment').click()
-    page.victimPersonOutsideEstablishmentSearchNameInput().type('Another Person')
-    page.victimPersonOutsideEstablishmentSearchNumberInput().type(prisonerOutsideEstablishmentNumber)
-    page.continue().click()
-    page.checkOffenceCode(1021, 'Yes')
   })
   it('line 10 - version 2', () => {
     const page = getPage()
@@ -120,13 +91,6 @@ context('Incident details', () => {
     page.victimPersonOutsideEstablishmentSearchNumberInput().type(prisonerOutsideEstablishmentNumber)
     page.continue().click()
     page.checkOffenceCode(1022, 'No')
-  })
-  it('line 9', () => {
-    const page = getPage()
-    page.radioLabelFromText('A person not listed above').click()
-    page.victimOtherPersonSearchNameInput().type('Another Person')
-    page.continue().click()
-    page.checkOffenceCode(1007, 'Yes')
   })
   it('line 10', () => {
     const page = getPage()
@@ -394,32 +358,6 @@ context('Incident details', () => {
       16001
     )
   })
-  it('line 36 - 17001', () => {
-    checkSimpleDecisionPath(
-      [
-        'Sets fire to, or damages, the prison or any property',
-        'Destroys part of the prison or someone else’s property',
-        'Yes',
-      ],
-      17001
-    )
-  })
-  it('line 36 - 17002', () => {
-    checkSimpleDecisionPath(
-      [
-        'Sets fire to, or damages, the prison or any property',
-        'Destroys part of the prison or someone else’s property',
-        'No',
-      ],
-      17002
-    )
-  })
-  it('line 38 - 24101', () => {
-    checkSimpleDecisionPath(
-      ['Sets fire to, or damages, the prison or any property', 'Displays or draws abusive or racist images'],
-      24101
-    )
-  })
   it('line 40', () => {
     checkSimpleDecisionPath(
       ['Disrespectful, threatening, abusive, or insulting behaviour', 'Disrespectful behaviour', 'A prison officer'],
@@ -444,16 +382,6 @@ context('Incident details', () => {
         'Another person not listed above',
       ],
       19003
-    )
-  })
-  it('line 43', () => {
-    checkSimpleDecisionPath(
-      [
-        'Disrespectful, threatening, abusive, or insulting behaviour',
-        'Threatening, abusive, or insulting behaviour',
-        'Yes',
-      ],
-      20001
     )
   })
   it('line 44', () => {

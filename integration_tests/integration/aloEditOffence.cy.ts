@@ -237,7 +237,7 @@ context('Adult', () => {
     {
       testName: '1001 -> 1021 / 1 -> 1(a) / Extra questions with decision tree',
       radio: '1(a)',
-      radio2: '98-4',
+      radio2: '89-4',
       title: 'Who was assaulted?',
       victimName: 'James Robertson',
       victimPN: 'G7123CI',
@@ -256,7 +256,7 @@ context('Adult', () => {
       testName: '1001 -> 10001 / 1 -> 10 / Direct answer',
       radio: '10',
       radio2: null,
-      title: null,
+      title: 'Offence details',
       victimName: null,
       victimPN: null,
       offenceCode: '10001',
@@ -265,10 +265,10 @@ context('Adult', () => {
       testName: '20001 - adult 20(a)',
       radio: '20(a)',
       radio2: null,
-      title: null,
+      title: 'Select which protected characteristics were part of the reason for the incident',
       victimName: null,
       victimPN: null,
-      offenceCode: '20001',
+      offenceCode: '2000124',
     },
   ].forEach(test => {
     it(test.testName, () => {
@@ -285,8 +285,8 @@ context('Adult', () => {
       const offenceCodeSelectionListPage = new OffenceCodeSelectionListPage('Which offence did John Smith commit?')
       offenceCodeSelectionListPage.radio(test.radio).click()
       offenceCodeSelectionListPage.continue().click()
+      const questionPage = new OffenceCodeSelection(test.title)
       if (test.radio2) {
-        const questionPage = new OffenceCodeSelection(test.title)
         questionPage.radio(test.radio2).check()
         if (test.radio === '1(a)') {
           questionPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
@@ -297,6 +297,14 @@ context('Adult', () => {
           questionPage.victimOtherPersonSearchNameInput().type('Tony Robinson')
         }
         questionPage.continue().click()
+        if (test.radio === '1(a)') {
+          questionPage.checkbox('89-4-2').check()
+          questionPage.continueCheckboxes().click()
+        }
+      }
+      if (test.radio === '20(a)') {
+        questionPage.checkbox('1-5-2-1-2').check()
+        questionPage.continueCheckboxes().click()
       }
       cy.location().should(loc => {
         expect(loc.search).to.contain(`offenceCode=${test.offenceCode}`)
