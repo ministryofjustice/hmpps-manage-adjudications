@@ -96,7 +96,7 @@ export default class NumberOfAdditionalDaysPage {
     if (error)
       return this.renderView(req, res, {
         error,
-        duration: trimmedDays,
+        duration,
       })
 
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req)
