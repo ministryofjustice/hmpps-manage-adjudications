@@ -95,14 +95,15 @@ export default class SuspendedPunishmentNumberOfDaysPage {
     const isTypeAdditionalDays = [PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(
       punishmentType as PunishmentType
     )
+
     const error = validateForm({
-      duration,
+      duration: trimmedDays,
       punishmentType: type,
       isYOI,
       privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
     })
 
-    if (error) return this.renderView(req, res, { error, duration })
+    if (error) return this.renderView(req, res, { error, duration: trimmedDays })
 
     if (isTypeAdditionalDays) {
       try {
@@ -114,7 +115,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
         if (punishmentToUpdate.length) {
           const { punishment } = punishmentToUpdate[0]
           const activatedFromChargeNumber = punishmentToUpdate[0].chargeNumber
-          const updatedPunishment = this.updatePunishment(punishment, duration, activatedFromChargeNumber)
+          const updatedPunishment = this.updatePunishment(punishment, trimmedDays, activatedFromChargeNumber)
           if (this.pageOptions.isEdit()) {
             await this.punishmentsService.updateSessionPunishment(
               req,

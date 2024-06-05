@@ -82,7 +82,6 @@ export default function validatePunishmentDays(
   if (punishmentType === PunishmentType.EXCLUSION_WORK && !isYOI && duration > 21) {
     return errors.EXCLUSION_WORK_DAYS_MAX_ADULT
   }
-
   if (punishmentType === PunishmentType.CONFINEMENT) {
     if (!isYOI && duration > 21) {
       return errors.CONFINEMENT_DAYS_MAX_ADULT
