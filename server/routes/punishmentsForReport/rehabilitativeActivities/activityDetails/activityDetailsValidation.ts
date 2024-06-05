@@ -15,11 +15,6 @@ export default function validateForm({
   endDate,
   totalSessions,
 }: ValidationForm): FormError | null {
-  if (totalSessions && !Number.isInteger(totalSessions))
-    return {
-      href: '#totalSessions',
-      text: 'Number of sessions must be a number',
-    }
   if (!details) {
     return {
       href: '#details',
@@ -38,6 +33,11 @@ export default function validateForm({
       text: 'Enter when the activity should be completed by',
     }
   }
+  if (totalSessions && !Number.isInteger(+totalSessions))
+    return {
+      href: '#totalSessions',
+      text: 'Number of sessions must be a number',
+    }
 
   return null
 }

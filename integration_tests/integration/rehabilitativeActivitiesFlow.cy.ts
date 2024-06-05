@@ -321,6 +321,8 @@ context('Add a rehabilitative activity', () => {
 
       const activityDate = formatDateForDatePicker(new Date('01/10/2030').toISOString(), 'short')
       activityDetails.endDate().type(activityDate)
+
+      activityDetails.numberOfSessions().type('4')
       activityDetails.submitButton().click()
 
       const awardedPunishments = Page.verifyOnPage(AwardPunishmentsPage)

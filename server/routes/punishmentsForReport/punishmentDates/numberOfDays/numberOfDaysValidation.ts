@@ -26,8 +26,8 @@ export default function validateForm({
   isYOI,
   privilegeType,
 }: PunishmentScheduleForm): FormError | null {
-  if (Number.isInteger(duration) && duration <= 0) return errors.DAYS_TOO_FEW
-  if (duration === undefined || duration === null || !duration) return errors.MISSING_DAYS
+  if (duration === undefined || duration === null) return errors.MISSING_DAYS
+  if (Number.isInteger(+duration) && duration <= 0) return errors.DAYS_TOO_FEW
 
   return validatePunishmentDays(punishmentType, duration, isYOI, privilegeType)
 }

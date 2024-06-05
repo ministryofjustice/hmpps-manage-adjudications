@@ -50,7 +50,8 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
-        duration: 0,
+        // @ts-expect-error: Ignore typecheck here
+        duration: '0', // this gets converted to a number for the check
         isYOI: false,
       })
     ).toEqual({

@@ -1,12 +1,13 @@
 import { FormError } from '../../../../@types/template'
 import { NotCompletedOutcome } from '../../../../data/PunishmentResult'
-import { isValidDateTimeFormat, possessive } from '../../../../utils/utils'
+import { isValidDateFormat, possessive } from '../../../../utils/utils'
 
 type NotCompletedForm = {
   outcome: NotCompletedOutcome
   daysToActivate: number
   suspendedUntil: string
   prisonerName: string
+  actualDays: number
 }
 
 export default function validateForm({
@@ -14,6 +15,7 @@ export default function validateForm({
   daysToActivate,
   suspendedUntil,
   prisonerName,
+  actualDays,
 }: NotCompletedForm): FormError | null {
   if (!outcome) {
     return {
@@ -28,16 +30,16 @@ export default function validateForm({
         text: `Enter the number of days for the punishment`,
       }
     }
-    if (Number.isNaN(Number(daysToActivate))) {
+    if (!Number.isInteger(+daysToActivate)) {
       return {
         href: '#daysToActivate',
         text: `The number of days for the punishment must be a number`,
       }
     }
-    if (daysToActivate > 7) {
+    if (daysToActivate > actualDays) {
       return {
         href: '#daysToActivate',
-        text: `The number of days for the punishment must be 7 or fewer`,
+        text: `The number of days for the punishment must be ${actualDays} or fewer`,
       }
     }
   }
@@ -48,7 +50,7 @@ export default function validateForm({
         text: `Enter the new date the suspended punishment will end`,
       }
     }
-    if (isValidDateTimeFormat(suspendedUntil)) {
+    if (!isValidDateFormat(suspendedUntil)) {
       return {
         href: '#suspendedUntil',
         text: `The new date the suspended punishment will end must be a real date`,
