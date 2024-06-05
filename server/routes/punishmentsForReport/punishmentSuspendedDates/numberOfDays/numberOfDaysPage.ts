@@ -95,7 +95,6 @@ export default class SuspendedPunishmentNumberOfDaysPage {
     const isTypeAdditionalDays = [PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(
       punishmentType as PunishmentType
     )
-
     const error = validateForm({
       duration,
       punishmentType: type,

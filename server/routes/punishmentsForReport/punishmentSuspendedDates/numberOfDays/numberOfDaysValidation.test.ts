@@ -21,7 +21,7 @@ describe('validateForm', () => {
       })
     ).toBeNull()
   })
-  it('shows error when no days select', () => {
+  it('shows error when no days selected', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
@@ -37,7 +37,8 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
-        duration: 0,
+        // @ts-expect-error: ignore
+        duration: '0',
         isYOI: false,
       })
     ).toEqual({

@@ -30,9 +30,9 @@ export default function validateForm({
   isYOI,
   privilegeType,
 }: NumberOfAddedDaysForm): FormError | null {
-  if (Number.isNaN(duration) || typeof duration === 'string') return errors.NOT_NUMERICAL
-  if (Number.isInteger(duration) && duration <= 0) return errors.DAYS_TOO_FEW
-  if (duration === undefined || duration === null || !duration) return errors.MISSING_DAYS
+  if (duration === undefined || duration === null) return errors.MISSING_DAYS
+  if (!Number.isInteger(+duration)) return errors.NOT_NUMERICAL
+  if (Number.isInteger(+duration) && duration <= 0) return errors.DAYS_TOO_FEW
 
   return validatePunishmentDays(punishmentType, duration, isYOI, privilegeType)
 }
