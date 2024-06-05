@@ -373,7 +373,7 @@ const stubGetOffenceRule = ({
 const stubGetAllOffenceRules = ({
   isYouthOffender = false,
   gender = PrisonerGender.MALE,
-  version = 1,
+  version = 2,
   response = {},
 }: {
   isYouthOffender: boolean

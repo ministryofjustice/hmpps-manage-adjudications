@@ -144,6 +144,13 @@ context('Details of offence', () => {
       },
     })
     cy.task('stubGetOffenceRule', {
+      offenceCode: 100124,
+      response: {
+        paragraphNumber: '1',
+        paragraphDescription: 'Commits any assault',
+      },
+    })
+    cy.task('stubGetOffenceRule', {
       offenceCode: 4001,
       response: {
         paragraphNumber: '4',
@@ -189,8 +196,10 @@ context('Details of offence', () => {
     whoWasAssaultedPage.searchPrisoner().click()
     whoWasAssaultedPage.simulateReturnFromPrisonerSearch(200, '1-1-1', '1-1-1-1', 'G5512G')
     whoWasAssaultedPage.continue().click()
-    const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    raciallyAggravated.radio('1-1-1-1-1').click()
+    const protectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    protectedCharacteristic.radioLabelFromText('No').click()
     whoWasAssaultedPage.continue().click()
     // We should now be on the offence details page.
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
@@ -207,7 +216,7 @@ context('Details of offence', () => {
         )
         expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
         expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to assault?')
-        expect($summaryLabels.get(4).innerText).to.contain('Was the incident a racially aggravated assault?')
+        expect($summaryLabels.get(4).innerText).to.contain('Was the incident aggravated by a protected characteristic?')
         expect($summaryLabels.get(5).innerText).to.contain('This offence broke')
       })
 
@@ -221,7 +230,7 @@ context('Details of offence', () => {
         )
         expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
         expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
-        expect($summaryData.get(4).innerText).to.contain('Yes')
+        expect($summaryData.get(4).innerText).to.contain('No')
         expect($summaryData.get(5).innerText).to.contain(
           'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
         )
@@ -351,22 +360,32 @@ context('Details of offence', () => {
     whoWasAssaultedPage.searchPrisoner().click()
     whoWasAssaultedPage.simulateReturnFromPrisonerSearch(200, '1-1-1', '1-1-1-1', 'G5512G')
     whoWasAssaultedPage.continue().click()
-    const wasItRaciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    wasItRaciallyAggravated.radio('1-1-1-1-1').check()
-    wasItRaciallyAggravated.continue().click()
+    const WasItAProtectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    WasItAProtectedCharacteristic.radioLabelFromText('Yes').click()
+    WasItAProtectedCharacteristic.continue().click()
+    const selectProtectedCharacteristic = new OffenceCodeSelection(
+      'Select which protected characteristics were part of the reason for the incident'
+    )
+    selectProtectedCharacteristic.checkbox('1-1-1-1-1-1').check()
+    cy.get('[data-qa="offence-code-protected-characteristics-continue"]').click()
     // We should now be on the offence details page
     const detailsOfOffencePage = Page.verifyOnPage(DetailsOfOffence)
     // Try to add another offence
     cy.go('back')
-    const racialPage = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    racialPage.radio('1-1-1-1-2').check()
-    racialPage.continue().click()
+    cy.go('back')
+    const protectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    protectedCharacteristic.radioLabelFromText('No').click()
+    protectedCharacteristic.continue().click()
     Page.verifyOnPage(DetailsOfOffence)
     detailsOfOffencePage
       .offenceDetailsSummary()
       .find('dt')
       .then($summaryLabels => {
-        expect($summaryLabels.get(4).innerText).to.contain('Was the incident a racially aggravated assault?')
+        expect($summaryLabels.get(4).innerText).to.contain('Was the incident aggravated by a protected characteristic?')
       })
 
     detailsOfOffencePage

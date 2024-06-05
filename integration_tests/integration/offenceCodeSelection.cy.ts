@@ -118,7 +118,7 @@ context('Offence details', () => {
     })
     // Offence rules
     cy.task('stubGetOffenceRule', {
-      offenceCode: 1005,
+      offenceCode: 1006,
       response: {
         paragraphNumber: '1',
         paragraphDescription: 'Commits any assault',
@@ -126,7 +126,7 @@ context('Offence details', () => {
     })
     // Offence rules
     cy.task('stubGetOffenceRule', {
-      offenceCode: 1021,
+      offenceCode: 1022,
       response: {
         paragraphNumber: '1',
         paragraphDescription: 'Commits any assault',
@@ -212,8 +212,10 @@ context('Offence details', () => {
     whoWasAssaultedPage.victimPrisonerHiddenInput().should('have.value', 'G5512G')
     whoWasAssaultedPage.victimPrisonerName().contains('Paul Wright')
     whoWasAssaultedPage.continue().click()
-    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    wasTheIncidentRacial.checkOnPage()
+    const protectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    protectedCharacteristic.checkOnPage()
   })
 
   it('select a prisoner question - delete', () => {
@@ -257,8 +259,10 @@ context('Offence details', () => {
     whoWasAssaultedPage.victimOfficerPrisonerHiddenInput().should('have.value', 'AOWENS')
     whoWasAssaultedPage.victimOfficerName().contains('Test User')
     whoWasAssaultedPage.continue().click()
-    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    wasTheIncidentRacial.checkOnPage()
+    const protectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    protectedCharacteristic.checkOnPage()
   })
 
   it('select an officer question - delete', () => {
@@ -314,8 +318,10 @@ context('Offence details', () => {
     whoWasAssaultedPage.radioLabelFromValue(anotherPersonAnswerId).contains('A person not listed above')
     whoWasAssaultedPage.victimOtherPersonSearchNameInput().type('James Peterson')
     whoWasAssaultedPage.continue().click()
-    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    wasTheIncidentRacial.checkOnPage()
+    const protectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    protectedCharacteristic.checkOnPage()
   })
 
   it('select a prisoner outside establishment question', () => {
@@ -330,8 +336,10 @@ context('Offence details', () => {
     whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type(prisonerOutsideEstablishmentNumber)
     whoWasAssaultedPage.continue().click()
-    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    wasTheIncidentRacial.checkOnPage()
+    const protectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    protectedCharacteristic.checkOnPage()
   })
 
   it('select a prisoner outside establishment question - validation', () => {
@@ -349,8 +357,10 @@ context('Offence details', () => {
     whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type(prisonerOutsideEstablishmentNumber)
     whoWasAssaultedPage.continue().click()
-    const wasTheIncidentRacial = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    wasTheIncidentRacial.checkOnPage()
+    const protectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    protectedCharacteristic.checkOnPage()
   })
 
   it('end to end - staff search', () => {
@@ -368,8 +378,10 @@ context('Offence details', () => {
     cy.url().should('include', `${adjudicationUrls.selectAssociatedStaff.root}?staffName=Carl%20Stanley`)
     whoWasAssaultedPage.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-3', 'CSTANLEY')
     whoWasAssaultedPage.continue().click()
-    const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    raciallyAggravated.radio('1-1-1-3-1').click()
+    const protectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    protectedCharacteristic.radio('1-1-1-3-2').click()
     whoWasAssaultedPage.continue().click()
     Page.verifyOnPage(DetailsOfOffence)
   })
@@ -386,8 +398,10 @@ context('Offence details', () => {
     whoWasAssaultedPage.prisonerOutsideEstablishmentNameInput().type('James Robertson')
     whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type(prisonerOutsideEstablishmentNumber)
     whoWasAssaultedPage.continue().click()
-    const raciallyAggravated = new OffenceCodeSelection('Was the incident a racially aggravated assault?')
-    raciallyAggravated.radio('1-1-1-4-1').click()
+    const protectedCharacteristic = new OffenceCodeSelection(
+      'Was the incident aggravated by a protected characteristic?'
+    )
+    protectedCharacteristic.radio('1-1-1-4-2').click()
     whoWasAssaultedPage.continue().click()
     Page.verifyOnPage(DetailsOfOffence)
   })
