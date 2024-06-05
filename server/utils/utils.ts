@@ -4,6 +4,7 @@ import { DraftAdjudication, EvidenceCode, EvidenceDetails } from '../data/DraftA
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
 
 const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
+const DATE_PICKER_FORMAT_SPEC = 'DD/MM/YYYY'
 
 type DateTimeInput = {
   date: string
@@ -117,6 +118,9 @@ export function generateRange<T>(start: number, end: number, generator: (index: 
 
 export const isValidDateTimeFormat = (dateTimeString: string): boolean =>
   moment(dateTimeString, DATE_TIME_FORMAT_SPEC, true).isValid()
+
+export const isValidDateFormat = (dateString: string): boolean =>
+  moment(dateString, DATE_PICKER_FORMAT_SPEC, true).isValid()
 
 export const getDate = (dateTimeString: string, format = 'dddd D MMMM YYYY'): string => {
   return getDateOrTime(dateTimeString, format)

@@ -60,14 +60,14 @@ export default class IncompleteRehabilitativeActivityPage {
     const { outcome, daysToActivate, suspendedUntil } = req.body
     const { user } = res.locals
 
-    const { prisonerName } = await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(
+    const { prisonerName, actualDays } = await this.punishmentsService.getRehabilitativeActivitiesCompletionDetails(
       req,
       chargeNumber,
       +id,
       user
     )
 
-    const error = validateForm({ outcome, daysToActivate, suspendedUntil, prisonerName })
+    const error = validateForm({ outcome, daysToActivate, suspendedUntil, prisonerName, actualDays })
 
     if (error) {
       return this.renderView(req, res, {
