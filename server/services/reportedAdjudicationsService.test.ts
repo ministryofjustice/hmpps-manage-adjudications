@@ -1226,13 +1226,13 @@ describe('reportedAdjudicationsService', () => {
     it('should return null if there are no transfers that match the overrideAgencyId', async () => {
       getMovementByOffender.mockResolvedValue([])
       getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('A1234AA', 'Harry', 'Potter', '1-2-015'))
-      const result = await service.getPrisonerLatestADMMovement('A1234AA', 'LEI', user)
+      const result = await service.getPrisonerLatestADMMovement('A1234AA', 'LEI', '2023-03-21T10:05:00', user)
       expect(result).toEqual(null)
     })
     it('should return correct info', async () => {
       getMovementByOffender.mockResolvedValue(testData.prisonerMovement({}))
       getPrisonerDetails.mockResolvedValue(testData.simplePrisoner('A1234AA', 'Harry', 'Potter', '1-2-015'))
-      const result = await service.getPrisonerLatestADMMovement('A1234AA', 'LEI', user)
+      const result = await service.getPrisonerLatestADMMovement('A1234AA', 'LEI', '2023-03-21T10:05:00', user)
       expect(result).toEqual({
         movementDate: '19 November 2030',
         toAgencyDescription: 'Leeds (HMP)',

@@ -57,7 +57,8 @@ context('Transfers flow', () => {
         const transferredPrisonersAdjudicationUnscheduled = testData.reportedAdjudication({
           chargeNumber: '1',
           prisonerNumber: 'A1234AA',
-          dateTimeOfIncident: '2030-11-15T11:30:00',
+          dateTimeOfIncident: '2020-11-15T11:30:00',
+          dateTimeOfDiscovery: '2020-11-15T11:30:00',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
           incidentStatement: {
             statement: 'This is a statement',
@@ -233,7 +234,7 @@ context('Transfers flow', () => {
           expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.viewOnly('1'))
         })
       })
-      it('Transfer banner - user in originating agency', () => {
+      it.only('Transfer banner - user in originating agency', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.review(1))
         const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         prisonerReportPage
