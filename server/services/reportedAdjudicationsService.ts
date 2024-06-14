@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { ConfirmedOnReportChangedData, ConfirmedOnReportData, DIS7Data } from '../data/ConfirmedOnReportData'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { OffenderBannerInfo } from '../data/prisonApiClient'
@@ -1140,6 +1141,7 @@ export default class ReportedAdjudicationsService {
   async getPrisonerLatestADMMovement(
     prisonerNo: string,
     overrideAgencyId: string,
+    dateTimeOfDiscovery: string,
     user: User
   ): Promise<OffenderBannerInfo> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
@@ -1147,7 +1149,10 @@ export default class ReportedAdjudicationsService {
       new PrisonApiClient(token).getMovementByOffender(prisonerNo),
       new PrisonApiClient(user.token).getPrisonerDetails(prisonerNo),
     ])
-    const moveToOverrideAgencyIdList = movementInfo.filter(prisonerMove => prisonerMove.toAgency === overrideAgencyId)
+    const timestamp = moment(dateTimeOfDiscovery)
+    const moveToOverrideAgencyIdList = movementInfo.filter(
+      prisonerMove => prisonerMove.toAgency === overrideAgencyId && moment(prisonerMove.movementDate).isAfter(timestamp)
+    )
     if (!moveToOverrideAgencyIdList.length) return null
     const { movementDate, toAgencyDescription } = moveToOverrideAgencyIdList[0]
     const convertedMovementDate = formatTimestampTo(movementDate, 'D MMMM YYYY')
@@ -1162,13 +1167,19 @@ export default class ReportedAdjudicationsService {
     overrideAgencyId: string,
     originatingAgencyId: string,
     prisonerNumber: string,
+    dateTimeOfDiscovery: string,
     user: User
   ) => {
     if (!overrideAgencyId || !overrideAgencyId.length) return null
     // Prisoner has been transferred and current user is in the agency where the adjudication was first reported
     if (user.meta.caseLoadId === originatingAgencyId) {
       try {
-        const movementData = await this.getPrisonerLatestADMMovement(prisonerNumber, overrideAgencyId, user)
+        const movementData = await this.getPrisonerLatestADMMovement(
+          prisonerNumber,
+          overrideAgencyId,
+          dateTimeOfDiscovery,
+          user
+        )
         const { movementDate, prisonerName, toAgencyDescription } = movementData
         return movementData
           ? `${prisonerName} was transferred to ${toAgencyDescription} on ${movementDate}`
@@ -1191,9 +1202,21 @@ export default class ReportedAdjudicationsService {
   }
 
   async getTransferBannerInfo(reportedAdjudication: ReportedAdjudication, user: User) {
-    const { overrideAgencyId, originatingAgencyId, prisonerNumber, status, transferableActionsAllowed } =
-      reportedAdjudication
-    const transferBannerContent = await this.getBannerText(overrideAgencyId, originatingAgencyId, prisonerNumber, user)
+    const {
+      overrideAgencyId,
+      originatingAgencyId,
+      prisonerNumber,
+      status,
+      transferableActionsAllowed,
+      incidentDetails,
+    } = reportedAdjudication
+    const transferBannerContent = await this.getBannerText(
+      overrideAgencyId,
+      originatingAgencyId,
+      prisonerNumber,
+      incidentDetails.dateTimeOfDiscovery,
+      user
+    )
 
     const originatingAgencyToAddOutcome =
       status === ReportedAdjudicationStatus.SCHEDULED &&
