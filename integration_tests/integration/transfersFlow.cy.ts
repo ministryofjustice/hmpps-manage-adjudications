@@ -234,7 +234,7 @@ context('Transfers flow', () => {
           expect(loc.pathname).to.eq(adjudicationUrls.punishmentsAndDamages.urls.viewOnly('1'))
         })
       })
-      it.only('Transfer banner - user in originating agency', () => {
+      it('Transfer banner - user in originating agency', () => {
         cy.visit(adjudicationUrls.prisonerReport.urls.review(1))
         const prisonerReportPage: PrisonerReport = Page.verifyOnPage(PrisonerReport)
         prisonerReportPage
