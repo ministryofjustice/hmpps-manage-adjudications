@@ -180,7 +180,7 @@ workflows:
           env: "preprod"
           context:
             - hmpps-common-vars
-            - hmpps-manage-adjudications-api-preprod
+            - hmpps-manage-adjudications-preprod
           requires:
             - request-preprod-approval
       - request-prod-approval:
@@ -194,7 +194,7 @@ workflows:
           slack_channel_name: << pipeline.parameters.releases-slack-channel >>
           context:
             - hmpps-common-vars
-            - hmpps-manage-adjudications-api-prod
+            - hmpps-manage-adjudications-prod
           requires:
             - request-prod-approval
 
