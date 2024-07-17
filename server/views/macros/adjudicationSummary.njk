@@ -11,6 +11,13 @@
     </div>
   {% endif %}
   <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
+    <h2 class="govuk-heading-m">Report details</h2>
+  </div>
+  <div class="adjudicationsSummary">
+    {{ summaryListWithChangeLinks(incidentData.reportDetails, 'Not entered', { "data-qa": "details-summary-table" }, '', "Report on someone's behalf") }}
+  </div>
+
+  <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
     <h2 class="govuk-heading-m">Incident details</h2>
     {% if editAndReviewAvailability.incidentDetailsEditable %}
       <p class="govuk-body">
@@ -19,7 +26,7 @@
     {% endif %}
   </div>
   <div class="adjudicationsSummary">
-    {{ summaryListWithChangeLinks(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }, '', "Report on someone's behalf") }}
+    {{ summaryListWithChangeLinks(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }, '') }}
   </div>
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">

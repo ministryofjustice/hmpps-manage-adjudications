@@ -715,13 +715,26 @@ export default class ReportedAdjudicationsService {
       changeReportingOfficerDataQa = 'reporting-officer-changeLink'
     }
 
-    const incidentDetails = [
+    const reportSubmittedDate = adjudication.createdDateTime?.split('.')[0]
+
+    const reportDetails = [
       {
         label: 'Reporting officer',
         value: formatReportingOfficer(reporter.name, adjudication),
         changeLinkHref: changeReportingOfficerLink,
         dataQa: changeReportingOfficerDataQa,
       },
+      {
+        label: 'Date report submitted',
+        value: getDate(reportSubmittedDate, 'D MMMM YYYY'),
+      },
+      {
+        label: 'Time report submitted',
+        value: getTime(reportSubmittedDate),
+      },
+    ]
+
+    const incidentDetails = [
       {
         label: 'Date of incident',
         value: date,
@@ -745,6 +758,7 @@ export default class ReportedAdjudicationsService {
     ]
 
     return {
+      reportDetails,
       incidentDetails,
       statement: adjudication.incidentStatement?.statement,
       isYouthOffender: adjudication.isYouthOffender,

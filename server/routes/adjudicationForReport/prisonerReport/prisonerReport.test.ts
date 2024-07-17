@@ -73,12 +73,21 @@ beforeEach(() => {
 
   reportedAdjudicationsService.getPrisonerReport.mockResolvedValue({
     isYouthOffender: false,
-
-    incidentDetails: [
+    reportDetails: [
       {
         label: 'Reporting officer',
         value: 'T. User',
       },
+      {
+        label: 'Date report submitted',
+        value: '9 December 2022',
+      },
+      {
+        label: 'Time report submitted',
+        value: '10:30',
+      },
+    ],
+    incidentDetails: [
       {
         label: 'Date of incident',
         value: '8 March 2020',

@@ -22,6 +22,8 @@ export default class AllCompletedReportsPage extends Page {
 
   dateOfDiscovery = (): PageElement => cy.get('[data-qa="date-of-discovery"]')
 
+  submissionDate = (): PageElement => cy.get('[data-qa="date-of-submission"]')
+
   locationDescription = (): PageElement => cy.get('[data-qa="location-description"]')
 
   prisonerNameAndNumber = (): PageElement => cy.get('[data-qa="prisoner-name-number"]')

@@ -105,7 +105,7 @@ export type TaskListDetails = {
   witnessesStatus: AdjudicationSectionStatus
 }
 
-export type PrisonerReport = CheckYourAnswers
+export type PrisonerReport = CheckYourAnswers & { reportDetails: SummarySectionItems[] }
 
 export type ApplicableRules = {
   isYouthOffenderRule: boolean
