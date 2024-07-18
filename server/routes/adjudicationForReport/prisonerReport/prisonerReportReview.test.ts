@@ -56,6 +56,9 @@ beforeEach(() => {
         },
         victimPrisonersNumber: 'G6123VU',
       },
+      otherData: {
+        createdDateTime: '2021-03-08T10:45:00',
+      },
     }),
     incidentRole: IncidentRole.COMMITTED,
     associatedPrisoner: undefined,
@@ -70,11 +73,21 @@ beforeEach(() => {
   locationService.getIncidentLocations.mockResolvedValue(testData.residentialLocations())
 
   reportedAdjudicationsService.getPrisonerReport.mockResolvedValue({
-    incidentDetails: [
+    reportDetails: [
       {
         label: 'Reporting officer',
         value: 'T. User',
       },
+      {
+        label: 'Date report submitted',
+        value: '8 March 2021',
+      },
+      {
+        label: 'Time report submitted',
+        value: '10:45',
+      },
+    ],
+    incidentDetails: [
       {
         label: 'Date of incident',
         value: '8 March 2020',

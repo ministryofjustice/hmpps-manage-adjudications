@@ -503,14 +503,27 @@ describe('reportedAdjudicationsService', () => {
           associatedPrisonersNumber: 'G6415GD',
           roleCode: '25b',
         },
+        otherData: {
+          createdDateTime: '2021-11-17T07:00:00',
+        },
       })
       const result = await service.getPrisonerReport(user, draftAdjudication)
       const expectedResult = {
-        incidentDetails: [
+        reportDetails: [
           {
             label: 'Reporting officer',
             value: 'T. User',
           },
+          {
+            label: 'Date report submitted',
+            value: '17 November 2021',
+          },
+          {
+            label: 'Time report submitted',
+            value: '07:00',
+          },
+        ],
+        incidentDetails: [
           {
             label: 'Date of incident',
             value: '16 November 2021',
@@ -553,14 +566,27 @@ describe('reportedAdjudicationsService', () => {
         },
         createdOnBehalfOfOfficer: 'some officer',
         createdOnBehalfOfReason: 'some reason',
+        otherData: {
+          createdDateTime: '2021-11-17T07:00:00',
+        },
       })
       const result = await service.getPrisonerReport(user, draftAdjudication)
       const expectedResult = {
-        incidentDetails: [
+        reportDetails: [
           {
             label: 'Reporting officer',
             value: 'T. User on behalf of some officer',
           },
+          {
+            label: 'Date report submitted',
+            value: '17 November 2021',
+          },
+          {
+            label: 'Time report submitted',
+            value: '07:00',
+          },
+        ],
+        incidentDetails: [
           {
             label: 'Date of incident',
             value: '16 November 2021',

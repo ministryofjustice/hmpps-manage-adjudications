@@ -446,27 +446,45 @@ context('Consolidated report', () => {
     it('should contain the correct incident details', () => {
       cy.visit(adjudicationUrls.prisonerReportConsolidated.urls.view('G6415GD', 1))
       const reportPage: AdjudicationConsolidatedView = Page.verifyOnPage(AdjudicationConsolidatedView)
+
+      reportPage
+        .reportDetailsSummary()
+        .find('dt')
+        .then($summaryLabels => {
+          expect($summaryLabels.get(0).innerText).to.contain('Reporting officer')
+          expect($summaryLabels.get(1).innerText).to.contain('Date report submitted')
+          expect($summaryLabels.get(2).innerText).to.contain('Time report submitted')
+        })
+
       reportPage
         .incidentDetailsSummary()
         .find('dt')
         .then($summaryLabels => {
-          expect($summaryLabels.get(0).innerText).to.contain('Reporting officer')
-          expect($summaryLabels.get(1).innerText).to.contain('Date of incident')
-          expect($summaryLabels.get(2).innerText).to.contain('Time of incident')
-          expect($summaryLabels.get(3).innerText).to.contain('Location')
-          expect($summaryLabels.get(4).innerText).to.contain('Date of discovery')
-          expect($summaryLabels.get(5).innerText).to.contain('Time of discovery')
+          expect($summaryLabels.get(0).innerText).to.contain('Date of incident')
+          expect($summaryLabels.get(1).innerText).to.contain('Time of incident')
+          expect($summaryLabels.get(2).innerText).to.contain('Location')
+          expect($summaryLabels.get(3).innerText).to.contain('Date of discovery')
+          expect($summaryLabels.get(4).innerText).to.contain('Time of discovery')
         })
+
+      reportPage
+        .reportDetailsSummary()
+        .find('dd')
+        .then($summaryData => {
+          expect($summaryData.get(0).innerText).to.contain('T. User')
+          expect($summaryData.get(1).innerText).to.contain('9 December 2022')
+          expect($summaryData.get(2).innerText).to.contain('10:30')
+        })
+
       reportPage
         .incidentDetailsSummary()
         .find('dd')
         .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('T. User')
-          expect($summaryData.get(1).innerText).to.contain('9 December 2021')
-          expect($summaryData.get(2).innerText).to.contain('10:30')
-          expect($summaryData.get(3).innerText).to.contain('Houseblock 1, Moorland (HMP & YOI)')
-          expect($summaryData.get(4).innerText).to.contain('9 December 2021')
-          expect($summaryData.get(5).innerText).to.contain('10:30')
+          expect($summaryData.get(0).innerText).to.contain('9 December 2021')
+          expect($summaryData.get(1).innerText).to.contain('10:30')
+          expect($summaryData.get(2).innerText).to.contain('Houseblock 1, Moorland (HMP & YOI)')
+          expect($summaryData.get(3).innerText).to.contain('9 December 2021')
+          expect($summaryData.get(4).innerText).to.contain('10:30')
         })
     })
     it('should contain the correct offence details', () => {
