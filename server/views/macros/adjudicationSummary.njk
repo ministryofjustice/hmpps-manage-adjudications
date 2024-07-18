@@ -4,18 +4,20 @@
 {% from "../macros/damagesWitnessesTable.njk" import damagesWitnessesTable %}
 {% from "../macros/evidenceTable.njk" import evidenceTable %}
 
-{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, offence, damages, evidence, witnesses, userSetGenderData, editAndReviewAvailability) %}
+{% macro adjudicationSummary(detailsURL, offenceDetailsURL, damagesURL, evidenceURL, witnessesURL, statementURL, incidentData, offence, damages, evidence, witnesses, userSetGenderData, editAndReviewAvailability, showReportDetails = false) %}
   {% if userSetGenderData %}
     <div class="adjudicationsSummary">
       {{ summaryList(userSetGenderData.data, null, { "data-qa": "gender-summary-table" }, null, userSetGenderData.changeLinkHref ) }}
     </div>
   {% endif %}
+  {% if showReportDetails %}
   <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
     <h2 class="govuk-heading-m">Report details</h2>
   </div>
   <div class="adjudicationsSummary">
     {{ summaryListWithChangeLinks(incidentData.reportDetails, 'Not entered', { "data-qa": "report-details-summary-table" }, '', "Report on someone's behalf") }}
   </div>
+  {% endif %}
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-5">
     <h2 class="govuk-heading-m">Incident details</h2>
@@ -26,7 +28,7 @@
     {% endif %}
   </div>
   <div class="adjudicationsSummary">
-    {{ summaryListWithChangeLinks(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }, '') }}
+    {{ summaryListWithChangeLinks(incidentData.incidentDetails, 'Not entered', { "data-qa": "details-summary-table" }, '', "Report on someone's behalf") }}
   </div>
 
   <div class="adjudicationsSummary-heading govuk-!-margin-top-9">
