@@ -57,7 +57,8 @@ context('All Completed Reports', () => {
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     allCompletedReportsPage.card().should('have.length', 20)
     allCompletedReportsPage.card().first().should('contain.text', '1')
-    allCompletedReportsPage.dateOfDiscovery().first().should('contain.text', 'Date of discovery: 15/11/2345 - 11:30')
+    allCompletedReportsPage.dateOfDiscovery().first().should('contain.text', 'Incident discovered: 15/11/2345 - 11:30')
+    allCompletedReportsPage.submissionDate().first().should('contain.text', 'Report submitted: 09/12/2022 - 10:30')
     allCompletedReportsPage.reportingOfficerName().first().should('contain.text', 'Reporting officer: T. User')
     allCompletedReportsPage.status().first().should('contain.text', 'Status: Awaiting review')
     allCompletedReportsPage

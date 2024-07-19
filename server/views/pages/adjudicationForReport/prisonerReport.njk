@@ -51,7 +51,7 @@
     {% include '../../partials/invalidReportGuidance/linkedCharges.njk' %}
   {% endif %}
 
-  {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftChargeNumber), prisonerReportData, offence, damages, evidence, witnesses, null, editAndReviewAvailability) }}
+  {{ adjudicationSummary(editIncidentDetailsURL, editOffencesDetailsURL, editDamagesURL, editEvidenceURL, editWitnessesURL, adjudicationUrls.incidentStatement.urls.submittedEdit(draftChargeNumber), prisonerReportData, offence, damages, evidence, witnesses, null, editAndReviewAvailability, true) }}
   {% if editAndReviewAvailability.reviewAvailable %}
     {{ adjudicationReviewPanel(returnLinkURL, csrfToken, pageData) }}
   {% endif %}

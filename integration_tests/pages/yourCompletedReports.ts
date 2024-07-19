@@ -22,6 +22,8 @@ export default class YourCompletedReportsPage extends Page {
 
   checkCheckboxWithValue = value => cy.get('[type="checkbox"]').check(value)
 
+  dateOfSubmission = (): PageElement => cy.get('[data-qa="date-of-submission"]')
+
   dateOfDiscovery = (): PageElement => cy.get('[data-qa="date-of-discovery"]')
 
   locationDescription = (): PageElement => cy.get('[data-qa="location-description"]')

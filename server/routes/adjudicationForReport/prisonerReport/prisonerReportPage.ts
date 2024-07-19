@@ -291,7 +291,8 @@ export default class prisonerReportRoutes {
       const prisonerReportData = await this.reportedAdjudicationsService.getPrisonerReport(
         user,
         draftAdjudication as ReportedAdjudication & DraftAdjudication,
-        draftRequired
+        draftRequired,
+        reportedAdjudication.createdDateTime
       )
       const offence = await this.decisionTreeService.getAdjudicationOffences(
         draftAdjudication.offenceDetails,
@@ -318,6 +319,7 @@ export default class prisonerReportRoutes {
       user,
       reportedAdjudication as ReportedAdjudication & DraftAdjudication
     )
+
     const offence = await this.decisionTreeService.getAdjudicationOffences(
       reportedAdjudication.offenceDetails,
       prisoner,

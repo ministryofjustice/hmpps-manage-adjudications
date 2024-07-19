@@ -19,7 +19,8 @@
         </h2>
 
         <div class="adjudication-report-card-list-item__metadata-group">
-          <p class="adjudication-report-card-list-item__metadata govuk-body" data-qa="date-of-discovery">Date of discovery: {{ adjudication.incidentDetails.dateTimeOfDiscovery | formatTimestampTo('DD/MM/YYYY - HH:mm') }}</p>
+          <p class="adjudication-report-card-list-item__metadata govuk-body" data-qa="date-of-discovery">Incident discovered: {{ adjudication.incidentDetails.dateTimeOfDiscovery | formatTimestampTo('DD/MM/YYYY - HH:mm') }}</p>
+          <p class="adjudication-report-card-list-item__metadata govuk-body" data-qa="date-of-submission">Report submitted: {{ adjudication.createdDateTime | formatTimestampTo('DD/MM/YYYY - HH:mm') }}</p>
         </div>
       </div>
 

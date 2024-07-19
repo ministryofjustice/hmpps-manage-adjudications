@@ -13,6 +13,8 @@ export default class PrisonerReportPage extends Page {
 
   incidentDetailsSummary = (): PageElement => cy.get('[data-qa="details-summary-table"]')
 
+  reportDetailsSummary = (): PageElement => cy.get('[data-qa="report-details-summary-table"]')
+
   offenceDetailsSummary = (): PageElement => cy.get('[data-qa="offence-summary-table"]')
 
   damageSummary = (): PageElement => cy.get('[data-qa="damages-table"]')

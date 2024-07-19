@@ -96,9 +96,9 @@ describe('GET /all-completed-reports', () => {
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('John Smith - G6123VU')
-        expect(response.text).toContain('Date of discovery: 15/11/2021 - 11:45')
+        expect(response.text).toContain('Incident discovered: 15/11/2021 - 11:45')
         expect(response.text).toContain('James Moriarty - G6174VU')
-        expect(response.text).toContain('Date of discovery: 15/11/2021 - 11:30')
+        expect(response.text).toContain('Incident discovered: 15/11/2021 - 11:30')
       })
   })
 })

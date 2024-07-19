@@ -686,7 +686,8 @@ export default class ReportedAdjudicationsService {
   async getPrisonerReport(
     user: User,
     adjudication: DraftAdjudication & ReportedAdjudication,
-    draftRequired?: boolean
+    draftRequired?: boolean,
+    createdDateTime?: string
   ): Promise<PrisonerReport> {
     const userId = adjudication.startedByUserId ? adjudication.startedByUserId : adjudication.createdByUserId
     const reporter = await this.hmppsManageUsersClient.getUserFromUsername(userId, user.token)
@@ -715,13 +716,31 @@ export default class ReportedAdjudicationsService {
       changeReportingOfficerDataQa = 'reporting-officer-changeLink'
     }
 
-    const incidentDetails = [
+    let reportSubmittedDate = ''
+    if (draftRequired) {
+      ;[reportSubmittedDate] = createdDateTime.split('.')
+    } else {
+      reportSubmittedDate = adjudication.createdDateTime?.split('.')[0]
+    }
+
+    const reportDetails = [
       {
         label: 'Reporting officer',
         value: formatReportingOfficer(reporter.name, adjudication),
         changeLinkHref: changeReportingOfficerLink,
         dataQa: changeReportingOfficerDataQa,
       },
+      {
+        label: 'Date report submitted',
+        value: getDate(reportSubmittedDate, 'D MMMM YYYY'),
+      },
+      {
+        label: 'Time report submitted',
+        value: getTime(reportSubmittedDate),
+      },
+    ]
+
+    const incidentDetails = [
       {
         label: 'Date of incident',
         value: date,
@@ -745,6 +764,7 @@ export default class ReportedAdjudicationsService {
     ]
 
     return {
+      reportDetails,
       incidentDetails,
       statement: adjudication.incidentStatement?.statement,
       isYouthOffender: adjudication.isYouthOffender,

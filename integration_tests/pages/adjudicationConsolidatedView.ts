@@ -9,6 +9,8 @@ export default class AdjudicationConsolidatedViewPage extends Page {
 
   reviewSummary = (): PageElement => cy.get('[data-qa="review-summary"]')
 
+  reportDetailsSummary = (): PageElement => cy.get('[data-qa="report-details-summary-table"]')
+
   incidentDetailsSummary = (): PageElement => cy.get('[data-qa="details-summary-table"]')
 
   offenceDetailsSummary = (): PageElement => cy.get('[data-qa="offence-summary-table"]')
