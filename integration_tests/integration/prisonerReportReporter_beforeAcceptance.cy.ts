@@ -72,9 +72,6 @@ const draftAdjudicationResponse = (reportedAdj: ReportedAdjudicationResult, id: 
       dateTimeOfIncident: '2021-12-09T10:30:00',
       dateTimeOfDiscovery: '2021-12-10T09:40:00',
       ...reportedAdjudication,
-      otherData: {
-        createdDateTime: reportedAdjudication.createdDateTime,
-      },
     }),
   }
 }
