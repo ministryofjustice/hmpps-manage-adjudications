@@ -162,7 +162,9 @@ export default class Question {
       matching.length !== 0 &&
       matching.every(answer => answer.getType() === AnswerType.CHECKBOXES_ONLY)
     ) {
-      const titleToMatch = getProtectedCharacteristicsTitle(ProtectedCharacteristicsTypes[firstProtectedCharacteristic])
+      const titleToMatch = getProtectedCharacteristicsTitle(
+        ProtectedCharacteristicsTypes[firstProtectedCharacteristic as keyof typeof ProtectedCharacteristicsTypes]
+      )
       return matching.find(a => a.getText() === titleToMatch)
     }
     return this.uniqueOrThrow(matching)

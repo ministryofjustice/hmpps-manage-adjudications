@@ -121,7 +121,7 @@ export default class AddWitnessRoutes {
     const witnessName = await answerTypeHelper.witnessNamesForSession(form, user)
     if (witnessName) {
       const witnessToAdd = {
-        code: WitnessCode[selectedAnswerId],
+        code: WitnessCode[selectedAnswerId as keyof typeof WitnessCode],
         firstName: witnessName?.firstName,
         lastName: witnessName?.lastName,
         reporter: user.username,
@@ -186,7 +186,7 @@ export default class AddWitnessRoutes {
     } else {
       selectedAnswerId = decisionFormOrSelectedAnswerId?.selectedAnswerId
     }
-    return selectedAnswerId && this.helpers.get(WitnessCode[selectedAnswerId])
+    return selectedAnswerId && this.helpers.get(WitnessCode[selectedAnswerId as keyof typeof WitnessCode])
   }
 
   private decisions(): Question {

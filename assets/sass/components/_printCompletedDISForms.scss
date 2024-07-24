@@ -46,6 +46,7 @@
   }
 }
 .inputBoxes {
+  display: flex;
   @media print {
     display: flex;
     flex-direction: row;
@@ -53,7 +54,6 @@
     margin-bottom: 0;
     padding-bottom: 0;
   }
-  display: flex;
   > div {
     margin-right: govuk-spacing(3);
   }

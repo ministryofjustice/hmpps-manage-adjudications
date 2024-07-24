@@ -172,7 +172,7 @@ export default class IncidentDetailsPage {
       return this.placeOnReportService.getAndDeletePrisonerGenderFromSession(req)
     }
     const prisoner = await this.placeOnReportService.getPrisonerDetails(prisonerNumber, user)
-    return PrisonerGender[prisoner.physicalAttributes.gender.toUpperCase()]
+    return PrisonerGender[prisoner.physicalAttributes.gender.toUpperCase() as keyof typeof PrisonerGender]
   }
 
   readFromApi = async (draftId: number, user: User): Promise<ApiIncidentDetails> => {

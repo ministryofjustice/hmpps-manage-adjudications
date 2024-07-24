@@ -35,7 +35,7 @@ export default class WhichPunishmentConsecutiveToPage {
     const userRoles = await this.userService.getUserRoles(user.token)
     const { chargeNumber } = req.params
     const { punishmentType } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
@@ -56,7 +56,7 @@ export default class WhichPunishmentConsecutiveToPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
     const { select } = req.body
 
     // We're grabbing the value of the button clicked, which has `consecutive-report-` before the charge number, so we need to strip that out first
@@ -64,7 +64,7 @@ export default class WhichPunishmentConsecutiveToPage {
     try {
       const punishmentData = {
         type,
-        privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+        privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         duration: Number(duration),

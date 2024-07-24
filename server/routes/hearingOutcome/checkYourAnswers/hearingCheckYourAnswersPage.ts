@@ -78,13 +78,13 @@ export default class HearingCheckYourAnswersPage {
           chargeNumber,
           user,
           (adjudicator && (adjudicator as string)) || null,
-          (plea && HearingOutcomePlea[plea.toString()]) || null
+          (plea && HearingOutcomePlea[plea.toString() as keyof typeof HearingOutcomePlea]) || null
         )
       } else {
         await this.hearingsService.createChargedProvedHearingOutcome(
           chargeNumber,
           adjudicator as string,
-          HearingOutcomePlea[plea as string],
+          HearingOutcomePlea[plea as keyof typeof HearingOutcomePlea],
           user
         )
       }

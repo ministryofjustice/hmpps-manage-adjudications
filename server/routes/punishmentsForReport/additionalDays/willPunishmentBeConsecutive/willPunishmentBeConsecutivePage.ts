@@ -73,7 +73,7 @@ export default class WillPunishmentBeConsecutivePage {
     const { chargeNumber } = req.params
     const { consecutive } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
 
     const error = validateForm({
       consecutive,
@@ -100,7 +100,7 @@ export default class WillPunishmentBeConsecutivePage {
     try {
       const punishmentData = {
         type,
-        privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+        privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         duration: Number(duration),

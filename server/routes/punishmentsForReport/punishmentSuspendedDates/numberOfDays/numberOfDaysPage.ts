@@ -88,7 +88,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
       stoppagePercentage,
       chargeNumberForSuspendedPunishment,
     } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
     const trimmedDays = duration ? Number(String(duration).trim()) : null
     const isYOI = await this.getYoiInfo(chargeNumber, user)
 
@@ -100,7 +100,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
       duration: trimmedDays,
       punishmentType: type,
       isYOI,
-      privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+      privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
     })
 
     if (error) return this.renderView(req, res, { error, duration: trimmedDays })

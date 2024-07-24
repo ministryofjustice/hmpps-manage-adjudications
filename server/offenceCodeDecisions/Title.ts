@@ -7,7 +7,7 @@ export default class Title {
 
   constructor(title: string | (readonly (readonly [IncidentRole, string])[] | null)) {
     if (typeof title === 'string') {
-      Object.keys(IncidentRole).forEach(key => this.titles.set(IncidentRole[key], title))
+      Object.keys(IncidentRole).forEach(key => this.titles.set(IncidentRole[key as keyof typeof IncidentRole], title))
     } else {
       this.titles = new Map<IncidentRole, string>(title)
     }

@@ -125,7 +125,7 @@ export default class NotProceedPage {
             details,
             user,
             (adjudicator && (adjudicator as string)) || null,
-            (plea && HearingOutcomePlea[plea.toString()]) || null
+            (plea && HearingOutcomePlea[plea.toString() as keyof typeof HearingOutcomePlea]) || null
           )
         } else {
           await this.hearingsService.createNotProceedHearingOutcome(

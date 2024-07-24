@@ -130,7 +130,7 @@ export class Answer {
     })
     if (protectedCharacteristics) {
       protectedCharacteristics.forEach(pc => {
-        const pcEnum = ProtectedCharacteristicsTypes[pc]
+        const pcEnum = ProtectedCharacteristicsTypes[pc as keyof typeof ProtectedCharacteristicsTypes]
         const pcTitle = getProtectedCharacteristicsTitle(pcEnum)
         if (!questionsAndAnswers[questionsAndAnswers.length - 1].answer.includes(pcTitle)) {
           questionsAndAnswers[questionsAndAnswers.length - 1].answer = questionsAndAnswers[

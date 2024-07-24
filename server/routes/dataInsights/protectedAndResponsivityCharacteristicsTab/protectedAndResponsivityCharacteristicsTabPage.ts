@@ -53,7 +53,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const agencyId: AgencyId = user.meta.caseLoadId
 
     const lastMonthText = getLastMonthText()
-    const chartSettingMap = {}
+    const chartSettingMap = {} as Record<string, any>
 
     const chartDetails2a = await this.chartApiService.getChart(username, agencyId, '2a')
     const characteristics: DropDownEntry[] = getUniqueItems(chartDetails2a.chartEntries as ChartEntryHorizontalBar[], {

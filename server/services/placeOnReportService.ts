@@ -530,16 +530,17 @@ export default class PlaceOnReportService {
   }
 
   setPrisonerGenderOnSession(req: Request, prisonerNumber: string, genderSelected: string) {
+    // @ts-expect-error: No index signature with a parameter of type 'string' was found on type 'Session & Partial<SessionData>
     req.session[prisonerNumber] = { gender: genderSelected }
   }
 
   getPrisonerGenderFromSession(req: Request) {
-    return req.session[req.params.prisonerNumber]?.gender
+    return req.session[req.params.prisonerNumber as keyof typeof req.session]?.gender
   }
 
   getAndDeletePrisonerGenderFromSession(req: Request) {
     const chosenGender = this.getPrisonerGenderFromSession(req)
-    delete req.session[req.params.prisonerNumber]?.gender
+    delete req.session[req.params.prisonerNumber as keyof typeof req.session]?.gender
     return chosenGender
   }
 
