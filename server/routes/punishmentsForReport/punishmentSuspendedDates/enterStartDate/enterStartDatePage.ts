@@ -78,7 +78,7 @@ export default class PunishmentSuspendedStartDatePage {
     const { startDate } = req.body
     const { punishmentType, privilegeType, duration, punishmentNumberToActivate } = req.query
 
-    const type = PunishmentType[punishmentType as string]
+    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
     const numberOfDays = Number(duration)
     const suspendedPunishmentIdToActivate = Number(punishmentNumberToActivate)
 
@@ -88,7 +88,7 @@ export default class PunishmentSuspendedStartDatePage {
       startDate,
       isYOI,
       punishmentType: type,
-      privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+      privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
       duration: Number(duration),
     })
 

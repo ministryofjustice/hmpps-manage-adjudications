@@ -76,7 +76,7 @@ export default class PunishmentNumberOfDaysPage {
     const { user } = res.locals
     const { duration } = req.body
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
 
     const trimmedDays = duration ? Number(String(duration).trim()) : null
 
@@ -85,7 +85,7 @@ export default class PunishmentNumberOfDaysPage {
       duration: trimmedDays,
       punishmentType: type,
       isYOI,
-      privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+      privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
     })
 
     if (error)

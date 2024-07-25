@@ -228,7 +228,7 @@ export const getOffenceInformation = (
   version: number,
 ): GroupedOffenceRulesAndTitles[] => {
   const dataMap = (isYouthOffender ? yoiQToOffencePara : adultQToOffencePara).filter(q => q.isApplicableVersion(version))
-  const offenceInformation = {}
+  const offenceInformation = {} as Record<string,any>
   for (const offenceRule of allOffenceRules) {
     // Find the corresponding data from the dataMap based on the paragraph number
     const matchingOffence = dataMap.find(offence => offence.paras.includes(offenceRule.paragraphNumber))

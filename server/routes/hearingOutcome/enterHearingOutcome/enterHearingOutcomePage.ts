@@ -150,7 +150,10 @@ export default class EnterHearingOutcomePage {
         governorName,
       })
 
-    const redirectUrlPrefix = this.getRedirectUrl(HearingOutcomeCode[hearingOutcome], chargeNumber)
+    const redirectUrlPrefix = this.getRedirectUrl(
+      HearingOutcomeCode[hearingOutcome as keyof typeof HearingOutcomeCode],
+      chargeNumber
+    )
     const adjudicator = governorId || inAdName
     return res.redirect(
       url.format({

@@ -101,6 +101,7 @@ function appSetup(route: Router, production: boolean, session: Record<string, un
   app.use(cookieSession({ keys: [''] }))
   app.use((req, res, next) => {
     Object.entries(session).forEach(([key, value]) => {
+      // @ts-expect-error: No index signature with a parameter of type 'string' was found on type 'Session & Partial<SessionData>
       req.session[key] = value
     })
     next()

@@ -99,8 +99,8 @@ export default class PunishmentSuspendedStartDateChoicePage {
     const error = validateForm({
       immediate,
       isYOI,
-      punishmentType: punishmentType ? PunishmentType[punishmentType as string] : null,
-      privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+      punishmentType: punishmentType ? PunishmentType[punishmentType as keyof typeof PunishmentType] : null,
+      privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
       duration: Number(duration),
     })
 

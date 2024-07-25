@@ -73,7 +73,7 @@ export default class SuspendedUntilDatePage {
     const { suspendedUntil } = req.body
     const { user } = res.locals
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
 
     const error = validateForm({
       suspendedUntil,
@@ -89,7 +89,7 @@ export default class SuspendedUntilDatePage {
     try {
       const punishmentData = {
         type,
-        privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+        privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
         duration: Number(duration),

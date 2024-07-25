@@ -118,7 +118,11 @@ export default class PleaAndFindingPage {
     const nameOfAdjudicator = adjudicator || adjudicatorName
 
     try {
-      const redirectUrl = this.getRedirectUrl(isEdit, HearingOutcomeFinding[hearingFinding], chargeNumber)
+      const redirectUrl = this.getRedirectUrl(
+        isEdit,
+        HearingOutcomeFinding[hearingFinding as keyof typeof HearingOutcomeFinding],
+        chargeNumber
+      )
       return res.redirect(
         url.format({
           pathname: redirectUrl,

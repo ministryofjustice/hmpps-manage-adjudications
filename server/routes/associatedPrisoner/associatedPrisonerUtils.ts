@@ -105,13 +105,13 @@ export const redirectToOffenceSelection = (
     return res.redirect(
       adjudicationUrls.offenceCodeSelection.urls.list(
         draftId,
-        radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase()])
+        radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase() as keyof typeof IncidentRole])
       )
     )
   return res.redirect(
     adjudicationUrls.offenceCodeSelection.urls.start(
       draftId,
-      radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase()])
+      radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase() as keyof typeof IncidentRole])
     )
   )
 }

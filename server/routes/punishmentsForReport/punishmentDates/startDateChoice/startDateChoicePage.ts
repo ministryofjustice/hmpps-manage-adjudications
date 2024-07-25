@@ -82,7 +82,7 @@ export default class PunishmentStartDateChoicePage {
     const { immediate } = req.body
     const { user } = res.locals
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
-    const type = PunishmentType[punishmentType as string]
+    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
 
     const error = validateForm({
       immediate,
@@ -103,7 +103,7 @@ export default class PunishmentStartDateChoicePage {
       try {
         const punishmentData = {
           type,
-          privilegeType: privilegeType ? PrivilegeType[privilegeType as string] : null,
+          privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
           otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
           stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
           duration: numberOfDays,

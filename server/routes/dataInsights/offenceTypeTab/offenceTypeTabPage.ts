@@ -55,7 +55,7 @@ export default class OffenceTypeTabPage {
     const { username } = user
     const agencyId: AgencyId = user.meta.caseLoadId
 
-    const chartSettingMap = {}
+    const chartSettingMap = {} as Record<string, unknown>
     const lastModifiedDate = getFullDate(
       (await this.chartApiService.getLastModifiedChart(username, '3a')).lastModifiedDate
     )
