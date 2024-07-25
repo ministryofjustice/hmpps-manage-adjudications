@@ -530,7 +530,7 @@ export default class PlaceOnReportService {
   }
 
   setPrisonerGenderOnSession(req: Request, prisonerNumber: string, genderSelected: string) {
-    // @ts-expect-error: No index signature with a parameter of type 'string' was found on type 'Session & Partial<SessionData>
+    // @ts-expect-error: No index signature with a parameter of type 'string' was found on type 'Session & Partial<SessionData>'.ts(7053)
     req.session[prisonerNumber] = { gender: genderSelected }
   }
 

@@ -1170,30 +1170,33 @@ const adjudicationUrls = {
         `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.totalsAdjudicationsAndLocations}`,
       protectedAndResponsivityCharacteristics: (params?: Record<string, unknown>) => {
         const queryParams =
-          params &&
-          Object.keys(params)
-            .map(key => `${key}=${params[key]}`)
-            .join('&')
+          (params &&
+            Object.keys(params)
+              .map(key => `${key}=${params[key]}`)
+              .join('&')) ||
+          ''
         return `${adjudicationUrls.dataInsights.root}${
           adjudicationUrls.dataInsights.matchers.protectedAndResponsivityCharacteristics
         }${queryParams ? `?${queryParams}` : ''}`
       },
       offenceType: (params?: Record<string, unknown>) => {
         const queryParams =
-          params &&
-          Object.keys(params)
-            .map(key => `${key}=${params[key]}`)
-            .join('&')
+          (params &&
+            Object.keys(params)
+              .map(key => `${key}=${params[key]}`)
+              .join('&')) ||
+          ''
         return `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.offenceType}${
           queryParams ? `?${queryParams}` : ''
         }`
       },
       punishments: (params?: Record<string, unknown>) => {
         const queryParams =
-          params &&
-          Object.keys(params)
-            .map(key => `${key}=${params[key]}`)
-            .join('&')
+          (params &&
+            Object.keys(params)
+              .map(key => `${key}=${params[key]}`)
+              .join('&')) ||
+          ''
         return `${adjudicationUrls.dataInsights.root}${adjudicationUrls.dataInsights.matchers.punishments}${
           queryParams ? `?${queryParams}` : ''
         }`
