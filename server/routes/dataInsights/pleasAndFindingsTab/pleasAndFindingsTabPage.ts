@@ -34,7 +34,7 @@ export default class PleasAndFindingsTabPage {
     const { username } = user
     const agencyId: AgencyId = user.meta.caseLoadId
 
-    const chartSettingMap = {} as Record<string, any>
+    const chartSettingMap = {} as Record<string, unknown>
     const lastModifiedDate = getFullDate(
       (await this.chartApiService.getLastModifiedChart(username, '5a')).lastModifiedDate
     )

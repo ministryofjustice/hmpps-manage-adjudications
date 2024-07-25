@@ -37,7 +37,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       (await this.chartApiService.getLastModifiedChart(username, '1a')).lastModifiedDate
     )
     const lastMonthText = getLastMonthText()
-    const chartSettingMap = {} as Record<string, any>
+    const chartSettingMap = {} as Record<string, unknown>
 
     chartSettingMap['1a'] = await produceVerticalBarsAndLineCharts(
       '1a',
