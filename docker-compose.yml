@@ -42,7 +42,7 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
 
   gotenberg:
-    image: gotenberg/gotenberg:8.2.2
+    image: gotenberg/gotenberg:8.9.0
     networks:
       - hmpps
     container_name: gotenberg
