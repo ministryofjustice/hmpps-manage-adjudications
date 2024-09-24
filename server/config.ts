@@ -52,7 +52,7 @@ export default {
         marginBottom: '0.8',
         marginLeft: '0.0',
         marginRight: '0.0',
-        scale: '0.93'
+        scale: '0.93',
       },
       adjudicationsUrl: get('ADJUDICATIONS_URL', 'http://host.docker.internal:3000', requiredInProduction),
     },
