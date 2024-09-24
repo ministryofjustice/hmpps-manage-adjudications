@@ -84,7 +84,7 @@ describe('GET /dis6', () => {
       {},
       {
         filename: 'conduct-report-1524493.pdf',
-        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '1.0' },
+        pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '1.0', scale: '0.93' },
       }
     )
   })
