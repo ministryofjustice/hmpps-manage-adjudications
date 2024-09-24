@@ -2,7 +2,7 @@ version: '3.1'
 services:
 
   redis:
-    image: 'bitnami/redis:7.0'
+    image: 'bitnami/redis:7.4'
     networks:
       - hmpps
     container_name: redis
@@ -42,7 +42,7 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
 
   gotenberg:
-    image: gotenberg/gotenberg:8.2.2
+    image: gotenberg/gotenberg:8.10.0
     networks:
       - hmpps
     container_name: gotenberg
