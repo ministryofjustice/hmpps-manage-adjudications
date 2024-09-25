@@ -93,5 +93,5 @@
 {% endblock %}
 
 {% block pageScripts %}
-  <script src="/assets/printWithNonce.js" nonce="{{ cspNonce }}"></script>
+  <script src="{{ '/assets/js/printWithNonce.js' | assetMap }}" nonce="{{ cspNonce }}"></script>
 {% endblock %}

@@ -46,7 +46,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
   setUpEnvironmentName(app)
-  nunjucksSetup(app, services.applicationInfo)
+  nunjucksSetup(app)
   app.use(setUpAuthentication())
   // before authorisation, so that refused requests are still audited as access attempts
   app.get('*any', auditPageView(services.auditService))
