@@ -44,11 +44,11 @@ describe('decisions', () => {
     expect(answersWithMissingOffenceCodes.length).toBeGreaterThan(0)
   })
 
-  if ('check that find duplicate method works as expected') {
+  it('check that find duplicate method works as expected', () => {
     const arrayWithDuplicates = ['1', '1-1', '1-2', '1-3', '1-4', '1-2', '1-4']
     const duplicates = findDuplicates(arrayWithDuplicates)
     expect(duplicates).toEqual(['1-2', '1-4'])
-  }
+  })
 
   it('no questions with duplicate ids', () => {
     const allIds = decisionTree.allIds()

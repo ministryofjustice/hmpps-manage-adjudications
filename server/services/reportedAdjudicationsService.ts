@@ -828,7 +828,7 @@ export default class ReportedAdjudicationsService {
           username => username && this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
         )
       )) || []
-    return new Map(usernamesAndNames.map(name => [name?.username, name?.name] || null))
+    return new Map(usernamesAndNames.map(name => [name?.username, name?.name]))
   }
 
   async getOutcomesHistory(history: OutcomeHistory, user: User) {
