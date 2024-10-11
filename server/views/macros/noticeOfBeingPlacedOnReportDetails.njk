@@ -97,6 +97,19 @@
             <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         </div>
          <div class='break-inside-avoid'>
+            {% if noticeOfBeingPlacedOnReportData.nextHearingTime is not defined %}
+                <div class='adjudication-pdf-section-issued-details'>
+                    <div class='adjudication-pdf-section-issued-details__item'>
+                        <p class='govuk-!-margin-bottom-1'>Time this form was issued (24-hour clock)</p>
+                        <input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><span><strong> : </strong></span><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><span> hours</span>
+                    </div>
+                    <div class='adjudication-pdf-section-issued-details__item'>
+                        <p class='govuk-!-margin-bottom-1'>Date this form was issued (DD/MM/YYYY)</p>
+                        <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+                    </div>
+                </div>
+            {% endif %}
+
             <div>
                 <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Name of issuing officer</p>
                 <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
