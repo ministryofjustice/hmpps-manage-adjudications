@@ -37,13 +37,14 @@
 
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         {% if noticeOfBeingPlacedOnReportData.nextHearingTime %}
-            <p class='govuk-!-margin-bottom-1'>You need to go to a hearing at <span><strong>{{ noticeOfBeingPlacedOnReportData.nextHearingTime }} on {{ noticeOfBeingPlacedOnReportData.nextHearingDate }}</strong></span>.</p>
-            <p class='govuk-!-margin-bottom-1'>This is the next hearing for this charge, after a previous hearing was put on hold, or ‘adjourned’.</p>
+            <p class='govuk-!-margin-bottom-1 govuk-!-font-weight-bold'>You need to go to a hearing</p>
+            <p class='govuk-!-margin-bottom-1'>It's at <span><strong>{{ noticeOfBeingPlacedOnReportData.nextHearingTime }} on {{ noticeOfBeingPlacedOnReportData.nextHearingDate }}</strong></span>.</p>
             <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         {% else %}
-            <p class='govuk-!-margin-bottom-1'>You need to attend an adjudication hearing and you will be told when this
-                will be.
-            </p>
+            <p class='govuk-!-margin-bottom-1 govuk-!-font-weight-bold'>You need to go to a hearing</p>
+            <p class='govuk-!-margin-bottom-1'>You will be told when the hearing will be. It will happen by the end of the next day after you got this form. If that’s a Sunday or a bank holiday, it will be on the next working day.
+            </p></br>
+            <p class='govuk-!-margin-bottom-1'>The hearing will not be in the first 2 hours after you got this form.</p>
         {% endif %}
 
         <p class='govuk-!-font-weight-bold govuk-!-margin-bottom-1'>It is alleged that an incident happened:</p>
@@ -96,18 +97,19 @@
             <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
         </div>
          <div class='break-inside-avoid'>
-            <p class='govuk-!-margin-bottom-2'>Your hearing will happen by the end of the next day after you got this form. If that’s a Sunday or a bank holiday, the hearing will be on the next working day.</p>
-            <p class='govuk-!-margin-bottom-2'>The hearing will <b>not</b> be in the first 2 hours after you got this form.</p>
-            <div class='adjudication-pdf-section-issued-details'>
-                <div class='adjudication-pdf-section-issued-details__item'>
-                    <p class='govuk-!-margin-bottom-1'>Time this form was issued (24-hour clock)</p>
-                    <input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><span><strong> : </strong></span><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><span> hours</span>
+            {% if noticeOfBeingPlacedOnReportData.nextHearingTime is not defined %}
+                <div class='adjudication-pdf-section-issued-details'>
+                    <div class='adjudication-pdf-section-issued-details__item'>
+                        <p class='govuk-!-margin-bottom-1'>Time this form was issued (24-hour clock)</p>
+                        <input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><span><strong> : </strong></span><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><span> hours</span>
+                    </div>
+                    <div class='adjudication-pdf-section-issued-details__item'>
+                        <p class='govuk-!-margin-bottom-1'>Date this form was issued (DD/MM/YYYY)</p>
+                        <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+                    </div>
                 </div>
-                <div class='adjudication-pdf-section-issued-details__item'>
-                    <p class='govuk-!-margin-bottom-1'>Date this form was issued (DD/MM/YYYY)</p>
-                    <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><span><strong> / </strong></span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
-                </div>
-            </div>
+            {% endif %}
+
             <div>
                 <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'>Name of issuing officer</p>
                 <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
