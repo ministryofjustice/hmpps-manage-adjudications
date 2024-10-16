@@ -1,7 +1,6 @@
 import { ConfirmedOnReportData } from './ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo, formatTimestampToDate, formatTimestampToTime } from '../utils/utils'
 import { IncidentAndOffences } from '../services/decisionTreeService'
-import logger from '../../logger'
 
 export default class noticeOfBeingPlacedOnReportData {
   isPrisonerCopy: boolean
