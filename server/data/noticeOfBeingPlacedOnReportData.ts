@@ -59,12 +59,9 @@ export default class noticeOfBeingPlacedOnReportData {
       `${confirmedOnReportData.prisonerFirstName} ${confirmedOnReportData.prisonerLastName}`
     )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
-    logger.info(`nextHearingDateTime : ${nextHearingDateTime}`)
     if (nextHearingDateTime !== null) {
       this.nextHearingDate = formatTimestampTo(nextHearingDateTime, 'dddd D MMMM')
       this.nextHearingTime = formatTimestampTo(nextHearingDateTime, 'HH:mm')
-      logger.info(`nextHearingDate : ${this.nextHearingDate}`)
-      logger.info(`nextHearingTime : ${this.nextHearingTime}`)
     }
     this.reportingOfficer = convertToTitleCase(confirmedOnReportData.reportingOfficer)
     this.incidentLocationDescription = `${confirmedOnReportData.incidentAgencyName} - ${confirmedOnReportData.incidentLocationName}`
