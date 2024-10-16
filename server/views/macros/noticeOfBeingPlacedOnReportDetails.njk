@@ -1,7 +1,6 @@
 {% macro noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) %}
 {% set offences = noticeOfBeingPlacedOnReportData.offences %}
     <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
-    {{ logger.info(`noticeOfBeingPlacedOnReportData : ${ noticeOfBeingPlacedOnReportData }`) }}
         {% if not noticeOfBeingPlacedOnReportData.nextHearingTime %}
             <div>
                 <p>A copy of this report should be given to {{ noticeOfBeingPlacedOnReportData.prisonerFriendlyName }} by
