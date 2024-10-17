@@ -41,6 +41,10 @@ export default class Dis12Pdf {
     logger.info(`isPrisonerCopy -> ${isPrisonerCopy}`)
     logger.info(`scheduledHearings -> ${scheduledHearings}`)
     logger.info(`nextHearingDateTime -> ${nextHearingDateTime}`)
+    logger.info(`reportedAdjudication -> ${reportedAdjudication}`)
+    logger.info(`reportedAdjudication.hearings -> ${reportedAdjudication.hearings}`)
+    logger.info(`ReportedAdjudicationStatus.SCHEDULED -> ${ReportedAdjudicationStatus.SCHEDULED}`)
+    logger.info(`reportedAdjudication.status -> ${reportedAdjudication.status}`)
 
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
       isPrisonerCopy,
