@@ -33,7 +33,8 @@ export default class Dis12Pdf {
 
     const isPrisonerCopy = copy === 'prisoner'
     const scheduledHearings =
-      reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED && reportedAdjudication.hearings.length >= 2
+      reportedAdjudication.status.toLowerCase() === ReportedAdjudicationStatus.SCHEDULED.toLowerCase() &&
+      reportedAdjudication.hearings.length >= 2
     let nextHearingDateTime
     if (isPrisonerCopy && scheduledHearings) {
       nextHearingDateTime = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
