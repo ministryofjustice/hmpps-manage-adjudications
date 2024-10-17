@@ -5,6 +5,7 @@ import NoticeOfBeingPlacedOnReportData from '../../data/noticeOfBeingPlacedOnRep
 import config from '../../config'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import logger from '../../../logger'
 
 export default class Dis12Pdf {
   constructor(
@@ -37,6 +38,9 @@ export default class Dis12Pdf {
     if (isPrisonerCopy && scheduledHearings) {
       nextHearingDateTime = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
     }
+    logger.info(`isPrisonerCopy -> ${isPrisonerCopy}`)
+    logger.info(`scheduledHearings -> ${scheduledHearings}`)
+    logger.info(`nextHearingDateTime -> ${nextHearingDateTime}`)
 
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
       isPrisonerCopy,
