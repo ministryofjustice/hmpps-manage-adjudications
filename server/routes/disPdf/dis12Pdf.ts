@@ -5,7 +5,6 @@ import NoticeOfBeingPlacedOnReportData from '../../data/noticeOfBeingPlacedOnRep
 import config from '../../config'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
-import logger from '../../../logger'
 
 export default class Dis12Pdf {
   constructor(
