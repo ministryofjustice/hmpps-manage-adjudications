@@ -31,24 +31,24 @@ export default class Dis12Pdf {
       true
     )
 
-    const isPrisonerCopy = copy === 'prisoner'
+    const isRelevantCopy = copy === 'prisoner' || copy === 'staff'
     const scheduledHearings =
-      reportedAdjudication.status.toLowerCase() === ReportedAdjudicationStatus.SCHEDULED.toLowerCase() &&
-      reportedAdjudication.hearings.length >= 2
+      reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED && reportedAdjudication.hearings.length >= 1
+
     let nextHearingDateTime
-    if (isPrisonerCopy && scheduledHearings) {
+    if (isRelevantCopy && scheduledHearings) {
       nextHearingDateTime = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
     }
-    logger.info(`isPrisonerCopy -> ${isPrisonerCopy}`)
+    logger.info(`isPrisonerCopy -> ${isRelevantCopy}`)
     logger.info(`scheduledHearings -> ${scheduledHearings}`)
     logger.info(`nextHearingDateTime -> ${nextHearingDateTime}`)
-    logger.info(`reportedAdjudication -> ${reportedAdjudication}`)
-    logger.info(`reportedAdjudication.hearings -> ${reportedAdjudication.hearings}`)
+    logger.info(`reportedAdjudication -> ${JSON.stringify(reportedAdjudication, null, 2)}`)
+    logger.info(`reportedAdjudication.hearings -> ${JSON.stringify(reportedAdjudication.hearings, null, 2)}`)
     logger.info(`ReportedAdjudicationStatus.SCHEDULED -> ${ReportedAdjudicationStatus.SCHEDULED}`)
     logger.info(`reportedAdjudication.status -> ${reportedAdjudication.status}`)
 
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
-      isPrisonerCopy,
+      isRelevantCopy,
       chargeNumber,
       adjudicationDetails,
       offences,
