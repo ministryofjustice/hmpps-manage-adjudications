@@ -39,13 +39,6 @@ export default class Dis12Pdf {
     if (isRelevantCopy && scheduledHearings) {
       nextHearingDateTime = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
     }
-    logger.info(`isPrisonerCopy -> ${isRelevantCopy}`)
-    logger.info(`scheduledHearings -> ${scheduledHearings}`)
-    logger.info(`nextHearingDateTime -> ${nextHearingDateTime}`)
-    logger.info(`reportedAdjudication -> ${JSON.stringify(reportedAdjudication, null, 2)}`)
-    logger.info(`reportedAdjudication.hearings -> ${JSON.stringify(reportedAdjudication.hearings, null, 2)}`)
-    logger.info(`ReportedAdjudicationStatus.SCHEDULED -> ${ReportedAdjudicationStatus.SCHEDULED}`)
-    logger.info(`reportedAdjudication.status -> ${reportedAdjudication.status}`)
 
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
       isRelevantCopy,
