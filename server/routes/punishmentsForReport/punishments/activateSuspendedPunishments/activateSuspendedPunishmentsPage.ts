@@ -9,7 +9,10 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import { PunishmentDataWithSchedule } from '../../../../data/PunishmentResult'
 
 export default class ActivateSuspendedPunishmentsPage {
-  constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {}
+  constructor(
+    private readonly punishmentsService: PunishmentsService,
+    private readonly userService: UserService
+  ) {}
 
   private renderView = async (req: Request, res: Response, error: FormError | null): Promise<void> => {
     const { chargeNumber } = req.params

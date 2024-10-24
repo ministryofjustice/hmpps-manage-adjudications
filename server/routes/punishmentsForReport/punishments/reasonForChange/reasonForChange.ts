@@ -7,7 +7,10 @@ import UserService from '../../../../services/userService'
 export default class ReasonForChangePunishmentRoutes {
   page: ReasonForChangePage
 
-  constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {
+  constructor(
+    private readonly punishmentsService: PunishmentsService,
+    private readonly userService: UserService
+  ) {
     this.page = new ReasonForChangePage(PageRequestType.CREATION, punishmentsService, userService)
   }
 

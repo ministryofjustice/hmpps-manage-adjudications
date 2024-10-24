@@ -33,7 +33,10 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class OfficerDecisionHelper extends DecisionHelper {
-  constructor(private readonly userService: UserService, readonly decisionTreeService: DecisionTreeService) {
+  constructor(
+    private readonly userService: UserService,
+    readonly decisionTreeService: DecisionTreeService
+  ) {
     super(decisionTreeService)
   }
 

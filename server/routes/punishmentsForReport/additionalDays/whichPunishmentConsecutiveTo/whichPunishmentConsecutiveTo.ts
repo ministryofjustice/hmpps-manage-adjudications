@@ -6,7 +6,10 @@ import PunishmentsService from '../../../../services/punishmentsService'
 export default class WhichPunishmentConsecutiveToRoute {
   page: WhichPunishmentConsecutiveToPage
 
-  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {
     this.page = new WhichPunishmentConsecutiveToPage(PageRequestType.CREATION, userService, punishmentsService)
   }
 

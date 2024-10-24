@@ -1,7 +1,11 @@
 import { numberRange } from '../utils'
 
 export default class PageResponse {
-  constructor(readonly size: number, readonly pageNumber: number, readonly totalElements: number) {}
+  constructor(
+    readonly size: number,
+    readonly pageNumber: number,
+    readonly totalElements: number
+  ) {}
 
   pageRange(pagesBefore: number, pagesAfter: number): number[] {
     const idealStartPage = this.pageNumber - pagesBefore
