@@ -29,7 +29,10 @@ class PageOptions {
 export default class confirmedOnReportPage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 

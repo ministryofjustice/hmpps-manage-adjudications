@@ -18,7 +18,10 @@ type PageData = {
 }
 
 export default class rehabilitativeActivityDetailsPage {
-  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params

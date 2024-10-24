@@ -7,7 +7,10 @@ import UserService from '../../../../services/userService'
 export default class CheckPunishmentsRoutes {
   page: CheckPunishmentsPage
 
-  constructor(private readonly punishmentsService: PunishmentsService, private readonly userService: UserService) {
+  constructor(
+    private readonly punishmentsService: PunishmentsService,
+    private readonly userService: UserService
+  ) {
     this.page = new CheckPunishmentsPage(PageRequestType.CREATION, punishmentsService, userService)
   }
 

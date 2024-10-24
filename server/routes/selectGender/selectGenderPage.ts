@@ -29,7 +29,10 @@ class PageOptions {
 export default class SelectGenderPage {
   pageOptions: PageOptions
 
-  constructor(pageType: PageRequestType, private readonly placeOnReportService: PlaceOnReportService) {
+  constructor(
+    pageType: PageRequestType,
+    private readonly placeOnReportService: PlaceOnReportService
+  ) {
     this.pageOptions = new PageOptions(pageType)
   }
 

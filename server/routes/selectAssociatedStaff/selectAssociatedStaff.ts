@@ -14,7 +14,10 @@ type PageData = {
 }
 
 export default class SelectAssociatedPrisonerRoutes {
-  constructor(private readonly userService: UserService, private readonly placeOnReportService: PlaceOnReportService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly placeOnReportService: PlaceOnReportService
+  ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, searchResults, staffName, redirectUrl } = pageData

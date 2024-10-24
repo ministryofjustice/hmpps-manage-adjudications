@@ -6,7 +6,10 @@ import PunishmentsService from '../../../../services/punishmentsService'
 export default class PaybackPunishmentCompletionDateEditRoute {
   page: PaybackPunishmentCompletionDatePage
 
-  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {
     this.page = new PaybackPunishmentCompletionDatePage(PageRequestType.EDIT, userService, punishmentsService)
   }
 

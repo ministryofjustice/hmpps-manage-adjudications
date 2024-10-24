@@ -6,7 +6,10 @@ import PunishmentsService from '../../../services/punishmentsService'
 export default class PunishmentCommentRoute {
   page: PunishmentCommentPage
 
-  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {
     this.page = new PunishmentCommentPage(PageRequestType.CREATION, userService, punishmentsService)
   }
 

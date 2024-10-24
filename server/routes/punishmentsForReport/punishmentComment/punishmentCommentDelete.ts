@@ -6,7 +6,10 @@ import ConfirmDeletionPage from './punishmentCommentDeletePage'
 export default class PunishmentCommentDeleteRoute {
   page: ConfirmDeletionPage
 
-  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {
     this.page = new ConfirmDeletionPage(userService, punishmentsService)
   }
 

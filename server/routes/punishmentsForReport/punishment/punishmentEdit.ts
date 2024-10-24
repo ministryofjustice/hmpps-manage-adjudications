@@ -6,7 +6,10 @@ import PunishmentsService from '../../../services/punishmentsService'
 export default class PunishmentEditRoute {
   page: PunishmentPage
 
-  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {
     this.page = new PunishmentPage(PageRequestType.EDIT, userService, punishmentsService)
   }
 

@@ -14,7 +14,10 @@ type PageData = {
 }
 
 export default class NextStepsPolicePage {
-  constructor(private readonly userService: UserService, private readonly outcomesService: OutcomesService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly outcomesService: OutcomesService
+  ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params

@@ -6,7 +6,10 @@ import PunishmentsService from '../../../../services/punishmentsService'
 export default class HasRehabilitativeActivitiesDetailsRoutes {
   page: HasRehabilitativeActivitiesDetailsPage
 
-  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {
     this.page = new HasRehabilitativeActivitiesDetailsPage(userService, punishmentsService)
   }
 

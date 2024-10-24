@@ -6,7 +6,10 @@ import PunishmentsService from '../../../../services/punishmentsService'
 export default class WillPunishmentBeConsecutiveEditRoute {
   page: WillPunishmentBeConsecutivePage
 
-  constructor(private readonly userService: UserService, private readonly punishmentsService: PunishmentsService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly punishmentsService: PunishmentsService
+  ) {
     this.page = new WillPunishmentBeConsecutivePage(PageRequestType.EDIT, userService, punishmentsService)
   }
 
