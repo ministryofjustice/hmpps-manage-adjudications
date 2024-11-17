@@ -59,7 +59,7 @@ type RequestValues = {
 type IncidentDetails = {
   incidentDate: SubmittedDateTime
   discoveryDate: SubmittedDateTime
-  locationId: any
+  locationId: string | number
   discoveryRadioSelected?: string
 }
 
@@ -130,7 +130,7 @@ export default class IncidentDetailsPage {
     const validationError = validateForm({
       incidentDate: postValues.incidentDetails?.incidentDate,
       discoveryDate: postValues.incidentDetails?.discoveryDate,
-      locationId: postValues.incidentDetails?.locationId,
+      locationId: postValues.incidentDetails?.locationId as string,
       discoveryRadioSelected: postValues.incidentDetails?.discoveryRadioSelected,
     })
     if (validationError) {
@@ -139,7 +139,7 @@ export default class IncidentDetailsPage {
     }
 
     const nomisLocationId = await this.locationService.getCorrespondingNomisLocationId(
-      postValues.incidentDetails.locationId,
+      postValues.incidentDetails.locationId as string,
       user
     )
 
@@ -194,7 +194,7 @@ export default class IncidentDetailsPage {
     // eslint-disable-next-line no-return-await
     return await this.placeOnReportService.startNewDraftAdjudication(
       formatDate(data.incidentDate),
-      data.locationId,
+      data.locationId as number,
       prisonerNumber,
       currentUser,
       data.gender,
@@ -211,7 +211,7 @@ export default class IncidentDetailsPage {
     return await this.placeOnReportService.editDraftIncidentDetails(
       draftId,
       formatDate(data.incidentDate),
-      data.locationId,
+      data.locationId as number,
       currentUser,
       formatDate(data.discoveryDate)
     )
