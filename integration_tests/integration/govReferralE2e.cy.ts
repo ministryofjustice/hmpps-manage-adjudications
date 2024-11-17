@@ -87,11 +87,20 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
       }),
     })
     cy.task('stubGetLocation', {
-      locationId: 123,
+      locationId: 'location-1',
       response: {
-        locationId: 123,
-        agencyId: 'MDI',
-        userDescription: 'Adj 1',
+        id: 'location-1',
+        prisonId: 'MDI',
+        key: 'MDI-Adj-1',
+        localName: 'Adj 1',
+      },
+    })
+
+    cy.task('stubGetDpsLocationId', {
+      nomisLocationId: 123,
+      response: {
+        nomisLocationId: 123,
+        dpsLocationId: 'location-1',
       },
     })
     cy.task('stubCreateNotProceed', {
@@ -303,12 +312,38 @@ context('Inad refers to gov after hearing', () => {
       }),
     })
     cy.task('stubGetLocation', {
-      locationId: 123,
+      locationId: 'houseblock-1',
       response: {
-        locationId: 123,
-        agencyId: 'MDI',
-        userDescription: 'Adj 1',
+        id: 'houseblock-1',
+        prisonId: 'MDI',
+        key: 'MDI-Adj-1',
+        localName: 'Adj 1',
       },
+    })
+
+    cy.task('stubGetDpsLocationId', {
+      nomisLocationId: 123,
+      response: {
+        nomisLocationId: 123,
+        dpsLocationId: 'houseblock-1',
+      },
+    })
+
+    cy.task('stubGetNomisLocationId', {
+      dpsLocationId: 'houseblock-1',
+      response: { nomisLocationId: 123 },
+    })
+
+    cy.task('stubGetAdjudicationLocations', {
+      prisonId: 'MDI',
+      response: [
+        {
+          id: 'houseblock-1',
+          prisonId: 'MDI',
+          key: 'MDI-Adj-1',
+          localName: 'Houseblock 1',
+        },
+      ],
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.task('stubCreateGovReferral', {
@@ -334,7 +369,7 @@ context('Inad refers to gov after hearing', () => {
     cy.signIn()
   })
   describe('---', () => {
-    it('-', () => {
+    it.only('-', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().type('John Smith')

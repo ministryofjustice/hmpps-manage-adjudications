@@ -11,7 +11,7 @@ jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/locationService.ts')
 
 const testData = new TestData()
-const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null, null) as jest.Mocked<PlaceOnReportService>
 const locationService = new LocationService(null) as jest.Mocked<LocationService>
 
 let app: Express
@@ -111,6 +111,7 @@ describe('POST /incident-details', () => {
   })
 
   it('should verify supply optional discoveryDate ', async () => {
+    locationService.getCorrespondingNomisLocationId.mockResolvedValue(2)
     return request(app)
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
@@ -141,6 +142,8 @@ describe('POST /incident-details', () => {
       })
   })
   it('should not call getPrisonerDetails to get the prisoner gender if it is stored on the session', () => {
+    locationService.getCorrespondingNomisLocationId.mockResolvedValue(2)
+
     return request(app)
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({

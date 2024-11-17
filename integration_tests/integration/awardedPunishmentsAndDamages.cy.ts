@@ -21,7 +21,7 @@ context('Awarded punishments and damages', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetUsersLocations', testData.residentialLocations())
+    cy.task('stubGetUsersLocations', testData.residentialLocationsFromPrisonApi())
     cy.task('stubGetHearingsGivenAgencyAndDate', {
       hearingDate: today.format('YYYY-MM-DD'),
       response: {
@@ -360,7 +360,7 @@ context('Awarded punishments and damages - Financial', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetUsersLocations', testData.residentialLocations())
+    cy.task('stubGetUsersLocations', testData.residentialLocationsFromPrisonApi())
     cy.task('stubGetHearingsGivenAgencyAndDate', {
       hearingDate: today.format('YYYY-MM-DD'),
       response: {
@@ -620,7 +620,7 @@ context('Awarded punishments and damages - Additional days', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetUsersLocations', testData.residentialLocations())
+    cy.task('stubGetUsersLocations', testData.residentialLocationsFromPrisonApi())
     cy.task('stubGetHearingsGivenAgencyAndDate', {
       hearingDate: today.format('YYYY-MM-DD'),
       response: {

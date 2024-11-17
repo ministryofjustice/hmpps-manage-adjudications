@@ -705,15 +705,11 @@ context('v2 offences ALO', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubGetLocation', {
-      locationId: 25538,
-      response: {
-        locationId: 25538,
-        agencyId: 'MDI',
-        locationPrefix: 'MDI-1',
-        userDescription: 'Houseblock 1',
-      },
-    })
+
+    cy.task('stubGetLocation', {})
+
+    cy.task('stubGetDpsLocationId', {})
+
     // Prisoner
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',

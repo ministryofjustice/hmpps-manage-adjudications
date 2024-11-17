@@ -6,7 +6,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -19,7 +19,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { time: { hour: '12', minute: '23' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -34,7 +34,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { time: { hour: '12', minute: '23' } },
           discoveryDate: { date: '' },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: '',
@@ -49,7 +49,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { time: { hour: '12', minute: '23' } },
           discoveryDate: { date: '', time: { hour: '', minute: '' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'No',
@@ -64,7 +64,7 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { time: { hour: '', minute: '23' } },
           discoveryDate: { date: '20/12/2022', time: { hour: '', minute: '23' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'No',
@@ -87,7 +87,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { minute: '23' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -101,7 +101,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '65', minute: '23' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -115,7 +115,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -129,7 +129,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '65' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -143,7 +143,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: {} },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -157,7 +157,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '8', minute: '30' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -171,7 +171,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '008', minute: '30' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -185,7 +185,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '1' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -199,7 +199,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '001' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -213,7 +213,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: 'lll', minute: '50' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -227,7 +227,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '09', minute: 'fffff' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
@@ -246,7 +246,7 @@ describe('validateForm', () => {
             date: '04/11/2021',
             time: { hour: `09`, minute: `22` },
           },
-          locationId: 2343,
+          locationId: 'location-id-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',

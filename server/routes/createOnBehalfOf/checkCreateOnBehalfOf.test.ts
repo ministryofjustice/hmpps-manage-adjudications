@@ -8,7 +8,7 @@ import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('./createOnBehalfOfSessionService.ts')
 
-const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null, null) as jest.Mocked<PlaceOnReportService>
 const createOnBehalfOfSessionService =
   new CreateOnBehalfOfSessionService() as jest.Mocked<CreateOnBehalfOfSessionService>
 

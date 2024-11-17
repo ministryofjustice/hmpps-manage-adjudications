@@ -19,3 +19,23 @@ export type Location = {
   userDescription: string
   agencyId: string
 }
+
+export type IncidentLocation = {
+  locationId: string
+  locationPrefix: string
+  userDescription: string
+  agencyId?: string
+}
+
+export type LocationsApiLocation = {
+  id: string
+  prisonId?: string
+  localName: string
+  pathHierarchy?: string
+  key: string
+}
+
+export type NomisSyncMapLocation = {
+  nomisLocationId?: number
+  dpsLocationId?: string
+}

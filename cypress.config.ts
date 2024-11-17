@@ -3,6 +3,8 @@ import { defineConfig } from 'cypress'
 
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import prisonApi from './integration_tests/mockApis/prisonApi'
+import locationsInsidePrisonApi from './integration_tests/mockApis/locationsInsidePrisonApi'
+import nomisSyncPrisonerMappingApi from './integration_tests/mockApis/nomisSyncPrisonerMappingApi'
 import curiousApi from './integration_tests/mockApis/curiousApi'
 import { CaseLoad } from './server/data/prisonApiClient'
 import auth from './integration_tests/mockApis/auth'
@@ -87,11 +89,16 @@ export default defineConfig({
         stubManageUsersApiPing: status => users.stubPing(status),
         stubPrisonerSearchPing: status => prisonerSearch.stubPing(status),
         stubPrisonApiPing: status => prisonApi.stubPing(status),
+        stubLocationsInsidePrisonApiPing: status => locationsInsidePrisonApi.stubPing(status),
+        stubNomisSyncPrisonerMappingApiPing: status => nomisSyncPrisonerMappingApi.stubPing(status),
         stubAdjudicationsPing: status => adjudications.stubPing(status),
         stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
-        stubGetLocations: prisonApi.stubGetLocations,
+        stubGetLocations: locationsInsidePrisonApi.stubGetLocations,
         stubGetLocationsByType: prisonApi.stubGetLocationsByType,
-        stubGetLocation: prisonApi.stubGetLocation,
+        stubGetAdjudicationLocations: locationsInsidePrisonApi.stubGetAdjudicationLocations,
+        stubGetLocation: locationsInsidePrisonApi.stubGetLocation,
+        stubGetDpsLocationId: nomisSyncPrisonerMappingApi.stubGetDpsLocationId,
+        stubGetNomisLocationId: nomisSyncPrisonerMappingApi.stubGetNomisLocationId,
         stubGetAgency: prisonApi.stubGetAgency,
         stubGetSecondaryLanguages: prisonApi.stubGetSecondaryLanguages,
         stubGetBatchPrisonerDetails: prisonApi.stubGetBatchPrisonerDetails,

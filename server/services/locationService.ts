@@ -1,15 +1,12 @@
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
-import { PrisonLocation, Location, AgencyId, LocationId, Agency } from '../data/PrisonLocationResult'
+import LocationsInsidePrisonApiClient from '../data/locationsInsidePrisonApiClient'
+import NomisSyncPrisonerMappingApiClient from '../data/nomisSyncPrisonerMappingApiClient'
+import { Location, AgencyId, Agency, IncidentLocation, LocationsApiLocation } from '../data/PrisonLocationResult'
 import { User } from '../data/hmppsManageUsersClient'
 
 export default class LocationService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
-
-  async getIncidentLocation(locationId: LocationId, user: User): Promise<Location> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    return new PrisonApiClient(token).getLocation(locationId)
-  }
 
   async getAgency(agencyId: AgencyId, user: User): Promise<Agency> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
@@ -23,9 +20,33 @@ export default class LocationService {
     return locations.filter(loc => loc.locationId > 0)
   }
 
-  async getIncidentLocations(agencyId: AgencyId, user: User): Promise<PrisonLocation[]> {
+  async getCorrespondingNomisLocationId(dpsLocationId: string, user: User): Promise<number> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const incidentLocations = await new PrisonApiClient(token).getLocations(agencyId)
+    const location = await new NomisSyncPrisonerMappingApiClient(token).getNomisLocationId(dpsLocationId)
+    return location.nomisLocationId
+  }
+
+  async getCorrespondingDpsLocationId(nomisLocationId: number, user: User): Promise<string> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const location = await new NomisSyncPrisonerMappingApiClient(token).getDpsLocationId(nomisLocationId)
+    return location.dpsLocationId
+  }
+
+  async getIncidentLocation(dpsLocationId: string, user: User): Promise<LocationsApiLocation> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    return new LocationsInsidePrisonApiClient(token).getLocation(dpsLocationId)
+  }
+
+  async getIncidentLocations(agencyId: AgencyId, user: User): Promise<IncidentLocation[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
+    const locations = await new LocationsInsidePrisonApiClient(token).getLocations(agencyId)
+    // mapping the reponse from locationsApi with that previosuly received from prisonApi
+    const incidentLocations = locations.map(loc => ({
+      locationId: loc.id,
+      userDescription: loc.localName,
+      locationPrefix: loc.key,
+      agencyId: loc.prisonId,
+    }))
 
     const formattedIncidentLocations = assignIntLocCodeAsUserDesc(incidentLocations)
 
@@ -47,9 +68,13 @@ export default class LocationService {
     return [...(prisonersCell ? [prisonersCell] : []), ...(otherCell ? [otherCell] : []), ...remainingLocations]
   }
 
-  async getHearingLocations(agencyId: AgencyId, user: User): Promise<PrisonLocation[]> {
+  async getHearingLocations(agencyId: AgencyId, user: User): Promise<IncidentLocation[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const hearingLocations = await new PrisonApiClient(token).getAdjudicationLocations(agencyId)
+    const locations = await new LocationsInsidePrisonApiClient(token).getAdjudicationLocations(agencyId)
+
+    const hearingLocations = locations.map(loc => {
+      return { locationId: loc.id, userDescription: loc.localName, locationPrefix: loc.key, agencyId: loc.prisonId }
+    })
     const formattedHearingLocations = assignIntLocCodeAsUserDesc(hearingLocations)
 
     return formattedHearingLocations.sort((a, b) =>
@@ -58,7 +83,7 @@ export default class LocationService {
   }
 }
 
-const assignIntLocCodeAsUserDesc = (locations: PrisonLocation[]) => {
+const assignIntLocCodeAsUserDesc = (locations: IncidentLocation[]) => {
   return locations.map(location => ({
     ...location,
     userDescription: location.userDescription ? location.userDescription : location.locationPrefix,

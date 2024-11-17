@@ -157,12 +157,6 @@ export default class PrisonApiClient {
     })
   }
 
-  async getAdjudicationLocations(agencyId: string): Promise<Location[]> {
-    return this.restClient.get({
-      path: `/api/agencies/${agencyId}/locations/type/ADJU`,
-    })
-  }
-
   async getAgency(agencyId: AgencyId): Promise<Agency> {
     return this.restClient.get({
       path: `/api/agencies/${agencyId}?activeOnly=false`,

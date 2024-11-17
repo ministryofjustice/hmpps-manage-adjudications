@@ -35,7 +35,7 @@ beforeEach(() => {
     })
   )
   locationService.getHearingLocations.mockResolvedValue(testData.residentialLocations())
-
+  locationService.getCorrespondingNomisLocationId.mockResolvedValue(27008)
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '1524494',

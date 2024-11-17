@@ -15,7 +15,7 @@ import PrisonApiClient from '../data/prisonApiClient'
 import ManageAdjudicationsSystemTokensClient from '../data/manageAdjudicationsSystemTokensClient'
 
 import PrisonerResult from '../data/prisonerResult'
-import { PrisonLocation } from '../data/PrisonLocationResult'
+import { IncidentLocation } from '../data/PrisonLocationResult'
 import {
   DraftAdjudicationResult,
   CheckYourAnswers,
@@ -40,6 +40,7 @@ import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 import config from '../config'
+import LocationService from './locationService'
 
 export interface PrisonerResultSummary extends PrisonerResult {
   friendlyName: string
@@ -69,7 +70,8 @@ export type ExistingDraftIncidentDetails = {
 export default class PlaceOnReportService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly hmppsManageUsersClient: HmppsManageUsersClient
+    private readonly hmppsManageUsersClient: HmppsManageUsersClient,
+    private readonly locationService: LocationService
   ) {}
 
   async getPrisonerImage(prisonerNumber: string, user: User): Promise<Readable> {
@@ -163,7 +165,7 @@ export default class PlaceOnReportService {
       : client.postDraftIncidentStatement(draftId, requestBody)
   }
 
-  async getCheckYourAnswersInfo(draftId: number, locations: PrisonLocation[], user: User): Promise<CheckYourAnswers> {
+  async getCheckYourAnswersInfo(draftId: number, locations: IncidentLocation[], user: User): Promise<CheckYourAnswers> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
 
@@ -181,7 +183,11 @@ export default class PlaceOnReportService {
     const dateDiscovery = getDate(dateTimeDiscovery, 'D MMMM YYYY')
     const timeDiscovery = getTime(dateTimeDiscovery)
 
-    const [locationObj] = locations.filter(loc => loc.locationId === draftAdjudication.incidentDetails.locationId)
+    const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
+      draftAdjudication.incidentDetails.locationId,
+      user
+    )
+    const [locationObj] = locations.filter(loc => loc.locationId === dpsLocationId)
 
     let changeReportingOfficerLink
     let changeReportingOfficerDataQa

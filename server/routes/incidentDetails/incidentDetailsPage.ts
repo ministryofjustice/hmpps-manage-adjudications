@@ -10,7 +10,7 @@ import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { convertSubmittedDateTimeToDateObject, formatDate, formatDateForDatePicker } from '../../utils/utils'
 import { User } from '../../data/hmppsManageUsersClient'
-import { PrisonLocation } from '../../data/PrisonLocationResult'
+import { IncidentLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult, PrisonerGender } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
 
@@ -24,7 +24,7 @@ type PageData = {
 type DisplayDataFromApis = {
   reporter: string
   prisoner: PrisonerResultSummary
-  possibleLocations: PrisonLocation[]
+  possibleLocations: IncidentLocation[]
 }
 
 type InitialFormData = {
@@ -59,7 +59,7 @@ type RequestValues = {
 type IncidentDetails = {
   incidentDate: SubmittedDateTime
   discoveryDate: SubmittedDateTime
-  locationId: number
+  locationId: any
   discoveryRadioSelected?: string
 }
 
@@ -137,6 +137,13 @@ export default class IncidentDetailsPage {
       const pageData = await this.getPageDataOnPost(postValues, user)
       return renderData(res, pageData, validationError)
     }
+
+    const nomisLocationId = await this.locationService.getCorrespondingNomisLocationId(
+      postValues.incidentDetails.locationId,
+      user
+    )
+
+    postValues.incidentDetails.locationId = nomisLocationId
 
     try {
       if (this.pageOptions.isEdit()) {
@@ -228,11 +235,21 @@ export default class IncidentDetailsPage {
         prisonerReportUrl,
       }
     }
+
+    let locationId = ''
+
+    if (readApiIncidentDetails?.locationId) {
+      locationId = await this.locationService.getCorrespondingDpsLocationId(
+        readApiIncidentDetails.locationId as unknown as number,
+        currentUser
+      )
+    }
+
     return {
       displayData: await this.getDisplayData(requestValues.prisonerNumber, originalReporterUsername, currentUser),
       exitButtonData,
       formData: {
-        incidentDetails: readApiIncidentDetails,
+        incidentDetails: { ...readApiIncidentDetails, locationId },
         originalReporterUsername,
       },
     }

@@ -29,7 +29,7 @@ const userService = new UserService(null, null) as jest.Mocked<UserService>
 
 const testData = new TestData()
 
-const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null, null) as jest.Mocked<PlaceOnReportService>
 const decisionTreeService = new DecisionTreeService(
   placeOnReportService,
   userService,

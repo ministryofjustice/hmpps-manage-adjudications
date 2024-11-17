@@ -14,7 +14,7 @@ import {
 } from '../../data/DraftAdjudicationResult'
 import { DisIssue, OicHearingType, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import PrisonerSimpleResult from '../../data/prisonerSimpleResult'
-import { Location } from '../../data/PrisonLocationResult'
+import { IncidentLocation, Location, LocationsApiLocation } from '../../data/PrisonLocationResult'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import { PrisonerSearchSummary } from '../../services/prisonerSearchService'
 import { alertFlagLabels, AlertFlags } from '../../utils/alertHelper'
@@ -213,7 +213,7 @@ export default class TestData {
     }
   }
 
-  residentialLocations = (): Location[] => {
+  residentialLocationsFromPrisonApi = (): Location[] => {
     return [
       {
         locationId: 25538,
@@ -235,6 +235,58 @@ export default class TestData {
       },
       {
         locationId: 27102,
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-MCASU',
+        userDescription: 'Segregation MPU',
+      },
+    ]
+  }
+
+  residentialLocationsFromLocationsApi = (): LocationsApiLocation[] => {
+    return [
+      {
+        id: 'location-1',
+        prisonId: 'MDI',
+        key: 'MDI-1',
+        localName: 'Houseblock 1',
+      },
+      {
+        id: 'location-2',
+        prisonId: 'MDI',
+        key: 'MDI-2',
+        localName: 'Houseblock 2',
+      },
+      {
+        id: 'location-seg',
+        prisonId: 'MDI',
+        key: 'MDI-MCASU',
+        localName: 'Segregation MPU',
+      },
+    ]
+  }
+
+  residentialLocations = (): IncidentLocation[] => {
+    return [
+      {
+        locationId: 'location-1',
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-1',
+        userDescription: 'Houseblock 1',
+      },
+      {
+        locationId: 'location-2',
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-2',
+        userDescription: 'Houseblock 2',
+      },
+      {
+        locationId: 'location-recep',
+        agencyId: 'MDI',
+        locationPrefix: 'MDI-RECEP',
+        userDescription: 'Reception',
+      },
+      {
+        locationId: 'location-seg',
         agencyId: 'MDI',
         locationPrefix: 'MDI-MCASU',
         userDescription: 'Segregation MPU',

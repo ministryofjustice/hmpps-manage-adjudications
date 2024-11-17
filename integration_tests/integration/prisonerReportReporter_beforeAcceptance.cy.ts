@@ -108,15 +108,9 @@ context('Prisoner report - reporter view', () => {
         lastName: 'WRIGHT',
       }),
     })
-    cy.task('stubGetLocation', {
-      locationId: 25538,
-      response: {
-        locationId: 25538,
-        agencyId: 'MDI',
-        locationPrefix: 'MDI-1',
-        userDescription: 'Houseblock 1',
-      },
-    })
+    cy.task('stubGetLocation', {})
+
+    cy.task('stubGetDpsLocationId', {})
 
     const awaitingReviewReport = reportedAdjudicationResponse({
       chargeNumber: '12345',

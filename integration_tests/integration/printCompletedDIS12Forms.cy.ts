@@ -19,7 +19,7 @@ context('Print completed DIS forms', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetUsersLocations', testData.residentialLocations())
+    cy.task('stubGetUsersLocations', testData.residentialLocationsFromPrisonApi())
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
       response: testData.userFromUsername(),
