@@ -138,19 +138,6 @@ export default class PrisonApiClient {
     }
   }
 
-  async getLocations(agencyId: string, occurrenceLocationsOnly = true): Promise<Location[]> {
-    return this.restClient.get({
-      path: `/api/agencies/${agencyId}/locations${occurrenceLocationsOnly ? '?eventType=OCCUR' : ''}`,
-      headers: { 'Sort-Fields': 'userDescription' },
-    })
-  }
-
-  async getLocation(locationId: LocationId): Promise<Location> {
-    return this.restClient.get({
-      path: `/api/locations/${locationId}?includeInactive=true`,
-    })
-  }
-
   async getUsersLocations(): Promise<Location[]> {
     return this.restClient.get({
       path: `/api/users/me/locations`,
