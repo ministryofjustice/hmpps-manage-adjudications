@@ -8,7 +8,7 @@ const getAdjudicationLocations = jest.fn()
 const testData = new TestData()
 
 jest.mock('../data/hmppsAuthClient')
-jest.mock('../data/LocationsInsidePrisonApiClient', () => {
+jest.mock('../data/locationsInsidePrisonApiClient', () => {
   return jest.fn().mockImplementation(() => {
     return { getLocations, getAdjudicationLocations }
   })
