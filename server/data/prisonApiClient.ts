@@ -6,7 +6,7 @@ import config from '../config'
 import RestClient from './restClient'
 import PrisonerSimpleResult from './prisonerSimpleResult'
 import PrisonerResult from './prisonerResult'
-import { Agency, AgencyId, Location, LocationId } from './PrisonLocationResult'
+import { Agency, AgencyId, Location } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
 import { Alert, alertCodeString, PrisonerAlerts } from '../utils/alertHelper'
 
