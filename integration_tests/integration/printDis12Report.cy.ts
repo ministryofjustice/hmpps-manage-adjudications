@@ -64,14 +64,6 @@ context('Print notice of being placed on report (DIS 1 and 2)', () => {
         },
       ],
     })
-    // cy.task('stubGetLocation', {
-    //   locationId: 25538,
-    //   response: testData.residentialLocations()[0],
-    // })
-    // cy.task('stubGetLocations', {
-    //   agencyId: 'MDI',
-    //   response: testData.residentialLocations(),
-    // })
 
     cy.task('stubGetLocation', {})
 

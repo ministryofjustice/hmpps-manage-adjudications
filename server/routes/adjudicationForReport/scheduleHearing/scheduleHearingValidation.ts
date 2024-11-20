@@ -3,8 +3,7 @@ import { formatDate, formatTimestampToDate, formatTimestampToTime } from '../../
 
 type ScheduleHearingForm = {
   hearingDate?: SubmittedDateTime
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  locationId?: any
+  locationId?: string
   hearingType?: string
   latestExistingHearing?: string
 }
