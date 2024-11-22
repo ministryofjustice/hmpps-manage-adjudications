@@ -19,24 +19,32 @@ describe('locationInsidePrisonApiClient', () => {
     nock.cleanAll()
   })
 
-  describe('getLocations', () => {
+  describe('locations api ', () => {
     const locations: nock.Body = []
-    it('should return data from api', async () => {
+    it('getLocations should return data from api', async () => {
       fakeLocationsInsidePrisonApi
-        .get('/locations/prison/MDI/non-residential-usage-type/OCCURRENCE')
+        .get('/locations/prison/MDI/non-residential-usage-type/OCCURRENCE?formatLocalName=true&sortByLocalName=true')
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, locations)
 
       const output = await client.getLocations('MDI')
       expect(output).toEqual(locations)
     })
-  })
 
-  describe('getAdjudicationLocations', () => {
-    const locations: nock.Body = []
-    it('should return data from api', async () => {
+    it('getLocation should return data from api', async () => {
+      const location: nock.Body = {}
       fakeLocationsInsidePrisonApi
-        .get('/locations/prison/MDI/location-type/ADJUDICATION_ROOM')
+        .get('/locations/MDI?formatLocalName=true')
+        .matchHeader('authorization', `Bearer ${token}`)
+        .reply(200, location)
+
+      const output = await client.getLocation('MDI')
+      expect(output).toEqual(location)
+    })
+
+    it('getAdjudicationLocations should return data from api', async () => {
+      fakeLocationsInsidePrisonApi
+        .get('/locations/prison/MDI/location-type/ADJUDICATION_ROOM?formatLocalName=true&sortByLocalName=true')
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, locations)
 
