@@ -30,7 +30,7 @@ const stubGetLocation = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/locationsInsidePrisonApi/locations/${locationId}`,
+      url: `/locationsInsidePrisonApi/locations/${locationId}?formatLocalName=true`,
     },
     response: {
       status: 200,
@@ -49,7 +49,7 @@ const stubGetLocations = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/locationsInsidePrisonApi/locations/prison/${prisonId}/non-residential-usage-type/OCCURRENCE`,
+      url: `/locationsInsidePrisonApi/locations/prison/${prisonId}/non-residential-usage-type/OCCURRENCE?formatLocalName=true&sortByLocalName=true`,
     },
     response: {
       status: 200,
@@ -68,7 +68,7 @@ const stubGetAdjudicationLocations = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/locationsInsidePrisonApi/locations/prison/${prisonId}/location-type/ADJUDICATION_ROOM`,
+      url: `/locationsInsidePrisonApi/locations/prison/${prisonId}/location-type/ADJUDICATION_ROOM?formatLocalName=true&sortByLocalName=true`,
     },
     response: {
       status: 200,
