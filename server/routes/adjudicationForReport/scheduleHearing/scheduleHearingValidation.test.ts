@@ -14,7 +14,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/01/2030', time: { hour: '12', minute: '23' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toBeNull()
@@ -25,7 +25,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { time: { hour: '12', minute: '23' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
@@ -56,7 +56,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/01/2030', time: { minute: '23' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
@@ -70,7 +70,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/01/2030', time: { hour: '12' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
@@ -84,7 +84,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/01/2030' },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
@@ -98,7 +98,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/11/2022', time: { hour: '09', minute: '00' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
@@ -112,7 +112,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/11/2022', time: { hour: '09', minute: '00' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
         })
       ).toEqual([
         {
@@ -127,7 +127,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/02/2030', time: { hour: '10', minute: '00' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-02-02T10:00:00',
         })
@@ -142,7 +142,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '02/02/2030', time: { hour: '08', minute: '00' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-02-02T10:00:00',
         })
@@ -157,7 +157,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '02/02/2030', time: { hour: '08', minute: '00' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-02-03T10:00:00',
         })
@@ -176,7 +176,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '03/03/2030', time: { hour: '10', minute: '00' } },
-          locationId: 2343,
+          locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-03-03T10:00:00',
         })

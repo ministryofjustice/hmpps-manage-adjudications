@@ -4,7 +4,7 @@ import { formatDate } from '../../utils/utils'
 type incidentDetailsForm = {
   incidentDate?: SubmittedDateTime
   discoveryDate?: SubmittedDateTime
-  locationId?: number
+  locationId?: string
   incidentRole?: string
   associatedPrisonersNumber?: string
   discoveryRadioSelected?: string

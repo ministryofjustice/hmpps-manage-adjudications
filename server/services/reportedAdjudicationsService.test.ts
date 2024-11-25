@@ -24,6 +24,7 @@ import {
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
 import UserService from './userService'
+import { LocationsApiLocation } from '../data/PrisonLocationResult'
 
 const testData = new TestData()
 
@@ -105,16 +106,11 @@ const user = {
   },
 } as unknown as User
 
-const location = {
-  locationId: 27187,
-  locationType: 'ADJU',
-  description: 'ADJ',
-  agencyId: 'MDI',
-  parentLocationId: 27186,
-  currentOccupancy: 0,
-  locationPrefix: 'MDI-RES-MCASU-MCASU',
-  userDescription: 'Adj',
-  internalLocationCode: 'MCASU',
+const location: LocationsApiLocation = {
+  id: 'location-1',
+  prisonId: 'MDI',
+  key: 'MDI-VISITS-CLO_VIS',
+  localName: 'Closed Visits',
 }
 
 const agency = {
@@ -303,6 +299,10 @@ describe('reportedAdjudicationsService', () => {
       })
 
       it('returns the correct data', async () => {
+        locationService.getIncidentLocation.mockResolvedValue({
+          localName: 'Adj',
+        } as LocationsApiLocation)
+
         const result = await service.getConfirmationDetails('123', user)
 
         expect(result).toEqual({
@@ -482,10 +482,10 @@ describe('reportedAdjudicationsService', () => {
         }),
       })
       locationService.getIncidentLocation.mockResolvedValue({
-        locationId: 26996,
-        agencyId: 'MDI',
-        locationPrefix: 'MDI-VISITS-CLO_VIS',
-        userDescription: 'Closed Visits',
+        id: '26996',
+        prisonId: 'MDI',
+        key: 'MDI-VISITS-CLO_VIS',
+        localName: 'Closed Visits',
       })
       hmppsManageUsersClient.getUserFromUsername.mockResolvedValue(testData.userFromUsername('TEST_GEN'))
     })
@@ -931,6 +931,11 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual([])
     })
     it('returns the correct data when everything is available except location name', async () => {
+      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-id')
+      locationService.getIncidentLocation.mockResolvedValue({
+        localName: '',
+      } as LocationsApiLocation)
+
       const hearingOutcome = testData.hearingOutcome({
         adjudicator: 'Jacob Marley',
         code: HearingOutcomeCode.COMPLETE,
@@ -963,7 +968,7 @@ describe('reportedAdjudicationsService', () => {
             convertedAdjudicator: null as void,
             dateTimeOfHearing: '2023-06-23T18:00:00',
             id: 101,
-            locationId: 775,
+            locationId: 'location-id',
             locationName: 'Moorland (HMP & YOI)',
             oicHearingType: OicHearingType.INAD_ADULT,
             outcome: {
@@ -983,7 +988,12 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual(expectedResult)
     })
     it('returns the correct data when everything is available', async () => {
-      locationService.getIncidentLocation.mockResolvedValue(testData.residentialLocations()[0])
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      locationService.getIncidentLocation.mockResolvedValue(testData.residentialLocations()[0] as any)
+      locationService.getIncidentLocation.mockResolvedValue({
+        id: 'location-id',
+        localName: 'Houseblock 1',
+      } as LocationsApiLocation)
       const hearingOutcome = testData.hearingOutcome({
         adjudicator: 'Jacob Marley',
         code: HearingOutcomeCode.COMPLETE,
@@ -1009,6 +1019,8 @@ describe('reportedAdjudicationsService', () => {
           },
         },
       ]
+      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-id')
+
       const result = await service.getOutcomesHistory(history, user)
       const expectedResult = [
         {
@@ -1017,7 +1029,7 @@ describe('reportedAdjudicationsService', () => {
             convertedAdjudicator: null as void,
             dateTimeOfHearing: '2023-06-23T18:00:00',
             id: 101,
-            locationId: 25538,
+            locationId: 'location-id',
             locationName: 'Houseblock 1, Moorland (HMP & YOI)',
             oicHearingType: OicHearingType.INAD_ADULT,
             outcome: {

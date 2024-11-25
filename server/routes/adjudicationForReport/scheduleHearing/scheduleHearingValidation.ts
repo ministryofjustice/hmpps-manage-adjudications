@@ -3,7 +3,7 @@ import { formatDate, formatTimestampToDate, formatTimestampToTime } from '../../
 
 type ScheduleHearingForm = {
   hearingDate?: SubmittedDateTime
-  locationId?: number
+  locationId?: string
   hearingType?: string
   latestExistingHearing?: string
 }

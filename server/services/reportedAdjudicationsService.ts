@@ -173,11 +173,15 @@ export default class ReportedAdjudicationsService {
     ).getReportedAdjudication(chargeNumber)
 
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
-    const location = await this.locationService.getIncidentLocation(
+
+    const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
       reportedAdjudication.incidentDetails.locationId,
       user
     )
-    const agencyDescription = await this.locationService.getAgency(location.agencyId, user)
+
+    const location = await this.locationService.getIncidentLocation(dpsLocationId, user)
+
+    const agencyDescription = await this.locationService.getAgency(location.prisonId, user)
 
     const lastHearing = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
 
@@ -219,7 +223,7 @@ export default class ReportedAdjudicationsService {
       prisonerFirstName: prisoner.firstName,
       prisonerLastName: prisoner.lastName,
       statement: reportedAdjudication.incidentStatement.statement,
-      incidentLocationName: location.userDescription,
+      incidentLocationName: location.localName,
       incidentAgencyName: agencyDescription.description,
       prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
       prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
@@ -271,11 +275,14 @@ export default class ReportedAdjudicationsService {
     const prisonerPreferredNonEnglishLanguage = getNonEnglishLanguage(prisoner.language)
     const prisonerOtherLanguages = secondaryLanguages?.map(l => l.description)
 
-    const location = await this.locationService.getIncidentLocation(
+    const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
       adjudicationData.reportedAdjudication.incidentDetails.locationId,
       user
     )
-    const agencyDescription = await this.locationService.getAgency(location.agencyId, user)
+
+    const location = await this.locationService.getIncidentLocation(dpsLocationId, user)
+
+    const agencyDescription = await this.locationService.getAgency(location.prisonId, user)
 
     const reporter = await this.hmppsManageUsersClient.getUserFromUsername(
       adjudicationData.reportedAdjudication.createdByUserId,
@@ -291,7 +298,7 @@ export default class ReportedAdjudicationsService {
       prisonerOtherLanguages,
       prisonerNeurodiversities,
       statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
-      incidentLocationName: location.userDescription,
+      incidentLocationName: location.localName,
       incidentAgencyName: agencyDescription.description,
       reportingOfficer: getFormattedOfficerName(reporter.name),
       prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
@@ -700,8 +707,13 @@ export default class ReportedAdjudicationsService {
     const dateDiscovery = getDate(dateTimeDiscovery, 'D MMMM YYYY')
     const timeDiscovery = getTime(dateTimeDiscovery)
 
+    const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
+      adjudication.incidentDetails.locationId,
+      user
+    )
+
     const [location, agencyName] = await Promise.all([
-      this.locationService.getIncidentLocation(adjudication.incidentDetails.locationId, user),
+      this.locationService.getIncidentLocation(dpsLocationId, user),
       this.locationService.getAgency(adjudication.originatingAgencyId, user),
     ])
 
@@ -751,7 +763,7 @@ export default class ReportedAdjudicationsService {
       },
       {
         label: 'Location',
-        value: `${location?.userDescription || ''}, ${agencyName.description}`,
+        value: `${location?.localName || ''}, ${agencyName.description}`,
       },
       {
         label: 'Date of discovery',
@@ -798,13 +810,22 @@ export default class ReportedAdjudicationsService {
     }
   }
 
-  getHearingLocationMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<number, string>> => {
+  getHearingLocationMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<string, string>> => {
     const hearingLocationIds = hearings.map(hearing => hearing.hearing.locationId)
+
+    const dpsHearingLocationIds =
+      (await Promise.all(
+        [...hearingLocationIds].map(id => {
+          return this.locationService.getCorrespondingDpsLocationId(id, user)
+        })
+      )) || []
+
     const locationNamesAndIds =
       (await Promise.all(
-        [...hearingLocationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
+        [...dpsHearingLocationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
       )) || []
-    return new Map(locationNamesAndIds.map(loc => [loc.locationId, loc.userDescription]))
+
+    return new Map(locationNamesAndIds.map(loc => [loc.id, loc.localName]))
   }
 
   getAgencyNameMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<string, string>> => {
@@ -841,10 +862,26 @@ export default class ReportedAdjudicationsService {
       this.getAdjudicatorNameMap(hearings, user),
     ])
 
-    return history.map(historyItem => {
+    // if history.hearing exists, replace its nomis location id with corresponding dps location id
+    // so we can get the location name from locationsApi rather than prisonApi
+    const historyWithDpsLocationIdsForHearings =
+      (await Promise.all(
+        history.map(async hist => {
+          if (hist.hearing) {
+            const locationId = await this.locationService.getCorrespondingDpsLocationId(hist.hearing?.locationId, user)
+            return {
+              ...hist,
+              hearing: { ...hist.hearing, locationId },
+            }
+          }
+          return hist
+        })
+      )) || []
+
+    return historyWithDpsLocationIdsForHearings.map(historyItem => {
       if (historyItem.hearing) {
         // Reconstruct the data but add the hearing location name
-        const hearingLocationName = locationNamesByIdMap.get(historyItem.hearing.locationId) || ''
+        const hearingLocationName = locationNamesByIdMap.get(historyItem.hearing.locationId as string) || ''
         const convertedGovAdjudicator = governorMap.get(historyItem.hearing.outcome?.adjudicator) || ''
         return {
           hearing: {

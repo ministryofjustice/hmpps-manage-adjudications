@@ -33,15 +33,15 @@ context('Transfers flow', () => {
         lastName: 'POTTER',
       }),
     })
-    cy.task('stubGetLocation', {
-      locationId: 1,
+    cy.task('stubGetLocation', {})
+
+    cy.task('stubGetDpsLocationId', {
+      nomisLocationId: 1,
       response: {
-        locationId: 1,
-        agencyId: 'MDI',
-        locationPrefix: 'MDI-1',
-        userDescription: 'Houseblock 1',
+        dpsLocationId: 'location-1',
       },
     })
+
     cy.task('stubGetOffenceRule', {
       offenceCode: 20002,
       response: {

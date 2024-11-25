@@ -49,8 +49,30 @@ context('Incident details (edit) - statement incomplete', () => {
       },
     })
     cy.task('stubGetLocations', {
-      agencyId: 'MDI',
-      response: testData.residentialLocations(),
+      prisonId: 'MDI',
+      response: testData.residentialLocationsFromLocationsApi(),
+    })
+
+    cy.task('stubGetDpsLocationId', {})
+
+    cy.task('stubGetNomisLocationId', {})
+
+    cy.task('stubGetDpsLocationId', {})
+
+    cy.task('stubGetNomisLocationId', {
+      dpsLocationId: 'location-2',
+      response: {
+        nomisLocationId: 25538,
+        dpsLocationId: 'location-2',
+      },
+    })
+
+    cy.task('stubGetDpsLocationId', {
+      nomisLocationId: 27029,
+      response: {
+        nomisLocationId: 27029,
+        dpsLocationId: 'location-1',
+      },
     })
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',

@@ -53,10 +53,15 @@ context('Create on behalf of', () => {
         paragraphDescription: 'Commits any assault',
       },
     })
+
+    cy.task('stubGetLocation', {})
+
     cy.task('stubGetLocations', {
-      agencyId: 'MDI',
-      response: testData.residentialLocations(),
+      prisonId: 'MDI',
+      response: testData.residentialLocationsFromLocationsApi(),
     })
+
+    cy.task('stubGetDpsLocationId', {})
 
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
@@ -117,15 +122,6 @@ context('Create on behalf of', () => {
     })
 
     // for submitted incident details test
-    cy.task('stubGetLocation', {
-      locationId: 25538,
-      response: {
-        locationId: 25538,
-        agencyId: 'MDI',
-        locationPrefix: 'MDI-1',
-        userDescription: 'Houseblock 1',
-      },
-    })
     const originalReportedTestOne = {
       reportedAdjudication: testData.reportedAdjudication({
         chargeNumber: '1524493',

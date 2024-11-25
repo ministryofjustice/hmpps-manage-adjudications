@@ -6,6 +6,7 @@ import adjudicationUrls from '../utils/urlGenerator'
 import { PrisonerGender } from '../data/DraftAdjudicationResult'
 import TestData from '../routes/testutils/testData'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
+import LocationService from './locationService'
 
 const testData = new TestData()
 
@@ -23,6 +24,7 @@ const updateIncidentRole = jest.fn()
 const getAgency = jest.fn()
 const saveYouthOffenderStatus = jest.fn()
 
+jest.mock('./locationService')
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/hmppsManageUsersClient')
 jest.mock('../data/prisonApiClient', () => {
@@ -48,7 +50,7 @@ jest.mock('../data/manageAdjudicationsSystemTokensClient', () => {
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const hmppsManageUsersClient = new HmppsManageUsersClient() as jest.Mocked<HmppsManageUsersClient>
-
+const locationService = new LocationService(null) as jest.Mocked<LocationService>
 const token = 'some token'
 
 describe('placeOnReportService', () => {
@@ -68,7 +70,7 @@ describe('placeOnReportService', () => {
   beforeEach(() => {
     hmppsAuthClient.getSystemClientToken.mockResolvedValue(token)
 
-    service = new PlaceOnReportService(hmppsAuthClient, hmppsManageUsersClient)
+    service = new PlaceOnReportService(hmppsAuthClient, hmppsManageUsersClient, locationService)
   })
 
   afterEach(() => {
@@ -161,6 +163,7 @@ describe('placeOnReportService', () => {
 
   describe('getCheckYourAnswersInfo', () => {
     it('returns the draft adjudication information - no completed adjudication number', async () => {
+      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-1')
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 10,
@@ -218,6 +221,8 @@ describe('placeOnReportService', () => {
       expect(result).toEqual(expectedResult)
     })
     it('returns the draft adjudication information - completed adjudication number included', async () => {
+      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-2')
+
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 10,
@@ -276,6 +281,8 @@ describe('placeOnReportService', () => {
       expect(result).toEqual(expectedResult)
     })
     it('returns the draft adjudication information - created on behalf of officer', async () => {
+      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-2')
+
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 10,

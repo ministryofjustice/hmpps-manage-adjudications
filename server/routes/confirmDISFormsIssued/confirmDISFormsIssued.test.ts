@@ -43,7 +43,8 @@ beforeEach(() => {
 
   const locations = testData.residentialLocations()
   reportedAdjudicationsService.getAdjudicationDISFormData.mockResolvedValue(adjudicationResponse)
-  locationService.getLocationsForUser.mockResolvedValue(locations)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  locationService.getLocationsForUser.mockResolvedValue(locations as any)
 })
 
 afterEach(() => {

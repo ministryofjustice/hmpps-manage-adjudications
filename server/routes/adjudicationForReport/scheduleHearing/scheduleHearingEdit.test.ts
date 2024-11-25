@@ -87,6 +87,8 @@ describe('GET reschedule a hearing', () => {
 })
 describe('POST edit existing hearing', () => {
   it('should successfully submit a hearing when all details provided - GOV', () => {
+    locationService.getCorrespondingNomisLocationId.mockResolvedValue(27008)
+
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.edit('1524494', 101))
       .send({
@@ -109,6 +111,8 @@ describe('POST edit existing hearing', () => {
       })
   })
   it('should successfully submit a hearing when all details provided - IND_ADJ', () => {
+    locationService.getCorrespondingNomisLocationId.mockResolvedValue(27008)
+
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.edit('1524494', 101))
       .send({

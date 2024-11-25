@@ -87,41 +87,6 @@ describe('prisonApiClient', () => {
     })
   })
 
-  describe('getLocations', () => {
-    const locations: nock.Body = []
-    it('should return data from api', async () => {
-      fakePrisonApi
-        .get('/api/agencies/MDI/locations?eventType=OCCUR')
-        .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, locations)
-
-      const output = await client.getLocations('MDI')
-      expect(output).toEqual(locations)
-    })
-    it('can search without filter', async () => {
-      fakePrisonApi
-        .get('/api/agencies/MDI/locations')
-        .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, locations)
-
-      const output = await client.getLocations('MDI', false)
-      expect(output).toEqual(locations)
-    })
-  })
-
-  describe('getAdjudicationLocations', () => {
-    const locations: nock.Body = []
-    it('should return data from api', async () => {
-      fakePrisonApi
-        .get('/api/agencies/MDI/locations/type/ADJU')
-        .matchHeader('authorization', `Bearer ${token}`)
-        .reply(200, locations)
-
-      const output = await client.getAdjudicationLocations('MDI')
-      expect(output).toEqual(locations)
-    })
-  })
-
   describe('getSecondaryLanguages', () => {
     it('should return data from api', async () => {
       const result = [

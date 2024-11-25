@@ -464,6 +464,43 @@ context('Hearing details page', () => {
         userDescription: 'Adj 2',
       },
     })
+
+    // get one location
+    cy.task('stubGetLocation', {
+      locationId: 'adj-1',
+      response: {
+        id: 'adj-1',
+        prisonId: 'MDI',
+        key: 'MDI-Adj-1',
+        localName: 'Adj 1',
+      },
+    })
+
+    cy.task('stubGetLocation', {
+      locationId: 'adj-2',
+      response: {
+        id: 'adj-2',
+        prisonId: 'MDI',
+        key: 'MDI-Adj-2',
+        localName: 'Adj 2',
+      },
+    })
+
+    cy.task('stubGetDpsLocationId', {
+      nomisLocationId: 123,
+      response: {
+        nomisLocationId: 123,
+        dpsLocationId: 'adj-1',
+      },
+    })
+
+    cy.task('stubGetDpsLocationId', {
+      nomisLocationId: 234,
+      response: {
+        nomisLocationId: 234,
+        dpsLocationId: 'adj-2',
+      },
+    })
     cy.task('stubGetReportedAdjudication', {
       id: 1524493,
       response: reportedAdjudicationResponse('1524493', ReportedAdjudicationStatus.AWAITING_REVIEW),

@@ -22,7 +22,7 @@ jest.mock('./userService', () => {
 jest.mock('./reportedAdjudicationsService')
 jest.mock('../offenceCodeDecisions/Question')
 
-const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null, null) as jest.Mocked<PlaceOnReportService>
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,

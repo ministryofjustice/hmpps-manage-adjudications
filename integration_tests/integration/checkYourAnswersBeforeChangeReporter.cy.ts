@@ -93,15 +93,25 @@ context('Check Your Answers Before Changing Reporter', () => {
       }),
     })
     cy.task('stubGetLocations', {
-      agencyId: 'MDI',
+      prisonId: 'MDI',
       response: [
         {
-          locationId: 234,
-          agencyId: 'MDI',
-          userDescription: 'Workshop 19 - Braille',
+          id: 'location-1',
+          prisonId: 'MDI',
+          key: 'MDI-1',
+          localName: 'Workshop 19 - Braille',
         },
       ],
     })
+
+    cy.task('stubGetDpsLocationId', {
+      nomisLocationId: 234,
+      response: {
+        nomisLocationId: 234,
+        dpsLocationId: 'location-1',
+      },
+    })
+
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
       response: testData.userFromUsername(),

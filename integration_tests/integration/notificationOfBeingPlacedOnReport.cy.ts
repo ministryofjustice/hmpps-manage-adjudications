@@ -61,10 +61,8 @@ context('Prisoner has been placed on report', () => {
         },
       ],
     })
-    cy.task('stubGetLocation', {
-      locationId: 25538,
-      response: testData.residentialLocations()[0],
-    })
+    cy.task('stubGetLocation', {})
+    cy.task('stubGetDpsLocationId', {})
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.task('stubGetUser', { username: 'USER1', response: testData.userFromUsername() })
 

@@ -48,9 +48,11 @@ context('Check Your Answers', () => {
       },
     })
     cy.task('stubGetLocations', {
-      agencyId: 'MDI',
-      response: testData.residentialLocations(),
+      prisonId: 'MDI',
+      response: testData.residentialLocationsFromLocationsApi(),
     })
+
+    cy.task('stubGetDpsLocationId', {})
 
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',

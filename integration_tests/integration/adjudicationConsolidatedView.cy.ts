@@ -256,23 +256,19 @@ context('Consolidated report', () => {
       username: 'JRED_GEN',
       response: testData.userFromUsername('JRED_GEN', 'Jennifer Red'),
     })
+    cy.task('stubGetLocation', {})
     cy.task('stubGetLocation', {
-      locationId: 1,
-      response: {
-        locationId: 1,
-        agencyId: 'MDI',
-        locationPrefix: 'MDI-1',
-        userDescription: 'Houseblock 1',
-      },
+      locationId: 'Adj-1',
+      response: { id: 'Adj-1', prisonId: 'MDI', key: 'MDI-adj-1', localName: 'Houseblock 1' },
     })
+
     cy.task('stubGetLocation', {
-      locationId: 2,
-      response: {
-        locationId: 2,
-        agencyId: 'MDI',
-        userDescription: 'Adj 1',
-      },
+      locationId: 'Adj-2',
+      response: { id: 'Adj-2', prisonId: 'MDI', key: 'MDI-adj-2', localName: 'Adj 1' },
     })
+    cy.task('stubGetDpsLocationId', { nomisLocationId: 1, response: { dpsLocationId: 'Adj-1' } })
+    cy.task('stubGetDpsLocationId', { nomisLocationId: 2, response: { dpsLocationId: 'Adj-2' } })
+
     cy.task('stubGetReportedAdjudication', {
       id: 1,
       response: reportedAdjudicationResponse({

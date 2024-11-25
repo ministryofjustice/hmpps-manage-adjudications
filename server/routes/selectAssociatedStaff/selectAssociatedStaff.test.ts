@@ -11,7 +11,7 @@ jest.mock('../../services/placeOnReportService')
 
 const testData = new TestData()
 const userService = new UserService(null, null) as jest.Mocked<UserService>
-const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null, null) as jest.Mocked<PlaceOnReportService>
 
 let app: Express
 

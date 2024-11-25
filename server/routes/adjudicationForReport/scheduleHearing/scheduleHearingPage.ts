@@ -6,7 +6,7 @@ import LocationService from '../../../services/locationService'
 import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { FormError, SubmittedDateTime } from '../../../@types/template'
-import { PrisonLocation } from '../../../data/PrisonLocationResult'
+import { IncidentLocation } from '../../../data/PrisonLocationResult'
 import { User } from '../../../data/hmppsManageUsersClient'
 import logger from '../../../../logger'
 import {
@@ -24,7 +24,7 @@ type InitialFormData = {
 type SubmittedFormData = InitialFormData
 
 type DisplayDataFromApis = {
-  possibleLocations: PrisonLocation[]
+  possibleLocations: IncidentLocation[]
   chargeNumber: string
 }
 
@@ -36,7 +36,8 @@ type PageData = {
 
 type HearingDetails = {
   hearingDate: SubmittedDateTime
-  locationId: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  locationId: any
   id?: number
   hearingType: string
 }
@@ -99,6 +100,12 @@ export default class scheduleHearingRoutes {
       const pageData = await this.getPageDataOnGet(chargeNumber, postValues.hearingDetails, user)
       return renderData(res, pageData, validationError)
     }
+
+    postValues.hearingDetails.locationId = await this.locationService.getCorrespondingNomisLocationId(
+      postValues.hearingDetails.locationId as unknown as string,
+      user
+    )
+
     const hearingDetailsToSave = postValues.hearingDetails
     try {
       const isYOI = await this.getYoiInfo(chargeNumber, user)
@@ -137,9 +144,10 @@ export default class scheduleHearingRoutes {
     const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
     const { reportedAdjudication } = adjudication
     const [hearingToRender] = reportedAdjudication.hearings.filter(hearing => hearing.id === hearingId)
+    const locationId = await this.locationService.getCorrespondingDpsLocationId(hearingToRender.locationId, user)
     return {
       hearingDate: await convertDateTimeStringToSubmittedDateTime(hearingToRender.dateTimeOfHearing),
-      locationId: hearingToRender.locationId,
+      locationId,
       id: hearingToRender.id,
       hearingType: getRadioHearingType(hearingToRender.oicHearingType),
     }

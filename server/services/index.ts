@@ -37,10 +37,10 @@ const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const hmppsManageUsersClient = new HmppsManageUsersClient()
 const frontendComponentApiClient = new FrontendComponentApiClient()
 const userService = new UserService(hmppsAuthClient, hmppsManageUsersClient)
-const placeOnReportService = new PlaceOnReportService(hmppsAuthClient, hmppsManageUsersClient)
+const locationService = new LocationService(hmppsAuthClient)
+const placeOnReportService = new PlaceOnReportService(hmppsAuthClient, hmppsManageUsersClient, locationService)
 const curiousApiService = new CuriousApiService()
 const chartApiService = new ChartApiService(hmppsAuthClient)
-const locationService = new LocationService(hmppsAuthClient)
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
   hmppsAuthClient,
   hmppsManageUsersClient,

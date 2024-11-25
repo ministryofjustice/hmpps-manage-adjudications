@@ -181,15 +181,10 @@ context('Prisoner report - reviewer view', () => {
         }),
       },
     })
-    cy.task('stubGetLocation', {
-      locationId: 25538,
-      response: {
-        locationId: 25538,
-        agencyId: 'MDI',
-        locationPrefix: 'MDI-1',
-        userDescription: 'Houseblock 1',
-      },
-    })
+    cy.task('stubGetLocation', {})
+
+    cy.task('stubGetDpsLocationId', {})
+
     cy.task('stubGetOffenceRule', {
       offenceCode: 1001,
       response: {

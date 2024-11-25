@@ -154,15 +154,10 @@ context('Prisoner report - reviewer view', () => {
       chargeNumber: 56789,
       response: draftAdjudication(returnedReport, 2),
     })
-    cy.task('stubGetLocation', {
-      locationId: 25538,
-      response: {
-        locationId: 25538,
-        agencyId: 'MDI',
-        locationPrefix: 'MDI-1',
-        userDescription: 'Houseblock 1',
-      },
-    })
+    cy.task('stubGetLocation', {})
+
+    cy.task('stubGetDpsLocationId', {})
+
     cy.task('stubGetDraftAdjudication', {
       id: 1,
       response: draftAdjudication(awaitingReviewReport, 1),

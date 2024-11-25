@@ -9,7 +9,7 @@ import TestData from '../testutils/testData'
 jest.mock('../../services/placeOnReportService.ts')
 jest.mock('../../services/damagesSessionService.ts')
 
-const placeOnReportService = new PlaceOnReportService(null, null) as jest.Mocked<PlaceOnReportService>
+const placeOnReportService = new PlaceOnReportService(null, null, null) as jest.Mocked<PlaceOnReportService>
 const damagesSessionService = new DamagesSessionService() as jest.Mocked<DamagesSessionService>
 const testData = new TestData()
 

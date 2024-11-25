@@ -10,7 +10,7 @@ import LocationService from '../../services/locationService'
 import logger from '../../../logger'
 import { convertSubmittedDateTimeToDateObject, formatDate, formatDateForDatePicker } from '../../utils/utils'
 import { User } from '../../data/hmppsManageUsersClient'
-import { PrisonLocation } from '../../data/PrisonLocationResult'
+import { IncidentLocation } from '../../data/PrisonLocationResult'
 import { DraftAdjudicationResult, PrisonerGender } from '../../data/DraftAdjudicationResult'
 import adjudicationUrls from '../../utils/urlGenerator'
 
@@ -24,7 +24,7 @@ type PageData = {
 type DisplayDataFromApis = {
   reporter: string
   prisoner: PrisonerResultSummary
-  possibleLocations: PrisonLocation[]
+  possibleLocations: IncidentLocation[]
 }
 
 type InitialFormData = {
@@ -59,7 +59,7 @@ type RequestValues = {
 type IncidentDetails = {
   incidentDate: SubmittedDateTime
   discoveryDate: SubmittedDateTime
-  locationId: number
+  locationId: string | number
   discoveryRadioSelected?: string
 }
 
@@ -130,13 +130,20 @@ export default class IncidentDetailsPage {
     const validationError = validateForm({
       incidentDate: postValues.incidentDetails?.incidentDate,
       discoveryDate: postValues.incidentDetails?.discoveryDate,
-      locationId: postValues.incidentDetails?.locationId,
+      locationId: postValues.incidentDetails?.locationId as string,
       discoveryRadioSelected: postValues.incidentDetails?.discoveryRadioSelected,
     })
     if (validationError) {
       const pageData = await this.getPageDataOnPost(postValues, user)
       return renderData(res, pageData, validationError)
     }
+
+    const nomisLocationId = await this.locationService.getCorrespondingNomisLocationId(
+      postValues.incidentDetails.locationId as string,
+      user
+    )
+
+    postValues.incidentDetails.locationId = nomisLocationId
 
     try {
       if (this.pageOptions.isEdit()) {
@@ -187,7 +194,7 @@ export default class IncidentDetailsPage {
     // eslint-disable-next-line no-return-await
     return await this.placeOnReportService.startNewDraftAdjudication(
       formatDate(data.incidentDate),
-      data.locationId,
+      data.locationId as number,
       prisonerNumber,
       currentUser,
       data.gender,
@@ -204,7 +211,7 @@ export default class IncidentDetailsPage {
     return await this.placeOnReportService.editDraftIncidentDetails(
       draftId,
       formatDate(data.incidentDate),
-      data.locationId,
+      data.locationId as number,
       currentUser,
       formatDate(data.discoveryDate)
     )
@@ -228,11 +235,21 @@ export default class IncidentDetailsPage {
         prisonerReportUrl,
       }
     }
+
+    let locationId = ''
+
+    if (readApiIncidentDetails?.locationId) {
+      locationId = await this.locationService.getCorrespondingDpsLocationId(
+        readApiIncidentDetails.locationId as unknown as number,
+        currentUser
+      )
+    }
+
     return {
       displayData: await this.getDisplayData(requestValues.prisonerNumber, originalReporterUsername, currentUser),
       exitButtonData,
       formData: {
-        incidentDetails: readApiIncidentDetails,
+        incidentDetails: { ...readApiIncidentDetails, locationId },
         originalReporterUsername,
       },
     }

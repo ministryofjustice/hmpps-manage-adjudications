@@ -6,7 +6,7 @@ import config from '../config'
 import RestClient from './restClient'
 import PrisonerSimpleResult from './prisonerSimpleResult'
 import PrisonerResult from './prisonerResult'
-import { Agency, AgencyId, Location, LocationId } from './PrisonLocationResult'
+import { Agency, AgencyId, Location } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
 import { Alert, alertCodeString, PrisonerAlerts } from '../utils/alertHelper'
 
@@ -138,28 +138,9 @@ export default class PrisonApiClient {
     }
   }
 
-  async getLocations(agencyId: string, occurrenceLocationsOnly = true): Promise<Location[]> {
-    return this.restClient.get({
-      path: `/api/agencies/${agencyId}/locations${occurrenceLocationsOnly ? '?eventType=OCCUR' : ''}`,
-      headers: { 'Sort-Fields': 'userDescription' },
-    })
-  }
-
-  async getLocation(locationId: LocationId): Promise<Location> {
-    return this.restClient.get({
-      path: `/api/locations/${locationId}?includeInactive=true`,
-    })
-  }
-
   async getUsersLocations(): Promise<Location[]> {
     return this.restClient.get({
       path: `/api/users/me/locations`,
-    })
-  }
-
-  async getAdjudicationLocations(agencyId: string): Promise<Location[]> {
-    return this.restClient.get({
-      path: `/api/agencies/${agencyId}/locations/type/ADJU`,
     })
   }
 

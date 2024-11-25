@@ -62,7 +62,8 @@ beforeEach(() => {
   reportedAdjudicationsService.getAwardedPunishmentsAndDamages.mockResolvedValue(awardedPunishmentsAndDamages as never)
 
   const locations = testData.residentialLocations()
-  locationService.getLocationsForUser.mockResolvedValue(locations)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  locationService.getLocationsForUser.mockResolvedValue(locations as any)
   userService.isUserALO.mockResolvedValue(true)
 })
 

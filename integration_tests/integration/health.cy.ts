@@ -8,6 +8,8 @@ context('Health check', () => {
       cy.task('stubPrisonerSearchPing')
       cy.task('stubPrisonApiPing')
       cy.task('stubAdjudicationsPing')
+      cy.task('stubLocationsInsidePrisonApiPing')
+      cy.task('stubNomisSyncPrisonerMappingApiPing')
     })
     it('Health check page is visible', () => {
       cy.request('/health').its('body.healthy').should('equal', true)
@@ -27,6 +29,8 @@ context('Health check', () => {
       cy.task('stubPrisonerSearchPing', 500)
       cy.task('stubPrisonApiPing', 500)
       cy.task('stubAdjudicationsPing', 500)
+      cy.task('stubLocationsInsidePrisonApiPing', 500)
+      cy.task('stubNomisSyncPrisonerMappingApiPing', 500)
     })
 
     it('Health check page is visible and returning unhealthy', () => {
@@ -41,6 +45,8 @@ context('Health check', () => {
         expect(response.body.checks.tokenVerification.status).to.eq(500)
         expect(response.body.checks.adjudications.status).to.eq(500)
         expect(response.body.checks.prisonApi.status).to.eq(500)
+        expect(response.body.checks.locationsInsidePrisonApi.status).to.eq(500)
+        expect(response.body.checks.nomisSyncPrisonerMappingApi.status).to.eq(500)
       })
     })
   })

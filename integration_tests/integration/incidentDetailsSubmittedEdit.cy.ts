@@ -42,9 +42,28 @@ context('Incident details (edit after completion of report)', () => {
       },
     })
     cy.task('stubGetLocations', {
-      agencyId: 'MDI',
-      response: testData.residentialLocations(),
+      prisonId: 'MDI',
+      response: testData.residentialLocationsFromLocationsApi(),
     })
+
+    cy.task('stubGetDpsLocationId', {})
+
+    cy.task('stubGetNomisLocationId', {})
+
+    cy.task('stubGetDpsLocationId', {
+      nomisLocationId: 27029,
+      response: {
+        dpsLocationId: 'location-1',
+      },
+    })
+
+    cy.task('stubGetNomisLocationId', {
+      dpsLocationId: 'location-2',
+      response: {
+        nomisLocationId: 25538,
+      },
+    })
+
     cy.task('stubGetUserFromUsername', {
       username: 'USER1',
       response: testData.userFromUsername(),

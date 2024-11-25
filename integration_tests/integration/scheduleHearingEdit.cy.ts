@@ -62,13 +62,39 @@ context('Schedule a hearing page', () => {
       response: testData.userFromUsername(),
     })
 
-    cy.task('stubGetLocationsByType', {
-      agencyId: 'MDI',
-      response: testData.residentialLocations(),
+    cy.task('stubGetAdjudicationLocations', {
+      prisonId: 'MDI',
+      response: testData.residentialLocationsFromLocationsApi(),
     })
+
+    cy.task('stubGetLocation', {})
+
     cy.task('stubGetLocation', {
-      locationId: 25538,
-      response: testData.residentialLocations()[0],
+      locationId: 'location-2',
+      response: {
+        id: 'location-2',
+        prisonId: 'MDI',
+        key: 'MDI-2',
+        localName: 'Houseblock 2',
+      },
+    })
+
+    cy.task('stubGetNomisLocationId', {})
+
+    cy.task('stubGetDpsLocationId', {})
+
+    cy.task('stubGetNomisLocationId', {
+      dpsLocationId: 'location-2',
+      response: {
+        nomisLocationId: 25655,
+      },
+    })
+
+    cy.task('stubGetDpsLocationId', {
+      nomisLocationId: 25655,
+      response: {
+        dpsLocationId: 'location-2',
+      },
     })
 
     cy.task('stubGetReportedAdjudication', {
@@ -99,21 +125,17 @@ context('Schedule a hearing page', () => {
     scheduleHearingsPage.datePicker().should('have.value', '01/12/2029')
     scheduleHearingsPage.timeInputHours().should('have.value', '11')
     scheduleHearingsPage.timeInputMinutes().should('have.value', '00')
-    scheduleHearingsPage.locationSelector().should('have.value', '25538')
+    scheduleHearingsPage.locationSelector().should('have.value', 'location-1')
     scheduleHearingsPage.locationSelectorSelectedOption().should('have.text', 'Houseblock 1')
   })
   it('should submit the form successfully when location is changed', () => {
-    cy.task('stubGetLocation', {
-      locationId: 25538,
-      response: testData.residentialLocations()[1],
-    })
     cy.task('stubGetReportedAdjudication', {
       id: 1524494,
       response: reportedAdjudicationResponse('1524494', [changedLocationHearing]),
     })
     cy.visit(adjudicationUrls.scheduleHearing.urls.edit('1524494', 333))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
-    scheduleHearingsPage.locationSelector().select('25655')
+    scheduleHearingsPage.locationSelector().select('location-2')
     scheduleHearingsPage.submitButton().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.hearingDetails.urls.review('1524494'))
