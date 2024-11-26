@@ -355,10 +355,7 @@ context('Inad refers to gov after hearing', () => {
         }),
       },
     })
-    cy.task('stubGetLocationsByType', {
-      agencyId: 'MDI',
-      response: testData.residentialLocations(),
-    })
+
     cy.task('stubScheduleHearing', {
       chargeNumber: 101,
       response: testData.reportedAdjudication({

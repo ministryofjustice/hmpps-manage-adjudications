@@ -57,57 +57,6 @@ const stubGetPrisonerDetails = ({
     },
   })
 
-const stubGetLocations = ({
-  agencyId,
-  response = [],
-}: {
-  agencyId: string
-  response: Record<string, unknown>[]
-}): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: `/prisonApi/api/agencies/${agencyId}/locations?eventType=OCCUR`,
-    },
-    response: {
-      status: 200,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8', 'Sort-Fields': 'userDescription' },
-      jsonBody: response,
-    },
-  })
-
-const stubGetLocationsByType = ({
-  agencyId,
-  response = [],
-}: {
-  agencyId: string
-  response: Record<string, unknown>[]
-}): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: `/prisonApi/api/agencies/${agencyId}/locations/type/ADJU`,
-    },
-    response: {
-      status: 200,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: response,
-    },
-  })
-
-const stubGetLocation = ({ locationId, response }: { locationId: number; response: Location }): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: `/prisonApi/api/locations/${locationId}?includeInactive=true`,
-    },
-    response: {
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      status: 200,
-      jsonBody: response,
-    },
-  })
-
 const stubGetAgency = ({ agencyId, response }: { agencyId: string; response: Agency }): SuperAgentRequest =>
   stubFor({
     request: {
@@ -215,9 +164,6 @@ export default {
   stubPing,
   stubUserCaseloads,
   stubGetPrisonerDetails,
-  stubGetLocations,
-  stubGetLocationsByType,
-  stubGetLocation,
   stubGetAgency,
   stubGetSecondaryLanguages,
   stubGetBatchPrisonerDetails,

@@ -40,10 +40,6 @@ context('Schedule a hearing page', () => {
       username: 'USER1',
       response: testData.userFromUsername(),
     })
-    cy.task('stubGetLocationsByType', {
-      agencyId: 'MDI',
-      response: testData.residentialLocations(),
-    })
 
     cy.task('stubGetAdjudicationLocations', {
       prisonId: 'MDI',
