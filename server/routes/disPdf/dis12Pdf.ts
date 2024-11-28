@@ -30,17 +30,17 @@ export default class Dis12Pdf {
       true
     )
 
-    const isRelevantCopy = copy === 'prisoner' || copy === 'staff'
+    const isPrisonerCopy = copy === 'prisoner'
     const scheduledHearings =
-      reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED && reportedAdjudication.hearings.length >= 1
+      reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED && reportedAdjudication.hearings.length >= 2
 
     let nextHearingDateTime
-    if (isRelevantCopy && scheduledHearings) {
+    if (isPrisonerCopy && scheduledHearings) {
       nextHearingDateTime = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing
     }
 
     const noticeOfBeingPlacedOnReportData = new NoticeOfBeingPlacedOnReportData(
-      isRelevantCopy,
+      isPrisonerCopy,
       chargeNumber,
       adjudicationDetails,
       offences,
