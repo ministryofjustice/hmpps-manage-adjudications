@@ -94,7 +94,6 @@ export default defineConfig({
         stubAdjudicationsPing: status => adjudications.stubPing(status),
         stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
         stubGetLocations: locationsInsidePrisonApi.stubGetLocations,
-        stubGetLocationsByType: prisonApi.stubGetLocationsByType,
         stubGetAdjudicationLocations: locationsInsidePrisonApi.stubGetAdjudicationLocations,
         stubGetLocation: locationsInsidePrisonApi.stubGetLocation,
         stubGetDpsLocationId: nomisSyncPrisonerMappingApi.stubGetDpsLocationId,
