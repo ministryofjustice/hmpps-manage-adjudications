@@ -81,25 +81,25 @@ export default class adjudicationHistoryForCurrentSentenceData {
       confirmedOnReportData.prisonerLivingUnitName || 'Unknown'
     }`
     this.discoveryDate = formatTimestampTo(dis5Data.dateOfDiscovery, 'dddd, D MMMM YYYY')
-    this.chargeProvedSentenceCount = dis5Data.previousCount
-    this.chargeProvedAtCurrentEstablishmentCount = dis5Data.previousAtCurrentEstablishmentCount
-    this.sameOffenceCount = dis5Data.sameOffenceCount
+    this.chargeProvedSentenceCount = dis5Data.previousCount || 0
+    this.chargeProvedAtCurrentEstablishmentCount = dis5Data.previousAtCurrentEstablishmentCount || 0
+    this.sameOffenceCount = dis5Data.sameOffenceCount || 0
     this.lastReportedOffence = dis5Data.lastReportedOffence || {}
-    this.chargesWithSuspendedPunishments = dis5Data.chargesWithSuspendedPunishments
-    this.existingPunishments = dis5Data.existingPunishments
-    this.currentIncentiveLevel = prisonerSearchDis5Data.currentIncentiveLevel
-    this.currentIncentiveLevelDateTime = prisonerSearchDis5Data.dateTimeOfLevel
-    this.incentiveNextReviewDate = prisonerSearchDis5Data.nextReviewDate
-    this.autoReleaseDate = prisonerSearchDis5Data.autoReleaseDate
-    this.conditionalReleaseDate = prisonerSearchDis5Data.conditionalReleaseDate
-    this.sentenceStartDate = prisonerSearchDis5Data.sentenceStartDate
-    this.nonParoleDate = confirmedOnReportData.nonParoleDate
-    this.acctAlertPresent = prisonerSearchDis5Data.acctAlertPresent
-    this.csipAlertPresent = prisonerSearchDis5Data.csipAlertPresent
-    this.damageObligationsList = dis5Data.damageObligations
-    this.spends = dis5Data.balances.spends
-    this.savings = dis5Data.balances.savings
-    this.cash = dis5Data.balances.cash
-    this.damageObligations = dis5Data.balances.damageObligations
+    this.chargesWithSuspendedPunishments = dis5Data.chargesWithSuspendedPunishments || []
+    this.existingPunishments = dis5Data.existingPunishments || []
+    this.currentIncentiveLevel = prisonerSearchDis5Data.currentIncentiveLevel || 'Unknown'
+    this.currentIncentiveLevelDateTime = prisonerSearchDis5Data.dateTimeOfLevel || 'Unknown'
+    this.incentiveNextReviewDate = prisonerSearchDis5Data.nextReviewDate || 'Unknown'
+    this.autoReleaseDate = prisonerSearchDis5Data.autoReleaseDate || 'Unknown'
+    this.conditionalReleaseDate = prisonerSearchDis5Data.conditionalReleaseDate || 'Unknown'
+    this.sentenceStartDate = prisonerSearchDis5Data.sentenceStartDate || 'Unknown'
+    this.nonParoleDate = confirmedOnReportData.nonParoleDate || 'Unknown'
+    this.acctAlertPresent = prisonerSearchDis5Data.acctAlertPresent || false
+    this.csipAlertPresent = prisonerSearchDis5Data.csipAlertPresent || false
+    this.damageObligationsList = dis5Data.damageObligations || []
+    this.spends = dis5Data.balances.spends || 0
+    this.savings = dis5Data.balances.savings || 0
+    this.cash = dis5Data.balances.cash || 0
+    this.damageObligations = dis5Data.balances.damageObligations || 0
   }
 }
