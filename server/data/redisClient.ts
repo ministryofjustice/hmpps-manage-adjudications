@@ -22,7 +22,7 @@ export const createRedisClient = (): RedisClient => {
       throw new Error(`Key must be a string, received ${typeof key}`)
     }
     const prefixedKey = `${PREFIX}${key}`
-    return (client as any)[command](prefixedKey, ...args)
+    return (client as any)[command](prefixedKey, ...args) // eslint-disable-line @typescript-eslint/no-explicit-any
   }
 
   const proxyClient = new Proxy(client, {
