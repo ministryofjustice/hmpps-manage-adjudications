@@ -2,7 +2,7 @@ import { createClient, RedisClientType } from 'redis'
 import logger from '../../logger'
 import config from '../config'
 
-export type RedisClient = RedisClientType<any, any, any>
+export type RedisClient = RedisClientType<Record<string, never>, Record<string, never>, Record<string, never>>
 
 export const createRedisClient = (): RedisClient => {
   const PREFIX = 'systemToken:'
