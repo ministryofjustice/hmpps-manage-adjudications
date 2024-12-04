@@ -25,7 +25,7 @@ const stubGetDpsLocationId = ({
   stubFor({
     request: {
       method: 'GET',
-      url: `/nomisSyncPrisonerMappingApi/mapping/locations/nomis/${nomisLocationId}`,
+      url: `/nomisSyncPrisonerMappingApi/api/locations/nomis/${nomisLocationId}`,
     },
     response: {
       status: 200,
