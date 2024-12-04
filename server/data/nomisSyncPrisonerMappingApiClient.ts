@@ -11,13 +11,13 @@ export default class NomisSyncPrisonerMappingApiClient {
 
   async getDpsLocationId(nomisLocationId: number): Promise<NomisSyncMapLocation> {
     return this.restClient.get({
-      path: `/mapping/locations/nomis/${nomisLocationId}`,
+      path: `/api/locations/nomis/${nomisLocationId}`,
     })
   }
 
   async getNomisLocationId(dpsLocationId: string): Promise<NomisSyncMapLocation> {
     return this.restClient.get({
-      path: `/mapping/locations/dps/${dpsLocationId}`,
+      path: `/api/locations/dps/${dpsLocationId}`,
     })
   }
 }
