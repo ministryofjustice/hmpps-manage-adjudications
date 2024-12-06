@@ -156,12 +156,12 @@ describe('GET /dis5', () => {
           currentIncentiveLevel: 'Basic',
           incentiveNextReviewDate: '2025-09-01',
           currentIncentiveLevelDateTime: '2020-09-01',
-          acctAlertPresent: undefined,
-          autoReleaseDate: undefined,
-          conditionalReleaseDate: undefined,
-          nonParoleDate: undefined,
-          csipAlertPresent: undefined,
-          sentenceStartDate: undefined,
+          acctAlertPresent: false,
+          autoReleaseDate: 'Unknown',
+          conditionalReleaseDate: 'Unknown',
+          nonParoleDate: 'Unknown',
+          csipAlertPresent: false,
+          sentenceStartDate: 'Unknown',
           damageObligationsList: [
             {
               id: 1,
