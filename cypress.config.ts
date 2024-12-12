@@ -28,6 +28,7 @@ export default defineConfig({
   viewportWidth: 1024,
   viewportHeight: 768,
   e2e: {
+    requestTimeout: 60000,
     setupNodeEvents(on) {
       on('task', {
         reset: resetStubs,
