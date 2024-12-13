@@ -169,7 +169,8 @@
     "sass": "^1.82.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "wait-on": "^8.0.1"
   },
   "overrides": {
     "csurf": {
