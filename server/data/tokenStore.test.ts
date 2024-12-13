@@ -9,9 +9,11 @@ const redisClient = {
 describe('tokenStore', () => {
   let tokenStore: TokenStore
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   beforeEach(() => {
     tokenStore = new TokenStore(redisClient as any)
   })
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   afterEach(() => {
     jest.resetAllMocks()

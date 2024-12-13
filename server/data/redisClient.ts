@@ -15,9 +15,11 @@ class RedisClientWithPrefix {
     this.prefix = prefix
   }
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   public async set(key: string, value: string, options?: any): Promise<void> {
     await this.client.set(this.prefix + key, value, options)
   }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   public async get(key: string): Promise<string | null> {
     return this.client.get(this.prefix + key)
