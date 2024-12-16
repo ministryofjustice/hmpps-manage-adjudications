@@ -1,16 +1,14 @@
 import addRequestId from 'express-request-id'
 import express, { Router } from 'express'
-import session from 'express-session'
-import connectRedis from 'connect-redis'
+import session, { Store } from 'express-session'
+import { RedisStore } from 'connect-redis'
 import { createRedisClient } from '../data/redisClient'
 import config from '../config'
-
-const RedisStore = connectRedis(session)
 
 export default function setUpWebSession(): Router {
   const redisWithPrefix = createRedisClient()
   const client = redisWithPrefix.getOriginalClient()
-  const store = new RedisStore({ client })
+  const store: Store = new RedisStore({ client })
   const router = express.Router()
   router.use(
     session({

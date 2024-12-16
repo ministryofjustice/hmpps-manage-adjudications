@@ -120,8 +120,8 @@ jobs:
           background: true
       - run:
           name: Wait for node app to start
-#          command: sleep 5
-          command: npx wait-on http://localhost:3007
+          command: sleep 5
+#          command: npx wait-on http://localhost:3007
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:

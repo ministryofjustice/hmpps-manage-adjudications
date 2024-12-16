@@ -40,11 +40,16 @@ const url =
     : `redis://${config.redis.host}:${config.redis.port}`
 
 export const createRedisClient = (): RedisClientWithPrefix => {
-  const client = createClient({
+  const client: RedisClient = createClient({
     url,
     password: config.redis.password,
     socket: {
-      tls: config.redis.tls_enabled === 'true',
+      reconnectStrategy: (attempts: number) => {
+        // Exponential back off: 20ms, 40ms, 80ms..., capped to retry every 30 seconds
+        const nextDelay = Math.min(2 ** attempts * 20, 30000)
+        logger.info(`Retry Redis connection attempt: ${attempts}, next attempt in: ${nextDelay}ms`)
+        return nextDelay
+      },
     },
   })
 
