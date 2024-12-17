@@ -36,6 +36,9 @@ export function pdfRenderer(client: GotenbergClient) {
             client
               .renderPdfFromHtml(pageHtml, headerHtml, footerHtml, options?.pdfMargins)
               .then(buffer => res.send(buffer))
+              .catch(error => {
+                res.status(500).send({ error: 'Failed to generate PDF' })
+              })
           })
         })
       })
