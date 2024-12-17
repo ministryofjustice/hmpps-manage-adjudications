@@ -14,7 +14,7 @@ export function pdfRenderer(client: GotenbergClient) {
       headerData: PdfHeaderData,
       footerView: string,
       footerData: PdfFooterData,
-      options: { filename: string; pdfMargins: PdfMargins },
+      options: { filename: string; pdfMargins: PdfMargins }
     ) => {
       res.render(headerView, headerData, (headerError: Error, headerHtml: string) => {
         if (headerError) {
