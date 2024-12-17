@@ -25,6 +25,5 @@ export const createRedisClient = (): RedisClient => {
   })
 
   client.on('error', (e: Error) => logger.error('Redis client error', e))
-
   return client
 }
