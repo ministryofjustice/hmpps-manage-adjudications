@@ -14,7 +14,7 @@ export function pdfRenderer(client: GotenbergClient) {
       headerData: PdfHeaderData,
       footerView: string,
       footerData: PdfFooterData,
-      options: { filename: string; pdfMargins: PdfMargins }
+      options: { filename: string; pdfMargins: PdfMargins },
     ) => {
       res.render(headerView, headerData, (headerError: Error, headerHtml: string) => {
         if (headerError) {
@@ -36,6 +36,9 @@ export function pdfRenderer(client: GotenbergClient) {
             client
               .renderPdfFromHtml(pageHtml, headerHtml, footerHtml, options?.pdfMargins)
               .then(buffer => res.send(buffer))
+              .catch(error => {
+                res.status(500).send({ error: 'Failed to generate PDF' })
+              })
           })
         })
       })
