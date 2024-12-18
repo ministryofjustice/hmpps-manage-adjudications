@@ -18,7 +18,7 @@ export default class TokenStore {
   public async setToken(key: string, token: string, durationSeconds: number): Promise<void> {
     // For redis v4, the expiration is set via an options object:
     await this.ensureConnected()
-    this.client.set(this.prefix + key, token, { EX: durationSeconds })
+    await this.client.set(this.prefix + key, token, { EX: durationSeconds })
   }
 
   public async getToken(key: string): Promise<string | null> {
