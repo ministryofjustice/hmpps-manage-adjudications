@@ -118,10 +118,6 @@ jobs:
           name: Run the node app.
           command: npm run start-feature
           background: true
-#      - run:
-#          name: Wait for node app to start
-#          command: sleep 5
-#          command: npx wait-on http://localhost:3007
       - hmpps/wait_till_ready:
           # Wait for node app to start
           port: 3007
