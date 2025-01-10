@@ -25,10 +25,14 @@ export default class Dis12Pdf {
       const adjudicationDetails = await withRetry(() =>
         this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
       )
+      log.info(`adjudicationDetails - ${JSON.stringify(adjudicationDetails)}`)
 
       const { reportedAdjudication, associatedPrisoner, prisoner } = await withRetry(() =>
         this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user)
       )
+      log.info(`reportedAdjudication - ${JSON.stringify(reportedAdjudication)}`)
+      log.info(`associatedPrisoner - ${JSON.stringify(associatedPrisoner)}`)
+      log.info(`prisoner - ${JSON.stringify(prisoner)}`)
 
       const offences = await withRetry(() =>
         this.decisionTreeService.getAdjudicationOffences(
@@ -40,6 +44,7 @@ export default class Dis12Pdf {
           true
         )
       )
+      log.info(`offences - ${JSON.stringify(offences)}`)
 
       // Validate completeness of data
       if (!adjudicationDetails || !reportedAdjudication || !offences) {
@@ -50,7 +55,7 @@ export default class Dis12Pdf {
       const scheduledHearings =
         reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED &&
         reportedAdjudication.hearings.length >= 2
-      log.info(`reportedAdjudication.hearings - ${reportedAdjudication.hearings}`)
+      log.info(`reportedAdjudication.hearings - ${JSON.stringify(reportedAdjudication.hearings)}`)
       log.info(`isPrisonerCopy - ${isPrisonerCopy}`)
       log.info(`scheduledHearings - ${scheduledHearings}`)
 
