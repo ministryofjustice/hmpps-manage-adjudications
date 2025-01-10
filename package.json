@@ -106,7 +106,7 @@
     "express": "^4.21.2",
     "express-request-id": "^1.4.1",
     "express-session": "^1.18.1",
-    "govuk-frontend": "^5.7.1",
+    "govuk-frontend": "^5.8.0",
     "helmet": "^6.2.0",
     "http-errors": "^2.0.0",
     "jquery": "^3.7.1",
@@ -118,7 +118,7 @@
     "passport-oauth2": "^1.8.0",
     "redis": "^4.7.0",
     "superagent": "^9.0.2",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.4"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.11",
@@ -133,7 +133,7 @@
     "@types/http-errors": "^2.0.4",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.7",
-    "@types/node": "^20.17.10",
+    "@types/node": "^20.17.12",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.4.17",
@@ -165,10 +165,10 @@
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
     "prettier-plugin-jinja-template": "^2.0.0",
-    "sass": "^1.83.0",
+    "sass": "^1.83.1",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.7.2",
+    "typescript": "^5.7.3",
     "wait-on": "^8.0.1"
   },
   "overrides": {
