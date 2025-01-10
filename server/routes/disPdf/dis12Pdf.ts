@@ -50,6 +50,9 @@ export default class Dis12Pdf {
       const scheduledHearings =
         reportedAdjudication.status === ReportedAdjudicationStatus.SCHEDULED &&
         reportedAdjudication.hearings.length >= 2
+      log.info(`reportedAdjudication.hearings - ${reportedAdjudication.hearings}`)
+      log.info(`isPrisonerCopy - ${isPrisonerCopy}`)
+      log.info(`scheduledHearings - ${scheduledHearings}`)
 
       let nextHearingDateTime
       if (isPrisonerCopy && scheduledHearings) {
@@ -63,6 +66,7 @@ export default class Dis12Pdf {
         offences,
         nextHearingDateTime
       )
+      log.info(`noticeOfBeingPlacedOnReportData - ${noticeOfBeingPlacedOnReportData}`)
 
       res.renderPdf(
         `pages/noticeOfBeingPlacedOnReport`,
