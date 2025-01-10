@@ -32,7 +32,17 @@ export default function disPdfRoutes({
   const dis7Pdf = new Dis7Pdf(reportedAdjudicationsService)
   const dis7BlankPdf = new Dis7BlankPdf(reportedAdjudicationsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  // const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+
+  // Updated `get` wrapper to ensure proper async handling
+  const get = (path: string, handler: RequestHandler) =>
+    router.get(path, async (req, res, next) => {
+      try {
+        await handler(req, res, next) // Ensure handler is awaited
+      } catch (error) {
+        next(error) // Pass errors to Express error middleware
+      }
+    })
 
   get(adjudicationUrls.printPdf.matchers.dis12, dis12Pdf.renderPdf)
   get(adjudicationUrls.printPdf.matchers.dis3, dis3Pdf.renderPdf)
