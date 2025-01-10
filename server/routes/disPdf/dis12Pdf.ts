@@ -71,7 +71,7 @@ export default class Dis12Pdf {
         offences,
         nextHearingDateTime
       )
-      log.info(`noticeOfBeingPlacedOnReportData - ${noticeOfBeingPlacedOnReportData}`)
+      log.info(`noticeOfBeingPlacedOnReportData - ${JSON.stringify(noticeOfBeingPlacedOnReportData)}`)
 
       res.renderPdf(
         `pages/noticeOfBeingPlacedOnReport`,
