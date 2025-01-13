@@ -89,7 +89,7 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^3.3.0",
+    "@ministryofjustice/frontend": "^3.3.1",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.6",
     "body-parser": "^1.20.3",
@@ -118,7 +118,7 @@
     "passport-oauth2": "^1.8.0",
     "redis": "^4.7.0",
     "superagent": "^9.0.2",
-    "uuid": "^11.0.4"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.11",
@@ -169,7 +169,7 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.3",
-    "wait-on": "^8.0.1"
+    "wait-on": "^8.0.2"
   },
   "overrides": {
     "csurf": {
