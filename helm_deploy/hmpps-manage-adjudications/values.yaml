@@ -68,8 +68,10 @@ gotenberg:
   containerArgs:
     [
       "--chromium-ignore-certificate-errors",
-      "--api-timeout=30s",
-      "--pdfengines-engines=pdftk",
+      "--pdfengines-merge-engines=pdftk",
+      "--libreoffice-disable-routes",
+      "--webhook-disable",
+      "--prometheus-disable-collect"
     ]
 
   ingress:
