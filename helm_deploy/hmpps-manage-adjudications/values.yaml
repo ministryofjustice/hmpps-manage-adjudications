@@ -61,17 +61,15 @@ gotenberg:
 
   image:
     repository: gotenberg/gotenberg
-    tag: 8.14.1
+    tag: 8.2.2
     port: 3000
 
   containerCommand: [ "gotenberg" ]
   containerArgs:
     [
       "--chromium-ignore-certificate-errors",
-      "--pdfengines-merge-engines=pdftk",
-      "--libreoffice-disable-routes",
-      "--webhook-disable",
-      "--prometheus-disable-collect"
+      "--api-timeout=30s",
+      "--pdfengines-engines=pdftk",
     ]
 
   ingress:
