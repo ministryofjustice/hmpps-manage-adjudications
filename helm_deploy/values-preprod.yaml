@@ -33,7 +33,8 @@ generic-service:
       - internal
       - prisons
       - private_prisons
-   
+      - home_office
+
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
 
