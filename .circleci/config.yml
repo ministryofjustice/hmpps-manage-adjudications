@@ -27,10 +27,8 @@ executors:
           - "gotenberg"
           - "--api-port=3001"
           - "--chromium-ignore-certificate-errors"
-          - "--pdfengines-merge-engines=pdftk"
-          - "--libreoffice-disable-routes"
-          - "--webhook-disable"
-          - "--prometheus-disable-collect"
+          - "--api-timeout=30s"
+          - "--pdfengines-engines=pdftk"
     working_directory: ~/app
     resource_class: <<parameters.resource_class>>
     parameters:
@@ -44,7 +42,7 @@ executors:
         default: "6.2"
         type: string
       gotenberg_tag:
-        default: "8.15.3"
+        default: "8.2.2"
         type: string
 
 jobs:
