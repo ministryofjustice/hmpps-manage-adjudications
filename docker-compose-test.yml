@@ -20,7 +20,7 @@ services:
       - "9091:8080"
 
   gotenberg:
-    image: gotenberg/gotenberg:8.15.3
+    image: gotenberg/gotenberg:8.2.2
     networks:
       - hmpps_int
     container_name: gotenberg
@@ -32,10 +32,9 @@ services:
       - "gotenberg"
       - "--api-port=3001"
       - "--chromium-ignore-certificate-errors"
-      - "--pdfengines-merge-engines=pdftk"
-      - "--libreoffice-disable-routes"
-      - "--webhook-disable"
-      - "--prometheus-disable-collect"
+      - "--api-timeout=30s"
+      - "--pdfengines-engines=pdftk"
+      - "--uno-listener-restart-threshold=0" #disables uno listener
     restart: always
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
