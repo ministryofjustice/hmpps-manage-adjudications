@@ -25,6 +25,7 @@ export default class GotenbergClient {
       .post(`${this.gotenbergHost}/forms/chromium/convert/html`)
       .set('Content-Type', 'multi-part/form-data')
       .buffer(true)
+      .field('skipNetworkIdleEvent', false)
       .attach('files', Buffer.from(html), 'index.html')
       .attach('files', Buffer.from(headerHtml), 'header.html')
       .attach('files', Buffer.from(footerHtml), 'footer.html')
