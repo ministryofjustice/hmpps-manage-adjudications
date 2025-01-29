@@ -61,7 +61,7 @@ gotenberg:
 
   image:
     repository: gotenberg/gotenberg
-    tag: 8.15.3
+    tag: 8.16.0
     port: 3000
 
   containerCommand: [ "gotenberg" ]
