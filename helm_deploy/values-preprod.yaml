@@ -24,6 +24,7 @@ generic-service:
     ADJUDICATIONS_URL: http://hmpps-manage-adjudications
     GOTENBERG_API_URL: http://hmpps-manage-adjudications-gotenberg
     FRONTEND_COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
+    ALERT_API_URL: https://alerts-api-preprod.hmpps.service.justice.gov.uk
     MAINTENANCE_MODE: false
     ENVIRONMENT_NAME: 'PRE-PRODUCTION'
     OFFENCE_VERSION: 2
