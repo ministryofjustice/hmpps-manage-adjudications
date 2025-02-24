@@ -1,7 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
-import { CaseLoad } from '../../server/data/prisonApiClient'
-import { Agency } from '../../server/data/PrisonLocationResult'
 import { alertCodeString } from '../../server/utils/alertHelper'
 
 const stubGetPrisonersAlerts = ({ prisonerNumber, response = [], status = 200 }): SuperAgentRequest =>
