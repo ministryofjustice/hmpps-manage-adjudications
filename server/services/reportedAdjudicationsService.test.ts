@@ -2,7 +2,6 @@ import moment from 'moment'
 import ReportedAdjudicationsService from './reportedAdjudicationsService'
 
 import PrisonApiClient from '../data/prisonApiClient'
-import AlertApiClient from '../data/alertApiClient'
 import ManageAdjudicationsSystemTokensClient from '../data/manageAdjudicationsSystemTokensClient'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import CuriousApiService from './curiousApiService'
