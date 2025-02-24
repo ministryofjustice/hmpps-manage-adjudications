@@ -74,7 +74,7 @@ context('Print completed DIS forms', () => {
       prisonerNumber: 'G7234VB',
       response: [{ alertCode: 'CSIP' }],
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage.printDISFormsLink('12345').should('exist')
     printCompletedDISFormsPage.printDISFormsLink('12345').click()
@@ -111,7 +111,7 @@ context('Print completed DIS forms', () => {
       prisonerNumber: 'P3785CP',
       response: [],
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage
       .resultsTable()
@@ -174,7 +174,7 @@ context('Print completed DIS forms', () => {
       response: [],
       status: 404,
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage
       .resultsTable()
@@ -242,7 +242,7 @@ context('Print completed DIS forms', () => {
       prisonerNumber: 'P3785CP',
       response: [],
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage.resultsTable().find('tr').should('have.length', 3)
     const filter: PrintDISFormsFilter = new PrintDISFormsFilter()
@@ -292,7 +292,7 @@ context('Print completed DIS forms', () => {
       prisonerNumber: 'P3785CP',
       response: [],
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage.resultsTable().find('tr').should('have.length', 3)
     const filter: PrintDISFormsFilter = new PrintDISFormsFilter()
