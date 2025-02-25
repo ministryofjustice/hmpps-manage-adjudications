@@ -505,7 +505,6 @@ export default class ReportedAdjudicationsService {
   async getAlerts(prisonerNumbers: string[], user: User): Promise<Map<string, Alert[]>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const alertsForEachPrisoner = await Promise.all(
-      // prisonerNumbers.map(prn => new PrisonApiClient(token).getAlertsForPrisoner(prn))
       prisonerNumbers.map(prn => new AlertApiClient(token).getAlertsForPrisoner(prn))
     )
     return new Map(alertsForEachPrisoner.map(a => [a.prisonerNumber, a.alerts]))
