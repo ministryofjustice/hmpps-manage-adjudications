@@ -104,7 +104,30 @@ context('Print completed DIS forms', () => {
     // First prisoner - G7234VB
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'G7234VB',
-      response: [{ alertCode: 'CSIP' }, { alertCode: 'HA' }, { alertCode: 'PEEP' }, { alertCode: 'PRGNT' }],
+      response: {
+        content: [
+          {
+            alertCode: {
+              code: 'HA',
+            },
+          },
+          {
+            alertCode: {
+              code: 'CSIP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PEEP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PRGNT',
+            },
+          },
+        ],
+      },
     })
     // Second prisoner - P3785CP
     cy.task('stubGetPrisonersAlerts', {
@@ -166,7 +189,30 @@ context('Print completed DIS forms', () => {
     // First prisoner - G7234VB
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'G7234VB',
-      response: [{ alertCode: 'CSIP' }, { alertCode: 'HA' }, { alertCode: 'PEEP' }, { alertCode: 'PRGNT' }],
+      response: {
+        content: [
+          {
+            alertCode: {
+              code: 'HA',
+            },
+          },
+          {
+            alertCode: {
+              code: 'CSIP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PEEP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PRGNT',
+            },
+          },
+        ],
+      },
     })
     // Second prisoner - P3785CP
     cy.task('stubGetPrisonersAlerts', {
@@ -235,7 +281,30 @@ context('Print completed DIS forms', () => {
     // G7234VB
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'G7234VB',
-      response: [{ alertCode: 'CSIP' }, { alertCode: 'HA' }, { alertCode: 'PEEP' }, { alertCode: 'PRGNT' }],
+      response: {
+        content: [
+          {
+            alertCode: {
+              code: 'HA',
+            },
+          },
+          {
+            alertCode: {
+              code: 'CSIP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PEEP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PRGNT',
+            },
+          },
+        ],
+      },
     })
     // Second prisoner - P3785CP
     cy.task('stubGetPrisonersAlerts', {
@@ -285,7 +354,30 @@ context('Print completed DIS forms', () => {
     // G7234VB
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'G7234VB',
-      response: [{ alertCode: 'CSIP' }, { alertCode: 'HA' }, { alertCode: 'PEEP' }, { alertCode: 'PRGNT' }],
+      response: {
+        content: [
+          {
+            alertCode: {
+              code: 'HA',
+            },
+          },
+          {
+            alertCode: {
+              code: 'CSIP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PEEP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PRGNT',
+            },
+          },
+        ],
+      },
     })
     // Second prisoner - P3785CP
     cy.task('stubGetPrisonersAlerts', {

@@ -92,7 +92,7 @@ export default class AlertApiClient {
     let paginatedAlerts: PaginatedAlertResponse | undefined
     try {
       paginatedAlerts = await this.restClient.get<PaginatedAlertResponse>({
-        path: `/offenders/${prisonerNumber}/alerts?alertCode=${alertCodeString}`,
+        path: `/prisoners/${prisonerNumber}/alerts?alertCode=${alertCodeString}`,
       })
     } catch (error) {
       if (error.status === 404) {

@@ -6,7 +6,7 @@ const stubGetPrisonersAlerts = ({ prisonerNumber, response = [], status = 200 })
   stubFor({
     request: {
       method: 'GET',
-      url: `/offenders/${prisonerNumber}/alerts?alertCode=${alertCodeString}`,
+      url: `/alertsApi/prisoners/${prisonerNumber}/alerts?alertCode=${alertCodeString}`,
     },
     response: {
       status,

@@ -74,7 +74,7 @@ describe('AlertApiClient', () => {
 
       // Stub out the nock call
       fakeAlertApi
-        .get(`/offenders/${prisonerNumber}/alerts?alertCode=${alertCodeString}`)
+        .get(`/prisoners/${prisonerNumber}/alerts?alertCode=${alertCodeString}`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, mockResponse)
 
@@ -107,7 +107,7 @@ describe('AlertApiClient', () => {
       }
 
       fakeAlertApi
-        .get(`/offenders/${prisonerNumber}/alerts?alertCode=${alertCodeString}`)
+        .get(`/prisoners/${prisonerNumber}/alerts?alertCode=${alertCodeString}`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, mockResponse)
 
@@ -119,7 +119,7 @@ describe('AlertApiClient', () => {
 
     it('should log and return empty alerts if 404 is returned', async () => {
       fakeAlertApi
-        .get(`/offenders/${prisonerNumber}/alerts?alertCode=${alertCodeString}`)
+        .get(`/prisoners/${prisonerNumber}/alerts?alertCode=${alertCodeString}`)
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(404)
 
