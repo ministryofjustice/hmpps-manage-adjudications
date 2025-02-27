@@ -27,16 +27,16 @@ import {
 import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import {
   convertToTitleCase,
-  formatReportingOfficer,
   formatLocation,
   formatName,
+  formatReportingOfficer,
   formatTimestampTo,
   formatTimestampToDate,
   getDate,
+  getEvidenceCategory,
   getFormattedOfficerName,
   getTime,
   hasAnyRole,
-  getEvidenceCategory,
 } from '../utils/utils'
 import { Location, LocationId } from '../data/PrisonLocationResult'
 import {
@@ -50,7 +50,8 @@ import LocationService from './locationService'
 import { ReviewStatus } from '../routes/adjudicationForReport/prisonerReport/prisonerReportReviewValidation'
 import { PrisonerResultSummary } from './placeOnReportService'
 import PrisonerSimpleResult from '../data/prisonerSimpleResult'
-import { Alert, alertFlagLabels, AlertFlags } from '../utils/alertHelper'
+import { alertFlagLabels, AlertFlags } from '../utils/alertHelper'
+import AlertApiClient, { Alert } from '../data/alertApiClient'
 import {
   HearingDetails,
   HearingDetailsHistory,
@@ -504,10 +505,9 @@ export default class ReportedAdjudicationsService {
   async getAlerts(prisonerNumbers: string[], user: User): Promise<Map<string, Alert[]>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const alertsForEachPrisoner = await Promise.all(
-      prisonerNumbers.map(prn => new PrisonApiClient(token).getAlertsForPrisoner(prn))
+      prisonerNumbers.map(prn => new AlertApiClient(token).getAlertsForPrisoner(prn))
     )
-    const alertMap = new Map(alertsForEachPrisoner.map(a => [a.prisonerNumber, a.alerts]))
-    return alertMap
+    return new Map(alertsForEachPrisoner.map(a => [a.prisonerNumber, a.alerts]))
   }
 
   async updateAdjudicationStatus(

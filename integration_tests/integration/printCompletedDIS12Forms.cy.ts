@@ -74,7 +74,7 @@ context('Print completed DIS forms', () => {
       prisonerNumber: 'G7234VB',
       response: [{ alertCode: 'CSIP' }],
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage.printDISFormsLink('12345').should('exist')
     printCompletedDISFormsPage.printDISFormsLink('12345').click()
@@ -104,14 +104,37 @@ context('Print completed DIS forms', () => {
     // First prisoner - G7234VB
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'G7234VB',
-      response: [{ alertCode: 'CSIP' }, { alertCode: 'HA' }, { alertCode: 'PEEP' }, { alertCode: 'PRGNT' }],
+      response: {
+        content: [
+          {
+            alertCode: {
+              code: 'HA',
+            },
+          },
+          {
+            alertCode: {
+              code: 'CSIP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PEEP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PRGNT',
+            },
+          },
+        ],
+      },
     })
     // Second prisoner - P3785CP
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'P3785CP',
       response: [],
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage
       .resultsTable()
@@ -166,7 +189,30 @@ context('Print completed DIS forms', () => {
     // First prisoner - G7234VB
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'G7234VB',
-      response: [{ alertCode: 'CSIP' }, { alertCode: 'HA' }, { alertCode: 'PEEP' }, { alertCode: 'PRGNT' }],
+      response: {
+        content: [
+          {
+            alertCode: {
+              code: 'HA',
+            },
+          },
+          {
+            alertCode: {
+              code: 'CSIP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PEEP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PRGNT',
+            },
+          },
+        ],
+      },
     })
     // Second prisoner - P3785CP
     cy.task('stubGetPrisonersAlerts', {
@@ -174,7 +220,7 @@ context('Print completed DIS forms', () => {
       response: [],
       status: 404,
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage
       .resultsTable()
@@ -235,14 +281,37 @@ context('Print completed DIS forms', () => {
     // G7234VB
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'G7234VB',
-      response: [{ alertCode: 'CSIP' }, { alertCode: 'HA' }, { alertCode: 'PEEP' }, { alertCode: 'PRGNT' }],
+      response: {
+        content: [
+          {
+            alertCode: {
+              code: 'HA',
+            },
+          },
+          {
+            alertCode: {
+              code: 'CSIP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PEEP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PRGNT',
+            },
+          },
+        ],
+      },
     })
     // Second prisoner - P3785CP
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'P3785CP',
       response: [],
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage.resultsTable().find('tr').should('have.length', 3)
     const filter: PrintDISFormsFilter = new PrintDISFormsFilter()
@@ -285,14 +354,37 @@ context('Print completed DIS forms', () => {
     // G7234VB
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'G7234VB',
-      response: [{ alertCode: 'CSIP' }, { alertCode: 'HA' }, { alertCode: 'PEEP' }, { alertCode: 'PRGNT' }],
+      response: {
+        content: [
+          {
+            alertCode: {
+              code: 'HA',
+            },
+          },
+          {
+            alertCode: {
+              code: 'CSIP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PEEP',
+            },
+          },
+          {
+            alertCode: {
+              code: 'PRGNT',
+            },
+          },
+        ],
+      },
     })
     // Second prisoner - P3785CP
     cy.task('stubGetPrisonersAlerts', {
       prisonerNumber: 'P3785CP',
       response: [],
     })
-    cy.visit(adjudicationUrls.printCompletedDisForms.root)
+    cy.visit(adjudicationUrls.printCompletedDisForms.root, { failOnStatusCode: false })
     const printCompletedDISFormsPage: PrintCompletedDISFormsPage = Page.verifyOnPage(PrintCompletedDISFormsPage)
     printCompletedDISFormsPage.resultsTable().find('tr').should('have.length', 3)
     const filter: PrintDISFormsFilter = new PrintDISFormsFilter()

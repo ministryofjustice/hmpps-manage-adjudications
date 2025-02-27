@@ -53,8 +53,14 @@ jest.mock('../data/prisonApiClient', () => {
       getPrisonerDetails,
       getSecondaryLanguages,
       getBatchPrisonerDetails,
-      getAlertsForPrisoner,
       getMovementByOffender,
+    }
+  })
+})
+jest.mock('../data/alertApiClient', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      getAlertsForPrisoner,
     }
   })
 })

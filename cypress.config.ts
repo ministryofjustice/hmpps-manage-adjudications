@@ -13,6 +13,7 @@ import adjudications from './integration_tests/mockApis/adjudications'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import users from './integration_tests/mockApis/users'
 import feComponent from './integration_tests/mockApis/feComponent'
+import alertApi from './integration_tests/mockApis/alertApi'
 
 export default defineConfig({
   projectId: 'gy9q8q',
@@ -102,7 +103,7 @@ export default defineConfig({
         stubGetSecondaryLanguages: prisonApi.stubGetSecondaryLanguages,
         stubGetBatchPrisonerDetails: prisonApi.stubGetBatchPrisonerDetails,
         stubGetUsersLocations: prisonApi.stubGetUsersLocations,
-        stubGetPrisonersAlerts: prisonApi.stubGetPrisonersAlerts,
+        stubGetPrisonersAlerts: alertApi.stubGetPrisonersAlerts,
         stubGetMovementByOffender: prisonApi.stubGetMovementByOffender,
         stubValidateChargeNumber: prisonApi.stubValidateChargeNumber,
 
