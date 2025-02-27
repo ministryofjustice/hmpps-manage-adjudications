@@ -2,7 +2,6 @@ import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 import { CaseLoad } from '../../server/data/prisonApiClient'
 import { Agency } from '../../server/data/PrisonLocationResult'
-import { alertCodeString } from '../../server/utils/alertHelper'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -115,19 +114,6 @@ const stubGetUsersLocations = (response = []): SuperAgentRequest =>
     },
   })
 
-const stubGetPrisonersAlerts = ({ prisonerNumber, response = [], status = 200 }): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: `/prisonApi/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=${alertCodeString}`,
-    },
-    response: {
-      status,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: response,
-    },
-  })
-
 const stubGetMovementByOffender = ({ response = [], status = 200 }): SuperAgentRequest =>
   stubFor({
     request: {
@@ -168,7 +154,6 @@ export default {
   stubGetSecondaryLanguages,
   stubGetBatchPrisonerDetails,
   stubGetUsersLocations,
-  stubGetPrisonersAlerts,
   stubGetMovementByOffender,
   stubValidateChargeNumber,
 }
