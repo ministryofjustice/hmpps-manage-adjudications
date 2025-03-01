@@ -89,7 +89,7 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^3.3.1",
+    "@ministryofjustice/frontend": "^3.7.0",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.6",
     "body-parser": "^1.20.3",
@@ -149,7 +149,7 @@
     "dotenv": "^16.4.7",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^10.0.1",
+    "eslint-config-prettier": "^10.0.2",
     "eslint-import-resolver-typescript": "^3.8.3",
     "eslint-plugin-cypress": "^3.6.0",
     "eslint-plugin-import": "2.31.0",
@@ -165,10 +165,10 @@
     "nodemon": "^3.1.9",
     "prettier": "^3.5.2",
     "prettier-plugin-jinja-template": "^2.0.0",
-    "sass": "^1.85.0",
+    "sass": "^1.85.1",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.6",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.2",
     "wait-on": "^8.0.2"
   },
   "overrides": {
