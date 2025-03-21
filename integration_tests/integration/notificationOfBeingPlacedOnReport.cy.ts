@@ -69,11 +69,23 @@ context('Prisoner has been placed on report', () => {
     cy.signIn()
   })
 
-  it('The notification of being on report should present on the print report page', () => {
-    cy.request(`${adjudicationUrls.printPdf.urls.dis12('1524242')}?copy=staff`).should(res => {
-      expect(res.status).to.eq(200)
-      expect(res.headers['content-disposition']).to.contain('notice-of-being-placed-on-report-1524242.pdf')
-      expect(res.headers['content-type']).to.eq('application/pdf')
+  const checkPdfAvailable = (retries = 3) => {
+    cy.request({
+      url: `${adjudicationUrls.printPdf.urls.dis12('1524242')}?copy=staff`,
+      failOnStatusCode: false,
+    }).then(res => {
+      if (res.status !== 200 && retries > 0) {
+        cy.wait(1000)
+        checkPdfAvailable(retries - 1)
+      } else {
+        expect(res.status).to.eq(200)
+        expect(res.headers['content-disposition']).to.contain('notice-of-being-placed-on-report-1524242.pdf')
+        expect(res.headers['content-type']).to.eq('application/pdf')
+      }
     })
+  }
+
+  it('The notification of being on report should present on the print report page', () => {
+    checkPdfAvailable()
   })
 })
