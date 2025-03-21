@@ -75,6 +75,7 @@ context('Prisoner has been placed on report', () => {
       failOnStatusCode: false,
     }).then(res => {
       if (res.status !== 200 && retries > 0) {
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(1000)
         checkPdfAvailable(retries - 1)
       } else {
