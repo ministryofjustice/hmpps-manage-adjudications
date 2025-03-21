@@ -21,7 +21,7 @@ export default class PrisonerSearchRoutes {
     if (transfer === 'true') {
       const userRoles = await this.userService.getUserRoles(res.locals.user.token)
       if (!hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
-        return this.renderView(req, res, null, true)
+        return this.renderView(req, res, undefined, true)
       }
     }
     return this.renderView(req, res)
