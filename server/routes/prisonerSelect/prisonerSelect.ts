@@ -24,18 +24,17 @@ export default class PrisonerSelectRoutes {
     const { error, searchTerm, transfer } = pageData
     const prisonIds = [user.meta.caseLoadId]
 
+    if (transfer === 'true') {
+      const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+      if (!hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
+        return res.redirect(`${adjudicationUrls.searchForPrisoner.root}?transfer=true`)
+      }
+      if (!error) prisonIds.pop()
+    }
+
     let searchResults = null
     if (!error) {
-      if (transfer === 'true') {
-        const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-        if (!hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
-          return res.redirect(`${adjudicationUrls.searchForPrisoner.root}?transfer=true`)
-        }
-        prisonIds.pop()
-      }
-
       if (!searchTerm) return res.redirect(adjudicationUrls.searchForPrisoner.root)
-
       searchResults = await this.prisonerSearchService.search({ searchTerm, prisonIds }, user)
 
       if (prisonIds.length === 0) {
