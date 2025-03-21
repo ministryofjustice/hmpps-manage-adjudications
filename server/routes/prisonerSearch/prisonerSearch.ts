@@ -35,9 +35,7 @@ export default class PrisonerSearchRoutes {
     if (error) return this.renderView(req, res, error)
 
     const query: Record<string, string> = { searchTerm }
-    if (transfer === 'true') {
-      query.transfer = transfer
-    }
+    if (transfer === 'true') query.transfer = transfer
 
     return res.redirect(
       url.format({

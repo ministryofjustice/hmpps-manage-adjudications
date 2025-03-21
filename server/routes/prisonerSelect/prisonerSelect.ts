@@ -60,23 +60,17 @@ export default class PrisonerSelectRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { searchTerm } = req.body
     const transfer = JSON.stringify(req.query.transfer)?.replace(/"/g, '')
-
     const error = validateForm({ searchTerm })
 
     if (error) return this.renderView(req, res, { error, searchTerm, transfer })
 
-    if (transfer === 'true') {
-      return res.redirect(
-        url.format({
-          pathname: adjudicationUrls.selectPrisoner.root,
-          query: { searchTerm, transfer },
-        })
-      )
-    }
+    const query: Record<string, string> = { searchTerm }
+    if (transfer === 'true') query.transfer = transfer
+
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.selectPrisoner.root,
-        query: { searchTerm },
+        query,
       })
     )
   }
