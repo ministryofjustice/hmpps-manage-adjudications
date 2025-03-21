@@ -7,11 +7,7 @@ import { hasAnyRole } from '../../utils/utils'
 import UserService from '../../services/userService'
 
 export default class PrisonerSearchRoutes {
-  private userService: UserService
-
-  constructor(userService: UserService) {
-    this.userService = userService
-  }
+  constructor(private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response, error?: FormError, forbidden = false): Promise<void> => {
     return res.render('pages/prisonerSearch', {

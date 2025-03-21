@@ -2,8 +2,10 @@ import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
+import UserService from '../../services/userService'
 import validateForm from '../prisonerSearch/prisonerSearchValidation'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { hasAnyRole } from '../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -12,7 +14,10 @@ type PageData = {
   transfer?: string
 }
 export default class PrisonerSelectRoutes {
-  constructor(private readonly prisonerSearchService: PrisonerSearchService) {}
+  constructor(
+    private readonly prisonerSearchService: PrisonerSearchService,
+    private readonly userService: UserService
+  ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { user } = res.locals
@@ -22,6 +27,10 @@ export default class PrisonerSelectRoutes {
     let searchResults = null
     if (!error) {
       if (transfer === 'true') {
+        const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+        if (!hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
+          return res.redirect(`${adjudicationUrls.searchForPrisoner.root}?transfer=true`)
+        }
         prisonIds.pop()
       }
 
