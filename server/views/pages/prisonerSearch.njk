@@ -25,7 +25,7 @@
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-heading-l">{{ title }}</h1>
       </legend>
-      {% if globalError %}
+      {% if forbidden %}
         <p class="govuk-body">You do not have permission to search outside of your establishment.</p>
         <p class="govuk-body">
           {{ govukButton({

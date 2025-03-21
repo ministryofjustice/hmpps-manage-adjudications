@@ -13,10 +13,10 @@ export default class PrisonerSearchRoutes {
     this.userService = userService
   }
 
-  private renderView = async (req: Request, res: Response, error?: FormError, globalError?: boolean): Promise<void> => {
+  private renderView = async (req: Request, res: Response, error?: FormError, forbidden = false): Promise<void> => {
     return res.render('pages/prisonerSearch', {
       errors: error ? [error] : [],
-      globalError,
+      forbidden,
     })
   }
 
