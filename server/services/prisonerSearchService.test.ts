@@ -60,6 +60,13 @@ describe('prisonerSearchService', () => {
     it('search by prisoner identifier', async () => {
       search.mockResolvedValue([
         testData.prisonerSearchSummary({
+          firstName: 'John',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AC',
+          prisonId: 'OUT',
+          enhanced: false,
+        }),
+        testData.prisonerSearchSummary({
           firstName: 'Steve',
           lastName: 'Jones',
           prisonerNumber: 'A1234AB',
@@ -82,7 +89,6 @@ describe('prisonerSearchService', () => {
           gender: 'Unknown',
           startHref: adjudicationUrls.selectGender.url.start('A1234AB'),
         }),
-
         testData.prisonerSearchSummary({
           firstName: 'John',
           lastName: 'Smith',
