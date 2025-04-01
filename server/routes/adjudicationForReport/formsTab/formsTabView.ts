@@ -37,7 +37,7 @@ export default class FormsTabRoute {
     const results = (await this.reportedAdjudicationsService.getAdjudicationDISFormData(user, filter, false)).filter(
       adj => adj.chargeNumber === chargeNumber
     )
-
+    console.log('formsTabView.ts 40 results: ', results)
     const { path } = req.query
     const tabUrls = this.getTabUrls(path as string, chargeNumber)
 

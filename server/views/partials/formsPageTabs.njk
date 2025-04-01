@@ -19,7 +19,6 @@
 
 <div>
   <h3 class="govuk-heading-s">Record of issuing notice of being placed on report to the prisoner</h3>
-
   {% set rows = [] %}
   {% for report in reports %}
     {% for disIssue in report.formattedDisIssueHistory %}
@@ -34,7 +33,7 @@
         { text: report.issuingOfficer or ' - ' }
       ]), rows) %}
   {% endfor %}
-
+  {% console.log('rows: ', rows) %}
   {% if rows | length %}
     <div class="results-table">
       {{ govukTable({

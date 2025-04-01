@@ -117,7 +117,7 @@ export default class PrisonApiClient {
       path: `/api/bookings/offenders?activeOnly=false`,
       data: prisonerNumbers,
     })
-
+    console.log('prisonApiClient, getBatchPrisonerDetails: result: ', result)
     return result.map(_ => plainToClass(PrisonerResult, _, { excludeExtraneousValues: false }))
   }
 

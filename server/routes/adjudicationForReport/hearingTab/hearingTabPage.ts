@@ -93,6 +93,7 @@ export default class HearingTabPage {
       userRoles,
       reportedAdjudication.status
     )
+    console.log('TRIGGER')
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
       prisoner,

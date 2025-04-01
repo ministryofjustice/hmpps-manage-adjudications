@@ -472,6 +472,7 @@ export default class ReportedAdjudicationsService {
   ): Promise<ReportedAdjudicationEnhancedWithIssuingDetails[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const response = await this.getIssueDataForAdjudications(user, filter, filterUsingHearingDate)
+    console.log('reportedAdjudicationsService 475 response: ', response)
     const { reportedAdjudications } = response
     const prisonerNumbers = reportedAdjudications.map(_ => _.prisonerNumber)
     const prisonerDetails = new Map(
@@ -480,7 +481,7 @@ export default class ReportedAdjudicationsService {
         prisonerDetail,
       ])
     )
-
+    console.log('reportedAdjudicationsService, getAdjudicationDISFormData: prisonerDetails: ', response)
     const alertMap = filterUsingHearingDate ? await this.getAlerts(prisonerNumbers, user) : null
 
     const usernamesInPage = new Set(
@@ -648,6 +649,10 @@ export default class ReportedAdjudicationsService {
       relevantAlerts = alertFlagLabels.filter(alertFlag =>
         alertFlag.alertCodes.some(alert => [...alertCodesPresent].includes(alert))
       )
+      console.log(
+        'ReportedAdjudicationsService, enhanceAdjudicationWithIssuingDetails: relevantAlerts: ',
+        relevantAlerts
+      )
     }
 
     const formattedDisIssueHistory: FormattedDisIssue[] = []
@@ -658,6 +663,10 @@ export default class ReportedAdjudicationsService {
         formattedDateTimeOfIssue: formatTimestampToDate(disIssue.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
       })
     })
+    console.log(
+      'ReportedAdjudicationsService, enhanceAdjudicationWithIssuingDetails: formattedDisIssueHistory: ',
+      formattedDisIssueHistory
+    )
 
     const dateTimeOfDiscovery =
       (adjudicationInfo as ReportedAdjudication).incidentDetails?.dateTimeOfDiscovery ||
