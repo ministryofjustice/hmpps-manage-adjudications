@@ -9,6 +9,7 @@ import PrisonerResult from './prisonerResult'
 import { Agency, AgencyId, Location } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
 import { Alert, alertCodeString, PrisonerAlerts } from '../utils/alertHelper'
+import log from '../log'
 
 export interface CaseLoad {
   caseLoadId: string
@@ -117,7 +118,9 @@ export default class PrisonApiClient {
       path: `/api/bookings/offenders?activeOnly=false`,
       data: prisonerNumbers,
     })
-
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    log.info('prisonApiClient, getBatchPrisonerDetails: result: ', result)
+    /* eslint-enable @typescript-eslint/no-explicit-any */
     return result.map(_ => plainToClass(PrisonerResult, _, { excludeExtraneousValues: false }))
   }
 

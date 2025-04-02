@@ -5,6 +5,7 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../../utils/utils'
 import { DISFormfilterFromUiFilter } from '../../../utils/adjudicationFilterHelper'
+import log from '../../../log'
 
 export default class FormsTabRoute {
   constructor(
@@ -37,7 +38,9 @@ export default class FormsTabRoute {
     const results = (await this.reportedAdjudicationsService.getAdjudicationDISFormData(user, filter, false)).filter(
       adj => adj.chargeNumber === chargeNumber
     )
-
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    log.info('formsTabView.ts ln40 results: ', results)
+    /* eslint-enable @typescript-eslint/no-explicit-any */
     const { path } = req.query
     const tabUrls = this.getTabUrls(path as string, chargeNumber)
 
