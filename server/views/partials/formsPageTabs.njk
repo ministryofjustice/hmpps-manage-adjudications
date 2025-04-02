@@ -33,7 +33,6 @@
         { text: report.issuingOfficer or ' - ' }
       ]), rows) %}
   {% endfor %}
-  {% console.log('rows: ', rows) %}
   {% if rows | length %}
     <div class="results-table">
       {{ govukTable({

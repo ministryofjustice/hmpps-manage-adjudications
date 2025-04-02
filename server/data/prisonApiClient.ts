@@ -117,7 +117,9 @@ export default class PrisonApiClient {
       path: `/api/bookings/offenders?activeOnly=false`,
       data: prisonerNumbers,
     })
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     console.log('prisonApiClient, getBatchPrisonerDetails: result: ', result)
+    /* eslint-enable @typescript-eslint/no-explicit-any */
     return result.map(_ => plainToClass(PrisonerResult, _, { excludeExtraneousValues: false }))
   }
 
