@@ -69,6 +69,7 @@ import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
 import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
 import UserService from './userService'
+import log from '../log'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -473,7 +474,7 @@ export default class ReportedAdjudicationsService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const response = await this.getIssueDataForAdjudications(user, filter, filterUsingHearingDate)
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    console.log('reportedAdjudicationsService, getAdjudicationDISFormData: response: ', response)
+    log.info('reportedAdjudicationsService, getAdjudicationDISFormData: response: ', response)
     /* eslint-enable @typescript-eslint/no-explicit-any */
 
     const { reportedAdjudications } = response
@@ -485,7 +486,7 @@ export default class ReportedAdjudicationsService {
       ])
     )
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    console.log('reportedAdjudicationsService, getAdjudicationDISFormData: prisonerDetails: ', response)
+    log.info('reportedAdjudicationsService, getAdjudicationDISFormData: prisonerDetails: ', response)
     /* eslint-enable @typescript-eslint/no-explicit-any */
 
     const alertMap = filterUsingHearingDate ? await this.getAlerts(prisonerNumbers, user) : null
@@ -656,10 +657,7 @@ export default class ReportedAdjudicationsService {
         alertFlag.alertCodes.some(alert => [...alertCodesPresent].includes(alert))
       )
       /* eslint-disable @typescript-eslint/no-explicit-any */
-      console.log(
-        'ReportedAdjudicationsService, enhanceAdjudicationWithIssuingDetails: relevantAlerts: ',
-        relevantAlerts
-      )
+      log.info('ReportedAdjudicationsService, enhanceAdjudicationWithIssuingDetails: relevantAlerts: ', relevantAlerts)
       /* eslint-enable @typescript-eslint/no-explicit-any */
     }
 
@@ -672,7 +670,7 @@ export default class ReportedAdjudicationsService {
       })
     })
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    console.log(
+    log.info(
       'ReportedAdjudicationsService, enhanceAdjudicationWithIssuingDetails: formattedDisIssueHistory: ',
       formattedDisIssueHistory
     )
