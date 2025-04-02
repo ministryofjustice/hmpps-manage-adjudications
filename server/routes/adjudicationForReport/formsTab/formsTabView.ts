@@ -5,6 +5,7 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../../utils/utils'
 import { DISFormfilterFromUiFilter } from '../../../utils/adjudicationFilterHelper'
+import log from '../../../log'
 
 export default class FormsTabRoute {
   constructor(
@@ -38,7 +39,7 @@ export default class FormsTabRoute {
       adj => adj.chargeNumber === chargeNumber
     )
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    console.log('formsTabView.ts ln40 results: ', results)
+    log.info('formsTabView.ts ln40 results: ', results)
     /* eslint-enable @typescript-eslint/no-explicit-any */
     const { path } = req.query
     const tabUrls = this.getTabUrls(path as string, chargeNumber)
