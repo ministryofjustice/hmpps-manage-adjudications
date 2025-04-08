@@ -16,9 +16,9 @@ const stubPing = (status = 200): SuperAgentRequest =>
   })
 
 const stubGetLocation = ({
-  locationId = 'location-1',
+  locationId = '0194ac90-2def-7c63-9f46-b3ccc911fdff',
   response = {
-    id: 'location-1',
+    id: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     prisonId: 'MDI',
     key: 'MDI-1',
     localName: 'Houseblock 1',
