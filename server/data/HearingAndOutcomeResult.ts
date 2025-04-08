@@ -94,6 +94,7 @@ export enum ReferGovReason {
 export type HearingDetails = {
   id?: number
   locationId: number
+  locationUuid: string
   dateTimeOfHearing: string
   oicHearingType: string
   outcome?: HearingOutcomeDetails

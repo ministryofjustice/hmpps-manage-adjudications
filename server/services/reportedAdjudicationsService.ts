@@ -926,12 +926,14 @@ export default class ReportedAdjudicationsService {
   async scheduleHearing(
     chargeNumber: string,
     locationId: number,
+    locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,
     user: User
   ) {
     const dataToSend = {
       locationId,
+      locationUuid,
       dateTimeOfHearing,
       oicHearingType,
     }
@@ -941,12 +943,14 @@ export default class ReportedAdjudicationsService {
   async rescheduleHearing(
     chargeNumber: string,
     locationId: number,
+    locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,
     user: User
   ) {
     const dataToSend = {
       locationId,
+      locationUuid,
       dateTimeOfHearing,
       oicHearingType,
     }

@@ -43,6 +43,7 @@ export default class LocationService {
     // mapping the reponse from locationsApi with that previosuly received from prisonApi
     const incidentLocations = locations.map(loc => ({
       locationId: loc.id,
+      locationUuid: loc.id,
       userDescription: loc.localName,
       locationPrefix: loc.key,
       agencyId: loc.prisonId,
@@ -73,7 +74,13 @@ export default class LocationService {
     const locations = await new LocationsInsidePrisonApiClient(token).getAdjudicationLocations(agencyId)
 
     const hearingLocations = locations.map(loc => {
-      return { locationId: loc.id, userDescription: loc.localName, locationPrefix: loc.key, agencyId: loc.prisonId }
+      return {
+        locationId: loc.id,
+        locationUuid: loc.id,
+        userDescription: loc.localName,
+        locationPrefix: loc.key,
+        agencyId: loc.prisonId,
+      }
     })
     const formattedHearingLocations = assignIntLocCodeAsUserDesc(hearingLocations)
 

@@ -63,6 +63,7 @@ export type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
   dateTimeOfDiscovery: SubmittedDateTime
   locationId: number
+  locationUuid?: string
   startedByUserId: string
   chargeNumber?: string
 }
@@ -107,6 +108,7 @@ export default class PlaceOnReportService {
   async startNewDraftAdjudication(
     dateTimeOfIncident: string,
     locationId: number,
+    locationUuid: string,
     prisonerNumber: string,
     user: User,
     gender: PrisonerGender,
@@ -119,6 +121,7 @@ export default class PlaceOnReportService {
       dateTimeOfIncident,
       agencyId: user.meta.caseLoadId,
       locationId,
+      locationUuid,
       prisonerNumber,
       dateTimeOfDiscovery,
       gender,
@@ -248,6 +251,7 @@ export default class PlaceOnReportService {
     return {
       dateTime: dateAndTimeOfIncident,
       locationId: incidentDetails.locationId,
+      locationUuid: incidentDetails.locationUuid,
       startedByUserId: response.draftAdjudication.startedByUserId,
       chargeNumber: response.draftAdjudication.chargeNumber,
       dateTimeOfDiscovery: dateAndTimeOfDiscovery,
@@ -267,6 +271,7 @@ export default class PlaceOnReportService {
     id: number,
     dateTime: string,
     location: number,
+    locationUuid: string,
     user: User,
     dateTimeOfDiscovery: string
   ): Promise<DraftAdjudicationResult> {
@@ -275,6 +280,7 @@ export default class PlaceOnReportService {
     const editedIncidentDetails = {
       dateTimeOfIncident: dateTime,
       locationId: location,
+      locationUuid,
       removeExistingOffences: false,
       dateTimeOfDiscovery,
     }

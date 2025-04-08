@@ -84,6 +84,7 @@ describe('POST new schedule hearing', () => {
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'GOV',
       })
       .expect(302)
@@ -93,6 +94,7 @@ describe('POST new schedule hearing', () => {
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
           '1524494',
           27008,
+          '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-03T11:00',
           OicHearingType.GOV_ADULT as string,
           expect.anything()
@@ -106,6 +108,7 @@ describe('POST new schedule hearing', () => {
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'IND_ADJ',
       })
       .expect(302)
@@ -115,6 +118,7 @@ describe('POST new schedule hearing', () => {
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
           '1524494',
           27008,
+          '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-03T11:00',
           OicHearingType.INAD_ADULT as string,
           expect.anything()
@@ -129,6 +133,7 @@ describe('POST new schedule hearing', () => {
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
         locationId: 27008,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'GOV',
       })
       .expect('Content-Type', /html/)

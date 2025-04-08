@@ -1,5 +1,6 @@
 export type PrisonLocation = {
   locationId: number
+  locationUuid: string
   locationPrefix: string
   userDescription: string
 }
@@ -8,6 +9,8 @@ export type AgencyId = string
 
 export type LocationId = number
 
+export type LocationUuid = string
+
 export type Agency = {
   agencyId: string
   description: string
@@ -15,6 +18,7 @@ export type Agency = {
 
 export type Location = {
   locationId: number
+  locationUuid: string
   locationPrefix: string
   userDescription: string
   agencyId: string
@@ -22,6 +26,7 @@ export type Location = {
 
 export type IncidentLocation = {
   locationId: string
+  locationUuid: string
   locationPrefix: string
   userDescription: string
   agencyId?: string

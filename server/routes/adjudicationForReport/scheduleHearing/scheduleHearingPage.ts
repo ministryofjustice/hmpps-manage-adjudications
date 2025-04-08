@@ -38,6 +38,8 @@ type HearingDetails = {
   hearingDate: SubmittedDateTime
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   locationId: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  locationUuid: any
   id?: number
   hearingType: string
 }
@@ -93,6 +95,7 @@ export default class scheduleHearingRoutes {
     const validationError = validateForm({
       hearingDate: postValues.hearingDetails.hearingDate,
       locationId: postValues.hearingDetails.locationId,
+      locationUuid: postValues.hearingDetails.locationUuid,
       hearingType: postValues.hearingDetails.hearingType,
       latestExistingHearing: latestHearing.dateTimeOfHearing,
     })
@@ -113,6 +116,7 @@ export default class scheduleHearingRoutes {
         await this.reportedAdjudicationsService.rescheduleHearing(
           chargeNumber,
           hearingDetailsToSave.locationId,
+          hearingDetailsToSave.locationUuid,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
           user
@@ -121,6 +125,7 @@ export default class scheduleHearingRoutes {
         await this.reportedAdjudicationsService.scheduleHearing(
           chargeNumber,
           hearingDetailsToSave.locationId,
+          hearingDetailsToSave.locationUuid,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
           user
@@ -145,9 +150,11 @@ export default class scheduleHearingRoutes {
     const { reportedAdjudication } = adjudication
     const [hearingToRender] = reportedAdjudication.hearings.filter(hearing => hearing.id === hearingId)
     const locationId = await this.locationService.getCorrespondingDpsLocationId(hearingToRender.locationId, user)
+    const locationUuid = await this.locationService.getIncidentLocation(hearingToRender.locationUuid, user)
     return {
-      hearingDate: await convertDateTimeStringToSubmittedDateTime(hearingToRender.dateTimeOfHearing),
+      hearingDate: convertDateTimeStringToSubmittedDateTime(hearingToRender.dateTimeOfHearing),
       locationId,
+      locationUuid,
       id: hearingToRender.id,
       hearingType: getRadioHearingType(hearingToRender.oicHearingType),
     }
@@ -181,6 +188,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError[]) => {
   const data = {
     hearingDate: convertSubmittedDateTimeToDateObject(pageData.formData.hearingDetails?.hearingDate),
     locationId: pageData.formData.hearingDetails?.locationId,
+    locationUuid: pageData.formData.hearingDetails?.locationUuid,
     hearingType: pageData.formData.hearingDetails?.hearingType,
   }
 
@@ -198,6 +206,7 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
     hearingDetails: {
       hearingDate: req.body.hearingDate,
       locationId: req.body.locationId,
+      locationUuid: req.body.locationUuid,
       hearingType: req.body.hearingType,
     },
   }

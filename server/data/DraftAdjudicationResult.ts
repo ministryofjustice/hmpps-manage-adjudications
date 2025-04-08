@@ -2,6 +2,7 @@ import { ProtectedCharacteristicsTypes } from '../routes/offenceCodeDecisions/of
 
 export type IncidentDetails = {
   locationId: number
+  locationUuid: string
   dateTimeOfIncident: string
   handoverDeadline?: string
   discoveryRadioSelected?: string
@@ -85,6 +86,7 @@ type SummarySectionItems = {
 export type EditedIncidentDetails = {
   dateTimeOfIncident: string
   locationId: number
+  locationUuid: string
   incidentRole?: IncidentRole
   removeExistingOffences?: boolean
 }

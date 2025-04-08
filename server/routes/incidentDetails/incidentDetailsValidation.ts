@@ -5,6 +5,7 @@ type incidentDetailsForm = {
   incidentDate?: SubmittedDateTime
   discoveryDate?: SubmittedDateTime
   locationId?: string
+  locationUuid?: string
   incidentRole?: string
   associatedPrisonersNumber?: string
   discoveryRadioSelected?: string
@@ -89,6 +90,7 @@ export default function validateForm({
   incidentDate,
   discoveryDate,
   locationId,
+  locationUuid,
   discoveryRadioSelected,
 }: incidentDetailsForm): FormError | null {
   if (!discoveryRadioSelected) {
@@ -142,6 +144,9 @@ export default function validateForm({
     return errors.MISSING_MINUTE
   }
   if (!locationId) {
+    return errors.MISSING_LOCATION
+  }
+  if (!locationUuid) {
     return errors.MISSING_LOCATION
   }
   if (Number.isNaN(Number(incidentDate.time.hour)) || Number(incidentDate.time.hour) > 23) {

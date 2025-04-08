@@ -60,6 +60,7 @@ type IncidentDetails = {
   incidentDate: SubmittedDateTime
   discoveryDate: SubmittedDateTime
   locationId: string | number
+  locationUuid: string
   discoveryRadioSelected?: string
 }
 
@@ -131,6 +132,7 @@ export default class IncidentDetailsPage {
       incidentDate: postValues.incidentDetails?.incidentDate,
       discoveryDate: postValues.incidentDetails?.discoveryDate,
       locationId: postValues.incidentDetails?.locationId as string,
+      locationUuid: postValues.incidentDetails?.locationUuid as string,
       discoveryRadioSelected: postValues.incidentDetails?.discoveryRadioSelected,
     })
     if (validationError) {
@@ -195,6 +197,7 @@ export default class IncidentDetailsPage {
     return await this.placeOnReportService.startNewDraftAdjudication(
       formatDate(data.incidentDate),
       data.locationId as number,
+      data.locationUuid,
       prisonerNumber,
       currentUser,
       data.gender,
@@ -212,6 +215,7 @@ export default class IncidentDetailsPage {
       draftId,
       formatDate(data.incidentDate),
       data.locationId as number,
+      data.locationUuid,
       currentUser,
       formatDate(data.discoveryDate)
     )
@@ -338,6 +342,7 @@ const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentD
     incidentDate: readDraftIncidentDetails.dateTime,
     discoveryDate: radioValue === 'Yes' ? null : readDraftIncidentDetails.dateTimeOfDiscovery,
     locationId: readDraftIncidentDetails.locationId,
+    locationUuid: readDraftIncidentDetails.locationUuid,
     discoveryRadioSelected: radioValue,
     reporterUsername: readDraftIncidentDetails.startedByUserId,
   }
@@ -355,6 +360,7 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
       incidentDate: req.body.incidentDate,
       discoveryDate: discoveryDateTime,
       locationId: req.body.locationId,
+      locationUuid: req.body.locationId,
       reporterUsername: req.body.originalReporterUsername,
       discoveryRadioSelected: req.body.discoveryRadioSelected,
     },
@@ -377,6 +383,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
     incidentDate: convertSubmittedDateTimeToDateObject(pageData.formData.incidentDetails?.incidentDate),
     discoveryDate: convertSubmittedDateTimeToDateObject(pageData.formData.incidentDetails?.discoveryDate),
     locationId: pageData.formData.incidentDetails?.locationId,
+    locationUuid: pageData.formData.incidentDetails?.locationId,
     discoveryRadioSelected: pageData.formData.incidentDetails?.discoveryRadioSelected,
   }
   return res.render(`pages/incidentDetails`, {
