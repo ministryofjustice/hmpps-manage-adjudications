@@ -473,9 +473,6 @@ export default class ReportedAdjudicationsService {
   ): Promise<ReportedAdjudicationEnhancedWithIssuingDetails[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const response = await this.getIssueDataForAdjudications(user, filter, filterUsingHearingDate)
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    log.info('reportedAdjudicationsService, getAdjudicationDISFormData: response: ', response)
-    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     const { reportedAdjudications } = response
     const prisonerNumbers = reportedAdjudications.map(_ => _.prisonerNumber)
@@ -485,9 +482,6 @@ export default class ReportedAdjudicationsService {
         prisonerDetail,
       ])
     )
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    log.info('reportedAdjudicationsService, getAdjudicationDISFormData: prisonerDetails: ', response)
-    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     const alertMap = filterUsingHearingDate ? await this.getAlerts(prisonerNumbers, user) : null
 
@@ -636,6 +630,44 @@ export default class ReportedAdjudicationsService {
     }
   }
 
+  async handleDisIssueHistoryFormatting(reportedAdjudication: ReportedAdjudication, user: User) {
+    const usernamesInPage = new Set<string>()
+    usernamesInPage.add(reportedAdjudication.issuingOfficer)
+
+    const issuingOfficerNamesAndUsernames =
+      (await Promise.all(
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+      )) || []
+
+    const issuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
+    const issuingOfficerName = issuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
+    const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
+
+    const disIssueHistory = await this.formatDisIssueHistory(reportedAdjudication, issuingOfficerNameByUsernameMap)
+    return [
+      {
+        issuingOfficer,
+        formattedDateTimeOfIssue: formatTimestampToDate(reportedAdjudication.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
+        disIssueHistory,
+      },
+    ]
+  }
+
+  formatDisIssueHistory(
+    adjudicationInfo: ReportedAdjudication | ConfirmIssueInfo,
+    issuingOfficerNameByUsernameMap: Map<string, string>
+  ) {
+    const formattedDisIssueHistory: FormattedDisIssue[] = []
+    adjudicationInfo.disIssueHistory.map(disIssue => {
+      const disIssueOfficerName = issuingOfficerNameByUsernameMap.get(disIssue.issuingOfficer)
+      return formattedDisIssueHistory.push({
+        issuingOfficer: getFormattedOfficerName(disIssueOfficerName && convertToTitleCase(disIssueOfficerName)) || '',
+        formattedDateTimeOfIssue: formatTimestampToDate(disIssue.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
+      })
+    })
+    return formattedDisIssueHistory
+  }
+
   enhanceAdjudicationWithIssuingDetails(
     adjudicationInfo: ReportedAdjudication | ConfirmIssueInfo,
     prisonerResult: PrisonerSimpleResult,
@@ -656,25 +688,9 @@ export default class ReportedAdjudicationsService {
       relevantAlerts = alertFlagLabels.filter(alertFlag =>
         alertFlag.alertCodes.some(alert => [...alertCodesPresent].includes(alert))
       )
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      log.info('ReportedAdjudicationsService, enhanceAdjudicationWithIssuingDetails: relevantAlerts: ', relevantAlerts)
-      /* eslint-enable @typescript-eslint/no-explicit-any */
     }
 
-    const formattedDisIssueHistory: FormattedDisIssue[] = []
-    adjudicationInfo.disIssueHistory.map(disIssue => {
-      const disIssueOfficerName = issuingOfficerNameByUsernameMap.get(disIssue.issuingOfficer)
-      return formattedDisIssueHistory.push({
-        issuingOfficer: getFormattedOfficerName(disIssueOfficerName && convertToTitleCase(disIssueOfficerName)) || '',
-        formattedDateTimeOfIssue: formatTimestampToDate(disIssue.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
-      })
-    })
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    log.info(
-      'ReportedAdjudicationsService, enhanceAdjudicationWithIssuingDetails: formattedDisIssueHistory: ',
-      formattedDisIssueHistory
-    )
-    /* eslint-enable @typescript-eslint/no-explicit-any */
+    const formattedDisIssueHistory = this.formatDisIssueHistory(adjudicationInfo, issuingOfficerNameByUsernameMap)
 
     const dateTimeOfDiscovery =
       (adjudicationInfo as ReportedAdjudication).incidentDetails?.dateTimeOfDiscovery ||
