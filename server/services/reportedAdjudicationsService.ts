@@ -473,7 +473,6 @@ export default class ReportedAdjudicationsService {
   ): Promise<ReportedAdjudicationEnhancedWithIssuingDetails[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const response = await this.getIssueDataForAdjudications(user, filter, filterUsingHearingDate)
-
     const { reportedAdjudications } = response
     const prisonerNumbers = reportedAdjudications.map(_ => _.prisonerNumber)
     const prisonerDetails = new Map(
@@ -482,6 +481,9 @@ export default class ReportedAdjudicationsService {
         prisonerDetail,
       ])
     )
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    log.info('reportedAdjudicationsService, getAdjudicationDISFormData: prisonerDetails: ', response)
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     const alertMap = filterUsingHearingDate ? await this.getAlerts(prisonerNumbers, user) : null
 
@@ -688,6 +690,9 @@ export default class ReportedAdjudicationsService {
       relevantAlerts = alertFlagLabels.filter(alertFlag =>
         alertFlag.alertCodes.some(alert => [...alertCodesPresent].includes(alert))
       )
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      log.info('ReportedAdjudicationsService, enhanceAdjudicationWithIssuingDetails: relevantAlerts: ', relevantAlerts)
+      /* eslint-enable @typescript-eslint/no-explicit-any */
     }
 
     const formattedDisIssueHistory = this.formatDisIssueHistory(adjudicationInfo, issuingOfficerNameByUsernameMap)
