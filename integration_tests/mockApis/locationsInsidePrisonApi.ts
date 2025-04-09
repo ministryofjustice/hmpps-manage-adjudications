@@ -16,6 +16,30 @@ const stubPing = (status = 200): SuperAgentRequest =>
   })
 
 const stubGetLocation = ({
+  locationId = 'location-1',
+  response = {
+    id: 'location-1',
+    prisonId: 'MDI',
+    key: 'MDI-1',
+    localName: 'Houseblock 1',
+  },
+}: {
+  locationId: string
+  response: LocationsApiLocation
+}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/locationsInsidePrisonApi/locations/${locationId}?formatLocalName=true`,
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: response,
+    },
+  })
+
+const stubGetLocationWithUuid = ({
   locationId = '0194ac90-2def-7c63-9f46-b3ccc911fdff',
   response = {
     id: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
@@ -80,6 +104,7 @@ const stubGetAdjudicationLocations = ({
 export default {
   stubPing,
   stubGetLocation,
+  stubGetLocationWithUuid,
   stubGetLocations,
   stubGetAdjudicationLocations,
 }

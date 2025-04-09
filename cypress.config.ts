@@ -97,6 +97,7 @@ export default defineConfig({
         stubGetLocations: locationsInsidePrisonApi.stubGetLocations,
         stubGetAdjudicationLocations: locationsInsidePrisonApi.stubGetAdjudicationLocations,
         stubGetLocation: locationsInsidePrisonApi.stubGetLocation,
+        stubGetLocationWithUuid: locationsInsidePrisonApi.stubGetLocationWithUuid,
         stubGetDpsLocationId: nomisSyncPrisonerMappingApi.stubGetDpsLocationId,
         stubGetNomisLocationId: nomisSyncPrisonerMappingApi.stubGetNomisLocationId,
         stubGetAgency: prisonApi.stubGetAgency,
