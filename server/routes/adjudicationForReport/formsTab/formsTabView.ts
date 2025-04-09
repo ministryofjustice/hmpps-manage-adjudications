@@ -5,7 +5,6 @@ import UserService from '../../../services/userService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import { hasAnyRole, momentDateToDatePicker } from '../../../utils/utils'
 import { DISFormfilterFromUiFilter } from '../../../utils/adjudicationFilterHelper'
-import log from '../../../log'
 
 export default class FormsTabRoute {
   constructor(
@@ -19,7 +18,6 @@ export default class FormsTabRoute {
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
-
     const { chargeNumber } = req.params
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
@@ -30,6 +28,10 @@ export default class FormsTabRoute {
       user
     )
 
+    const formattedDisIssues = await this.reportedAdjudicationsService.handleDisIssueHistoryFormatting(
+      reportedAdjudication,
+      user
+    )
     const filter = DISFormfilterFromUiFilter({
       fromDate: momentDateToDatePicker(moment().subtract(6, 'months')),
       toDate: momentDateToDatePicker(moment()),
@@ -38,9 +40,6 @@ export default class FormsTabRoute {
     const results = (await this.reportedAdjudicationsService.getAdjudicationDISFormData(user, filter, false)).filter(
       adj => adj.chargeNumber === chargeNumber
     )
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    log.info('formsTabView.ts ln40 results: ', results)
-    /* eslint-enable @typescript-eslint/no-explicit-any */
     const { path } = req.query
     const tabUrls = this.getTabUrls(path as string, chargeNumber)
 
@@ -54,6 +53,7 @@ export default class FormsTabRoute {
       noticeOfBeingPlacedOnReportStaffHref: `${adjudicationUrls.printPdf.urls.dis12(chargeNumber)}?copy=staff`,
       ...tabUrls,
       outcomesEntered: reportedAdjudication.punishments?.length > 0,
+      formattedDisIssues,
     })
   }
 
