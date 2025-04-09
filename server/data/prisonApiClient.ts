@@ -9,7 +9,6 @@ import PrisonerResult from './prisonerResult'
 import { Agency, AgencyId, Location } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
 import { Alert, alertCodeString, PrisonerAlerts } from '../utils/alertHelper'
-import log from '../log'
 
 export interface CaseLoad {
   caseLoadId: string
