@@ -69,7 +69,6 @@ import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
 import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
 import UserService from './userService'
-import log from '../log'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -481,9 +480,6 @@ export default class ReportedAdjudicationsService {
         prisonerDetail,
       ])
     )
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    log.info('reportedAdjudicationsService, getAdjudicationDISFormData: prisonerDetails: ', response)
-    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     const alertMap = filterUsingHearingDate ? await this.getAlerts(prisonerNumbers, user) : null
 
@@ -690,9 +686,6 @@ export default class ReportedAdjudicationsService {
       relevantAlerts = alertFlagLabels.filter(alertFlag =>
         alertFlag.alertCodes.some(alert => [...alertCodesPresent].includes(alert))
       )
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      log.info('ReportedAdjudicationsService, enhanceAdjudicationWithIssuingDetails: relevantAlerts: ', relevantAlerts)
-      /* eslint-enable @typescript-eslint/no-explicit-any */
     }
 
     const formattedDisIssueHistory = this.formatDisIssueHistory(adjudicationInfo, issuingOfficerNameByUsernameMap)
