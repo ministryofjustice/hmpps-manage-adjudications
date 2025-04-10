@@ -4,7 +4,7 @@ import { formatDate } from '../../utils/utils'
 type incidentDetailsForm = {
   incidentDate?: SubmittedDateTime
   discoveryDate?: SubmittedDateTime
-  locationId?: string
+  locationId?: string // TODO: MAP-2114: remove at a later date
   locationUuid?: string
   incidentRole?: string
   associatedPrisonersNumber?: string
@@ -89,7 +89,7 @@ const errors: { [key: string]: FormError } = {
 export default function validateForm({
   incidentDate,
   discoveryDate,
-  locationId,
+  locationId, // TODO: MAP-2114: remove at a later date
   locationUuid,
   discoveryRadioSelected,
 }: incidentDetailsForm): FormError | null {
@@ -144,7 +144,7 @@ export default function validateForm({
     return errors.MISSING_MINUTE
   }
   if (!locationId) {
-    return errors.MISSING_LOCATION
+    return errors.MISSING_LOCATION // TODO: MAP-2114: remove at a later date
   }
   if (!locationUuid) {
     return errors.MISSING_LOCATION

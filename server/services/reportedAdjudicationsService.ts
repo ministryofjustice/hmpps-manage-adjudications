@@ -925,7 +925,7 @@ export default class ReportedAdjudicationsService {
 
   async scheduleHearing(
     chargeNumber: string,
-    locationId: number,
+    locationId: number, // TODO: MAP-2114: remove at a later date
     locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,
@@ -942,7 +942,7 @@ export default class ReportedAdjudicationsService {
 
   async rescheduleHearing(
     chargeNumber: string,
-    locationId: number,
+    locationId: number, // TODO: MAP-2114: remove at a later date
     locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,

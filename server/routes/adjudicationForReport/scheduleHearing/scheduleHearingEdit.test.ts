@@ -93,7 +93,7 @@ describe('POST edit existing hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.edit('1524494', 101))
       .send({
         hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
-        locationId: 27008,
+        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'GOV',
       })
@@ -119,7 +119,7 @@ describe('POST edit existing hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.edit('1524494', 101))
       .send({
         hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
-        locationId: 27008,
+        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'IND_ADJ',
       })

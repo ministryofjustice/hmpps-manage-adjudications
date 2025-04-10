@@ -42,7 +42,7 @@ export default class LocationService {
     const locations = await new LocationsInsidePrisonApiClient(token).getLocations(agencyId)
     // mapping the reponse from locationsApi with that previosuly received from prisonApi
     const incidentLocations = locations.map(loc => ({
-      locationId: loc.id,
+      locationId: loc.id, // TODO: MAP-2114: This is currently the Uuid - remove at a later date
       locationUuid: loc.id,
       userDescription: loc.localName,
       locationPrefix: loc.key,
@@ -75,7 +75,7 @@ export default class LocationService {
 
     const hearingLocations = locations.map(loc => {
       return {
-        locationId: loc.id,
+        locationId: loc.id, // TODO: MAP-2114: This is currently the Uuid - remove at a later date
         locationUuid: loc.id,
         userDescription: loc.localName,
         locationPrefix: loc.key,

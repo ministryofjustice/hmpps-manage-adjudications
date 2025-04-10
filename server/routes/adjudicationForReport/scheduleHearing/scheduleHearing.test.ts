@@ -83,7 +83,7 @@ describe('POST new schedule hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.start('1524494'))
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
-        locationId: 27008,
+        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'GOV',
       })
@@ -107,7 +107,7 @@ describe('POST new schedule hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.start('1524494'))
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
-        locationId: 27008,
+        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'IND_ADJ',
       })
