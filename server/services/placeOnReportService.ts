@@ -62,7 +62,8 @@ export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
 export type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
   dateTimeOfDiscovery: SubmittedDateTime
-  locationId: number
+  locationId: number // TODO: MAP-2114: remove at a later date
+  locationUuid?: string
   startedByUserId: string
   chargeNumber?: string
 }
@@ -106,7 +107,8 @@ export default class PlaceOnReportService {
 
   async startNewDraftAdjudication(
     dateTimeOfIncident: string,
-    locationId: number,
+    locationId: number, // TODO: MAP-2114: remove at a later date
+    locationUuid: string,
     prisonerNumber: string,
     user: User,
     gender: PrisonerGender,
@@ -118,7 +120,8 @@ export default class PlaceOnReportService {
     const requestBody = {
       dateTimeOfIncident,
       agencyId: user.meta.caseLoadId,
-      locationId,
+      locationId, // TODO: MAP-2114: remove at a later date
+      locationUuid,
       prisonerNumber,
       dateTimeOfDiscovery,
       gender,
@@ -247,7 +250,8 @@ export default class PlaceOnReportService {
     const dateAndTimeOfDiscovery = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfDiscovery)
     return {
       dateTime: dateAndTimeOfIncident,
-      locationId: incidentDetails.locationId,
+      locationId: incidentDetails.locationId, // TODO: MAP-2114: remove at a later date
+      locationUuid: incidentDetails.locationUuid,
       startedByUserId: response.draftAdjudication.startedByUserId,
       chargeNumber: response.draftAdjudication.chargeNumber,
       dateTimeOfDiscovery: dateAndTimeOfDiscovery,
@@ -266,7 +270,8 @@ export default class PlaceOnReportService {
   async editDraftIncidentDetails(
     id: number,
     dateTime: string,
-    location: number,
+    location: number, // TODO: MAP-2114: remove at a later date
+    locationUuid: string,
     user: User,
     dateTimeOfDiscovery: string
   ): Promise<DraftAdjudicationResult> {
@@ -275,6 +280,7 @@ export default class PlaceOnReportService {
     const editedIncidentDetails = {
       dateTimeOfIncident: dateTime,
       locationId: location,
+      locationUuid,
       removeExistingOffences: false,
       dateTimeOfDiscovery,
     }
