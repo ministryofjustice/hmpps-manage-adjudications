@@ -57,7 +57,13 @@ beforeEach(() => {
   })
 
   locationService.getIncidentLocations.mockResolvedValue([
-    { locationId: 'location-6', locationPrefix: 'OC', userDescription: 'Rivendell', agencyId: 'NMI' },
+    {
+      locationId: 'location-6',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+      locationPrefix: 'OC',
+      userDescription: 'Rivendell',
+      agencyId: 'NMI',
+    },
   ])
 
   placeOnReportService.getCheckYourAnswersInfo.mockResolvedValue({

@@ -67,7 +67,7 @@ context('Schedule a hearing page', () => {
       response: testData.residentialLocationsFromLocationsApi(),
     })
 
-    cy.task('stubGetLocation', {})
+    cy.task('stubGetLocationWithUuid', {})
 
     cy.task('stubGetLocation', {
       locationId: 'location-2',

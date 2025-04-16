@@ -93,7 +93,8 @@ export enum ReferGovReason {
 
 export type HearingDetails = {
   id?: number
-  locationId: number
+  locationId: number // TODO: MAP-2114: remove at a later date
+  locationUuid: string
   dateTimeOfHearing: string
   oicHearingType: string
   outcome?: HearingOutcomeDetails
