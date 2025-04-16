@@ -381,6 +381,7 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-11-30T14:10:00',
           incidentStatement: { statement: 'Something happened' },
           locationId: 27187,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
         testData.reportedAdjudication({
           chargeNumber: '1524425',
@@ -388,6 +389,7 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-11-30T14:00:00',
           incidentStatement: { statement: 'Something happened' },
           locationId: 27187,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
       ]
       const batchPrisonerDetails = [
@@ -428,6 +430,7 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-11-30T14:10:00',
           incidentStatement: { statement: 'Something happened' },
           locationId: 27187,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           otherData: {
             displayName: 'Willis, Michael',
             friendlyName: 'Michael Willis',
@@ -448,6 +451,7 @@ describe('reportedAdjudicationsService', () => {
           dateTimeOfIncident: '2021-11-30T14:00:00',
           incidentStatement: { statement: 'Something happened' },
           locationId: 27187,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           otherData: {
             displayName: 'Smith, Peter',
             friendlyName: 'Peter Smith',
@@ -502,6 +506,7 @@ describe('reportedAdjudicationsService', () => {
         dateTimeOfIncident: '2021-11-16T07:21:00',
         dateTimeOfDiscovery: '2021-11-17T08:22:00',
         locationId: 25538,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         incidentStatement: {
           statement: 'Statement for a test',
         },
@@ -563,6 +568,7 @@ describe('reportedAdjudicationsService', () => {
         dateTimeOfIncident: '2021-11-16T07:21:00',
         dateTimeOfDiscovery: '2021-11-17T08:22:00',
         locationId: 25538,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         incidentStatement: {
           statement: 'Statement for a test',
         },
@@ -975,6 +981,7 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfHearing: '2023-06-23T18:00:00',
             id: 101,
             locationId: 'location-id',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             locationName: 'Moorland (HMP & YOI)',
             oicHearingType: OicHearingType.INAD_ADULT,
             outcome: {
@@ -1014,6 +1021,7 @@ describe('reportedAdjudicationsService', () => {
             outcome: hearingOutcome,
             oicHearingType: OicHearingType.INAD_ADULT,
             locationId: 25538,
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           }),
 
           outcome: {
@@ -1036,6 +1044,7 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfHearing: '2023-06-23T18:00:00',
             id: 101,
             locationId: 'location-id',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             locationName: 'Houseblock 1, Moorland (HMP & YOI)',
             oicHearingType: OicHearingType.INAD_ADULT,
             outcome: {

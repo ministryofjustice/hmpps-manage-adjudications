@@ -47,7 +47,8 @@ export default class noticeOfBeingPlacedOnReportData {
     chargeNumber: string,
     confirmedOnReportData: ConfirmedOnReportData,
     offences: IncidentAndOffences,
-    nextHearingDateTime: string
+    nextHearingDateTime: string,
+    createdOnBehalfOfOfficer: string
   ) {
     this.isPrisonerCopy = isPrisonerCopy
     this.chargeNumber = chargeNumber
@@ -66,7 +67,9 @@ export default class noticeOfBeingPlacedOnReportData {
       logger.info(`nextHearingDate : ${this.nextHearingDate}`)
       logger.info(`nextHearingTime : ${this.nextHearingTime}`)
     }
-    this.reportingOfficer = convertToTitleCase(confirmedOnReportData.reportingOfficer)
+    this.reportingOfficer = !createdOnBehalfOfOfficer
+      ? convertToTitleCase(confirmedOnReportData.reportingOfficer)
+      : `${convertToTitleCase(confirmedOnReportData.reportingOfficer)} on behalf of ${convertToTitleCase(createdOnBehalfOfOfficer)}`
     this.incidentLocationDescription = `${confirmedOnReportData.incidentAgencyName} - ${confirmedOnReportData.incidentLocationName}`
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${
       confirmedOnReportData.prisonerLivingUnitName || 'Unknown'

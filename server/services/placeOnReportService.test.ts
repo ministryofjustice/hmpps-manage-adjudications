@@ -89,6 +89,7 @@ describe('placeOnReportService', () => {
       startNewDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 1,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           chargeNumber: '4567123',
           prisonerNumber: 'G2996UX',
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -98,6 +99,7 @@ describe('placeOnReportService', () => {
       const result = await service.startNewDraftAdjudication(
         '2021-10-28T15:40:25.884',
         3,
+        '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         'G2996UX',
         user,
         PrisonerGender.MALE,
@@ -107,6 +109,7 @@ describe('placeOnReportService', () => {
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         dateTimeOfDiscovery: '2021-10-29T15:40:25.884',
         locationId: 3,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G2996UX',
         agencyId: 'MDI',
         gender: PrisonerGender.MALE,
@@ -135,6 +138,7 @@ describe('placeOnReportService', () => {
       await service.startNewDraftAdjudication(
         '2021-10-28T15:40:25.884',
         3,
+        '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         'G2996UX',
         user,
         PrisonerGender.MALE,
@@ -144,6 +148,7 @@ describe('placeOnReportService', () => {
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         dateTimeOfDiscovery: '2021-10-29T15:40:25.884',
         locationId: 3,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G2996UX',
         agencyId: 'MDI',
         gender: PrisonerGender.MALE,
@@ -171,6 +176,7 @@ describe('placeOnReportService', () => {
           dateTimeOfIncident: '2021-11-04T07:20:00',
           dateTimeOfDiscovery: '2021-11-05T07:20:00',
           locationId: 25538,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement:
               "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
@@ -231,6 +237,7 @@ describe('placeOnReportService', () => {
           dateTimeOfIncident: '2021-11-04T07:20:00',
           dateTimeOfDiscovery: '2021-11-05T07:21:00',
           locationId: 25655,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement:
               "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
@@ -291,6 +298,7 @@ describe('placeOnReportService', () => {
           dateTimeOfIncident: '2021-11-04T07:20:00',
           dateTimeOfDiscovery: '2021-11-05T07:21:00',
           locationId: 25655,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement:
               "John didn't want to go to chapel today. He pushed over some pews and threw things on the floor.",
@@ -395,6 +403,7 @@ describe('placeOnReportService', () => {
         prisonerNumber: 'A12345',
         dateTimeOfIncident: '2020-12-10T10:00:00',
         locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         incidentStatement: {
           statement: 'This is a statement',
         },
@@ -410,6 +419,7 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'A12345',
           dateTimeOfIncident: '2020-12-10T10:00:00',
           locationId: 2,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: null,
         }),
       })
@@ -423,6 +433,7 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'A12345',
           dateTimeOfIncident: '2020-12-10T10:00:00',
           locationId: 2,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement: 'This is a statement',
           },
@@ -436,6 +447,7 @@ describe('placeOnReportService', () => {
           id: 4,
           prisonerNumber: 'A12345',
           locationId: 2,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           dateTimeOfIncident: '2020-12-10T10:00:00',
           incidentStatement: {
             statement: 'Statement that needs to change',
@@ -451,6 +463,7 @@ describe('placeOnReportService', () => {
           id: 4,
           prisonerNumber: 'A12345',
           locationId: 2,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           dateTimeOfIncident: '2020-12-10T10:00:00',
           incidentStatement: {
             statement: 'This is a statement',
@@ -479,6 +492,7 @@ describe('placeOnReportService', () => {
         dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
         dateTimeOfDiscovery: { date: '09/11/2021', time: { hour: '10', minute: '00' } },
         locationId: 1234,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         chargeNumber: null as never,
         startedByUserId: 'USER1',
       }
@@ -490,6 +504,7 @@ describe('placeOnReportService', () => {
           dateTimeOfIncident: '2021-11-08T10:00:00',
           dateTimeOfDiscovery: '2021-11-09T10:00:00',
           locationId: 1234,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
       })
 
@@ -516,6 +531,7 @@ describe('placeOnReportService', () => {
         4,
         '2021-11-09T13:55:34.143Z',
         12123123,
+        '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         user,
         '2021-11-10T13:55:34.143Z'
       )
@@ -524,6 +540,7 @@ describe('placeOnReportService', () => {
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
         dateTimeOfDiscovery: '2021-11-10T13:55:34.143Z',
         locationId: 12123123,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         removeExistingOffences: false,
       })
     })

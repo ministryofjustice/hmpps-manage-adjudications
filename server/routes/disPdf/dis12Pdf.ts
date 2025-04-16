@@ -61,7 +61,8 @@ export default class Dis12Pdf {
         chargeNumber,
         adjudicationDetails,
         offences,
-        nextHearingDateTime
+        nextHearingDateTime,
+        reportedAdjudication.createdOnBehalfOfOfficer
       )
 
       res.renderPdf(
