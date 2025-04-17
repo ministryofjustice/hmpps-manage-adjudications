@@ -69,7 +69,6 @@ import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
 import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
 import UserService from './userService'
-import logger from '../../logger'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -634,8 +633,6 @@ export default class ReportedAdjudicationsService {
 
     if (reportedAdjudication.issuingOfficer) {
       usernamesInPage.add(reportedAdjudication.issuingOfficer)
-    } else {
-      logger.error('No issuing officer: ', reportedAdjudication)
     }
 
     const issuingOfficerNamesAndUsernames =
