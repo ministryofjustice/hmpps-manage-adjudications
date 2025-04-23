@@ -150,11 +150,10 @@ export default class scheduleHearingRoutes {
     const { reportedAdjudication } = adjudication
     const [hearingToRender] = reportedAdjudication.hearings.filter(hearing => hearing.id === hearingId)
     const locationId = await this.locationService.getCorrespondingDpsLocationId(hearingToRender.locationId, user)
-    const locationUuid = await this.locationService.getIncidentLocation(hearingToRender.locationUuid, user)
     return {
       hearingDate: convertDateTimeStringToSubmittedDateTime(hearingToRender.dateTimeOfHearing),
       locationId, // TODO: MAP-2114: remove at a later date
-      locationUuid,
+      locationUuid: locationId,
       id: hearingToRender.id,
       hearingType: getRadioHearingType(hearingToRender.oicHearingType),
     }
