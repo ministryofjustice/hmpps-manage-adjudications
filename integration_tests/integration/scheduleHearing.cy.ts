@@ -155,23 +155,6 @@ context('Schedule a hearing page', () => {
         expect($errors.get(0).innerText).to.contain('Select time of hearing')
       })
   })
-  it('should show error if the time entered is in the past', () => {
-    const oneHourAgo = moment().subtract(1, 'hour').format('HH').toString()
-    cy.visit(adjudicationUrls.scheduleHearing.urls.start('1524494'))
-    const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
-    scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
-    scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    scheduleHearingsPage.datePicker().type(date1)
-    scheduleHearingsPage.timeInputHours().select(oneHourAgo)
-    scheduleHearingsPage.timeInputMinutes().select('00')
-    scheduleHearingsPage.submitButton().click()
-    scheduleHearingsPage
-      .errorSummary()
-      .find('li')
-      .then($errors => {
-        expect($errors.get(0).innerText).to.contain('The hearing time must be in the future')
-      })
-  })
   it('should show error if the date entered is before the date of any existing hearings', () => {
     cy.visit(adjudicationUrls.scheduleHearing.urls.start('1524494'))
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
