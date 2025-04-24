@@ -102,7 +102,6 @@ context('Confirm DIS forms have been issued', () => {
     cy.task('stubGetBatchPrisonerDetails', prisoners)
     cy.visit(adjudicationUrls.confirmDISFormsIssued.root)
     const confirmDISFormsIssued: ConfirmDISFormsIssuedPage = Page.verifyOnPage(ConfirmDISFormsIssuedPage)
-    console.log('confirmDISFormsIssued: ', confirmDISFormsIssued)
     confirmDISFormsIssued.noResultsMessage().should('not.exist')
     confirmDISFormsIssued
       .resultsTable()
