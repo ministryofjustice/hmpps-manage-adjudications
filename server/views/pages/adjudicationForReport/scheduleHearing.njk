@@ -75,8 +75,7 @@
         },
         classes: 'hmpps-datepicker--fixed-width',
         value: data.hearingDate.date,
-        errorMessage: errors | findErrors(['hearingDate[date]']),
-        minDate: today
+        errorMessage: errors | findErrors(['hearingDate[date]'])
     }) }}
 
     {{ timeSelect({
