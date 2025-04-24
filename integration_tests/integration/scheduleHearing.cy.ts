@@ -1,4 +1,3 @@
-import moment from 'moment'
 import ScheduleHearingPage from '../pages/scheduleHearing'
 import Page from '../pages/page'
 import adjudicationUrls from '../../server/utils/urlGenerator'
@@ -28,8 +27,7 @@ const singleHearing = [
 ]
 
 const date = formatDateForDatePicker(new Date('1/1/2030').toISOString(), 'short')
-const date1 = formatDateForDatePicker(new Date().toISOString(), 'short')
-const date2 = formatDateForDatePicker(new Date('12/31/2029').toISOString(), 'short')
+const date1 = formatDateForDatePicker(new Date('12/31/2029').toISOString(), 'short')
 
 context('Schedule a hearing page', () => {
   beforeEach(() => {
@@ -160,7 +158,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    scheduleHearingsPage.datePicker().type(date2)
+    scheduleHearingsPage.datePicker().type(date1)
     scheduleHearingsPage.timeInputHours().select('11')
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()
@@ -196,7 +194,7 @@ context('Schedule a hearing page', () => {
     const scheduleHearingsPage: ScheduleHearingPage = Page.verifyOnPage(ScheduleHearingPage)
     scheduleHearingsPage.hearingTypeRadios().find('input[value="GOV"]').click()
     scheduleHearingsPage.locationSelector().select('Houseblock 1')
-    scheduleHearingsPage.datePicker().type(date2)
+    scheduleHearingsPage.datePicker().type(date1)
     scheduleHearingsPage.timeInputHours().select('10')
     scheduleHearingsPage.timeInputMinutes().select('00')
     scheduleHearingsPage.submitButton().click()
