@@ -153,7 +153,7 @@ workflows:
       - hmpps/helm_lint:
           name: helm_lint
 
-      - request-dev-approval:
+      - request-dev-approval-from-branch:
           type: approval
           requires:
             - helm_lint
@@ -164,11 +164,15 @@ workflows:
               ignore:
                 - main
       - hmpps/build_docker:
-          name: build_docker_branch
+          name: build_docker_from_branch
           requires:
-            - request-dev-approval
+            - request-dev-approval-from-branch
+          filters:
+            branches:
+              ignore:
+                - main
       - hmpps/deploy_env:
-          name: deploy_dev_branch
+          name: deploy_dev_from_branch
           env: "dev"
           context: hmpps-common-vars
           filters:
@@ -179,7 +183,7 @@ workflows:
             - helm_lint
             - unit_test
             - integration_test
-            - build_docker_branch
+            - build_docker_from_branch
 
 
       - hmpps/build_docker:
@@ -202,16 +206,16 @@ workflows:
             - integration_test
             - build_docker
 
-      - request-preprod-branch-approval:
+      - request-preprod-approval-from-branch:
           type: approval
           requires:
-            - deploy_dev_branch
+            - deploy_dev_from_branch
           filters:
             branches:
               ignore:
                 - main
       - hmpps/deploy_env:
-          name: deploy_preprod_branch
+          name: deploy_preprod_from_branch
           env: "preprod"
           context:
             - hmpps-common-vars
@@ -221,7 +225,7 @@ workflows:
               ignore:
                 - main
           requires:
-            - request-preprod-branch-approval
+            - request-preprod-approval-from-branch
 
       - request-preprod-approval:
           type: approval
