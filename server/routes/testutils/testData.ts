@@ -51,6 +51,7 @@ export default class TestData {
     dateTimeOfDiscovery = dateTimeOfIncident,
     handoverDeadline,
     locationId = 1,
+    locationUuid = '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     incidentStatement = {} as IncidentStatement,
     offenceDetails = {} as OffenceDetails,
     incidentRole = {} as IncidentRole,
@@ -82,6 +83,7 @@ export default class TestData {
     dateTimeOfDiscovery?: string
     handoverDeadline?: string
     locationId?: number
+    locationUuid?: string
     incidentStatement?: IncidentStatement
     offenceDetails?: OffenceDetails
     incidentRole?: IncidentRole
@@ -115,6 +117,7 @@ export default class TestData {
         dateTimeOfDiscovery,
         handoverDeadline,
         locationId,
+        locationUuid,
       },
       incidentStatement,
       offenceDetails,
@@ -151,6 +154,7 @@ export default class TestData {
     prisonerNumber,
     gender = PrisonerGender.MALE,
     locationId = 1,
+    locationUuid = '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     dateTimeOfIncident = '2023-01-01T06:00:00',
     dateTimeOfDiscovery = dateTimeOfIncident,
     offenceDetails = {} as OffenceDetails,
@@ -171,6 +175,7 @@ export default class TestData {
     prisonerNumber: string
     gender?: PrisonerGender
     locationId?: number
+    locationUuid?: string
     dateTimeOfIncident?: string
     dateTimeOfDiscovery?: string
     offenceDetails?: OffenceDetails
@@ -194,6 +199,7 @@ export default class TestData {
       gender,
       incidentDetails: {
         locationId,
+        locationUuid,
         dateTimeOfIncident,
         dateTimeOfDiscovery,
         handoverDeadline: moment(dateTimeOfDiscovery).add(2, 'days').format('YYYY-MM-DDTHH:mm'),
@@ -217,24 +223,28 @@ export default class TestData {
     return [
       {
         locationId: 25538,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-1',
         userDescription: 'Houseblock 1',
       },
       {
         locationId: 25655,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-2',
         userDescription: 'Houseblock 2',
       },
       {
         locationId: 26956,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-RECEP',
         userDescription: 'Reception',
       },
       {
         locationId: 27102,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-MCASU',
         userDescription: 'Segregation MPU',
@@ -269,24 +279,28 @@ export default class TestData {
     return [
       {
         locationId: 'location-1',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-1',
         userDescription: 'Houseblock 1',
       },
       {
         locationId: 'location-2',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-2',
         userDescription: 'Houseblock 2',
       },
       {
         locationId: 'location-recep',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-RECEP',
         userDescription: 'Reception',
       },
       {
         locationId: 'location-seg',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-MCASU',
         userDescription: 'Segregation MPU',
@@ -313,6 +327,7 @@ export default class TestData {
     outcome,
     id = 101,
     locationId = 775,
+    locationUuid = '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     oicHearingType = OicHearingType.GOV_ADULT,
     agencyId = 'MDI',
   }: {
@@ -320,12 +335,14 @@ export default class TestData {
     outcome?: HearingOutcomeResult
     id?: number
     locationId?: number
+    locationUuid?: string
     oicHearingType?: OicHearingType
     agencyId?: string
   }): HearingDetails => {
     return {
       id,
       locationId,
+      locationUuid,
       dateTimeOfHearing,
       oicHearingType,
       agencyId,

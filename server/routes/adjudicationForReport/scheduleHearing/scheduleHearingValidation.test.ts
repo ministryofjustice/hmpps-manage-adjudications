@@ -94,20 +94,6 @@ describe('validateForm', () => {
         },
       ])
     })
-    it('shows error if a time in the past is entered', () => {
-      expect(
-        validateForm({
-          hearingDate: { date: '01/11/2022', time: { hour: '09', minute: '00' } },
-          locationId: 'location-id-1',
-          hearingType: OicHearingType.GOV_ADULT as string,
-        })
-      ).toEqual([
-        {
-          href: '#hearingDate[time][hour]',
-          text: 'The hearing time must be in the future',
-        },
-      ])
-    })
     it('shows error if no hearing type is entered', () => {
       expect(
         validateForm({

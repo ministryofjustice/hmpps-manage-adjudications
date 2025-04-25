@@ -67,3 +67,24 @@
     border-color: #d53880;
   }
 }
+
+.moj-alert {
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+  display: grid;
+  margin-bottom: 30px;
+  grid-template-columns: min-content fit-content(960px);
+  padding: 10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0);
+  border-image: initial;
+  background: rgb(255, 255, 255);
+  gap: 10px;
+}
+
+.moj-alert--information {
+  color: rgb(29, 112, 184);
+  border-color: rgb(29, 112, 184);
+}

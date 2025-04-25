@@ -93,7 +93,8 @@ describe('POST edit existing hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.edit('1524494', 101))
       .send({
         hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
-        locationId: 27008,
+        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'GOV',
       })
       .expect(302)
@@ -103,6 +104,7 @@ describe('POST edit existing hearing', () => {
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
           '1524494',
           27008,
+          '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-04T10:00',
           OicHearingType.GOV_ADULT as string,
           expect.anything()
@@ -117,7 +119,8 @@ describe('POST edit existing hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.edit('1524494', 101))
       .send({
         hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
-        locationId: 27008,
+        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'IND_ADJ',
       })
       .expect(302)
@@ -127,6 +130,7 @@ describe('POST edit existing hearing', () => {
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
           '1524494',
           27008,
+          '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-04T10:00',
           OicHearingType.INAD_ADULT as string,
           expect.anything()

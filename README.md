@@ -29,6 +29,7 @@ NOMIS_USER_API_URL=https://nomis-user-dev.aks-dev-1.studio-hosting.service.justi
 FRONTEND_COMPONENT_API_URL=https://frontend-components-dev.hmpps.service.justice.gov.uk
 DATA_INSIGHTS_API_URL=https://adjudications-insights-api-dev.hmpps.service.justice.gov.uk
 ENVIRONMENT_NAME=DEV
+REDIS_HOST=localhost
 ```
 
 To start the main services excluding the manage adjudications app:

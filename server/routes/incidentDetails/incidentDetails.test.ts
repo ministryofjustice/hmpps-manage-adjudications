@@ -71,6 +71,7 @@ describe('POST /incident-details', () => {
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
         discoveryRadioSelected: 'Yes',
@@ -84,6 +85,7 @@ describe('POST /incident-details', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
         locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         discoveryRadioSelected: 'Yes',
       })
       .expect('Content-Type', /html/)
@@ -100,6 +102,7 @@ describe('POST /incident-details', () => {
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         discoveryDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
         discoveryRadioSelected: 'Yes',
@@ -117,7 +120,8 @@ describe('POST /incident-details', () => {
       .send({
         incidentDate: { date: '26/10/2021', time: { hour: '13', minute: '30' } },
         discoveryDate: { date: '', time: { hour: '', minute: '' } },
-        locationId: 2,
+        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
         discoveryRadioSelected: 'Yes',
@@ -126,6 +130,7 @@ describe('POST /incident-details', () => {
         expect(placeOnReportService.startNewDraftAdjudication).toBeCalledWith(
           '2021-10-26T13:30',
           2,
+          '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           'G6415GD',
           expect.anything(),
           PrisonerGender.MALE,
@@ -149,7 +154,8 @@ describe('POST /incident-details', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
+        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
         discoveryRadioSelected: 'Yes',
@@ -161,6 +167,7 @@ describe('POST /incident-details', () => {
         expect(placeOnReportService.startNewDraftAdjudication).toBeCalledWith(
           '2021-10-27T13:30',
           2,
+          '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           'G6415GD',
           expect.anything(),
           PrisonerGender.MALE,

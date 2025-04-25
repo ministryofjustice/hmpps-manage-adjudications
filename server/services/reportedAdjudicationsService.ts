@@ -628,6 +628,47 @@ export default class ReportedAdjudicationsService {
     }
   }
 
+  async handleDisIssueHistoryFormatting(reportedAdjudication: ReportedAdjudication, user: User) {
+    const usernamesInPage = new Set<string>()
+
+    if (reportedAdjudication.issuingOfficer) {
+      usernamesInPage.add(reportedAdjudication.issuingOfficer)
+    }
+
+    const issuingOfficerNamesAndUsernames =
+      (await Promise.all(
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+      )) || []
+
+    const issuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
+    const issuingOfficerName = issuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
+    const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
+
+    const disIssueHistory = await this.formatDisIssueHistory(reportedAdjudication, issuingOfficerNameByUsernameMap)
+    return [
+      {
+        issuingOfficer,
+        formattedDateTimeOfIssue: formatTimestampToDate(reportedAdjudication.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
+        disIssueHistory,
+      },
+    ]
+  }
+
+  formatDisIssueHistory(
+    adjudicationInfo: ReportedAdjudication | ConfirmIssueInfo,
+    issuingOfficerNameByUsernameMap: Map<string, string>
+  ) {
+    const formattedDisIssueHistory: FormattedDisIssue[] = []
+    adjudicationInfo.disIssueHistory.map(disIssue => {
+      const disIssueOfficerName = issuingOfficerNameByUsernameMap.get(disIssue.issuingOfficer)
+      return formattedDisIssueHistory.push({
+        issuingOfficer: getFormattedOfficerName(disIssueOfficerName && convertToTitleCase(disIssueOfficerName)) || '',
+        formattedDateTimeOfIssue: formatTimestampToDate(disIssue.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
+      })
+    })
+    return formattedDisIssueHistory
+  }
+
   enhanceAdjudicationWithIssuingDetails(
     adjudicationInfo: ReportedAdjudication | ConfirmIssueInfo,
     prisonerResult: PrisonerSimpleResult,
@@ -650,14 +691,7 @@ export default class ReportedAdjudicationsService {
       )
     }
 
-    const formattedDisIssueHistory: FormattedDisIssue[] = []
-    adjudicationInfo.disIssueHistory.map(disIssue => {
-      const disIssueOfficerName = issuingOfficerNameByUsernameMap.get(disIssue.issuingOfficer)
-      return formattedDisIssueHistory.push({
-        issuingOfficer: getFormattedOfficerName(disIssueOfficerName && convertToTitleCase(disIssueOfficerName)) || '',
-        formattedDateTimeOfIssue: formatTimestampToDate(disIssue.dateTimeOfIssue, 'D MMMM YYYY - HH:mm'),
-      })
-    })
+    const formattedDisIssueHistory = this.formatDisIssueHistory(adjudicationInfo, issuingOfficerNameByUsernameMap)
 
     const dateTimeOfDiscovery =
       (adjudicationInfo as ReportedAdjudication).incidentDetails?.dateTimeOfDiscovery ||
@@ -908,13 +942,15 @@ export default class ReportedAdjudicationsService {
 
   async scheduleHearing(
     chargeNumber: string,
-    locationId: number,
+    locationId: number, // TODO: MAP-2114: remove at a later date
+    locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,
     user: User
   ) {
     const dataToSend = {
       locationId,
+      locationUuid,
       dateTimeOfHearing,
       oicHearingType,
     }
@@ -923,13 +959,15 @@ export default class ReportedAdjudicationsService {
 
   async rescheduleHearing(
     chargeNumber: string,
-    locationId: number,
+    locationId: number, // TODO: MAP-2114: remove at a later date
+    locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,
     user: User
   ) {
     const dataToSend = {
       locationId,
+      locationUuid,
       dateTimeOfHearing,
       oicHearingType,
     }

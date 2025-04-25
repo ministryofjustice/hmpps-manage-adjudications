@@ -19,6 +19,7 @@ const draftAdjudication = (statement: { statement: string; completed: boolean })
     prisonerNumber: 'A7937DY',
     incidentDetails: {
       locationId: 1,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       dateTimeOfIncident: '2023-01-01T06:00:00',
     },
     incidentStatement: statement,

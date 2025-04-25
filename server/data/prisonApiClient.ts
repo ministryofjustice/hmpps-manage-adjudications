@@ -117,7 +117,6 @@ export default class PrisonApiClient {
       path: `/api/bookings/offenders?activeOnly=false`,
       data: prisonerNumbers,
     })
-
     return result.map(_ => plainToClass(PrisonerResult, _, { excludeExtraneousValues: false }))
   }
 

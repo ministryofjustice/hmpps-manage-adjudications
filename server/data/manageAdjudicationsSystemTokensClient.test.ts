@@ -94,6 +94,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
       }
       const details = {
         locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         incidentRole: {
@@ -222,6 +223,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
     const editedDetails = {
       dateTimeOfIncident: '2021-11-04T09:21:00.00',
       locationId: 23424,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       incidentRole: {
         roleCode: '25b',
         associatedPrisonersNumber: 'B2345BB',
