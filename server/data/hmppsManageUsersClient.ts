@@ -46,8 +46,13 @@ export default class HmppsManageUsersClient {
     return this.restClient(token).get({ path: '/users/me' })
   }
 
-  getUserFromUsername(username: string, token: string): Promise<User> {
-    return this.restClient(token).get({ path: `/users/${username}` })
+  async getUserFromUsername(username: string, token: string): Promise<User | null> {
+    try {
+      return await this.restClient(token).get({ path: `/users/${username}` })
+    } catch (error) {
+      logger.error(`Error fetching user "${username}": ${error.message}`)
+      return null
+    }
   }
 
   getUsersFromName(name: string, token: string): Promise<NomisUserResponse> {
