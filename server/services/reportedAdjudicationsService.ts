@@ -69,7 +69,6 @@ import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
 import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
 import UserService from './userService'
-import logger from '../../logger'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -108,18 +107,9 @@ export default class ReportedAdjudicationsService {
     if (reportedAdjudication.status === ReportedAdjudicationStatus.AWAITING_REVIEW)
       return { reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status) }
 
-    let reviewingOfficer
-
-    if (reportedAdjudication.reviewedByUserId) {
-      try {
-        reviewingOfficer = await this.hmppsManageUsersClient.getUserFromUsername(
-          reportedAdjudication.reviewedByUserId,
-          user.token
-        )
-      } catch (e) {
-        logger.error(`Failed to fetch reviewing officer: ${e.message}`)
-      }
-    }
+    const reviewingOfficer =
+      reportedAdjudication.reviewedByUserId &&
+      (await this.hmppsManageUsersClient.getUserFromUsername(reportedAdjudication.reviewedByUserId, user.token))
 
     const getReasonTitle = (status: ReportedAdjudicationStatus) => {
       switch (status) {
@@ -263,7 +253,7 @@ export default class ReportedAdjudicationsService {
         lastHearing.outcome.adjudicator,
         user.token
       )
-      return adjudicatorUser.name
+      return adjudicatorUser?.name
     } catch {
       return null
     }
@@ -311,7 +301,7 @@ export default class ReportedAdjudicationsService {
       statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
       incidentLocationName: location.localName,
       incidentAgencyName: agencyDescription.description,
-      reportingOfficer: getFormattedOfficerName(reporter.name),
+      reportingOfficer: getFormattedOfficerName(reporter?.name),
       prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
       prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
       incidentDate: adjudicationData.reportedAdjudication.incidentDetails.dateTimeOfIncident,
@@ -342,7 +332,7 @@ export default class ReportedAdjudicationsService {
       prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
       prisonerFirstName: prisoner.firstName,
       prisonerLastName: prisoner.lastName,
-      reporter: reporter.name,
+      reporter: reporter?.name,
     }
   }
 
@@ -396,7 +386,9 @@ export default class ReportedAdjudicationsService {
       (await Promise.all(
         [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
-    const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
+    const reporterNameByUsernameMap = new Map(
+      reporterNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+    )
 
     const uniqueAgencyIds = new Set(pageResponse.content.map(adj => adj.originatingAgencyId))
     const agencyIdsAndNames =
@@ -447,7 +439,9 @@ export default class ReportedAdjudicationsService {
       (await Promise.all(
         [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
-    const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
+    const reporterNameByUsernameMap = new Map(
+      reporterNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+    )
 
     return this.mapData(pageResponse, reportedAdjudication => {
       const enhancedAdjudication = this.enhanceReportedAdjudication(
@@ -500,7 +494,9 @@ export default class ReportedAdjudicationsService {
       (await Promise.all(
         [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
-    const issuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
+    const issuingOfficerNameByUsernameMap = new Map(
+      issuingOfficerNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+    )
 
     return reportedAdjudications.map(reportedAdjudication => {
       return this.enhanceAdjudicationWithIssuingDetails(
@@ -650,7 +646,10 @@ export default class ReportedAdjudicationsService {
         [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
 
-    const issuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
+    const issuingOfficerNameByUsernameMap = new Map(
+      issuingOfficerNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+    )
+
     const issuingOfficerName = issuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
     const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
 
@@ -782,7 +781,7 @@ export default class ReportedAdjudicationsService {
     const reportDetails = [
       {
         label: 'Reporting officer',
-        value: formatReportingOfficer(reporter.name, adjudication),
+        value: formatReportingOfficer(reporter?.name, adjudication),
         changeLinkHref: changeReportingOfficerLink,
         dataQa: changeReportingOfficerDataQa,
       },
