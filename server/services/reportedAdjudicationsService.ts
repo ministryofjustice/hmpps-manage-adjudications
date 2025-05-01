@@ -295,10 +295,18 @@ export default class ReportedAdjudicationsService {
 
     const agencyDescription = await this.locationService.getAgency(location.prisonId, user)
 
-    const reporter = await this.hmppsManageUsersClient.getUserFromUsername(
-      adjudicationData.reportedAdjudication.createdByUserId,
-      user.token
-    )
+    let reporter
+
+    try {
+      reporter = await this.hmppsManageUsersClient.getUserFromUsername(
+        adjudicationData.reportedAdjudication.createdByUserId,
+        user.token
+      )
+    } catch (error) {
+      logger.error(
+        `Failed to fetch reporter for userId "${adjudicationData.reportedAdjudication.createdByUserId}": ${error.message}`
+      )
+    }
 
     return {
       reportExpirationDateTime: adjudicationData.reportedAdjudication.incidentDetails.handoverDeadline,
@@ -311,7 +319,7 @@ export default class ReportedAdjudicationsService {
       statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
       incidentLocationName: location.localName,
       incidentAgencyName: agencyDescription.description,
-      reportingOfficer: getFormattedOfficerName(reporter.name),
+      reportingOfficer: getFormattedOfficerName(reporter?.name),
       prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
       prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
       incidentDate: adjudicationData.reportedAdjudication.incidentDetails.dateTimeOfIncident,
@@ -342,7 +350,7 @@ export default class ReportedAdjudicationsService {
       prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
       prisonerFirstName: prisoner.firstName,
       prisonerLastName: prisoner.lastName,
-      reporter: reporter.name,
+      reporter: reporter?.name,
     }
   }
 
@@ -394,7 +402,14 @@ export default class ReportedAdjudicationsService {
     const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
     const reporterNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(async username => {
+          try {
+            return await this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
+          } catch (error) {
+            logger.error(`Failed to fetch reporter for username "${username}": ${error.message}`)
+            return null
+          }
+        })
       )) || []
     const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
 
@@ -445,7 +460,14 @@ export default class ReportedAdjudicationsService {
     const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
     const reporterNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(async username => {
+          try {
+            return await this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
+          } catch (error) {
+            logger.error(`Failed to fetch user ${username}: ${error.message}`)
+            return null
+          }
+        })
       )) || []
     const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
 
@@ -498,7 +520,14 @@ export default class ReportedAdjudicationsService {
     )
     const issuingOfficerNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(async username => {
+          try {
+            return await this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
+          } catch (error) {
+            logger.error(`Failed to fetch issuing officer ${username}: ${error.message}`)
+            return null
+          }
+        })
       )) || []
     const issuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
 
@@ -647,7 +676,14 @@ export default class ReportedAdjudicationsService {
 
     const issuingOfficerNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(async username => {
+          try {
+            return await this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
+          } catch (error) {
+            logger.error(`Failed to fetch issuing officer for username "${username}": ${error.message}`)
+            return null
+          }
+        })
       )) || []
 
     const issuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
@@ -741,7 +777,13 @@ export default class ReportedAdjudicationsService {
     createdDateTime?: string
   ): Promise<PrisonerReport> {
     const userId = adjudication.startedByUserId ? adjudication.startedByUserId : adjudication.createdByUserId
-    const reporter = await this.hmppsManageUsersClient.getUserFromUsername(userId, user.token)
+    let reporter = null
+
+    try {
+      reporter = await this.hmppsManageUsersClient.getUserFromUsername(userId, user.token)
+    } catch (error) {
+      logger.error(`Failed to fetch reporter for userId "${userId}": ${error.message}`)
+    }
 
     const dateTime = adjudication.incidentDetails.dateTimeOfIncident
     const date = getDate(dateTime, 'D MMMM YYYY')
@@ -782,7 +824,7 @@ export default class ReportedAdjudicationsService {
     const reportDetails = [
       {
         label: 'Reporting officer',
-        value: formatReportingOfficer(reporter.name, adjudication),
+        value: formatReportingOfficer(reporter?.name, adjudication),
         changeLinkHref: changeReportingOfficerLink,
         dataQa: changeReportingOfficerDataQa,
       },
@@ -889,9 +931,15 @@ export default class ReportedAdjudicationsService {
     })
     const usernamesAndNames =
       (await Promise.all(
-        [...governorUsernames].map(
-          username => username && this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
-        )
+        [...governorUsernames].map(async username => {
+          if (!username) return null
+          try {
+            return await this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
+          } catch (error) {
+            logger.error(`Failed to fetch governor user "${username}": ${error.message}`)
+            return null
+          }
+        })
       )) || []
     return new Map(usernamesAndNames.map(name => [name?.username, name?.name]))
   }
