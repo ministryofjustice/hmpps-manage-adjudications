@@ -25,7 +25,17 @@
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h1 class="govuk-heading-l">{{ title }}</h1>
       </legend>
-      {% include "../partials/prisonerSearchForm.njk" %}
+      {% if forbidden %}
+        <p class="govuk-body">You do not have permission to search outside of your establishment.</p>
+        <p class="govuk-body">
+          {{ govukButton({
+            text: "Continue",
+            href: "/place-a-prisoner-on-report"
+          }) }}
+        </p>
+      {% else %}
+        {% include "../partials/prisonerSearchForm.njk" %}
+      {% endif %}
     </fieldset>
   </div>
 

@@ -77,6 +77,10 @@ class MockUserService extends UserService {
     super(undefined, undefined)
   }
 
+  async getUserRoles() {
+    return ['GLOBAL_SEARCH']
+  }
+
   async getUser(token: string) {
     return {
       token,
