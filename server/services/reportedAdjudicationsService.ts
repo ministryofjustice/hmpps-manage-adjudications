@@ -69,6 +69,7 @@ import { PunishmentType } from '../data/PunishmentResult'
 import { EstablishmentInformation } from '../@types/template'
 import { AdjudicationHistoryBookingType } from '../data/AdjudicationHistoryData'
 import UserService from './userService'
+import logger from '../../logger'
 
 function getNonEnglishLanguage(primaryLanguage: string): string {
   if (!primaryLanguage || primaryLanguage === 'English') {
@@ -107,9 +108,18 @@ export default class ReportedAdjudicationsService {
     if (reportedAdjudication.status === ReportedAdjudicationStatus.AWAITING_REVIEW)
       return { reviewStatus: reportedAdjudicationStatusDisplayName(reportedAdjudication.status) }
 
-    const reviewingOfficer =
-      reportedAdjudication.reviewedByUserId &&
-      (await this.hmppsManageUsersClient.getUserFromUsername(reportedAdjudication.reviewedByUserId, user.token))
+    let reviewingOfficer
+
+    if (reportedAdjudication.reviewedByUserId) {
+      try {
+        reviewingOfficer = await this.hmppsManageUsersClient.getUserFromUsername(
+          reportedAdjudication.reviewedByUserId,
+          user.token
+        )
+      } catch (e) {
+        logger.error(`Failed to fetch reviewing officer: ${e.message}`)
+      }
+    }
 
     const getReasonTitle = (status: ReportedAdjudicationStatus) => {
       switch (status) {
