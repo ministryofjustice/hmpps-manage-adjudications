@@ -253,7 +253,7 @@ export default class ReportedAdjudicationsService {
         lastHearing.outcome.adjudicator,
         user.token
       )
-      return adjudicatorUser.name
+      return adjudicatorUser?.name
     } catch {
       return null
     }
@@ -301,7 +301,7 @@ export default class ReportedAdjudicationsService {
       statement: adjudicationData.reportedAdjudication.incidentStatement.statement,
       incidentLocationName: location.localName,
       incidentAgencyName: agencyDescription.description,
-      reportingOfficer: getFormattedOfficerName(reporter.name),
+      reportingOfficer: getFormattedOfficerName(reporter?.name),
       prisonerLivingUnitName: prisoner.assignedLivingUnit.description,
       prisonerAgencyName: prisoner.assignedLivingUnit.agencyName,
       incidentDate: adjudicationData.reportedAdjudication.incidentDetails.dateTimeOfIncident,
@@ -332,7 +332,7 @@ export default class ReportedAdjudicationsService {
       prisonerNumber: adjudicationData.reportedAdjudication.prisonerNumber,
       prisonerFirstName: prisoner.firstName,
       prisonerLastName: prisoner.lastName,
-      reporter: reporter.name,
+      reporter: reporter?.name,
     }
   }
 
@@ -386,7 +386,9 @@ export default class ReportedAdjudicationsService {
       (await Promise.all(
         [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
-    const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
+    const reporterNameByUsernameMap = new Map(
+      reporterNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+    )
 
     const uniqueAgencyIds = new Set(pageResponse.content.map(adj => adj.originatingAgencyId))
     const agencyIdsAndNames =
@@ -437,7 +439,9 @@ export default class ReportedAdjudicationsService {
       (await Promise.all(
         [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
-    const reporterNameByUsernameMap = new Map(reporterNamesAndUsernames.map(u => [u.username, u.name]))
+    const reporterNameByUsernameMap = new Map(
+      reporterNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+    )
 
     return this.mapData(pageResponse, reportedAdjudication => {
       const enhancedAdjudication = this.enhanceReportedAdjudication(
@@ -490,7 +494,9 @@ export default class ReportedAdjudicationsService {
       (await Promise.all(
         [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
-    const issuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
+    const issuingOfficerNameByUsernameMap = new Map(
+      issuingOfficerNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+    )
 
     return reportedAdjudications.map(reportedAdjudication => {
       return this.enhanceAdjudicationWithIssuingDetails(
@@ -640,7 +646,10 @@ export default class ReportedAdjudicationsService {
         [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
       )) || []
 
-    const issuingOfficerNameByUsernameMap = new Map(issuingOfficerNamesAndUsernames.map(u => [u.username, u.name]))
+    const issuingOfficerNameByUsernameMap = new Map(
+      issuingOfficerNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+    )
+
     const issuingOfficerName = issuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
     const issuingOfficer = getFormattedOfficerName(issuingOfficerName && convertToTitleCase(issuingOfficerName)) || ''
 
@@ -772,7 +781,7 @@ export default class ReportedAdjudicationsService {
     const reportDetails = [
       {
         label: 'Reporting officer',
-        value: formatReportingOfficer(reporter.name, adjudication),
+        value: formatReportingOfficer(reporter?.name, adjudication),
         changeLinkHref: changeReportingOfficerLink,
         dataQa: changeReportingOfficerDataQa,
       },
