@@ -77,10 +77,8 @@
   <body>, to avoid blocking the initial render. #}
   <script type="module" src="/assets/govuk/govuk-frontend.min.js"></script>
 	<script src="/assets/js/main.js"></script>
-  <script type="module" src="/assets/govukFrontendInit.js"></script>
-  <script src="/assets/moj/all.js"></script>
+  <script type="module" src="/assets/frontendInit.js"></script>
   <script src="/assets/date-picker.js"></script>
-  <script src="/assets/mojFrontendInit.js"></script>
   {% if feComponents.jsIncludes %}
     {% for js in feComponents.jsIncludes %}
       <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
