@@ -29,7 +29,7 @@ beforeEach(() => {
     chargeNumber: '2',
     prisonerNumber: 'G6123VU',
     dateTimeOfIncident: '2021-11-15T11:45:00',
-    locationId: 27187,
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     otherData: {
       friendlyName: 'John Smith',
       displayName: 'Smith, John',
@@ -41,7 +41,7 @@ beforeEach(() => {
     chargeNumber: '1',
     prisonerNumber: 'G6174VU',
     dateTimeOfIncident: '2021-11-15T11:30:00',
-    locationId: 27187,
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     otherData: {
       displayName: 'Moriarty, James',
       friendlyName: 'James Moriarty',

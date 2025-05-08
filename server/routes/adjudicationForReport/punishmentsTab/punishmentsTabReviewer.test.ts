@@ -31,7 +31,7 @@ beforeEach(() => {
     hearing: testData.singleHearing({
       dateTimeOfHearing: '2023-01-23T17:00:00',
       id: 1,
-      locationId: 775,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       outcome: testData.hearingOutcome({
         code: HearingOutcomeCode.COMPLETE,
         optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },
@@ -71,6 +71,7 @@ describe('GET Punishments and damages tab', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
         chargeNumber: '1524493',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6415GD',
         dateTimeOfIncident: '2021-12-09T10:30:00',
         status: ReportedAdjudicationStatus.CHARGE_PROVED,
@@ -100,6 +101,7 @@ describe('GET Punishments and damages tab', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
         chargeNumber: '1524493',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6415GD',
         dateTimeOfIncident: '2021-12-09T10:30:00',
         status: ReportedAdjudicationStatus.QUASHED,

@@ -34,7 +34,11 @@ beforeEach(() => {
     stoppagePercentage: 25,
   })
   reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
-    testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' })
+    testData.singleHearing({
+      id: 100,
+      dateTimeOfHearing: '2022-11-03T11:00:00',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+    })
   )
 })
 

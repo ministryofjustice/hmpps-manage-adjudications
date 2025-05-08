@@ -25,6 +25,7 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   const reportedAdjudication = testData.reportedAdjudication({
     chargeNumber: '12345',
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     prisonerNumber: 'G7234VB',
     otherData: {
       displayName: 'Smith, James',

@@ -24,6 +24,7 @@ const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<Pri
 const testData = new TestData()
 
 const reportedAdjudication: ReportedAdjudication = testData.reportedAdjudication({
+  locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
   chargeNumber: '1524493',
   prisonerNumber: 'G6415GD',
 })

@@ -11,7 +11,7 @@ import {
   PrisonerGender,
   WitnessDetails,
 } from './DraftAdjudicationResult'
-import { LocationId } from './PrisonLocationResult'
+import { LocationUuid } from './PrisonLocationResult'
 import { HearingDetails, OutcomeHistory } from './HearingAndOutcomeResult'
 import { PunishmentComment, PunishmentDataWithSchedule } from './PunishmentResult'
 import { AdjudicationHistoryBookingType } from './AdjudicationHistoryData'
@@ -112,7 +112,7 @@ export type ReportedAdjudicationFilter = {
 export type ReportedAdjudicationDISFormFilter = {
   fromDate: moment.Moment
   toDate: moment.Moment
-  locationId: LocationId
+  locationUuid: LocationUuid
   issueStatus?: IssueStatus | IssueStatus[]
 }
 

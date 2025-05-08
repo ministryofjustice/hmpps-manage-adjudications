@@ -32,6 +32,7 @@ let app: Express
 const outcomeHistory = {
   hearing: testData.singleHearing({
     dateTimeOfHearing: '2023-03-10T22:00:00',
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
   }),
   outcome: {
     outcome: testData.outcome({ reason: NotProceedReason.ANOTHER_WAY, details: 'some details' }),
