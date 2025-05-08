@@ -54,16 +54,16 @@
 
       {{
       govukSelect({
-        id: 'locationId',
-        name: 'locationId',
+        id: 'locationUuid',
+        name: 'locationUuid',
         label: {
             text: 'Location of hearing',
             isPageHeading: false,
             classes: ''
         },
-        items: locations | toSelect('locationId', 'userDescription', data.locationId ),
+        items: locations | toSelect('locationUuid', 'userDescription', data.locationUuid ),
         classes: '',
-        errorMessage: 'locationId' | findError(errors)
+        errorMessage: 'locationUuid' | findError(errors)
       })
       }}
 
