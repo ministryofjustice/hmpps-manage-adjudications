@@ -26,6 +26,7 @@ beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 100,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       offenceDetails: {
         offenceCode: 1001,
@@ -41,6 +42,7 @@ beforeEach(() => {
   placeOnReportService.updateDraftIncidentRole.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 100,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       chargeNumber: '1524493',
     }),

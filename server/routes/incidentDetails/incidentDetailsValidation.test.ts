@@ -6,7 +6,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '23' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -20,7 +19,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { time: { hour: '12', minute: '23' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -36,7 +34,6 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { time: { hour: '12', minute: '23' } },
           discoveryDate: { date: '' },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -52,7 +49,6 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { time: { hour: '12', minute: '23' } },
           discoveryDate: { date: '', time: { hour: '', minute: '' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -68,7 +64,6 @@ describe('validateForm', () => {
         validateForm({
           incidentDate: { time: { hour: '', minute: '23' } },
           discoveryDate: { date: '20/12/2022', time: { hour: '', minute: '23' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -92,7 +87,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { minute: '23' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -107,7 +101,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '65', minute: '23' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -122,7 +115,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -137,7 +129,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '12', minute: '65' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -152,7 +143,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: {} },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -167,7 +157,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '8', minute: '30' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -182,7 +171,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '008', minute: '30' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -197,7 +185,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '1' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -212,7 +199,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '08', minute: '001' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -227,7 +213,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: 'lll', minute: '50' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -242,7 +227,6 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentDate: { date: '31/10/2021', time: { hour: '09', minute: 'fffff' } },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -262,7 +246,6 @@ describe('validateForm', () => {
             date: '04/11/2021',
             time: { hour: `09`, minute: `22` },
           },
-          locationId: 'location-id-1',
           locationUuid: 'location-uuid-1',
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
@@ -274,7 +257,7 @@ describe('validateForm', () => {
       })
     })
   })
-  describe('locationId', () => {
+  describe('locationUuid', () => {
     it('shows error if location is not selected', () => {
       expect(
         validateForm({
@@ -284,7 +267,7 @@ describe('validateForm', () => {
           discoveryRadioSelected: 'Yes',
         })
       ).toEqual({
-        href: '#locationId',
+        href: '#locationUuid',
         text: 'Select the location of the incident',
       })
     })

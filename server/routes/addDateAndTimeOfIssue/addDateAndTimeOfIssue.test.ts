@@ -21,7 +21,11 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService })
   reportedAdjudicationsService.issueDISForm.mockResolvedValue({
-    reportedAdjudication: testData.reportedAdjudication({ chargeNumber: '12345', prisonerNumber: 'G6123VU' }),
+    reportedAdjudication: testData.reportedAdjudication({
+      chargeNumber: '12345',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+      prisonerNumber: 'G6123VU',
+    }),
   })
 })
 

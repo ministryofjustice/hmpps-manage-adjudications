@@ -89,6 +89,7 @@ describe('PunishmentsService', () => {
       createPunishments.mockResolvedValue(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {
             punishments,
@@ -99,6 +100,7 @@ describe('PunishmentsService', () => {
       expect(result).toEqual(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {
             punishments,
@@ -121,6 +123,7 @@ describe('PunishmentsService', () => {
       createPunishments.mockResolvedValue(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {
             punishments: [punishments],
@@ -131,6 +134,7 @@ describe('PunishmentsService', () => {
       expect(result).toEqual(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {
             punishments: [punishments],
@@ -159,6 +163,7 @@ describe('PunishmentsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {
             punishments,
@@ -194,6 +199,7 @@ describe('PunishmentsService', () => {
       createPunishmentComment.mockResolvedValue(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {
             punishmentComments,
@@ -204,6 +210,7 @@ describe('PunishmentsService', () => {
       expect(result).toEqual(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {
             punishmentComments,
@@ -225,6 +232,7 @@ describe('PunishmentsService', () => {
       amendPunishmentComment.mockResolvedValue(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {
             punishmentComments,
@@ -235,6 +243,7 @@ describe('PunishmentsService', () => {
       expect(result).toEqual(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {
             punishmentComments,
@@ -248,6 +257,7 @@ describe('PunishmentsService', () => {
       removePunishmentComment.mockResolvedValue(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {},
         })
@@ -256,6 +266,7 @@ describe('PunishmentsService', () => {
       expect(result).toEqual(
         testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           otherData: {},
         })
@@ -267,6 +278,7 @@ describe('PunishmentsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
         }),
@@ -278,11 +290,13 @@ describe('PunishmentsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2024-11-23T17:00:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
               oicHearingType: OicHearingType.GOV_ADULT,
               id: 69,
             }),
@@ -296,11 +310,13 @@ describe('PunishmentsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '100',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2024-11-23T17:00:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
               oicHearingType: OicHearingType.INAD_ADULT,
               id: 69,
             }),
@@ -316,6 +332,7 @@ describe('PunishmentsService', () => {
       getUserFromUsername.mockResolvedValue(testData.userFromUsername())
       const reportedAdjudication = testData.reportedAdjudication({
         chargeNumber: '100',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.CHARGE_PROVED,
         punishmentComments: [

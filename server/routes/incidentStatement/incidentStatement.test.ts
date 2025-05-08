@@ -18,7 +18,6 @@ const draftAdjudication = (statement: { statement: string; completed: boolean })
     chargeNumber: '123456',
     prisonerNumber: 'A7937DY',
     incidentDetails: {
-      locationId: 1,
       locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       dateTimeOfIncident: '2023-01-01T06:00:00',
     },
@@ -80,6 +79,7 @@ describe('POST /incident-statement', () => {
       placeOnReportService.addOrUpdateDraftIncidentStatement.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 1041,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A7937DY',
           incidentStatement: {
             statement: 'Lorem Ipsum',
@@ -101,8 +101,8 @@ describe('POST /incident-statement', () => {
       placeOnReportService.addOrUpdateDraftIncidentStatement.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 1041,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A7937DY',
-          locationId: 27022,
           dateTimeOfIncident: '2022-03-23T09:10:00',
           incidentStatement: {
             statement: 'Lorem Ipsum',

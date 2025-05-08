@@ -18,6 +18,7 @@ beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValueOnce({
     draftAdjudication: testData.draftAdjudication({
       id: 4490,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'A7937DY',
     }),
   })

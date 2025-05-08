@@ -27,6 +27,7 @@ beforeEach(() => {
   const adjudicationResponse = [
     testData.reportedAdjudication({
       chargeNumber: '12345',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G7234VB',
       otherData: {
         displayName: 'Smith, James',
@@ -34,6 +35,7 @@ beforeEach(() => {
     }),
     testData.reportedAdjudication({
       chargeNumber: '12345',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6123VU',
       otherData: {
         displayName: 'Tovey, Peter',
@@ -71,7 +73,7 @@ describe('GET /issue-DIS1-2', () => {
           adjudicationUrls.confirmDISFormsIssued.urls.filter({
             fromDate: '04/12/2022',
             toDate: '06/12/2022',
-            locationId: '722174',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           })
         )
         .expect('Content-Type', /html/)
@@ -104,25 +106,33 @@ describe('POST /issue-DIS1-2', () => {
   it('should use correct filter parameters from form - without location', () => {
     return request(app)
       .post(adjudicationUrls.confirmDISFormsIssued.root)
-      .send({ fromDate: { date: '04/12/2022' }, toDate: { date: '06/12/2022' }, locationId: null })
+      .send({ fromDate: { date: '04/12/2022' }, toDate: { date: '06/12/2022' }, locationUuid: null })
       .expect(
         'Location',
-        `${adjudicationUrls.confirmDISFormsIssued.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=`
+        `${adjudicationUrls.confirmDISFormsIssued.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationUuid=`
       )
   })
   it('should use correct filter parameters from form - with location', () => {
     return request(app)
       .post(adjudicationUrls.confirmDISFormsIssued.root)
-      .send({ fromDate: { date: '04/12/2022' }, toDate: { date: '06/12/2022' }, locationId: 722174 })
+      .send({
+        fromDate: { date: '04/12/2022' },
+        toDate: { date: '06/12/2022' },
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+      })
       .expect(
         'Location',
-        `${adjudicationUrls.confirmDISFormsIssued.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174`
+        `${adjudicationUrls.confirmDISFormsIssued.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationUuid=0194ac90-2def-7c63-9f46-b3ccc911fdff`
       )
   })
   it('should cause validation error if toDate is before fromDate', () => {
     return request(app)
       .post(adjudicationUrls.confirmDISFormsIssued.root)
-      .send({ fromDate: { date: '06/12/2022' }, toDate: { date: '04/12/2022' }, locationId: 722174 })
+      .send({
+        fromDate: { date: '06/12/2022' },
+        toDate: { date: '04/12/2022' },
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+      })
       .expect(res => {
         expect(res.text).toContain('Enter a date that is before or the same as the ‘date to’')
       })

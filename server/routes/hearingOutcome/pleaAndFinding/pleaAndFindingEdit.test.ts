@@ -32,7 +32,7 @@ beforeEach(() => {
     hearing: testData.singleHearing({
       dateTimeOfHearing: '2023-01-23T17:00:00',
       id: 1,
-      locationId: 775,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       outcome: testData.hearingOutcome({
         code: HearingOutcomeCode.COMPLETE,
         optionalItems: { plea: HearingOutcomePlea.GUILTY, finding: HearingOutcomeFinding.CHARGE_PROVED },

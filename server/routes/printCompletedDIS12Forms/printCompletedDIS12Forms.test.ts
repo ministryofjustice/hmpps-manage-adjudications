@@ -28,6 +28,7 @@ beforeEach(() => {
   const adjudicationResponse = [
     testData.reportedAdjudication({
       chargeNumber: '12345',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G7234VB',
       otherData: {
         displayName: 'Smith, James',
@@ -35,6 +36,7 @@ beforeEach(() => {
     }),
     testData.reportedAdjudication({
       chargeNumber: '23456',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6123VU',
       otherData: {
         displayName: 'Tovey, Peter',
@@ -72,7 +74,7 @@ describe('GET /print-completed-DIS-forms', () => {
           adjudicationUrls.printCompletedDisForms.urls.filter({
             fromDate: '06/12/2022',
             toDate: '07/12/2022',
-            locationId: '25655',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             issueStatus: allIssueStatuses,
           })
         )
@@ -108,12 +110,12 @@ describe('POST /issue-DIS1-2', () => {
       .send({
         fromDate: { date: '04/12/2022' },
         toDate: { date: '06/12/2022' },
-        locationId: null,
+        locationUuid: null,
         issueStatus: allIssueStatuses,
       })
       .expect(
         'Location',
-        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=&issueStatus=ISSUED&issueStatus=NOT_ISSUED`
+        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationUuid=&issueStatus=ISSUED&issueStatus=NOT_ISSUED`
       )
   })
   it('should use correct filter parameters from form - with location', () => {
@@ -122,12 +124,12 @@ describe('POST /issue-DIS1-2', () => {
       .send({
         fromDate: { date: '04/12/2022' },
         toDate: { date: '06/12/2022' },
-        locationId: 722174,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         issueStatus: allIssueStatuses,
       })
       .expect(
         'Location',
-        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174&issueStatus=ISSUED&issueStatus=NOT_ISSUED`
+        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationUuid=0194ac90-2def-7c63-9f46-b3ccc911fdff&issueStatus=ISSUED&issueStatus=NOT_ISSUED`
       )
   })
   it('should use correct filter parameters from form - with just ISSUED', () => {
@@ -136,12 +138,12 @@ describe('POST /issue-DIS1-2', () => {
       .send({
         fromDate: { date: '04/12/2022' },
         toDate: { date: '06/12/2022' },
-        locationId: 722174,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         issueStatus: IssueStatus.ISSUED,
       })
       .expect(
         'Location',
-        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174&issueStatus=ISSUED`
+        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationUuid=0194ac90-2def-7c63-9f46-b3ccc911fdff&issueStatus=ISSUED`
       )
   })
   it('should use correct filter parameters from form - with just NOT_ISSUED', () => {
@@ -150,12 +152,12 @@ describe('POST /issue-DIS1-2', () => {
       .send({
         fromDate: { date: '04/12/2022' },
         toDate: { date: '06/12/2022' },
-        locationId: 722174,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         issueStatus: IssueStatus.NOT_ISSUED,
       })
       .expect(
         'Location',
-        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174&issueStatus=NOT_ISSUED`
+        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationUuid=0194ac90-2def-7c63-9f46-b3ccc911fdff4&issueStatus=NOT_ISSUED`
       )
   })
   it('should cause validation error if toDate is before fromDate', () => {
@@ -164,7 +166,7 @@ describe('POST /issue-DIS1-2', () => {
       .send({
         fromDate: { date: '06/12/2022' },
         toDate: { date: '04/12/2022' },
-        locationId: 722174,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         issueStatus: allIssueStatuses,
       })
       .expect(res => {

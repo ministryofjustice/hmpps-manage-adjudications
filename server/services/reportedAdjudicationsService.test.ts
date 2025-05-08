@@ -151,6 +151,7 @@ describe('reportedAdjudicationsService', () => {
       const completedAdjudicationsContent = [
         testData.reportedAdjudication({
           chargeNumber: '2',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-01-01T11:45:00',
           incidentStatement: {
@@ -159,6 +160,7 @@ describe('reportedAdjudicationsService', () => {
         }),
         testData.reportedAdjudication({
           chargeNumber: '1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6174VU',
           dateTimeOfIncident: '2021-01-01T11:30:00',
           incidentStatement: {
@@ -203,6 +205,7 @@ describe('reportedAdjudicationsService', () => {
       const expectedAdjudicationContent = [
         testData.reportedAdjudication({
           chargeNumber: '2',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-01-01T11:45:00',
           dateTimeOfDiscovery: '2021-01-01T11:45:00',
@@ -226,6 +229,7 @@ describe('reportedAdjudicationsService', () => {
         }),
         testData.reportedAdjudication({
           chargeNumber: '1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6174VU',
           dateTimeOfIncident: '2021-01-01T11:30:00',
           dateTimeOfDiscovery: '2021-01-01T11:30:00',
@@ -266,6 +270,7 @@ describe('reportedAdjudicationsService', () => {
         getReportedAdjudication.mockResolvedValue({
           reportedAdjudication: testData.reportedAdjudication({
             chargeNumber: '123',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             prisonerNumber: 'A1234AA',
             dateTimeOfIncident: '2021-10-28T15:40:25.884',
             incidentStatement: {
@@ -349,6 +354,7 @@ describe('reportedAdjudicationsService', () => {
       beforeEach(() => {
         getReportedAdjudication.mockResolvedValue({
           reportedAdjudication: testData.reportedAdjudication({
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             chargeNumber: '123',
             prisonerNumber: 'A1234AA',
           }),
@@ -380,7 +386,6 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'A5041DY',
           dateTimeOfIncident: '2021-11-30T14:10:00',
           incidentStatement: { statement: 'Something happened' },
-          locationId: 27187,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
         testData.reportedAdjudication({
@@ -388,7 +393,6 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           incidentStatement: { statement: 'Something happened' },
-          locationId: 27187,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
       ]
@@ -429,7 +433,6 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'A5041DY',
           dateTimeOfIncident: '2021-11-30T14:10:00',
           incidentStatement: { statement: 'Something happened' },
-          locationId: 27187,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           otherData: {
             displayName: 'Willis, Michael',
@@ -450,7 +453,6 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-11-30T14:00:00',
           incidentStatement: { statement: 'Something happened' },
-          locationId: 27187,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           otherData: {
             displayName: 'Smith, Peter',
@@ -486,6 +488,7 @@ describe('reportedAdjudicationsService', () => {
           id: 10,
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-04T07:20:00',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement: 'Statement for a test',
           },
@@ -505,7 +508,6 @@ describe('reportedAdjudicationsService', () => {
         prisonerNumber: 'G6123VU',
         dateTimeOfIncident: '2021-11-16T07:21:00',
         dateTimeOfDiscovery: '2021-11-17T08:22:00',
-        locationId: 25538,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         incidentStatement: {
           statement: 'Statement for a test',
@@ -567,7 +569,6 @@ describe('reportedAdjudicationsService', () => {
         prisonerNumber: 'G6123VU',
         dateTimeOfIncident: '2021-11-16T07:21:00',
         dateTimeOfDiscovery: '2021-11-17T08:22:00',
-        locationId: 25538,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         incidentStatement: {
           statement: 'Statement for a test',
@@ -639,6 +640,7 @@ describe('reportedAdjudicationsService', () => {
     ) => {
       return testData.reportedAdjudication({
         chargeNumber: '123',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         status,
         otherData: {
@@ -763,9 +765,15 @@ describe('reportedAdjudicationsService', () => {
         reportedAdjudications: [
           testData.reportedAdjudication({
             chargeNumber: '1524493',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             prisonerNumber: 'G6123VU',
             dateTimeOfIncident: '2023-02-05T06:00:00',
-            hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+            hearings: [
+              testData.singleHearing({
+                dateTimeOfHearing: '2023-02-06T10:00:00',
+                locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+              }),
+            ],
           }),
         ],
       })
@@ -773,16 +781,23 @@ describe('reportedAdjudicationsService', () => {
       const defaultFilter: ReportedAdjudicationDISFormFilter = {
         fromDate: moment('03/02/2023', 'DD/MM/YYYY'),
         toDate: moment('05/02/2021', 'DD/MM/YYYY'),
-        locationId: null,
+        // TODO: set locationUUid as uuid string, not null
+        locationUuid: null,
         issueStatus: [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED],
       }
       const result = await service.getAdjudicationDISFormData(user, defaultFilter, false)
       expect(result).toEqual([
         testData.reportedAdjudication({
           chargeNumber: '1524493',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2023-02-05T06:00:00',
-          hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-02-06T10:00:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+            }),
+          ],
           otherData: {
             displayName: 'Smith, John',
             friendlyName: 'John Smith',
@@ -807,9 +822,15 @@ describe('reportedAdjudicationsService', () => {
         reportedAdjudications: [
           testData.reportedAdjudication({
             chargeNumber: '1524493',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             prisonerNumber: 'G6123VU',
             dateTimeOfIncident: '2023-02-05T06:00:00',
-            hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+            hearings: [
+              testData.singleHearing({
+                dateTimeOfHearing: '2023-02-06T10:00:00',
+                locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+              }),
+            ],
           }),
         ],
       })
@@ -818,16 +839,22 @@ describe('reportedAdjudicationsService', () => {
       const defaultFilter: ReportedAdjudicationDISFormFilter = {
         fromDate: moment('03/02/2023', 'DD/MM/YYYY'),
         toDate: moment('05/02/2021', 'DD/MM/YYYY'),
-        locationId: null,
+        locationUuid: null,
         issueStatus: [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED],
       }
       const result = await service.getAdjudicationDISFormData(user, defaultFilter, true)
       expect(result).toEqual([
         testData.reportedAdjudication({
           chargeNumber: '1524493',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2023-02-05T06:00:00',
-          hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-02-06T10:00:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+            }),
+          ],
           otherData: {
             displayName: 'Smith, John',
             friendlyName: 'John Smith',
@@ -852,9 +879,15 @@ describe('reportedAdjudicationsService', () => {
         reportedAdjudications: [
           testData.reportedAdjudication({
             chargeNumber: '1524493',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2023-02-05T06:00:00',
-            hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+            hearings: [
+              testData.singleHearing({
+                dateTimeOfHearing: '2023-02-06T10:00:00',
+                locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+              }),
+            ],
           }),
         ],
       })
@@ -862,16 +895,22 @@ describe('reportedAdjudicationsService', () => {
       const defaultFilter: ReportedAdjudicationDISFormFilter = {
         fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
         toDate: moment('01/01/2021', 'DD/MM/YYYY'),
-        locationId: null,
+        locationUuid: null,
         issueStatus: [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED],
       }
       const result = await service.getAdjudicationDISFormData(user, defaultFilter, false)
       expect(result).toEqual([
         testData.reportedAdjudication({
           chargeNumber: '1524493',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2023-02-05T06:00:00',
-          hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-02-06T10:00:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+            }),
+          ],
           otherData: {
             displayName: 'Unknown',
             friendlyName: 'Unknown',
@@ -896,9 +935,15 @@ describe('reportedAdjudicationsService', () => {
         reportedAdjudications: [
           testData.reportedAdjudication({
             chargeNumber: '1524493',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             prisonerNumber: 'G6415GD',
             dateTimeOfIncident: '2023-02-05T06:00:00',
-            hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+            hearings: [
+              testData.singleHearing({
+                dateTimeOfHearing: '2023-02-06T10:00:00',
+                locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+              }),
+            ],
           }),
         ],
       })
@@ -907,16 +952,22 @@ describe('reportedAdjudicationsService', () => {
       const defaultFilter: ReportedAdjudicationDISFormFilter = {
         fromDate: moment('01/01/2021', 'DD/MM/YYYY'),
         toDate: moment('01/01/2021', 'DD/MM/YYYY'),
-        locationId: null,
+        locationUuid: null,
         issueStatus: [IssueStatus.ISSUED, IssueStatus.NOT_ISSUED],
       }
       const result = await service.getAdjudicationDISFormData(user, defaultFilter, true)
       expect(result).toEqual([
         testData.reportedAdjudication({
           chargeNumber: '1524493',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2023-02-05T06:00:00',
-          hearings: [testData.singleHearing({ dateTimeOfHearing: '2023-02-06T10:00:00' })],
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2023-02-06T10:00:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+            }),
+          ],
           otherData: {
             displayName: 'Unknown',
             friendlyName: 'Unknown',
@@ -943,7 +994,6 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual([])
     })
     it('returns the correct data when everything is available except location name', async () => {
-      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-id')
       locationService.getIncidentLocation.mockResolvedValue({
         localName: '',
       } as LocationsApiLocation)
@@ -961,6 +1011,7 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfHearing: '2023-06-23T18:00:00',
             outcome: hearingOutcome,
             oicHearingType: OicHearingType.INAD_ADULT,
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           }),
 
           outcome: {
@@ -980,7 +1031,6 @@ describe('reportedAdjudicationsService', () => {
             convertedAdjudicator: null as void,
             dateTimeOfHearing: '2023-06-23T18:00:00',
             id: 101,
-            locationId: 'location-id',
             locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             locationName: 'Moorland (HMP & YOI)',
             oicHearingType: OicHearingType.INAD_ADULT,
@@ -1020,7 +1070,6 @@ describe('reportedAdjudicationsService', () => {
             dateTimeOfHearing: '2023-06-23T18:00:00',
             outcome: hearingOutcome,
             oicHearingType: OicHearingType.INAD_ADULT,
-            locationId: 25538,
             locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           }),
 
@@ -1033,7 +1082,6 @@ describe('reportedAdjudicationsService', () => {
           },
         },
       ]
-      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-id')
 
       const result = await service.getOutcomesHistory(history, user)
       const expectedResult = [
@@ -1043,7 +1091,6 @@ describe('reportedAdjudicationsService', () => {
             convertedAdjudicator: null as void,
             dateTimeOfHearing: '2023-06-23T18:00:00',
             id: 101,
-            locationId: 'location-id',
             locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             locationName: 'Houseblock 1, Moorland (HMP & YOI)',
             oicHearingType: OicHearingType.INAD_ADULT,
@@ -1069,6 +1116,7 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '123',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -1076,6 +1124,7 @@ describe('reportedAdjudicationsService', () => {
             {
               hearing: testData.singleHearing({
                 dateTimeOfHearing: '2023-03-10T22:00:00',
+                locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
                 outcome: testData.hearingOutcome({
                   code: HearingOutcomeCode.COMPLETE,
                 }),
@@ -1091,6 +1140,7 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual({
         hearing: testData.singleHearing({
           dateTimeOfHearing: '2023-03-10T22:00:00',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           outcome: testData.hearingOutcome({
             code: HearingOutcomeCode.COMPLETE,
           }),
@@ -1104,6 +1154,7 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '123',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -1111,6 +1162,7 @@ describe('reportedAdjudicationsService', () => {
             {
               hearing: testData.singleHearing({
                 dateTimeOfHearing: '2023-03-14T18:00:00',
+                locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
                 outcome: testData.hearingOutcome({
                   code: HearingOutcomeCode.REFER_INAD,
                 }),
@@ -1127,6 +1179,7 @@ describe('reportedAdjudicationsService', () => {
             {
               hearing: testData.singleHearing({
                 dateTimeOfHearing: '2023-03-15T15:00:00',
+                locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
                 outcome: testData.hearingOutcome({
                   code: HearingOutcomeCode.COMPLETE,
                 }),
@@ -1144,6 +1197,7 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual({
         hearing: testData.singleHearing({
           dateTimeOfHearing: '2023-03-15T15:00:00',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           outcome: testData.hearingOutcome({
             code: HearingOutcomeCode.COMPLETE,
           }),
@@ -1159,6 +1213,7 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '123',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.ADJOURNED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -1166,6 +1221,7 @@ describe('reportedAdjudicationsService', () => {
             {
               hearing: testData.singleHearing({
                 dateTimeOfHearing: '2023-03-10T22:00:00',
+                locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
                 outcome: testData.hearingOutcome({
                   code: HearingOutcomeCode.ADJOURN,
                 }),
@@ -1183,6 +1239,7 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '123',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -1195,15 +1252,18 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '123',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.SCHEDULED,
           dateTimeOfIncident: '2023-03-20T10:00:00',
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2023-03-21T10:05:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             }),
             testData.singleHearing({
               dateTimeOfHearing: '2023-03-21T19:00:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             }),
           ],
         }),
@@ -1212,6 +1272,7 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual(
         testData.singleHearing({
           dateTimeOfHearing: '2023-03-21T19:00:00',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         })
       )
     })
@@ -1221,6 +1282,7 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '123',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -1233,12 +1295,14 @@ describe('reportedAdjudicationsService', () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '123',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.UNSCHEDULED,
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2023-03-21T19:00:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
               id: 1,
             }),
           ],
@@ -1254,13 +1318,16 @@ describe('reportedAdjudicationsService', () => {
           prisonerNumber: 'A1234AA',
           status: ReportedAdjudicationStatus.SCHEDULED,
           dateTimeOfIncident: '2023-03-20T10:00:00',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2023-03-21T10:05:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
               id: 1,
             }),
             testData.singleHearing({
               dateTimeOfHearing: '2023-03-21T19:00:00',
+              locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
               id: 2,
             }),
           ],
@@ -1270,6 +1337,7 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual(
         testData.singleHearing({
           dateTimeOfHearing: '2023-03-21T10:05:00',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           id: 1,
         })
       )
@@ -1297,6 +1365,7 @@ describe('reportedAdjudicationsService', () => {
     it('if there is no overrideAgencyId, should return content as null', async () => {
       const reportedAdjudication = testData.reportedAdjudication({
         chargeNumber: '123',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         overrideAgencyId: null,
@@ -1316,6 +1385,7 @@ describe('reportedAdjudicationsService', () => {
 
       const reportedAdjudication = testData.reportedAdjudication({
         chargeNumber: '123',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         otherData: {
@@ -1332,6 +1402,7 @@ describe('reportedAdjudicationsService', () => {
     it('if the user is based in the agency where the adjudication has been transferred to', async () => {
       const reportedAdjudication = testData.reportedAdjudication({
         chargeNumber: '123',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.UNSCHEDULED,
         otherData: {
@@ -1358,6 +1429,7 @@ describe('reportedAdjudicationsService', () => {
     it('user based in override, transferableActionsAllowed false as hearing present without outcome', async () => {
       const reportedAdjudication = testData.reportedAdjudication({
         chargeNumber: '123',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         status: ReportedAdjudicationStatus.SCHEDULED,
         otherData: {
@@ -1454,7 +1526,13 @@ describe('reportedAdjudicationsService', () => {
         size: 20,
         number: 1,
         totalElements: 1,
-        content: [testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' })],
+        content: [
+          testData.reportedAdjudication({
+            chargeNumber: '1234',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+            prisonerNumber: 'G6123VU',
+          }),
+        ],
       })
       const result = await service.getAdjudicationHistory(
         prisoner,
@@ -1469,7 +1547,13 @@ describe('reportedAdjudicationsService', () => {
         size: 20,
         number: 1,
         totalElements: 1,
-        content: [testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' })],
+        content: [
+          testData.reportedAdjudication({
+            chargeNumber: '1234',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+            prisonerNumber: 'G6123VU',
+          }),
+        ],
       })
     })
     it('calls the all bookings endpoint if user selects all bookings', async () => {
@@ -1477,7 +1561,13 @@ describe('reportedAdjudicationsService', () => {
         size: 20,
         number: 1,
         totalElements: 1,
-        content: [testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' })],
+        content: [
+          testData.reportedAdjudication({
+            chargeNumber: '1234',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+            prisonerNumber: 'G6123VU',
+          }),
+        ],
       })
       const result = await service.getAdjudicationHistory(
         prisoner,
@@ -1492,7 +1582,13 @@ describe('reportedAdjudicationsService', () => {
         size: 20,
         number: 1,
         totalElements: 1,
-        content: [testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' })],
+        content: [
+          testData.reportedAdjudication({
+            chargeNumber: '1234',
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+            prisonerNumber: 'G6123VU',
+          }),
+        ],
       })
     })
   })

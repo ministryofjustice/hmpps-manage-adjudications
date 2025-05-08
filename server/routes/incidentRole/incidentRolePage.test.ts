@@ -26,8 +26,8 @@ beforeEach(() => {
     draftAdjudication: testData.draftAdjudication({
       id: 100,
       prisonerNumber: 'G6415GD',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       dateTimeOfIncident: '2022-03-23T09:10:00',
-      locationId: 2,
     }),
   })
 
@@ -35,8 +35,8 @@ beforeEach(() => {
     draftAdjudication: testData.draftAdjudication({
       id: 34,
       prisonerNumber: 'G6415GD',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       dateTimeOfIncident: '2022-03-23T09:10:00',
-      locationId: 2,
     }),
   })
 })
@@ -130,6 +130,7 @@ describe('POST /incident-role/<id> with existing draft offences', () => {
       draftAdjudication: testData.draftAdjudication({
         id: 100,
         prisonerNumber: 'G6415GD',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         dateTimeOfIncident: '2022-03-23T09:10:00',
         offenceDetails: {
           offenceCode: 1001,

@@ -38,12 +38,14 @@ beforeEach(() => {
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '1524494',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
       status: ReportedAdjudicationStatus.SCHEDULED,
       hearings: [
         testData.singleHearing({
           dateTimeOfHearing: '2022-11-03T11:00:00',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
       ],
     }),
@@ -51,19 +53,24 @@ beforeEach(() => {
   reportedAdjudicationsService.rescheduleHearing.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '1524494',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
       status: ReportedAdjudicationStatus.SCHEDULED,
       hearings: [
         testData.singleHearing({
           dateTimeOfHearing: '2022-11-04T10:00:00',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
       ],
     }),
   })
 
   reportedAdjudicationsService.getLatestNonMatchingHearing.mockResolvedValue(
-    testData.singleHearing({ dateTimeOfHearing: '2022-11-03T11:00:00' })
+    testData.singleHearing({
+      dateTimeOfHearing: '2022-11-03T11:00:00',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+    })
   )
 
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, userService })
@@ -87,13 +94,10 @@ describe('GET reschedule a hearing', () => {
 })
 describe('POST edit existing hearing', () => {
   it('should successfully submit a hearing when all details provided - GOV', () => {
-    locationService.getCorrespondingNomisLocationId.mockResolvedValue(27008)
-
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.edit('1524494', 101))
       .send({
         hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
-        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'GOV',
       })
@@ -103,7 +107,6 @@ describe('POST edit existing hearing', () => {
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
           '1524494',
-          27008,
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-04T10:00',
           OicHearingType.GOV_ADULT as string,
@@ -113,13 +116,10 @@ describe('POST edit existing hearing', () => {
       })
   })
   it('should successfully submit a hearing when all details provided - IND_ADJ', () => {
-    locationService.getCorrespondingNomisLocationId.mockResolvedValue(27008)
-
     return request(app)
       .post(adjudicationUrls.scheduleHearing.urls.edit('1524494', 101))
       .send({
         hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
-        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'IND_ADJ',
       })
@@ -129,7 +129,6 @@ describe('POST edit existing hearing', () => {
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.rescheduleHearing).toHaveBeenCalledWith(
           '1524494',
-          27008,
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-04T10:00',
           OicHearingType.INAD_ADULT as string,
@@ -144,7 +143,7 @@ describe('POST edit existing hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.edit('1524494', 101))
       .send({
         hearingDate: { date: '04/11/2045', time: { hour: '10', minute: '00' } },
-        locationId: 27008,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'GOV',
       })
       .expect('Content-Type', /html/)

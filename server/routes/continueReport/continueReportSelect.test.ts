@@ -34,6 +34,7 @@ describe('GET /select-report', () => {
       const draftAdjudicationReports = [
         testData.draftAdjudication({
           id: 31,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2020-10-12T20:00:00',
           otherData: {
@@ -44,6 +45,7 @@ describe('GET /select-report', () => {
         }),
         testData.draftAdjudication({
           id: 58,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G5966UI',
           dateTimeOfIncident: '2020-11-11T15:15:00',
           otherData: {

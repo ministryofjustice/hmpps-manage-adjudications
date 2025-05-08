@@ -25,6 +25,7 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
 const adjudicationWithWitnesses = {
   draftAdjudication: testData.draftAdjudication({
     id: 100,
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
     witnesses: [
       testData.singleWitness({ code: WitnessCode.OTHER_PERSON }),
@@ -37,6 +38,7 @@ const adjudicationWithWitnesses = {
 const adjudicationWithoutWitnessesNewNoSave = {
   draftAdjudication: testData.draftAdjudication({
     id: 101,
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
   }),
 }
@@ -44,6 +46,7 @@ const adjudicationWithoutWitnessesNewNoSave = {
 const adjudicationWithoutWitnessesSaved = {
   draftAdjudication: testData.draftAdjudication({
     id: 102,
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
     otherData: {
       witnessesSaved: true,

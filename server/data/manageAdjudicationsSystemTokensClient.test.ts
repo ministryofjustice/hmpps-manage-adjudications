@@ -38,10 +38,12 @@ describe('manageAdjudicationsSystemTokensClient', () => {
   describe('getYourCompletedAdjudications', () => {
     const content = [
       testData.reportedAdjudication({
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         chargeNumber: '2',
         prisonerNumber: 'G6123VU',
       }),
       testData.reportedAdjudication({
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         chargeNumber: '1',
         prisonerNumber: 'G6174VU',
       }),
@@ -85,7 +87,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
           id: 1,
           prisonerNumber: 'G2996UX',
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
-          locationId: 2,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentRole: {
             roleCode: '25b',
             associatedPrisonersNumber: 'B2345BB',
@@ -93,7 +95,6 @@ describe('manageAdjudicationsSystemTokensClient', () => {
         }),
       }
       const details = {
-        locationId: 2,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -116,19 +117,19 @@ describe('manageAdjudicationsSystemTokensClient', () => {
       expect(response).toEqual(result)
       expect(response.draftAdjudication.prisonerNumber).toEqual('G2996UX')
       expect(response.draftAdjudication.incidentDetails.dateTimeOfIncident).toEqual('2021-10-28T15:40:25.884')
-      expect(response.draftAdjudication.incidentDetails.locationId).toEqual(2)
+      expect(response.draftAdjudication.incidentDetails.locationUuid).toEqual('0194ac90-2def-7c63-9f46-b3ccc911fdff')
       expect(response.draftAdjudication.incidentRole.roleCode).toEqual('25b')
       expect(response.draftAdjudication.incidentRole.associatedPrisonersNumber).toEqual('B2345BB')
     })
   })
 
   describe('postDraftIncidentStatement', () => {
-    it('should return only the neccessary prisoner details', async () => {
+    it('should return only the necessary prisoner details', async () => {
       const result = {
         draftAdjudication: testData.draftAdjudication({
           id: 4,
           prisonerNumber: 'A12345',
-          locationId: 2,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement: 'test',
           },
@@ -155,6 +156,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
       const result = {
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '3',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A12345',
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         }),
@@ -177,6 +179,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
       const result = {
         draftAdjudication: testData.draftAdjudication({
           id: 10,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
         }),
       }
@@ -196,6 +199,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
   describe('submitCompleteDraftAdjudication', () => {
     const result = {
       reportedAdjudication: testData.reportedAdjudication({
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         chargeNumber: '2345221',
         prisonerNumber: 'G6123VU',
       }),
@@ -215,6 +219,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
   describe('editDraftIncidentDetails', () => {
     const result = {
       reportedAdjudication: testData.reportedAdjudication({
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         chargeNumber: '2345221',
         prisonerNumber: 'G6123VU',
       }),
@@ -222,7 +227,6 @@ describe('manageAdjudicationsSystemTokensClient', () => {
 
     const editedDetails = {
       dateTimeOfIncident: '2021-11-04T09:21:00.00',
-      locationId: 23424,
       locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       incidentRole: {
         roleCode: '25b',
@@ -246,11 +250,13 @@ describe('manageAdjudicationsSystemTokensClient', () => {
       testData.draftAdjudication({
         dateTimeOfIncident: '2021-11-16T14:15:08.021Z',
         prisonerNumber: 'G2996UX',
+        locationUuid: '0294ac90-2def-7c63-9f46-b3ccc911fdff',
         id: 1,
       }),
       testData.draftAdjudication({
         dateTimeOfIncident: '2021-11-16T12:30:00.000Z',
         prisonerNumber: 'G2296UP',
+        locationUuid: '0394ac90-2def-7c63-9f46-b3ccc911fdff',
         id: 2,
       }),
     ]
@@ -289,7 +295,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
           id: 177,
           prisonerNumber: 'A7820DY',
           dateTimeOfIncident: '2021-12-01T09:40:00',
-          locationId: 26142,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentRole: {
             roleCode: '25b',
             associatedPrisonersNumber: 'B2345BB',
@@ -311,7 +317,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
       expect(response).toEqual(result)
       expect(response.draftAdjudication.prisonerNumber).toEqual('A7820DY')
       expect(response.draftAdjudication.incidentDetails.dateTimeOfIncident).toEqual('2021-12-01T09:40:00')
-      expect(response.draftAdjudication.incidentDetails.locationId).toEqual(26142)
+      expect(response.draftAdjudication.incidentDetails.locationUuid).toEqual('0194ac90-2def-7c63-9f46-b3ccc911fdff')
       expect(response.draftAdjudication.incidentRole.roleCode).toEqual('25b')
       expect(response.draftAdjudication.incidentRole.associatedPrisonersNumber).toEqual('B2345BB')
       expect(response.draftAdjudication.incidentStatement.statement).toEqual('TESTING')
@@ -321,6 +327,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
     const result = {
       draftAdjudication: testData.draftAdjudication({
         id: 2469,
+        locationUuid: '0494ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         isYouthOffender: true,
       }),
@@ -386,6 +393,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
     const result = {
       draftAdjudication: testData.draftAdjudication({
         id: 2469,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         damages: [
           testData.singleDamage({
@@ -418,6 +426,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
     const result = {
       draftAdjudication: testData.draftAdjudication({
         id: 2469,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         evidence: [
           testData.singleEvidence({

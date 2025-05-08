@@ -25,6 +25,7 @@ beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 100,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2022-03-23T09:10:00',
       dateTimeOfDiscovery: '2022-03-23T09:10:00',
@@ -53,7 +54,7 @@ describe('POST /incident-role', () => {
       .post(`${adjudicationUrls.incidentRole.urls.start(100)}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
       })
@@ -65,7 +66,7 @@ describe('POST /incident-role', () => {
       .post(`${adjudicationUrls.incidentRole.urls.start(100)}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '11', minute: '30' } },
-        locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       })
       .expect(res => {
         expect(res.text).toContain('There is a problem')

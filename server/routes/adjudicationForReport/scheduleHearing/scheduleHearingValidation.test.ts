@@ -14,7 +14,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/01/2030', time: { hour: '12', minute: '23' } },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toBeNull()
@@ -25,7 +25,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { time: { hour: '12', minute: '23' } },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
@@ -36,16 +36,17 @@ describe('validateForm', () => {
       ])
     })
   })
-  describe('locationId', () => {
+  describe('locationUuid', () => {
     it('shows error if location is not selected', () => {
       expect(
         validateForm({
           hearingDate: { time: { hour: '12', minute: '23' } },
+          locationUuid: undefined,
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
         {
-          href: '#locationId',
+          href: '#locationUuid',
           text: 'Select location of hearing',
         },
       ])
@@ -56,7 +57,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/01/2030', time: { minute: '23' } },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
@@ -70,7 +71,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/01/2030', time: { hour: '12' } },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
@@ -84,7 +85,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/01/2030' },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearingType: OicHearingType.GOV_ADULT as string,
         })
       ).toEqual([
@@ -98,7 +99,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/11/2022', time: { hour: '09', minute: '00' } },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         })
       ).toEqual([
         {
@@ -113,7 +114,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '01/02/2030', time: { hour: '10', minute: '00' } },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-02-02T10:00:00',
         })
@@ -128,7 +129,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '02/02/2030', time: { hour: '08', minute: '00' } },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-02-02T10:00:00',
         })
@@ -143,7 +144,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '02/02/2030', time: { hour: '08', minute: '00' } },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-02-03T10:00:00',
         })
@@ -162,7 +163,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           hearingDate: { date: '03/03/2030', time: { hour: '10', minute: '00' } },
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-03-03T10:00:00',
         })

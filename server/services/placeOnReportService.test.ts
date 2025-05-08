@@ -98,7 +98,6 @@ describe('placeOnReportService', () => {
 
       const result = await service.startNewDraftAdjudication(
         '2021-10-28T15:40:25.884',
-        3,
         '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         'G2996UX',
         user,
@@ -108,7 +107,6 @@ describe('placeOnReportService', () => {
       expect(startNewDraftAdjudication).toHaveBeenCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         dateTimeOfDiscovery: '2021-10-29T15:40:25.884',
-        locationId: 3,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G2996UX',
         agencyId: 'MDI',
@@ -120,6 +118,7 @@ describe('placeOnReportService', () => {
         draftAdjudication: testData.draftAdjudication({
           id: 1,
           chargeNumber: '4567123',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G2996UX',
           dateTimeOfIncident: '2021-10-28T15:40:25.884',
         }),
@@ -137,7 +136,6 @@ describe('placeOnReportService', () => {
 
       await service.startNewDraftAdjudication(
         '2021-10-28T15:40:25.884',
-        3,
         '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         'G2996UX',
         user,
@@ -147,7 +145,6 @@ describe('placeOnReportService', () => {
       expect(startNewDraftAdjudication).toHaveBeenCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
         dateTimeOfDiscovery: '2021-10-29T15:40:25.884',
-        locationId: 3,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G2996UX',
         agencyId: 'MDI',
@@ -168,14 +165,12 @@ describe('placeOnReportService', () => {
 
   describe('getCheckYourAnswersInfo', () => {
     it('returns the draft adjudication information - no completed adjudication number', async () => {
-      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-1')
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 10,
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-04T07:20:00',
           dateTimeOfDiscovery: '2021-11-05T07:20:00',
-          locationId: 25538,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement:
@@ -227,8 +222,6 @@ describe('placeOnReportService', () => {
       expect(result).toEqual(expectedResult)
     })
     it('returns the draft adjudication information - completed adjudication number included', async () => {
-      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-2')
-
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 10,
@@ -236,7 +229,6 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-04T07:20:00',
           dateTimeOfDiscovery: '2021-11-05T07:21:00',
-          locationId: 25655,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement:
@@ -288,8 +280,6 @@ describe('placeOnReportService', () => {
       expect(result).toEqual(expectedResult)
     })
     it('returns the draft adjudication information - created on behalf of officer', async () => {
-      locationService.getCorrespondingDpsLocationId.mockResolvedValue('location-2')
-
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 10,
@@ -297,7 +287,6 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-04T07:20:00',
           dateTimeOfDiscovery: '2021-11-05T07:21:00',
-          locationId: 25655,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement:
@@ -402,7 +391,6 @@ describe('placeOnReportService', () => {
         id: 4,
         prisonerNumber: 'A12345',
         dateTimeOfIncident: '2020-12-10T10:00:00',
-        locationId: 2,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         incidentStatement: {
           statement: 'This is a statement',
@@ -418,7 +406,6 @@ describe('placeOnReportService', () => {
           id: 4,
           prisonerNumber: 'A12345',
           dateTimeOfIncident: '2020-12-10T10:00:00',
-          locationId: 2,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: null,
         }),
@@ -432,7 +419,6 @@ describe('placeOnReportService', () => {
           id: 4,
           prisonerNumber: 'A12345',
           dateTimeOfIncident: '2020-12-10T10:00:00',
-          locationId: 2,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           incidentStatement: {
             statement: 'This is a statement',
@@ -446,7 +432,6 @@ describe('placeOnReportService', () => {
         draftAdjudication: testData.draftAdjudication({
           id: 4,
           prisonerNumber: 'A12345',
-          locationId: 2,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           dateTimeOfIncident: '2020-12-10T10:00:00',
           incidentStatement: {
@@ -462,7 +447,6 @@ describe('placeOnReportService', () => {
         draftAdjudication: testData.draftAdjudication({
           id: 4,
           prisonerNumber: 'A12345',
-          locationId: 2,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           dateTimeOfIncident: '2020-12-10T10:00:00',
           incidentStatement: {
@@ -477,6 +461,7 @@ describe('placeOnReportService', () => {
       submitCompleteDraftAdjudication.mockResolvedValue(
         testData.reportedAdjudication({
           chargeNumber: '234',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
           prisonerNumber: 'G2996UX',
         })
@@ -491,7 +476,6 @@ describe('placeOnReportService', () => {
       const expectedResult = {
         dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
         dateTimeOfDiscovery: { date: '09/11/2021', time: { hour: '10', minute: '00' } },
-        locationId: 1234,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         chargeNumber: null as never,
         startedByUserId: 'USER1',
@@ -503,7 +487,6 @@ describe('placeOnReportService', () => {
           prisonerNumber: 'A12345',
           dateTimeOfIncident: '2021-11-08T10:00:00',
           dateTimeOfDiscovery: '2021-11-09T10:00:00',
-          locationId: 1234,
           locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
       })
@@ -517,6 +500,7 @@ describe('placeOnReportService', () => {
       const expectedResult = testData.draftAdjudication({
         id: 4,
         chargeNumber: '234',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G2996UX',
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
         dateTimeOfDiscovery: '2021-11-10T13:55:34.143Z',
@@ -530,7 +514,6 @@ describe('placeOnReportService', () => {
       const response = await service.editDraftIncidentDetails(
         4,
         '2021-11-09T13:55:34.143Z',
-        12123123,
         '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         user,
         '2021-11-10T13:55:34.143Z'
@@ -539,7 +522,6 @@ describe('placeOnReportService', () => {
       expect(editDraftIncidentDetails).toBeCalledWith(4, {
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
         dateTimeOfDiscovery: '2021-11-10T13:55:34.143Z',
-        locationId: 12123123,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         removeExistingOffences: false,
       })
@@ -555,11 +537,13 @@ describe('placeOnReportService', () => {
       const draftAdjudicationReports = [
         testData.draftAdjudication({
           id: 31,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A12345',
           dateTimeOfIncident: '2021-11-16T14:15:00',
         }),
         testData.draftAdjudication({
           id: 58,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G2996UX',
           dateTimeOfIncident: '2021-11-20T09:45:00',
         }),
@@ -584,6 +568,7 @@ describe('placeOnReportService', () => {
       const expectedDraftAdjudicationsContent = [
         testData.draftAdjudication({
           id: 31,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'A12345',
           dateTimeOfIncident: '2021-11-16T14:15:00',
           otherData: {
@@ -594,6 +579,7 @@ describe('placeOnReportService', () => {
         }),
         testData.draftAdjudication({
           id: 58,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G2996UX',
           dateTimeOfIncident: '2021-11-20T09:45:00',
           otherData: {
@@ -637,6 +623,7 @@ describe('placeOnReportService', () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 104,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-10-12T20:00',
           incidentStatement: null,
@@ -664,6 +651,7 @@ describe('placeOnReportService', () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 104,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-10-12T20:00',
           incidentRole: {
@@ -709,6 +697,7 @@ describe('placeOnReportService', () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 104,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6415GD',
           dateTimeOfIncident: '2021-10-12T20:00',
           incidentStatement: {
@@ -762,6 +751,7 @@ describe('placeOnReportService', () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 92,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-18T14:50:00',
           incidentStatement: {
@@ -810,6 +800,7 @@ describe('placeOnReportService', () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 92,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-18T14:50:00',
           incidentRole: {
@@ -859,6 +850,7 @@ describe('placeOnReportService', () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 92,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-18T14:50:00',
           damages: [testData.singleDamage({})],
@@ -905,6 +897,7 @@ describe('placeOnReportService', () => {
       getDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
           id: 92,
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           prisonerNumber: 'G6123VU',
           dateTimeOfIncident: '2021-11-18T14:50:00',
           damages: [testData.singleDamage({})],
@@ -982,6 +975,7 @@ describe('placeOnReportService', () => {
     it('creates the incident role object and sends', async () => {
       const expectedResult = testData.reportedAdjudication({
         chargeNumber: '234',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G2996UX',
         incidentRole: {
           associatedPrisonersNumber: 'G2996UX',
@@ -1003,6 +997,7 @@ describe('placeOnReportService', () => {
     it('creates the correct data payload if the prisoner is YOI and sends to the draft adjudication database', async () => {
       const expectedResult = testData.reportedAdjudication({
         chargeNumber: '2483',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
       })
 
@@ -1017,6 +1012,7 @@ describe('placeOnReportService', () => {
     it('creates the correct data payload if the prisoner is an adult and sends to the draft adjudication database', async () => {
       const expectedResult = testData.reportedAdjudication({
         chargeNumber: '2483',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
       })
       saveYouthOffenderStatus.mockResolvedValue(expectedResult)

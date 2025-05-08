@@ -38,10 +38,12 @@ describe('manageAdjudicationsSystemTokensClient', () => {
     const content = [
       testData.reportedAdjudication({
         chargeNumber: '2',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
       }),
       testData.reportedAdjudication({
         chargeNumber: '1',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6174VU',
       }),
     ]

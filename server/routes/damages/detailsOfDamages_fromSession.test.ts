@@ -24,6 +24,7 @@ const adjudicationPrisonerDetails: PrisonerResultSummary = testData.prisonerResu
 const adjudicationWithoutDamages = {
   draftAdjudication: testData.draftAdjudication({
     id: 100,
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
     dateTimeOfIncident: '2021-12-09T10:30:00',
     offenceDetails: {

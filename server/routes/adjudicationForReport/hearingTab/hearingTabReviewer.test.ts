@@ -30,6 +30,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '1524493',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       outcomes: [],
     }),
@@ -62,6 +63,7 @@ describe('GET hearing details page - reviewer version', () => {
     const hearing = {
       ...testData.singleHearing({
         dateTimeOfHearing: '2023-03-01T17:00:00',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         outcome: testData.hearingOutcome({
           code: HearingOutcomeCode.COMPLETE,
           optionalItems: {
@@ -77,6 +79,7 @@ describe('GET hearing details page - reviewer version', () => {
       reportedAdjudication: testData.reportedAdjudication({
         chargeNumber: '1524495',
         status: ReportedAdjudicationStatus.CHARGE_PROVED,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6415GD',
         outcomes: [
           {
@@ -93,7 +96,7 @@ describe('GET hearing details page - reviewer version', () => {
       {
         hearing: {
           ...hearing,
-          locationId: 'location-id-1',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           locationName: 'Moorland Closed (HMP & YOI)',
           convertedAdjudicator: 'J. Red',
         },
