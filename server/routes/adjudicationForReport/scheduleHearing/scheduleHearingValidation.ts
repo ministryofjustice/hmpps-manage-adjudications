@@ -3,8 +3,7 @@ import { formatDate, formatTimestampToDate, formatTimestampToTime } from '../../
 
 type ScheduleHearingForm = {
   hearingDate?: SubmittedDateTime
-  locationId?: string // TODO: MAP-2114: remove at a later date
-  locationUuid?: string
+  locationUuid: string
   hearingType?: string
   latestExistingHearing?: string
 }
@@ -19,7 +18,7 @@ const errors: { [key: string]: FormError } = {
     text: 'Select time of hearing',
   },
   MISSING_LOCATION: {
-    href: '#locationId',
+    href: '#locationUuid',
     text: 'Select location of hearing',
   },
   MISSING_HEARING_TYPE: {
@@ -38,14 +37,14 @@ const errors: { [key: string]: FormError } = {
 
 export default function validateForm({
   hearingDate,
-  locationId,
+  locationUuid,
   hearingType,
   latestExistingHearing,
 }: ScheduleHearingForm): FormError[] | null {
   if (!hearingType) {
     return [errors.MISSING_HEARING_TYPE]
   }
-  if (!locationId) {
+  if (!locationUuid) {
     return [errors.MISSING_LOCATION]
   }
   if (!hearingDate.date) {

@@ -36,10 +36,7 @@ type PageData = {
 
 type HearingDetails = {
   hearingDate: SubmittedDateTime
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  locationId: any // TODO: MAP-2114: remove at a later date
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  locationUuid: any
+  locationUuid: string
   id?: number
   hearingType: string
 }
@@ -94,7 +91,6 @@ export default class scheduleHearingRoutes {
     )
     const validationError = validateForm({
       hearingDate: postValues.hearingDetails.hearingDate,
-      locationId: postValues.hearingDetails.locationId, // TODO: MAP-2114: remove at a later date
       locationUuid: postValues.hearingDetails.locationUuid,
       hearingType: postValues.hearingDetails.hearingType,
       latestExistingHearing: latestHearing.dateTimeOfHearing,
@@ -104,18 +100,12 @@ export default class scheduleHearingRoutes {
       return renderData(res, pageData, validationError)
     }
 
-    postValues.hearingDetails.locationId = await this.locationService.getCorrespondingNomisLocationId(
-      postValues.hearingDetails.locationId as unknown as string,
-      user
-    )
-
     const hearingDetailsToSave = postValues.hearingDetails
     try {
       const isYOI = await this.getYoiInfo(chargeNumber, user)
       if (this.pageOptions.isEdit()) {
         await this.reportedAdjudicationsService.rescheduleHearing(
           chargeNumber,
-          hearingDetailsToSave.locationId, // TODO: MAP-2114: remove at a later date
           hearingDetailsToSave.locationUuid,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
@@ -124,7 +114,6 @@ export default class scheduleHearingRoutes {
       } else {
         await this.reportedAdjudicationsService.scheduleHearing(
           chargeNumber,
-          hearingDetailsToSave.locationId, // TODO: MAP-2114: remove at a later date
           hearingDetailsToSave.locationUuid,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
@@ -149,11 +138,9 @@ export default class scheduleHearingRoutes {
     const adjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user)
     const { reportedAdjudication } = adjudication
     const [hearingToRender] = reportedAdjudication.hearings.filter(hearing => hearing.id === hearingId)
-    const locationId = await this.locationService.getCorrespondingDpsLocationId(hearingToRender.locationId, user)
     return {
       hearingDate: convertDateTimeStringToSubmittedDateTime(hearingToRender.dateTimeOfHearing),
-      locationId, // TODO: MAP-2114: remove at a later date
-      locationUuid: locationId,
+      locationUuid: hearingToRender.locationUuid,
       id: hearingToRender.id,
       hearingType: getRadioHearingType(hearingToRender.oicHearingType),
     }
@@ -186,7 +173,6 @@ export default class scheduleHearingRoutes {
 const renderData = (res: Response, pageData: PageData, error: FormError[]) => {
   const data = {
     hearingDate: convertSubmittedDateTimeToDateObject(pageData.formData.hearingDetails?.hearingDate),
-    locationId: pageData.formData.hearingDetails?.locationId, // TODO: MAP-2114: remove at a later date
     locationUuid: pageData.formData.hearingDetails?.locationUuid,
     hearingType: pageData.formData.hearingDetails?.hearingType,
   }
@@ -204,8 +190,7 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
   const values = {
     hearingDetails: {
       hearingDate: req.body.hearingDate,
-      locationId: req.body.locationId, // TODO: MAP-2114: remove at a later date
-      locationUuid: req.body.locationId,
+      locationUuid: req.body.locationUuid,
       hearingType: req.body.hearingType,
     },
   }

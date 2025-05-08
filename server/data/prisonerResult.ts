@@ -2,7 +2,7 @@ import { Expose } from 'class-transformer'
 
 type AssignedLivingUnit = {
   agencyId: string
-  locationId: number
+  locationUuid: string
   description: string
   agencyName: string
 }

@@ -43,8 +43,8 @@ export default class printCompletedDISFormsRoutes {
     const uiFilter = fillInPrintDISFormFilterDefaults(uiPrintDISFormFilterFromRequest(req))
     const filter = printDISFormfilterFromUiFilter(uiFilter)
     const results = await this.reportedAdjudicationsService.getAdjudicationDISFormData(res.locals.user, filter, true)
-    const filteredResults = filter.locationId
-      ? await this.reportedAdjudicationsService.filterAdjudicationsByLocation(results, filter.locationId, user)
+    const filteredResults = filter.locationUuid
+      ? await this.reportedAdjudicationsService.filterAdjudicationsByLocation(results, filter.locationUuid, user)
       : results
     return this.renderView(res, uiFilter, filteredResults, [])
   }

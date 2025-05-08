@@ -1,7 +1,6 @@
 import { ProtectedCharacteristicsTypes } from '../routes/offenceCodeDecisions/offenceData'
 
 export type IncidentDetails = {
-  locationId: number // TODO: MAP-2114: remove at a later date
   locationUuid: string
   dateTimeOfIncident: string
   handoverDeadline?: string
@@ -85,7 +84,6 @@ type SummarySectionItems = {
 
 export type EditedIncidentDetails = {
   dateTimeOfIncident: string
-  locationId: number // TODO: MAP-2114: remove at a later date
   locationUuid: string
   incidentRole?: IncidentRole
   removeExistingOffences?: boolean

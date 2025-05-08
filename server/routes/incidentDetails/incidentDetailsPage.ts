@@ -59,7 +59,6 @@ type RequestValues = {
 type IncidentDetails = {
   incidentDate: SubmittedDateTime
   discoveryDate: SubmittedDateTime
-  locationId: string | number // TODO: MAP-2114: remove at a later date
   locationUuid: string
   discoveryRadioSelected?: string
 }
@@ -131,7 +130,6 @@ export default class IncidentDetailsPage {
     const validationError = validateForm({
       incidentDate: postValues.incidentDetails?.incidentDate,
       discoveryDate: postValues.incidentDetails?.discoveryDate,
-      locationId: postValues.incidentDetails?.locationId as string, // TODO: MAP-2114: remove at a later date
       locationUuid: postValues.incidentDetails?.locationUuid as string,
       discoveryRadioSelected: postValues.incidentDetails?.discoveryRadioSelected,
     })
@@ -139,13 +137,6 @@ export default class IncidentDetailsPage {
       const pageData = await this.getPageDataOnPost(postValues, user)
       return renderData(res, pageData, validationError)
     }
-
-    const nomisLocationId = await this.locationService.getCorrespondingNomisLocationId(
-      postValues.incidentDetails.locationId as string,
-      user
-    )
-
-    postValues.incidentDetails.locationId = nomisLocationId
 
     try {
       if (this.pageOptions.isEdit()) {
@@ -196,7 +187,6 @@ export default class IncidentDetailsPage {
     // eslint-disable-next-line no-return-await
     return await this.placeOnReportService.startNewDraftAdjudication(
       formatDate(data.incidentDate),
-      data.locationId as number, // TODO: MAP-2114: remove at a later date
       data.locationUuid,
       prisonerNumber,
       currentUser,
@@ -214,7 +204,6 @@ export default class IncidentDetailsPage {
     return await this.placeOnReportService.editDraftIncidentDetails(
       draftId,
       formatDate(data.incidentDate),
-      data.locationId as number, // TODO: MAP-2114: remove at a later date
       data.locationUuid,
       currentUser,
       formatDate(data.discoveryDate)
@@ -240,20 +229,11 @@ export default class IncidentDetailsPage {
       }
     }
 
-    let locationId = ''
-
-    if (readApiIncidentDetails?.locationId) {
-      locationId = await this.locationService.getCorrespondingDpsLocationId(
-        readApiIncidentDetails.locationId as unknown as number,
-        currentUser
-      )
-    }
-
     return {
       displayData: await this.getDisplayData(requestValues.prisonerNumber, originalReporterUsername, currentUser),
       exitButtonData,
       formData: {
-        incidentDetails: { ...readApiIncidentDetails, locationId },
+        incidentDetails: { ...readApiIncidentDetails },
         originalReporterUsername,
       },
     }
@@ -341,7 +321,6 @@ const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentD
   return {
     incidentDate: readDraftIncidentDetails.dateTime,
     discoveryDate: radioValue === 'Yes' ? null : readDraftIncidentDetails.dateTimeOfDiscovery,
-    locationId: readDraftIncidentDetails.locationId, // TODO: MAP-2114: remove at a later date
     locationUuid: readDraftIncidentDetails.locationUuid,
     discoveryRadioSelected: radioValue,
     reporterUsername: readDraftIncidentDetails.startedByUserId,
@@ -359,8 +338,7 @@ const extractValuesFromPost = (req: Request): SubmittedFormData => {
     incidentDetails: {
       incidentDate: req.body.incidentDate,
       discoveryDate: discoveryDateTime,
-      locationId: req.body.locationId, // TODO: MAP-2114: remove at a later date
-      locationUuid: req.body.locationId,
+      locationUuid: req.body.locationUuid,
       reporterUsername: req.body.originalReporterUsername,
       discoveryRadioSelected: req.body.discoveryRadioSelected,
     },
@@ -382,8 +360,7 @@ const renderData = (res: Response, pageData: PageData, error: FormError) => {
   const data = {
     incidentDate: convertSubmittedDateTimeToDateObject(pageData.formData.incidentDetails?.incidentDate),
     discoveryDate: convertSubmittedDateTimeToDateObject(pageData.formData.incidentDetails?.discoveryDate),
-    locationId: pageData.formData.incidentDetails?.locationId, // TODO: MAP-2114: remove at a later date
-    locationUuid: pageData.formData.incidentDetails?.locationId,
+    locationUuid: pageData.formData.incidentDetails?.locationUuid,
     discoveryRadioSelected: pageData.formData.incidentDetails?.discoveryRadioSelected,
   }
   return res.render(`pages/incidentDetails`, {

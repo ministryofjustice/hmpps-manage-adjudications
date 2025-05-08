@@ -62,8 +62,7 @@ export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
 export type ExistingDraftIncidentDetails = {
   dateTime: SubmittedDateTime
   dateTimeOfDiscovery: SubmittedDateTime
-  locationId: number // TODO: MAP-2114: remove at a later date
-  locationUuid?: string
+  locationUuid: string
   startedByUserId: string
   chargeNumber?: string
 }
@@ -107,7 +106,6 @@ export default class PlaceOnReportService {
 
   async startNewDraftAdjudication(
     dateTimeOfIncident: string,
-    locationId: number, // TODO: MAP-2114: remove at a later date
     locationUuid: string,
     prisonerNumber: string,
     user: User,
@@ -120,7 +118,6 @@ export default class PlaceOnReportService {
     const requestBody = {
       dateTimeOfIncident,
       agencyId: user.meta.caseLoadId,
-      locationId, // TODO: MAP-2114: remove at a later date
       locationUuid,
       prisonerNumber,
       dateTimeOfDiscovery,
@@ -185,12 +182,8 @@ export default class PlaceOnReportService {
     const dateTimeDiscovery = draftAdjudication.incidentDetails.dateTimeOfDiscovery
     const dateDiscovery = getDate(dateTimeDiscovery, 'D MMMM YYYY')
     const timeDiscovery = getTime(dateTimeDiscovery)
-
-    const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
-      draftAdjudication.incidentDetails.locationId,
-      user
-    )
-    const [locationObj] = locations.filter(loc => loc.locationId === dpsLocationId)
+    // TODO: Check for locationsUuid work
+    const [locationObj] = locations
 
     let changeReportingOfficerLink
     let changeReportingOfficerDataQa
@@ -250,7 +243,6 @@ export default class PlaceOnReportService {
     const dateAndTimeOfDiscovery = await convertDateTimeStringToSubmittedDateTime(incidentDetails.dateTimeOfDiscovery)
     return {
       dateTime: dateAndTimeOfIncident,
-      locationId: incidentDetails.locationId, // TODO: MAP-2114: remove at a later date
       locationUuid: incidentDetails.locationUuid,
       startedByUserId: response.draftAdjudication.startedByUserId,
       chargeNumber: response.draftAdjudication.chargeNumber,
@@ -270,7 +262,6 @@ export default class PlaceOnReportService {
   async editDraftIncidentDetails(
     id: number,
     dateTime: string,
-    location: number, // TODO: MAP-2114: remove at a later date
     locationUuid: string,
     user: User,
     dateTimeOfDiscovery: string
@@ -279,7 +270,6 @@ export default class PlaceOnReportService {
     const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
     const editedIncidentDetails = {
       dateTimeOfIncident: dateTime,
-      locationId: location,
       locationUuid,
       removeExistingOffences: false,
       dateTimeOfDiscovery,

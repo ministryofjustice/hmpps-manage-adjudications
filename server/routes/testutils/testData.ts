@@ -50,7 +50,6 @@ export default class TestData {
     gender = PrisonerGender.MALE,
     dateTimeOfDiscovery = dateTimeOfIncident,
     handoverDeadline,
-    locationId = 1,
     locationUuid = '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     incidentStatement = {} as IncidentStatement,
     offenceDetails = {} as OffenceDetails,
@@ -82,8 +81,7 @@ export default class TestData {
     gender?: PrisonerGender
     dateTimeOfDiscovery?: string
     handoverDeadline?: string
-    locationId?: number
-    locationUuid?: string
+    locationUuid: string
     incidentStatement?: IncidentStatement
     offenceDetails?: OffenceDetails
     incidentRole?: IncidentRole
@@ -116,7 +114,6 @@ export default class TestData {
         dateTimeOfIncident,
         dateTimeOfDiscovery,
         handoverDeadline,
-        locationId,
         locationUuid,
       },
       incidentStatement,
@@ -153,7 +150,6 @@ export default class TestData {
     id,
     prisonerNumber,
     gender = PrisonerGender.MALE,
-    locationId = 1,
     locationUuid = '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     dateTimeOfIncident = '2023-01-01T06:00:00',
     dateTimeOfDiscovery = dateTimeOfIncident,
@@ -174,8 +170,7 @@ export default class TestData {
     id: number
     prisonerNumber: string
     gender?: PrisonerGender
-    locationId?: number
-    locationUuid?: string
+    locationUuid: string
     dateTimeOfIncident?: string
     dateTimeOfDiscovery?: string
     offenceDetails?: OffenceDetails
@@ -198,7 +193,6 @@ export default class TestData {
       chargeNumber,
       gender,
       incidentDetails: {
-        locationId,
         locationUuid,
         dateTimeOfIncident,
         dateTimeOfDiscovery,
@@ -222,28 +216,24 @@ export default class TestData {
   residentialLocationsFromPrisonApi = (): Location[] => {
     return [
       {
-        locationId: 25538,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-1',
         userDescription: 'Houseblock 1',
       },
       {
-        locationId: 25655,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-2',
         userDescription: 'Houseblock 2',
       },
       {
-        locationId: 26956,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-RECEP',
         userDescription: 'Reception',
       },
       {
-        locationId: 27102,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-MCASU',
@@ -278,28 +268,24 @@ export default class TestData {
   residentialLocations = (): IncidentLocation[] => {
     return [
       {
-        locationId: 'location-1',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-1',
         userDescription: 'Houseblock 1',
       },
       {
-        locationId: 'location-2',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-2',
         userDescription: 'Houseblock 2',
       },
       {
-        locationId: 'location-recep',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-RECEP',
         userDescription: 'Reception',
       },
       {
-        locationId: 'location-seg',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         agencyId: 'MDI',
         locationPrefix: 'MDI-MCASU',
@@ -326,7 +312,6 @@ export default class TestData {
     dateTimeOfHearing,
     outcome,
     id = 101,
-    locationId = 775,
     locationUuid = '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     oicHearingType = OicHearingType.GOV_ADULT,
     agencyId = 'MDI',
@@ -334,14 +319,12 @@ export default class TestData {
     dateTimeOfHearing: string
     outcome?: HearingOutcomeResult
     id?: number
-    locationId?: number
-    locationUuid?: string
+    locationUuid: string
     oicHearingType?: OicHearingType
     agencyId?: string
   }): HearingDetails => {
     return {
       id,
-      locationId,
       locationUuid,
       dateTimeOfHearing,
       oicHearingType,
@@ -643,7 +626,7 @@ export default class TestData {
       currentLocation: assignedLivingUnitDesc,
       assignedLivingUnit: {
         agencyId: 'MDI',
-        locationId: 123,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         description: assignedLivingUnitDesc,
         agencyName: 'Moorland (HMPYOI)',
       },

@@ -32,10 +32,11 @@ export default class FormsTabRoute {
       reportedAdjudication,
       user
     )
+    // TODO: Clean up Uuid work.
     const filter = DISFormfilterFromUiFilter({
       fromDate: momentDateToDatePicker(moment().subtract(6, 'months')),
       toDate: momentDateToDatePicker(moment()),
-      locationId: null,
+      locationUuid: null,
     })
     const results = (await this.reportedAdjudicationsService.getAdjudicationDISFormData(user, filter, false)).filter(
       adj => adj.chargeNumber === chargeNumber
