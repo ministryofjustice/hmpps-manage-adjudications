@@ -88,7 +88,6 @@ export default class RestClient {
         .set(this.getHeaders(headers))
         .responseType(responseType)
         .timeout(this.timeoutConfig())
-      console.log('result: ', result)
       return raw ? (result as T) : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error)
