@@ -67,7 +67,13 @@ export default class RestClient {
     logger.warn(sanitiseError(error), `Error calling ${this.name}`)
   }
 
-  async get<T>({ path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest): Promise<T> {
+  async get<T = unknown>({
+    path = null,
+    query = '',
+    headers = {},
+    responseType = '',
+    raw = false,
+  }: GetRequest): Promise<T> {
     logger.info(`Get using user credentials: calling ${this.name}: ${path} ${query}`)
     try {
       const result = await superagent
@@ -82,8 +88,7 @@ export default class RestClient {
         .set(this.getHeaders(headers))
         .responseType(responseType)
         .timeout(this.timeoutConfig())
-
-      return raw ? result : result.body
+      return raw ? (result as T) : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
@@ -91,7 +96,7 @@ export default class RestClient {
     }
   }
 
-  async post<T>({
+  async post<T = unknown>({
     path = null,
     headers = {},
     responseType = '',
@@ -113,7 +118,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? result : result.body
+      return raw ? (result as T) : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
@@ -150,7 +155,13 @@ export default class RestClient {
     })
   }
 
-  async put<T>({ path = null, headers = {}, responseType = '', data = {}, raw = false }: PostRequest = {}): Promise<T> {
+  async put<T = unknown>({
+    path = null,
+    headers = {},
+    responseType = '',
+    data = {},
+    raw = false,
+  }: PostRequest = {}): Promise<T> {
     logger.info(`Put using user credentials: calling ${this.name}: ${path}`)
     try {
       const result = await superagent
@@ -165,8 +176,7 @@ export default class RestClient {
         .set(this.getHeaders(headers))
         .responseType(responseType)
         .timeout(this.timeoutConfig())
-
-      return raw ? result : result.body
+      return raw ? (result as T) : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
@@ -174,7 +184,7 @@ export default class RestClient {
     }
   }
 
-  async delete<T>({
+  async delete<T = unknown>({
     path = null,
     headers = {},
     responseType = '',
@@ -196,7 +206,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? result : result.body
+      return raw ? (result as T) : result.body
     } catch (error) {
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'DELETE'`)
