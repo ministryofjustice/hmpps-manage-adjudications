@@ -1,7 +1,6 @@
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import LocationsInsidePrisonApiClient from '../data/locationsInsidePrisonApiClient'
-import NomisSyncPrisonerMappingApiClient from '../data/nomisSyncPrisonerMappingApiClient'
 import { Location, AgencyId, Agency, IncidentLocation, LocationsApiLocation } from '../data/PrisonLocationResult'
 import { User } from '../data/hmppsManageUsersClient'
 
@@ -16,20 +15,9 @@ export default class LocationService {
   async getLocationsForUser(user: User): Promise<Location[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const locations = await new PrisonApiClient(token).getUsersLocations()
-    // This removes the first entry in the response (which is usually the prison as a whole), we don't need it here
-    return locations.filter(loc => loc.locationId > 0)
-  }
-
-  async getCorrespondingNomisLocationId(dpsLocationId: string, user: User): Promise<number> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const location = await new NomisSyncPrisonerMappingApiClient(token).getNomisLocationId(dpsLocationId)
-    return location.nomisLocationId
-  }
-
-  async getCorrespondingDpsLocationId(nomisLocationId: number, user: User): Promise<string> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const location = await new NomisSyncPrisonerMappingApiClient(token).getDpsLocationId(nomisLocationId)
-    return location.dpsLocationId
+    // This removes the first entry in the response (which is usually the prison as a whole), we don't need it here?
+    // TODO: Do we need to remove the first location? Previously `locations.filter(loc => loc.locationId > 0)`
+    return locations
   }
 
   async getIncidentLocation(dpsLocationId: string, user: User): Promise<LocationsApiLocation> {
@@ -42,7 +30,6 @@ export default class LocationService {
     const locations = await new LocationsInsidePrisonApiClient(token).getLocations(agencyId)
     // mapping the reponse from locationsApi with that previosuly received from prisonApi
     const incidentLocations = locations.map(loc => ({
-      locationId: loc.id, // TODO: MAP-2114: This is currently the Uuid - remove at a later date
       locationUuid: loc.id,
       userDescription: loc.localName,
       locationPrefix: loc.key,
@@ -75,7 +62,7 @@ export default class LocationService {
 
     const hearingLocations = locations.map(loc => {
       return {
-        locationId: loc.id, // TODO: MAP-2114: This is currently the Uuid - remove at a later date
+        // TODO: check for Uuid work
         locationUuid: loc.id,
         userDescription: loc.localName,
         locationPrefix: loc.key,

@@ -29,6 +29,7 @@ let app: Express
 const outcomeHistory = {
   hearing: testData.singleHearing({
     dateTimeOfHearing: '2023-03-10T22:00:00',
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
   }),
   outcome: {
     outcome: testData.outcome({}),
@@ -78,6 +79,7 @@ describe('POST', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
         chargeNumber: '1524493',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6415GD',
         outcomes: [],
         punishments: [],
@@ -101,6 +103,7 @@ describe('POST', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: testData.reportedAdjudication({
         chargeNumber: '1524493',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6415GD',
         outcomes: [],
         punishments: [

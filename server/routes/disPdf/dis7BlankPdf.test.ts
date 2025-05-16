@@ -20,12 +20,14 @@ const testData = new TestData()
 
 const reportedAdjudicationAdult: ReportedAdjudication = testData.reportedAdjudication({
   chargeNumber: '1524493',
+  locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
   prisonerNumber: 'G6415GD',
   isYouthOffender: false,
 })
 
 const reportedAdjudicationYoi: ReportedAdjudication = testData.reportedAdjudication({
   chargeNumber: '1524493',
+  locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
   prisonerNumber: 'G6415GD',
   isYouthOffender: true,
 })

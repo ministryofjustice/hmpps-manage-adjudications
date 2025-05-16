@@ -35,10 +35,10 @@ beforeEach(() => {
     })
   )
   locationService.getHearingLocations.mockResolvedValue(testData.residentialLocations())
-  locationService.getCorrespondingNomisLocationId.mockResolvedValue(27008)
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '1524494',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
     }),
@@ -47,15 +47,24 @@ beforeEach(() => {
   reportedAdjudicationsService.scheduleHearing.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '1524494',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
       status: ReportedAdjudicationStatus.SCHEDULED,
-      hearings: [testData.singleHearing({ dateTimeOfHearing: '2022-11-03T11:00:00' })],
+      hearings: [
+        testData.singleHearing({
+          dateTimeOfHearing: '2022-11-03T11:00:00',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+        }),
+      ],
     }),
   })
 
   reportedAdjudicationsService.getLatestNonMatchingHearing.mockResolvedValue(
-    testData.singleHearing({ dateTimeOfHearing: '2022-11-03T11:00:00' })
+    testData.singleHearing({
+      dateTimeOfHearing: '2022-11-03T11:00:00',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
+    })
   )
 
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, userService })
@@ -83,7 +92,6 @@ describe('POST new schedule hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.start('1524494'))
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
-        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'GOV',
       })
@@ -93,7 +101,6 @@ describe('POST new schedule hearing', () => {
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
           '1524494',
-          27008,
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-03T11:00',
           OicHearingType.GOV_ADULT as string,
@@ -107,7 +114,6 @@ describe('POST new schedule hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.start('1524494'))
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
-        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'IND_ADJ',
       })
@@ -117,7 +123,6 @@ describe('POST new schedule hearing', () => {
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.scheduleHearing).toHaveBeenCalledWith(
           '1524494',
-          27008,
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-03T11:00',
           OicHearingType.INAD_ADULT as string,
@@ -132,7 +137,6 @@ describe('POST new schedule hearing', () => {
       .post(adjudicationUrls.scheduleHearing.urls.start('1524494'))
       .send({
         hearingDate: { date: '03/11/2045', time: { hour: '11', minute: '00' } },
-        locationId: 27008,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         hearingType: 'GOV',
       })

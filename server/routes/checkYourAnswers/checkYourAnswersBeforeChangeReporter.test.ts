@@ -36,6 +36,7 @@ const prisonerData = testData.prisonerResultSummary({
 
 const draftData = testData.draftAdjudication({
   id: 1,
+  locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
   chargeNumber: '123',
   prisonerNumber: 'G6415GD',
 })
@@ -58,7 +59,6 @@ beforeEach(() => {
 
   locationService.getIncidentLocations.mockResolvedValue([
     {
-      locationId: 'location-6',
       locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       locationPrefix: 'OC',
       userDescription: 'Rivendell',
@@ -92,6 +92,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '123',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2023-05-30T09:30:00',
     }),
