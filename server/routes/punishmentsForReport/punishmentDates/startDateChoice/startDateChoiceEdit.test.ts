@@ -31,14 +31,17 @@ beforeEach(() => {
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '100',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6123VU',
       dateTimeOfIncident: '2023-08-31T12:54:09.197Z',
       hearings: [
         testData.singleHearing({
           dateTimeOfHearing: '2023-09-02T10:50:00.000Z',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
         testData.singleHearing({
           dateTimeOfHearing: '2023-09-03T12:00:00.000Z',
+          locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         }),
       ],
     }),

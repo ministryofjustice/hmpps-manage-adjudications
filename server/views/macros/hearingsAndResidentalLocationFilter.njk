@@ -18,15 +18,15 @@
       }) }}
 
       {{ govukSelect({
-                id: 'locationId',
+                id: 'locationUuid',
                 label: {
                     text: 'Residential location',
                     classes: 'govuk-!-font-weight-bold'
                 },
-                name: 'locationId',
-                items: params.locations | toSelect('locationId', 'userDescription', params.filter.locationId, null, 'description' ),
+                name: 'locationUuid',
+                items: params.locations | toSelect('locationUuid', 'userDescription', params.filter.locationUuid, null, 'description' ),
                 attributes: {
-                    "data-qa": "locationId"
+                    "data-qa": "locationUuid"
                 }
             }) }}
     </div>

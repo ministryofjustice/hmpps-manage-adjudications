@@ -27,7 +27,7 @@ beforeEach(() => {
 
   placeOnReportService.getDraftIncidentDetailsForEditing.mockResolvedValue({
     dateTime: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
-    locationId: 1234,
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     startedByUserId: 'TESTER2_GEN',
     dateTimeOfDiscovery: { date: '08/11/2021', time: { hour: '10', minute: '00' } },
   })
@@ -35,6 +35,7 @@ beforeEach(() => {
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 34,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
     }),
@@ -43,9 +44,9 @@ beforeEach(() => {
   placeOnReportService.editDraftIncidentDetails.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 34,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
-      locationId: 2,
     }),
   })
 
@@ -79,7 +80,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         discoveryRadioSelected: 'Yes',
       })
       .expect(302)
@@ -92,7 +93,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
         prisonerNumber: 'G6415GD',
         dateTimeOfIncident: '2021-10-27T13:30:17.808Z',
         dateTimeOfDiscovery: '2021-10-27T13:30:17.808Z',
-        locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         offenceDetails: {
           offenceCode: 16001,
           offenceRule: {
@@ -110,7 +111,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         discoveryRadioSelected: 'Yes',
       })
       .expect(302)
@@ -121,7 +122,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .post(adjudicationUrls.incidentDetails.urls.edit('G6415GD', 34))
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
-        locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         discoveryRadioSelected: 'Yes',
       })
       .expect('Content-Type', /html/)
@@ -137,7 +138,7 @@ describe('POST /incident-details/<PRN>/<id>/edit', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         discoveryDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
-        locationId: 2,
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         discoveryRadioSelected: 'Yes',
       })
       .expect('Content-Type', /html/)

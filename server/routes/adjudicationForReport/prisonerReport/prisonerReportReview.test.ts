@@ -34,6 +34,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '1524493',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-12-09T10:30:00',
     }),
@@ -45,6 +46,7 @@ beforeEach(() => {
   decisionTreeService.draftAdjudicationIncidentData.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 12345,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       chargeNumber: '1524661',
       prisonerNumber: 'G5512GK',
       dateTimeOfIncident: '2021-03-08T10:45:00',
