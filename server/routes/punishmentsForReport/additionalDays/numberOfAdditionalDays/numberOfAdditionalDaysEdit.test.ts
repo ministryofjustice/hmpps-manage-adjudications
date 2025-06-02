@@ -37,6 +37,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '1524494',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2022-10-31T12:54:09.197Z',
     }),

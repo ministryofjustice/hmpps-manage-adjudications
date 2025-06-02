@@ -46,6 +46,7 @@ const victimPrisonerDetails: PrisonerResultSummary = testData.prisonerResultSumm
 const reportedAdj = {
   reportedAdjudication: testData.reportedAdjudication({
     chargeNumber: '100',
+    locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
     prisonerNumber: adjudicationPrisonerDetails.offenderNo,
     dateTimeOfIncident: '2022-12-09T10:30:00',
     incidentRole: {

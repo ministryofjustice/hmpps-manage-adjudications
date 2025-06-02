@@ -1,13 +1,10 @@
 export type PrisonLocation = {
-  locationId: number // TODO: MAP-2114: remove at a later date
   locationUuid: string
   locationPrefix: string
   userDescription: string
 }
 
 export type AgencyId = string
-
-export type LocationId = number // TODO: MAP-2114: remove at a later date
 
 export type LocationUuid = string
 
@@ -17,7 +14,6 @@ export type Agency = {
 }
 
 export type Location = {
-  locationId: number // TODO: MAP-2114: remove at a later date
   locationUuid: string
   locationPrefix: string
   userDescription: string
@@ -25,7 +21,6 @@ export type Location = {
 }
 
 export type IncidentLocation = {
-  locationId: string // TODO: MAP-2114: remove at a later date
   locationUuid: string
   locationPrefix: string
   userDescription: string

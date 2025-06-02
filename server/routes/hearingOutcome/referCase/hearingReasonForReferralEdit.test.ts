@@ -31,6 +31,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getLastOutcomeItem.mockResolvedValue({
     hearing: testData.singleHearing({
       dateTimeOfHearing: '2023-03-14T18:00:00',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       outcome: testData.hearingOutcome({
         code: HearingOutcomeCode.REFER_POLICE,
         optionalItems: { details: 'A reason for referral' },

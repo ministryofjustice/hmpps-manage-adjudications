@@ -38,7 +38,7 @@ import {
   getTime,
   hasAnyRole,
 } from '../utils/utils'
-import { Location, LocationId } from '../data/PrisonLocationResult'
+import { Location, LocationUuid } from '../data/PrisonLocationResult'
 import {
   DamageDetails,
   DraftAdjudication,
@@ -175,12 +175,10 @@ export default class ReportedAdjudicationsService {
 
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
 
-    const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
-      reportedAdjudication.incidentDetails.locationId,
+    const location = await this.locationService.getIncidentLocation(
+      reportedAdjudication.incidentDetails.locationUuid,
       user
     )
-
-    const location = await this.locationService.getIncidentLocation(dpsLocationId, user)
 
     const agencyDescription = await this.locationService.getAgency(location.prisonId, user)
 
@@ -276,12 +274,11 @@ export default class ReportedAdjudicationsService {
     const prisonerPreferredNonEnglishLanguage = getNonEnglishLanguage(prisoner.language)
     const prisonerOtherLanguages = secondaryLanguages?.map(l => l.description)
 
-    const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
-      adjudicationData.reportedAdjudication.incidentDetails.locationId,
+    // TODO: Check for locationsUUid work
+    const location = await this.locationService.getIncidentLocation(
+      adjudicationData.reportedAdjudication.incidentDetails.locationUuid,
       user
     )
-
-    const location = await this.locationService.getIncidentLocation(dpsLocationId, user)
 
     const agencyDescription = await this.locationService.getAgency(location.prisonId, user)
 
@@ -750,13 +747,8 @@ export default class ReportedAdjudicationsService {
     const dateDiscovery = getDate(dateTimeDiscovery, 'D MMMM YYYY')
     const timeDiscovery = getTime(dateTimeDiscovery)
 
-    const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
-      adjudication.incidentDetails.locationId,
-      user
-    )
-
     const [location, agencyName] = await Promise.all([
-      this.locationService.getIncidentLocation(dpsLocationId, user),
+      this.locationService.getIncidentLocation(adjudication.incidentDetails.locationUuid, user),
       this.locationService.getAgency(adjudication.originatingAgencyId, user),
     ])
 
@@ -854,20 +846,11 @@ export default class ReportedAdjudicationsService {
   }
 
   getHearingLocationMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<string, string>> => {
-    const hearingLocationIds = hearings.map(hearing => hearing.hearing.locationId)
-
-    const dpsHearingLocationIds =
-      (await Promise.all(
-        [...hearingLocationIds].map(id => {
-          return this.locationService.getCorrespondingDpsLocationId(id, user)
-        })
-      )) || []
-
+    const hearingLocationUuids = hearings.map(hearing => hearing.hearing.locationUuid)
     const locationNamesAndIds =
       (await Promise.all(
-        [...dpsHearingLocationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
+        [...hearingLocationUuids].map(locationUuid => this.locationService.getIncidentLocation(locationUuid, user))
       )) || []
-
     return new Map(locationNamesAndIds.map(loc => [loc.id, loc.localName]))
   }
 
@@ -905,26 +888,9 @@ export default class ReportedAdjudicationsService {
       this.getAdjudicatorNameMap(hearings, user),
     ])
 
-    // if history.hearing exists, replace its nomis location id with corresponding dps location id
-    // so we can get the location name from locationsApi rather than prisonApi
-    const historyWithDpsLocationIdsForHearings =
-      (await Promise.all(
-        history.map(async hist => {
-          if (hist.hearing) {
-            const locationId = await this.locationService.getCorrespondingDpsLocationId(hist.hearing?.locationId, user)
-            return {
-              ...hist,
-              hearing: { ...hist.hearing, locationId },
-            }
-          }
-          return hist
-        })
-      )) || []
-
-    return historyWithDpsLocationIdsForHearings.map(historyItem => {
+    return history.map(historyItem => {
       if (historyItem.hearing) {
-        // Reconstruct the data but add the hearing location name
-        const hearingLocationName = locationNamesByIdMap.get(historyItem.hearing.locationId as string) || ''
+        const hearingLocationName = locationNamesByIdMap.get(historyItem.hearing.locationUuid) || ''
         const convertedGovAdjudicator = governorMap.get(historyItem.hearing.outcome?.adjudicator) || ''
         return {
           hearing: {
@@ -951,14 +917,12 @@ export default class ReportedAdjudicationsService {
 
   async scheduleHearing(
     chargeNumber: string,
-    locationId: number, // TODO: MAP-2114: remove at a later date
     locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,
     user: User
   ) {
     const dataToSend = {
-      locationId,
       locationUuid,
       dateTimeOfHearing,
       oicHearingType,
@@ -968,14 +932,12 @@ export default class ReportedAdjudicationsService {
 
   async rescheduleHearing(
     chargeNumber: string,
-    locationId: number, // TODO: MAP-2114: remove at a later date
     locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,
     user: User
   ) {
     const dataToSend = {
-      locationId,
       locationUuid,
       dateTimeOfHearing,
       oicHearingType,
@@ -1034,12 +996,12 @@ export default class ReportedAdjudicationsService {
 
   async filterAdjudicationsByLocation(
     adjudications: ReportedAdjudicationEnhancedWithIssuingDetails[],
-    chosenLocationId: LocationId,
+    chosenLocationUuid: LocationUuid,
     user: User
   ) {
     const location = await (
       await this.locationService.getLocationsForUser(user)
-    ).filter(loc => loc.locationId === chosenLocationId)
+    ).filter(loc => loc.locationUuid === chosenLocationUuid)
     const { locationPrefix } = location[0]
     return adjudications.filter(adj => this.getLocationPrefix(adj.prisonerLocation) === locationPrefix)
   }
@@ -1381,7 +1343,7 @@ export default class ReportedAdjudicationsService {
     )
 
     if (filter.locationId) {
-      const location = possibleLocations.filter(loc => loc.locationId === filter.locationId)
+      const location = possibleLocations.filter(loc => loc.locationUuid === filter.locationId)
       const { locationPrefix } = location[0]
       awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(
         apad => this.getLocationPrefix(apad.prisonerLocation) === locationPrefix

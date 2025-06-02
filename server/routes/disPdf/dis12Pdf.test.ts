@@ -47,13 +47,14 @@ const offenceRule: OffenceRule = {
 const reportedAdjudication: ReportedAdjudication = testData.reportedAdjudication({
   chargeNumber: '1524493',
   prisonerNumber: 'G6415GD',
-  locationId: 197682,
+  locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
   dateTimeOfIncident: '2021-12-09T10:30:00',
   offenceDetails: { offenceCode: 1, offenceRule },
   status: ReportedAdjudicationStatus.SCHEDULED,
   hearings: [
     testData.singleHearing({
       dateTimeOfHearing: '2023-09-02T10:50:00.000',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       outcome: testData.hearingOutcome({
         code: HearingOutcomeCode.ADJOURN,
         optionalItems: { details: 'adjourned details', reason: 'LEGAL_ADVICE', plea: 'NOT_ASKED' },
@@ -61,6 +62,7 @@ const reportedAdjudication: ReportedAdjudication = testData.reportedAdjudication
     }),
     testData.singleHearing({
       dateTimeOfHearing: '2023-09-03T12:00:00.000',
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       oicHearingType: OicHearingType.INAD_ADULT,
     }),
   ],
@@ -170,7 +172,7 @@ describe('GET /all-completed-reports', () => {
     const reportedAdjudicationWithoutHearing = testData.reportedAdjudication({
       chargeNumber: '1524493',
       prisonerNumber: 'G6415GD',
-      locationId: 197682,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       dateTimeOfIncident: '2021-12-09T10:30:00',
       offenceDetails: { offenceCode: 1, offenceRule },
     })

@@ -25,7 +25,7 @@ beforeEach(() => {
     draftAdjudication: testData.draftAdjudication({
       id: 436,
       prisonerNumber: 'G6415GD',
-      locationId: 197682,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       dateTimeOfIncident: '2021-12-09T10:30:00',
       incidentStatement: {
         statement: 'This is the statement about the event',
