@@ -157,8 +157,8 @@ export default function routes(
   router.use(adjudicationUrls.confirmedOnReport.root, confirmedOnReportRoutes({ reportedAdjudicationsService }))
   router.use(adjudicationUrls.taskList.root, taskListRoutes({ placeOnReportService }))
   router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
-  router.use(adjudicationUrls.searchForPrisoner.root, prisonerSearchRoutes())
-  router.use(adjudicationUrls.selectPrisoner.root, prisonerSelectRoutes({ prisonerSearchService }))
+  router.use(adjudicationUrls.searchForPrisoner.root, prisonerSearchRoutes({ userService }))
+  router.use(adjudicationUrls.selectPrisoner.root, prisonerSelectRoutes({ prisonerSearchService, userService }))
   router.use(adjudicationUrls.selectAssociatedPrisoner.root, selectAssociatedPrisonerRoutes({ prisonerSearchService }))
   router.use(
     adjudicationUrls.selectAssociatedStaff.root,
