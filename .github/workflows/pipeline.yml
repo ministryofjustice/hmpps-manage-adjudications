@@ -58,6 +58,17 @@ jobs:
       additional_docker_tag: ${{ inputs.additional_docker_tag }}
       push: ${{ inputs.push || true }}
       docker_multiplatform: false
+  deploy_test:
+    name: Deploy to the test environment
+    if: github.ref != 'refs/heads/main'
+    needs:
+      - build
+      - helm_lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
+    secrets: inherit
+    with:
+      environment: 'test'
+      app_version: '${{ needs.build.outputs.app_version }}'
   deploy_dev:
     name: Deploy to the dev environment
     if: github.ref == 'refs/heads/main'
