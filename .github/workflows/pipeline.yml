@@ -47,7 +47,7 @@ jobs:
       environment: ${{ matrix.environments }}
   build:
     name: Build docker image from hmpps-github-actions
-    if: github.ref == 'refs/heads/main'
+    if: ${{ github.ref == 'refs/heads/main' || (github.ref != 'refs/heads/main' && contains(github.event.pull_request.labels.*.name, 'test')) }}
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
     needs:
       - node_integration_tests
