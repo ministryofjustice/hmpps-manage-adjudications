@@ -1548,6 +1548,25 @@ export default class ReportedAdjudicationsService {
       )
     }
 
+    // Filter results by selected agencies if any are provided in filter.agency (can be a string or comma-separated)
+    if (filter.agency && Array.isArray(results.content)) {
+      const selectedAgencies = Array.isArray(filter.agency)
+        ? filter.agency
+        : String(filter.agency)
+            .split(',')
+            .map(a => a.trim())
+            .filter(Boolean)
+      const filteredContent = results.content.filter(adjudication =>
+        selectedAgencies.includes(adjudication.originatingAgencyId)
+      )
+      return {
+        ...results,
+        content: filteredContent,
+        totalElements: filteredContent.length,
+        size: filteredContent.length,
+      }
+    }
+
     return results
   }
 

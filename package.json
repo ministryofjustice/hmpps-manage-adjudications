@@ -21,10 +21,11 @@
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests",
-    "test": "jest --runInBand",
+    "test": "jest",
+    "test:ci": "jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run --config video=false",
-    "int-test-ui": "cypress open",
+    "int-test-ui": "cypress open --e2e --browser chrome",
     "clean": "rm -rf dist build node_modules stylesheets",
     "rebuild": "npm run clean && npm i && npm run build"
   },
@@ -89,7 +90,7 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^3.3.1",
+    "@ministryofjustice/frontend": "^5.1.3",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.6",
     "body-parser": "^1.20.3",
@@ -106,7 +107,7 @@
     "express": "^4.21.2",
     "express-request-id": "^1.4.1",
     "express-session": "^1.18.1",
-    "govuk-frontend": "^5.8.0",
+    "govuk-frontend": "^5.10.2",
     "helmet": "^6.2.0",
     "http-errors": "^2.0.0",
     "jquery": "^3.7.1",

@@ -17,7 +17,7 @@ const stubFeComponents = ({
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/feComponent/components\\?component=header&component=footer&component=meta',
+      urlPattern: '/components/components\\?component=header&component=footer&component=meta',
     },
     response: {
       status: 200,
@@ -46,7 +46,7 @@ const stubFeComponentsCss = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/feComponent/components/.+css',
+      urlPattern: '/components/.+css',
     },
     response: {
       status: 200,
@@ -61,7 +61,7 @@ const stubFeComponentsJs = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/feComponent/components/.+js',
+      urlPattern: '/components/.+js',
     },
     response: {
       status: 200,
@@ -76,7 +76,7 @@ const stubFeComponentsFail = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/feComponent/components/header',
+      urlPattern: '/components/components/header',
     },
     response: {
       status: 500,
