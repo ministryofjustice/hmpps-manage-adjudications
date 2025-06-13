@@ -45,9 +45,9 @@ jobs:
     secrets: inherit
     with:
       environment: ${{ matrix.environments }}
-  build:
+  build_test:
     name: Build docker image from hmpps-github-actions
-    if: ${{ github.ref == 'refs/heads/main' || (github.ref != 'refs/heads/main' && contains(github.event.pull_request.labels.*.name, 'test')) }}
+    if: contains(github.event.pull_request.labels.*.name, 'test')
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
     needs:
       - node_integration_tests
@@ -62,13 +62,26 @@ jobs:
     name: Deploy to the test environment
     if: github.ref != 'refs/heads/main'
     needs:
-      - build
+      - build_test
       - helm_lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
       environment: 'test'
       app_version: '${{ needs.build.outputs.app_version }}'
+  build:
+    name: Build docker image from hmpps-github-actions
+    if: github.ref == 'refs/heads/main'
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
+    needs:
+      - node_integration_tests
+      - node_unit_tests
+    with:
+      docker_registry: 'ghcr.io'
+      registry_org: 'ministryofjustice'
+      additional_docker_tag: ${{ inputs.additional_docker_tag }}
+      push: ${{ inputs.push || true }}
+      docker_multiplatform: false
   deploy_dev:
     name: Deploy to the dev environment
     if: github.ref == 'refs/heads/main'
