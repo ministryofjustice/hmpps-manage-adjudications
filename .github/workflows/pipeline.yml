@@ -64,8 +64,8 @@ jobs:
     name: Deploy to the test environment
     if: contains(github.event.pull_request.labels.*.name, 'test')
     needs:
-      - build
-      - helm_lint
+      - node_integration_tests
+      - node_unit_tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
