@@ -33,7 +33,7 @@ export default defineConfig({
       on('task', {
         reset: resetStubs,
         getSignInUrl: auth.getSignInUrl,
-        stubSignIn: (roles: string[] = ['ROLE_ADJUDICATIONS_REVIEWER']) => {
+        stubSignIn: (roles: string[] = ['ROLE_ADJUDICATIONS_REVIEWER', 'ROLE_GLOBAL_SEARCH']) => {
           const userCaseLoads = [
             {
               caseLoadId: 'MDI',
