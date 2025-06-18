@@ -33,6 +33,7 @@ beforeEach(() => {
   placeOnReportService.startNewDraftAdjudication.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
       id: 1,
+      locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
       prisonerNumber: 'G6415GD',
       dateTimeOfIncident: '2021-10-27T13:30:00.000',
       dateTimeOfDiscovery: '2021-10-27T13:30:00.000',
@@ -70,7 +71,6 @@ describe('POST /incident-details', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: 2,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
@@ -84,7 +84,6 @@ describe('POST /incident-details', () => {
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
-        locationId: 2,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         discoveryRadioSelected: 'Yes',
       })
@@ -101,7 +100,6 @@ describe('POST /incident-details', () => {
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
         discoveryDate: { date: '27/10/2021', time: { hour: '12', minute: '30' } },
-        locationId: 2,
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
@@ -114,13 +112,11 @@ describe('POST /incident-details', () => {
   })
 
   it('should verify supply optional discoveryDate ', async () => {
-    locationService.getCorrespondingNomisLocationId.mockResolvedValue(2)
     return request(app)
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '26/10/2021', time: { hour: '13', minute: '30' } },
         discoveryDate: { date: '', time: { hour: '', minute: '' } },
-        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
@@ -129,7 +125,6 @@ describe('POST /incident-details', () => {
       .expect(() => {
         expect(placeOnReportService.startNewDraftAdjudication).toBeCalledWith(
           '2021-10-26T13:30',
-          2,
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           'G6415GD',
           expect.anything(),
@@ -147,14 +142,11 @@ describe('POST /incident-details', () => {
       })
   })
   it('should not call getPrisonerDetails to get the prisoner gender if it is stored on the session', () => {
-    locationService.getCorrespondingNomisLocationId.mockResolvedValue(2)
-
     return request(app)
       .post(`${adjudicationUrls.incidentDetails.urls.start('G6415GD')}?selectedPerson=G2678PF`)
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
         discoveryDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
-        locationId: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         currentRadioSelected: 'incited',
         incitedInput: 'G2678PF',
@@ -166,7 +158,6 @@ describe('POST /incident-details', () => {
         expect(placeOnReportService.getAndDeletePrisonerGenderFromSession).toBeCalledTimes(1)
         expect(placeOnReportService.startNewDraftAdjudication).toBeCalledWith(
           '2021-10-27T13:30',
-          2,
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           'G6415GD',
           expect.anything(),

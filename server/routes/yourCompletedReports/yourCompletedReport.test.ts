@@ -31,6 +31,7 @@ describe('GET /your-completed-reports', () => {
     beforeEach(() => {
       const adjudicationOne = testData.reportedAdjudication({
         chargeNumber: '2',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6123VU',
         dateTimeOfIncident: '2021-11-15T11:45:00',
         otherData: {
@@ -42,6 +43,7 @@ describe('GET /your-completed-reports', () => {
       })
       const adjudicationTwo = testData.reportedAdjudication({
         chargeNumber: '1',
+        locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         prisonerNumber: 'G6174VU',
         dateTimeOfIncident: '2021-11-15T11:30:00',
         otherData: {
