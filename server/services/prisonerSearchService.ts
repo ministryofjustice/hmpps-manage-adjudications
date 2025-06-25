@@ -95,15 +95,13 @@ export default class PrisonerSearchService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
 
     const results = await new PrisonerSearchClient(token).search(searchRequest)
-    const enhancedResults = results
-      .filter(prisoner => prisoner.prisonId !== 'OUT')
-      .map(prisoner => {
-        return {
-          ...prisoner,
-          onlyShowPrisonName: prisoner.prisonId !== user.meta.caseLoadId,
-          ...PrisonerSearchService.enhancePrisoner(prisoner),
-        }
-      })
+    const enhancedResults = results.map(prisoner => {
+      return {
+        ...prisoner,
+        onlyShowPrisonName: prisoner.prisonId !== user.meta.caseLoadId,
+        ...PrisonerSearchService.enhancePrisoner(prisoner),
+      }
+    })
 
     return enhancedResults.sort((a: PrisonerSearchSummary, b: PrisonerSearchSummary) =>
       a.displayName.localeCompare(b.displayName)
