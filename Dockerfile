@@ -1,5 +1,5 @@
 # Stage: base image
-FROM node:22.16-bookworm-slim as base
+FROM node:22.17-bookworm-slim as base
 
 ARG BUILD_NUMBER=1_0_0
 ENV GIT_REF ${GIT_REF:-xxxxxxxxxxxxxxxxxxx}
