@@ -82,7 +82,6 @@ describe('prisonerSearchService', () => {
           gender: 'Unknown',
           startHref: adjudicationUrls.selectGender.url.start('A1234AB'),
         }),
-
         testData.prisonerSearchSummary({
           firstName: 'John',
           lastName: 'Smith',

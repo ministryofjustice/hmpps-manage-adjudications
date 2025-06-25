@@ -2,8 +2,10 @@ import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
 import PrisonerSearchService, { PrisonerSearchSummary } from '../../services/prisonerSearchService'
+import UserService from '../../services/userService'
 import validateForm from '../prisonerSearch/prisonerSearchValidation'
 import adjudicationUrls from '../../utils/urlGenerator'
+import { hasAnyRole } from '../../utils/utils'
 
 type PageData = {
   error?: FormError
@@ -12,21 +14,27 @@ type PageData = {
   transfer?: string
 }
 export default class PrisonerSelectRoutes {
-  constructor(private readonly prisonerSearchService: PrisonerSearchService) {}
+  constructor(
+    private readonly prisonerSearchService: PrisonerSearchService,
+    private readonly userService: UserService
+  ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { user } = res.locals
     const { error, searchTerm, transfer } = pageData
     const prisonIds = [user.meta.caseLoadId]
 
+    if (transfer === 'true') {
+      const userRoles = await this.userService.getUserRoles(res.locals.user.token)
+      if (!hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
+        return res.redirect(`${adjudicationUrls.searchForPrisoner.root}?transfer=true`)
+      }
+      if (!error) prisonIds.pop()
+    }
+
     let searchResults = null
     if (!error) {
-      if (transfer === 'true') {
-        prisonIds.pop()
-      }
-
       if (!searchTerm) return res.redirect(adjudicationUrls.searchForPrisoner.root)
-
       searchResults = await this.prisonerSearchService.search({ searchTerm, prisonIds }, user)
 
       if (prisonIds.length === 0) {
@@ -52,23 +60,17 @@ export default class PrisonerSelectRoutes {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { searchTerm } = req.body
     const transfer = JSON.stringify(req.query.transfer)?.replace(/"/g, '')
-
     const error = validateForm({ searchTerm })
 
     if (error) return this.renderView(req, res, { error, searchTerm, transfer })
 
-    if (transfer === 'true') {
-      return res.redirect(
-        url.format({
-          pathname: adjudicationUrls.selectPrisoner.root,
-          query: { searchTerm, transfer },
-        })
-      )
-    }
+    const query: Record<string, string> = { searchTerm }
+    if (transfer === 'true') query.transfer = transfer
+
     return res.redirect(
       url.format({
         pathname: adjudicationUrls.selectPrisoner.root,
-        query: { searchTerm },
+        query,
       })
     )
   }
