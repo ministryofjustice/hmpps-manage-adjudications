@@ -23,10 +23,15 @@
   <div class="govuk-form-group">
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      {% if forbidden %}
+        <h1 class="govuk-heading-l">You do not have permission to view people outside of your establishment.</h1>
+      {% else %}
         <h1 class="govuk-heading-l">{{ title }}</h1>
+      {% endif %}
       </legend>
       {% if forbidden %}
-        <p class="govuk-body">You do not have permission to search outside of your establishment.</p>
+        <p class="govuk-body">You need extra permission to be able to view and create reports for people who are not in your establishment.</p>
+        <p class="govuk-body">Contact a local system administrator (LSA) in your establishment to discuss the permission you need.</p>
         <p class="govuk-body">
           {{ govukButton({
             text: "Continue",
