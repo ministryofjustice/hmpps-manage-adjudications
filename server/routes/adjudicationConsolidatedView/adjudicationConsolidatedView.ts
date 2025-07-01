@@ -14,6 +14,7 @@ import {
   PunishmentDataWithSchedule,
   flattenPunishments,
 } from '../../data/PunishmentResult'
+import { hasAnyRole } from '../../utils/utils'
 
 type PageData = {
   prisoner: PrisonerResultSummary
@@ -94,14 +95,22 @@ export default class AdjudicationConsolidatedView {
   view = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, prisonerNumber } = req.params
     const { user } = res.locals
-    const activeCaseLoadId = req.query.agency as string
+    let activeCaseLoadId = req.query.agency as string
+
+    const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
+
+    if (prisoner.agencyId !== activeCaseLoadId) {
+      const userRoles = await this.userService.getUserRoles(user.token)
+      if (!hasAnyRole(['ADJUDICATIONS_REVIEWER', 'GLOBAL_SEARCH'], userRoles)) {
+        activeCaseLoadId = user.meta.caseLoadId
+      }
+    }
 
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
       user,
       activeCaseLoadId
     )
-    const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
     const { reviewData, evidence, offence, prisonerReportDetails, transferBannerInfo } = await this.getInfoForReport(
       reportedAdjudication,
       prisoner,
