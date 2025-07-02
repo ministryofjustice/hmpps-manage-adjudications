@@ -99,7 +99,7 @@ export default class AdjudicationConsolidatedView {
 
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
 
-    if (prisoner.agencyId !== activeCaseLoadId) {
+    if (prisoner.agencyId !== user.meta.caseLoadId) {
       const userRoles = await this.userService.getUserRoles(user.token)
       if (!hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
         activeCaseLoadId = user.meta.caseLoadId
