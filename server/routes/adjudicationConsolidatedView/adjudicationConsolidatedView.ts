@@ -101,7 +101,7 @@ export default class AdjudicationConsolidatedView {
 
     if (prisoner.agencyId !== activeCaseLoadId) {
       const userRoles = await this.userService.getUserRoles(user.token)
-      if (!hasAnyRole(['ADJUDICATIONS_REVIEWER', 'GLOBAL_SEARCH'], userRoles)) {
+      if (!hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
         activeCaseLoadId = user.meta.caseLoadId
       }
     }

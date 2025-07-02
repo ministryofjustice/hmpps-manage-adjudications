@@ -65,10 +65,8 @@ export default class AdjudicationHistoryRoutes {
     let forbidden = false
 
     if (prisoner.agencyId !== activeCaseLoadId) {
-      const userRoles = await this.userService.getUserRoles(user.token)
-      if (!hasAnyRole(['ADJUDICATIONS_REVIEWER', 'GLOBAL_SEARCH'], userRoles)) {
-        forbidden = true
-      }
+      const roles = await this.userService.getUserRoles(user.token)
+      forbidden = !hasAnyRole(['GLOBAL_SEARCH'], roles)
     }
 
     const uniqueListOfAgenciesForPrisoner = await this.reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner(
