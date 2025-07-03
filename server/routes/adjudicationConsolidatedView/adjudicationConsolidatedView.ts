@@ -98,20 +98,22 @@ export default class AdjudicationConsolidatedView {
   view = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, prisonerNumber } = req.params
     const { user } = res.locals
-    const activeCaseLoadId = user.meta.caseLoadId
+    const activeCaseLoadId = req.query.agency as string
     let forbidden = false
 
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
+
+    if (prisoner.agencyId !== user.meta.caseLoadId) {
+      const userRoles = await this.userService.getUserRoles(user.token)
+      forbidden = !hasAnyRole(['GLOBAL_SEARCH'], userRoles)
+    }
+
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
       user,
       activeCaseLoadId
     )
 
-    if (prisoner.agencyId !== activeCaseLoadId) {
-      const userRoles = await this.userService.getUserRoles(user.token)
-      forbidden = !hasAnyRole(['GLOBAL_SEARCH'], userRoles)
-    }
     if (prisoner.prisonerNumber !== reportedAdjudication.prisonerNumber) {
       forbidden = true
     }
