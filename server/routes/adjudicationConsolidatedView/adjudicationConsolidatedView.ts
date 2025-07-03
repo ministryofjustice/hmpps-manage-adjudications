@@ -102,18 +102,16 @@ export default class AdjudicationConsolidatedView {
     let forbidden = false
 
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
-
-    if (prisoner.agencyId !== user.meta.caseLoadId) {
-      const userRoles = await this.userService.getUserRoles(user.token)
-      forbidden = !hasAnyRole(['GLOBAL_SEARCH'], userRoles)
-    }
-
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
       user,
       activeCaseLoadId
     )
 
+    if (prisoner.agencyId !== user.meta.caseLoadId) {
+      const userRoles = await this.userService.getUserRoles(user.token)
+      forbidden = !hasAnyRole(['GLOBAL_SEARCH'], userRoles)
+    }
     if (prisoner.prisonerNumber !== reportedAdjudication.prisonerNumber) {
       forbidden = true
     }
