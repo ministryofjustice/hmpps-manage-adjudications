@@ -29,14 +29,19 @@
       href: digitalPrisonServiceUrl
     },
     {
-      text: prisoner.displayName,
-      href: prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
+      text: 'Adjudications' if forbidden else prisoner.displayName,
+      href: '/place-a-prisoner-on-report' if forbidden else prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
     }
     ],
     classes: "govuk-!-display-none-print"
   }) }}
 {% endblock %}
 {% block content %}
+{% if forbidden %}
+    <h1 class="govuk-heading-l">You do not have permission to view people outside of your establishment.</h1>
+    <p class="govuk-body">You need extra permission to be able to view and create reports for people who are not in your establishment.</p>
+    <p class="govuk-body">Contact a local system administrator (LSA) in your establishment to discuss the permission you need.</p>
+{% else %}
   {# Report details #}
   <div class="govuk-grid-row">
     {% if reportedAdjudication.overrideAgencyId and transferBannerContent %}
@@ -120,5 +125,5 @@
       </div>
     {% endif %}
   </div>
-
+{% endif %}
 {% endblock %}

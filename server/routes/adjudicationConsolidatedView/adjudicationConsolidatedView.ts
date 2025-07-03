@@ -42,6 +42,7 @@ type PageData = {
   quashed: boolean
   chargeProved: boolean
   corrupted: boolean
+  forbidden?: boolean
 }
 
 export default class AdjudicationConsolidatedView {
@@ -69,6 +70,7 @@ export default class AdjudicationConsolidatedView {
       quashed,
       chargeProved,
       corrupted,
+      forbidden,
     } = pageData
     res.render(`pages/adjudicationConsolidatedView.njk`, {
       prisonerNumber: prisoner.prisonerNumber,
@@ -89,28 +91,31 @@ export default class AdjudicationConsolidatedView {
       quashed,
       chargeProved,
       corrupted,
+      forbidden,
     })
   }
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, prisonerNumber } = req.params
     const { user } = res.locals
-    let activeCaseLoadId = req.query.agency as string
+    const activeCaseLoadId = req.query.agency as string
+    let forbidden = false
 
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
-
-    if (prisoner.agencyId !== user.meta.caseLoadId) {
-      const userRoles = await this.userService.getUserRoles(user.token)
-      if (!hasAnyRole(['GLOBAL_SEARCH'], userRoles)) {
-        activeCaseLoadId = user.meta.caseLoadId
-      }
-    }
-
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
       user,
       activeCaseLoadId
     )
+
+    if (prisoner.agencyId !== user.meta.caseLoadId) {
+      const userRoles = await this.userService.getUserRoles(user.token)
+      forbidden = !hasAnyRole(['GLOBAL_SEARCH'], userRoles)
+    }
+    if (prisoner.prisonerNumber !== reportedAdjudication.prisonerNumber) {
+      forbidden = true
+    }
+
     const { reviewData, evidence, offence, prisonerReportDetails, transferBannerInfo } = await this.getInfoForReport(
       reportedAdjudication,
       prisoner,
@@ -137,6 +142,7 @@ export default class AdjudicationConsolidatedView {
       quashed,
       chargeProved,
       corrupted,
+      forbidden,
     })
   }
 
