@@ -20,8 +20,8 @@
       href: digitalPrisonServiceUrl
     },
     {
-      text: prisoner.displayName,
-      href: prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
+      text: 'Adjudications' if forbidden else prisoner.displayName,
+      href: '/place-a-prisoner-on-report' if forbidden else prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
     }
     ],
     classes: "govuk-!-display-none-print"
