@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import ConfirmedOnReportPage, { PageRequestType } from './confirmedOnReportPage'
 
@@ -26,7 +25,7 @@ export default function prisonerConfirmedOnReportRoutes({
     reportedAdjudicationsService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.confirmedOnReport.matchers.start, confirmedOnReportRoute.view)
   get(adjudicationUrls.confirmedOnReport.matchers.confirmationOfChange, confirmedOnReportChangeReportRoutes.view)

@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import SelectAssociatedPrisonerRoutes from './selectAssociatedPrisoner'
 
@@ -15,8 +14,8 @@ export default function selectAssociatedPrisonerRoutes({
 
   const selectAssociatedPrisonerRoute = new SelectAssociatedPrisonerRoutes(prisonerSearchService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.selectAssociatedPrisoner.matchers.start, selectAssociatedPrisonerRoute.view)
   post(adjudicationUrls.selectAssociatedPrisoner.matchers.start, selectAssociatedPrisonerRoute.submit)

@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import PunishmentsTabReviewerRoute from './punishmentsTabReviewer'
 import PunishmentsTabReporterRoute from './punishmentsTabReporter'
@@ -37,7 +36,7 @@ export default function PunishmentsAndDamagesRoutes({
     userService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.punishmentsAndDamages.matchers.review, punishmentsTabReviewerRoute.view)
   get(adjudicationUrls.punishmentsAndDamages.matchers.report, punishmentsTabReporterRoute.view)

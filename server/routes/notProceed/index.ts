@@ -1,7 +1,6 @@
 import express, { RequestHandler, Router } from 'express'
 import NotProceedRoutes from './notProceed'
 import NotProceedEditRoutes from './notProceedEdit'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
@@ -51,8 +50,8 @@ export default function notProceedRoutes({
     reportedAdjudicationsService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.reasonForNotProceeding.matchers.start, notProceedRoute.view)
   post(adjudicationUrls.reasonForNotProceeding.matchers.start, notProceedRoute.submit)

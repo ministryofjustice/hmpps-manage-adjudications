@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import GovReasonForReferralRoutes from './govReasonForReferral'
 import GovReasonForReferralEditRoutes from './govReasonForReferralEdit'
@@ -31,8 +30,8 @@ export default function govReasonForReferralRoutes({
     outcomesService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.govReasonForReferral.matchers.start, govReasonForReferralRoute.view)
   post(adjudicationUrls.govReasonForReferral.matchers.start, govReasonForReferralRoute.submit)

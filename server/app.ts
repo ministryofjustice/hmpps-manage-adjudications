@@ -49,7 +49,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
   app.use(authorisationMiddleware())
-  app.use('*', getFrontendComponents(services))
+  app.use('*"matcher"', getFrontendComponents(services))
 
   if (config.maintenanceModeFlag === 'true') {
     app.use('/', maintenanceRoutes(maintenancePageRouter(services.userService)))

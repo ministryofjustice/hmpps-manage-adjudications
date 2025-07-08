@@ -1,5 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
+
 import PunishmentsService from '../../../../services/punishmentsService'
 import UserService from '../../../../services/userService'
 
@@ -26,7 +26,7 @@ export default function awardPunishmentsRoutes({
     userService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.awardPunishments.matchers.start, punishmentsUsingApi.view)
   get(adjudicationUrls.awardPunishments.matchers.modified, punishmentsUsingSession.view)

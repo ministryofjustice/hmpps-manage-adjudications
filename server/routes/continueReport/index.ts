@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import ContinueReportSelectRoutes from './continueReportSelect'
 
@@ -15,8 +14,8 @@ export default function CheckAnswersRoutes({
 
   const continueReportRoute = new ContinueReportSelectRoutes(placeOnReportService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.continueReport.matchers.start, continueReportRoute.view)
   post(adjudicationUrls.continueReport.matchers.start, continueReportRoute.submit)

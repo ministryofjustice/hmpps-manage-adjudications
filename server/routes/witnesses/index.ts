@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import WitnessesSessionService from '../../services/witnessesSessionService'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
@@ -61,8 +60,8 @@ export default function detailsOfWitnessesRoutes({
     reportedAdjudicationsService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.detailsOfWitnesses.matchers.start, detailsOfWitnessesUsingDraft.view)
   post(adjudicationUrls.detailsOfWitnesses.matchers.start, detailsOfWitnessesUsingDraft.submit)

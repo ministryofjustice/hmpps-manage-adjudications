@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import EnterStartDateRoute from './enterStartDate'
 import EnterStartDateEditRoute from './enterStartDateEdit'
@@ -27,8 +26,8 @@ export default function SuspendedPunishmentEnterStartDateRoutes({
     reportedAdjudicationsService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.suspendedPunishmentStartDate.matchers.existingPunishment, enterStartDateRoute.view)
   post(adjudicationUrls.suspendedPunishmentStartDate.matchers.existingPunishment, enterStartDateRoute.submit)

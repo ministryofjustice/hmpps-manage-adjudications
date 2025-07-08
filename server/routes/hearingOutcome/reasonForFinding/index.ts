@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
@@ -26,8 +25,8 @@ export default function reasonForFindingRoutes({
     userService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.hearingReasonForFinding.matchers.start, reasonForFindingRoute.view)
   post(adjudicationUrls.hearingReasonForFinding.matchers.start, reasonForFindingRoute.submit)

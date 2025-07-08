@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import AcceptedReportConfirmationRoute from './acceptedReportConfirmation'
 
@@ -14,7 +13,7 @@ export default function acceptedReportConfRoutes({
   const router = express.Router()
 
   const acceptedReportConfirmationRoute = new AcceptedReportConfirmationRoute(reportedAdjudicationsService)
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.acceptedReportConfirmation.matchers.start, acceptedReportConfirmationRoute.view)
   return router

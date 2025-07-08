@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import AutoPunishmentScheduleRoute from './autoPunishmentSchedule'
 
@@ -25,7 +24,7 @@ export default function AutoPunishmentScheduleRoutes({
     reportedAdjudicationsService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.punishmentAutomaticDateSchedule.matchers.start, autoPunishmentScheduleRoute.view)
 

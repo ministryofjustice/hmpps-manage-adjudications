@@ -1,11 +1,10 @@
 import jwtDecode from 'jwt-decode'
 import { RequestHandler } from 'express'
-import asyncMiddleware from './asyncMiddleware'
 
 import logger from '../../logger'
 
 export default function authorisationMiddleware(authorisedRoles: string[] = []): RequestHandler {
-  return asyncMiddleware((req, res, next) => {
+  return (req, res, next) => {
     if (res.locals && res.locals.user && res.locals.user.token) {
       const { authorities: roles = [] } = jwtDecode(res.locals.user.token) as { authorities?: string[] }
 
@@ -19,5 +18,5 @@ export default function authorisationMiddleware(authorisedRoles: string[] = []):
 
     req.session.returnTo = req.originalUrl
     return res.redirect('/sign-in')
-  })
+  }
 }

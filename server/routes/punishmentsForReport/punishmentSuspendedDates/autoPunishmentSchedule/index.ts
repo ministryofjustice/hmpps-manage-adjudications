@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import AutoPunishmentSuspendedScheduleRoute from './autoPunishmentSchedule'
 
@@ -18,7 +17,7 @@ export default function AutoPunishmentSuspendedScheduleRoutes({
 
   const autoPunishmentScheduleRoute = new AutoPunishmentSuspendedScheduleRoute(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.suspendedPunishmentAutoDates.matchers.existingPunishment, autoPunishmentScheduleRoute.view)
 

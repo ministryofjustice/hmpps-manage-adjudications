@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import PleaAndFindingRoutes from './pleaAndFinding'
 import PleaAndFindingEditRoutes from './pleaAndFindingEdit'
@@ -27,8 +26,8 @@ export default function pleaAndFindingRoutes({
     reportedAdjudicationsService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.hearingPleaAndFinding.matchers.start, pleaAndFindingRoute.view)
   post(adjudicationUrls.hearingPleaAndFinding.matchers.start, pleaAndFindingRoute.submit)

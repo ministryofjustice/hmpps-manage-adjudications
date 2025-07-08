@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import PlaceOnReportService from '../../services/placeOnReportService'
 import UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -17,8 +16,8 @@ export default function deleteAssociatedPersonRoutes({
 
   const deletePersonRoutes = new DeletePersonRoutes(placeOnReportService, userService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.deletePerson.matchers.start, deletePersonRoutes.view)
   post(adjudicationUrls.deletePerson.matchers.start, deletePersonRoutes.submit)

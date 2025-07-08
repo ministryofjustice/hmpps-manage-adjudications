@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import PrisonerReportRoutes from './prisonerReport'
 import PrisonerReportReviewRoutes from './prisonerReportReview'
@@ -37,8 +36,8 @@ export default function prisonerReportRoutes({
     userService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.prisonerReport.matchers.report, prisonerReportRoute.view)
   get(adjudicationUrls.prisonerReport.matchers.review, prisonerReportReview.view)

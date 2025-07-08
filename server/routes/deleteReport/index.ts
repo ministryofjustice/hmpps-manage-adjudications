@@ -1,5 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
+
 import adjudicationUrls from '../../utils/urlGenerator'
 import PlaceOnReportService from '../../services/placeOnReportService'
 
@@ -14,8 +14,8 @@ export default function CheckAnswersRoutes({
 
   const deleteReportRoute = new DeleteReport(placeOnReportService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.deleteReport.matchers.delete, deleteReportRoute.view)
   post(adjudicationUrls.deleteReport.matchers.delete, deleteReportRoute.submit)

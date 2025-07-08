@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import AgeOfPrisonerRoutes from './ageOfPrisoner'
 import AgeOfPrisonerSubmittedEditRoutes from './ageOfPrisonerSubmittedEdit'
@@ -17,8 +16,8 @@ export default function ageOfPrisonerRoutes({
   const ageOfPrisonerRoute = new AgeOfPrisonerRoutes(placeOnReportService)
   const ageOfPrisonerSubmittedEditRoute = new AgeOfPrisonerSubmittedEditRoutes(placeOnReportService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.ageOfPrisoner.matchers.start, ageOfPrisonerRoute.view)
   post(adjudicationUrls.ageOfPrisoner.matchers.start, ageOfPrisonerRoute.submit)

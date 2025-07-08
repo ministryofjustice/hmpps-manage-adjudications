@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import PrintDis12ReportRoutes from './printDis12Report'
 
@@ -15,7 +14,7 @@ export default function prisonerConfirmedOnReportRoutes({
 
   const printDis12ReportRoute = new PrintDis12ReportRoutes(reportedAdjudicationsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.printReport.matchers.dis12, printDis12ReportRoute.view)
 

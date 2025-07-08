@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
 import DecisionTreeService from '../../services/decisionTreeService'
@@ -39,8 +38,8 @@ export default function detailsOfOffenceRoutes({
 
   const deleteOffence = new DeleteOffenceRoutes(decisionTreeService, placeOnReportService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.detailsOfOffence.matchers.add, addOffence.add)
   get(adjudicationUrls.detailsOfOffence.matchers.aloAdd, addOffence.aloAdd)
