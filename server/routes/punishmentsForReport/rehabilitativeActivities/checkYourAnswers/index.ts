@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import CheckYourAnswersCompleteRehabilitativeActivityPage from './checkYourAnswers'
 
@@ -18,8 +17,8 @@ export default function checkYourAnswersRehabCompleteRoutes({
 
   const checkYourAnswersRoute = new CheckYourAnswersCompleteRehabilitativeActivityPage(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.matchers.start, checkYourAnswersRoute.view)
   post(adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.matchers.start, checkYourAnswersRoute.submit)

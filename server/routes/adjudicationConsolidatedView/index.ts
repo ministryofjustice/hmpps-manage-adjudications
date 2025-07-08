@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import AdjudicationConsolidatedView from './adjudicationConsolidatedView'
 
@@ -28,7 +27,7 @@ export default function adjudicationConsolidatedViewRoutes({
     decisionTreeService,
     punishmentsService
   )
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.prisonerReportConsolidated.matchers.view, adjudicationConsolidatedViewRoute.view)
 

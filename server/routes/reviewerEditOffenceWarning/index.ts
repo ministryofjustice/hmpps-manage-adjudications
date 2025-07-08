@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import ReviewerEditOffenceWarningRoute from './reviewerEditOffenceWarning'
 
@@ -25,7 +24,7 @@ export default function ReviewerEditOffenceWarningRoutes({
     userService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.reviewerEditOffenceWarning.matchers.edit, reviewerEditOffenceWarningRoute.view)
 

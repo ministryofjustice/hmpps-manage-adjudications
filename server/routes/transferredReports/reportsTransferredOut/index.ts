@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import ReportsTransferredOut from './reportsTransferredOut'
 
@@ -18,8 +17,8 @@ export default function reportsTransferredOut({
 
   const reportsTransferredOutRoute = new ReportsTransferredOut(reportedAdjudicationsService, userService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.reportsTransferredOut.matchers.start, reportsTransferredOutRoute.view)
   post(adjudicationUrls.reportsTransferredOut.matchers.start, reportsTransferredOutRoute.submit)

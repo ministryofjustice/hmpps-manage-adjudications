@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import PunishmentRoute from './punishment'
 import PunishmentEditRoute from './punishmentEdit'
@@ -20,8 +19,8 @@ export default function PunishmentRoutes({
   const punishmentRoute = new PunishmentRoute(userService, punishmentsService)
   const punishmentEditRoute = new PunishmentEditRoute(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.punishment.matchers.start, punishmentRoute.view)
   post(adjudicationUrls.punishment.matchers.start, punishmentRoute.submit)

@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import PaybackPunishmentSchedulePage from './paybackPunishmentSchedule'
 
@@ -17,7 +16,7 @@ export default function paybackPunishmentScheduleRoutes({
   const router = express.Router()
 
   const paybackPunishmentScheduleRoute = new PaybackPunishmentSchedulePage(userService, punishmentsService)
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.paybackPunishmentSchedule.matchers.start, paybackPunishmentScheduleRoute.view)
 

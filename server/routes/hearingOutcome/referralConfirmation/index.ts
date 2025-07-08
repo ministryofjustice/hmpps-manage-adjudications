@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import HearingReferralConfirmationRoutes from './hearingReferralConfirmation'
 
@@ -11,7 +10,7 @@ export default function hearingReferralConfirmationRoutes({ userService }: { use
 
   const hearingReferralConfirmationRoute = new HearingReferralConfirmationRoutes(userService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.hearingReferralConfirmation.matchers.start, hearingReferralConfirmationRoute.view)
 

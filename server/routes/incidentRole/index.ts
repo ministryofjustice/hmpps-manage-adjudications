@@ -1,5 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
+
 import IncidentRoleRoutes from './incidentRole'
 import IncidentRoleSubmittedEditRoutes from './incidentRoleSubmittedEdit'
 import IncidentRoleSubmittedEditAloRoutes from './incidentRoleSubmittedEditAlo'
@@ -18,8 +18,8 @@ export default function prisonerIncidentRoleRoutes({
   const incidentRoleSubmittedEdit = new IncidentRoleSubmittedEditRoutes(placeOnReportService)
   const incidentRoleSubmittedEditAlo = new IncidentRoleSubmittedEditAloRoutes(placeOnReportService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.incidentRole.matchers.start, incidentRoleRoute.view)
   post(adjudicationUrls.incidentRole.matchers.start, incidentRoleRoute.submit)

@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import DamagesAmountRoute from './damagesAmount'
 import DamagesAmountEditRoute from './damagesAmountEdit'
@@ -20,8 +19,8 @@ export default function DamagesAmountRoutes({
   const damagesAmountRoute = new DamagesAmountRoute(punishmentsService, userService)
   const damagesAmountEditRoute = new DamagesAmountEditRoute(punishmentsService, userService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.damagesAmount.matchers.start, damagesAmountRoute.view)
   post(adjudicationUrls.damagesAmount.matchers.start, damagesAmountRoute.submit)

@@ -1,5 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
+
 import PunishmentsService from '../../../../services/punishmentsService'
 import UserService from '../../../../services/userService'
 
@@ -19,8 +19,8 @@ export default function reasonForChangeRoutes({
   const reasonForChangePunishmentRoute = new ReasonForChangeRoute(punishmentsService, userService)
   const ReasonForChangePunishmentEditRoute = new ReasonForChangeEditRoute(punishmentsService, userService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.reasonForChangePunishment.matchers.start, reasonForChangePunishmentRoute.view)
   post(adjudicationUrls.reasonForChangePunishment.matchers.start, reasonForChangePunishmentRoute.submit)

@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import IsPrisonerStillInEstablishmentRoutes from './isPrisonerStillInEstablishment'
 
@@ -10,8 +9,8 @@ export default function isPrisonerStillInEstablishmentRoutes(): Router {
 
   const isPrisonerStillInEstablishmentRoute = new IsPrisonerStillInEstablishmentRoutes()
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.isPrisonerStillInEstablishment.matchers.start, isPrisonerStillInEstablishmentRoute.view)
   post(adjudicationUrls.isPrisonerStillInEstablishment.matchers.start, isPrisonerStillInEstablishmentRoute.submit)

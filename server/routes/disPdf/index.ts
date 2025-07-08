@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import Dis12Pdf from './dis12Pdf'
@@ -32,7 +31,7 @@ export default function disPdfRoutes({
   const dis7Pdf = new Dis7Pdf(reportedAdjudicationsService)
   const dis7BlankPdf = new Dis7BlankPdf(reportedAdjudicationsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.printPdf.matchers.dis12, dis12Pdf.renderPdf)
   get(adjudicationUrls.printPdf.matchers.dis3, dis3Pdf.renderPdf)

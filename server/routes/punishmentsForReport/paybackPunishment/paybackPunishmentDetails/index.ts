@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import PaybackPunishmentDetailsRoute from './paybackPunishmentDetails'
 import PaybackPunishmentDetailsEditRoute from './paybackPunishmentDetailsEdit'
@@ -20,8 +19,8 @@ export default function PaybackPunishmentDetailsRoutes({
   const paybackPunishmentDetailsRoute = new PaybackPunishmentDetailsRoute(userService, punishmentsService)
   const paybackPunishmentDetailsEditRoute = new PaybackPunishmentDetailsEditRoute(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.paybackPunishmentDetails.matchers.start, paybackPunishmentDetailsRoute.view)
   post(adjudicationUrls.paybackPunishmentDetails.matchers.start, paybackPunishmentDetailsRoute.submit)

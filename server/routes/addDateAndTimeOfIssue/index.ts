@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import AddDateAndTimeOfIssue from './addDateAndTimeOfIssue'
 
@@ -15,8 +14,8 @@ export default function addDateAndTimeOfIssueRoutes({
 
   const addDateAndTimeOfIssueRoute = new AddDateAndTimeOfIssue(reportedAdjudicationsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.addIssueDateTime.matchers.start, addDateAndTimeOfIssueRoute.view)
   post(adjudicationUrls.addIssueDateTime.matchers.start, addDateAndTimeOfIssueRoute.submit)

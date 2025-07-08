@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import ChartApiService from '../../../services/chartApiService'
 import PleasAndFindingsRoutes from './pleasAndFindings'
@@ -9,7 +8,7 @@ export default function pleasAndFindingsRoutes({ chartApiService }: { chartApiSe
 
   const route = new PleasAndFindingsRoutes(chartApiService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.dataInsights.matchers.start, route.view)
 

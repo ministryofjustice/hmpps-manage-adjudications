@@ -1,5 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
+
 import EvidenceSessionService from '../../services/evidenceSessionService'
 
 import PlaceOnReportService from '../../services/placeOnReportService'
@@ -48,8 +48,8 @@ export default function detailsOfEvidenceRoutes({
 
   const addEvidence = new AddEvidenceRoutes(evidenceSessionService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.detailsOfEvidence.matchers.start, detailsOfEvidenceUsingDraft.view)
   post(adjudicationUrls.detailsOfEvidence.matchers.start, detailsOfEvidenceUsingDraft.submit)
