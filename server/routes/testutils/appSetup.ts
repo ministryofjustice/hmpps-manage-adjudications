@@ -99,6 +99,7 @@ function appSetup(route: Router, production: boolean, session: Record<string, un
   app.use((req, res, next) => {
     res.locals = {}
     res.locals.user = user
+    req.body = {}
     next()
   })
 

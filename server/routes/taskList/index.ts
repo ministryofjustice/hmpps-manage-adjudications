@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import DraftTaskListRoutes from './draftTaskList'
 
@@ -15,7 +14,7 @@ export default function draftTaskListRoutesRoutes({
 
   const draftTaskList = new DraftTaskListRoutes(placeOnReportService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.taskList.matchers.start, draftTaskList.view)
 

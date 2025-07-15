@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import PaybackPunishmentCompletionDateRoute from './paybackPunishmentCompletionDate'
 import PaybackPunishmentCompletionDateEditRoute from './paybackPunishmentCompletionDateEdit'
@@ -23,8 +22,8 @@ export default function PaybackPunishmentCompletionDateRoutes({
     punishmentsService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.paybackPunishmentCompletionDate.matchers.start, paybackPunishmentCompletionDateRoute.view)
   post(adjudicationUrls.paybackPunishmentCompletionDate.matchers.start, paybackPunishmentCompletionDateRoute.submit)

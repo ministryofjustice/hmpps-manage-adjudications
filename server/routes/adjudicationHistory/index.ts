@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import AdjudicationHistory from './adjudicationHistory'
 
@@ -18,8 +17,8 @@ export default function adjudicationHistoryRoutes({
 
   const adjudicationHistoryRoute = new AdjudicationHistory(reportedAdjudicationsService, userService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.adjudicationHistory.matchers.start, adjudicationHistoryRoute.view)
   post(adjudicationUrls.adjudicationHistory.matchers.start, adjudicationHistoryRoute.submit)

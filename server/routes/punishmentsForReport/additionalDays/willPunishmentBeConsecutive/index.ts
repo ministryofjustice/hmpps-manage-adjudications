@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import WillPunishmentBeConsecutiveRoute from './willPunishmentBeConsecutive'
 import WillPunishmentBeConsecutiveEditRoute from './willPunishmentBeConsecutiveEdit'
@@ -20,8 +19,8 @@ export default function willPunishmentBeConsecutiveRoutes({
   const willPunishmentBeConsecutiveRoute = new WillPunishmentBeConsecutiveRoute(userService, punishmentsService)
   const willPunishmentBeConsecutiveEditRoute = new WillPunishmentBeConsecutiveEditRoute(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.isPunishmentConsecutive.matchers.start, willPunishmentBeConsecutiveRoute.view)
   post(adjudicationUrls.isPunishmentConsecutive.matchers.start, willPunishmentBeConsecutiveRoute.submit)

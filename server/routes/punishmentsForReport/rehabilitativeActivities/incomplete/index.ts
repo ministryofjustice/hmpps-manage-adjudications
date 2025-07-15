@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
@@ -17,8 +16,8 @@ export default function IncompleteRehabilitativeActivityRoutes({
 
   const incompleteRehabilitativeActivityRoute = new IncompleteRehabilitativeActivity(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.incompleteRehabilitativeActivity.matchers.start, incompleteRehabilitativeActivityRoute.view)
   post(adjudicationUrls.incompleteRehabilitativeActivity.matchers.start, incompleteRehabilitativeActivityRoute.submit)

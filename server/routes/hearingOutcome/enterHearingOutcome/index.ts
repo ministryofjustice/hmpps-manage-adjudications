@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import EnterHearingOutcomeRoutes from './enterHearingOutcome'
 import EnterHearingOutcomeEditRoutes from './enterHearingOutcomeEdit'
@@ -20,8 +19,8 @@ export default function enterHearingOutcomeRoutes({
   const enterHearingOutcomeRoute = new EnterHearingOutcomeRoutes(userService, hearingsService)
   const enterHearingOutcomeEditRoute = new EnterHearingOutcomeEditRoutes(userService, hearingsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.enterHearingOutcome.matchers.start, enterHearingOutcomeRoute.view)
   post(adjudicationUrls.enterHearingOutcome.matchers.start, enterHearingOutcomeRoute.submit)

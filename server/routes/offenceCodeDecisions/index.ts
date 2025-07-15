@@ -1,5 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
+
 import OffenceCodeDecisionsRoutes from './offenceCodeDecisions'
 import OffenceCodeDecisionsAloEditRoutes from './offenceCodeDecisionsAloEdit'
 import PlaceOnReportService from '../../services/placeOnReportService'
@@ -38,8 +38,8 @@ export default function offenceCodeDecisionsRoutes({
 
   const offenceListRoute = new OffenceListRoute(placeOnReportService, userService, decisionTreeService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.offenceCodeSelection.matchers.list(), offenceListRoute.view)
   post(adjudicationUrls.offenceCodeSelection.matchers.list(), offenceListRoute.submit)

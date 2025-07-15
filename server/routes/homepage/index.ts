@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import HomepageRoutes from './homepage'
 import UserService from '../../services/userService'
@@ -17,7 +16,7 @@ export default function homepageRoutes({
 
   const prisonerSearch = new HomepageRoutes(userService, reportedAdjudicationsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
   get('/', async (req, res) => res.redirect(adjudicationUrls.homepage.root))
   get(adjudicationUrls.homepage.root, prisonerSearch.view)
   return router

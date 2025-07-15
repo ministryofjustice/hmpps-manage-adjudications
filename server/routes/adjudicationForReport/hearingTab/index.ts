@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
 
 import HearingTabReviewerRoute from './hearingTabReviewer'
 import HearingTabReporterRoute from './hearingTabReporter'
@@ -38,8 +37,8 @@ export default function HearingDetailsRoutes({
     userService
   )
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.hearingDetails.matchers.review, hearingTabReviewerRoute.view)
   post(adjudicationUrls.hearingDetails.matchers.review, hearingTabReviewerRoute.submit)

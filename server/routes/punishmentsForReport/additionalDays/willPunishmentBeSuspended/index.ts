@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 
 import WillPunishmentBeSuspendedRoute from './willPunishmentBeSuspended'
 import WillPunishmentBeSuspendedEditRoute from './willPunishmentBeSuspendedEdit'
@@ -20,8 +19,8 @@ export default function willPunishmentBeSuspendedRoutesV1({
   const willPunishmentBeSuspendedRoute = new WillPunishmentBeSuspendedRoute(userService, punishmentsService)
   const willPunishmentBeSuspendedEditRoute = new WillPunishmentBeSuspendedEditRoute(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.isPunishmentSuspendedAdditionalDays.matchers.start, willPunishmentBeSuspendedRoute.view)
   post(adjudicationUrls.isPunishmentSuspendedAdditionalDays.matchers.start, willPunishmentBeSuspendedRoute.submit)

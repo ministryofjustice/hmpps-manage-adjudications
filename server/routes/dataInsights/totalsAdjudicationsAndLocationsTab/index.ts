@@ -1,5 +1,5 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../middleware/asyncMiddleware'
+
 import adjudicationUrls from '../../../utils/urlGenerator'
 import TotalsAdjudicationsAndLocationsRoutes from './totalsAdjudicationsAndLocations'
 import ChartApiService from '../../../services/chartApiService'
@@ -13,7 +13,7 @@ export default function totalsAdjudicationsAndLocationsRoutes({
 
   const route = new TotalsAdjudicationsAndLocationsRoutes(chartApiService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 
   get(adjudicationUrls.dataInsights.matchers.start, route.view)
 

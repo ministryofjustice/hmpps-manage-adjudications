@@ -1,5 +1,4 @@
 import express, { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 
 import SelectAssociatedStaffRoutes from './selectAssociatedStaff'
 
@@ -18,8 +17,8 @@ export default function selectAssociatedStaffRoutes({
 
   const selectAssociatedStaffRoute = new SelectAssociatedStaffRoutes(userService, placeOnReportService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
+  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
 
   get(adjudicationUrls.selectAssociatedStaff.matchers.start, selectAssociatedStaffRoute.view)
   post(adjudicationUrls.selectAssociatedStaff.matchers.start, selectAssociatedStaffRoute.submit)
