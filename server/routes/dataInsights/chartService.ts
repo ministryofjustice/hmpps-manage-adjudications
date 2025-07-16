@@ -1114,7 +1114,7 @@ export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: Ro
     })
 }
 
-export const updateCharacteristics = (chartData2a: ChartDetailsResult) => {
+export async function updateCharacteristics(chartData2a: ChartDetailsResult): Promise<ChartDetailsResult> {
   const entries = chartData2a.chartEntries as ChartEntryHorizontalBar[]
 
   const updatedEntries = entries.map(entry => {
@@ -1130,8 +1130,6 @@ export const updateCharacteristics = (chartData2a: ChartDetailsResult) => {
 
     return updatedEntry
   })
-
-  const chartEntries = updatedEntries as ChartEntryHorizontalBar[]
 
   return {
     ...chartData2a,

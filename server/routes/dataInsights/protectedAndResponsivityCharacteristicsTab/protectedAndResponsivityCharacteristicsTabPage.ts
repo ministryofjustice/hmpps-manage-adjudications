@@ -50,6 +50,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const { error } = pageData
     const { user } = res.locals
     const { username } = user
+
     const agencyId: AgencyId = user.meta.caseLoadId
 
     const lastMonthText = getLastMonthText()
@@ -57,7 +58,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
 
     const chartData2a = await this.chartApiService.getChart(username, agencyId, '2a')
 
-    const chartDetails2a = updateCharacteristics(chartData2a)
+    const chartDetails2a = await updateCharacteristics(chartData2a)
 
     const characteristics: DropDownEntry[] = getUniqueItems(chartDetails2a.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.characteristic,
@@ -304,6 +305,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { characteristic, offenceType, punishment, plea, finding, allSelectorParams } = req.body
+
     const params = {
       ...JSON.parse(allSelectorParams),
       ...(characteristic !== undefined ? { characteristic } : {}),
@@ -312,6 +314,8 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       ...(plea !== undefined ? { plea } : {}),
       ...(finding !== undefined ? { finding } : {}),
     }
+
+    console.log(params)
     return res.redirect(adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics(params))
   }
 }
