@@ -1131,8 +1131,10 @@ export const updateCharacteristics = (chartData2a: ChartDetailsResult) => {
     return updatedEntry
   })
 
+  const chartEntries = updatedEntries as ChartEntryHorizontalBar[]
+
   return {
     ...chartData2a,
-    updatedChartEntries: updatedEntries,
+    chartEntries: updatedEntries,
   }
 }
