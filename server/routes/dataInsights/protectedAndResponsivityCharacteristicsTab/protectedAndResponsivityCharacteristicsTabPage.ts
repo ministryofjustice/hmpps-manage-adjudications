@@ -61,9 +61,12 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const chartDetails2a = updateCharacteristics(chartData2a)
     console.log(chartDetails2a)
 
-    const characteristics: DropDownEntry[] = getUniqueItems(chartDetails2a.chartEntries as ChartEntryHorizontalBar[], {
-      source: (row: ChartEntryHorizontalBar) => row.characteristic,
-    })
+    const characteristics: DropDownEntry[] = getUniqueItems(
+      chartDetails2a.updatedChartEntries as ChartEntryHorizontalBar[],
+      {
+        source: (row: ChartEntryHorizontalBar) => row.characteristic,
+      }
+    )
     const lastModifiedDate = getFullDate(
       (await this.chartApiService.getLastModifiedChart(username, '2a')).lastModifiedDate
     )
