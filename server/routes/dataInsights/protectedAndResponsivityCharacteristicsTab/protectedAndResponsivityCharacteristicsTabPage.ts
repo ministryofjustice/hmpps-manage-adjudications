@@ -5,7 +5,7 @@ import ChartApiService from '../../../services/chartApiService'
 import { AgencyId } from '../../../data/PrisonLocationResult'
 import { ChartDetailsResult, ChartEntryHorizontalBar, TableHead } from '../../../services/ChartDetailsResult'
 import { DataInsightsTab, getDataInsightsTabsOptions } from '../dataInsightsTabsOptions'
-import { getUniqueItems, produceHorizontalBarsChart } from '../chartService'
+import { getUniqueItems, produceHorizontalBarsChart, updateCharacteristics } from '../chartService'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import DropDownEntry from '../dropDownEntry'
 import { getFullDate, getLastMonthText } from '../../../utils/utils'
@@ -55,7 +55,12 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const lastMonthText = getLastMonthText()
     const chartSettingMap = {} as Record<string, unknown>
 
-    const chartDetails2a = await this.chartApiService.getChart(username, agencyId, '2a')
+    const chartData2a = await this.chartApiService.getChart(username, agencyId, '2a')
+    console.log(chartData2a)
+
+    const chartDetails2a = updateCharacteristics(chartData2a)
+    console.log(chartDetails2a)
+
     const characteristics: DropDownEntry[] = getUniqueItems(chartDetails2a.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.characteristic,
     })

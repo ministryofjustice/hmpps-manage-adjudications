@@ -4,7 +4,6 @@ const CHART_COMMANDS = (function () {
   const loadChart = chartSettings => {
     const elementId = chartSettings.elementId
     const elementById = window.document.getElementById(elementId)
-
     const chartOptions = chartSettings.chartOptions
 
     if (chartOptions?.options?.plugins?.customTitle) {

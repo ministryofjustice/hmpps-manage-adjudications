@@ -1113,3 +1113,26 @@ export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: Ro
       return new DropDownEntry(value, value.toLowerCase().trim().replace(/\W+/g, '-'))
     })
 }
+
+export const updateCharacteristics = (chartData2a: ChartDetailsResult) => {
+  const entries = chartData2a.chartEntries as ChartEntryHorizontalBar[]
+
+  const updatedEntries = entries.map(entry => {
+    const updatedEntry = { ...entry }
+
+    if (updatedEntry.characteristic === 'Religion') {
+      updatedEntry.characteristic = 'Religion, Faith and Belief'
+    }
+
+    if (updatedEntry.value === 'Unkown') {
+      updatedEntry.value = 'Unknown' // fixing typo
+    }
+
+    return updatedEntry
+  })
+
+  return {
+    ...chartData2a,
+    updatedChartEntries: updatedEntries,
+  }
+}
