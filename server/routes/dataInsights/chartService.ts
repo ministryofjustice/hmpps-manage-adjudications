@@ -1110,6 +1110,7 @@ export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: Ro
   )
     .sort()
     .map(value => {
-      return new DropDownEntry(value, value.toLowerCase().trim().replace(/\W+/g, '-'))
+      const tmpLabel = value === 'Religion' ? 'Religion, Faith and Belief' : value
+      return new DropDownEntry(value, tmpLabel, value.toLowerCase().trim().replace(/\W+/g, '-'))
     })
 }

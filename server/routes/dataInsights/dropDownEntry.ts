@@ -1,10 +1,13 @@
 export default class DropDownEntry {
   text: string
 
+  label: string
+
   value: string
 
-  constructor(text: string, value: string) {
-    this.text = text
+  constructor(text: string, label: string, value: string) {
+    this.text = text // This is used to display chart data so retained
+    this.label = label
     this.value = value
   }
 
