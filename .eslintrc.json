@@ -39,6 +39,7 @@
         // end fix
         "@typescript-eslint/no-use-before-define": 0,
         "class-methods-use-this": 0,
+        "no-empty-function": 0,
         "no-useless-constructor": 0,
         "@typescript-eslint/no-unused-vars": [
           1,
@@ -75,6 +76,7 @@
     ],
     "no-use-before-define": 0,
     "semi": 0,
+    "no-empty-function": 0,
     "import/no-unresolved": "error",
     "import/extensions": [
       "error",
