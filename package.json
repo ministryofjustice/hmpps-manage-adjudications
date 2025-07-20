@@ -119,7 +119,7 @@
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
     "redis": "^4.7.1",
-    "superagent": "^9.0.2",
+    "superagent": "^10.2.2",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
