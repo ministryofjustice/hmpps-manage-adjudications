@@ -36,7 +36,7 @@ generic-service:
       - home_office
 
 generic-prometheus-alerts:
-  alertSeverity: digital-prison-service
+  alertSeverity: maintenance-alerts-prod-warning
 
 gotenberg:
   replicaCount: 4
