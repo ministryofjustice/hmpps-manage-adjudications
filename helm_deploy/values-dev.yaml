@@ -42,7 +42,7 @@ generic-service:
   allowlist: null
 
 generic-prometheus-alerts:
-  alertSeverity: digital-prison-service-dev
+  alertSeverity: maintenance-alerts-non-prod-warning
 
 gotenberg:
   replicaCount: 1
