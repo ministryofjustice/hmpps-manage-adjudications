@@ -37,8 +37,12 @@ export default class GotenbergClient {
     if (marginLeft) request.field('marginLeft', marginLeft)
     if (marginRight) request.field('marginRight', marginRight)
 
-    // Execute the POST to the Gotenberg container
-    const response = await request
+    // Execute the POST to the Gotenberg container with timeout
+    // Set a reasonable timeout for PDF generation (30 seconds)
+    const response = await request.timeout({
+      response: 30000, // 30 seconds for the response
+      deadline: 35000, // 35 seconds total deadline
+    })
     return response.body
   }
 }
