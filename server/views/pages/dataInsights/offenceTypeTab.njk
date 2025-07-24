@@ -2,7 +2,6 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
 {% from "../../macros/dataInsights/officialSensitiveBanner.njk" import officialSensitiveBanner %}
-{% from "../../macros/dataInsights/giveFeedbackBanner.njk" import giveFeedbackBanner %}
 {% from "../../partials/charts/horizontalBarsChartWithSelect.njk" import horizontalBarsChartWithSelect %}
 {% from "../../partials/charts/linesChart.njk" import linesChart %}
 
@@ -13,7 +12,6 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {{ giveFeedbackBanner() }}
 
   {{ breadcrumb() }}
 
