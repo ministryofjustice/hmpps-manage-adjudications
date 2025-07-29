@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import adjudicationUrls from '../../utils/urlGenerator'
 import validateForm from './createOnBehalfOfReasonValidation'

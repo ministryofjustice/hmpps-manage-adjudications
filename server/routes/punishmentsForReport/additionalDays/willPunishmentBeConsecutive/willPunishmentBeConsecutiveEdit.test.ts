@@ -30,7 +30,7 @@ beforeEach(() => {
       offenderNo: 'G6415GD',
       firstName: 'John',
       lastName: 'Smith',
-    })
+    }),
   )
 })
 
@@ -70,8 +70,8 @@ describe('POST', () => {
       .post(
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
           '100',
-          'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`
+          'XYZ',
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`,
       )
       .send({
         consecutive: 'yes',
@@ -81,8 +81,8 @@ describe('POST', () => {
         'Location',
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(
           '100',
-          'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10&consecutive=yes`
+          'XYZ',
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10&consecutive=yes`,
       )
   })
   it('should save and redirect if the no radio is chosen', () => {
@@ -90,8 +90,8 @@ describe('POST', () => {
       .post(
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
           '100',
-          uuidv4()
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`
+          uuidv4(),
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`,
       )
       .send({
         consecutive: 'no',
@@ -108,7 +108,7 @@ describe('POST', () => {
             rehabilitativeActivities: [],
           },
           '100',
-          expect.anything()
+          expect.anything(),
         )
       })
       .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))

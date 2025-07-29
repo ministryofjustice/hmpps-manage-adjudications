@@ -8,7 +8,7 @@ describe('validateForm', () => {
         validateForm({
           location: AssociatedPrisonerLocation.INTERNAL,
           associatedPrisonersNumber: 'GF456CU',
-        })
+        }),
       ).toBeNull()
     })
   })
@@ -18,7 +18,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           location: AssociatedPrisonerLocation.UNKNOWN,
-        })
+        }),
       ).toEqual([
         {
           href: '#selectedAnswerId',
@@ -33,7 +33,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           location: AssociatedPrisonerLocation.INTERNAL,
-        })
+        }),
       ).toEqual([
         {
           href: '#prisonerSearchNameInput',
@@ -48,7 +48,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           location: AssociatedPrisonerLocation.EXTERNAL,
-        })
+        }),
       ).toEqual([
         {
           href: '#prisonerOutsideEstablishmentNumberInput',
@@ -65,7 +65,7 @@ describe('validateForm', () => {
         validateForm({
           location: AssociatedPrisonerLocation.EXTERNAL,
           associatedPrisonersNumber: '123',
-        })
+        }),
       ).toEqual([
         {
           href: '#prisonerOutsideEstablishmentNameInput',
@@ -78,7 +78,7 @@ describe('validateForm', () => {
         validateForm({
           location: AssociatedPrisonerLocation.EXTERNAL,
           associatedPrisonersName: '123',
-        })
+        }),
       ).toEqual([
         {
           href: '#prisonerOutsideEstablishmentNumberInput',

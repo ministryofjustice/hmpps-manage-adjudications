@@ -20,7 +20,7 @@ beforeEach(() => {
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
       assignedLivingUnitDesc: '4-2-001',
-    })
+    }),
   )
 })
 
@@ -61,12 +61,12 @@ describe('GET /place-the-prisoner-on-report', () => {
         expect(response.text).toContain('Accept details and place on report')
         expect(response.text).toContain('NOT STARTED')
         expect(response.text).toContain(
-          'You need to provide Udfsanaye Aidetria with a printed copy of this report by 00:00 on 23 November 2021.'
+          'You need to provide Udfsanaye Aidetria with a printed copy of this report by 00:00 on 23 November 2021.',
         )
         expect(response.text).not.toContain(
           `<a href='${adjudicationUrls.checkYourAnswers.urls.start(
-            104
-          )}' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>`
+            104,
+          )}' class='task' data-qa='accept-details-link'>Accept details and place on report</a></td>`,
         )
       })
   })

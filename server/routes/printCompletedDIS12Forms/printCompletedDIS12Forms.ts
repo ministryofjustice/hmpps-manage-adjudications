@@ -17,14 +17,14 @@ import { formatDateForDatePicker } from '../../utils/utils'
 export default class printCompletedDISFormsRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly locationService: LocationService
+    private readonly locationService: LocationService,
   ) {}
 
   private renderView = async (
     res: Response,
     filter: PrintDISFormsUiFilter,
     results: ReportedAdjudicationEnhancedWithIssuingDetails[],
-    errors: FormError[]
+    errors: FormError[],
   ): Promise<void> => {
     const { user } = res.locals
     const possibleLocations = await this.locationService.getLocationsForUser(user)

@@ -29,7 +29,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const question = new Question(null) as jest.Mocked<Question>
 const testData = new TestData()

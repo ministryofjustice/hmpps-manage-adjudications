@@ -24,7 +24,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -77,8 +77,8 @@ describe('POST /hearing-adjourned', () => {
           HearingOutcomeAdjournReason.INVESTIGATION,
           HearingOutcomePlea.UNFIT,
           expect.anything(),
-          undefined
-        )
+          undefined,
+        ),
       )
   })
   it('should successfully call the endpoint and redirect to the confirmation page - adjudicator passed in', () => {
@@ -99,8 +99,8 @@ describe('POST /hearing-adjourned', () => {
           HearingOutcomeAdjournReason.INVESTIGATION,
           HearingOutcomePlea.UNFIT,
           expect.anything(),
-          'Rebecca Red'
-        )
+          'Rebecca Red',
+        ),
       )
   })
 })

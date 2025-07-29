@@ -11,7 +11,7 @@ import { PunishmentDataWithSchedule } from '../../../../data/PunishmentResult'
 export default class ActivateSuspendedPunishmentsPage {
   constructor(
     private readonly punishmentsService: PunishmentsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   private renderView = async (req: Request, res: Response, error: FormError | null): Promise<void> => {
@@ -20,7 +20,7 @@ export default class ActivateSuspendedPunishmentsPage {
     const suspendedPunishmentDetails = await this.punishmentsService.getSuspendedPunishmentDetails(chargeNumber, user)
     // Should only show suspended punishments that have not been added in this reports
     const suspendedPunishmentsFromOtherReports = suspendedPunishmentDetails.suspendedPunishments.filter(
-      susPun => susPun.chargeNumber !== chargeNumber
+      susPun => susPun.chargeNumber !== chargeNumber,
     )
 
     const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
@@ -29,7 +29,7 @@ export default class ActivateSuspendedPunishmentsPage {
     if (sessionPunishments != null) {
       const idsToFilter = (<PunishmentDataWithSchedule[]>sessionPunishments).map(punishment => punishment.id)
       suspendedPunishmentsToActivate = suspendedPunishmentsFromOtherReports.filter(
-        suspendedPunishments => !idsToFilter.includes(suspendedPunishments.punishment.id)
+        suspendedPunishments => !idsToFilter.includes(suspendedPunishments.punishment.id),
       )
     }
 
@@ -60,7 +60,7 @@ export default class ActivateSuspendedPunishmentsPage {
     const punishmentToActivate = await this.punishmentsService.getSuspendedPunishment(
       chargeNumber,
       Number(punishmentNumberToActivate),
-      user
+      user,
     )
     const punishmentType = punishmentToActivate[0].punishment.type
     const { duration } = punishmentToActivate[0].punishment.schedule
@@ -70,7 +70,7 @@ export default class ActivateSuspendedPunishmentsPage {
       url.format({
         pathname: redirectUrl,
         query: { punishmentNumberToActivate, punishmentType, duration },
-      })
+      }),
     )
   }
 

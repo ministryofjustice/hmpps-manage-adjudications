@@ -18,7 +18,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -41,8 +41,8 @@ describe('GET', () => {
     return request(app)
       .get(
         `${adjudicationUrls.punishmentStartDate.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -56,8 +56,8 @@ describe('GET', () => {
     return request(app)
       .get(
         `${adjudicationUrls.punishmentStartDate.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -71,8 +71,8 @@ describe('POST ', () => {
     return request(app)
       .post(
         `${adjudicationUrls.punishmentStartDate.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .send({
         startDate: '13/12/2023',
@@ -81,8 +81,8 @@ describe('POST ', () => {
       .expect(
         'Location',
         `${adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=13%2F12%2F2023`
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=13%2F12%2F2023`,
       )
       .then(() =>
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
@@ -97,8 +97,8 @@ describe('POST ', () => {
             stoppagePercentage: null,
             rehabilitativeActivities: [],
           },
-          '100'
-        )
+          '100',
+        ),
       )
   })
 })

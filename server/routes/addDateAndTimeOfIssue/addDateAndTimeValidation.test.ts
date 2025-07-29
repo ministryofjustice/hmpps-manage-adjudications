@@ -7,7 +7,7 @@ describe('validateForm', () => {
         validateForm({
           date: '31/10/2021',
           time: { hour: '12', minute: '23' },
-        })
+        }),
       ).toBeNull()
     })
   })
@@ -16,7 +16,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           time: { hour: '12', minute: '23' },
-        })
+        }),
       ).toEqual({
         href: '#issuedDate[date]',
         text: 'Enter date of issue',
@@ -35,7 +35,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { minute: '23' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][hour]',
           text: 'Enter time of issue',
@@ -46,7 +46,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { hour: '65', minute: '23' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][hour]',
           text: 'Enter an hour between 00 and 23',
@@ -57,7 +57,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { hour: '12' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][minute]',
           text: 'Enter time of issue',
@@ -68,7 +68,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { hour: '12', minute: '65' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][minute]',
           text: 'Enter a minute between 00 and 59',
@@ -79,7 +79,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: {},
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time]',
           text: 'Enter time of issue',
@@ -90,7 +90,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { hour: '8', minute: '30' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][hour]',
           text: 'Enter the hour using 2 numbers - for example, 08 or 18',
@@ -101,7 +101,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { hour: '008', minute: '30' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][hour]',
           text: 'Enter the hour using 2 numbers - for example, 08 or 18',
@@ -112,7 +112,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { hour: '08', minute: '1' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][minute]',
           text: 'Enter the minute using 2 numbers - for example, 08 or 18',
@@ -123,7 +123,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { hour: '08', minute: '001' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][minute]',
           text: 'Enter the minute using 2 numbers - for example, 08 or 18',
@@ -134,7 +134,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { hour: 'lll', minute: '50' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][hour]',
           text: 'Enter an hour between 00 and 23',
@@ -145,7 +145,7 @@ describe('validateForm', () => {
           validateForm({
             date: '31/10/2021',
             time: { hour: '09', minute: 'fffff' },
-          })
+          }),
         ).toEqual({
           href: '#issuedDate[time][minute]',
           text: 'Enter a minute between 00 and 59',

@@ -74,7 +74,7 @@ context('Task list', () => {
         .expirationNotice()
         .should(
           'contain.text',
-          'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
+          'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.',
         )
     })
     it('should route to the incident page if you click the link', () => {
@@ -240,7 +240,7 @@ context('Task list', () => {
         .expirationNotice()
         .should(
           'contain.text',
-          'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
+          'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.',
         )
     })
     it('should route to the offenders details page if you click the link', () => {
@@ -334,7 +334,7 @@ context('Task list', () => {
         .expirationNotice()
         .should(
           'contain.text',
-          'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.'
+          'You need to provide John Smith with a printed copy of this report by 11:09 on 5 November 2021.',
         )
     })
     it('should route to the check your answers page if you click the link', () => {
@@ -421,7 +421,7 @@ context('Task list', () => {
         .expirationNotice()
         .should(
           'contain.text',
-          'You need to provide John Smith with a printed copy of this report by 10:11 on 3 February 2022.'
+          'You need to provide John Smith with a printed copy of this report by 10:11 on 3 February 2022.',
         )
     })
   })
@@ -497,6 +497,6 @@ context('Task list', () => {
           expect(loc.pathname).to.eq(adjudicationUrls.detailsOfWitnesses.urls.start(3456))
         })
       })
-    }
+    },
   )
 })

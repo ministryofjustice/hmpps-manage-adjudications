@@ -243,7 +243,7 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
           expect($summaryData.get(1).innerText).to.contain('This is my reasoning for referring to the governor')
           expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
           expect($summaryData.get(3).innerText).to.contain(
-            'Resolved in another way\n\nThis was resolved with a conversation'
+            'Resolved in another way\n\nThis was resolved with a conversation',
           )
         })
     })
@@ -366,7 +366,7 @@ context('Inad refers to gov after hearing', () => {
     cy.signIn()
   })
   describe('---', () => {
-    it.only('-', () => {
+    it('-', () => {
       cy.visit(adjudicationUrls.enterHearingOutcome.urls.start('101'))
       const enterHearingOutcomePage = Page.verifyOnPage(EnterHearingOutcomePage)
       enterHearingOutcomePage.governorName().type('John Smith')

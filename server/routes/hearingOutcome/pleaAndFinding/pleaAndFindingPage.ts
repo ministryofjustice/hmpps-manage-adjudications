@@ -45,7 +45,7 @@ export default class PleaAndFindingPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly hearingsService: HearingsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -82,7 +82,7 @@ export default class PleaAndFindingPage {
           ReportedAdjudicationStatus.CHARGE_PROVED,
           ReportedAdjudicationStatus.NOT_PROCEED,
         ],
-        user
+        user,
       )) as HearingDetailsHistory
       readApiHearingOutcome = {
         plea: lastOutcomeItem.hearing?.outcome.plea,
@@ -121,13 +121,13 @@ export default class PleaAndFindingPage {
       const redirectUrl = this.getRedirectUrl(
         isEdit,
         HearingOutcomeFinding[hearingFinding as keyof typeof HearingOutcomeFinding],
-        chargeNumber
+        chargeNumber,
       )
       return res.redirect(
         url.format({
           pathname: redirectUrl,
           query: { adjudicator: String(nameOfAdjudicator), plea: hearingPlea, finding: hearingFinding },
-        })
+        }),
       )
     } catch (postError) {
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
@@ -137,7 +137,7 @@ export default class PleaAndFindingPage {
 
   getPreviouslyEnteredHearingOutcomeFromApi = async (
     chargeNumber: string,
-    user: User
+    user: User,
   ): Promise<HearingOutcomeDetails> => {
     return this.hearingsService.getHearingOutcome(chargeNumber, user)
   }

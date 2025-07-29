@@ -20,7 +20,7 @@ export default class FinancialAwardedPunishmentsAndDamagesRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly locationService: LocationService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   private renderView = async (
@@ -29,7 +29,7 @@ export default class FinancialAwardedPunishmentsAndDamagesRoutes {
     filter: AwardedPunishmentsAndDamagesUiFilter,
     possibleLocations: PrisonLocation[],
     results: AwardedPunishmentsAndDamages[],
-    errors: FormError[]
+    errors: FormError[],
   ): Promise<void> => {
     const allAwardedPunishmentsAndDamagesHref = url.format({
       pathname: adjudicationUrls.awardedPunishmentsAndDamages.urls.start(),
@@ -61,7 +61,7 @@ export default class FinancialAwardedPunishmentsAndDamagesRoutes {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const uiFilter = fillInAwardedPunishmentsAndDamagesFilterDefaults(
-      uiAwardedPunishmentsAndDamagesFilterFromRequest(req)
+      uiAwardedPunishmentsAndDamagesFilterFromRequest(req),
     )
     const filter = awardedPunishmentsAndDamagesFilterFromUiFilter(uiFilter)
     const possibleLocations = await this.locationService.getLocationsForUser(user)
@@ -70,7 +70,7 @@ export default class FinancialAwardedPunishmentsAndDamagesRoutes {
       filter,
       possibleLocations,
       userIsALO,
-      user
+      user,
     )
     const filteredResults = results.filter(result => result.financialPunishmentCount > 0)
 

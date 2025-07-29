@@ -18,7 +18,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -84,8 +84,8 @@ describe('POST', () => {
             rehabilitativeActivities: [],
           },
           '100',
-          'abc'
-        )
+          'abc',
+        ),
       )
   })
   it('should not edit the data to the session if the user selects yes', () => {

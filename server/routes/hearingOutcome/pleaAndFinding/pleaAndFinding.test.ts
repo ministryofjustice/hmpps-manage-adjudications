@@ -38,7 +38,7 @@ describe('POST /hearing-plea-finding', () => {
   it('should redirect to the correct URL after correct submission - proved finding', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
@@ -48,14 +48,14 @@ describe('POST /hearing-plea-finding', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingsCheckAnswers.urls.start(
-          '100'
-        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=CHARGE_PROVED`
+          '100',
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=CHARGE_PROVED`,
       )
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
@@ -65,14 +65,14 @@ describe('POST /hearing-plea-finding', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingReasonForFinding.urls.start(
-          '100'
-        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=DISMISSED`
+          '100',
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=DISMISSED`,
       )
   })
   it('should redirect to the correct URL after correct submission - not proceeded with finding', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
@@ -82,8 +82,8 @@ describe('POST /hearing-plea-finding', () => {
       .expect(
         'Location',
         `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart(
-          '100'
-        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=NOT_PROCEED`
+          '100',
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=NOT_PROCEED`,
       )
   })
 })

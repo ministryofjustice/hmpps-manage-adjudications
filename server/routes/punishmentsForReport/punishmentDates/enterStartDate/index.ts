@@ -23,7 +23,7 @@ export default function EnterStartDateRoutes({
   const enterStartDateEditRoute = new EnterStartDateEditRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

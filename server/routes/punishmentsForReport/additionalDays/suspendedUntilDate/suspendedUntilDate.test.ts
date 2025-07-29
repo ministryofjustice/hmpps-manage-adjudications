@@ -18,7 +18,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -41,8 +41,8 @@ describe('GET', () => {
     return request(app)
       .get(
         `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -56,8 +56,8 @@ describe('GET', () => {
     return request(app)
       .get(
         `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -71,8 +71,8 @@ describe('POST ', () => {
     return request(app)
       .post(
         `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .send({
         suspendedUntil: '13/12/2023',
@@ -91,8 +91,8 @@ describe('POST ', () => {
             stoppagePercentage: null,
             rehabilitativeActivities: [],
           },
-          '100'
-        )
+          '100',
+        ),
       )
   })
 })

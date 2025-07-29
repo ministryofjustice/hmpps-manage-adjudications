@@ -78,7 +78,7 @@ context('Plea and finding', () => {
   describe('Submits successfully', () => {
     it('goes to the money recovered for damages page if data successfully submitted - nothing changed', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.submitButton().click()
@@ -88,7 +88,7 @@ context('Plea and finding', () => {
     })
     it('goes to the reason for finding page if data successfully submitted - change finding radio button to DISMISSED', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="NOT_GUILTY"]').click()
@@ -100,7 +100,7 @@ context('Plea and finding', () => {
     })
     it('goes to the reason for not proceeding page if data successfully submitted - change finding radio button to NOT_PROCEED', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.pleaRadioButtons().find('input[value="UNFIT"]').click()

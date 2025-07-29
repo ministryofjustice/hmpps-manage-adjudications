@@ -4,7 +4,7 @@ export default class PageResponse {
   constructor(
     readonly size: number,
     readonly pageNumber: number,
-    readonly totalElements: number
+    readonly totalElements: number,
   ) {}
 
   pageRange(pagesBefore: number, pagesAfter: number): number[] {

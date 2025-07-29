@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
@@ -20,7 +19,7 @@ type PageData = {
 export default class RemoveRehabilitativeActivityPage {
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {

@@ -12,14 +12,14 @@ export default class NotProceedEditRoutes {
     userService: UserService,
     outcomesService: OutcomesService,
     hearingsService: HearingsService,
-    reportedAdjudicationsService: ReportedAdjudicationsService
+    reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new NotProceedPage(
       PageRequestType.REFER_AND_NO_HEARING_EDIT,
       userService,
       outcomesService,
       hearingsService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

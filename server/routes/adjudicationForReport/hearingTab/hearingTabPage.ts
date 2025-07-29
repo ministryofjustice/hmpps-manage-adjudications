@@ -58,7 +58,7 @@ export default class HearingTabPage {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly outcomesService: OutcomesService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -68,12 +68,12 @@ export default class HearingTabPage {
     const { chargeNumber } = req.params
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
-      user
+      user,
     )
 
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(
       reportedAdjudication.prisonerNumber,
-      user
+      user,
     )
 
     const history = await this.reportedAdjudicationsService.getOutcomesHistory(reportedAdjudication.outcomes, user)
@@ -85,13 +85,13 @@ export default class HearingTabPage {
 
     const getTransferBannerInfo = await this.reportedAdjudicationsService.getTransferBannerInfo(
       reportedAdjudication,
-      user
+      user,
     )
 
     const userRoles = await this.userService.getUserRoles(user.token)
     const showFormsTab = await this.reportedAdjudicationsService.canViewPrintAndIssueFormsTab(
       userRoles,
-      reportedAdjudication.status
+      reportedAdjudication.status,
     )
 
     return res.render(`pages/adjudicationForReport/hearingTab`, {
@@ -105,17 +105,17 @@ export default class HearingTabPage {
       latestHearingId,
       secondaryButtonInfo: this.reportedAdjudicationsService.getSecondaryButtonInfoForHearingDetails(
         reportedAdjudication.outcomes,
-        readOnly
+        readOnly,
       ),
       primaryButtonInfo: this.reportedAdjudicationsService.getPrimaryButtonInfoForHearingDetails(
         reportedAdjudication.outcomes,
         readOnly,
-        chargeNumber
+        chargeNumber,
       ),
       tertiaryButtonInfo: this.reportedAdjudicationsService.getTertiaryButtonInfoForHearingDetails(
         reportedAdjudication.outcomes,
         readOnly,
-        chargeNumber
+        chargeNumber,
       ),
       allCompletedReportsHref: adjudicationUrls.allCompletedReports.urls.start(),
       allHearingsHref: adjudicationUrls.viewScheduledHearings.urls.start(),

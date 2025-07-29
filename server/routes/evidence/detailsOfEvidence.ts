@@ -46,7 +46,7 @@ export default class DetailsOfEvidencePage {
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly evidenceSessionService: EvidenceSessionService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -87,7 +87,7 @@ export default class DetailsOfEvidencePage {
         evidenceIndexToDelete,
         evidenceTypeToDelete === EvidenceCode.BAGGED_AND_TAGGED,
         evidenceTypeToDelete === EvidenceCode.OTHER,
-        chargeNumber
+        chargeNumber,
       )
     }
     if (!allEvidence || allEvidence.length < 1) {
@@ -187,7 +187,7 @@ export default class DetailsOfEvidencePage {
   redirectToNextPage = (res: Response, chargeNumber: string, isSubmittedEdit: boolean, referrer: string) => {
     if (isSubmittedEdit)
       return res.redirect(
-        `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(chargeNumber)}?referrer=${referrer}`
+        `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(chargeNumber)}?referrer=${referrer}`,
       )
     return res.redirect(adjudicationUrls.detailsOfWitnesses.urls.start(chargeNumber))
   }

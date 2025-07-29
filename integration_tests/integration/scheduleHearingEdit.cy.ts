@@ -214,7 +214,7 @@ context('Schedule a hearing page', () => {
       .find('li')
       .then($errors => {
         expect($errors.get(0).innerText).to.contain(
-          'The date of this hearing must be after the date of the previous hearing'
+          'The date of this hearing must be after the date of the previous hearing',
         )
       })
   })
@@ -231,7 +231,7 @@ context('Schedule a hearing page', () => {
       .find('li')
       .then($errors => {
         expect($errors.get(0).innerText).to.contain(
-          'The time of this hearing must be after the time of the previous hearing'
+          'The time of this hearing must be after the time of the previous hearing',
         )
       })
   })
@@ -248,7 +248,7 @@ context('Schedule a hearing page', () => {
       .find('li')
       .then($errors => {
         expect($errors.get(0).innerText).to.contain(
-          'The time of this hearing must be after the time of the previous hearing'
+          'The time of this hearing must be after the time of the previous hearing',
         )
       })
   })

@@ -24,7 +24,7 @@ export default class Question {
   constructor(
     title: Title | string | (readonly (readonly [IncidentRole, string])[] | null),
     overrideId?: string | null,
-    applicableVersions: number[] = [1, 2]
+    applicableVersions: number[] = [1, 2],
   ) {
     this.overrideId = overrideId
     this.applicableVersions = applicableVersions
@@ -99,7 +99,7 @@ export default class Question {
 
   private findAnswerByCodeForPreviousVersions(
     offenceCode: number,
-    firstProtectedCharacteristic: string = null
+    firstProtectedCharacteristic: string = null,
   ): Answer {
     /* eslint-disable no-plusplus */
     for (let version = +config.offenceVersion - 1; version > 0; version--) {
@@ -143,7 +143,7 @@ export default class Question {
       ...this.getChildAnswers()
         .map(childAnswer => childAnswer.getChildQuestion())
         .filter(childQuestion => !!childQuestion)
-        .map(d => d.matchingQuestions(fn))
+        .map(d => d.matchingQuestions(fn)),
     )
     if (fn(this)) {
       matches.push(this)
@@ -154,7 +154,7 @@ export default class Question {
   findAnswerBy(
     fn: (answer: Answer) => boolean,
     overrideVersion: number = null,
-    firstProtectedCharacteristic: string = null
+    firstProtectedCharacteristic: string = null,
   ): Answer {
     const matching = this.matchingAnswers(fn, overrideVersion)
     if (
@@ -163,7 +163,7 @@ export default class Question {
       matching.every(answer => answer.getType() === AnswerType.CHECKBOXES_ONLY)
     ) {
       const titleToMatch = getProtectedCharacteristicsTitle(
-        ProtectedCharacteristicsTypes[firstProtectedCharacteristic as keyof typeof ProtectedCharacteristicsTypes]
+        ProtectedCharacteristicsTypes[firstProtectedCharacteristic as keyof typeof ProtectedCharacteristicsTypes],
       )
       return matching.find(a => a.getText() === titleToMatch)
     }

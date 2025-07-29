@@ -22,7 +22,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const decisionTreeService = new DecisionTreeService(null, null, null, null, []) as jest.Mocked<DecisionTreeService>
 
@@ -135,7 +135,7 @@ beforeEach(() => {
 
   app = appWithAllRoutes(
     { production: false },
-    { reportedAdjudicationsService, locationService, userService, decisionTreeService }
+    { reportedAdjudicationsService, locationService, userService, decisionTreeService },
   )
 })
 

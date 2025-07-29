@@ -8,7 +8,7 @@ export default function getFrontendComponents({ frontendComponentService }: Serv
       const { user } = res.locals
       const { header, footer, meta } = await frontendComponentService.getComponents(
         ['header', 'footer', 'meta'],
-        user.token
+        user.token,
       )
       res.locals.userMetadata = meta.activeCaseLoad
       res.locals.feComponents = {

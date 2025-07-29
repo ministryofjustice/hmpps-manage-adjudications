@@ -64,8 +64,8 @@ describe('POST /not-proceed', () => {
           '100',
           NotProceedReason.NOT_FAIR,
           'details',
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

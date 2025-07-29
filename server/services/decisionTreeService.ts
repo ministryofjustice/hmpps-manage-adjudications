@@ -28,7 +28,7 @@ export default class DecisionTreeService {
     private readonly userService: UserService,
     private readonly reportedAdjudicationService: ReportedAdjudicationsService,
     private readonly decisionTree: Question,
-    private readonly additionalQuestions: Question[]
+    private readonly additionalQuestions: Question[],
   ) {}
 
   getDecisionTree(key: string): Question {
@@ -37,7 +37,7 @@ export default class DecisionTreeService {
     }
 
     const additionalQuestion = this.additionalQuestions.filter(
-      question => key.startsWith(question.id()) && question.isApplicableVersion(+config.offenceVersion)
+      question => key.startsWith(question.id()) && question.isApplicableVersion(+config.offenceVersion),
     )
 
     if (additionalQuestion.length === 0) {
@@ -60,7 +60,7 @@ export default class DecisionTreeService {
   async reportedAdjudicationIncidentData(chargeNumber: string, user: User) {
     const { reportedAdjudication } = await this.reportedAdjudicationService.getReportedAdjudicationDetails(
       chargeNumber,
-      user
+      user,
     )
     const data = await this.adjudicationIncidentData(reportedAdjudication, user)
     return {
@@ -95,7 +95,7 @@ export default class DecisionTreeService {
     associatedPrisoner: PrisonerResult,
     incidentRole: IncidentRole,
     user: User,
-    prisonerView: boolean
+    prisonerView: boolean,
   ): Promise<IncidentAndOffences> {
     if (offenceData.offenceCode === 0) {
       return {
@@ -116,7 +116,7 @@ export default class DecisionTreeService {
       placeHolderValues,
       incidentRoleEnum,
       prisonerView,
-      offenceData.protectedCharacteristics
+      offenceData.protectedCharacteristics,
     )
     return {
       questionsAndAnswers,
@@ -158,12 +158,12 @@ export default class DecisionTreeService {
     placeHolderValues: PlaceholderValues,
     incidentRole: IncidentRoleEnum,
     prisonerView: boolean,
-    protectedCharacteristics: string[]
+    protectedCharacteristics: string[],
   ) {
     return this.getDecisionTree(null)
       .findAnswerByCode(
         offenceCode,
-        protectedCharacteristics && protectedCharacteristics.length > 0 && protectedCharacteristics[0]
+        protectedCharacteristics && protectedCharacteristics.length > 0 && protectedCharacteristics[0],
       )
       .getProcessedQuestionsAndAnswersToGetHere(placeHolderValues, incidentRole, prisonerView, protectedCharacteristics)
   }

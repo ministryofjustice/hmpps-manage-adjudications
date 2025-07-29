@@ -10,13 +10,13 @@ export default class IsPunishmentSuspendedRoute {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new IsPunishmentSuspendedPage(
       PageRequestType.CREATION,
       userService,
       punishmentsService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

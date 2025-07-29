@@ -24,7 +24,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -42,7 +42,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { userService, outcomesService, hearingsService, reportedAdjudicationsService },
-    {}
+    {},
   )
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   reportedAdjudicationsService.getLastOutcomeItem.mockResolvedValue(outcomeHistory)
@@ -93,8 +93,8 @@ describe('POST /not-proceed', () => {
           'details',
           expect.anything(),
           null,
-          null
-        )
+          null,
+        ),
       )
   })
 })

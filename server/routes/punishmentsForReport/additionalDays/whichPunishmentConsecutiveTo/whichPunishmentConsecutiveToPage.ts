@@ -25,7 +25,7 @@ export default class WhichPunishmentConsecutiveToPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -44,7 +44,7 @@ export default class WhichPunishmentConsecutiveToPage {
     const possibleConsecutivePunishments = await this.punishmentsService.getPossibleConsecutivePunishments(
       chargeNumber,
       type,
-      user
+      user,
     )
 
     return res.render(`pages/whichPunishmentConsecutiveTo.njk`, {

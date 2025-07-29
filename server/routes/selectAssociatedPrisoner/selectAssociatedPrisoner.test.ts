@@ -16,7 +16,7 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { prisonerSearchService },
-    { redirectUrl: adjudicationUrls.incidentDetails.urls.edit('G6123VU', 1234) }
+    { redirectUrl: adjudicationUrls.incidentDetails.urls.edit('G6123VU', 1234) },
   )
 })
 
@@ -46,8 +46,8 @@ describe('GET /select-associated-prisoner', () => {
           expect(res.text).toContain(
             `<a href="${adjudicationUrls.incidentDetails.urls.edit(
               'G6123VU',
-              1234
-            )}?selectedPerson=A1234AA" class="govuk-link" data-qa="select-prisoner-link">Select prisoner<span class="govuk-visually-hidden"> for John Smith</span></a>`
+              1234,
+            )}?selectedPerson=A1234AA" class="govuk-link" data-qa="select-prisoner-link">Select prisoner<span class="govuk-visually-hidden"> for John Smith</span></a>`,
           )
         })
     })
@@ -77,7 +77,7 @@ describe('POST /select-associated-prisoner', () => {
       .send({ searchTerm: 'Smith' })
       .expect(
         'Location',
-        `${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fedit`
+        `${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fedit`,
       )
   })
   it('should redirect to select prisoner page with the correct search text and redirect URL intact - with query', () => {
@@ -87,16 +87,16 @@ describe('POST /select-associated-prisoner', () => {
       {
         redirectUrl: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6123VU',
-          1234
+          1234,
         )}?referrer=${adjudicationUrls.prisonerReport.urls.review('1524455')}`,
-      }
+      },
     )
     return request(app)
       .post(adjudicationUrls.selectAssociatedPrisoner.root)
       .send({ searchTerm: 'Smith' })
       .expect(
         'Location',
-        `${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fsubmitted%2Fedit%3Freferrer%3D%2Fprisoner-report%2F1524455%2Freview`
+        `${adjudicationUrls.selectAssociatedPrisoner.root}?searchTerm=Smith&redirectUrl=%2Fincident-details%2FG6123VU%2F1234%2Fsubmitted%2Fedit%3Freferrer%3D%2Fprisoner-report%2F1524455%2Freview`,
       )
   })
 

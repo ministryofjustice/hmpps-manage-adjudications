@@ -215,7 +215,7 @@ context('Awarded punishments and damages', () => {
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.awardedPunishmentsAndDamagesLink().click()
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      AwardedPunishmentsAndDamagesPage
+      AwardedPunishmentsAndDamagesPage,
     )
     awardedPunishmentsAndDamagesPage.allAwardedPunishmentsAndDamagesTab().should('exist')
     awardedPunishmentsAndDamagesPage.financialAwardedPunishmentsAndDamagesTab().should('exist')
@@ -231,7 +231,7 @@ context('Awarded punishments and damages', () => {
   it('should have the correct details showing in the table', () => {
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.root)
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      AwardedPunishmentsAndDamagesPage
+      AwardedPunishmentsAndDamagesPage,
     )
     awardedPunishmentsAndDamagesPage
       .resultsTable()
@@ -309,7 +309,7 @@ context('Awarded punishments and damages', () => {
 
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.root)
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      AwardedPunishmentsAndDamagesPage
+      AwardedPunishmentsAndDamagesPage,
     )
     awardedPunishmentsAndDamagesPage.noResultsMessage().should('exist')
   })
@@ -317,7 +317,7 @@ context('Awarded punishments and damages', () => {
   it('should accept user-chosen filtering', () => {
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.root)
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      AwardedPunishmentsAndDamagesPage
+      AwardedPunishmentsAndDamagesPage,
     )
     const date = formatDateForDatePicker(new Date().toISOString(), 'short')
     awardedPunishmentsAndDamagesPage.datePicker().type(date)
@@ -329,8 +329,8 @@ context('Awarded punishments and damages', () => {
       expect(loc.search).to.eq(
         `?hearingDate=${`${today.date()}`.padStart(2, '0')}%2F${`${month}`.padStart(
           2,
-          '0'
-        )}%2F${today.year()}&locationId=25538`
+          '0',
+        )}%2F${today.year()}&locationId=25538`,
       )
     })
     // P3785CP should be filtered out based on the locationId
@@ -342,10 +342,10 @@ context('Awarded punishments and damages', () => {
       adjudicationUrls.awardedPunishmentsAndDamages.urls.filter({
         hearingDate: today.format('DD/MM/YYYY'),
         locationId: '27102',
-      })
+      }),
     )
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      AwardedPunishmentsAndDamagesPage
+      AwardedPunishmentsAndDamagesPage,
     )
     awardedPunishmentsAndDamagesPage.clearLink().click()
     cy.location().should(loc => {
@@ -486,12 +486,12 @@ context('Awarded punishments and damages - Financial', () => {
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.awardedPunishmentsAndDamagesLink().click()
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      AwardedPunishmentsAndDamagesPage
+      AwardedPunishmentsAndDamagesPage,
     )
     awardedPunishmentsAndDamagesPage.financialAwardedPunishmentsAndDamagesTab().click()
 
     const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      FinancialAwardedPunishmentsAndDamagesPage
+      FinancialAwardedPunishmentsAndDamagesPage,
     )
     financialAwardedPunishmentsAndDamagesPage.allAwardedPunishmentsAndDamagesTab().should('exist')
     financialAwardedPunishmentsAndDamagesPage.financialAwardedPunishmentsAndDamagesTab().should('exist')
@@ -509,7 +509,7 @@ context('Awarded punishments and damages - Financial', () => {
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
 
     const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      FinancialAwardedPunishmentsAndDamagesPage
+      FinancialAwardedPunishmentsAndDamagesPage,
     )
     financialAwardedPunishmentsAndDamagesPage
       .resultsTable()
@@ -569,7 +569,7 @@ context('Awarded punishments and damages - Financial', () => {
 
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
     const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      FinancialAwardedPunishmentsAndDamagesPage
+      FinancialAwardedPunishmentsAndDamagesPage,
     )
     financialAwardedPunishmentsAndDamagesPage.noResultsMessage().should('exist')
   })
@@ -577,7 +577,7 @@ context('Awarded punishments and damages - Financial', () => {
   it('should accept user-chosen filtering', () => {
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.urls.financial())
     const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      FinancialAwardedPunishmentsAndDamagesPage
+      FinancialAwardedPunishmentsAndDamagesPage,
     )
     const date = formatDateForDatePicker(new Date().toISOString(), 'short')
     financialAwardedPunishmentsAndDamagesPage.datePicker().type(date)
@@ -589,8 +589,8 @@ context('Awarded punishments and damages - Financial', () => {
       expect(loc.search).to.eq(
         `?hearingDate=${`${today.date()}`.padStart(2, '0')}%2F${`${month}`.padStart(
           2,
-          '0'
-        )}%2F${today.year()}&locationId=25538`
+          '0',
+        )}%2F${today.year()}&locationId=25538`,
       )
     })
     // P3785CP should be filtered out based on the locationId
@@ -602,10 +602,10 @@ context('Awarded punishments and damages - Financial', () => {
       adjudicationUrls.awardedPunishmentsAndDamages.urls.financialFilter({
         hearingDate: today.format('DD/MM/YYYY'),
         locationId: '27102',
-      })
+      }),
     )
     const financialAwardedPunishmentsAndDamagesPage: FinancialAwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      FinancialAwardedPunishmentsAndDamagesPage
+      FinancialAwardedPunishmentsAndDamagesPage,
     )
     financialAwardedPunishmentsAndDamagesPage.clearLink().click()
     cy.location().should(loc => {
@@ -735,12 +735,12 @@ context('Awarded punishments and damages - Additional days', () => {
     const homepage: HomepagePage = Page.verifyOnPage(HomepagePage)
     homepage.awardedPunishmentsAndDamagesLink().click()
     const awardedPunishmentsAndDamagesPage: AwardedPunishmentsAndDamagesPage = Page.verifyOnPage(
-      AwardedPunishmentsAndDamagesPage
+      AwardedPunishmentsAndDamagesPage,
     )
     awardedPunishmentsAndDamagesPage.additionalDaysAwardedPunishmentsTab().click()
 
     const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
-      AdditionalDaysAwardedPunishmentsPage
+      AdditionalDaysAwardedPunishmentsPage,
     )
     additionalDaysAwardedPunishmentsPage.allAwardedPunishmentsAndDamagesTab().should('exist')
     additionalDaysAwardedPunishmentsPage.financialAwardedPunishmentsAndDamagesTab().should('exist')
@@ -757,7 +757,7 @@ context('Awarded punishments and damages - Additional days', () => {
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
 
     const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
-      AdditionalDaysAwardedPunishmentsPage
+      AdditionalDaysAwardedPunishmentsPage,
     )
     additionalDaysAwardedPunishmentsPage
       .resultsTable()
@@ -817,7 +817,7 @@ context('Awarded punishments and damages - Additional days', () => {
 
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
     const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
-      AdditionalDaysAwardedPunishmentsPage
+      AdditionalDaysAwardedPunishmentsPage,
     )
     additionalDaysAwardedPunishmentsPage.noResultsMessage().should('exist')
   })
@@ -825,7 +825,7 @@ context('Awarded punishments and damages - Additional days', () => {
   it('should accept user-chosen filtering', () => {
     cy.visit(adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays())
     const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
-      AdditionalDaysAwardedPunishmentsPage
+      AdditionalDaysAwardedPunishmentsPage,
     )
     const date = formatDateForDatePicker(new Date().toISOString(), 'short')
     additionalDaysAwardedPunishmentsPage.datePicker().type(date)
@@ -837,8 +837,8 @@ context('Awarded punishments and damages - Additional days', () => {
       expect(loc.search).to.eq(
         `?hearingDate=${`${today.date()}`.padStart(2, '0')}%2F${`${month}`.padStart(
           2,
-          '0'
-        )}%2F${today.year()}&locationId=25538`
+          '0',
+        )}%2F${today.year()}&locationId=25538`,
       )
     })
     // P3785CP should be filtered out based on the locationId
@@ -850,10 +850,10 @@ context('Awarded punishments and damages - Additional days', () => {
       adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDaysFilter({
         hearingDate: today.format('DD/MM/YYYY'),
         locationId: '27102',
-      })
+      }),
     )
     const additionalDaysAwardedPunishmentsPage: AdditionalDaysAwardedPunishmentsPage = Page.verifyOnPage(
-      AdditionalDaysAwardedPunishmentsPage
+      AdditionalDaysAwardedPunishmentsPage,
     )
     additionalDaysAwardedPunishmentsPage.clearLink().click()
     cy.location().should(loc => {

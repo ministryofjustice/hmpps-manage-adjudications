@@ -14,7 +14,7 @@ export default class DropDownEntry {
   public static getByValueOrElse(
     values: DropDownEntry[],
     value: string,
-    defaultValue: DropDownEntry
+    defaultValue: DropDownEntry,
   ): DropDownEntry | undefined {
     if (value === undefined) {
       return defaultValue

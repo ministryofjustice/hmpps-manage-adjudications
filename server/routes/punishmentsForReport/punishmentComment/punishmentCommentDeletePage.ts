@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../../@types/template'
@@ -15,7 +14,7 @@ type PageData = {
 export default class ConfirmDeletionPage {
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -75,7 +74,7 @@ export default class ConfirmDeletionPage {
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-      })
+      }),
     )
   }
 }

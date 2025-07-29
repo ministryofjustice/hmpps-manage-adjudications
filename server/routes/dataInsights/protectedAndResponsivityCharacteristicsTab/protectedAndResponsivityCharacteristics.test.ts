@@ -18,20 +18,20 @@ beforeEach(() => {
       agencyId: 'RNI',
       chartName: '2a',
       chartEntries: [],
-    })
+    }),
   )
   chartApiService.getChart.mockResolvedValue(
     testData.chartDetailsResult({
       agencyId: 'RNI',
       chartName: '2b',
       chartEntries: [],
-    })
+    }),
   )
   chartApiService.getLastModifiedChart.mockResolvedValue(
     testData.chartLastUpdatedResult({
       chartName: '2a',
       lastModifiedDate: '2023-08-24T15:30:00',
-    })
+    }),
   )
   app = appWithAllRoutes({ production: false }, { chartApiService })
 })

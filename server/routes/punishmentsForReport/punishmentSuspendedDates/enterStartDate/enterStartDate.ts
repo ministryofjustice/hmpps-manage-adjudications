@@ -10,13 +10,13 @@ export default class EnterStartDateRoute {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new EnterStartDatePage(
       PageRequestType.EXISTING,
       userService,
       punishmentsService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

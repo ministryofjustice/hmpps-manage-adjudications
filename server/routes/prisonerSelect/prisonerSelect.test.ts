@@ -42,14 +42,14 @@ describe('GET /select-prisoner', () => {
           expect(res.text).toContain('Select a prisoner')
           expect(res.text).toContain('<p class="align-right"><strong>Prisoners listed:</strong> 1</p>')
           expect(res.text).toContain(
-            '<img src="/prisoner/A1234AA/image" alt="Photograph of Smith, John" class="results-table__image" />'
+            '<img src="/prisoner/A1234AA/image" alt="Photograph of Smith, John" class="results-table__image" />',
           )
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain('1-2-015')
           expect(res.text).toContain(
             `<a href="${adjudicationUrls.incidentDetails.urls.start(
-              'A1234AA'
-            )}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>`
+              'A1234AA',
+            )}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>`,
           )
         })
     })
@@ -62,14 +62,14 @@ describe('GET /select-prisoner', () => {
           expect(res.text).toContain('Select a prisoner')
           expect(res.text).toContain('<p class="align-right"><strong>Prisoners listed:</strong> 1</p>')
           expect(res.text).toContain(
-            '<img src="/prisoner/A1234AA/image" alt="Photograph of Smith, John" class="results-table__image" />'
+            '<img src="/prisoner/A1234AA/image" alt="Photograph of Smith, John" class="results-table__image" />',
           )
           expect(res.text).toContain('Smith, John')
           expect(res.text).toContain('1-2-015')
           expect(res.text).toContain(
             `<a href="${adjudicationUrls.incidentDetails.urls.start(
-              'A1234AA'
-            )}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>`
+              'A1234AA',
+            )}" class="govuk-link" data-qa="start-report-link">Start a report<span class="govuk-visually-hidden">for John Smith</span></a>`,
           )
         })
     })

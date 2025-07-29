@@ -22,7 +22,7 @@ beforeEach(() => {
       offenderNo: 'G6415GD',
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
-    })
+    }),
   )
 
   placeOnReportService.getDraftIncidentDetailsForEditing.mockResolvedValue({

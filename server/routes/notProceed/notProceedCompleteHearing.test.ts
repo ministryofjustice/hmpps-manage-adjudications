@@ -66,7 +66,7 @@ describe('POST /not-proceed', () => {
   it('should call the correct endpoint (createNotProceedHearingOutcome) and redirect', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100')}?adjudicator=Rod%20Red&plea=UNFIT`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100')}?adjudicator=Rod%20Red&plea=UNFIT`,
       )
       .send({
         notProceedReason: NotProceedReason.NOT_FAIR,
@@ -79,14 +79,14 @@ describe('POST /not-proceed', () => {
           HearingOutcomePlea.UNFIT,
           NotProceedReason.NOT_FAIR,
           'details',
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should not call the createNotProceed endpoint (for referrals and not proceed without hearing)', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100')}?adjudicator=Rod%20Red&plea=GUILTY`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100')}?adjudicator=Rod%20Red&plea=GUILTY`,
       )
       .send({
         notProceedReason: NotProceedReason.NOT_FAIR,

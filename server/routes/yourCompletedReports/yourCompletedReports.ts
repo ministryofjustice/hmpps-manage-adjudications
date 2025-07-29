@@ -24,7 +24,7 @@ export default class YourCompletedReportsRoutes {
     res: Response,
     filter: UiFilter,
     results: ApiPageResponse<ReportedAdjudication>,
-    errors: FormError[]
+    errors: FormError[],
   ): Promise<void> => {
     return res.render(`pages/yourCompletedReports`, {
       results,
@@ -32,7 +32,7 @@ export default class YourCompletedReportsRoutes {
       statuses: reportedAdjudicationStatuses(filter),
       pagination: mojPaginationFromPageResponse(
         results,
-        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`),
       ),
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
@@ -46,7 +46,7 @@ export default class YourCompletedReportsRoutes {
     const results = await this.reportedAdjudicationsService.getYourCompletedAdjudications(
       res.locals.user,
       filter,
-      pageRequestFrom(20, +req.query.pageNumber || 1)
+      pageRequestFrom(20, +req.query.pageNumber || 1),
     )
     return this.renderView(req, res, uiFilter, results, [])
   }

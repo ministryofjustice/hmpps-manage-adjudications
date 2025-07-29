@@ -41,7 +41,7 @@ export default class EnterHearingOutcomePage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly hearingsService: HearingsService
+    private readonly hearingsService: HearingsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -152,20 +152,20 @@ export default class EnterHearingOutcomePage {
 
     const redirectUrlPrefix = this.getRedirectUrl(
       HearingOutcomeCode[hearingOutcome as keyof typeof HearingOutcomeCode],
-      chargeNumber
+      chargeNumber,
     )
     const adjudicator = governorId || inAdName
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
         query: { adjudicator, hearingOutcome },
-      })
+      }),
     )
   }
 
   getPreviouslyEnteredHearingOutcomeFromApi = async (
     chargeNumber: string,
-    user: User
+    user: User,
   ): Promise<HearingOutcomeDetails> => {
     return this.hearingsService.getHearingOutcome(chargeNumber, user)
   }
@@ -201,7 +201,7 @@ export default class EnterHearingOutcomePage {
         query: {
           staffName: governorName,
         },
-      })
+      }),
     )
   }
 }

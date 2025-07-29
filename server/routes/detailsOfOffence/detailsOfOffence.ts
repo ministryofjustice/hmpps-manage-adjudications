@@ -40,7 +40,7 @@ export default class DetailsOfOffencePage {
   constructor(
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -69,7 +69,7 @@ export default class DetailsOfOffencePage {
       placeHolderValues,
       incidentRole,
       false,
-      offence.protectedCharacteristics
+      offence.protectedCharacteristics,
     )
 
     const offenceToDisplay = {
@@ -104,7 +104,7 @@ export default class DetailsOfOffencePage {
         res,
         draftId,
         isReportedAdjudication,
-        this.pageOptions.isAloEdit()
+        this.pageOptions.isAloEdit(),
       )
     }
 
@@ -123,7 +123,7 @@ export default class DetailsOfOffencePage {
       ...(offenceCode && { offenceCode: Number(offenceCode) }),
       ...(protectedCharacteristics.length !== 0 && {
         protectedCharacteristics: protectedCharacteristics.map(pc =>
-          getProtectedCharacteristicsTypeByIndex(+pc.slice(-1))
+          getProtectedCharacteristicsTypeByIndex(+pc.slice(-1)),
         ),
       }),
     }
@@ -132,7 +132,7 @@ export default class DetailsOfOffencePage {
       const adjudicationReport = await this.placeOnReportService.aloAmendOffenceDetails(
         draftId,
         offenceDetailsToSave,
-        user
+        user,
       )
       return res.redirect(adjudicationUrls.prisonerReport.urls.review(adjudicationReport?.chargeNumber))
     }
@@ -148,13 +148,13 @@ export default class DetailsOfOffencePage {
       const protectedCharacteristicEnums: ProtectedCharacteristicsTypes[] = []
       if (req.query.protectedCharacteristics && typeof req.query.protectedCharacteristics !== 'string') {
         const protectedCharacteristics = (req.query.protectedCharacteristics ?? []) as string[]
-        /* eslint-disable no-plusplus */
+
         protectedCharacteristics.forEach(pc => {
           protectedCharacteristicEnums.push(getProtectedCharacteristicsTypeByIndex(+pc.slice(-1)))
         })
       } else if (req.query.protectedCharacteristics) {
         protectedCharacteristicEnums.push(
-          getProtectedCharacteristicsTypeByIndex(+req.query.protectedCharacteristics.toString().slice(-1))
+          getProtectedCharacteristicsTypeByIndex(+req.query.protectedCharacteristics.toString().slice(-1)),
         )
       }
 
@@ -179,7 +179,7 @@ export default class DetailsOfOffencePage {
     res: Response,
     draftId: number,
     isReportedDraft: boolean,
-    isAloEdit: boolean
+    isAloEdit: boolean,
   ) => {
     if (isAloEdit) {
       return res.redirect(adjudicationUrls.ageOfPrisoner.urls.aloSubmittedEditWithResettingOffences(draftId))

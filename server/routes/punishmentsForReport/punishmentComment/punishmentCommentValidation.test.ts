@@ -6,14 +6,14 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentComment: 'some text',
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when no punishment comment is not blank', () => {
     expect(
       validateForm({
         punishmentComment: '  ',
-      })
+      }),
     ).toEqual({
       href: '#punishmentComment',
       text: 'Enter a comment',
@@ -23,7 +23,7 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentComment: wordLimitExceedingString,
-      })
+      }),
     ).toStrictEqual({
       href: '#punishmentComment',
       text: 'Your comment must be 4,000 characters or fewer',

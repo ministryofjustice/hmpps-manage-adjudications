@@ -6,14 +6,14 @@ describe('Character count exceeded', () => {
     expect(
       validateForm({
         reasonForFinding: 'blah blah',
-      })
+      }),
     ).toBeNull()
   })
   it('returns the expected response for an invalid submit', () => {
     expect(
       validateForm({
         reasonForFinding: wordLimitExceedingString,
-      })
+      }),
     ).toStrictEqual({
       href: '#reasonForFinding',
       text: 'Your statement must be 4,000 characters or fewer',

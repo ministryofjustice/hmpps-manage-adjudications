@@ -20,7 +20,7 @@ export default function createOnBehalfOfRoutes({
   const createOnBehalfOfReasonRoute = new CreateOnBehalfOfReasonRoutes(createOnBehalfOfSessionService)
   const checkCreateOnBehalfOfRoute = new CheckCreateOnBehalfOfRoutes(
     placeOnReportService,
-    createOnBehalfOfSessionService
+    createOnBehalfOfSessionService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

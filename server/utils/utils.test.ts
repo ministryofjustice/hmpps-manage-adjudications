@@ -217,7 +217,7 @@ describe('convertSubmittedDateTimeToDateObject', () => {
       convertSubmittedDateTimeToDateObject({
         date: '09/11/2021',
         time: { hour: '10', minute: '00' },
-      })
+      }),
     ).toEqual({ date: '09/11/2021', hour: '10', minute: '00' })
   })
   it('null', () => {

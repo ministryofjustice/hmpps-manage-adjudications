@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { defineConfig } from 'cypress'
 
 import { resetStubs } from './integration_tests/mockApis/wiremock'
@@ -6,7 +5,6 @@ import prisonApi from './integration_tests/mockApis/prisonApi'
 import locationsInsidePrisonApi from './integration_tests/mockApis/locationsInsidePrisonApi'
 import nomisSyncPrisonerMappingApi from './integration_tests/mockApis/nomisSyncPrisonerMappingApi'
 import curiousApi from './integration_tests/mockApis/curiousApi'
-import { CaseLoad } from './server/data/prisonApiClient'
 import auth from './integration_tests/mockApis/auth'
 import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import adjudications from './integration_tests/mockApis/adjudications'

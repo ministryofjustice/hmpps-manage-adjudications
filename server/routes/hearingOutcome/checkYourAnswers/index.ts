@@ -21,12 +21,12 @@ export default function hearingCheckYourAnswersRoutes({
   const hearingCheckYourAnswersRoute = new HearingCheckYourAnswersRoutes(
     hearingsService,
     userService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const hearingCheckYourAnswersEditRoute = new HearingCheckYourAnswersEditRoutes(
     hearingsService,
     userService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

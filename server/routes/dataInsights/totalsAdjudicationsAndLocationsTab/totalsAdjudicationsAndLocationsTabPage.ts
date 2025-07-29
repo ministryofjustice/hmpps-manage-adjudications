@@ -34,7 +34,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
     const { username } = user
     const agencyId: AgencyId = user.meta.caseLoadId
     const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '1a')).lastModifiedDate
+      (await this.chartApiService.getLastModifiedChart(username, '1a')).lastModifiedDate,
     )
     const lastMonthText = getLastMonthText()
     const chartSettingMap = {} as Record<string, unknown>
@@ -46,7 +46,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       'Adjudication reports created - over 24 months',
       'This is a high-level view of adjudication reports created over time. What do recent numbers tell you about prison stability? Are there any surprises or possible actions?',
       await this.chartApiService.getChart(username, agencyId, '1a'),
-      'Number'
+      'Number',
     )
 
     chartSettingMap['1b'] = await produceVerticalBarsAndLineCharts(
@@ -56,7 +56,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       'Adjudication reports referred to independent adjudicator - over 24 months',
       'This chart shows adjudications which had at least 1 hearing with an independent adjudicator. Use it to explore any concerns you may have about numbers being referred to IAs. What do the numbers tell you about possible actions and future trends?',
       await this.chartApiService.getChart(username, agencyId, '1b'),
-      'Number'
+      'Number',
     )
 
     chartSettingMap['1c'] = await produceCommentaryChart(
@@ -75,7 +75,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
             proportion: `${Math.trunc(row.proportion * 100)}%`,
           } as ChartEntryCommentary
         },
-      }
+      },
     )
 
     chartSettingMap['1d'] = await produceHorizontalBarsChart(
@@ -95,7 +95,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getTotalsAdjudicationsHorizontalBarsChartHead(),
-      'Percentage'
+      'Percentage',
     )
 
     chartSettingMap['1f'] = await produceHorizontalBarsChart(
@@ -115,7 +115,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getTotalsAdjudicationsHorizontalBarsChartHead(),
-      'Percentage'
+      'Percentage',
     )
 
     return res.render(`pages/dataInsights/totalsAdjudicationsAndLocationsTab.njk`, {

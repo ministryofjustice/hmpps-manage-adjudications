@@ -64,8 +64,8 @@ describe('POST /reason-for-gov-referral', () => {
           '100',
           '123',
           ReferGovReason.GOV_INQUIRY,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

@@ -123,7 +123,7 @@ function appSetup(route: Router, production: boolean, session: Record<string, un
 export default function appWithAllRoutes(
   { production = false }: { production?: boolean },
   overrides: Partial<Services> = {},
-  session = {}
+  session = {},
 ): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
 
@@ -148,6 +148,6 @@ export default function appWithAllRoutes(
       ...overrides,
     }),
     production,
-    session
+    session,
   )
 }

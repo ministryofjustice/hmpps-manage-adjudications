@@ -10,7 +10,7 @@ describe('incomplete rehab activity validation', () => {
         suspendedUntil: '15/06/2024',
         prisonerName: 'John Smith',
         actualDays: 5,
-      })
+      }),
     ).toBeNull()
   })
   it('errors if no outcome is selected', () => {
@@ -21,7 +21,7 @@ describe('incomplete rehab activity validation', () => {
         suspendedUntil: '15/06/2024',
         prisonerName: 'John Smith',
         actualDays: 5,
-      })
+      }),
     ).toEqual({
       href: '#outcome',
       text: 'Select what happens to John Smith’s suspended punishment',
@@ -35,7 +35,7 @@ describe('incomplete rehab activity validation', () => {
         suspendedUntil: '15/06/2024',
         prisonerName: 'John Smith',
         actualDays: 5,
-      })
+      }),
     ).toEqual({
       href: '#daysToActivate',
       text: `Enter the number of days for the punishment`,
@@ -50,7 +50,7 @@ describe('incomplete rehab activity validation', () => {
         suspendedUntil: '15/06/2024',
         prisonerName: 'John Smith',
         actualDays: 5,
-      })
+      }),
     ).toEqual({
       href: '#daysToActivate',
       text: `The number of days for the punishment must be a number`,
@@ -65,7 +65,7 @@ describe('incomplete rehab activity validation', () => {
         suspendedUntil: '15/06/2024',
         prisonerName: 'John Smith',
         actualDays: 5,
-      })
+      }),
     ).toBeNull()
   })
   it('Partial chosen but number entered is more than previously chosen for the punishment', () => {
@@ -76,7 +76,7 @@ describe('incomplete rehab activity validation', () => {
         suspendedUntil: '15/06/2024',
         prisonerName: 'John Smith',
         actualDays: 5,
-      })
+      }),
     ).toEqual({
       href: '#daysToActivate',
       text: `The number of days for the punishment must be 5 or fewer`,
@@ -90,7 +90,7 @@ describe('incomplete rehab activity validation', () => {
         suspendedUntil: null,
         prisonerName: 'John Smith',
         actualDays: 5,
-      })
+      }),
     ).toEqual({
       href: '#suspendedUntil',
       text: `Enter the new date the suspended punishment will end`,
@@ -104,7 +104,7 @@ describe('incomplete rehab activity validation', () => {
         suspendedUntil: '2025/01/04',
         prisonerName: 'John Smith',
         actualDays: 5,
-      })
+      }),
     ).toEqual({
       href: '#suspendedUntil',
       text: `The new date the suspended punishment will end must be a real date`,

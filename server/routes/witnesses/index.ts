@@ -28,28 +28,28 @@ export default function detailsOfWitnessesRoutes({
     PageRequestType.WITNESSES_FROM_API,
     placeOnReportService,
     witnessesSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const detailsOfWitnessesUsingSession = new DetailsOfWitnessesPage(
     PageRequestType.WITNESSES_FROM_SESSION,
     placeOnReportService,
     witnessesSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const submittedEditDetailsOfWitnessesUsingDraft = new DetailsOfWitnessesPage(
     PageRequestType.SUBMITTED_EDIT_WITNESSES_FROM_API,
     placeOnReportService,
     witnessesSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const submittedEditDetailsOfWitnessesUsingSession = new DetailsOfWitnessesPage(
     PageRequestType.SUBMITTED_EDIT_WITNESSES_FROM_SESSION,
     placeOnReportService,
     witnessesSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const addWitness = new AddWitnessRoutes(
@@ -57,7 +57,7 @@ export default function detailsOfWitnessesRoutes({
     placeOnReportService,
     userService,
     decisionTreeService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)
@@ -73,11 +73,11 @@ export default function detailsOfWitnessesRoutes({
   post(adjudicationUrls.detailsOfWitnesses.matchers.submittedEdit, submittedEditDetailsOfWitnessesUsingDraft.submit)
   get(
     adjudicationUrls.detailsOfWitnesses.matchers.submittedEditModified,
-    submittedEditDetailsOfWitnessesUsingSession.view
+    submittedEditDetailsOfWitnessesUsingSession.view,
   )
   post(
     adjudicationUrls.detailsOfWitnesses.matchers.submittedEditModified,
-    submittedEditDetailsOfWitnessesUsingSession.submit
+    submittedEditDetailsOfWitnessesUsingSession.submit,
   )
 
   return router

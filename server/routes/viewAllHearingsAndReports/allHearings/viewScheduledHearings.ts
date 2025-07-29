@@ -10,7 +10,7 @@ import { ScheduledHearingEnhanced } from '../../../data/ReportedAdjudicationResu
 export default class viewScheduledHearingsRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   private renderView = async (
@@ -18,7 +18,7 @@ export default class viewScheduledHearingsRoutes {
     res: Response,
     uiChosenDate: string,
     results: ScheduledHearingEnhanced[],
-    errors: FormError[]
+    errors: FormError[],
   ): Promise<void> => {
     return res.render(`pages/viewAllHearingsAndReports/viewScheduledHearings`, {
       hearings: results,

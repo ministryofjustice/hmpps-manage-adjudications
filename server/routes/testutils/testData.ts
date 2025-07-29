@@ -312,7 +312,7 @@ export default class TestData {
     offenderNo: string,
     firstName: string,
     lastName: string,
-    assignedLivingUnitDesc: string
+    assignedLivingUnitDesc: string,
   ): PrisonerSimpleResult => {
     return {
       offenderNo,
@@ -556,7 +556,7 @@ export default class TestData {
     username = 'JSMITH_GEN',
     name = 'John Smith',
     firstName = 'John',
-    lastName = 'Smith'
+    lastName = 'Smith',
   ) => {
     return {
       username,

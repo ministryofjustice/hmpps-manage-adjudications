@@ -28,12 +28,12 @@ export default function prisonerReportRoutes({
     reportedAdjudicationsService,
     userService,
     decisionTreeService,
-    locationService
+    locationService,
   )
   const prisonerReportViewRoute = new PrisonerReportViewRoutes(
     reportedAdjudicationsService,
     decisionTreeService,
-    userService
+    userService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

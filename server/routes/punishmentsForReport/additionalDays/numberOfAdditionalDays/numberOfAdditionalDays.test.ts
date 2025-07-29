@@ -19,7 +19,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -71,8 +71,8 @@ describe('POST number of additional days page', () => {
     return request(app)
       .post(
         `${adjudicationUrls.numberOfAdditionalDays.urls.start(
-          '100'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`
+          '100',
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=`,
       )
       .send({
         duration: 10,
@@ -81,8 +81,8 @@ describe('POST number of additional days page', () => {
       .expect(
         'Location',
         `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.start(
-          '100'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`
+          '100',
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`,
       )
   })
 })

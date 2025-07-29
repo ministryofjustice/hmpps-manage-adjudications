@@ -20,7 +20,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -29,7 +29,7 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
-    testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' })
+    testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' }),
   )
 })
 
@@ -76,8 +76,8 @@ describe('POST /punishment', () => {
       .expect(
         'Location',
         `${adjudicationUrls.punishmentNumberOfDays.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`,
       )
   })
 })

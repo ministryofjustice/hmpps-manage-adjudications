@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
@@ -26,7 +25,6 @@ type PageData = {
   prisonerName?: string
 } & DecisionForm
 
-// eslint-disable-next-line no-shadow
 enum ErrorType {
   MISSING_DECISION = 'MISSING_DECISION',
 }
@@ -42,7 +40,7 @@ export default class OffenceListRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
@@ -56,7 +54,7 @@ export default class OffenceListRoutes {
     const offencesAndTitles = await getOffenceInformation(
       allOffenceRules,
       draftAdjudication.isYouthOffender,
-      +config.offenceVersion
+      +config.offenceVersion,
     )
     const prisonerName = await this.placeOnReportService.getPrisonerDetails(draftAdjudication.prisonerNumber, user)
 
@@ -105,21 +103,21 @@ export default class OffenceListRoutes {
       const nextPageId = paragraphNumberToQuestionId(
         selectedAnswerId,
         draftAdjudication.isYouthOffender,
-        +config.offenceVersion
+        +config.offenceVersion,
       )
       return res.redirect(adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(draftId, incidentRole, nextPageId))
     }
     const chosenOffenceCode = await getOffenceCodeFromParagraphNumber(
       selectedAnswerId,
       draftAdjudication.isYouthOffender,
-      +config.offenceVersion
+      +config.offenceVersion,
     )
     return this.redirect(
       {
         pathname: adjudicationUrls.detailsOfOffence.urls.aloAdd(draftId),
         query: { offenceCode: `${chosenOffenceCode}` },
       },
-      res
+      res,
     )
   }
 
@@ -127,7 +125,7 @@ export default class OffenceListRoutes {
     return this.placeOnReportService.getAllOffenceRules(
       draftAdjudication.isYouthOffender,
       draftAdjudication.gender,
-      user
+      user,
     )
   }
 

@@ -15,13 +15,13 @@ export default class prisonerReportReviewRoutes {
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly locationService: LocationService
+    private readonly locationService: LocationService,
   ) {
     this.page = new PrisonerReportPage(
       PageRequestType.REVIEWER,
       reportedAdjudicationsService,
       decisionTreeService,
-      userService
+      userService,
     )
   }
 

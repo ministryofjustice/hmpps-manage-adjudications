@@ -13,7 +13,7 @@ context('Is the prisoner still in this establishment?', () => {
   it('should contain the required page elements', () => {
     cy.visit(adjudicationUrls.isPrisonerStillInEstablishment.urls.start())
     const isThePrisonerStillInThisEstablishmentPage: IsThePrisonerStillInThisEstablishmentPage = Page.verifyOnPage(
-      IsThePrisonerStillInThisEstablishmentPage
+      IsThePrisonerStillInThisEstablishmentPage,
     )
     isThePrisonerStillInThisEstablishmentPage.checkOnPage()
     isThePrisonerStillInThisEstablishmentPage.radios().should('exist')
@@ -22,7 +22,7 @@ context('Is the prisoner still in this establishment?', () => {
   it('should should go to normal search page if yes is selected', () => {
     cy.visit(adjudicationUrls.isPrisonerStillInEstablishment.urls.start())
     const isThePrisonerStillInThisEstablishmentPage: IsThePrisonerStillInThisEstablishmentPage = Page.verifyOnPage(
-      IsThePrisonerStillInThisEstablishmentPage
+      IsThePrisonerStillInThisEstablishmentPage,
     )
     isThePrisonerStillInThisEstablishmentPage.checkOnPage()
     isThePrisonerStillInThisEstablishmentPage.radioYes().click()
@@ -34,7 +34,7 @@ context('Is the prisoner still in this establishment?', () => {
   it('should should go to normal search page with transfer query if no is selected', () => {
     cy.visit(adjudicationUrls.isPrisonerStillInEstablishment.urls.start())
     const isThePrisonerStillInThisEstablishmentPage: IsThePrisonerStillInThisEstablishmentPage = Page.verifyOnPage(
-      IsThePrisonerStillInThisEstablishmentPage
+      IsThePrisonerStillInThisEstablishmentPage,
     )
     isThePrisonerStillInThisEstablishmentPage.checkOnPage()
     isThePrisonerStillInThisEstablishmentPage.radioNo().click()

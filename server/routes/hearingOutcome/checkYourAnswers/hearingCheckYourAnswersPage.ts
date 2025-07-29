@@ -28,7 +28,7 @@ export default class HearingCheckYourAnswersPage {
     pageType: PageRequestType,
     private readonly hearingsService: HearingsService,
     private readonly userService: UserService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -78,14 +78,14 @@ export default class HearingCheckYourAnswersPage {
           chargeNumber,
           user,
           (adjudicator && (adjudicator as string)) || null,
-          (plea && HearingOutcomePlea[plea.toString() as keyof typeof HearingOutcomePlea]) || null
+          (plea && HearingOutcomePlea[plea.toString() as keyof typeof HearingOutcomePlea]) || null,
         )
       } else {
         await this.hearingsService.createChargedProvedHearingOutcome(
           chargeNumber,
           adjudicator as string,
           HearingOutcomePlea[plea as keyof typeof HearingOutcomePlea],
-          user
+          user,
         )
       }
 

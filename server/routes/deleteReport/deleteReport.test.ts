@@ -27,7 +27,7 @@ describe('GET /delete-report/:id', () => {
         firstName: 'John',
         lastName: 'Smith',
         offenderNo: 'A1234AA',
-      })
+      }),
     )
   })
   it('should load deletion request confirmation page', () => {

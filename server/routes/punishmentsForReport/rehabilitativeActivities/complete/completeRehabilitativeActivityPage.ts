@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
@@ -18,7 +17,7 @@ type PageData = {
 export default class CompleteRehabilitativeActivityPage {
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -68,7 +67,7 @@ export default class CompleteRehabilitativeActivityPage {
       req,
       chargeNumber,
       +id,
-      user
+      user,
     )
     const error = validateForm({ completed, prisonerName })
 
@@ -85,7 +84,7 @@ export default class CompleteRehabilitativeActivityPage {
       try {
         this.punishmentsService.addCompletedRehabilitativeActivity(req, true)
         return res.redirect(
-          adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.urls.start(chargeNumber, +id)
+          adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.urls.start(chargeNumber, +id),
         )
       } catch (postError) {
         res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)

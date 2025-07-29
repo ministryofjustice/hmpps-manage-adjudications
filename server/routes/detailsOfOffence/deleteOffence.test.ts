@@ -24,7 +24,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 const testDecisionsTree = question([
@@ -35,14 +35,14 @@ const testDecisionsTree = question([
 ]).child(
   answer(['Prisoner victim', `Prisoner victim: ${Text.VICTIM_PRISONER_FULL_NAME}`])
     .type(Type.PRISONER)
-    .offenceCode(1)
+    .offenceCode(1),
 )
 const decisionTreeService = new DecisionTreeService(
   placeOnReportService,
   userService,
   reportedAdjudicationsService,
   testDecisionsTree,
-  []
+  [],
 )
 let app: Express
 
@@ -99,7 +99,7 @@ describe('GET /details-of-offence/102/delete view', () => {
           expect(res.text).toContain('Do you want to remove this offence?')
           expect(res.text).toContain('Committed: A_prisoner_first_name A_prisoner_last_name')
           expect(res.text).toContain('Prisoner victim: A_prisoner_first_name A_prisoner_last_name')
-        })
+        }),
     )
   })
 })
@@ -115,8 +115,8 @@ describe('POST /details-of-offence/102/delete validation', () => {
         .then(() =>
           agent.post(adjudicationUrls.detailsOfOffence.urls.delete(102, offenceData)).expect(res => {
             expect(res.text).toContain('Select yes if you want to remove this offence')
-          })
-        )
+          }),
+        ),
     )
   })
 })
@@ -139,9 +139,9 @@ describe('POST /details-of-offence/102/delete/1', () => {
                 .get(adjudicationUrls.detailsOfOffence.urls.modified(102))
                 .expect(200)
                 // The offence with this answer should be removed
-                .expect(res => expect(res.text).toContain('This report does not currently have any offence details.'))
-            )
-        )
+                .expect(res => expect(res.text).toContain('This report does not currently have any offence details.')),
+            ),
+        ),
       )
   })
 
@@ -158,9 +158,9 @@ describe('POST /details-of-offence/102/delete/1', () => {
             .expect(302)
             .expect(
               'Location',
-              `${adjudicationUrls.detailsOfOffence.urls.modified(102)}?offenceCode=1&victimPrisonersNumber=G5512G`
-            )
-        )
+              `${adjudicationUrls.detailsOfOffence.urls.modified(102)}?offenceCode=1&victimPrisonersNumber=G5512G`,
+            ),
+        ),
       )
   })
 })

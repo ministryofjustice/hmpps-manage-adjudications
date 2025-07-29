@@ -110,8 +110,8 @@ context('Print notice of being placed on report (DIS 1 and 2)', () => {
   it('should redirect the user to the referrer on finish', () => {
     cy.visit(
       `${adjudicationUrls.printReport.urls.dis12('1524242')}?referrer=${adjudicationUrls.prisonerReport.urls.report(
-        1524242
-      )}`
+        1524242,
+      )}`,
     )
     const printReportPage = Page.verifyOnPage(PrintReport)
     printReportPage.exitButton().click()

@@ -32,7 +32,7 @@ export default class CreateOnBehalfOfSessionService {
   setCreatedOnBehalfOfEditSubmittedAdjudication(
     req: Request,
     id: string,
-    createdOnBehalfOfEditSubmittedAdjudication: string
+    createdOnBehalfOfEditSubmittedAdjudication: string,
   ): void {
     this.setCreatedOnBehalfOfForDraftId(req, id)
     req.session.createdOnBehalfOf[id].createdOnBehalfOfEditSubmittedAdjudication =

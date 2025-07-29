@@ -86,7 +86,7 @@ export default class IncidentRolePage {
 
   constructor(
     pageType: PageRequestType,
-    private readonly placeOnReportService: PlaceOnReportService
+    private readonly placeOnReportService: PlaceOnReportService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -112,7 +112,7 @@ export default class IncidentRolePage {
     const { user } = res.locals
     const existingAdjudication = await this.placeOnReportService.getDraftAdjudicationDetails(
       postValues.draftId,
-      user as User
+      user as User,
     )
 
     const { offenceDetails, prisonerNumber } = existingAdjudication.draftAdjudication
@@ -138,7 +138,7 @@ export default class IncidentRolePage {
           postValues.draftId,
           incidentDetailsToSave.currentIncidentRoleSelection,
           this.pageOptions.isPreviouslySubmitted(),
-          this.pageOptions.isAloEdit()
+          this.pageOptions.isAloEdit(),
         )
       }
       const offencesExist = !removeExistingOffences && offenceDetails && Object.keys(offenceDetails).length > 0
@@ -147,7 +147,7 @@ export default class IncidentRolePage {
           res,
           postValues.draftId,
           incidentDetailsToSave.currentIncidentRoleSelection,
-          this.pageOptions
+          this.pageOptions,
         )
       }
       return redirectToOffenceDetails(res, postValues.draftId, this.pageOptions)
@@ -165,14 +165,13 @@ export default class IncidentRolePage {
     draftId: number,
     data: IncidentDetails,
     removeExistingOffences: boolean,
-    currentUser: User
+    currentUser: User,
   ): Promise<DraftAdjudicationResult> => {
-    // eslint-disable-next-line no-return-await
     return this.placeOnReportService.updateDraftIncidentRole(
       draftId,
       codeFromIncidentRole(data.currentIncidentRoleSelection),
       removeExistingOffences,
-      currentUser
+      currentUser,
     )
   }
 
@@ -180,7 +179,7 @@ export default class IncidentRolePage {
     prisonerNumber: string,
     requestValues: RequestValues,
     data: StashedIncidentDetails,
-    currentUser: User
+    currentUser: User,
   ): Promise<PageData> => {
     let exitButtonData: ExitButtonData = null
     let prisonerReportUrl = null
@@ -205,7 +204,7 @@ export default class IncidentRolePage {
   getPageDataOnPost = async (
     postValues: SubmittedFormData,
     prisonerNumber: string,
-    currentUser: User
+    currentUser: User,
   ): Promise<PageData> => {
     let exitButtonData: ExitButtonData = null
     let prisonerReportUrl = null
@@ -400,18 +399,21 @@ const redirectToOffenceSelection = (
   res: Response,
   chargeNumber: number,
   incidentRoleCode: IncidentRole,
-  pageOptions: PageOptions
+  pageOptions: PageOptions,
 ) => {
   if (pageOptions.isAloEdit()) {
     return res.redirect(
       adjudicationUrls.offenceCodeSelection.urls.list(
         chargeNumber,
-        radioSelectionCodeFromIncidentRole(incidentRoleCode)
-      )
+        radioSelectionCodeFromIncidentRole(incidentRoleCode),
+      ),
     )
   }
   return res.redirect(
-    adjudicationUrls.offenceCodeSelection.urls.start(chargeNumber, radioSelectionCodeFromIncidentRole(incidentRoleCode))
+    adjudicationUrls.offenceCodeSelection.urls.start(
+      chargeNumber,
+      radioSelectionCodeFromIncidentRole(incidentRoleCode),
+    ),
   )
 }
 
@@ -426,7 +428,7 @@ const redirectToAssociatedPrisoner = (
   draftId: number,
   roleCode: string,
   isSubmitted: boolean,
-  isAloEdit: boolean
+  isAloEdit: boolean,
 ) => {
   if (isAloEdit) return res.redirect(adjudicationUrls.incidentAssociate.urls.aloEdit(draftId, roleCode))
   return isSubmitted

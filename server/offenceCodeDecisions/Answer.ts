@@ -109,7 +109,7 @@ export class Answer {
     let questionsAndAnswers = [] as { question: Question; answer: Answer }[]
     if (this.getParentQuestion().getParentAnswer()) {
       questionsAndAnswers = questionsAndAnswers.concat(
-        this.getParentQuestion().getParentAnswer().getQuestionsAndAnswersToGetHere()
+        this.getParentQuestion().getParentAnswer().getQuestionsAndAnswersToGetHere(),
       )
     }
     questionsAndAnswers.push({ question: this.getParentQuestion(), answer: this })
@@ -120,7 +120,7 @@ export class Answer {
     placeHolderValues: PlaceholderValues,
     incidentRole: IncidentRole,
     prisonerView: boolean,
-    protectedCharacteristics: string[]
+    protectedCharacteristics: string[],
   ): { question: string; answer: string }[] {
     const questionsAndAnswers = this.getQuestionsAndAnswersToGetHere().map(questionAndAnswer => {
       return {
@@ -151,7 +151,7 @@ export class Answer {
   matchingAnswers(fn: (answer: Answer) => boolean, overrideVersion: number = null): Answer[] {
     const childMatches = []
       .concat(
-        ...this.getChildAnswers(overrideVersion).map(childAnswer => childAnswer.matchingAnswers(fn, overrideVersion))
+        ...this.getChildAnswers(overrideVersion).map(childAnswer => childAnswer.matchingAnswers(fn, overrideVersion)),
       )
       .filter(notEmpty)
     if (fn(this)) {
@@ -186,7 +186,6 @@ export class Answer {
   }
 }
 
-// eslint-disable-next-line no-shadow
 export enum AnswerType {
   RADIO_SELECTION_ONLY = 'RADIO_SELECTION_ONLY',
   PRISONER = 'PRISONER',

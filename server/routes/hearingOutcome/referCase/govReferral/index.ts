@@ -22,12 +22,12 @@ export default function govReasonForReferralRoutes({
   const govReasonForReferralRoute = new GovReasonForReferralRoutes(
     userService,
     reportedAdjudicationsService,
-    outcomesService
+    outcomesService,
   )
   const GovReasonForReferralEditRoute = new GovReasonForReferralEditRoutes(
     userService,
     reportedAdjudicationsService,
-    outcomesService
+    outcomesService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

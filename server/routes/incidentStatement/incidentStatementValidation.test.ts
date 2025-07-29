@@ -20,12 +20,12 @@ describe('validateForm - incident statement', () => {
         validateForm({
           incidentStatementComplete: 'yes',
           incidentStatement: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-        })
+        }),
       ).toBeNull()
     })
     it('returns the expected response for an invalid submit', () => {
       expect(
-        validateForm({ incidentStatementComplete: 'yes', incidentStatement: wordLimitExceedingString })
+        validateForm({ incidentStatementComplete: 'yes', incidentStatement: wordLimitExceedingString }),
       ).toStrictEqual({
         href: '#incidentStatement',
         text: 'Your statement must be 4,000 characters or fewer',
@@ -33,7 +33,7 @@ describe('validateForm - incident statement', () => {
     })
     it('returns the expected response for an invalid submit', () => {
       expect(
-        validateForm({ incidentStatementComplete: 'no', incidentStatement: wordLimitExceedingString })
+        validateForm({ incidentStatementComplete: 'no', incidentStatement: wordLimitExceedingString }),
       ).toStrictEqual({
         href: '#incidentStatement',
         text: 'Your statement must be 4,000 characters or fewer',
@@ -46,7 +46,7 @@ describe('validateForm - incident statement', () => {
         validateForm({
           incidentStatementComplete: 'no',
           incidentStatement: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-        })
+        }),
       ).toBeNull()
     })
     it('returns the expected response for a valid submit with complete statement', () => {
@@ -54,7 +54,7 @@ describe('validateForm - incident statement', () => {
         validateForm({
           incidentStatementComplete: 'yes',
           incidentStatement: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-        })
+        }),
       ).toBeNull()
     })
     it('returns the expected response for an invalid submit with statement', () => {

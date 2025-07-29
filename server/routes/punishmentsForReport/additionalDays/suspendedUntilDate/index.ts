@@ -22,12 +22,12 @@ export default function suspendedUntilDateAdditionalDaysRoutes({
   const suspendedUntilDateRoute = new SuspendedUntilDateRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const suspendedUntilDateEditRoute = new SuspendedUntilDateEditRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

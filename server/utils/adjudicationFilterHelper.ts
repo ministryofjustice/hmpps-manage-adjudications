@@ -122,7 +122,7 @@ export type AwardedPunishmentsAndDamagesUiFilter = {
 }
 
 export const fillInAwardedPunishmentsAndDamagesFilterDefaults = (
-  awardedPunishmentsAndDamagesUiFilter: AwardedPunishmentsAndDamagesUiFilter
+  awardedPunishmentsAndDamagesUiFilter: AwardedPunishmentsAndDamagesUiFilter,
 ): AwardedPunishmentsAndDamagesUiFilter => {
   return {
     hearingDate: awardedPunishmentsAndDamagesUiFilter.hearingDate || momentDateToDatePicker(moment()),
@@ -145,7 +145,7 @@ export const uiAwardedPunishmentsAndDamagesFilterFromRequest = (req: Request): A
 }
 
 export const awardedPunishmentsAndDamagesFilterFromUiFilter = (
-  filter: AwardedPunishmentsAndDamagesUiFilter
+  filter: AwardedPunishmentsAndDamagesUiFilter,
 ): AwardedPunishmentsAndDamagesFilter => {
   return {
     hearingDate: datePickerToApi(filter.hearingDate),
@@ -185,7 +185,7 @@ export const fillInTransfersDefaults = (uiFilter: TransfersUiFilter): TransfersU
 
 // Same as fillInDefaults r.e. dates
 export const fillInPrintDISFormFilterDefaults = (
-  printDISFormsUiFilter: PrintDISFormsUiFilter
+  printDISFormsUiFilter: PrintDISFormsUiFilter,
 ): PrintDISFormsUiFilter => {
   return {
     fromDate: printDISFormsUiFilter.fromDate || momentDateToDatePicker(moment()),
@@ -196,7 +196,7 @@ export const fillInPrintDISFormFilterDefaults = (
 }
 
 export const fillInAdjudicationHistoryDefaults = (
-  uiFilter: AdjudicationHistoryUiFilter
+  uiFilter: AdjudicationHistoryUiFilter,
 ): AdjudicationHistoryUiFilter => {
   return {
     ...uiFilter,
@@ -319,7 +319,7 @@ export const reportedAdjudicationStatuses = (filter: UiFilter | AdjudicationHist
 
 export const establishmentCheckboxes = (
   filter: AdjudicationHistoryUiFilter,
-  establishments: EstablishmentInformation[]
+  establishments: EstablishmentInformation[],
 ) => {
   return establishments.map(agencyInfo => {
     return {

@@ -99,20 +99,20 @@ export const redirectToOffenceSelection = (
   res: Response,
   draftId: number,
   incidentRoleCode: string,
-  isAloEdit: boolean
+  isAloEdit: boolean,
 ) => {
   if (isAloEdit)
     return res.redirect(
       adjudicationUrls.offenceCodeSelection.urls.list(
         draftId,
-        radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase() as keyof typeof IncidentRole])
-      )
+        radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase() as keyof typeof IncidentRole]),
+      ),
     )
   return res.redirect(
     adjudicationUrls.offenceCodeSelection.urls.start(
       draftId,
-      radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase() as keyof typeof IncidentRole])
-    )
+      radioSelectionCodeFromIncidentRole(IncidentRole[incidentRoleCode.toUpperCase() as keyof typeof IncidentRole]),
+    ),
   )
 }
 
@@ -121,7 +121,7 @@ export const setRedirectUrl = (
   draftId: number,
   roleCode: string,
   isPreviouslySubmitted: boolean,
-  isAloEdit: boolean
+  isAloEdit: boolean,
 ) => {
   if (isAloEdit) {
     const originalPageReferrerUrl = req.query.referrer as string
@@ -143,7 +143,7 @@ export const renderData = (
   draftId: number,
   roleCode: string,
   pageData: DisplayData,
-  error: FormError[]
+  error: FormError[],
 ) => {
   return res.render(`pages/associatePrisoner`, {
     roleCode: roleCode === 'assisted' ? 'assist' : 'incite',

@@ -54,8 +54,8 @@ describe('POST /reason-for-referral', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`,
       )
       .send({
         referralReason: '123',
@@ -69,16 +69,16 @@ describe('POST /reason-for-referral', () => {
           'Roxanne Red',
           '123',
           undefined,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should successfully call the endpoint and redirect - REFER_GOV', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_GOV`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_GOV`,
       )
       .send({
         referralReason: '123',
@@ -93,8 +93,8 @@ describe('POST /reason-for-referral', () => {
           'Roxanne Red',
           '123',
           ReferGovReason.GOV_INQUIRY,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should redirect the user back to the enter hearing outcome page if the adjudicator name and/or hearing outcome has been tampered/lost', () => {
@@ -111,8 +111,8 @@ describe('POST /reason-for-referral', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=NOT_IN_ENUM`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=NOT_IN_ENUM`,
       )
       .send({
         referralReason: '123',
@@ -125,8 +125,8 @@ describe('POST /reason-for-referral', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN`,
       )
       .send({
         referralReason: '123',

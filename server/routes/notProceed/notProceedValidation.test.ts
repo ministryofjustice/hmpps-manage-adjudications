@@ -8,7 +8,7 @@ describe('validateForm', () => {
       validateForm({
         notProceedReason: NotProceedReason.NOT_FAIR,
         notProceedDetails: 'details',
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when no prosecution option selected', () => {
@@ -16,7 +16,7 @@ describe('validateForm', () => {
       validateForm({
         notProceedReason: null,
         notProceedDetails: 'details',
-      })
+      }),
     ).toEqual({
       href: '#notProceedReason',
       text: 'Select the reason for not proceeding',
@@ -27,7 +27,7 @@ describe('validateForm', () => {
       validateForm({
         notProceedReason: NotProceedReason.NOT_FAIR,
         notProceedDetails: '',
-      })
+      }),
     ).toEqual({
       href: '#notProceedDetails',
       text: 'Enter more details',
@@ -38,7 +38,7 @@ describe('validateForm', () => {
       validateForm({
         notProceedReason: NotProceedReason.NOT_FAIR,
         notProceedDetails: wordLimitExceedingString,
-      })
+      }),
     ).toStrictEqual({
       href: '#notProceedDetails',
       text: 'Your statement must be 4,000 characters or fewer',

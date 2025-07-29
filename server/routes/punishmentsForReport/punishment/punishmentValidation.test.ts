@@ -6,7 +6,7 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.CONFINEMENT,
-      })
+      }),
     ).toBeNull()
   })
   it('Valid submit has no errors when type is privilege', () => {
@@ -14,7 +14,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.PRIVILEGE,
         privilegeType: PrivilegeType.ASSOCIATION,
-      })
+      }),
     ).toBeNull()
   })
   it('Valid submit has no errors when type is privilege - other', () => {
@@ -23,7 +23,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.PRIVILEGE,
         privilegeType: PrivilegeType.OTHER,
         otherPrivilege: 'testing',
-      })
+      }),
     ).toBeNull()
   })
   it('Valid submit has no errors when type is earnings', () => {
@@ -31,7 +31,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.EARNINGS,
         stoppagePercentage: 10,
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when no punishment option selected - damages previously added', () => {
@@ -39,7 +39,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: null,
         damagesAlreadyAdded: true,
-      })
+      }),
     ).toEqual({
       href: '#punishmentType',
       text: 'Select a punishment',
@@ -50,7 +50,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: null,
         damagesAlreadyAdded: false,
-      })
+      }),
     ).toEqual({
       href: '#punishmentType',
       text: 'Select a punishment or recovery of money for damages',
@@ -60,7 +60,7 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.PRIVILEGE,
-      })
+      }),
     ).toEqual({
       href: '#privilegeType',
       text: 'Select the type of privilege',
@@ -71,7 +71,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.PRIVILEGE,
         privilegeType: PrivilegeType.OTHER,
-      })
+      }),
     ).toEqual({
       href: '#otherPrivilege',
       text: 'Enter a privilege to be withdrawn',
@@ -83,7 +83,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.PRIVILEGE,
         privilegeType: PrivilegeType.OTHER,
         otherPrivilege: 'testing testing testing testing testing testing testing testing',
-      })
+      }),
     ).toEqual({
       href: '#otherPrivilege',
       text: 'The privilege must be less than 32 characters',
@@ -93,7 +93,7 @@ describe('validateForm', () => {
     expect(
       validateForm({
         punishmentType: PunishmentType.EARNINGS,
-      })
+      }),
     ).toEqual({
       href: '#stoppagePercentage',
       text: 'Enter the percentage of earnings to be stopped',
@@ -104,7 +104,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.EARNINGS,
         stoppagePercentage: 101,
-      })
+      }),
     ).toEqual({
       href: '#stoppagePercentage',
       text: 'Enter a number between 0 and 100',
@@ -115,7 +115,7 @@ describe('validateForm', () => {
       validateForm({
         punishmentType: PunishmentType.EARNINGS,
         stoppagePercentage: -3,
-      })
+      }),
     ).toEqual({
       href: '#stoppagePercentage',
       text: 'Enter a number between 0 and 100',

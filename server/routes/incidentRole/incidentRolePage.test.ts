@@ -19,7 +19,7 @@ beforeEach(() => {
       offenderNo: 'G6415GD',
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
-    })
+    }),
   )
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
@@ -101,8 +101,8 @@ describe('POST /incident-role/<id> without draft offence data', () => {
           100,
           null,
           false, // RemoveOffences
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should remove existing offences if the radio selection is changed', () => {
@@ -118,8 +118,8 @@ describe('POST /incident-role/<id> without draft offence data', () => {
           100,
           null,
           true, // RemoveOffences
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })
@@ -162,7 +162,7 @@ describe('POST /incident-role/<id> with existing draft offences', () => {
         })
         .expect(302)
         .expect('Location', adjudicationUrls.incidentAssociate.urls.start(100, role))
-    }
+    },
   )
   it('should redirect to offence details page if role not changed', () => {
     return request(app)

@@ -38,7 +38,7 @@ export default class PunishmentStartDateChoicePage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -134,7 +134,7 @@ export default class PunishmentStartDateChoicePage {
           duration,
           startDate: lastHearingDate,
         } as ParsedUrlQueryInput,
-      })
+      }),
     )
   }
 
@@ -150,7 +150,7 @@ export default class PunishmentStartDateChoicePage {
   getLastHearingDate = async (chargeNumber: string, user: User) => {
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
-      user
+      user,
     )
     return reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing || ''
   }

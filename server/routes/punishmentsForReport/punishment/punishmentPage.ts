@@ -42,7 +42,7 @@ export default class PunishmentPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -54,7 +54,7 @@ export default class PunishmentPage {
 
     const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
       chargeNumber,
-      user
+      user,
     )
 
     const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
@@ -146,7 +146,7 @@ export default class PunishmentPage {
       url.format({
         pathname: redirectUrlPrefix,
         query,
-      })
+      }),
     )
   }
 
@@ -154,7 +154,7 @@ export default class PunishmentPage {
     punishmentType: PunishmentType,
     privilegeType: PrivilegeType,
     otherPrivilege: string,
-    stoppageOfEarningsPercentage: number
+    stoppageOfEarningsPercentage: number,
   ) => {
     if (this.pageOptions.isEdit()) {
       if (punishmentType === PunishmentType.PRIVILEGE && privilegeType === PrivilegeType.OTHER)
@@ -188,7 +188,7 @@ export default class PunishmentPage {
   private damagesAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.DAMAGES_OWED
+        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.DAMAGES_OWED,
       ).length
     }
     return false
@@ -198,7 +198,7 @@ export default class PunishmentPage {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
         (punishment: PunishmentDataWithSchedule) =>
-          punishment.type !== PunishmentType.CAUTION && punishment.type !== PunishmentType.DAMAGES_OWED
+          punishment.type !== PunishmentType.CAUTION && punishment.type !== PunishmentType.DAMAGES_OWED,
       ).length
     }
     return false
@@ -207,7 +207,7 @@ export default class PunishmentPage {
   private cautionAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.CAUTION
+        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.CAUTION,
       ).length
     }
     return false

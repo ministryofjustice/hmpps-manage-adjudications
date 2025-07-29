@@ -10,13 +10,13 @@ export default class SuspendedPunishmentNumberOfDaysEditRoute {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new SuspendedPunishmentNumberOfDaysPage(
       PageRequestType.EDIT,
       userService,
       punishmentsService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

@@ -7,7 +7,7 @@ describe('validateForm', () => {
       validateForm({
         hearingFinding: HearingOutcomeFinding.DISMISSED,
         hearingPlea: HearingOutcomePlea.ABSTAIN,
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when the plea is missing', () => {
@@ -15,7 +15,7 @@ describe('validateForm', () => {
       validateForm({
         hearingFinding: HearingOutcomeFinding.DISMISSED,
         hearingPlea: '',
-      })
+      }),
     ).toEqual({
       href: '#hearingPlea',
       text: 'Select a plea',
@@ -26,7 +26,7 @@ describe('validateForm', () => {
       validateForm({
         hearingFinding: '',
         hearingPlea: HearingOutcomePlea.ABSTAIN,
-      })
+      }),
     ).toEqual({
       href: '#hearingFinding',
       text: 'Select a finding',

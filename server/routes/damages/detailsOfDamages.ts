@@ -45,7 +45,7 @@ export default class DetailsOfDamagesPage {
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly damagesSessionService: DamagesSessionService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -172,7 +172,7 @@ export default class DetailsOfDamagesPage {
   redirectToNextPage = (res: Response, chargeNumber: string, isSubmittedEdit: boolean, referrer: string) => {
     if (isSubmittedEdit)
       return res.redirect(
-        `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(chargeNumber)}?referrer=${referrer}`
+        `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(chargeNumber)}?referrer=${referrer}`,
       )
     return res.redirect(adjudicationUrls.detailsOfEvidence.urls.start(chargeNumber))
   }

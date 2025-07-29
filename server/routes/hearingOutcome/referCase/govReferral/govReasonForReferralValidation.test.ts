@@ -7,7 +7,7 @@ describe('validateForm', () => {
       validateForm({
         referralReason: "Referring back to the gov because I don't know what to do",
         referGovReason: ReferGovReason.REVIEW_FOR_REFER_POLICE,
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when the comments are missing', () => {
@@ -15,7 +15,7 @@ describe('validateForm', () => {
       validateForm({
         referralReason: '',
         referGovReason: ReferGovReason.GOV_INQUIRY,
-      })
+      }),
     ).toEqual({
       href: '#referralReason',
       text: 'Enter the adjudicator’s comments about the referral',
@@ -26,7 +26,7 @@ describe('validateForm', () => {
       validateForm({
         referralReason: 'I am unsure',
         referGovReason: undefined,
-      })
+      }),
     ).toEqual({
       href: '#referGovReason',
       text: 'Enter the reason for the referral',

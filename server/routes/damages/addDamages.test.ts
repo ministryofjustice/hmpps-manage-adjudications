@@ -37,8 +37,8 @@ describe('Add damages', () => {
             details: 'Repainting required',
             reporter: 'user1',
           },
-          '100'
-        )
+          '100',
+        ),
       )
   })
   it('should add the damage and redirect to the damages details page - submitted edit', () => {
@@ -59,8 +59,8 @@ describe('Add damages', () => {
             details: 'Repainting required',
             reporter: 'user1',
           },
-          '100'
-        )
+          '100',
+        ),
       )
   })
 })

@@ -19,14 +19,14 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, prisonerSearchService },
-    { originalRadioSelection: 'incited' }
+    { originalRadioSelection: 'incited' },
   )
   placeOnReportService.getPrisonerDetails.mockResolvedValue(
     testData.prisonerResultSummary({
       offenderNo: 'G6415GD',
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
-    })
+    }),
   )
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({

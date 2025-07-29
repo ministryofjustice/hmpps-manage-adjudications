@@ -38,7 +38,7 @@ const error: { [key in ErrorType]: FormError } = {
 export default class PrisonerOutsideEstablishmentDecisionHelper extends DecisionHelper {
   constructor(
     readonly decisionTreeService: DecisionTreeService,
-    readonly prisonerSearchService: PrisonerSearchService
+    readonly prisonerSearchService: PrisonerSearchService,
   ) {
     super(decisionTreeService)
   }
@@ -54,7 +54,6 @@ export default class PrisonerOutsideEstablishmentDecisionHelper extends Decision
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override async validateForm(form: DecisionForm, req: Request, user: User): Promise<FormError[]> {
     const prisonerOutsideEstablishmentData = form.selectedAnswerData as PrisonerOutsideEstablishmentData
     const errors = []
@@ -70,7 +69,7 @@ export default class PrisonerOutsideEstablishmentDecisionHelper extends Decision
       } else {
         const foundPrisoner = await this.prisonerSearchService.isPrisonerNumberValid(
           prisonerOutsideEstablishmentData.victimPrisonersNumber,
-          user
+          user,
         )
         if (!foundPrisoner) {
           errors.push(error.PRISONER_OUTSIDE_ESTABLISHMENT_INVALID_NUMBER)

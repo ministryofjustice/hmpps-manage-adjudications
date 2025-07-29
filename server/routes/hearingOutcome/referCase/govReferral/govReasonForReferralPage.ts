@@ -37,7 +37,7 @@ export default class GovReasonForReferralPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly outcomesService: OutcomesService
+    private readonly outcomesService: OutcomesService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -65,7 +65,7 @@ export default class GovReasonForReferralPage {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         chargeNumber,
         [ReportedAdjudicationStatus.REFER_GOV],
-        user
+        user,
       )) as HearingDetailsHistory
       referralOutcome = lastOutcomeItem.outcome.referralOutcome
     }

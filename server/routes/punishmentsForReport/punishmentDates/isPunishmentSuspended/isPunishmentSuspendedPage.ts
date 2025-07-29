@@ -35,7 +35,7 @@ export default class PunishmentSuspendedPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -95,7 +95,7 @@ export default class PunishmentSuspendedPage {
           stoppagePercentage,
           duration,
         } as ParsedUrlQueryInput,
-      })
+      }),
     )
   }
 

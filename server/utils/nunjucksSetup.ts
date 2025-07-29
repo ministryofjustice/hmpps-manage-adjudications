@@ -78,7 +78,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     {
       autoescape: true,
       express: app,
-    }
+    },
   )
 
   // Expose the google tag manager container ID to the nunjucks environment
@@ -393,7 +393,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         default:
           return null
       }
-    }
+    },
   )
 
   njkEnv.addFilter(
@@ -422,7 +422,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         default:
           return null
       }
-    }
+    },
   )
   njkEnv.addFilter(
     'punishmentExplanationsSuspended',
@@ -450,7 +450,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         default:
           return null
       }
-    }
+    },
   )
 
   njkEnv.addFilter('hideIfUndefined', data => {
@@ -476,7 +476,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         punishment.type,
         punishment.stoppagePercentage,
         punishment.privilegeType,
-        punishment.otherPrivilege
+        punishment.otherPrivilege,
       )
       return {
         ...punishment,
@@ -485,7 +485,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     })
 
     return punishmentsWithConvertedNames.sort((a: PunishmentWithConvertedName, b: PunishmentWithConvertedName) =>
-      a.punishmentName.localeCompare(b.punishmentName)
+      a.punishmentName.localeCompare(b.punishmentName),
     )
   })
 

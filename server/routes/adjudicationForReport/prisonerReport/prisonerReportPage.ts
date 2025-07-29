@@ -44,29 +44,29 @@ const getVariablesForPageType = (
   pageOptions: PageOptions,
   prisonerNumber: string,
   chargeNumber: string,
-  draftId: number
+  draftId: number,
 ) => {
   if (pageOptions.isReviewerView()) {
     return {
       // We don't need a editIncidentStatementURL here as a reviewer can't edit the statement
       printHref: `${adjudicationUrls.printReport.urls.dis12(
-        chargeNumber
+        chargeNumber,
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         prisonerNumber,
-        draftId
+        draftId,
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       returnLinkURL: adjudicationUrls.allCompletedReports.root,
       returnLinkContent: 'Return to all completed reports',
       editOffencesDetailsURL: adjudicationUrls.reviewerEditOffenceWarning.urls.edit(chargeNumber),
       editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-        chargeNumber
+        chargeNumber,
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-        chargeNumber
+        chargeNumber,
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-        chargeNumber
+        chargeNumber,
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(chargeNumber)}`,
       reportHref: adjudicationUrls.prisonerReport.urls.review(chargeNumber),
       hearingsHref: adjudicationUrls.hearingDetails.urls.review(chargeNumber),
@@ -81,35 +81,35 @@ const getVariablesForPageType = (
       punishmentsHref: adjudicationUrls.punishmentsAndDamages.urls.viewOnly(chargeNumber),
       formsHref: `${adjudicationUrls.forms.urls.view(chargeNumber)}?path=view`,
       editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-        chargeNumber
+        chargeNumber,
       )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber)}`,
       editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-        chargeNumber
+        chargeNumber,
       )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber)}`,
       editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-        chargeNumber
+        chargeNumber,
       )}?referrer=${adjudicationUrls.prisonerReport.urls.viewOnly(chargeNumber)}`,
     }
   }
   return {
     printHref: `${adjudicationUrls.printReport.urls.dis12(
-      chargeNumber
+      chargeNumber,
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
       prisonerNumber,
-      draftId
+      draftId,
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     returnLinkURL: adjudicationUrls.yourCompletedReports.root,
     returnLinkContent: 'Return to your completed reports',
     editOffencesDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftId),
     editDamagesURL: `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-      chargeNumber
+      chargeNumber,
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     editEvidenceURL: `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-      chargeNumber
+      chargeNumber,
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     editWitnessesURL: `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-      chargeNumber
+      chargeNumber,
     )}?referrer=${adjudicationUrls.prisonerReport.urls.report(chargeNumber)}`,
     reportHref: adjudicationUrls.prisonerReport.urls.report(chargeNumber),
     hearingsHref: adjudicationUrls.hearingDetails.urls.report(chargeNumber),
@@ -125,7 +125,7 @@ export default class prisonerReportRoutes {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -139,7 +139,7 @@ export default class prisonerReportRoutes {
 
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
-      user
+      user,
     )
 
     const { status } = reportedAdjudication
@@ -154,11 +154,11 @@ export default class prisonerReportRoutes {
       this.pageOptions,
       prisoner.prisonerNumber,
       draftRequired ? draftAdjudication.chargeNumber : reportedAdjudication.chargeNumber,
-      newDraftAdjudicationId
+      newDraftAdjudicationId,
     )
 
     const convertedEvidence = await this.reportedAdjudicationsService.convertEvidenceToTableFormat(
-      reportedAdjudication.evidence
+      reportedAdjudication.evidence,
     )
 
     const editAndReviewAvailability = this.getEditAndReviewAvailability(reportedAdjudication, this.pageOptions, status)
@@ -167,12 +167,12 @@ export default class prisonerReportRoutes {
 
     const getTransferBannerInfo = await this.reportedAdjudicationsService.getTransferBannerInfo(
       reportedAdjudication,
-      user
+      user,
     )
 
     const showFormsTab = await this.reportedAdjudicationsService.canViewPrintAndIssueFormsTab(
       userRoles,
-      reportedAdjudication.status
+      reportedAdjudication.status,
     )
     const hideChargeNumberAndPrintForAdjudicationStatuses = [
       ReportedAdjudicationStatus.AWAITING_REVIEW,
@@ -207,7 +207,7 @@ export default class prisonerReportRoutes {
   getEditAndReviewAvailability = (
     reportedAdjudication: ReportedAdjudication,
     pageOptions: PageOptions,
-    status: ReportedAdjudicationStatus
+    status: ReportedAdjudicationStatus,
   ) => {
     const awaitingReviewOrReturned = [
       ReportedAdjudicationStatus.AWAITING_REVIEW,
@@ -278,12 +278,12 @@ export default class prisonerReportRoutes {
     draftRequired: boolean,
     user: User,
     chargeNumber: string,
-    reportedAdjudication: ReportedAdjudication
+    reportedAdjudication: ReportedAdjudication,
   ) => {
     if (draftRequired) {
       const newDraftAdjudicationId = await this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(
         user,
-        chargeNumber
+        chargeNumber,
       )
       const { draftAdjudication, prisoner, associatedPrisoner } =
         await this.decisionTreeService.draftAdjudicationIncidentData(newDraftAdjudicationId, user)
@@ -292,7 +292,7 @@ export default class prisonerReportRoutes {
         user,
         draftAdjudication as ReportedAdjudication & DraftAdjudication,
         draftRequired,
-        reportedAdjudication.createdDateTime
+        reportedAdjudication.createdDateTime,
       )
       const offence = await this.decisionTreeService.getAdjudicationOffences(
         draftAdjudication.offenceDetails,
@@ -300,7 +300,7 @@ export default class prisonerReportRoutes {
         associatedPrisoner,
         draftAdjudication.incidentRole,
         user,
-        false
+        false,
       )
       return {
         newDraftAdjudicationId,
@@ -313,11 +313,11 @@ export default class prisonerReportRoutes {
     }
     const { prisoner, associatedPrisoner } = await this.decisionTreeService.adjudicationIncidentData(
       reportedAdjudication,
-      user
+      user,
     )
     const prisonerReportData = await this.reportedAdjudicationsService.getPrisonerReport(
       user,
-      reportedAdjudication as ReportedAdjudication & DraftAdjudication
+      reportedAdjudication as ReportedAdjudication & DraftAdjudication,
     )
 
     const offence = await this.decisionTreeService.getAdjudicationOffences(
@@ -326,7 +326,7 @@ export default class prisonerReportRoutes {
       associatedPrisoner,
       reportedAdjudication.incidentRole,
       user,
-      false
+      false,
     )
     return {
       newDraftAdjudicationId: null as number,

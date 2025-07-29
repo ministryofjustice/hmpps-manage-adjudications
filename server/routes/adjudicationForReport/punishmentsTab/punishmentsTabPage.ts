@@ -61,7 +61,7 @@ export default class PunishmentsTabPage {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -71,12 +71,12 @@ export default class PunishmentsTabPage {
     const { chargeNumber } = req.params
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
-      user
+      user,
     )
 
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(
       reportedAdjudication.prisonerNumber,
-      user
+      user,
     )
     const readOnly = this.isReadOnly(reportedAdjudication)
 
@@ -86,18 +86,18 @@ export default class PunishmentsTabPage {
     const punishmentComments = await this.punishmentsService.formatPunishmentComments(
       reportedAdjudication,
       chargeNumber,
-      user
+      user,
     )
 
     const getTransferBannerInfo = await this.reportedAdjudicationsService.getTransferBannerInfo(
       reportedAdjudication,
-      user
+      user,
     )
 
     const userRoles = await this.userService.getUserRoles(user.token)
     const showFormsTab = await this.reportedAdjudicationsService.canViewPrintAndIssueFormsTab(
       userRoles,
-      reportedAdjudication.status
+      reportedAdjudication.status,
     )
 
     const rehabActivities = await this.punishmentsService.getRehabActivitiesFromServer(chargeNumber, user)

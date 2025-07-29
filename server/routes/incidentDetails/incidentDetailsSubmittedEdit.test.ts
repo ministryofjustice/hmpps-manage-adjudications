@@ -22,7 +22,7 @@ beforeEach(() => {
       offenderNo: 'G6415GD',
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
-    })
+    }),
   )
 
   placeOnReportService.getDraftIncidentDetailsForEditing.mockResolvedValue({
@@ -58,8 +58,8 @@ describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
       .get(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          5
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          5,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -72,8 +72,8 @@ describe('GET /incident-details/<PRN>/<id>/submitted/edit', () => {
       .get(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          5
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          5,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -107,8 +107,8 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .post(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          34,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
@@ -133,8 +133,8 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .post(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          34,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },
@@ -150,8 +150,8 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .post(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          34,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '66', minute: '30' } },
@@ -170,8 +170,8 @@ describe('POST /incident-details/<PRN>/<id>/submitted/edit', () => {
       .post(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          34,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         incidentDate: { date: '27/10/2021', time: { hour: '13', minute: '30' } },

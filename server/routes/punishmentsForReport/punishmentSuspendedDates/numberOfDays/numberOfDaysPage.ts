@@ -44,7 +44,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -93,7 +93,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
     const isYOI = await this.getYoiInfo(chargeNumber, user)
 
     const isTypeAdditionalDays = [PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(
-      punishmentType as PunishmentType
+      punishmentType as PunishmentType,
     )
 
     const error = validateForm({
@@ -121,7 +121,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
               req,
               updatedPunishment,
               chargeNumber,
-              req.params.redisId
+              req.params.redisId,
             )
           } else {
             await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
@@ -146,7 +146,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
           punishmentNumberToActivate,
           chargeNumberForSuspendedPunishment,
         } as ParsedUrlQueryInput,
-      })
+      }),
     )
   }
 
@@ -167,7 +167,7 @@ export default class SuspendedPunishmentNumberOfDaysPage {
   updatePunishment(
     existingPunishment: SuspendedPunishment,
     duration: number,
-    activatedFromChargeNumber: string
+    activatedFromChargeNumber: string,
   ): PunishmentData {
     const activePunishment = {
       ...existingPunishment,

@@ -22,13 +22,13 @@ export default function policeReasonForReferralRoutes({
   const policeReasonForReferralRoute = new PoliceReasonForReferralRoutes(
     outcomesService,
     userService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const policeReasonForReferralEditRoute = new PoliceReasonForReferralEditRoutes(
     outcomesService,
     userService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

@@ -10,13 +10,13 @@ export default class GovReasonForReferralRoutes {
   constructor(
     userService: UserService,
     reportedAdjudicationsService: ReportedAdjudicationsService,
-    outcomesService: OutcomesService
+    outcomesService: OutcomesService,
   ) {
     this.page = new GovReasonForReferralPage(
       PageRequestType.CREATION,
       userService,
       reportedAdjudicationsService,
-      outcomesService
+      outcomesService,
     )
   }
 

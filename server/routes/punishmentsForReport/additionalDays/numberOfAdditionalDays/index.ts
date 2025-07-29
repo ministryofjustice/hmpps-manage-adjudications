@@ -22,12 +22,12 @@ export default function NumberOfAdditionalDaysRoutes({
   const numberOfAdditionalDaysRoute = new NumberOfAdditionalDaysRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const numberOfAdditionalDaysEditRoute = new NumberOfAdditionalDaysEditRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

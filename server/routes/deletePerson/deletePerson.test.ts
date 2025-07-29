@@ -19,14 +19,14 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, userService },
-    { redirectUrl: adjudicationUrls.incidentDetails.urls.edit('G6123VU', 466) }
+    { redirectUrl: adjudicationUrls.incidentDetails.urls.edit('G6123VU', 466) },
   )
   placeOnReportService.getPrisonerDetails.mockResolvedValue(
     testData.prisonerResultSummary({
       offenderNo: 'G6415GD',
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
-    })
+    }),
   )
 
   userService.getStaffFromUsername.mockResolvedValue(testData.staffFromUsername())

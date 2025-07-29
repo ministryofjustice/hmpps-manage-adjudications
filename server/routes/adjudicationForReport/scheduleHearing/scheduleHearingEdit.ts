@@ -12,13 +12,13 @@ export default class scheduleHearingRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly locationService: LocationService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.page = new ScheduleHearingPage(
       PageRequestType.EDIT,
       reportedAdjudicationsService,
       locationService,
-      userService
+      userService,
     )
   }
 

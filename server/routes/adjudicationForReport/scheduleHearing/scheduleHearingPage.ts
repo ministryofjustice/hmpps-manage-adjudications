@@ -64,7 +64,7 @@ export default class scheduleHearingRoutes {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly locationService: LocationService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -90,7 +90,7 @@ export default class scheduleHearingRoutes {
     const latestHearing = await this.reportedAdjudicationsService.getLatestNonMatchingHearing(
       chargeNumber,
       hearingId,
-      user
+      user,
     )
     const validationError = validateForm({
       hearingDate: postValues.hearingDetails.hearingDate,
@@ -106,7 +106,7 @@ export default class scheduleHearingRoutes {
 
     postValues.hearingDetails.locationId = await this.locationService.getCorrespondingNomisLocationId(
       postValues.hearingDetails.locationId as unknown as string,
-      user
+      user,
     )
 
     const hearingDetailsToSave = postValues.hearingDetails
@@ -119,7 +119,7 @@ export default class scheduleHearingRoutes {
           hearingDetailsToSave.locationUuid,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
-          user
+          user,
         )
       } else {
         await this.reportedAdjudicationsService.scheduleHearing(
@@ -128,7 +128,7 @@ export default class scheduleHearingRoutes {
           hearingDetailsToSave.locationUuid,
           formatDate(hearingDetailsToSave.hearingDate),
           getOICHearingType(hearingDetailsToSave.hearingType, isYOI),
-          user
+          user,
         )
       }
 

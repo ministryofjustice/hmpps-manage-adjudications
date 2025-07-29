@@ -79,7 +79,7 @@ export const formatDate = (userSubmittedDateTime: SubmittedDateTime): string => 
 
 export const formatDateForDatePicker = (
   isoDate: string,
-  style: 'short' | 'full' | 'long' | 'medium' = 'long'
+  style: 'short' | 'full' | 'long' | 'medium' = 'long',
 ): string => {
   if (!isoDate) return ''
 
@@ -166,7 +166,7 @@ export const calculateAge = (dateOfBirth: string, dateOfIncident: string) => {
 export const getEvidenceCategory = (
   evidenceArray: EvidenceDetails[],
   isBaggedAndTagged: boolean,
-  isOther: boolean
+  isOther: boolean,
 ): EvidenceDetails[] => {
   if (!evidenceArray) return []
   if (isBaggedAndTagged) {
@@ -176,12 +176,12 @@ export const getEvidenceCategory = (
     return evidenceArray.filter(evidenceItem => evidenceItem.code === EvidenceCode.OTHER)
   }
   return evidenceArray.filter(
-    evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED && evidenceItem.code !== EvidenceCode.OTHER
+    evidenceItem => evidenceItem.code !== EvidenceCode.BAGGED_AND_TAGGED && evidenceItem.code !== EvidenceCode.OTHER,
   )
 }
 
 export const convertDateTimeStringToSubmittedDateTime = (
-  dateTime: string
+  dateTime: string,
 ): { date: string; time: { hour: string; minute: string } } => {
   if (!dateTime || !isValidDateTimeFormat(dateTime)) return null
   const date = getDate(dateTime, 'DD/MM/YYYY')
@@ -192,7 +192,7 @@ export const convertDateTimeStringToSubmittedDateTime = (
 }
 
 export const convertSubmittedDateTimeToDateObject = (
-  userProvidedValue?: SubmittedDateTime
+  userProvidedValue?: SubmittedDateTime,
 ): { date: string; hour: string; minute: string } => {
   if (userProvidedValue) {
     const {
@@ -217,7 +217,7 @@ export const convertOicHearingType = (hearingType: string): string => {
 export const calculatePunishmentEndDate = (
   startDate: string,
   numberOfDaysOfPunishment: number,
-  format = 'D MMMM YYYY'
+  format = 'D MMMM YYYY',
 ) => {
   return moment(datePickerDateToMoment(startDate))
     .add(numberOfDaysOfPunishment - 1, 'days')
@@ -226,7 +226,7 @@ export const calculatePunishmentEndDate = (
 
 export const formatReportingOfficer = (
   reporterName: string,
-  adjudication: DraftAdjudication | ReportedAdjudication
+  adjudication: DraftAdjudication | ReportedAdjudication,
 ): string => {
   let reportingOfficer: string = getFormattedOfficerName(reporterName)
   if (adjudication.createdOnBehalfOfOfficer) {

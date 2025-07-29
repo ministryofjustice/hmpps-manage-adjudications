@@ -15,7 +15,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const testData = new TestData() as jest.Mocked<TestData>
 
@@ -72,7 +72,7 @@ describe('GET /issue-DIS1-2', () => {
             fromDate: '04/12/2022',
             toDate: '06/12/2022',
             locationId: '722174',
-          })
+          }),
         )
         .expect('Content-Type', /html/)
         .expect(response => {
@@ -107,7 +107,7 @@ describe('POST /issue-DIS1-2', () => {
       .send({ fromDate: { date: '04/12/2022' }, toDate: { date: '06/12/2022' }, locationId: null })
       .expect(
         'Location',
-        `${adjudicationUrls.confirmDISFormsIssued.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=`
+        `${adjudicationUrls.confirmDISFormsIssued.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=`,
       )
   })
   it('should use correct filter parameters from form - with location', () => {
@@ -116,7 +116,7 @@ describe('POST /issue-DIS1-2', () => {
       .send({ fromDate: { date: '04/12/2022' }, toDate: { date: '06/12/2022' }, locationId: 722174 })
       .expect(
         'Location',
-        `${adjudicationUrls.confirmDISFormsIssued.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174`
+        `${adjudicationUrls.confirmDISFormsIssued.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174`,
       )
   })
   it('should cause validation error if toDate is before fromDate', () => {

@@ -10,13 +10,13 @@ export default class PunishmentTabReporterRoute {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.page = new PunishmentsTabPage(
       PageRequestType.REPORTER,
       reportedAdjudicationsService,
       punishmentsService,
-      userService
+      userService,
     )
   }
 

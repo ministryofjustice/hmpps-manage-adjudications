@@ -21,7 +21,7 @@ export default function AutoPunishmentScheduleRoutes({
   const autoPunishmentScheduleRoute = new AutoPunishmentScheduleRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

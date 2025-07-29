@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import UserService from '../../../../services/userService'
 import { apiDateToDatePicker, datePickerToApi, formatDateForDatePicker, hasAnyRole } from '../../../../utils/utils'
@@ -19,7 +18,7 @@ type PageData = {
 export default class IncompleteRehabilitativeActivityPage {
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -67,7 +66,7 @@ export default class IncompleteRehabilitativeActivityPage {
       req,
       chargeNumber,
       +id,
-      user
+      user,
     )
 
     const error = validateForm({ outcome, daysToActivate, suspendedUntil, prisonerName, actualDays })
@@ -88,7 +87,7 @@ export default class IncompleteRehabilitativeActivityPage {
         false,
         outcome,
         daysToActivate,
-        suspendedUntil ? datePickerToApi(suspendedUntil) : null
+        suspendedUntil ? datePickerToApi(suspendedUntil) : null,
       )
       return res.redirect(adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.urls.start(chargeNumber, +id))
     } catch (postError) {

@@ -24,7 +24,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 const testDecisionsTree = question([
@@ -36,12 +36,12 @@ const testDecisionsTree = question([
   .child(
     answer(['Prisoner victim', `Prisoner victim: ${Text.VICTIM_PRISONER_FULL_NAME}`])
       .type(Type.PRISONER)
-      .offenceCode(1)
+      .offenceCode(1),
   )
   .child(
     answer('A standard answer with child question').child(
-      question('A child question').child(answer('A standard child answer').offenceCode(2))
-    )
+      question('A child question').child(answer('A standard child answer').offenceCode(2)),
+    ),
   )
 
 const decisionTreeService = new DecisionTreeService(
@@ -49,7 +49,7 @@ const decisionTreeService = new DecisionTreeService(
   userService,
   reportedAdjudicationsService,
   testDecisionsTree,
-  []
+  [],
 )
 
 const testData = new TestData()
@@ -180,7 +180,7 @@ describe('GET /details-of-offence/100 view', () => {
         expect(res.text).toContain('Offence details')
         // First offence - first question and answer
         expect(res.text).toContain(
-          'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name'
+          'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name',
         )
         expect(res.text).toContain('Prisoner victim: A_prisoner_first_name A_prisoner_last_name')
       })
@@ -205,8 +205,8 @@ describe('GET /details-of-offence/100 view', () => {
           1,
           false,
           PrisonerGender.MALE,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })
@@ -231,8 +231,8 @@ describe('GET /details-of-offence/102 view', () => {
           1,
           true,
           PrisonerGender.MALE,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })
@@ -246,7 +246,7 @@ describe('POST /details-of-offence/100', () => {
       .then(() =>
         agent
           .post(adjudicationUrls.detailsOfOffence.urls.start(100))
-          .then(() => expect(placeOnReportService.saveOffenceDetails).not.toHaveBeenCalled())
+          .then(() => expect(placeOnReportService.saveOffenceDetails).not.toHaveBeenCalled()),
       )
   })
 
@@ -260,7 +260,7 @@ describe('POST /details-of-offence/100', () => {
           .post(adjudicationUrls.detailsOfOffence.urls.start(100))
           .send({ reportedChargeNumber: 1524493 })
           .expect(302)
-          .expect('Location', adjudicationUrls.detailsOfDamages.urls.start('100'))
+          .expect('Location', adjudicationUrls.detailsOfDamages.urls.start('100')),
       )
   })
 })

@@ -34,7 +34,7 @@ export enum PlaceholderText {
 export function getPlaceholderValues(
   prisoner: PrisonerResult,
   associatedPrisoner?: PrisonerResult,
-  answerDataDetails?: AnswerDataDetails
+  answerDataDetails?: AnswerDataDetails,
 ): PlaceholderValues {
   return {
     prisonerFirstName: prisoner.firstName,
@@ -53,23 +53,23 @@ export function getProcessedText(template: string, values: PlaceholderValues, pr
   return (template || '')
     .replace(
       PlaceholderText.PRISONER_FULL_NAME,
-      convertToTitleCase(`${values.prisonerFirstName || ''} ${values.prisonerLastName || ''}`)
+      convertToTitleCase(`${values.prisonerFirstName || ''} ${values.prisonerLastName || ''}`),
     )
     .replace(
       PlaceholderText.PRISONER_FULL_NAME_POSSESSIVE,
-      possessive(convertToTitleCase(`${values.prisonerFirstName || ''} ${values.prisonerLastName || ''}`))
+      possessive(convertToTitleCase(`${values.prisonerFirstName || ''} ${values.prisonerLastName || ''}`)),
     )
     .replace(
       PlaceholderText.ASSOCIATED_PRISONER_FULL_NAME,
-      convertToTitleCase(`${values.associatedPrisonerFirstName || ''} ${values.associatedPrisonerLastName || ''}`)
+      convertToTitleCase(`${values.associatedPrisonerFirstName || ''} ${values.associatedPrisonerLastName || ''}`),
     )
     .replace(
       PlaceholderText.VICTIM_STAFF_FULL_NAME,
-      convertNameForPlaceholder(values.victimStaffFullName || '', prisonerView)
+      convertNameForPlaceholder(values.victimStaffFullName || '', prisonerView),
     )
     .replace(
       PlaceholderText.VICTIM_PRISONER_FULL_NAME,
-      convertToTitleCase(`${values.victimPrisonerFirstName || ''} ${values.victimPrisonerLastName || ''}`)
+      convertToTitleCase(`${values.victimPrisonerFirstName || ''} ${values.victimPrisonerLastName || ''}`),
     )
     .replace(PlaceholderText.VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT, formatPrisonerOutsideEstablishmentText(values))
     .replace(PlaceholderText.VICTIM_OTHER_PERSON_FULL_NAME, convertToTitleCase(values.victimOtherPersonFullName || ''))

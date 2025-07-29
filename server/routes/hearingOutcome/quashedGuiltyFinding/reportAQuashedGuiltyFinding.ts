@@ -10,13 +10,13 @@ export default class ReportAQuashedGuiltyFindingRoutes {
   constructor(
     userService: UserService,
     outcomesService: OutcomesService,
-    reportedAdjudicationsService: ReportedAdjudicationsService
+    reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new ReportAQuashedGuiltyFindingPage(
       PageRequestType.CREATION,
       userService,
       outcomesService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

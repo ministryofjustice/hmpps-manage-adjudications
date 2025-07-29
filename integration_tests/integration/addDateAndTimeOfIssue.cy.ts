@@ -33,8 +33,8 @@ context('Add date and time', () => {
     const yesterday = formatDateForDatePicker(new Date(date.setDate(date.getDate() - 1)).toISOString(), 'short')
     cy.visit(
       `${adjudicationUrls.addIssueDateTime.urls.start(
-        '12345'
-      )}?referrer=${adjudicationUrls.confirmDISFormsIssued.urls.start()}`
+        '12345',
+      )}?referrer=${adjudicationUrls.confirmDISFormsIssued.urls.start()}`,
     )
     const addDateTimeOfIssuePage: AddDateAndTimeOfIssue = Page.verifyOnPage(AddDateAndTimeOfIssue)
     addDateTimeOfIssuePage.dateInput().type(yesterday)

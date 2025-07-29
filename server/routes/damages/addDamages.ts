@@ -18,7 +18,6 @@ export default class AddDamagesRoutes {
     const { chargeNumber } = req.params
     const submitted = req.query.submitted as string
 
-    // eslint-disable-next-line no-extra-boolean-cast
     const cancelButtonHref =
       submitted === 'true'
         ? adjudicationUrls.detailsOfDamages.urls.submittedEditModified(chargeNumber)

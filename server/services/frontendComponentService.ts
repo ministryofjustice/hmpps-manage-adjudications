@@ -6,7 +6,7 @@ export default class FrontendComponentService {
 
   async getComponents<T extends AvailableComponent[]>(
     components: T,
-    userToken: string
+    userToken: string,
   ): Promise<Record<T[number], FrontendComponent>> {
     return this.frontendApiClient.getComponents(components, userToken)
   }

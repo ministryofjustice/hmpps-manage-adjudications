@@ -13,7 +13,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -26,7 +26,7 @@ beforeEach(() => {
       offenderNo: 'G7234VB',
       firstName: 'James',
       lastName: 'Smith',
-    })
+    }),
   )
   reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner.mockResolvedValue([
     {
@@ -109,8 +109,8 @@ describe('POST /adjudication-history', () => {
       .expect(
         'Location',
         `${adjudicationUrls.adjudicationHistory.urls.start(
-          'G7234VB'
-        )}?bookingType=current&fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&agency=MDI&punishment=ada`
+          'G7234VB',
+        )}?bookingType=current&fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&agency=MDI&punishment=ada`,
       )
   })
   it('should redirect with the correct filter parameters - current booking - multiple punishment', () => {
@@ -127,8 +127,8 @@ describe('POST /adjudication-history', () => {
       .expect(
         'Location',
         `${adjudicationUrls.adjudicationHistory.urls.start(
-          'G7234VB'
-        )}?bookingType=current&fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&agency=MDI&punishment=ada&punishment=pada`
+          'G7234VB',
+        )}?bookingType=current&fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW&agency=MDI&punishment=ada&punishment=pada`,
       )
   })
   it('should redirect with the correct filter parameters - all bookings', () => {
@@ -145,8 +145,8 @@ describe('POST /adjudication-history', () => {
       .expect(
         'Location',
         `${adjudicationUrls.adjudicationHistory.urls.start(
-          'G7234VB'
-        )}?bookingType=all&fromDate=&toDate=&status=&agency=&punishment=`
+          'G7234VB',
+        )}?bookingType=all&fromDate=&toDate=&status=&agency=&punishment=`,
       )
   })
 })

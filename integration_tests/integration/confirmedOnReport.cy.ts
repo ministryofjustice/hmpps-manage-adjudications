@@ -75,7 +75,7 @@ context('Report has been submitted for review', () => {
     cy.contains('This report will be reviewed. The reviewer can do one of 3 things')
     cy.contains('Check your prison’s processes.')
     cy.contains(
-      'If the prisoner is transferred, this report will need to be reviewed and accepted before it is sent to the new prison.'
+      'If the prisoner is transferred, this report will need to be reviewed and accepted before it is sent to the new prison.',
     )
   })
 

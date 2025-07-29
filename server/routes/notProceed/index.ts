@@ -27,27 +27,27 @@ export default function notProceedRoutes({
     userService,
     outcomesService,
     hearingsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const notProceedEditRoute = new NotProceedEditRoutes(
     userService,
     outcomesService,
     hearingsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const notProceedCompleteHearingRoute = new NotProceedCompleteHearingRoutes(
     userService,
     outcomesService,
     hearingsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const notProceedCompleteHearingEditRoute = new NotProceedCompleteHearingEditRoutes(
     userService,
     outcomesService,
     hearingsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

@@ -48,16 +48,16 @@ export default class noticeOfBeingPlacedOnReportData {
     confirmedOnReportData: ConfirmedOnReportData,
     offences: IncidentAndOffences,
     nextHearingDateTime: string,
-    createdOnBehalfOfOfficer: string
+    createdOnBehalfOfOfficer: string,
   ) {
     this.isPrisonerCopy = isPrisonerCopy
     this.chargeNumber = chargeNumber
     this.statement = confirmedOnReportData.statement
     this.prisonerDisplayName = convertToTitleCase(
-      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
+      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`,
     )
     this.prisonerFriendlyName = convertToTitleCase(
-      `${confirmedOnReportData.prisonerFirstName} ${confirmedOnReportData.prisonerLastName}`
+      `${confirmedOnReportData.prisonerFirstName} ${confirmedOnReportData.prisonerLastName}`,
     )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
     logger.info(`nextHearingDateTime : ${nextHearingDateTime}`)

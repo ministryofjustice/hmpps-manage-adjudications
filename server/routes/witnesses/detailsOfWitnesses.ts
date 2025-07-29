@@ -45,7 +45,7 @@ export default class DetailsOfWitnessesPage {
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly witnessesSessionService: WitnessesSessionService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -159,13 +159,13 @@ export default class DetailsOfWitnessesPage {
     res: Response,
     chargeNumber: string | number,
     isReportedDraft: boolean,
-    referrer: string = null
+    referrer: string = null,
   ) => {
     if (isReportedDraft) {
       return res.redirect(
         `${adjudicationUrls.confirmedOnReport.urls.confirmationOfChangePostReview(
-          chargeNumber as string
-        )}?referrer=${referrer}`
+          chargeNumber as string,
+        )}?referrer=${referrer}`,
       )
     }
     return res.redirect(adjudicationUrls.incidentStatement.urls.start(chargeNumber as number))

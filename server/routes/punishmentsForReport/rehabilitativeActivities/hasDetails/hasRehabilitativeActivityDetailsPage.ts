@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
 import { ParsedUrlQuery } from 'querystring'
@@ -17,7 +16,7 @@ type PageData = {
 export default class HasRehabilitativeActivitiesDetailsPage {
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -72,7 +71,7 @@ export default class HasRehabilitativeActivitiesDetailsPage {
         url.format({
           pathname: redirectUrl,
           query: { numberOfActivities, currentActivityNumber } as ParsedUrlQuery,
-        })
+        }),
       )
     }
 
@@ -80,7 +79,7 @@ export default class HasRehabilitativeActivitiesDetailsPage {
       req,
       chargeNumber,
       redisId,
-      Number(numberOfActivities)
+      Number(numberOfActivities),
     )
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }

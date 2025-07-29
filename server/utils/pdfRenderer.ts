@@ -14,7 +14,7 @@ export function pdfRenderer(client: GotenbergClient) {
       headerData,
       footerView,
       footerData,
-      options: { filename: string; pdfMargins: PdfMargins }
+      options: { filename: string; pdfMargins: PdfMargins },
     ) => {
       try {
         const headerHtml = await new Promise<string>((resolve, reject) => {

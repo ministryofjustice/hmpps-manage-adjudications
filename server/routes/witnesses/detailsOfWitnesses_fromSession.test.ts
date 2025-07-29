@@ -79,8 +79,8 @@ describe('POST', () => {
         expect(placeOnReportService.saveWitnessDetails).toHaveBeenCalledWith(
           '100',
           witnessesOnSession,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

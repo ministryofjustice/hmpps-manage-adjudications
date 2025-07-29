@@ -44,7 +44,7 @@ export default class adjudicationResultReportData {
     this.chargeNumber = chargeNumber
     this.establishmentName = confirmedOnReportData.prisonName
     this.prisonerDisplayName = convertToTitleCase(
-      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
+      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`,
     )
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${
       confirmedOnReportData.prisonerLivingUnitName || 'Unknown'

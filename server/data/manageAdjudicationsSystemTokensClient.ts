@@ -103,7 +103,7 @@ export default class ManageAdjudicationsSystemTokensClient {
 
   async postDraftIncidentStatement(
     draftId: number,
-    incidentStatement: IncidentStatement
+    incidentStatement: IncidentStatement,
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.post({
       path: `/draft-adjudications/${draftId}/incident-statement`,
@@ -113,7 +113,7 @@ export default class ManageAdjudicationsSystemTokensClient {
 
   async putDraftIncidentStatement(
     draftId: number,
-    incidentStatement: IncidentStatement
+    incidentStatement: IncidentStatement,
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${draftId}/incident-statement`,
@@ -129,7 +129,7 @@ export default class ManageAdjudicationsSystemTokensClient {
 
   async getAllDraftAdjudicationsForUser(
     filter: ContinueReportApiFilter,
-    pageRequest: ApiPageRequest
+    pageRequest: ApiPageRequest,
   ): Promise<ApiPageResponse<DraftAdjudication>> {
     const path =
       `/draft-adjudications/my-reports?page=${pageRequest.number}&size=${pageRequest.size}` +
@@ -149,7 +149,7 @@ export default class ManageAdjudicationsSystemTokensClient {
 
   async editDraftIncidentDetails(
     id: number,
-    editedIncidentDetails: EditedIncidentDetails
+    editedIncidentDetails: EditedIncidentDetails,
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${id}/incident-details`,
@@ -159,7 +159,7 @@ export default class ManageAdjudicationsSystemTokensClient {
 
   async updateIncidentRole(
     id: number,
-    editIncidentRoleRequest: EditIncidentRoleRequest
+    editIncidentRoleRequest: EditIncidentRoleRequest,
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${id}/incident-role`,
@@ -177,7 +177,7 @@ export default class ManageAdjudicationsSystemTokensClient {
     (prefix: string) =>
     async (
       filter: ReportedAdjudicationFilter,
-      pageRequest: ApiPageRequest
+      pageRequest: ApiPageRequest,
     ): Promise<ApiPageResponse<ReportedAdjudication>> => {
       const path =
         `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
@@ -192,7 +192,7 @@ export default class ManageAdjudicationsSystemTokensClient {
   getYourCompletedAdjudications = this.getCompletedAdjudications('/reported-adjudications/my-reports')
 
   async getReportedAdjudicationIssueData(
-    filter: ReportedAdjudicationDISFormFilter
+    filter: ReportedAdjudicationDISFormFilter,
   ): Promise<ReportedAdjudicationsResult> {
     const path =
       `/reported-adjudications/for-issue/v2?` +
@@ -204,7 +204,7 @@ export default class ManageAdjudicationsSystemTokensClient {
   }
 
   async getReportedAdjudicationPrintData(
-    filter: ReportedAdjudicationDISFormFilter
+    filter: ReportedAdjudicationDISFormFilter,
   ): Promise<ReportedAdjudicationsResult> {
     const path =
       `/reported-adjudications/for-print?${
@@ -244,7 +244,7 @@ export default class ManageAdjudicationsSystemTokensClient {
 
   async saveYouthOffenderStatus(
     draftId: number,
-    applicableRulesData: ApplicableRules
+    applicableRulesData: ApplicableRules,
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${draftId}/applicable-rules`,
@@ -254,7 +254,7 @@ export default class ManageAdjudicationsSystemTokensClient {
 
   async saveAssociatedPrisoner(
     draftId: number,
-    associatedPrisoner: AssociatedPrisoner
+    associatedPrisoner: AssociatedPrisoner,
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${draftId}/associated-prisoner`,
@@ -314,7 +314,7 @@ export default class ManageAdjudicationsSystemTokensClient {
   async setCreatedOnBehalfOf(
     chargeNumber: string,
     createdOnBehalfOfOfficer: string,
-    createdOnBehalfOfReason: string
+    createdOnBehalfOfReason: string,
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/created-on-behalf-of`,
@@ -328,7 +328,7 @@ export default class ManageAdjudicationsSystemTokensClient {
   async setDraftCreatedOnBehalfOf(
     draftId: number,
     createdOnBehalfOfOfficer: string,
-    createdOnBehalfOfReason: string
+    createdOnBehalfOfReason: string,
   ): Promise<DraftAdjudicationResult> {
     return this.restClient.put({
       path: `/draft-adjudications/${draftId}/created-on-behalf-of`,
@@ -368,7 +368,7 @@ export default class ManageAdjudicationsSystemTokensClient {
     bookingId: number,
     filter: AdjudicationHistoryFilter,
     allAgencies: Array<string>,
-    pageRequest: ApiPageRequest
+    pageRequest: ApiPageRequest,
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const path =
       `/reported-adjudications/booking/${bookingId}?page=${pageRequest.number}&size=${pageRequest.size}` +
@@ -388,7 +388,7 @@ export default class ManageAdjudicationsSystemTokensClient {
   async getPrisonerAdjudicationHistoryAllBookings(
     prisonerNumber: string,
     filter: AdjudicationHistoryFilter,
-    pageRequest: ApiPageRequest
+    pageRequest: ApiPageRequest,
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const path =
       `/reported-adjudications/bookings/prisoner/${prisonerNumber}?page=${pageRequest.number}&size=${pageRequest.size}` +

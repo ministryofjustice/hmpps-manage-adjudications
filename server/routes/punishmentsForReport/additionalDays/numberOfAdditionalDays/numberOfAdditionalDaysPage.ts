@@ -41,7 +41,7 @@ export default class NumberOfAdditionalDaysPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -104,7 +104,7 @@ export default class NumberOfAdditionalDaysPage {
       url.format({
         pathname: redirectUrlPrefix,
         query: { ...req.query, duration: trimmedDays },
-      })
+      }),
     )
   }
 

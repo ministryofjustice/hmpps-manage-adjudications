@@ -24,7 +24,7 @@ export default class CheckPunishmentsPage {
   constructor(
     pageType: PageRequestType,
     private readonly punishmentsService: PunishmentsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -70,7 +70,7 @@ export default class CheckPunishmentsPage {
         if (req.query.punishmentsChanged) {
           const { reasonForChange, detailsOfChange } = this.punishmentsService.getReasonForChangePunishments(
             req,
-            chargeNumber
+            chargeNumber,
           )
           Promise.all([
             await this.punishmentsService.editPunishmentSet(punishments, chargeNumber, user),
@@ -78,7 +78,7 @@ export default class CheckPunishmentsPage {
               chargeNumber,
               detailsOfChange,
               reasonForChange,
-              user
+              user,
             ),
           ])
         } else {

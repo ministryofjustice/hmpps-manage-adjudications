@@ -15,7 +15,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 
@@ -37,7 +37,7 @@ beforeEach(() => {
       offenderNo: 'G7234VB',
       firstName: 'JAMES',
       lastName: 'SMITH',
-    })
+    }),
   )
 
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, userService }, {})

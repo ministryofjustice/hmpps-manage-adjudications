@@ -39,7 +39,7 @@ describe('POST /create-on-behalf-of', () => {
       .send({ createdOnBehalfOfOfficer: 'some officer' })
       .expect(
         'Location',
-        `${adjudicationUrls.createOnBehalfOf.urls.reason(100)}?createdOnBehalfOfOfficer=some%20officer`
+        `${adjudicationUrls.createOnBehalfOf.urls.reason(100)}?createdOnBehalfOfOfficer=some%20officer`,
       )
   })
 

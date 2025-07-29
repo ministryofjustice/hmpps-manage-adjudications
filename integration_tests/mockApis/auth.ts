@@ -105,7 +105,7 @@ export default {
   getSignInUrl,
   stubPing,
   stubSignIn: (
-    roles: string[] = ['ROLE_ADJUDICATIONS_REVIEWER', 'ROLE_GLOBAL_SEARCH']
+    roles: string[] = ['ROLE_ADJUDICATIONS_REVIEWER', 'ROLE_GLOBAL_SEARCH'],
   ): Promise<[Response, Response, Response, Response, Response]> =>
     Promise.all([favicon(), redirect(), signOut(), token(roles), tokenVerification.stubVerifyToken()]),
 }

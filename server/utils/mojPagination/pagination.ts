@@ -34,12 +34,12 @@ export function pageRequestFrom(pageSize: number, pageNumber: number): ApiPageRe
 
 export default function mojPaginationFromPageResponse<T>(
   reportPageResponse: ApiPageResponse<T>,
-  url: URL
+  url: URL,
 ): PageViewModel {
   const pageResponse = new PageResponse(
     reportPageResponse.size,
     reportPageResponse.number + 1,
-    reportPageResponse.totalElements
+    reportPageResponse.totalElements,
   )
   return {
     results: {

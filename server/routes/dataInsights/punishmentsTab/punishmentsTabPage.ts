@@ -45,7 +45,7 @@ export default class PunishmentsTabPage {
     const chartSettingMap = {} as Record<string, unknown>
 
     const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '4a')).lastModifiedDate
+      (await this.chartApiService.getLastModifiedChart(username, '4a')).lastModifiedDate,
     )
 
     chartSettingMap['4a'] = await produceLinesCharts(
@@ -58,7 +58,7 @@ export default class PunishmentsTabPage {
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.sanction },
       { source: (row: ChartEntryHorizontalBar) => row.count },
-      'Count'
+      'Count',
     )
 
     const chartDetails4b = await this.chartApiService.getChart(username, agencyId, '4b')
@@ -68,7 +68,7 @@ export default class PunishmentsTabPage {
     const offenceType: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       offenceTypes,
       req.query.offenceType as string,
-      offenceTypes.length > 0 ? offenceTypes[0] : undefined
+      offenceTypes.length > 0 ? offenceTypes[0] : undefined,
     )
 
     chartSettingMap['4d'] = await produceCommentaryChart(
@@ -87,7 +87,7 @@ export default class PunishmentsTabPage {
             proportion: `${Math.trunc(row.proportion * 100)}%`,
           } as ChartEntryCommentary
         },
-      }
+      },
     )
 
     chartSettingMap['4b'] = await produceLinesCharts(
@@ -100,7 +100,7 @@ export default class PunishmentsTabPage {
       { filter: (row: ChartEntryHorizontalBar) => row.offence_type === offenceType?.text },
       { source: (row: ChartEntryLine) => row.sanction },
       { source: (row: ChartEntryHorizontalBar) => row.count },
-      'Count'
+      'Count',
     )
 
     chartSettingMap['4c'] = await produceMultiVerticalBarsCharts(
@@ -115,7 +115,7 @@ export default class PunishmentsTabPage {
       { source: (row: ChartEntryLine) => `${row.year}-${row.month}` },
       { source: (row: ChartEntryLine) => row.count },
       'Percentage',
-      'Total punishments'
+      'Total punishments',
     )
 
     return res.render(`pages/dataInsights/punishmentsTab.njk`, {

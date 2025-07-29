@@ -23,7 +23,6 @@ type PageData = {
   chargeNumber?: string
 } & DecisionForm
 
-// eslint-disable-next-line no-shadow
 enum ErrorType {
   MISSING_DECISION = 'MISSING_DECISION',
 }
@@ -41,7 +40,7 @@ export default class AddWitnessRoutes {
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {}
 
   private helpers = new Map<WitnessCode, DecisionHelper>([
@@ -60,10 +59,10 @@ export default class AddWitnessRoutes {
     const prisoner = await this.getPrisoner(
       chargeNumber,
       this.witnessesSessionService.getSubmittedEditFlagFromSession(req),
-      user
+      user,
     )
     const selectedAnswerViewData = await this.answerTypeHelper(pageData)?.viewDataFromForm(pageData, user)
-    // eslint-disable-next-line no-extra-boolean-cast
+
     const cancelButtonHref = this.witnessesSessionService.getSubmittedEditFlagFromSession(req)
       ? adjudicationUrls.detailsOfWitnesses.urls.submittedEditModified(chargeNumber)
       : adjudicationUrls.detailsOfWitnesses.urls.modified(chargeNumber)
@@ -131,7 +130,7 @@ export default class AddWitnessRoutes {
 
     const redirectUrl = this.getRedirectUrl(
       this.witnessesSessionService.getSubmittedEditFlagFromSession(req),
-      chargeNumber
+      chargeNumber,
     )
     this.witnessesSessionService.deleteSubmittedEditFlagOnSession(req)
     return res.redirect(redirectUrl)
@@ -142,7 +141,7 @@ export default class AddWitnessRoutes {
 
     return this.redirect(
       { pathname: adjudicationUrls.detailsOfWitnesses.urls.add(chargeNumber), query: { selectedAnswerId } },
-      res
+      res,
     )
   }
 
@@ -160,7 +159,7 @@ export default class AddWitnessRoutes {
     }
 
     req.session.redirectUrl = `${adjudicationUrls.detailsOfWitnesses.urls.add(
-      chargeNumber
+      chargeNumber,
     )}?selectedAnswerId=${selectedAnswerId}`
     return this.redirect(answerTypeHelper.getRedirectUrlForUserSearch(form), res)
   }

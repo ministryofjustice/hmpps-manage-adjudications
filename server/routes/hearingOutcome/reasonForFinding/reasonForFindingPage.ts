@@ -36,7 +36,7 @@ export default class ReasonForFindingPage {
     pageType: PageRequestType,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly hearingsService: HearingsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -68,7 +68,7 @@ export default class ReasonForFindingPage {
         const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
           chargeNumber,
           [ReportedAdjudicationStatus.DISMISSED],
-          res.locals.user
+          res.locals.user,
         )
 
         if (lastOutcomeItem.outcome?.outcome.details) {
@@ -115,7 +115,7 @@ export default class ReasonForFindingPage {
           trimmedReasonForFinding,
           user,
           (adjudicator && (adjudicator as string)) || null,
-          (plea && HearingOutcomePlea[plea.toString() as keyof typeof HearingOutcomePlea]) || null
+          (plea && HearingOutcomePlea[plea.toString() as keyof typeof HearingOutcomePlea]) || null,
         )
       } else {
         await this.hearingsService.createDismissedHearingOutcome(
@@ -123,7 +123,7 @@ export default class ReasonForFindingPage {
           adjudicator as string,
           plea as HearingOutcomePlea,
           trimmedReasonForFinding,
-          user
+          user,
         )
       }
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))

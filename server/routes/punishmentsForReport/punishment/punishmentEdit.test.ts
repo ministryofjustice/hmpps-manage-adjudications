@@ -21,7 +21,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -34,7 +34,7 @@ beforeEach(() => {
     stoppagePercentage: 25,
   })
   reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
-    testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' })
+    testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' }),
   )
 })
 
@@ -82,8 +82,8 @@ describe('POST /punishment', () => {
         'Location',
         `${adjudicationUrls.punishmentNumberOfDays.urls.edit(
           '100',
-          'XYZ'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch`
+          'XYZ',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch`,
       )
   })
   it('should successfully call the endpoint and redirect - only passing parameters with new data', () => {
@@ -95,7 +95,7 @@ describe('POST /punishment', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.punishmentNumberOfDays.urls.edit('100', 'XYZ')}?punishmentType=EXTRA_WORK`
+        `${adjudicationUrls.punishmentNumberOfDays.urls.edit('100', 'XYZ')}?punishmentType=EXTRA_WORK`,
       )
   })
 })

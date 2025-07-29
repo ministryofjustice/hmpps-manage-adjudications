@@ -34,13 +34,13 @@ const getVariablesForPageType = (
   pageOptions: PageOptions,
   prisonerNumber: string,
   draftId: number,
-  incidentDetailsData: CheckYourAnswers
+  incidentDetailsData: CheckYourAnswers,
 ) => {
   if (pageOptions.isEditByReporter()) {
     return {
       editIncidentDetailsURL: `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         prisonerNumber,
-        draftId
+        draftId,
       )}?referrer=${adjudicationUrls.checkYourAnswers.urls.report(draftId)}`,
       editIncidentStatementURL: adjudicationUrls.incidentStatement.urls.submittedEdit(draftId),
       editOffenceDetailsURL: adjudicationUrls.ageOfPrisoner.urls.submittedEdit(draftId),
@@ -80,7 +80,7 @@ export default class CheckYourAnswersPage {
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly locationService: LocationService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -88,7 +88,7 @@ export default class CheckYourAnswersPage {
   getReviewData = async (draftAdjudication: DraftAdjudication, user: User) => {
     const reportedAdjudication = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       draftAdjudication.chargeNumber,
-      user
+      user,
     )
     return this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication.reportedAdjudication, user)
   }
@@ -105,13 +105,13 @@ export default class CheckYourAnswersPage {
     const incidentDetailsData = await this.placeOnReportService.getCheckYourAnswersInfo(
       draftId,
       incidentLocations,
-      user
+      user,
     )
 
     const userSetGenderData = await this.placeOnReportService.getGenderDataForTable(
       this.pageOptions.isCreation(),
       prisoner,
-      draftAdjudication
+      draftAdjudication,
     )
 
     // The reported adjudication number won't exist in the creation journey
@@ -125,13 +125,13 @@ export default class CheckYourAnswersPage {
         associatedPrisoner,
         draftAdjudication.incidentRole,
         user,
-        false
+        false,
       ),
       getVariablesForPageType(this.pageOptions, prisoner.prisonerNumber, draftId, incidentDetailsData),
     ])
 
     const convertedEvidence = await this.reportedAdjudicationsService.convertEvidenceToTableFormat(
-      draftAdjudication.evidence
+      draftAdjudication.evidence,
     )
 
     return res.render(`pages/checkYourAnswers`, {

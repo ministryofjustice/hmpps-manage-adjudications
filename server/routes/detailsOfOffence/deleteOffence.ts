@@ -7,7 +7,6 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import { OffenceData, getProtectedCharacteristicsTypeByIndex } from '../offenceCodeDecisions/offenceData'
 import PlaceOnReportService from '../../services/placeOnReportService'
 
-// eslint-disable-next-line no-shadow
 enum ErrorType {
   MISSING_SELECTION = 'MISSING_SELECTION',
 }
@@ -22,7 +21,7 @@ const error: { [key in ErrorType]: FormError } = {
 export default class DeleteOffenceRoutes {
   constructor(
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly placeOnReportService: PlaceOnReportService
+    private readonly placeOnReportService: PlaceOnReportService,
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => this.renderView(req, res, [])
@@ -42,7 +41,7 @@ export default class DeleteOffenceRoutes {
         })
       } else {
         protectedCharacteristics.push(
-          getProtectedCharacteristicsTypeByIndex(+req.query.protectedCharacteristics.toString().slice(-1))
+          getProtectedCharacteristicsTypeByIndex(+req.query.protectedCharacteristics.toString().slice(-1)),
         )
       }
     }
@@ -54,7 +53,7 @@ export default class DeleteOffenceRoutes {
       placeHolderValues,
       incidentRole,
       false,
-      protectedCharacteristics
+      protectedCharacteristics,
     )
 
     const offenceToDisplay = {
@@ -64,7 +63,7 @@ export default class DeleteOffenceRoutes {
         Number(offenceData.offenceCode),
         draftAdjudication.isYouthOffender,
         draftAdjudication.gender,
-        user
+        user,
       ),
       isYouthOffender: draftAdjudication.isYouthOffender,
     }
@@ -96,7 +95,7 @@ export default class DeleteOffenceRoutes {
         pathname: adjudicationUrls.detailsOfOffence.urls.modified(draftId),
         query: { ...offenceData, protectedCharacteristics },
       },
-      res
+      res,
     )
   }
 

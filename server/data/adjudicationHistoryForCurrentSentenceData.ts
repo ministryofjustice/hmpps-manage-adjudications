@@ -66,15 +66,15 @@ export default class adjudicationHistoryForCurrentSentenceData {
     chargeNumber: string,
     confirmedOnReportData: ConfirmedOnReportData,
     dis5Data: Dis5AdjudicationsAndMoneyPrintSupport,
-    prisonerSearchDis5Data: PrisonerSearchDetailsDis5
+    prisonerSearchDis5Data: PrisonerSearchDetailsDis5,
   ) {
     this.chargeNumber = chargeNumber
 
     this.prisonerDisplayName = convertToTitleCase(
-      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
+      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`,
     )
     this.prisonerFriendlyName = convertToTitleCase(
-      `${confirmedOnReportData.prisonerFirstName} ${confirmedOnReportData.prisonerLastName}`
+      `${confirmedOnReportData.prisonerFirstName} ${confirmedOnReportData.prisonerLastName}`,
     )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${

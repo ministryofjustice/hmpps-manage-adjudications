@@ -19,19 +19,19 @@ export default function detailsOfOffenceRoutes({
   const detailsOfOffenceUsingDraft = new DetailsOfOffencePage(
     PageRequestType.OFFENCES_FROM_API,
     placeOnReportService,
-    decisionTreeService
+    decisionTreeService,
   )
 
   const detailsOfOffenceUsingSession = new DetailsOfOffencePage(
     PageRequestType.OFFENCES_FROM_SESSION,
     placeOnReportService,
-    decisionTreeService
+    decisionTreeService,
   )
 
   const detailsOfOffenceUsingSessionAloEdit = new DetailsOfOffencePage(
     PageRequestType.OFFENCES_FROM_SESSION_ALO_EDIT,
     placeOnReportService,
-    decisionTreeService
+    decisionTreeService,
   )
 
   const addOffence = new AddOffenceRoutes()

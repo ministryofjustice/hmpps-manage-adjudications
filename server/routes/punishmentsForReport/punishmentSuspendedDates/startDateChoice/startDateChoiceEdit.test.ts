@@ -21,7 +21,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -127,8 +127,8 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.suspendedPunishmentStartDateChoice.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`
+          'xyz',
+        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`,
       )
       .send({
         immediate: 'true',
@@ -137,8 +137,8 @@ describe('POST ', () => {
       .expect(
         'Location',
         `${adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(
-          '100'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
+          '100',
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`,
       )
       .then(() => {
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalled()
@@ -149,8 +149,8 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.suspendedPunishmentStartDateChoice.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`
+          'xyz',
+        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`,
       )
       .send({
         immediate: 'false',
@@ -160,8 +160,8 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentStartDate.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
+          'xyz',
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`,
       )
   })
 })

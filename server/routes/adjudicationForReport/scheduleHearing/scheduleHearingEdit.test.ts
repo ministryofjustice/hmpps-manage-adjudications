@@ -20,7 +20,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -32,7 +32,7 @@ beforeEach(() => {
       offenderNo: 'G6415GD',
       firstName: 'JASON',
       lastName: 'SURCHET',
-    })
+    }),
   )
   locationService.getHearingLocations.mockResolvedValue(testData.residentialLocations())
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
@@ -63,7 +63,7 @@ beforeEach(() => {
   })
 
   reportedAdjudicationsService.getLatestNonMatchingHearing.mockResolvedValue(
-    testData.singleHearing({ dateTimeOfHearing: '2022-11-03T11:00:00' })
+    testData.singleHearing({ dateTimeOfHearing: '2022-11-03T11:00:00' }),
   )
 
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, locationService, userService })
@@ -107,7 +107,7 @@ describe('POST edit existing hearing', () => {
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-04T10:00',
           OicHearingType.GOV_ADULT as string,
-          expect.anything()
+          expect.anything(),
         )
         expect(reportedAdjudicationsService.scheduleHearing).not.toHaveBeenCalled()
       })
@@ -133,7 +133,7 @@ describe('POST edit existing hearing', () => {
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',
           '2045-11-04T10:00',
           OicHearingType.INAD_ADULT as string,
-          expect.anything()
+          expect.anything(),
         )
         expect(reportedAdjudicationsService.scheduleHearing).not.toHaveBeenCalled()
       })

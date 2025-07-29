@@ -18,7 +18,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -47,8 +47,8 @@ describe('GET', () => {
       .get(
         `${adjudicationUrls.punishmentIsSuspended.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -63,8 +63,8 @@ describe('GET', () => {
       .get(
         `${adjudicationUrls.punishmentIsSuspended.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -79,8 +79,8 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.punishmentIsSuspended.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .send({
         suspended: 'no',
@@ -90,8 +90,8 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.punishmentStartDate.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
   })
   it('redirects to the suspended until date page if the user selects yes', () => {
@@ -99,8 +99,8 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.punishmentIsSuspended.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .send({
         suspended: 'yes',
@@ -110,8 +110,8 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.punishmentSuspendedUntil.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
   })
 })

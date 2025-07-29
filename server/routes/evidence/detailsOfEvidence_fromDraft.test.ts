@@ -138,8 +138,8 @@ describe('GET', () => {
             ],
             other: [],
           },
-          '100'
-        )
+          '100',
+        ),
       )
       .then(() => expect(evidenceSessionService.getAllSessionEvidence).not.toHaveBeenCalled())
   })
@@ -154,8 +154,8 @@ describe('POST', () => {
         agent
           .post(adjudicationUrls.detailsOfEvidence.urls.start('101'))
           .then(() =>
-            expect(placeOnReportService.saveEvidenceDetails).toHaveBeenCalledWith('101', [], expect.anything())
-          )
+            expect(placeOnReportService.saveEvidenceDetails).toHaveBeenCalledWith('101', [], expect.anything()),
+          ),
       )
   })
   it('should not save the evidence if it is the not first time calling the endpoint and no changes have been made', () => {
@@ -166,7 +166,7 @@ describe('POST', () => {
       .then(() =>
         agent
           .post(adjudicationUrls.detailsOfEvidence.urls.start('102'))
-          .then(() => expect(placeOnReportService.saveEvidenceDetails).not.toHaveBeenCalled())
+          .then(() => expect(placeOnReportService.saveEvidenceDetails).not.toHaveBeenCalled()),
       )
   })
 })

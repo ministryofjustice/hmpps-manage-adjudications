@@ -38,7 +38,7 @@ export const produceVerticalBarsAndLineCharts = async (
   chartTitle: string,
   chartHint: string,
   chartDetails: ChartDetailsResult,
-  yAxisLabel: string
+  yAxisLabel: string,
 ) => {
   const chartEntries = chartDetails.chartEntries as ChartEntryVerticalBar[]
 
@@ -56,7 +56,7 @@ export const produceVerticalBarsAndLineCharts = async (
     head: convertChartLabelsToTableHeaders(labels),
     rows: getVerticalBarsAndLineChartRows(
       chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_curr),
-      chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_prev)
+      chartEntries.map((entry: ChartEntryVerticalBar) => entry.count_prev),
     ),
     yAxisLabel,
   })
@@ -84,7 +84,7 @@ export const produceMultiVerticalBarsCharts = async (
   totalCountGroupByKey: RowSource,
   totalCountGroupBySource: RowSource,
   yAxisLabel: string,
-  tableTotalLabel: string
+  tableTotalLabel: string,
 ) => {
   const chartEntries = chartDetails.chartEntries as ChartEntryLine[]
 
@@ -97,9 +97,9 @@ export const produceMultiVerticalBarsCharts = async (
             return row1.month - row2.month
           }
           return row1.year - row2.year
-        })
+        }),
       ),
-    new Map<string, ChartEntryLine[]>()
+    new Map<string, ChartEntryLine[]>(),
   )
 
   const totalCountGroupBy: Map<string, number> = chartEntries.reduce(
@@ -107,9 +107,9 @@ export const produceMultiVerticalBarsCharts = async (
       entryMap.set(
         totalCountGroupByKey.source(row) as string,
         (totalCountGroupBySource.source(row) as number) +
-          ((entryMap.get(totalCountGroupByKey.source(row) as string) as number) || 0)
+          ((entryMap.get(totalCountGroupByKey.source(row) as string) as number) || 0),
       ),
-    new Map<string, number>()
+    new Map<string, number>(),
   )
 
   const legends = Array.from(chartEntriesMap.keys())
@@ -156,7 +156,7 @@ export const produceDuoVerticalBarsCharts = async (
   yValueSource: RowSource,
   totalCountGroupByKey: RowSource,
   totalCountGroupBySource: RowSource,
-  yAxisLabel: string
+  yAxisLabel: string,
 ) => {
   const chartEntries = chartDetails.chartEntries as ChartEntryDuoLine[]
 
@@ -174,7 +174,7 @@ export const produceDuoVerticalBarsCharts = async (
             count: legend.countSource.source(row),
             proportion: legend.propSource.source(row),
           } as ChartEntryLine,
-        ])
+        ]),
       )
     })
     totalCountGroupBy.set(totalCountGroupByKey.source(row) as string, totalCountGroupBySource.source(row) as number)
@@ -226,12 +226,12 @@ export const produceHorizontalBarsChart = async (
   barsDataSource: RowSource,
   rowsSource: RowSource[],
   head: TableHead[],
-  xAxisLabel: string
+  xAxisLabel: string,
 ) => {
   const chartEntries = (chartDetails.chartEntries as ChartEntryHorizontalBar[]).filter(
     (row: ChartEntryHorizontalBar) => {
       return dataFilter.filter(row)
-    }
+    },
   )
 
   const barData = chartEntries.map((row: ChartEntryHorizontalBar) => {
@@ -266,12 +266,12 @@ export const produceCommentaryChart = async (
   textBeforeProportion: string,
   textAfterProportion: string,
   chartDetails: ChartDetailsResult,
-  rowsSource: RowSource
+  rowsSource: RowSource,
 ) => {
   const chartEntries: ChartEntryCommentary[] = (chartDetails.chartEntries as ChartEntryHorizontalBar[]).map(
     (row: ChartEntryHorizontalBar) => {
       return rowsSource.source(row) as ChartEntryCommentary
-    }
+    },
   )
   return createCommentaryChartSettings({
     elementId: chartName,
@@ -293,7 +293,7 @@ export const produceLinesCharts = async (
   dataFilter: DataFilter,
   legendsSource: RowSource,
   yValueSource: RowSource,
-  yAxisLabel: string
+  yAxisLabel: string,
 ) => {
   const chartEntries = (chartDetails.chartEntries as ChartEntryLine[]).filter((row: ChartEntryLine) => {
     return dataFilter.filter(row)
@@ -308,9 +308,9 @@ export const produceLinesCharts = async (
             return row1.month - row2.month
           }
           return row1.year - row2.year
-        })
+        }),
       ),
-    new Map<string, ChartEntryLine[]>()
+    new Map<string, ChartEntryLine[]>(),
   )
 
   return createLinesChartsSettings({
@@ -996,7 +996,7 @@ export const getMultiLinesChartHead = (): TableHead[] => []
 
 export const getMultipleLineChartRows = (
   chartEntriesMap: Map<string, ChartEntryLine[]>,
-  monthYearLabels: string[][]
+  monthYearLabels: string[][],
 ): TableRow[][] => {
   const rows = [] as TableRow[][]
   Array.from(chartEntriesMap.keys()).forEach((key: string) => {
@@ -1105,8 +1105,8 @@ export const getUniqueItems = (chartEntries: ChartEntryHorizontalBar[], cell: Ro
     new Set(
       chartEntries.map((row: ChartEntryHorizontalBar) => {
         return cell.source(row) as string
-      })
-    )
+      }),
+    ),
   )
     .sort()
     .map(value => {

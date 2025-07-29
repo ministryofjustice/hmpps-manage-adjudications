@@ -136,8 +136,8 @@ context('Select associated staff', () => {
       `${adjudicationUrls.offenceCodeSelection.urls.question(
         100,
         'committed',
-        '1-1-1'
-      )}?selectedAnswerId=1-1-1-3&selectedPerson=JSMITH_GEN`
+        '1-1-1',
+      )}?selectedAnswerId=1-1-1-3&selectedPerson=JSMITH_GEN`,
     )
   })
 })

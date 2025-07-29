@@ -20,7 +20,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -80,8 +80,8 @@ describe('POST /reason-for-gov-referral', () => {
           '100',
           '123',
           ReferGovReason.GOV_INQUIRY,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

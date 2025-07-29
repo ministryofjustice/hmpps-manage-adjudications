@@ -22,12 +22,12 @@ export default function reportAQuashedGuiltyFindingRoutes({
   const reportAQuashedGuiltyFindingRoute = new ReportAQuashedGuiltyFindingRoutes(
     userService,
     outcomesService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const reportAQuashedGuiltyFindingEditRoute = new ReportAQuashedGuiltyFindingEditRoutes(
     userService,
     outcomesService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

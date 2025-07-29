@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-cycle
 import config from '../config'
 import RestClient from './restClient'
 import { AgencyId } from './PrisonLocationResult'

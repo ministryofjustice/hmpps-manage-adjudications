@@ -30,7 +30,7 @@ export default class AwardPunishmentsPage {
   constructor(
     pageType: PageRequestType,
     private readonly punishmentsService: PunishmentsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }

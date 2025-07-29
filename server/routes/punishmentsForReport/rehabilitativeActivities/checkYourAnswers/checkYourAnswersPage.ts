@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import moment from 'moment'
 import UserService from '../../../../services/userService'
@@ -19,7 +18,7 @@ type PageData = {
 export default class CheckYourAnswersCompleteRehabilitativeActivityPage {
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -93,7 +92,7 @@ export default class CheckYourAnswersCompleteRehabilitativeActivityPage {
         user,
         outcome,
         +daysToActivate,
-        suspendedUntil
+        suspendedUntil,
       )
       req.session.rehabCompletionInformation = null
       return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))

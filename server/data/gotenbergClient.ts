@@ -18,7 +18,7 @@ export default class GotenbergClient {
     html: string,
     headerHtml: string,
     footerHtml: string,
-    options: PdfMargins = {}
+    options: PdfMargins = {},
   ): Promise<Buffer> {
     const { marginBottom, marginLeft, marginRight, marginTop } = options
     const request = superagent

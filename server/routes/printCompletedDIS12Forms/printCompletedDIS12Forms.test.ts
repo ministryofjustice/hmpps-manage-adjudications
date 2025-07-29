@@ -16,7 +16,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const testData = new TestData() as jest.Mocked<TestData>
 
@@ -74,7 +74,7 @@ describe('GET /print-completed-DIS-forms', () => {
             toDate: '07/12/2022',
             locationId: '25655',
             issueStatus: allIssueStatuses,
-          })
+          }),
         )
         .expect('Content-Type', /html/)
         .expect(response => {
@@ -113,7 +113,7 @@ describe('POST /issue-DIS1-2', () => {
       })
       .expect(
         'Location',
-        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=&issueStatus=ISSUED&issueStatus=NOT_ISSUED`
+        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=&issueStatus=ISSUED&issueStatus=NOT_ISSUED`,
       )
   })
   it('should use correct filter parameters from form - with location', () => {
@@ -127,7 +127,7 @@ describe('POST /issue-DIS1-2', () => {
       })
       .expect(
         'Location',
-        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174&issueStatus=ISSUED&issueStatus=NOT_ISSUED`
+        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174&issueStatus=ISSUED&issueStatus=NOT_ISSUED`,
       )
   })
   it('should use correct filter parameters from form - with just ISSUED', () => {
@@ -141,7 +141,7 @@ describe('POST /issue-DIS1-2', () => {
       })
       .expect(
         'Location',
-        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174&issueStatus=ISSUED`
+        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174&issueStatus=ISSUED`,
       )
   })
   it('should use correct filter parameters from form - with just NOT_ISSUED', () => {
@@ -155,7 +155,7 @@ describe('POST /issue-DIS1-2', () => {
       })
       .expect(
         'Location',
-        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174&issueStatus=NOT_ISSUED`
+        `${adjudicationUrls.printCompletedDisForms.root}?fromDate=04%2F12%2F2022&toDate=06%2F12%2F2022&locationId=722174&issueStatus=NOT_ISSUED`,
       )
   })
   it('should cause validation error if toDate is before fromDate', () => {

@@ -34,7 +34,7 @@ const createTasks = (
   transferOutTotal: number,
   transferAllTotal: number,
   hearingsToScheduleTotal: number,
-  activeCaseloadName: string
+  activeCaseloadName: string,
 ): TaskType[] => {
   return [
     {
@@ -164,7 +164,7 @@ const createTasks = (
 export default class HomepageRoutes {
   constructor(
     private readonly userService: UserService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
@@ -181,14 +181,14 @@ export default class HomepageRoutes {
       transferOutTotal,
       transferAllTotal,
       hearingsToScheduleTotal,
-      userCaseloadName
+      userCaseloadName,
     ).filter(task => task.enabled)
     const reviewerTasks = enabledTasks.filter(task => task.roles.includes('ADJUDICATIONS_REVIEWER'))
 
     const disRelatedTasksPredicate = (task: TaskType) =>
       task.description?.includes('DIS') || task.heading.includes('View hearing outcomes')
     const reporterTasks = enabledTasks.filter(
-      task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !disRelatedTasksPredicate(task)
+      task => !task.roles.includes('ADJUDICATIONS_REVIEWER') && !disRelatedTasksPredicate(task),
     )
     const disRelatedTasks = createTasks(
       reviewTotal,
@@ -196,7 +196,7 @@ export default class HomepageRoutes {
       transferOutTotal,
       transferAllTotal,
       hearingsToScheduleTotal,
-      userCaseloadName
+      userCaseloadName,
     ).filter(disRelatedTasksPredicate)
 
     const dataInsightsTask = {

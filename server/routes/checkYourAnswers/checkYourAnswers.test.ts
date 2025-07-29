@@ -25,7 +25,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -118,7 +118,7 @@ beforeEach(() => {
 
   app = appWithAllRoutes(
     { production: false },
-    { placeOnReportService, locationService, decisionTreeService, reportedAdjudicationsService }
+    { placeOnReportService, locationService, decisionTreeService, reportedAdjudicationsService },
   )
 })
 
@@ -135,7 +135,7 @@ describe('GET /check-your-answers', () => {
         expect(response.text).toContain('Check your answers')
         expect(response.text).toContain('Accept and place on report')
         expect(response.text).toContain(
-          'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.'
+          'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.',
         )
         expect(response.text).toContain('What type of offence did Phyllis Smith commit?')
         expect(response.text).toContain('Assault, fighting, or endangering the health or personal safety of others')

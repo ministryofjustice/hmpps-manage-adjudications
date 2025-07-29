@@ -49,8 +49,8 @@ describe('POST /hearing-outcome independent adjudicator', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`,
       )
   })
   it('should redirect to the correct URL - refer to independent adjudicator', () => {
@@ -65,8 +65,8 @@ describe('POST /hearing-outcome independent adjudicator', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_INAD`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_INAD`,
       )
   })
   it('should redirect to the correct URL - complete', () => {
@@ -80,7 +80,7 @@ describe('POST /hearing-outcome independent adjudicator', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Roxanne%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Roxanne%20Red&hearingOutcome=COMPLETE`,
       )
   })
   it('should redirect to the correct URL - adjourn', () => {
@@ -94,7 +94,7 @@ describe('POST /hearing-outcome independent adjudicator', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingAdjourned.urls.start('100')}?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN`
+        `${adjudicationUrls.hearingAdjourned.urls.start('100')}?adjudicator=Roxanne%20Red&hearingOutcome=ADJOURN`,
       )
   })
 })
@@ -111,8 +111,8 @@ describe('POST /hearing-outcome governor', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
-          '100'
-        )}?adjudicator=RRED_GEN&hearingOutcome=REFER_POLICE`
+          '100',
+        )}?adjudicator=RRED_GEN&hearingOutcome=REFER_POLICE`,
       )
   })
   it('should redirect to the correct URL - refer to independent adjudicator', () => {
@@ -126,7 +126,7 @@ describe('POST /hearing-outcome governor', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingReasonForReferral.urls.start('100')}?adjudicator=RRED_GEN&hearingOutcome=REFER_INAD`
+        `${adjudicationUrls.hearingReasonForReferral.urls.start('100')}?adjudicator=RRED_GEN&hearingOutcome=REFER_INAD`,
       )
   })
   it('should redirect to the correct URL - complete', () => {
@@ -140,7 +140,7 @@ describe('POST /hearing-outcome governor', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=RRED_GEN&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=RRED_GEN&hearingOutcome=COMPLETE`,
       )
   })
   it('should redirect to the correct URL - adjourn', () => {
@@ -154,7 +154,7 @@ describe('POST /hearing-outcome governor', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.hearingAdjourned.urls.start('100')}?adjudicator=RRED_GEN&hearingOutcome=ADJOURN`
+        `${adjudicationUrls.hearingAdjourned.urls.start('100')}?adjudicator=RRED_GEN&hearingOutcome=ADJOURN`,
       )
   })
 })

@@ -93,7 +93,7 @@ context('Punishment - when is it suspended until?', () => {
     })
     it('should go to correct page when suspended - meets requirements for rehab activity', () => {
       cy.visit(
-        `${adjudicationUrls.punishmentSuspendedUntil.urls.start('101')}?punishmentType=PRIVILEGE&privilegeType=TV`
+        `${adjudicationUrls.punishmentSuspendedUntil.urls.start('101')}?punishmentType=PRIVILEGE&privilegeType=TV`,
       )
       const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
       const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')

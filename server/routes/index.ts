@@ -127,7 +127,7 @@ export default function routes(
     punishmentsService,
     chartApiService,
     createOnBehalfOfSessionService,
-  }: Services
+  }: Services,
 ): Router {
   router.use(
     adjudicationUrls.offenceCodeSelection.root,
@@ -136,13 +136,13 @@ export default function routes(
       userService,
       decisionTreeService,
       prisonerSearchService,
-    })
+    }),
   )
   router.use(adjudicationUrls.incidentDetails.root, incidentDetailsRoutes({ placeOnReportService, locationService }))
   router.use(adjudicationUrls.incidentRole.root, incidentRoleRoutes({ placeOnReportService }))
   router.use(
     adjudicationUrls.detailsOfOffence.root,
-    detailsOfOffenceRoutes({ placeOnReportService, decisionTreeService })
+    detailsOfOffenceRoutes({ placeOnReportService, decisionTreeService }),
   )
   router.use(adjudicationUrls.incidentStatement.root, incidentStatementRoutes({ placeOnReportService }))
   router.use(
@@ -152,7 +152,7 @@ export default function routes(
       locationService,
       decisionTreeService,
       reportedAdjudicationsService,
-    })
+    }),
   )
   router.use(adjudicationUrls.confirmedOnReport.root, confirmedOnReportRoutes({ reportedAdjudicationsService }))
   router.use(adjudicationUrls.taskList.root, taskListRoutes({ placeOnReportService }))
@@ -162,31 +162,31 @@ export default function routes(
   router.use(adjudicationUrls.selectAssociatedPrisoner.root, selectAssociatedPrisonerRoutes({ prisonerSearchService }))
   router.use(
     adjudicationUrls.selectAssociatedStaff.root,
-    selectAssociatedStaffRoutes({ userService, placeOnReportService })
+    selectAssociatedStaffRoutes({ userService, placeOnReportService }),
   )
   router.use(adjudicationUrls.yourCompletedReports.root, yourCompletedReportsRoutes({ reportedAdjudicationsService }))
   router.use(
     adjudicationUrls.allCompletedReports.root,
-    allCompletedReportsRoutes({ reportedAdjudicationsService, userService })
+    allCompletedReportsRoutes({ reportedAdjudicationsService, userService }),
   )
   router.use(
     adjudicationUrls.reportsTransferredIn.root,
-    reportsTransferredInRoutes({ reportedAdjudicationsService, userService })
+    reportsTransferredInRoutes({ reportedAdjudicationsService, userService }),
   )
   router.use(
     adjudicationUrls.reportsTransferredOut.root,
-    reportsTransferredOutRoutes({ reportedAdjudicationsService, userService })
+    reportsTransferredOutRoutes({ reportedAdjudicationsService, userService }),
   )
   router.use(
     adjudicationUrls.reportsTransferredAll.root,
-    reportsTransferredAllRoutes({ reportedAdjudicationsService, userService })
+    reportsTransferredAllRoutes({ reportedAdjudicationsService, userService }),
   )
   router.use(adjudicationUrls.continueReport.root, continueReportSelectRoutes({ placeOnReportService }))
   router.use(adjudicationUrls.deleteReport.root, deleteReportRoutes({ placeOnReportService }))
   router.use(adjudicationUrls.printReport.root, printReportRoutes({ reportedAdjudicationsService }))
   router.use(
     adjudicationUrls.printPdf.root,
-    disPdfRoutes({ reportedAdjudicationsService, decisionTreeService, prisonerSearchService })
+    disPdfRoutes({ reportedAdjudicationsService, decisionTreeService, prisonerSearchService }),
   )
   router.use(
     adjudicationUrls.prisonerReport.root,
@@ -195,7 +195,7 @@ export default function routes(
       userService,
       decisionTreeService,
       locationService,
-    })
+    }),
   )
   router.use(adjudicationUrls.deletePerson.root, deletePersonRoutes({ placeOnReportService, userService }))
   router.use(
@@ -204,7 +204,7 @@ export default function routes(
       placeOnReportService,
       damagesSessionService,
       reportedAdjudicationsService,
-    })
+    }),
   )
   router.use(
     adjudicationUrls.detailsOfEvidence.root,
@@ -212,7 +212,7 @@ export default function routes(
       placeOnReportService,
       evidenceSessionService,
       reportedAdjudicationsService,
-    })
+    }),
   )
   router.use(
     adjudicationUrls.detailsOfWitnesses.root,
@@ -222,19 +222,19 @@ export default function routes(
       userService,
       decisionTreeService,
       reportedAdjudicationsService,
-    })
+    }),
   )
   router.use('/', homepageRoutes({ userService, reportedAdjudicationsService }))
   router.use(adjudicationUrls.ageOfPrisoner.root, ageOfPrisonerRoutes({ placeOnReportService }))
 
   router.use(
     adjudicationUrls.incidentAssociate.root,
-    associatedPrisonerRoutes({ placeOnReportService, prisonerSearchService })
+    associatedPrisonerRoutes({ placeOnReportService, prisonerSearchService }),
   )
 
   router.use(
     adjudicationUrls.hearingDetails.root,
-    hearingTabRoutes({ reportedAdjudicationsService, userService, outcomesService })
+    hearingTabRoutes({ reportedAdjudicationsService, userService, outcomesService }),
   )
 
   router.use(adjudicationUrls.forms.root, formsTabRoutes({ reportedAdjudicationsService, userService }))
@@ -242,11 +242,11 @@ export default function routes(
   router.use(adjudicationUrls.dataInsights.root, totalsAdjudicationsAndLocationsRoutes({ chartApiService }))
   router.use(
     adjudicationUrls.dataInsights.urls.totalsAdjudicationsAndLocations(),
-    totalsAdjudicationsAndLocationsRoutes({ chartApiService })
+    totalsAdjudicationsAndLocationsRoutes({ chartApiService }),
   )
   router.use(
     adjudicationUrls.dataInsights.urls.protectedAndResponsivityCharacteristics(),
-    protectedAndResponsivityCharacteristicsRoutes({ chartApiService })
+    protectedAndResponsivityCharacteristicsRoutes({ chartApiService }),
   )
   router.use(adjudicationUrls.dataInsights.urls.offenceType(), offenceTypeRoutes({ chartApiService }))
   router.use(adjudicationUrls.dataInsights.urls.punishments(), punishmentsRoutes({ chartApiService }))
@@ -254,194 +254,194 @@ export default function routes(
 
   router.use(
     adjudicationUrls.scheduleHearing.root,
-    scheduleHearingRoutes({ reportedAdjudicationsService, locationService, userService })
+    scheduleHearingRoutes({ reportedAdjudicationsService, locationService, userService }),
   )
 
   router.use(
     adjudicationUrls.viewScheduledHearings.root,
-    viewScheduledHearingsRoutes({ reportedAdjudicationsService, userService })
+    viewScheduledHearingsRoutes({ reportedAdjudicationsService, userService }),
   )
 
   router.use(
     adjudicationUrls.acceptedReportConfirmation.root,
-    acceptedReportConfirmationRoutes({ reportedAdjudicationsService })
+    acceptedReportConfirmationRoutes({ reportedAdjudicationsService }),
   )
 
   router.use(adjudicationUrls.selectGender.root, selectGenderRoutes({ placeOnReportService }))
 
   router.use(
     adjudicationUrls.createOnBehalfOf.root,
-    createOnBehalfOfRoutes({ placeOnReportService, createOnBehalfOfSessionService })
+    createOnBehalfOfRoutes({ placeOnReportService, createOnBehalfOfSessionService }),
   )
 
   router.use(
     adjudicationUrls.confirmDISFormsIssued.root,
-    confirmDISFormsIssuedRoutes({ reportedAdjudicationsService, locationService })
+    confirmDISFormsIssuedRoutes({ reportedAdjudicationsService, locationService }),
   )
 
   router.use(adjudicationUrls.addIssueDateTime.root, addDateAndTimeOfIssueRoutes({ reportedAdjudicationsService }))
 
   router.use(
     adjudicationUrls.printCompletedDisForms.root,
-    printCompletedDISFormsRoutes({ reportedAdjudicationsService, locationService })
+    printCompletedDISFormsRoutes({ reportedAdjudicationsService, locationService }),
   )
 
   router.use(adjudicationUrls.enterHearingOutcome.root, enterHearingOutcomeRoutes({ userService, hearingsService }))
 
   router.use(
     adjudicationUrls.hearingReasonForReferral.root,
-    hearingReasonForReferralRoutes({ hearingsService, userService, reportedAdjudicationsService })
+    hearingReasonForReferralRoutes({ hearingsService, userService, reportedAdjudicationsService }),
   )
 
   router.use(
     adjudicationUrls.reasonForReferral.root,
-    policeReasonForReferralRoutes({ outcomesService, userService, reportedAdjudicationsService })
+    policeReasonForReferralRoutes({ outcomesService, userService, reportedAdjudicationsService }),
   )
 
   router.use(
     adjudicationUrls.govReasonForReferral.root,
-    govReasonForReferralRoutes({ userService, reportedAdjudicationsService, outcomesService })
+    govReasonForReferralRoutes({ userService, reportedAdjudicationsService, outcomesService }),
   )
 
   router.use(adjudicationUrls.hearingReferralConfirmation.root, hearingReferralConfirmationRoutes({ userService }))
 
   router.use(
     adjudicationUrls.hearingAdjourned.root,
-    hearingAdjournedRoutes({ hearingsService, userService, reportedAdjudicationsService })
+    hearingAdjournedRoutes({ hearingsService, userService, reportedAdjudicationsService }),
   )
   router.use(
     adjudicationUrls.hearingPleaAndFinding.root,
-    hearingPleaAndFindingRoutes({ userService, hearingsService, reportedAdjudicationsService })
+    hearingPleaAndFindingRoutes({ userService, hearingsService, reportedAdjudicationsService }),
   )
 
   router.use(adjudicationUrls.nextStepsPolice.root, nextStepPoliceRoutes({ userService, outcomesService }))
   router.use(
     adjudicationUrls.reasonForNotProceeding.root,
-    notProceedRoutes({ userService, outcomesService, hearingsService, reportedAdjudicationsService })
+    notProceedRoutes({ userService, outcomesService, hearingsService, reportedAdjudicationsService }),
   )
   router.use(adjudicationUrls.nextStepsInad.root, nextStepInadRoutes({ userService }))
   router.use(adjudicationUrls.nextStepsGov.root, nextStepGovRoutes({ userService }))
   router.use(
     adjudicationUrls.hearingReasonForFinding.root,
-    reasonForFindingRoutes({ reportedAdjudicationsService, hearingsService, userService })
+    reasonForFindingRoutes({ reportedAdjudicationsService, hearingsService, userService }),
   )
   router.use(
     adjudicationUrls.reportAQuashedGuiltyFinding.root,
-    reportAQuashedGuiltyFindingRoutes({ outcomesService, userService, reportedAdjudicationsService })
+    reportAQuashedGuiltyFindingRoutes({ outcomesService, userService, reportedAdjudicationsService }),
   )
   router.use(
     adjudicationUrls.hearingsCheckAnswers.root,
-    hearingCheckYourAnswersRoutes({ hearingsService, userService, reportedAdjudicationsService })
+    hearingCheckYourAnswersRoutes({ hearingsService, userService, reportedAdjudicationsService }),
   )
   router.use(
     adjudicationUrls.punishmentsAndDamages.root,
-    punishmentsAndDamagesRoutes({ reportedAdjudicationsService, userService, punishmentsService })
+    punishmentsAndDamagesRoutes({ reportedAdjudicationsService, userService, punishmentsService }),
   )
   router.use(adjudicationUrls.punishmentComment.root, PunishmentCommentRoutes({ userService, punishmentsService }))
   router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
 
   router.use(
     adjudicationUrls.paybackPunishmentSpecifics.root,
-    paybackPunishmentSpecificsRoutes({ userService, punishmentsService })
+    paybackPunishmentSpecificsRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.paybackPunishmentDuration.root,
-    paybackPunishmentDurationRoutes({ userService, punishmentsService })
+    paybackPunishmentDurationRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.punishmentHasRehabilitativeActivities.root,
-    isThereRehabilitativeActivitiesRoutes({ userService, punishmentsService })
+    isThereRehabilitativeActivitiesRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.root,
-    HasRehabilitativeActivitiesDetailsRoutes({ userService, punishmentsService })
+    HasRehabilitativeActivitiesDetailsRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.rehabilitativeActivityDetails.root,
-    rehabilitativeActivityDetailsRoutes({ userService, punishmentsService })
+    rehabilitativeActivityDetailsRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.removeRehabilitativeActivity.root,
-    RemoveRehabilitativeActivityRoutes({ userService, punishmentsService })
+    RemoveRehabilitativeActivityRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.editRehabilitativeActivity.root,
-    EditRehabilitativeActivityPage({ userService, punishmentsService })
+    EditRehabilitativeActivityPage({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.completeRehabilitativeActivity.root,
-    CompleteRehabilitativeActivityRoutes({ userService, punishmentsService })
+    CompleteRehabilitativeActivityRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.incompleteRehabilitativeActivity.root,
-    IncompleteRehabilitativeActivityRoutes({ userService, punishmentsService })
+    IncompleteRehabilitativeActivityRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.root,
-    confirmRehabCompleteRoutes({ userService, punishmentsService })
+    confirmRehabCompleteRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.paybackPunishmentCompletionDate.root,
-    paybackPunishmentCompletionRoutes({ userService, punishmentsService })
+    paybackPunishmentCompletionRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.paybackPunishmentDetails.root,
-    PaybackPunishmentDetailsRoutes({ userService, punishmentsService })
+    PaybackPunishmentDetailsRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.paybackPunishmentSchedule.root,
-    paybackPunishmentScheduleRoutes({ userService, punishmentsService })
+    paybackPunishmentScheduleRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.numberOfAdditionalDays.root,
-    numberOfAdditionalDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    numberOfAdditionalDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
   )
 
   router.use(
     adjudicationUrls.isPunishmentSuspendedAdditionalDays.root,
-    willPunishmentBeSuspendedRoutes({ userService, punishmentsService })
+    willPunishmentBeSuspendedRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.isPunishmentConsecutive.root,
-    willPunishmentBeConsecutiveRoutes({ userService, punishmentsService })
+    willPunishmentBeConsecutiveRoutes({ userService, punishmentsService }),
   )
   router.use(
     adjudicationUrls.whichPunishmentIsItConsecutiveTo.root,
-    whichPunishmentConsecutiveToRoutes({ userService, punishmentsService })
+    whichPunishmentConsecutiveToRoutes({ userService, punishmentsService }),
   )
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
   router.use(adjudicationUrls.checkPunishments.root, checkPunishmentRoutes({ punishmentsService, userService }))
   router.use(
     adjudicationUrls.activateSuspendedPunishments.root,
-    activateSuspendedPunishmentsRoutes({ punishmentsService, userService })
+    activateSuspendedPunishmentsRoutes({ punishmentsService, userService }),
   )
   router.use(
     adjudicationUrls.reasonForChangePunishment.root,
-    reasonForChangeRoutes({ punishmentsService, userService })
+    reasonForChangeRoutes({ punishmentsService, userService }),
   )
 
   router.use(
     adjudicationUrls.awardedPunishmentsAndDamages.root,
-    awardedPunishmentsAndDamagesRoutes({ reportedAdjudicationsService, locationService, userService })
+    awardedPunishmentsAndDamagesRoutes({ reportedAdjudicationsService, locationService, userService }),
   )
 
   router.use(
     adjudicationUrls.reviewerEditOffenceWarning.root,
-    reviewerEditOffenceWarningRoute({ decisionTreeService, reportedAdjudicationsService, userService })
+    reviewerEditOffenceWarningRoute({ decisionTreeService, reportedAdjudicationsService, userService }),
   )
   router.use(adjudicationUrls.damagesAmount.root, damagesAmountRoutes({ punishmentsService, userService }))
 
@@ -449,27 +449,27 @@ export default function routes(
 
   router.use(
     adjudicationUrls.punishmentNumberOfDays.root,
-    punishmentNumberOfDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    punishmentNumberOfDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
   )
   router.use(
     adjudicationUrls.punishmentIsSuspended.root,
-    punishmentSuspendedRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    punishmentSuspendedRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
   )
   router.use(
     adjudicationUrls.punishmentSuspendedUntil.root,
-    punishmentSuspendedUntilDateRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    punishmentSuspendedUntilDateRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
   )
   router.use(
     adjudicationUrls.punishmentStartDate.root,
-    enterStartDateRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    enterStartDateRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
   )
   router.use(
     adjudicationUrls.punishmentAutomaticDateSchedule.root,
-    autoPunishmentScheduleRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    autoPunishmentScheduleRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
   )
   router.use(
     adjudicationUrls.whenWillPunishmentStart.root,
-    punishmentStartDateChoiceRoutes({ userService, punishmentsService, reportedAdjudicationsService })
+    punishmentStartDateChoiceRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
   )
   router.use(
     adjudicationUrls.suspendedPunishmentNumberOfDays.root,
@@ -477,7 +477,7 @@ export default function routes(
       userService,
       punishmentsService,
       reportedAdjudicationsService,
-    })
+    }),
   )
   router.use(
     adjudicationUrls.suspendedPunishmentStartDateChoice.root,
@@ -485,7 +485,7 @@ export default function routes(
       userService,
       punishmentsService,
       reportedAdjudicationsService,
-    })
+    }),
   )
   router.use(
     adjudicationUrls.suspendedPunishmentStartDate.root,
@@ -493,14 +493,14 @@ export default function routes(
       userService,
       punishmentsService,
       reportedAdjudicationsService,
-    })
+    }),
   )
   router.use(
     adjudicationUrls.suspendedPunishmentAutoDates.root,
     autoPunishmentSuspendedScheduleRoutes({
       userService,
       punishmentsService,
-    })
+    }),
   )
   router.use(
     adjudicationUrls.punishmentSuspendedUntilAdditionalDays.root,
@@ -508,15 +508,15 @@ export default function routes(
       userService,
       punishmentsService,
       reportedAdjudicationsService,
-    })
+    }),
   )
   router.use(
     adjudicationUrls.adjudicationHistory.root,
-    adjudicationHistoryRoutes({ reportedAdjudicationsService, userService })
+    adjudicationHistoryRoutes({ reportedAdjudicationsService, userService }),
   )
   router.use(
     adjudicationUrls.activePunishments.root,
-    activePunishmentsRoutes({ reportedAdjudicationsService, punishmentsService })
+    activePunishmentsRoutes({ reportedAdjudicationsService, punishmentsService }),
   )
   router.use(
     adjudicationUrls.prisonerReportConsolidated.root,
@@ -525,7 +525,7 @@ export default function routes(
       userService,
       decisionTreeService,
       punishmentsService,
-    })
+    }),
   )
 
   return router

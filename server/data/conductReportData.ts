@@ -13,7 +13,7 @@ export default class conductReportData {
   constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData) {
     this.chargeNumber = chargeNumber
     this.prisonerDisplayName = convertToTitleCase(
-      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
+      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`,
     )
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${

@@ -9,7 +9,7 @@ import { DISFormfilterFromUiFilter } from '../../../utils/adjudicationFilterHelp
 export default class FormsTabRoute {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
@@ -21,16 +21,16 @@ export default class FormsTabRoute {
     const { chargeNumber } = req.params
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
-      user
+      user,
     )
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(
       reportedAdjudication.prisonerNumber,
-      user
+      user,
     )
 
     const formattedDisIssues = await this.reportedAdjudicationsService.handleDisIssueHistoryFormatting(
       reportedAdjudication,
-      user
+      user,
     )
     const filter = DISFormfilterFromUiFilter({
       fromDate: momentDateToDatePicker(moment().subtract(6, 'months')),
@@ -38,7 +38,7 @@ export default class FormsTabRoute {
       locationId: null,
     })
     const results = (await this.reportedAdjudicationsService.getAdjudicationDISFormData(user, filter, false)).filter(
-      adj => adj.chargeNumber === chargeNumber
+      adj => adj.chargeNumber === chargeNumber,
     )
     const { path } = req.query
     const tabUrls = this.getTabUrls(path as string, chargeNumber)

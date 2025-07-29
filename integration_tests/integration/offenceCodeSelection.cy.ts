@@ -213,7 +213,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.victimPrisonerName().contains('Paul Wright')
     whoWasAssaultedPage.continue().click()
     const protectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     protectedCharacteristic.checkOnPage()
   })
@@ -260,7 +260,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.victimOfficerName().contains('Test User')
     whoWasAssaultedPage.continue().click()
     const protectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     protectedCharacteristic.checkOnPage()
   })
@@ -319,7 +319,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.victimOtherPersonSearchNameInput().type('James Peterson')
     whoWasAssaultedPage.continue().click()
     const protectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     protectedCharacteristic.checkOnPage()
   })
@@ -337,7 +337,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type(prisonerOutsideEstablishmentNumber)
     whoWasAssaultedPage.continue().click()
     const protectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     protectedCharacteristic.checkOnPage()
   })
@@ -358,7 +358,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type(prisonerOutsideEstablishmentNumber)
     whoWasAssaultedPage.continue().click()
     const protectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     protectedCharacteristic.checkOnPage()
   })
@@ -379,7 +379,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.simulateReturnFromStaffSearch(100, '1-1-1', '1-1-1-3', 'CSTANLEY')
     whoWasAssaultedPage.continue().click()
     const protectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     protectedCharacteristic.radio('1-1-1-3-2').click()
     whoWasAssaultedPage.continue().click()
@@ -399,7 +399,7 @@ context('Offence details', () => {
     whoWasAssaultedPage.prisonerOutsideEstablishmentNumberInput().type(prisonerOutsideEstablishmentNumber)
     whoWasAssaultedPage.continue().click()
     const protectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     protectedCharacteristic.radio('1-1-1-4-2').click()
     whoWasAssaultedPage.continue().click()

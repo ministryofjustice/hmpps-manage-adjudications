@@ -60,7 +60,7 @@ export default class IncidentStatementRoutes {
         draftId,
         incidentStatement,
         statementComplete,
-        user
+        user,
       )
       const { draftAdjudication } = draftAdjudicationResult
 

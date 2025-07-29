@@ -8,7 +8,7 @@ export default class RemoveRehabilitativeActivityRoutes {
 
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.page = new RemoveRehabilitativeActivityPage(userService, punishmentsService)
   }

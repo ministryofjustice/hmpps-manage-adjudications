@@ -16,7 +16,7 @@ export default class Dis4Pdf {
 
     try {
       const adjudicationDetails = await withRetry(() =>
-        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
+        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user),
       )
 
       // Validate completeness of data
@@ -26,7 +26,7 @@ export default class Dis4Pdf {
 
       const adjudicationHearingContinuationData = new AdjudicationHearingContinuationData(
         chargeNumber,
-        adjudicationDetails
+        adjudicationDetails,
       )
 
       res.renderPdf(
@@ -39,7 +39,7 @@ export default class Dis4Pdf {
         {
           filename: `adjudication-hearing-continuation-${chargeNumber}.pdf`,
           pdfMargins,
-        }
+        },
       )
     } catch (error) {
       log.error('Error rendering PDF:', error)

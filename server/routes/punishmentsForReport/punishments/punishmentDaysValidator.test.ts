@@ -87,7 +87,7 @@ describe('validateForm', () => {
     expect(validateForm(PunishmentType.PRIVILEGE, 43, false, PrivilegeType.CANTEEN)).toEqual({
       href: '#duration',
       text: `Days for loss of ${convertPrivilegeType(
-        PrivilegeType.CANTEEN
+        PrivilegeType.CANTEEN,
       )} cannot be more than 42 days for an offence under Adult rules`,
     })
   })
@@ -114,7 +114,7 @@ describe('validateForm', () => {
     expect(validateForm(PunishmentType.PRIVILEGE, 22, true, PrivilegeType.CANTEEN)).toEqual({
       href: '#duration',
       text: `Days for loss of ${convertPrivilegeType(
-        PrivilegeType.CANTEEN
+        PrivilegeType.CANTEEN,
       )} cannot be more than 21 days for an offence under YOI rules`,
     })
   })

@@ -10,13 +10,13 @@ export default class ReasonForFindingEditRoutes {
   constructor(
     reportedAdjudicationsService: ReportedAdjudicationsService,
     hearingsService: HearingsService,
-    userService: UserService
+    userService: UserService,
   ) {
     this.page = new ReasonForFindingPage(
       PageRequestType.EDIT,
       reportedAdjudicationsService,
       hearingsService,
-      userService
+      userService,
     )
   }
 

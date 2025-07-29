@@ -10,13 +10,13 @@ export default class HearingAdjournRoutes {
   constructor(
     hearingsService: HearingsService,
     userService: UserService,
-    reportedAdjudicationsService: ReportedAdjudicationsService
+    reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new HearingAdjournPage(
       PageRequestType.CREATION,
       hearingsService,
       userService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

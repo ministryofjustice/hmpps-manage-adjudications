@@ -8,7 +8,7 @@ export default class CheckCreateOnBehalfOfRoutes {
 
   constructor(
     placeOnReportService: PlaceOnReportService,
-    createOnBehalfOfSessionService: CreateOnBehalfOfSessionService
+    createOnBehalfOfSessionService: CreateOnBehalfOfSessionService,
   ) {
     this.page = new CheckCreateOnBehalfOfPage(placeOnReportService, createOnBehalfOfSessionService)
   }

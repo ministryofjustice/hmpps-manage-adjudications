@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReasonForChangePage, { PageRequestType } from './reasonForChangePage'
@@ -9,7 +8,7 @@ export default class ReasonForChangePunishmentEditRoutes {
 
   constructor(
     private readonly punishmentsService: PunishmentsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.page = new ReasonForChangePage(PageRequestType.EDIT, punishmentsService, userService)
   }

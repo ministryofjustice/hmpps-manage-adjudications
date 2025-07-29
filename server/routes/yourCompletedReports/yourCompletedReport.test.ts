@@ -13,7 +13,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -105,7 +105,7 @@ describe('POST /your-completed-reports', () => {
       })
       .expect(
         'Location',
-        `${adjudicationUrls.yourCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW`
+        `${adjudicationUrls.yourCompletedReports.root}?fromDate=01%2F01%2F2021&toDate=02%2F01%2F2021&status=AWAITING_REVIEW`,
       )
   })
 })

@@ -135,8 +135,8 @@ context('Incident details (edit after completion of report)', () => {
     cy.visit(
       `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         'G6415GD',
-        34
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+        34,
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
     )
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.timeInputHours().clear()
@@ -152,8 +152,8 @@ context('Incident details (edit after completion of report)', () => {
     cy.visit(
       `${adjudicationUrls.incidentDetails.urls.submittedEdit(
         'G6415GD',
-        34
-      )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+        34,
+      )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
     )
     const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
     incidentDetailsPage.exitButton().click()
@@ -169,8 +169,8 @@ context('Incident details (edit after completion of report)', () => {
       cy.visit(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          34,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.timeInputHours().clear()
@@ -221,8 +221,8 @@ context('Incident details (edit after completion of report)', () => {
       cy.visit(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          34,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.timeInputHours().clear()
@@ -239,8 +239,8 @@ context('Incident details (edit after completion of report)', () => {
       cy.visit(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          34,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.timeInputHoursDiscovery().clear()
@@ -258,8 +258,8 @@ context('Incident details (edit after completion of report)', () => {
       cy.visit(
         `${adjudicationUrls.incidentDetails.urls.submittedEdit(
           'G6415GD',
-          34
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          34,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       const incidentDetailsPage: IncidentDetails = Page.verifyOnPage(IncidentDetails)
       incidentDetailsPage.radioButtonsDiscovery().find('input[value="No"]').click()

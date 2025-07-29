@@ -25,7 +25,7 @@ export default class HearingsService {
     adjudicatorName: string,
     referralReason: string,
     referGovReason: ReferGovReason,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
@@ -43,7 +43,7 @@ export default class HearingsService {
     details: string,
     adjournReason: HearingOutcomeAdjournReason,
     plea: HearingOutcomePlea,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
@@ -58,7 +58,7 @@ export default class HearingsService {
   async getHearingOutcome(chargeNumber: string, user: User) {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const adjudication = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
-      chargeNumber
+      chargeNumber,
     )
     const { outcomes } = adjudication.reportedAdjudication
     const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
@@ -68,7 +68,7 @@ export default class HearingsService {
   async getHearingAdjudicatorType(chargeNumber: string, user: User) {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const adjudication = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
-      chargeNumber
+      chargeNumber,
     )
     const { outcomes } = adjudication.reportedAdjudication
     const latestHearing = outcomes.length && outcomes[outcomes.length - 1]
@@ -80,7 +80,7 @@ export default class HearingsService {
     adjudicatorName: string,
     plea: HearingOutcomePlea,
     details: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
@@ -90,7 +90,7 @@ export default class HearingsService {
 
     return new ManageAdjudicationsUserTokensClient(user).createDismissedHearingOutcome(
       chargeNumber,
-      hearingOutcomeDetails
+      hearingOutcomeDetails,
     )
   }
 
@@ -98,7 +98,7 @@ export default class HearingsService {
     chargeNumber: string,
     adjudicatorName: string,
     plea: HearingOutcomePlea,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator: adjudicatorName,
@@ -107,7 +107,7 @@ export default class HearingsService {
 
     return new ManageAdjudicationsUserTokensClient(user).createChargeProvedHearingOutcome(
       chargeNumber,
-      hearingOutcomeDetails
+      hearingOutcomeDetails,
     )
   }
 
@@ -117,7 +117,7 @@ export default class HearingsService {
     plea: HearingOutcomePlea,
     reason: NotProceedReason,
     details: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const hearingOutcomeDetails = {
       adjudicator,
@@ -128,7 +128,7 @@ export default class HearingsService {
 
     return new ManageAdjudicationsUserTokensClient(user).createNotProceedHearingOutcome(
       chargeNumber,
-      hearingOutcomeDetails
+      hearingOutcomeDetails,
     )
   }
 
@@ -138,7 +138,7 @@ export default class HearingsService {
     adjournReason: HearingOutcomeAdjournReason,
     plea: HearingOutcomePlea,
     user: User,
-    adjudicator?: string
+    adjudicator?: string,
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
@@ -149,7 +149,7 @@ export default class HearingsService {
     return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(
       chargeNumber,
       ReportedAdjudicationStatus.ADJOURNED,
-      data
+      data,
     )
   }
 
@@ -159,7 +159,7 @@ export default class HearingsService {
     referralReason: string,
     user: User,
     adjudicator?: string,
-    referGovReason?: ReferGovReason
+    referGovReason?: ReferGovReason,
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
@@ -187,7 +187,7 @@ export default class HearingsService {
     chargeNumber: string,
     user: User,
     adjudicator?: string,
-    plea?: HearingOutcomePlea
+    plea?: HearingOutcomePlea,
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
@@ -196,7 +196,7 @@ export default class HearingsService {
     return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(
       chargeNumber,
       ReportedAdjudicationStatus.CHARGE_PROVED,
-      data
+      data,
     )
   }
 
@@ -205,7 +205,7 @@ export default class HearingsService {
     details: string,
     user: User,
     adjudicator?: string,
-    plea?: HearingOutcomePlea
+    plea?: HearingOutcomePlea,
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
@@ -215,7 +215,7 @@ export default class HearingsService {
     return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(
       chargeNumber,
       ReportedAdjudicationStatus.DISMISSED,
-      data
+      data,
     )
   }
 
@@ -225,7 +225,7 @@ export default class HearingsService {
     details: string,
     user: User,
     adjudicator?: string,
-    plea?: HearingOutcomePlea
+    plea?: HearingOutcomePlea,
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       ...(adjudicator && { adjudicator }),
@@ -236,7 +236,7 @@ export default class HearingsService {
     return new ManageAdjudicationsUserTokensClient(user).amendHearingOutcome(
       chargeNumber,
       ReportedAdjudicationStatus.NOT_PROCEED,
-      data
+      data,
     )
   }
 }

@@ -39,7 +39,7 @@ export default class HearingReasonForReferralPage {
     pageType: PageRequestType,
     private readonly hearingsService: HearingsService,
     private readonly userService: UserService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -63,7 +63,7 @@ export default class HearingReasonForReferralPage {
       !hearingOutcome ||
       !adjudicatorName ||
       ![HearingOutcomeCode.REFER_INAD, HearingOutcomeCode.REFER_POLICE, HearingOutcomeCode.REFER_GOV].includes(
-        hearingOutcome
+        hearingOutcome,
       )
     )
       return false
@@ -88,7 +88,7 @@ export default class HearingReasonForReferralPage {
           ReportedAdjudicationStatus.REFER_POLICE,
           ReportedAdjudicationStatus.REFER_GOV,
         ],
-        user
+        user,
       )) as HearingDetailsHistory
       hearingOutcome = lastOutcomeItem.hearing?.outcome
       referGovReason = lastOutcomeItem.outcome?.outcome.referGovReason
@@ -132,7 +132,7 @@ export default class HearingReasonForReferralPage {
           trimmedReferralReason,
           user,
           adjudicator as string,
-          referGovReason
+          referGovReason,
         )
       } else {
         // We need to check the data from previous page hasn't been lost/tampered with
@@ -145,7 +145,7 @@ export default class HearingReasonForReferralPage {
           adjudicator as string,
           trimmedReferralReason,
           referGovReason,
-          user
+          user,
         )
       }
 
