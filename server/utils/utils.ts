@@ -111,7 +111,10 @@ export const formatTimestampTo = (timestamp: string, format: string): string =>
 export const numberRange = (start: number, end: number): number[] => generateRange(start, end, _ => _)
 
 export function generateRange<T>(start: number, end: number, generator: (index: number) => T): T[] {
-  return Array(end - start + 1)
+  const length = end - start + 1
+  if (!Number.isFinite(length) || length <= 0) return []
+
+  return Array(length)
     .fill(null)
     .map((_, idx) => generator(start + idx))
 }
