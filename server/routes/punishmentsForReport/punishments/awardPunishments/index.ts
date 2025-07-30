@@ -17,13 +17,13 @@ export default function awardPunishmentsRoutes({
   const punishmentsUsingApi = new AwardPunishmentsPage(
     PageRequestType.PUNISHMENTS_FROM_API,
     punishmentsService,
-    userService
+    userService,
   )
 
   const punishmentsUsingSession = new AwardPunishmentsPage(
     PageRequestType.PUNISHMENTS_FROM_SESSION,
     punishmentsService,
-    userService
+    userService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

@@ -16,7 +16,7 @@ type PageData = {
 export default class PrisonerSelectRoutes {
   constructor(
     private readonly prisonerSearchService: PrisonerSearchService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -71,7 +71,7 @@ export default class PrisonerSelectRoutes {
       url.format({
         pathname: adjudicationUrls.selectPrisoner.root,
         query,
-      })
+      }),
     )
   }
 }

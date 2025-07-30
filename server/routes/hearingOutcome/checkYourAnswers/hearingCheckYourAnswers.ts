@@ -10,13 +10,13 @@ export default class HearingCheckYourAnswersRoutes {
   constructor(
     hearingsService: HearingsService,
     userService: UserService,
-    reportedAdjudicationsService: ReportedAdjudicationsService
+    reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new HearingCheckYourAnswersPage(
       PageRequestType.CREATION,
       hearingsService,
       userService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

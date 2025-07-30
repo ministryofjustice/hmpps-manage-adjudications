@@ -47,7 +47,7 @@ export default class AssociatedPrisonerPage {
   constructor(
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly prisonerSearchService: PrisonerSearchService
+    private readonly prisonerSearchService: PrisonerSearchService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -159,7 +159,7 @@ export default class AssociatedPrisonerPage {
           currentAssociatedPrisonerName: null,
         },
         selectedAnswerId,
-        user as User
+        user as User,
       )
 
       return renderData(res, draftId, roleCode, pageData, [errors.MISSING_INTERNAL_ASSOCIATED_PRISONER_ASSIST])
@@ -174,7 +174,7 @@ export default class AssociatedPrisonerPage {
   saveToApiUpdate = async (
     draftId: number,
     roleAssociatedPrisoner: RoleAssociatedPrisoner,
-    currentUser: User
+    currentUser: User,
   ): Promise<DraftAdjudicationResult> => {
     return this.placeOnReportService.saveAssociatedPrisoner(
       draftId,
@@ -182,24 +182,24 @@ export default class AssociatedPrisonerPage {
         associatedPrisonersNumber: roleAssociatedPrisoner.currentAssociatedPrisonerNumber,
         associatedPrisonersName: roleAssociatedPrisoner.currentAssociatedPrisonerName,
       },
-      currentUser
+      currentUser,
     )
   }
 
   getDisplayData = async (
     roleAssociatedPrisoner: RoleAssociatedPrisoner,
     locationOverride: AssociatedPrisonerLocation,
-    currentUser: User
+    currentUser: User,
   ): Promise<DisplayData> => {
     const prisoner = await this.placeOnReportService.getPrisonerDetails(
       roleAssociatedPrisoner.prisonerNumber,
-      currentUser
+      currentUser,
     )
     const location = locationOverride == null ? getPrisonerLocation(roleAssociatedPrisoner) : locationOverride
     const currentAssociatedPrisonerName = await this.getAssociatedPrisonerNameByLocation(
       location,
       roleAssociatedPrisoner,
-      currentUser
+      currentUser,
     )
 
     return {
@@ -213,7 +213,7 @@ export default class AssociatedPrisonerPage {
   getAssociatedPrisonerNameByLocation = async (
     location: AssociatedPrisonerLocation,
     roleAssociatedPrisoner: RoleAssociatedPrisoner,
-    currentUser: User
+    currentUser: User,
   ) => {
     switch (location) {
       case AssociatedPrisonerLocation.EXTERNAL:

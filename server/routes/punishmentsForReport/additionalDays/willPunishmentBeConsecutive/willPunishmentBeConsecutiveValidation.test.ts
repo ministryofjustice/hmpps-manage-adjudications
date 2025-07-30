@@ -5,14 +5,14 @@ describe('validateForm', () => {
     expect(
       validateForm({
         consecutive: 'yes',
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when no radio is chosen', () => {
     expect(
       validateForm({
         consecutive: null,
-      })
+      }),
     ).toEqual({
       href: '#consecutive',
       text: 'Select yes if this punishment is consecutive to another punishment',

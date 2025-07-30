@@ -17,7 +17,7 @@ export default class OutcomesService {
     chargeNumber: string,
     reason: NotProceedReason,
     details: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const outcomeDetails = {
       code: OutcomeCode.NOT_PROCEED,
@@ -51,7 +51,7 @@ export default class OutcomesService {
     chargeNumber: string,
     details: string,
     referGovReason: ReferGovReason,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const outcomeDetails = {
       code: OutcomeCode.REFER_GOV,
@@ -65,7 +65,7 @@ export default class OutcomesService {
     chargeNumber: string,
     referralReason: string,
     user: User,
-    referGovReason?: ReferGovReason
+    referGovReason?: ReferGovReason,
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       details: referralReason,
@@ -78,7 +78,7 @@ export default class OutcomesService {
     chargeNumber: string,
     quashReason: QuashGuiltyFindingReason,
     quashDetails: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       details: quashDetails,
@@ -91,7 +91,7 @@ export default class OutcomesService {
     chargeNumber: string,
     notProceedReason: NotProceedReason,
     details: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       details,
@@ -104,7 +104,7 @@ export default class OutcomesService {
     chargeNumber: string,
     quashReason: QuashGuiltyFindingReason,
     quashDetails: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const data = {
       details: quashDetails,

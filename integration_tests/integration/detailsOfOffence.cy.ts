@@ -183,7 +183,7 @@ context('Details of offence', () => {
     // Choose a complex offence so that we test all of the functionality.
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
-      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?',
     )
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()
@@ -197,7 +197,7 @@ context('Details of offence', () => {
     whoWasAssaultedPage.simulateReturnFromPrisonerSearch(200, '1-1-1', '1-1-1-1', 'G5512G')
     whoWasAssaultedPage.continue().click()
     const protectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     protectedCharacteristic.radioLabelFromText('No').click()
     whoWasAssaultedPage.continue().click()
@@ -212,7 +212,7 @@ context('Details of offence', () => {
       .then($summaryLabels => {
         expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
         expect($summaryLabels.get(1).innerText).to.contain(
-          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?',
         )
         expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
         expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to assault?')
@@ -226,13 +226,13 @@ context('Details of offence', () => {
       .then($summaryData => {
         expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
         expect($summaryData.get(1).innerText).to.contain(
-          'Assault, fighting, or endangering the health or personal safety of others'
+          'Assault, fighting, or endangering the health or personal safety of others',
         )
         expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
         expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
         expect($summaryData.get(4).innerText).to.contain('No')
         expect($summaryData.get(5).innerText).to.contain(
-          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault',
         )
       })
 
@@ -244,7 +244,7 @@ context('Details of offence', () => {
     // Choose a complex offence so that we test all of the functionality.
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
-      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?',
     )
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()
@@ -267,7 +267,7 @@ context('Details of offence', () => {
       .then($summaryLabels => {
         expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
         expect($summaryLabels.get(1).innerText).to.contain(
-          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?',
         )
         expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
         expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to endanger?')
@@ -280,12 +280,12 @@ context('Details of offence', () => {
       .then($summaryData => {
         expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
         expect($summaryData.get(1).innerText).to.contain(
-          'Assault, fighting, or endangering the health or personal safety of others'
+          'Assault, fighting, or endangering the health or personal safety of others',
         )
         expect($summaryData.get(2).innerText).to.contain('Endangering the health or personal safety of someone')
         expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
         expect($summaryData.get(4).innerText).to.contain(
-          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 5\n\nIntentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered'
+          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 5\n\nIntentionally endangers the health or personal safety of others or, by their conduct, is reckless whether such health or personal safety is endangered',
         )
       })
     // Delete link
@@ -296,7 +296,7 @@ context('Details of offence', () => {
     // Choose a complex offence so that we test all of the functionality.
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
-      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?',
     )
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()
@@ -320,7 +320,7 @@ context('Details of offence', () => {
       .then($summaryLabels => {
         expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
         expect($summaryLabels.get(1).innerText).to.contain(
-          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+          'What type of offence did John Smith assist another prisoner to commit or attempt to commit?',
         )
         expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
         expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to fight with?')
@@ -333,12 +333,12 @@ context('Details of offence', () => {
       .then($summaryData => {
         expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
         expect($summaryData.get(1).innerText).to.contain(
-          'Assault, fighting, or endangering the health or personal safety of others'
+          'Assault, fighting, or endangering the health or personal safety of others',
         )
         expect($summaryData.get(2).innerText).to.contain('Fighting with someone')
         expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')
         expect($summaryData.get(4).innerText).to.contain(
-          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 4\n\nFights with any person'
+          'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit,\nor to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 4\n\nFights with any person',
         )
       }) // Delete link
     detailsOfOffencePage.deleteLink(1).should('exist')
@@ -347,7 +347,7 @@ context('Details of offence', () => {
   it('should replace existing offences if a new offence is added', () => {
     cy.visit(adjudicationUrls.offenceCodeSelection.urls.start(200, 'assisted'))
     const whatTypeOfOffencePage = new OffenceCodeSelection(
-      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+      'What type of offence did John Smith assist another prisoner to commit or attempt to commit?',
     )
     whatTypeOfOffencePage.radio('1-1').check()
     whatTypeOfOffencePage.continue().click()
@@ -361,12 +361,12 @@ context('Details of offence', () => {
     whoWasAssaultedPage.simulateReturnFromPrisonerSearch(200, '1-1-1', '1-1-1-1', 'G5512G')
     whoWasAssaultedPage.continue().click()
     const WasItAProtectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     WasItAProtectedCharacteristic.radioLabelFromText('Yes').click()
     WasItAProtectedCharacteristic.continue().click()
     const selectProtectedCharacteristic = new OffenceCodeSelection(
-      'Select which protected characteristics were part of the reason for the incident'
+      'Select which protected characteristics were part of the reason for the incident',
     )
     selectProtectedCharacteristic.checkbox('1-1-1-1-1-1').check()
     cy.get('[data-qa="offence-code-protected-characteristics-continue"]').click()
@@ -376,7 +376,7 @@ context('Details of offence', () => {
     cy.go('back')
     cy.go('back')
     const protectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     protectedCharacteristic.radioLabelFromText('No').click()
     protectedCharacteristic.continue().click()
@@ -417,7 +417,7 @@ context('Details of offence', () => {
       .then($summaryData => {
         expect($summaryData.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
         expect($summaryData.get(1).innerText).to.contain(
-          'Assault, fighting, or endangering the health or personal safety of others'
+          'Assault, fighting, or endangering the health or personal safety of others',
         )
         expect($summaryData.get(2).innerText).to.contain('Assaulting someone')
         expect($summaryData.get(3).innerText).to.contain('Another prisoner - Paul Wright')

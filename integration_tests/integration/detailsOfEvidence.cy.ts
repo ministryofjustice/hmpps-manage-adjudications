@@ -231,7 +231,7 @@ context('Details of evidence', () => {
         expect($data.get(5).innerText).to.contain('Remove')
         expect($data.get(6).innerText).to.contain('Photo')
         expect($data.get(7).innerText).to.contain(
-          'A photo of the prisoner stealing the keys from behind a prison officers back'
+          'A photo of the prisoner stealing the keys from behind a prison officers back',
         )
         expect($data.get(8).innerText).to.contain('Remove')
       })
@@ -339,8 +339,8 @@ context('Details of evidence', () => {
     it('should show the evidence page with no evidence', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-          12345
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+          12345,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`,
       )
       const detailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
 
@@ -354,8 +354,8 @@ context('Details of evidence', () => {
     it('should show evidence', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-          23456
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+          23456,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`,
       )
       const detailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
       detailsOfEvidencePage.noEvidence().should('not.exist')
@@ -398,8 +398,8 @@ context('Details of evidence', () => {
     it('should remove the correct piece of evidence', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-          23456
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+          23456,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`,
       )
       const detailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
       detailsOfEvidencePage.noPhotoVideoEvidence().should('not.exist')
@@ -428,8 +428,8 @@ context('Details of evidence', () => {
     it('should take user to the add evidence page if they click the button, and show the new evidence in the correct tables on the details page on return', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-          23456
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+          23456,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`,
       )
       const detailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
       detailsOfEvidencePage.addEvidenceButton().click()
@@ -454,7 +454,7 @@ context('Details of evidence', () => {
           expect($data.get(5).innerText).to.contain('Remove')
           expect($data.get(6).innerText).to.contain('Photo')
           expect($data.get(7).innerText).to.contain(
-            'A photo of the prisoner stealing the keys from behind a prison officers back'
+            'A photo of the prisoner stealing the keys from behind a prison officers back',
           )
           expect($data.get(8).innerText).to.contain('Remove')
         })
@@ -479,8 +479,8 @@ context('Details of evidence', () => {
     it('should not show the remove link for evidence the current user did not add', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-          34567
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`
+          34567,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`,
       )
       const detailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
       detailsOfEvidencePage
@@ -501,8 +501,8 @@ context('Details of evidence', () => {
     it('should return to the referrer stored in the session if the exit button is clicked - reporter', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-          12345
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+          12345,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`,
       )
       const detailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
       detailsOfEvidencePage.exitButton().click()
@@ -513,8 +513,8 @@ context('Details of evidence', () => {
     it('should return to the referrer stored in the session if the exit button is clicked - reviewer', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfEvidence.urls.submittedEdit(
-          12345
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(12345)}`
+          12345,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(12345)}`,
       )
       const detailsOfEvidencePage: DetailsOfEvidence = Page.verifyOnPage(DetailsOfEvidence)
       detailsOfEvidencePage.exitButton().click()

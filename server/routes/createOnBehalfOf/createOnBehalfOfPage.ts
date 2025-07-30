@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -14,7 +13,7 @@ export default class CreateOnBehalfOfPage {
     this.createOnBehalfOfSessionService.setCreatedOnBehalfOfEditSubmittedAdjudication(
       req,
       id,
-      req.query.editSubmittedAdjudication as string
+      req.query.editSubmittedAdjudication as string,
     )
     this.createOnBehalfOfSessionService.setRedirectUrl(req, id, req.query.referrer as string)
 
@@ -43,7 +42,7 @@ export default class CreateOnBehalfOfPage {
       url.format({
         pathname: adjudicationUrls.createOnBehalfOf.urls.reason(id),
         query: { createdOnBehalfOfOfficer },
-      })
+      }),
     )
   }
 }

@@ -23,18 +23,18 @@ export default function HearingDetailsRoutes({
   const hearingTabReviewerRoute = new HearingTabReviewerRoute(
     reportedAdjudicationsService,
     userService,
-    outcomesService
+    outcomesService,
   )
   const hearingTabReporterRoute = new HearingTabReporterRoute(
     reportedAdjudicationsService,
     outcomesService,
-    userService
+    userService,
   )
 
   const hearingTabViewOnlyRoute = new HearingTabViewOnlyRoute(
     reportedAdjudicationsService,
     outcomesService,
-    userService
+    userService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

@@ -41,7 +41,7 @@ export default class PrisonerSearchRoutes {
       url.format({
         pathname: adjudicationUrls.selectPrisoner.root,
         query,
-      })
+      }),
     )
   }
 }

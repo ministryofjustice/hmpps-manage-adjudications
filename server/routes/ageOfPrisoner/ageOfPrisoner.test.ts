@@ -19,7 +19,7 @@ beforeEach(() => {
       offenderNo: 'A7937DY',
       firstName: 'UDFSANAYE',
       lastName: 'AIDETRIA',
-    })
+    }),
   )
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
@@ -59,8 +59,8 @@ describe('POST /age-of-prisoner', () => {
           1041,
           'adult',
           true,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should render error summary with correct validation message', () => {
@@ -96,8 +96,8 @@ describe('POST /age-of-prisoner with existing selection of adult', () => {
           1041,
           'yoi',
           true,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should not request offence deletion if the value is changed', () => {
@@ -111,8 +111,8 @@ describe('POST /age-of-prisoner with existing selection of adult', () => {
           1041,
           'adult',
           false,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

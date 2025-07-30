@@ -8,7 +8,7 @@ export default class PaybackPunishmentDurationRoute {
 
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.page = new PaybackPunishmentDurationPage(PageRequestType.CREATION, userService, punishmentsService)
   }

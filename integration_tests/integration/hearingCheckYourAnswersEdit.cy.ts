@@ -108,7 +108,7 @@ context('Check your answers before submitting', () => {
   describe('Loads', () => {
     it('should contain the required page elements', () => {
       cy.visit(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`,
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().should('exist')
@@ -117,7 +117,7 @@ context('Check your answers before submitting', () => {
     })
     it('cancel link goes back to reviewer version of hearing details page', () => {
       cy.visit(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`,
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.cancelLink().click()
@@ -127,7 +127,7 @@ context('Check your answers before submitting', () => {
     })
     it('shows the correct information in the summary table', () => {
       cy.visit(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`,
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage
@@ -150,7 +150,7 @@ context('Check your answers before submitting', () => {
   describe('saves', () => {
     it('should submit successful', () => {
       cy.visit(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.edit('100')}?adjudicator=JGREEN&plea=GUILTY&finding=CHARGE_PROVED`,
       )
       const checkAnswersPage = Page.verifyOnPage(HearingCheckAnswersPage)
       checkAnswersPage.submitButton().click()

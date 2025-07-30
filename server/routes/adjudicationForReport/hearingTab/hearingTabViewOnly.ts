@@ -10,7 +10,7 @@ export default class HearingTabRoute {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly outcomesService: OutcomesService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.page = new HearingTabPage(PageRequestType.VIEW, reportedAdjudicationsService, outcomesService, userService)
   }

@@ -43,7 +43,7 @@ export default class HearingAdournedPage {
     pageType: PageRequestType,
     private readonly hearingsService: HearingsService,
     private readonly userService: UserService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -74,7 +74,7 @@ export default class HearingAdournedPage {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         chargeNumber,
         [ReportedAdjudicationStatus.ADJOURNED],
-        user
+        user,
       )) as HearingDetailsHistory
       readApi = lastOutcomeItem.hearing?.outcome
     }
@@ -111,7 +111,7 @@ export default class HearingAdournedPage {
           adjournReason,
           adjournPlea,
           user,
-          adjudicator as string
+          adjudicator as string,
         )
       } else {
         await this.hearingsService.createAdjourn(
@@ -121,7 +121,7 @@ export default class HearingAdournedPage {
           trimmedAdjournDetails,
           adjournReason,
           adjournPlea,
-          user
+          user,
         )
       }
 

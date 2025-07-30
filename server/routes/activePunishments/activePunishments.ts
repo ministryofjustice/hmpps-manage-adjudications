@@ -8,14 +8,14 @@ import PunishmentsService from '../../services/punishmentsService'
 export default class ActivePunishmentsRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (
     req: Request,
     res: Response,
     prisoner: PrisonerResultSummary,
-    punishments: ActivePunishment[]
+    punishments: ActivePunishment[],
   ): Promise<void> => {
     res.render(`pages/activePunishments.njk`, {
       prisonerNumber: req.params.prisonerNumber,

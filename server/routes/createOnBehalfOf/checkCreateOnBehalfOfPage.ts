@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PlaceOnReportService from '../../services/placeOnReportService'
@@ -7,7 +6,7 @@ import CreateOnBehalfOfSessionService from './createOnBehalfOfSessionService'
 export default class CheckCreateOnBehalfOfPage {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly createOnBehalfOfSessionService: CreateOnBehalfOfSessionService
+    private readonly createOnBehalfOfSessionService: CreateOnBehalfOfSessionService,
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
@@ -26,7 +25,7 @@ export default class CheckCreateOnBehalfOfPage {
         label: 'Reason why you are reporting on their behalf',
         value: createdOnBehalfOfReason,
         changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.reason(
-          id
+          id,
         )}?createdOnBehalfOfOfficer=${createdOnBehalfOfOfficer}`,
         dataQa: 'reason-changeLink',
       },
@@ -46,7 +45,7 @@ export default class CheckCreateOnBehalfOfPage {
     const createdOnBehalfOfReason = this.createOnBehalfOfSessionService.getCreatedOnBehalfOfReason(req, id)
     const editSubmittedAdjudication = this.createOnBehalfOfSessionService.getCreatedOnBehalfOfEditSubmittedAdjudication(
       req,
-      id
+      id,
     )
 
     if (editSubmittedAdjudication === 'true') {
@@ -56,7 +55,7 @@ export default class CheckCreateOnBehalfOfPage {
         Number(id),
         createdOnBehalfOfOfficer,
         createdOnBehalfOfReason,
-        user
+        user,
       )
     }
     this.createOnBehalfOfSessionService.deleteCreatedOnBehalfOfOfficer(req, id)

@@ -177,7 +177,7 @@ context('Incident details', () => {
         'Escape or failure to comply with temporary release conditions',
         'Absconding from either prison or legal custody',
       ],
-      7002
+      7002,
     )
   })
   it('line 16', () => {
@@ -186,7 +186,7 @@ context('Incident details', () => {
         'Escape or failure to comply with temporary release conditions',
         'Failing to comply with any conditions of a temporary release',
       ],
-      8001
+      8001,
     )
   })
   it('line 17', () => {
@@ -195,7 +195,7 @@ context('Incident details', () => {
         'Escape or failure to comply with temporary release conditions',
         'Failing to return from their temporary release',
       ],
-      8002
+      8002,
     )
   })
   it('line 19', () => {
@@ -206,7 +206,7 @@ context('Incident details', () => {
         'Has an unauthorised article in their possession',
         'Yes',
       ],
-      12001
+      12001,
     )
   })
   it('line 20', () => {
@@ -217,7 +217,7 @@ context('Incident details', () => {
         'Has an unauthorised article in their possession',
         'No',
       ],
-      12002
+      12002,
     )
   })
   it('line 21', () => {
@@ -228,7 +228,7 @@ context('Incident details', () => {
         'Sells or gives an unauthorised article to another person',
         'Yes',
       ],
-      14001
+      14001,
     )
   })
   it('line 22', () => {
@@ -239,7 +239,7 @@ context('Incident details', () => {
         'Sells or gives an unauthorised article to another person',
         'No',
       ],
-      13001
+      13001,
     )
   })
   it('line 23', () => {
@@ -249,7 +249,7 @@ context('Incident details', () => {
         'Possession of an unauthorised article',
         'Takes an article from another person without permission',
       ],
-      15001
+      15001,
     )
   })
   it('line 24', () => {
@@ -259,7 +259,7 @@ context('Incident details', () => {
         'Drugs',
         'Receiving any controlled drug without the consent of an officer',
       ],
-      24001
+      24001,
     )
   })
   it('line 25', () => {
@@ -269,7 +269,7 @@ context('Incident details', () => {
         'Drugs',
         'Receiving any controlled drug or any other article during a visit',
       ],
-      24002
+      24002,
     )
   })
   it('line 26', () => {
@@ -279,7 +279,7 @@ context('Incident details', () => {
         'Drugs',
         'Tampering with or falsifying a drug testing sample',
       ],
-      23001
+      23001,
     )
   })
   it('line 27', () => {
@@ -289,7 +289,7 @@ context('Incident details', () => {
         'Drugs',
         'Refuses to provide a sample for drug testing',
       ],
-      23002
+      23002,
     )
   })
   it('line 28', () => {
@@ -299,7 +299,7 @@ context('Incident details', () => {
         'Drugs',
         'Administrating a controlled drug to themself',
       ],
-      9001
+      9001,
     )
   })
   it('line 29', () => {
@@ -309,7 +309,7 @@ context('Incident details', () => {
         'Drugs',
         'Failing to stop someone else administrating a controlled drug to them',
       ],
-      9002
+      9002,
     )
   })
   it('line 30', () => {
@@ -319,7 +319,7 @@ context('Incident details', () => {
         'Drugs',
         'Possessing any unauthorised controlled drugs',
       ],
-      12101
+      12101,
     )
   })
   it('line 31', () => {
@@ -329,7 +329,7 @@ context('Incident details', () => {
         'Drugs',
         'Possessing a greater quantity of controlled drugs than authorised to have',
       ],
-      12102
+      12102,
     )
   })
   it('line 32', () => {
@@ -339,7 +339,7 @@ context('Incident details', () => {
         'Alcohol',
         'Consumes any alcoholic drink',
       ],
-      10001
+      10001,
     )
   })
   it('line 33', () => {
@@ -349,19 +349,19 @@ context('Incident details', () => {
         'Alcohol',
         'Consumes any alcoholic drink other than that provided to them under rule 25(1)',
       ],
-      11001
+      11001,
     )
   })
   it('line 35', () => {
     checkSimpleDecisionPath(
       ['Sets fire to, or damages, the prison or any property', 'Sets fire to any part of the prison or any property'],
-      16001
+      16001,
     )
   })
   it('line 40', () => {
     checkSimpleDecisionPath(
       ['Disrespectful, threatening, abusive, or insulting behaviour', 'Disrespectful behaviour', 'A prison officer'],
-      19001
+      19001,
     )
   })
   it('line 41', () => {
@@ -371,7 +371,7 @@ context('Incident details', () => {
         'Disrespectful behaviour',
         'A member of staff who is not a prison officer',
       ],
-      19002
+      19002,
     )
   })
   it('line 42', () => {
@@ -381,7 +381,7 @@ context('Incident details', () => {
         'Disrespectful behaviour',
         'Another person not listed above',
       ],
-      19003
+      19003,
     )
   })
   it('line 44', () => {
@@ -391,13 +391,13 @@ context('Incident details', () => {
         'Threatening, abusive, or insulting behaviour',
         'No',
       ],
-      20002
+      20002,
     )
   })
   it('line 46', () => {
     checkSimpleDecisionPath(
       ['Disobeys any lawful order, or failure to comply with any rule or regulation', 'Disobeying any lawful order'],
-      22001
+      22001,
     )
   })
   it('line 47', () => {
@@ -406,7 +406,7 @@ context('Incident details', () => {
         'Disobeys any lawful order, or failure to comply with any rule or regulation',
         'Failure to comply with any rule or regulation',
       ],
-      23101
+      23101,
     )
   })
   it('line 49', () => {
@@ -430,7 +430,7 @@ context('Incident details', () => {
         'Stopping someone who is not a prisoner from doing their job',
         'Denying someone access to any part of the prison',
       ],
-      3001
+      3001,
     )
   })
   it('line 55', () => {
@@ -439,7 +439,7 @@ context('Incident details', () => {
         'Stopping someone who is not a prisoner from doing their job',
         'Obstructing a member of staff from doing their job',
       ],
-      6001
+      6001,
     )
   })
   it('line 56 ', () => {
@@ -449,7 +449,7 @@ context('Incident details', () => {
         'Stopping someone carrying out a drug test',
         'Tampering with or falsifying a drug testing sample',
       ],
-      23201
+      23201,
     )
   })
   it('line 57', () => {
@@ -459,7 +459,7 @@ context('Incident details', () => {
         'Stopping someone carrying out a drug test',
         'Refuses to provide a sample for drug testing',
       ],
-      23202
+      23202,
     )
   })
   it('line 59', () => {
@@ -468,7 +468,7 @@ context('Incident details', () => {
         'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
         'Being absent without authorisation',
       ],
-      18001
+      18001,
     )
   })
   it('line 60', () => {
@@ -477,7 +477,7 @@ context('Incident details', () => {
         'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
         'Being in an unauthorised place',
       ],
-      18002
+      18002,
     )
   })
   it('line 61', () => {
@@ -486,7 +486,7 @@ context('Incident details', () => {
         'Being absent without authorisation, being in an unauthorised place, or failing to work correctly',
         'Failing to work correctly',
       ],
-      21001
+      21001,
     )
   })
 })

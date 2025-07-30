@@ -12,7 +12,7 @@ export default class AddOffenceRoutes {
         pathname: adjudicationUrls.detailsOfOffence.urls.modified(draftId),
         query: offenceToAdd,
       },
-      res
+      res,
     )
   }
 
@@ -24,7 +24,7 @@ export default class AddOffenceRoutes {
         pathname: adjudicationUrls.detailsOfOffence.urls.aloEdit(draftId),
         query: offenceToAdd,
       },
-      res
+      res,
     )
   }
 

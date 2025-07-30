@@ -20,7 +20,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -59,8 +59,8 @@ describe('POST /reason-for-referral', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`,
       )
       .send({
         referralReason: '123',
@@ -73,8 +73,8 @@ describe('POST /reason-for-referral', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_POLICE`,
       )
       .send({
         referralReason: '123',
@@ -87,16 +87,16 @@ describe('POST /reason-for-referral', () => {
           '123',
           expect.anything(),
           'Roxanne Red',
-          undefined
-        )
+          undefined,
+        ),
       )
   })
   it('should successfully call the endpoint with the referGovReason if present', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_GOV`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_GOV`,
       )
       .send({
         referralReason: '123',
@@ -110,8 +110,8 @@ describe('POST /reason-for-referral', () => {
           '123',
           expect.anything(),
           'Roxanne Red',
-          ReferGovReason.GOV_INQUIRY
-        )
+          ReferGovReason.GOV_INQUIRY,
+        ),
       )
   })
   it('should successfully call the endpoint and redirect to the confirmation page if query params are not present', () => {
@@ -128,16 +128,16 @@ describe('POST /reason-for-referral', () => {
           '123',
           expect.anything(),
           undefined,
-          undefined
-        )
+          undefined,
+        ),
       )
   })
   it('should use the query parameter outcome code rather than api outcome code if one is present', () => {
     return request(app)
       .post(
         `${adjudicationUrls.hearingReasonForReferral.urls.edit(
-          '100'
-        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_INAD`
+          '100',
+        )}?adjudicator=Roxanne%20Red&hearingOutcome=REFER_INAD`,
       )
       .send({
         referralReason: '123',
@@ -150,8 +150,8 @@ describe('POST /reason-for-referral', () => {
           '123',
           expect.anything(),
           'Roxanne Red',
-          undefined
-        )
+          undefined,
+        ),
       )
   })
 })

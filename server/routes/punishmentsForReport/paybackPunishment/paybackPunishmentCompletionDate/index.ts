@@ -19,7 +19,7 @@ export default function PaybackPunishmentCompletionDateRoutes({
   const paybackPunishmentCompletionDateRoute = new PaybackPunishmentCompletionDateRoute(userService, punishmentsService)
   const paybackPunishmentCompletionDateEditRoute = new PaybackPunishmentCompletionDateEditRoute(
     userService,
-    punishmentsService
+    punishmentsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

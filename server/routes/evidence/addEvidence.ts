@@ -21,7 +21,6 @@ export default class AddEvidenceRoutes {
     const { chargeNumber } = req.params
     const submitted = req.query.submitted as string
 
-    // eslint-disable-next-line no-extra-boolean-cast
     const cancelButtonHref =
       submitted === 'true'
         ? adjudicationUrls.detailsOfEvidence.urls.submittedEditModified(chargeNumber)

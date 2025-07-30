@@ -46,7 +46,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   hmppsManageUsersClient,
   curiousApiService,
   locationService,
-  userService
+  userService,
 )
 const prisonerSearchService = new PrisonerSearchService(hmppsAuthClient)
 const damagesSessionService = new DamagesSessionService()
@@ -68,7 +68,7 @@ const decisionTreeService = new DecisionTreeService(
     paragraph18,
     paragraph23,
     paragraph22,
-  ]
+  ],
 )
 const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)

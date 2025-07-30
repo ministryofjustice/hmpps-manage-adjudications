@@ -20,7 +20,7 @@ beforeEach(() => {
       firstName: 'UDFSANAYE',
       lastName: 'AIDETRIA',
       assignedLivingUnitDesc: '4-2-001',
-    })
+    }),
   )
 })
 

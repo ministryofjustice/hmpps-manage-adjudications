@@ -23,7 +23,7 @@ describe('process text', () => {
         '{VICTIM_STAFF_FULL_NAME}' +
         '{VICTIM_PRISONER_FULL_NAME}' +
         '{VICTIM_PRISONER_OUTSIDE_ESTABLISHMENT}' +
-        '{VICTIM_OTHER_PERSON_FULL_NAME}'
+        '{VICTIM_OTHER_PERSON_FULL_NAME}',
     )
     // Now test that processing works as expected.
     expect(getProcessedText(template, placeholderValues, false)).toEqual(
@@ -33,7 +33,7 @@ describe('process text', () => {
         'Victimstafffirstname Victimstafflastname' +
         'Victimprisonerfirstname Victimprisonerlastname' +
         'Victimotherpersonfirstname Victimotherpersonlastname VICTIMPRISONERNUMBER' +
-        'Victimotherpersonfirstname Victimotherpersonlastname'
+        'Victimotherpersonfirstname Victimotherpersonlastname',
     )
   })
   it('placeholder text for pdf', () => {
@@ -46,7 +46,7 @@ describe('process text', () => {
     }
     // Now test that processing works as expected.
     expect(getProcessedText(template, placeholderValues, true)).toEqual(
-      'Prisonerfirstname PrisonerlastnamePrisonerfirstname Prisonerlastname’sV. Victimstafflastname'
+      'Prisonerfirstname PrisonerlastnamePrisonerfirstname Prisonerlastname’sV. Victimstafflastname',
     )
   })
   it('possessive ends in s', () => {
@@ -64,7 +64,7 @@ describe('process text', () => {
       prisonerLastName: 'PRISONERLASTNAME',
     }
     expect(getProcessedText(template, placeholderValuesMinimal, false)).toEqual(
-      'Prisonerfirstname PrisonerlastnamePrisonerfirstname Prisonerlastname’s'
+      'Prisonerfirstname PrisonerlastnamePrisonerfirstname Prisonerlastname’s',
     )
   })
 })

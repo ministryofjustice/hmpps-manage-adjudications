@@ -77,8 +77,8 @@ describe('POST', () => {
         expect(punishmentsService.editPunishmentSet).toHaveBeenCalledWith(
           punishmentsOnSession,
           '100',
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should redirect after submission', () => {

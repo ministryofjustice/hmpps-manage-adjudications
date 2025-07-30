@@ -16,7 +16,7 @@ export default class Dis7PdfBlank {
 
     try {
       const adjudicationDetails = await withRetry(() =>
-        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
+        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user),
       )
 
       // Validate completeness of data
@@ -39,7 +39,7 @@ export default class Dis7PdfBlank {
         {
           filename: `adjudication-result-${chargeNumber}.pdf`,
           pdfMargins,
-        }
+        },
       )
     } catch (error) {
       log.error('Error rendering PDF:', error)

@@ -149,7 +149,7 @@ context('Warning - reviewer edits offence', () => {
         .then($summaryLabels => {
           expect($summaryLabels.get(0).innerText).to.contain('Which set of rules apply to the prisoner?')
           expect($summaryLabels.get(1).innerText).to.contain(
-            'What type of offence did John Smith assist another prisoner to commit or attempt to commit?'
+            'What type of offence did John Smith assist another prisoner to commit or attempt to commit?',
           )
           expect($summaryLabels.get(2).innerText).to.contain('What did the incident involve?')
           expect($summaryLabels.get(3).innerText).to.contain('Who did John Smith assist James Jones to assault?')
@@ -162,13 +162,13 @@ context('Warning - reviewer edits offence', () => {
         .then($data => {
           expect($data.get(0).innerText).to.contain('Adult offences\n\nPrison rule 51')
           expect($data.get(1).innerText).to.contain(
-            'Assault, fighting, or endangering the health or personal safety of others'
+            'Assault, fighting, or endangering the health or personal safety of others',
           )
           expect($data.get(2).innerText).to.contain('Assaulting someone')
           expect($data.get(3).innerText).to.contain('Another prisoner - Paul Wright')
           expect($data.get(4).innerText).to.contain('Yes')
           expect($data.get(5).innerText).to.contain(
-            'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault'
+            'Prison rule 51, paragraph 25(c)\n\nAssists another prisoner to commit, or to attempt to commit, any of the foregoing offences:\n\nPrison rule 51, paragraph 1\n\nCommits any assault',
           )
         })
     })

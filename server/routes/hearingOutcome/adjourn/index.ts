@@ -22,7 +22,7 @@ export default function hearingAdjournedRoutes({
   const hearingAdjournEditRoute = new HearingAdjournEditRoutes(
     hearingsService,
     userService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

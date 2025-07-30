@@ -9,7 +9,7 @@ export default class FrontendComponentApiClient {
 
   getComponents<T extends AvailableComponent[]>(
     components: T,
-    userToken: string
+    userToken: string,
   ): Promise<Record<T[number], FrontendComponent>> {
     return FrontendComponentApiClient.restClient(userToken).get<Record<T[number], FrontendComponent>>({
       path: `/components`,

@@ -8,7 +8,7 @@ export default class PunishmentCommentRoute {
 
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.page = new PunishmentCommentPage(PageRequestType.CREATION, userService, punishmentsService)
   }

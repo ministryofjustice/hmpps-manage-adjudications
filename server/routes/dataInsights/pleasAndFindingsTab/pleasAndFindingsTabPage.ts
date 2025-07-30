@@ -36,7 +36,7 @@ export default class PleasAndFindingsTabPage {
 
     const chartSettingMap = {} as Record<string, unknown>
     const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '5a')).lastModifiedDate
+      (await this.chartApiService.getLastModifiedChart(username, '5a')).lastModifiedDate,
     )
 
     chartSettingMap['5a'] = await produceLinesCharts(
@@ -49,7 +49,7 @@ export default class PleasAndFindingsTabPage {
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.plea },
       { source: (row: ChartEntryHorizontalBar) => row.count },
-      'Count'
+      'Count',
     )
 
     chartSettingMap['5b'] = await produceLinesCharts(
@@ -62,7 +62,7 @@ export default class PleasAndFindingsTabPage {
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.finding },
       { source: (row: ChartEntryHorizontalBar) => row.count },
-      'Count'
+      'Count',
     )
 
     return res.render(`pages/dataInsights/pleasAndFindingsTab.njk`, {

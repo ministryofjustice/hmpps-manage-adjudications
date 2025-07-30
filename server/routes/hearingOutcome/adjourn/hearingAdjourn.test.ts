@@ -72,8 +72,8 @@ describe('POST /hearing-adjourned', () => {
           '123',
           HearingOutcomeAdjournReason.EVIDENCE,
           HearingOutcomePlea.NOT_ASKED,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

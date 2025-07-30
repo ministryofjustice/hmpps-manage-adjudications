@@ -66,7 +66,7 @@ context('Incident details', () => {
       .find('dd')
       .then($summaryData => {
         expect($summaryData.get(1).innerText).to.contain(
-          'Assault, fighting, or endangering the health or personal safety of others'
+          'Assault, fighting, or endangering the health or personal safety of others',
         )
       })
     detailsOfOffencePage.deleteLink(1).click()
@@ -76,7 +76,7 @@ context('Incident details', () => {
       .find('dd')
       .then($summaryData => {
         expect($summaryData.get(1).innerText).to.contain(
-          'Assault, fighting, or endangering the health or personal safety of others'
+          'Assault, fighting, or endangering the health or personal safety of others',
         )
       })
   })

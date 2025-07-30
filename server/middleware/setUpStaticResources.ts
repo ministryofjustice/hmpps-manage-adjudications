@@ -21,7 +21,7 @@ export default function setUpStaticResources(): Router {
     '/node_modules/govuk-frontend/dist',
     '/node_modules/@ministryofjustice/frontend/moj/assets',
     '/node_modules/@ministryofjustice/frontend',
-    '/node_modules/jquery/dist'
+    '/node_modules/jquery/dist',
   ).forEach(dir => {
     router.use('/assets', express.static(path.join(process.cwd(), dir), cacheControl))
   })
@@ -37,7 +37,7 @@ export default function setUpStaticResources(): Router {
   Array.of('chart.umd.js', 'chart.umd.js.map').forEach(file => {
     router.use(
       `/assets/js/${file}`,
-      express.static(path.join(process.cwd(), `/node_modules/chart.js/dist/${file}`), cacheControl)
+      express.static(path.join(process.cwd(), `/node_modules/chart.js/dist/${file}`), cacheControl),
     )
   })
 

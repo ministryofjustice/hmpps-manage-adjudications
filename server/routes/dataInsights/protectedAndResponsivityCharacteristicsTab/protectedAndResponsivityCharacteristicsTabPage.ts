@@ -20,7 +20,7 @@ class PageOptions {}
 const getHorizontalBarsChartHeadByCharacteristic = (
   mainLabel: string,
   percentageLabel: string,
-  numberLabel: string
+  numberLabel: string,
 ) => {
   const head: TableHead[] = [
     {
@@ -60,12 +60,12 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       source: (row: ChartEntryHorizontalBar) => row.characteristic,
     })
     const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '2a')).lastModifiedDate
+      (await this.chartApiService.getLastModifiedChart(username, '2a')).lastModifiedDate,
     )
     const characteristic: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       characteristics,
       req.query.characteristic as string,
-      characteristics.length > 0 ? characteristics[0] : undefined
+      characteristics.length > 0 ? characteristics[0] : undefined,
     )
     chartSettingMap['2a'] = await produceHorizontalBarsChart(
       '2a',
@@ -86,9 +86,9 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       getHorizontalBarsChartHeadByCharacteristic(
         characteristic?.text,
         'Percentage of prisoners',
-        'Number of prisoners'
+        'Number of prisoners',
       ),
-      'Percentage'
+      'Percentage',
     )
 
     chartSettingMap['2b'] = await produceHorizontalBarsChart(
@@ -108,7 +108,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of reports', 'Number of reports'),
-      'Percentage'
+      'Percentage',
     )
 
     const chartDetails2d = await this.chartApiService.getChart(username, agencyId, '2d')
@@ -118,7 +118,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const offenceType: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       offenceTypes,
       req.query.offenceType as string,
-      offenceTypes.length > 0 ? offenceTypes[0] : undefined
+      offenceTypes.length > 0 ? offenceTypes[0] : undefined,
     )
     chartSettingMap['2d'] = await produceHorizontalBarsChart(
       '2d',
@@ -140,7 +140,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of offences', 'Number of offences'),
-      'Percentage'
+      'Percentage',
     )
 
     const chartDetails2e = await this.chartApiService.getChart(username, agencyId, '2e')
@@ -150,7 +150,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const punishment: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       punishments,
       req.query.punishment as string,
-      punishments.length > 0 ? punishments[0] : undefined
+      punishments.length > 0 ? punishments[0] : undefined,
     )
     chartSettingMap['2e'] = await produceHorizontalBarsChart(
       '2e',
@@ -174,9 +174,9 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       getHorizontalBarsChartHeadByCharacteristic(
         characteristic?.text,
         'Percentage of punishments',
-        'Number of punishments'
+        'Number of punishments',
       ),
-      'Percentage'
+      'Percentage',
     )
 
     const chartDetails2f = await this.chartApiService.getChart(username, agencyId, '2f')
@@ -186,7 +186,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const plea: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       pleas,
       req.query.plea as string,
-      pleas.length > 0 ? pleas[0] : undefined
+      pleas.length > 0 ? pleas[0] : undefined,
     )
     chartSettingMap['2f'] = await produceHorizontalBarsChart(
       '2f',
@@ -208,7 +208,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of pleas', 'Number of pleas'),
-      'Percentage'
+      'Percentage',
     )
 
     const chartDetails2g = await this.chartApiService.getChart(username, agencyId, '2g')
@@ -218,7 +218,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const finding: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       findings,
       req.query.finding as string,
-      findings.length > 0 ? findings[0] : undefined
+      findings.length > 0 ? findings[0] : undefined,
     )
     chartSettingMap['2g'] = await produceHorizontalBarsChart(
       '2g',
@@ -240,7 +240,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getHorizontalBarsChartHeadByCharacteristic(characteristic?.text, 'Percentage of findings', 'Number of findings'),
-      'Percentage'
+      'Percentage',
     )
 
     return res.render(`pages/dataInsights/protectedAndResponsivityCharacteristicsTab.njk`, {

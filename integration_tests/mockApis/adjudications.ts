@@ -279,7 +279,7 @@ const stubGetReportedAdjudications =
 const stubGetAllReportedAdjudications = stubGetReportedAdjudications('/adjudications/reported-adjudications/reports')
 
 const stubGetYourReportedAdjudications = stubGetReportedAdjudications(
-  '/adjudications/reported-adjudications/my-reports'
+  '/adjudications/reported-adjudications/my-reports',
 )
 
 const stubGetTransferredAdjudications = ({

@@ -34,11 +34,11 @@ export default class prepareAndRecordAnAdjudicationHearingData {
     offences: IncidentAndOffences,
     damages: DamageDetails[],
     evidence: EvidenceDetailsSplit,
-    witnesses: WitnessDetails[]
+    witnesses: WitnessDetails[],
   ) {
     this.chargeNumber = chargeNumber
     this.prisonerDisplayName = convertToTitleCase(
-      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`
+      `${confirmedOnReportData.prisonerLastName}, ${confirmedOnReportData.prisonerFirstName}`,
     )
     this.prisonerLocationDescription = `${confirmedOnReportData.prisonerAgencyName} - ${
       confirmedOnReportData.prisonerLivingUnitName || 'Unknown'

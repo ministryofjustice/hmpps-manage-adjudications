@@ -22,19 +22,19 @@ export default function awardedPunishmentsAndDamagesRoutes({
   const awardedPunishmentsAndDamagesRoute = new AwardedPunishmentsAndDamagesRoutes(
     reportedAdjudicationsService,
     locationService,
-    userService
+    userService,
   )
 
   const financialAwardedPunishmentsAndDamagesRoute = new FinancialAwardedPunishmentsAndDamagesRoutes(
     reportedAdjudicationsService,
     locationService,
-    userService
+    userService,
   )
 
   const additionalDaysAwardedPunishmentsRoute = new AdditionalDaysAwardedPunishmentsRoutes(
     reportedAdjudicationsService,
     locationService,
-    userService
+    userService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)
@@ -46,13 +46,13 @@ export default function awardedPunishmentsAndDamagesRoutes({
   get(adjudicationUrls.awardedPunishmentsAndDamages.matchers.financial, financialAwardedPunishmentsAndDamagesRoute.view)
   post(
     adjudicationUrls.awardedPunishmentsAndDamages.matchers.financial,
-    financialAwardedPunishmentsAndDamagesRoute.submit
+    financialAwardedPunishmentsAndDamagesRoute.submit,
   )
 
   get(adjudicationUrls.awardedPunishmentsAndDamages.matchers.additionalDays, additionalDaysAwardedPunishmentsRoute.view)
   post(
     adjudicationUrls.awardedPunishmentsAndDamages.matchers.additionalDays,
-    additionalDaysAwardedPunishmentsRoute.submit
+    additionalDaysAwardedPunishmentsRoute.submit,
   )
 
   return router

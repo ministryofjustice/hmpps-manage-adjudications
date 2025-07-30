@@ -6,7 +6,7 @@ describe('validateForm', () => {
       expect(
         validateForm({
           incidentRole: 'attempted',
-        })
+        }),
       ).toBeNull()
     })
   })

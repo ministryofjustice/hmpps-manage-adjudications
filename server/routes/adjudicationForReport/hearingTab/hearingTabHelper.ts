@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { NextStep } from '../../../data/HearingAndOutcomeResult'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
 import adjudicationUrls from '../../../utils/urlGenerator'

@@ -12,7 +12,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const testData = new TestData()
 
@@ -45,8 +45,8 @@ describe('POST /add-issue-date-time', () => {
     return request(app)
       .post(
         `${adjudicationUrls.addIssueDateTime.urls.start(
-          '12345'
-        )}?referrer=${adjudicationUrls.confirmDISFormsIssued.urls.start()}`
+          '12345',
+        )}?referrer=${adjudicationUrls.confirmDISFormsIssued.urls.start()}`,
       )
       .send({ issuedDate: { date: '09/12/2022', time: { hour: '09', minute: '30' } } })
       .expect(() => {

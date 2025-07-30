@@ -51,12 +51,12 @@ const apiChecks = [
   service(
     'locationsInsidePrisonApi',
     `${config.apis.locationsInsidePrison.url}/health/ping`,
-    config.apis.locationsInsidePrison.agent
+    config.apis.locationsInsidePrison.agent,
   ),
   service(
     'nomisSyncPrisonerMappingApi',
     `${config.apis.nomisSyncPrisonerMapping.url}/health/ping`,
-    config.apis.nomisSyncPrisonerMapping.agent
+    config.apis.nomisSyncPrisonerMapping.agent,
   ),
 
   ...(config.apis.tokenVerification.enabled
@@ -64,7 +64,7 @@ const apiChecks = [
         service(
           'tokenVerification',
           `${config.apis.tokenVerification.url}/health/ping`,
-          config.apis.tokenVerification.agent
+          config.apis.tokenVerification.agent,
         ),
       ]
     : []),
@@ -73,7 +73,7 @@ const apiChecks = [
 export default function healthCheck(
   applicationInfo: ApplicationInfo,
   callback: HealthCheckCallback,
-  checks = apiChecks
+  checks = apiChecks,
 ): void {
   Promise.all(checks.map(fn => fn())).then(checkResults => {
     const allOk = checkResults.every(item => item.status === 'ok')

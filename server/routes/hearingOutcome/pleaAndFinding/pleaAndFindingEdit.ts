@@ -10,7 +10,7 @@ export default class PleaAndFindingRoutes {
   constructor(
     userService: UserService,
     hearingsService: HearingsService,
-    reportedAdjudicationsService: ReportedAdjudicationsService
+    reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new PleaAndFindingPage(PageRequestType.EDIT, userService, hearingsService, reportedAdjudicationsService)
   }

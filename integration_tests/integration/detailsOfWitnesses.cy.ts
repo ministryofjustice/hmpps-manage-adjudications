@@ -331,8 +331,8 @@ context('Details of witnesses', () => {
     it('should show the witnesses page with no witnesses added to begin with', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-          12345
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+          12345,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`,
       )
       const detailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
 
@@ -346,8 +346,8 @@ context('Details of witnesses', () => {
     it('should show witnesses when there are some on the draft', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-          23456
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+          23456,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`,
       )
       const detailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
       detailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 3) // This includes the header row plus two data rows
@@ -373,8 +373,8 @@ context('Details of witnesses', () => {
     it('should remove the correct witness if the remove link is used (first)', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-          23456
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+          23456,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`,
       )
       const detailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
       detailsOfWitnessesPage.removeLink(1).click()
@@ -394,8 +394,8 @@ context('Details of witnesses', () => {
     it('should show any witnesses added to the session in the table', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-          12345
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+          12345,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`,
       )
       const detailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
       detailsOfWitnessesPage.witnessesTable().should('not.exist')
@@ -418,8 +418,8 @@ context('Details of witnesses', () => {
     it('should not show the remove link for witnesses that the current user did not add', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-          34567
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`
+          34567,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`,
       )
       const detailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
       detailsOfWitnessesPage.witnessesTable().find('tr').should('have.length', 5)
@@ -438,8 +438,8 @@ context('Details of witnesses', () => {
     it('should return to the referrer stored in the session if the exit button is clicked - reporter', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-          34567
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`
+          34567,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`,
       )
       const detailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
       detailsOfWitnessesPage.exitButton().click()
@@ -450,8 +450,8 @@ context('Details of witnesses', () => {
     it('should return to the referrer stored in the session if the exit button is clicked - reviewer', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfWitnesses.urls.submittedEdit(
-          34567
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(34567)}`
+          34567,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(34567)}`,
       )
       const detailsOfWitnessesPage: DetailsOfWitnesses = Page.verifyOnPage(DetailsOfWitnesses)
       detailsOfWitnessesPage.exitButton().click()

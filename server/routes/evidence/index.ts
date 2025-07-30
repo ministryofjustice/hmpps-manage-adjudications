@@ -22,28 +22,28 @@ export default function detailsOfEvidenceRoutes({
     PageRequestType.EVIDENCE_FROM_API,
     placeOnReportService,
     evidenceSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const detailsOfEvidenceUsingSession = new DetailsOfEvidencePage(
     PageRequestType.EVIDENCE_FROM_SESSION,
     placeOnReportService,
     evidenceSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const submittedEditDetailsOfEvidenceUsingDraft = new DetailsOfEvidencePage(
     PageRequestType.SUBMITTED_EDIT_EVIDENCE_FROM_API,
     placeOnReportService,
     evidenceSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const submittedEditDetailsOfEvidenceUsingSession = new DetailsOfEvidencePage(
     PageRequestType.SUBMITTED_EDIT_EVIDENCE_FROM_SESSION,
     placeOnReportService,
     evidenceSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const addEvidence = new AddEvidenceRoutes(evidenceSessionService)
@@ -61,11 +61,11 @@ export default function detailsOfEvidenceRoutes({
   post(adjudicationUrls.detailsOfEvidence.matchers.submittedEdit, submittedEditDetailsOfEvidenceUsingDraft.submit)
   get(
     adjudicationUrls.detailsOfEvidence.matchers.submittedEditModified,
-    submittedEditDetailsOfEvidenceUsingSession.view
+    submittedEditDetailsOfEvidenceUsingSession.view,
   )
   post(
     adjudicationUrls.detailsOfEvidence.matchers.submittedEditModified,
-    submittedEditDetailsOfEvidenceUsingSession.submit
+    submittedEditDetailsOfEvidenceUsingSession.submit,
   )
 
   return router

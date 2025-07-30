@@ -52,17 +52,17 @@ export default class LocationService {
     const formattedIncidentLocations = assignIntLocCodeAsUserDesc(incidentLocations)
 
     const prisonersCell = formattedIncidentLocations.find(
-      location => location.userDescription.toUpperCase() === "PRISONER'S CELL"
+      location => location.userDescription.toUpperCase() === "PRISONER'S CELL",
     )
     const otherCell = formattedIncidentLocations.find(
-      location => location.userDescription.toUpperCase() === 'OTHER CELL'
+      location => location.userDescription.toUpperCase() === 'OTHER CELL',
     )
 
     const remainingLocations = formattedIncidentLocations
       .filter(
         location =>
           location.userDescription.toUpperCase() !== 'OTHER CELL' &&
-          location.userDescription.toUpperCase() !== "PRISONER'S CELL"
+          location.userDescription.toUpperCase() !== "PRISONER'S CELL",
       )
       .sort((a, b) => a.userDescription.localeCompare(b.userDescription, 'en', { ignorePunctuation: true }))
 
@@ -85,7 +85,7 @@ export default class LocationService {
     const formattedHearingLocations = assignIntLocCodeAsUserDesc(hearingLocations)
 
     return formattedHearingLocations.sort((a, b) =>
-      a.userDescription.localeCompare(b.userDescription, 'en', { ignorePunctuation: true })
+      a.userDescription.localeCompare(b.userDescription, 'en', { ignorePunctuation: true }),
     )
   }
 }

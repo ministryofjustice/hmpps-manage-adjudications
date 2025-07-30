@@ -49,7 +49,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -120,7 +120,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
         if (this.pageOptions.isExistingOrExistingEdit()) {
           const { suspendedPunishments } = await this.punishmentsService.getSuspendedPunishmentDetails(
             chargeNumber,
-            user
+            user,
           )
           const punishmentToUpdate = suspendedPunishments.filter(susPun => {
             return susPun.punishment.id === suspendedPunishmentIdToActivate
@@ -133,14 +133,14 @@ export default class PunishmentSuspendedStartDateChoicePage {
               punishment,
               numberOfDays,
               lastHearingDate,
-              activatedFromChargeNumber
+              activatedFromChargeNumber,
             )
             if (this.pageOptions.isEdit()) {
               await this.punishmentsService.updateSessionPunishment(
                 req,
                 updatedPunishment,
                 chargeNumber,
-                req.params.redisId
+                req.params.redisId,
               )
             } else {
               await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
@@ -166,7 +166,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
           punishmentNumberToActivate,
           chargeNumberForSuspendedPunishment,
         } as ParsedUrlQueryInput,
-      })
+      }),
     )
   }
 
@@ -183,7 +183,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
   getLastHearingDate = async (chargeNumber: string, user: User) => {
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
-      user
+      user,
     )
     return reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing || ''
   }
@@ -192,7 +192,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
     existingPunishment: SuspendedPunishment,
     duration: number,
     startDate: string,
-    activatedFromChargeNumber: string
+    activatedFromChargeNumber: string,
   ): PunishmentData {
     const activePunishment = {
       ...existingPunishment,

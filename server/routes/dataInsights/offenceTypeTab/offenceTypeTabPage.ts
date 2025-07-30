@@ -57,7 +57,7 @@ export default class OffenceTypeTabPage {
 
     const chartSettingMap = {} as Record<string, unknown>
     const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '3a')).lastModifiedDate
+      (await this.chartApiService.getLastModifiedChart(username, '3a')).lastModifiedDate,
     )
 
     chartSettingMap['3a'] = await produceLinesCharts(
@@ -70,7 +70,7 @@ export default class OffenceTypeTabPage {
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.offence_type },
       { source: (row: ChartEntryHorizontalBar) => row.count },
-      'Count'
+      'Count',
     )
 
     const chartDetails3b = await this.chartApiService.getChart(username, agencyId, '3b')
@@ -80,7 +80,7 @@ export default class OffenceTypeTabPage {
     const offenceType: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       offenceTypes,
       req.query.offenceType as string,
-      offenceTypes.length > 0 ? offenceTypes[0] : undefined
+      offenceTypes.length > 0 ? offenceTypes[0] : undefined,
     )
 
     chartSettingMap['3b'] = await produceHorizontalBarsChart(
@@ -100,7 +100,7 @@ export default class OffenceTypeTabPage {
         { source: (row: ChartEntryHorizontalBar) => row.count },
       ],
       getOffenceTypeHorizontalBarsChartHead(),
-      'Percentage'
+      'Percentage',
     )
 
     return res.render(`pages/dataInsights/offenceTypeTab.njk`, {

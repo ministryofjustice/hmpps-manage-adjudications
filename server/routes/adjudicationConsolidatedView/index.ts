@@ -25,7 +25,7 @@ export default function adjudicationConsolidatedViewRoutes({
     reportedAdjudicationsService,
     userService,
     decisionTreeService,
-    punishmentsService
+    punishmentsService,
   )
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)
 

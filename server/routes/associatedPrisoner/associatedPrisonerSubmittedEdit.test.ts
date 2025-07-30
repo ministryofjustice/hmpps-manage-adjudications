@@ -21,7 +21,7 @@ beforeEach(() => {
       offenderNo: 'G6415GD',
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
-    })
+    }),
   )
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
@@ -57,8 +57,8 @@ describe('GET /associated-prisoner/<id>/submitted/edit', () => {
       .get(
         `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
           5,
-          'assisted'
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          'assisted',
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -92,8 +92,8 @@ describe('POST /associated-prisoner/<id>/submitted/edit', () => {
       .post(
         `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
           100,
-          'assisted'
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          'assisted',
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         selectedAnswerId: 'external',
@@ -109,8 +109,8 @@ describe('POST /associated-prisoner/<id>/submitted/edit', () => {
             associatedPrisonersNumber: '12345',
             associatedPrisonersName: 'test',
           },
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should update correctly when switching from external to internal', () => {
@@ -118,8 +118,8 @@ describe('POST /associated-prisoner/<id>/submitted/edit', () => {
       .post(
         `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
           100,
-          'assisted'
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          'assisted',
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         selectedAnswerId: 'internal',
@@ -135,8 +135,8 @@ describe('POST /associated-prisoner/<id>/submitted/edit', () => {
             associatedPrisonersNumber: '1234',
             associatedPrisonersName: null,
           },
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 
@@ -145,8 +145,8 @@ describe('POST /associated-prisoner/<id>/submitted/edit', () => {
       .post(
         `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
           100,
-          'assisted'
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          'assisted',
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         selectedAnswerId: 'internal',
@@ -161,8 +161,8 @@ describe('POST /associated-prisoner/<id>/submitted/edit', () => {
       .post(
         `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
           100,
-          'assisted'
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          'assisted',
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         selectedAnswerId: 'external',
@@ -179,8 +179,8 @@ describe('POST /associated-prisoner/<id>/submitted/edit', () => {
       .post(
         `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
           100,
-          'assisted'
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          'assisted',
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         selectedAnswerId: 'internal',

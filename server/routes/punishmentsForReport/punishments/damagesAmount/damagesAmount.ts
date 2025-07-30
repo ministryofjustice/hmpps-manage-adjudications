@@ -8,7 +8,7 @@ export default class DamagesAmountRoute {
 
   constructor(
     private readonly punishmentsService: PunishmentsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.page = new DamagesAmountPage(PageRequestType.CREATION, punishmentsService, userService)
   }

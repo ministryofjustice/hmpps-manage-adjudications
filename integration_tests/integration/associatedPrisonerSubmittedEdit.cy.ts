@@ -214,8 +214,8 @@ context('Incident assist submitted edit', () => {
       cy.visit(
         `${adjudicationUrls.incidentAssociate.urls.submittedEdit(
           36,
-          'assisted'
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          'assisted',
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       const associatedPrisonerPage: AssociatedPrisoner = Page.verifyOnPage(AssociatedPrisoner)
       associatedPrisonerPage.submitButton().click()

@@ -20,7 +20,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -66,8 +66,8 @@ describe('GET', () => {
       .get(
         `${adjudicationUrls.whenWillPunishmentStart.urls.edit(
           '100',
-          'XYZ'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          'XYZ',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -93,8 +93,8 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.whenWillPunishmentStart.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .send({
         immediate: 'true',
@@ -103,8 +103,8 @@ describe('POST ', () => {
       .expect(
         'Location',
         `${adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(
-          '100'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=03%2F09%2F2023`
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=03%2F09%2F2023`,
       )
   })
   it('redirects to the enter start date page if user does not select another date', () => {
@@ -112,8 +112,8 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.whenWillPunishmentStart.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
       )
       .send({
         immediate: 'false',
@@ -123,8 +123,8 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.punishmentStartDate.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=`,
       )
   })
 })

@@ -31,7 +31,7 @@ export default class confirmedOnReportPage {
 
   constructor(
     pageType: PageRequestType,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -46,7 +46,7 @@ export default class confirmedOnReportPage {
 
     const prisonerFirstAndLastName = formatName(
       adjudicationDetails.prisonerFirstName,
-      adjudicationDetails.prisonerLastName
+      adjudicationDetails.prisonerLastName,
     )
 
     const showNextStepsContent = !this.pageOptions.isReportChangeAfterReview()

@@ -397,7 +397,7 @@ context('Print completed DIS forms', () => {
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.printCompletedDisForms.root)
       expect(loc.search).to.eq(
-        '?fromDate=05%2F12%2F2022&toDate=07%2F12%2F2022&locationId=27102&issueStatus=ISSUED&issueStatus=NOT_ISSUED'
+        '?fromDate=05%2F12%2F2022&toDate=07%2F12%2F2022&locationId=27102&issueStatus=ISSUED&issueStatus=NOT_ISSUED',
       )
     })
     printCompletedDISFormsPage.resultsTable().find('tr').should('have.length', 2)

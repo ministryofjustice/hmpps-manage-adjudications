@@ -21,7 +21,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -54,7 +54,7 @@ describe('GET /', () => {
   it('should load the page', () => {
     return request(app)
       .get(
-        `${adjudicationUrls.hearingsCheckAnswers.urls.start('100')}?adjudicator=JGREEN&plea=UNFIT&finding=CHARGE_PROVED`
+        `${adjudicationUrls.hearingsCheckAnswers.urls.start('100')}?adjudicator=JGREEN&plea=UNFIT&finding=CHARGE_PROVED`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -82,8 +82,8 @@ describe('POST', () => {
           '100',
           'Roxanne Red',
           HearingOutcomePlea.GUILTY,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

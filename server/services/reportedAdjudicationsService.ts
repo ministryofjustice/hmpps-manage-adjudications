@@ -90,17 +90,17 @@ export default class ReportedAdjudicationsService {
     private readonly hmppsManageUsersClient: HmppsManageUsersClient,
     private readonly curiousApiService: CuriousApiService,
     private readonly locationService: LocationService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   async getReportedAdjudicationDetails(
     chargeNumber: string,
     user: User,
-    activeCaseLoadId: string = user.meta.caseLoadId
+    activeCaseLoadId: string = user.meta.caseLoadId,
   ): Promise<ReportedAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new ManageAdjudicationsSystemTokensClient(token, user, activeCaseLoadId).getReportedAdjudication(
-      chargeNumber
+      chargeNumber,
     )
   }
 
@@ -159,7 +159,7 @@ export default class ReportedAdjudicationsService {
         {
           label: 'Details',
           value: reportedAdjudication.statusDetails,
-        }
+        },
       )
     return {
       reviewSummary,
@@ -171,14 +171,14 @@ export default class ReportedAdjudicationsService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const { reportedAdjudication } = await new ManageAdjudicationsSystemTokensClient(
       token,
-      user
+      user,
     ).getReportedAdjudication(chargeNumber)
 
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(reportedAdjudication.prisonerNumber)
 
     const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
       reportedAdjudication.incidentDetails.locationId,
-      user
+      user,
     )
 
     const location = await this.locationService.getIncidentLocation(dpsLocationId, user)
@@ -188,31 +188,31 @@ export default class ReportedAdjudicationsService {
     const lastHearing = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
 
     const cautionGiven = reportedAdjudication.punishments.filter(
-      punishment => punishment.type === PunishmentType.CAUTION
+      punishment => punishment.type === PunishmentType.CAUTION,
     )
 
     const ccPunishmentAwarded = reportedAdjudication.punishments.filter(
-      punishment => punishment.type === PunishmentType.CONFINEMENT
+      punishment => punishment.type === PunishmentType.CONFINEMENT,
     )
 
     const adaGiven = reportedAdjudication.punishments.filter(
       punishment =>
-        punishment.type === PunishmentType.ADDITIONAL_DAYS || punishment.type === PunishmentType.PROSPECTIVE_DAYS
+        punishment.type === PunishmentType.ADDITIONAL_DAYS || punishment.type === PunishmentType.PROSPECTIVE_DAYS,
     )
 
     const damages = reportedAdjudication.punishments.filter(
-      punishment => punishment.type === PunishmentType.DAMAGES_OWED
+      punishment => punishment.type === PunishmentType.DAMAGES_OWED,
     )
     const activePunishments = reportedAdjudication.punishments.filter(
-      punishment => !punishment.schedule?.suspendedUntil
+      punishment => !punishment.schedule?.suspendedUntil,
     )
 
     const activePunishmentsExcludingCautionAndDamages = activePunishments.filter(
-      punishment => punishment.type !== PunishmentType.DAMAGES_OWED && punishment.type !== PunishmentType.CAUTION
+      punishment => punishment.type !== PunishmentType.DAMAGES_OWED && punishment.type !== PunishmentType.CAUTION,
     )
 
     const suspendedPunishments = reportedAdjudication.punishments.filter(
-      punishment => punishment.schedule?.suspendedUntil
+      punishment => punishment.schedule?.suspendedUntil,
     )
 
     const rehabActivities = suspendedPunishments.filter(susPun => susPun.rehabilitativeActivities)
@@ -252,7 +252,7 @@ export default class ReportedAdjudicationsService {
     try {
       const adjudicatorUser = await this.hmppsManageUsersClient.getUserFromUsername(
         lastHearing.outcome.adjudicator,
-        user.token
+        user.token,
       )
       return adjudicatorUser?.name
     } catch {
@@ -263,11 +263,11 @@ export default class ReportedAdjudicationsService {
   async getConfirmationDetails(chargeNumber: string, user: User): Promise<ConfirmedOnReportData> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const adjudicationData = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
-      chargeNumber
+      chargeNumber,
     )
 
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
-      adjudicationData.reportedAdjudication.prisonerNumber
+      adjudicationData.reportedAdjudication.prisonerNumber,
     )
     const [secondaryLanguages, prisonerNeurodiversities] = await Promise.all([
       new PrisonApiClient(token).getSecondaryLanguages(prisoner.bookingId),
@@ -279,7 +279,7 @@ export default class ReportedAdjudicationsService {
 
     const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
       adjudicationData.reportedAdjudication.incidentDetails.locationId,
-      user
+      user,
     )
 
     const location = await this.locationService.getIncidentLocation(dpsLocationId, user)
@@ -288,7 +288,7 @@ export default class ReportedAdjudicationsService {
 
     const reporter = await this.hmppsManageUsersClient.getUserFromUsername(
       adjudicationData.reportedAdjudication.createdByUserId,
-      user.token
+      user.token,
     )
 
     return {
@@ -317,15 +317,15 @@ export default class ReportedAdjudicationsService {
   async getSimpleConfirmationDetails(chargeNumber: string, user: User): Promise<ConfirmedOnReportChangedData> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const adjudicationData = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
-      chargeNumber
+      chargeNumber,
     )
 
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
-      adjudicationData.reportedAdjudication.prisonerNumber
+      adjudicationData.reportedAdjudication.prisonerNumber,
     )
     const reporter = await this.hmppsManageUsersClient.getUserFromUsername(
       adjudicationData.reportedAdjudication.createdByUserId,
-      user.token
+      user.token,
     )
 
     return {
@@ -340,25 +340,25 @@ export default class ReportedAdjudicationsService {
   async getYourCompletedAdjudications(
     user: User,
     filter: ReportedAdjudicationFilter,
-    pageRequest: ApiPageRequest
+    pageRequest: ApiPageRequest,
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const pageResponse = await new ManageAdjudicationsSystemTokensClient(token, user).getYourCompletedAdjudications(
       filter,
-      pageRequest
+      pageRequest,
     )
 
     const prisonerDetails = new Map(
       (
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
-      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
+      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail]),
     )
 
     return this.mapData(pageResponse, reportedAdjudication => {
       const enhancedAdjudication = this.enhanceReportedAdjudication(
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
-        null
+        null,
       )
       return {
         ...enhancedAdjudication,
@@ -370,25 +370,25 @@ export default class ReportedAdjudicationsService {
   async getAllCompletedAdjudications(
     user: User,
     filter: ReportedAdjudicationFilter,
-    pageRequest: ApiPageRequest
+    pageRequest: ApiPageRequest,
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const pageResponse = await new ManageAdjudicationsUserTokensClient(user).getAllCompletedAdjudications(
       filter,
-      pageRequest
+      pageRequest,
     )
     const prisonerDetails = new Map(
       (
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
-      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
+      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail]),
     )
 
     const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
     const reporterNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token)),
       )) || []
     const reporterNameByUsernameMap = new Map(
-      reporterNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+      reporterNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name]),
     )
 
     const uniqueAgencyIds = new Set(pageResponse.content.map(adj => adj.originatingAgencyId))
@@ -402,7 +402,7 @@ export default class ReportedAdjudicationsService {
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
         reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId),
         agencyNameByIdMap.get(reportedAdjudication.originatingAgencyId),
-        null
+        null,
       )
       return {
         ...enhancedAdjudication,
@@ -413,22 +413,25 @@ export default class ReportedAdjudicationsService {
   async getTransferredAdjudicationReports(
     user: User,
     filter: TransferredAdjudicationFilter,
-    pageRequest: ApiPageRequest
+    pageRequest: ApiPageRequest,
   ): Promise<ApiPageResponse<ReportedAdjudicationEnhanced>> {
     const pageResponse = await new ManageAdjudicationsUserTokensClient(user).getTransferredAdjudications(
       filter,
-      pageRequest
+      pageRequest,
     )
 
     const prisonerDetails = new Map(
       (
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(pageResponse.content.map(_ => _.prisonerNumber))
-      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
+      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail]),
     )
 
     const uniqueAgencyIds = [
       ...new Set(
-        pageResponse.content.reduce<string[]>((acc, obj) => [...acc, obj.originatingAgencyId, obj.overrideAgencyId], [])
+        pageResponse.content.reduce<string[]>(
+          (acc, obj) => [...acc, obj.originatingAgencyId, obj.overrideAgencyId],
+          [],
+        ),
       ),
     ]
     const agencyIdsAndNames =
@@ -438,10 +441,10 @@ export default class ReportedAdjudicationsService {
     const usernamesInPage = new Set(pageResponse.content.map(adj => adj.createdByUserId))
     const reporterNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token)),
       )) || []
     const reporterNameByUsernameMap = new Map(
-      reporterNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+      reporterNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name]),
     )
 
     return this.mapData(pageResponse, reportedAdjudication => {
@@ -450,7 +453,7 @@ export default class ReportedAdjudicationsService {
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
         reporterNameByUsernameMap.get(reportedAdjudication.createdByUserId),
         agencyNameByIdMap.get(reportedAdjudication.originatingAgencyId),
-        agencyNameByIdMap.get(reportedAdjudication.overrideAgencyId)
+        agencyNameByIdMap.get(reportedAdjudication.overrideAgencyId),
       )
       return {
         ...enhancedAdjudication,
@@ -461,7 +464,7 @@ export default class ReportedAdjudicationsService {
   async getIssueDataForAdjudications(
     user: User,
     filter: ReportedAdjudicationDISFormFilter,
-    filterUsingHearingDate: boolean
+    filterUsingHearingDate: boolean,
   ): Promise<ReportedAdjudicationsResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     if (filterUsingHearingDate) {
@@ -473,7 +476,7 @@ export default class ReportedAdjudicationsService {
   async getAdjudicationDISFormData(
     user: User,
     filter: ReportedAdjudicationDISFormFilter,
-    filterUsingHearingDate = false
+    filterUsingHearingDate = false,
   ): Promise<ReportedAdjudicationEnhancedWithIssuingDetails[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const response = await this.getIssueDataForAdjudications(user, filter, filterUsingHearingDate)
@@ -483,20 +486,20 @@ export default class ReportedAdjudicationsService {
       (await new PrisonApiClient(token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
         prisonerDetail.offenderNo,
         prisonerDetail,
-      ])
+      ]),
     )
 
     const alertMap = filterUsingHearingDate ? await this.getAlerts(prisonerNumbers, user) : null
 
     const usernamesInPage = new Set(
-      reportedAdjudications.filter(adj => adj.issuingOfficer).map(adj => adj.issuingOfficer)
+      reportedAdjudications.filter(adj => adj.issuingOfficer).map(adj => adj.issuingOfficer),
     )
     const issuingOfficerNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token)),
       )) || []
     const issuingOfficerNameByUsernameMap = new Map(
-      issuingOfficerNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+      issuingOfficerNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name]),
     )
 
     return reportedAdjudications.map(reportedAdjudication => {
@@ -504,7 +507,7 @@ export default class ReportedAdjudicationsService {
         reportedAdjudication,
         prisonerDetails.get(reportedAdjudication.prisonerNumber),
         issuingOfficerNameByUsernameMap,
-        filterUsingHearingDate ? alertMap.get(reportedAdjudication.prisonerNumber) : null
+        filterUsingHearingDate ? alertMap.get(reportedAdjudication.prisonerNumber) : null,
       )
     })
   }
@@ -512,7 +515,7 @@ export default class ReportedAdjudicationsService {
   async getAlerts(prisonerNumbers: string[], user: User): Promise<Map<string, Alert[]>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const alertsForEachPrisoner = await Promise.all(
-      prisonerNumbers.map(prn => new AlertApiClient(token).getAlertsForPrisoner(prn))
+      prisonerNumbers.map(prn => new AlertApiClient(token).getAlertsForPrisoner(prn)),
     )
     return new Map(alertsForEachPrisoner.map(a => [a.prisonerNumber, a.alerts]))
   }
@@ -522,7 +525,7 @@ export default class ReportedAdjudicationsService {
     status: ReviewStatus,
     reason: string,
     details: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsUserTokensClient(user).updateAdjudicationStatus(chargeNumber, {
       status,
@@ -534,7 +537,7 @@ export default class ReportedAdjudicationsService {
   async updateDamageDetails(
     chargeNumber: string,
     damages: DamageDetails[],
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new ManageAdjudicationsSystemTokensClient(token, user).updateDamageDetails(chargeNumber, damages)
@@ -543,7 +546,7 @@ export default class ReportedAdjudicationsService {
   async updateEvidenceDetails(
     chargeNumber: string,
     evidence: EvidenceDetails[],
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new ManageAdjudicationsSystemTokensClient(token, user).updateEvidenceDetails(chargeNumber, evidence)
@@ -563,7 +566,7 @@ export default class ReportedAdjudicationsService {
   async updateWitnessDetails(
     chargeNumber: string,
     witnesses: WitnessDetails[],
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     return new ManageAdjudicationsSystemTokensClient(token, user).updateWitnessDetails(chargeNumber, witnesses)
@@ -601,7 +604,7 @@ export default class ReportedAdjudicationsService {
     prisonerResult: PrisonerSimpleResult,
     reporterName: string,
     originatingAgencyName?: string,
-    overrideAgencyName?: string
+    overrideAgencyName?: string,
   ): ReportedAdjudicationEnhanced {
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
     const { displayName, friendlyName } = prisonerNames
@@ -622,12 +625,12 @@ export default class ReportedAdjudicationsService {
       dateTimeOfIncident: reportedAdjudication.incidentDetails.dateTimeOfIncident,
       formattedDateTimeOfIncident: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfIncident,
-        'D MMMM YYYY - HH:mm'
+        'D MMMM YYYY - HH:mm',
       ),
       dateTimeOfDiscovery: reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
       formattedDateTimeOfDiscovery: formatTimestampToDate(
         reportedAdjudication.incidentDetails.dateTimeOfDiscovery,
-        'D MMMM YYYY - HH:mm'
+        'D MMMM YYYY - HH:mm',
       ),
       statusDisplayName: reportedAdjudicationStatusDisplayName(reportedAdjudication.status),
       formattedDateTimeOfScheduledHearing:
@@ -644,11 +647,11 @@ export default class ReportedAdjudicationsService {
 
     const issuingOfficerNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token)),
       )) || []
 
     const issuingOfficerNameByUsernameMap = new Map(
-      issuingOfficerNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name])
+      issuingOfficerNamesAndUsernames.filter((u): u is User => u !== null).map(u => [u.username, u.name]),
     )
 
     const issuingOfficerName = issuingOfficerNameByUsernameMap.get(reportedAdjudication.issuingOfficer)
@@ -666,7 +669,7 @@ export default class ReportedAdjudicationsService {
 
   formatDisIssueHistory(
     adjudicationInfo: ReportedAdjudication | ConfirmIssueInfo,
-    issuingOfficerNameByUsernameMap: Map<string, string>
+    issuingOfficerNameByUsernameMap: Map<string, string>,
   ) {
     const formattedDisIssueHistory: FormattedDisIssue[] = []
     adjudicationInfo.disIssueHistory.map(disIssue => {
@@ -683,7 +686,7 @@ export default class ReportedAdjudicationsService {
     adjudicationInfo: ReportedAdjudication | ConfirmIssueInfo,
     prisonerResult: PrisonerSimpleResult,
     issuingOfficerNameByUsernameMap: Map<string, string>,
-    prisonersAlerts: Alert[] = []
+    prisonersAlerts: Alert[] = [],
   ): ReportedAdjudicationEnhancedWithIssuingDetails {
     const issuingOfficerName = issuingOfficerNameByUsernameMap.get(adjudicationInfo.issuingOfficer)
     const prisonerNames = this.getPrisonerDisplayNames(prisonerResult)
@@ -697,7 +700,7 @@ export default class ReportedAdjudicationsService {
     if (prisonersAlerts) {
       const alertCodesPresent = new Set(prisonersAlerts.map(alert => alert.alertCode))
       relevantAlerts = alertFlagLabels.filter(alertFlag =>
-        alertFlag.alertCodes.some(alert => [...alertCodesPresent].includes(alert))
+        alertFlag.alertCodes.some(alert => [...alertCodesPresent].includes(alert)),
       )
     }
 
@@ -729,7 +732,7 @@ export default class ReportedAdjudicationsService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const newDraftAdjudicationData = await new ManageAdjudicationsSystemTokensClient(
       token,
-      user
+      user,
     ).createDraftFromCompleteAdjudication(chargeNumber)
     return newDraftAdjudicationData.draftAdjudication.id
   }
@@ -738,7 +741,7 @@ export default class ReportedAdjudicationsService {
     user: User,
     adjudication: DraftAdjudication & ReportedAdjudication,
     draftRequired?: boolean,
-    createdDateTime?: string
+    createdDateTime?: string,
   ): Promise<PrisonerReport> {
     const userId = adjudication.startedByUserId ? adjudication.startedByUserId : adjudication.createdByUserId
     const reporter = await this.hmppsManageUsersClient.getUserFromUsername(userId, user.token)
@@ -753,7 +756,7 @@ export default class ReportedAdjudicationsService {
 
     const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
       adjudication.incidentDetails.locationId,
-      user
+      user,
     )
 
     const [location, agencyName] = await Promise.all([
@@ -765,9 +768,9 @@ export default class ReportedAdjudicationsService {
     let changeReportingOfficerDataQa
     if (draftRequired && !adjudication.createdOnBehalfOfOfficer) {
       changeReportingOfficerLink = `${adjudicationUrls.createOnBehalfOf.urls.start(
-        adjudication.chargeNumber
+        adjudication.chargeNumber,
       )}?referrer=${adjudicationUrls.prisonerReport.urls.review(
-        adjudication.chargeNumber
+        adjudication.chargeNumber,
       )}&editSubmittedAdjudication=true`
       changeReportingOfficerDataQa = 'reporting-officer-changeLink'
     }
@@ -861,12 +864,12 @@ export default class ReportedAdjudicationsService {
       (await Promise.all(
         [...hearingLocationIds].map(id => {
           return this.locationService.getCorrespondingDpsLocationId(id, user)
-        })
+        }),
       )) || []
 
     const locationNamesAndIds =
       (await Promise.all(
-        [...dpsHearingLocationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user))
+        [...dpsHearingLocationIds].map(locationId => this.locationService.getIncidentLocation(locationId, user)),
       )) || []
 
     return new Map(locationNamesAndIds.map(loc => [loc.id, loc.localName]))
@@ -881,7 +884,7 @@ export default class ReportedAdjudicationsService {
 
   getAdjudicatorNameMap = async (hearings: { hearing: HearingDetails }[], user: User): Promise<Map<string, string>> => {
     const governorHearings = hearings.filter(
-      hearing => hearing.hearing.oicHearingType.includes('GOV') && hearing.hearing.outcome
+      hearing => hearing.hearing.oicHearingType.includes('GOV') && hearing.hearing.outcome,
     )
     const governorUsernames = governorHearings.map(hearing => {
       if (hearing.hearing.outcome.code === HearingOutcomeCode.NOMIS) return null
@@ -890,8 +893,8 @@ export default class ReportedAdjudicationsService {
     const usernamesAndNames =
       (await Promise.all(
         [...governorUsernames].map(
-          username => username && this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
-        )
+          username => username && this.hmppsManageUsersClient.getUserFromUsername(username, user.token),
+        ),
       )) || []
     return new Map(usernamesAndNames.map(name => [name?.username, name?.name]))
   }
@@ -919,7 +922,7 @@ export default class ReportedAdjudicationsService {
             }
           }
           return hist
-        })
+        }),
       )) || []
 
     return historyWithDpsLocationIdsForHearings.map(historyItem => {
@@ -956,7 +959,7 @@ export default class ReportedAdjudicationsService {
     locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,
-    user: User
+    user: User,
   ) {
     const dataToSend = {
       locationId,
@@ -973,7 +976,7 @@ export default class ReportedAdjudicationsService {
     locationUuid: string,
     dateTimeOfHearing: string,
     oicHearingType: string,
-    user: User
+    user: User,
   ) {
     const dataToSend = {
       locationId,
@@ -987,15 +990,15 @@ export default class ReportedAdjudicationsService {
   async getAllHearings(chosenHearingDate: string, user: User) {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const results = await new ManageAdjudicationsSystemTokensClient(token, user).getHearingsGivenAgencyAndDate(
-      chosenHearingDate
+      chosenHearingDate,
     )
 
     const { hearings } = results
 
     const prisonerDetails = new Map(
       (await new PrisonApiClient(user.token).getBatchPrisonerDetails(hearings.map(_ => _.prisonerNumber))).map(
-        prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail]
-      )
+        prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail],
+      ),
     )
     const enhancedHearings = hearings.map(hearing => {
       return this.enhanceHearing(hearing, prisonerDetails.get(hearing.prisonerNumber))
@@ -1019,11 +1022,11 @@ export default class ReportedAdjudicationsService {
   async getAcceptedReportConfirmationDetails(chargeNumber: string, user: User) {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const adjudicationData = await new ManageAdjudicationsSystemTokensClient(token, user).getReportedAdjudication(
-      chargeNumber
+      chargeNumber,
     )
 
     const prisoner = await new PrisonApiClient(token).getPrisonerDetails(
-      adjudicationData.reportedAdjudication.prisonerNumber
+      adjudicationData.reportedAdjudication.prisonerNumber,
     )
 
     return {
@@ -1036,7 +1039,7 @@ export default class ReportedAdjudicationsService {
   async filterAdjudicationsByLocation(
     adjudications: ReportedAdjudicationEnhancedWithIssuingDetails[],
     chosenLocationId: LocationId,
-    user: User
+    user: User,
   ) {
     const location = await (
       await this.locationService.getLocationsForUser(user)
@@ -1061,7 +1064,7 @@ export default class ReportedAdjudicationsService {
   getPrimaryButtonInfoForHearingDetails(
     history: OutcomeHistory,
     readOnly: boolean,
-    chargeNumber: string
+    chargeNumber: string,
   ): { href: string; text: string; name: string; qa: string } | null {
     if (!history.length || readOnly) return null
     const finalHistoryItem = history[history.length - 1]
@@ -1207,7 +1210,7 @@ export default class ReportedAdjudicationsService {
   async getLastOutcomeItem(
     chargeNumber: string,
     acceptableStatuses: ReportedAdjudicationStatus[],
-    user: User
+    user: User,
   ): Promise<OutcomeDetailsHistory | HearingDetailsHistory | Record<string, never>> {
     const adjudication = await this.getReportedAdjudicationDetails(chargeNumber, user)
     const { reportedAdjudication } = adjudication
@@ -1225,7 +1228,7 @@ export default class ReportedAdjudicationsService {
   async getLatestNonMatchingHearing(
     chargeNumber: string,
     hearingIdToSkip: number,
-    user: User
+    user: User,
   ): Promise<HearingDetails | Record<string, never>> {
     try {
       const { reportedAdjudication } = await this.getReportedAdjudicationDetails(chargeNumber, user)
@@ -1248,7 +1251,7 @@ export default class ReportedAdjudicationsService {
     prisonerNo: string,
     overrideAgencyId: string,
     dateTimeOfDiscovery: string,
-    user: User
+    user: User,
   ): Promise<OffenderBannerInfo> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const [movementInfo, prisoner] = await Promise.all([
@@ -1257,7 +1260,8 @@ export default class ReportedAdjudicationsService {
     ])
     const timestamp = moment(dateTimeOfDiscovery)
     const moveToOverrideAgencyIdList = movementInfo.filter(
-      prisonerMove => prisonerMove.toAgency === overrideAgencyId && moment(prisonerMove.movementDate).isAfter(timestamp)
+      prisonerMove =>
+        prisonerMove.toAgency === overrideAgencyId && moment(prisonerMove.movementDate).isAfter(timestamp),
     )
     if (!moveToOverrideAgencyIdList.length) return null
     const { movementDate, toAgencyDescription } = moveToOverrideAgencyIdList[0]
@@ -1274,7 +1278,7 @@ export default class ReportedAdjudicationsService {
     originatingAgencyId: string,
     prisonerNumber: string,
     dateTimeOfDiscovery: string,
-    user: User
+    user: User,
   ) => {
     if (!overrideAgencyId || !overrideAgencyId.length) return null
     // Prisoner has been transferred and current user is in the agency where the adjudication was first reported
@@ -1284,7 +1288,7 @@ export default class ReportedAdjudicationsService {
           prisonerNumber,
           overrideAgencyId,
           dateTimeOfDiscovery,
-          user
+          user,
         )
         const { movementDate, prisonerName, toAgencyDescription } = movementData
         return movementData
@@ -1321,7 +1325,7 @@ export default class ReportedAdjudicationsService {
       originatingAgencyId,
       prisonerNumber,
       incidentDetails.dateTimeOfDiscovery,
-      user
+      user,
     )
 
     const originatingAgencyToAddOutcome =
@@ -1349,27 +1353,27 @@ export default class ReportedAdjudicationsService {
     filter: AwardedPunishmentsAndDamagesFilter,
     possibleLocations: Location[],
     userIsALO: boolean,
-    user: User
+    user: User,
   ): Promise<AwardedPunishmentsAndDamages[]> {
     const hearingForDateByChargeNumber = new Map(
-      (await this.getAllHearings(filter.hearingDate, user)).map(hearing => [hearing.chargeNumber, hearing])
+      (await this.getAllHearings(filter.hearingDate, user)).map(hearing => [hearing.chargeNumber, hearing]),
     )
 
     const adjudicationsForHearings = await Promise.all(
       Array.from(hearingForDateByChargeNumber.keys()).flatMap(chargeNumber => {
         return this.getReportedAdjudicationDetails(chargeNumber, user)
-      })
+      }),
     )
 
     const prisonerNumbers = adjudicationsForHearings.map(
-      reportedAdjudicationResult => reportedAdjudicationResult.reportedAdjudication.prisonerNumber
+      reportedAdjudicationResult => reportedAdjudicationResult.reportedAdjudication.prisonerNumber,
     )
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const prisonerDetails = new Map(
       (await new PrisonApiClient(token).getBatchPrisonerDetails(prisonerNumbers)).map(prisonerDetail => [
         prisonerDetail.offenderNo,
         prisonerDetail,
-      ])
+      ]),
     )
 
     let awardedPunishmentsAndDamages: AwardedPunishmentsAndDamages[] = adjudicationsForHearings.map(
@@ -1378,15 +1382,15 @@ export default class ReportedAdjudicationsService {
           reportedAdjudicationResult,
           hearingForDateByChargeNumber,
           prisonerDetails,
-          userIsALO
-        )
+          userIsALO,
+        ),
     )
 
     if (filter.locationId) {
       const location = possibleLocations.filter(loc => loc.locationId === filter.locationId)
       const { locationPrefix } = location[0]
       awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(
-        apad => this.getLocationPrefix(apad.prisonerLocation) === locationPrefix
+        apad => this.getLocationPrefix(apad.prisonerLocation) === locationPrefix,
       )
     }
 
@@ -1401,7 +1405,7 @@ export default class ReportedAdjudicationsService {
     ]
 
     awardedPunishmentsAndDamages = awardedPunishmentsAndDamages.filter(result =>
-      displayForAdjudicationStatuses.includes(result.status)
+      displayForAdjudicationStatuses.includes(result.status),
     )
 
     return awardedPunishmentsAndDamages
@@ -1429,7 +1433,7 @@ export default class ReportedAdjudicationsService {
     adj: ReportedAdjudicationResult,
     hearingForDateByChargeNumber: Map<string, any>,
     prisonerDetails: Map<string, PrisonerSimpleResult>,
-    userIsALO: boolean
+    userIsALO: boolean,
   ): AwardedPunishmentsAndDamages {
     const adjudication = adj.reportedAdjudication
     const hearingForAdjudication = hearingForDateByChargeNumber.get(adjudication.chargeNumber)
@@ -1454,7 +1458,7 @@ export default class ReportedAdjudicationsService {
 
     const financialPunishmentTypes = [PunishmentType.DAMAGES_OWED, PunishmentType.EARNINGS]
     const financialPunishmentCount = adjudication.punishments.filter(punishment =>
-      financialPunishmentTypes.includes(punishment.type)
+      financialPunishmentTypes.includes(punishment.type),
     ).length
 
     let additionalDays = 0
@@ -1477,7 +1481,7 @@ export default class ReportedAdjudicationsService {
         formatLocation(prisonerDetails.get(adjudication.prisonerNumber)?.assignedLivingUnitDesc) || 'Unknown',
       formattedDateTimeOfHearing: formatTimestampToDate(
         hearingForAdjudication.dateTimeOfHearing,
-        'D MMMM YYYY - HH:mm'
+        'D MMMM YYYY - HH:mm',
       ),
       status: adjudication.status,
       caution,
@@ -1502,7 +1506,7 @@ export default class ReportedAdjudicationsService {
       if (chosenAgency === 'OUT') return null
       // Now we have a unique set of agency ids, we can match them to their descriptions
       const matchingAgencyInfo = movementInfo.find(
-        node => node.fromAgency === chosenAgency || node.toAgency === chosenAgency
+        node => node.fromAgency === chosenAgency || node.toAgency === chosenAgency,
       )
       if (matchingAgencyInfo) {
         return {
@@ -1525,7 +1529,7 @@ export default class ReportedAdjudicationsService {
     uniqueListOfAgenciesForPrisoner: EstablishmentInformation[],
     filter: AdjudicationHistoryFilter,
     pageRequest: ApiPageRequest,
-    user: User
+    user: User,
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const userRoles = await this.userService.getUserRoles(user.token)
     let { token } = user
@@ -1539,14 +1543,14 @@ export default class ReportedAdjudicationsService {
       results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistoryAllBookings(
         prisoner.prisonerNumber,
         filter,
-        pageRequest
+        pageRequest,
       )
     } else {
       results = await new ManageAdjudicationsSystemTokensClient(token, user).getPrisonerAdjudicationHistory(
         prisoner.bookingId,
         filter,
         agencyIds,
-        pageRequest
+        pageRequest,
       )
     }
 
@@ -1559,7 +1563,7 @@ export default class ReportedAdjudicationsService {
             .map(a => a.trim())
             .filter(Boolean)
       const filteredContent = results.content.filter(adjudication =>
-        selectedAgencies.includes(adjudication.originatingAgencyId)
+        selectedAgencies.includes(adjudication.originatingAgencyId),
       )
       return {
         ...results,
@@ -1576,7 +1580,7 @@ export default class ReportedAdjudicationsService {
     chargeNumber: string,
     prisonerNumber: string,
     bookingId: number,
-    user: User
+    user: User,
   ): Promise<Dis5AdjudicationsAndMoneyPrintSupport> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
 

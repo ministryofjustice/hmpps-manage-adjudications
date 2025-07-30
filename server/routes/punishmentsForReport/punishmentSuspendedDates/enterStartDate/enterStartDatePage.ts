@@ -46,7 +46,7 @@ export default class PunishmentSuspendedStartDatePage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -112,14 +112,14 @@ export default class PunishmentSuspendedStartDatePage {
             punishment,
             numberOfDays,
             startDate,
-            activatedFromChargeNumber
+            activatedFromChargeNumber,
           )
           if (this.pageOptions.isEdit()) {
             await this.punishmentsService.updateSessionPunishment(
               req,
               updatedPunishment,
               chargeNumber,
-              req.params.redisId
+              req.params.redisId,
             )
           } else {
             await this.punishmentsService.addSessionPunishment(req, updatedPunishment, chargeNumber)
@@ -148,7 +148,7 @@ export default class PunishmentSuspendedStartDatePage {
     existingPunishment: SuspendedPunishment,
     duration: number,
     startDate: string,
-    activatedFromChargeNumber: string
+    activatedFromChargeNumber: string,
   ): PunishmentData {
     const activePunishment = {
       ...existingPunishment,

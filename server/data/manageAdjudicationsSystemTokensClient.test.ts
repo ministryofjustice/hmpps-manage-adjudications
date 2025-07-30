@@ -60,7 +60,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
     it('should return a page of completed adjudications', async () => {
       fakeManageAdjudicationsApi
         .get(
-          `/reported-adjudications/my-reports?page=0&size=20&startDate=2022-01-01&endDate=2022-01-01&status=AWAITING_REVIEW`
+          `/reported-adjudications/my-reports?page=0&size=20&startDate=2022-01-01&endDate=2022-01-01&status=AWAITING_REVIEW`,
         )
         .matchHeader('authorization', `Bearer ${token}`)
         .matchHeader('Active-Caseload', user.meta.caseLoadId)
@@ -72,7 +72,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
           fromDate: moment('2022-01-01', 'YYYY-MM-DD'),
           status: ReportedAdjudicationStatus.AWAITING_REVIEW,
         },
-        request
+        request,
       )
       expect(result).toEqual(response)
     })
@@ -277,7 +277,7 @@ describe('manageAdjudicationsSystemTokensClient', () => {
           fromDate: moment('16/11/2021', 'DD/MM/YYYY'),
           toDate: moment('21/11/2021', 'DD/MM/YYYY'),
         },
-        request
+        request,
       )
       expect(response).toEqual(result)
     })

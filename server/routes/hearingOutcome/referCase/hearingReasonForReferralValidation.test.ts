@@ -9,7 +9,7 @@ describe('validateForm', () => {
         referralReason: 'This is a very serious offence which needs the police.',
         referGovReasonPresent: false,
         referGovReason: undefined,
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when the reason is missing - police referral', () => {
@@ -18,7 +18,7 @@ describe('validateForm', () => {
         referralReason: '',
         referGovReasonPresent: false,
         referGovReason: undefined,
-      })
+      }),
     ).toEqual({
       href: '#referralReason',
       text: 'Enter the reason for the referral',
@@ -30,7 +30,7 @@ describe('validateForm', () => {
         referralReason: '',
         referGovReasonPresent: true,
         referGovReason: ReferGovReason.GOV_INQUIRY,
-      })
+      }),
     ).toEqual({
       href: '#referralReason',
       text: 'Enter the adjudicator’s comments about the referral',
@@ -42,7 +42,7 @@ describe('validateForm', () => {
         referralReason: '',
         referGovReasonPresent: true,
         referGovReason: undefined,
-      })
+      }),
     ).toEqual({
       href: '#referGovReason',
       text: 'Enter the reason for the referral',
@@ -54,7 +54,7 @@ describe('validateForm', () => {
         referralReason: wordLimitExceedingString,
         referGovReasonPresent: false,
         referGovReason: undefined,
-      })
+      }),
     ).toStrictEqual({
       href: '#referralReason',
       text: 'Your statement must be 4,000 characters or fewer',

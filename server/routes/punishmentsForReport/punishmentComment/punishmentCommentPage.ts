@@ -32,7 +32,7 @@ export default class PunishmentCommentPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -96,7 +96,7 @@ export default class PunishmentCommentPage {
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
-      })
+      }),
     )
   }
 }

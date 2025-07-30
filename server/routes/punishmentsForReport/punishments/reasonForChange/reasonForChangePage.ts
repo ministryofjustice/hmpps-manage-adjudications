@@ -34,7 +34,7 @@ export default class ReasonForChangePunishmentRoutes {
   constructor(
     pageType: PageRequestType,
     private readonly punishmentsService: PunishmentsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -83,7 +83,7 @@ export default class ReasonForChangePunishmentRoutes {
       url.format({
         pathname: adjudicationUrls.checkPunishments.urls.submittedEdit(chargeNumber),
         query: { punishmentsChanged: true },
-      })
+      }),
     )
   }
 }

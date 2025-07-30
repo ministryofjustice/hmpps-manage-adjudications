@@ -295,13 +295,13 @@ context('v2 offences', () => {
 
     // now add the new path
     const aggravateByProtectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     aggravateByProtectedCharacteristic.radio('1-5-2-1').check()
     whatTypeOfOffencePage.continue().click()
     // now this should lead to the new page
     const whichProtectedCharacteristic = new OffenceCodeSelection(
-      'Select which protected characteristics were part of the reason for the incident'
+      'Select which protected characteristics were part of the reason for the incident',
     )
     whichProtectedCharacteristic.checkbox('1-5-2-1-1').check()
     whichProtectedCharacteristic.checkbox('1-5-2-1-2').check()
@@ -314,7 +314,7 @@ context('v2 offences', () => {
       .find('dd')
       .then($summaryData => {
         expect($summaryData.get(5).innerText).to.contain(
-          'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic'
+          'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
         )
       })
   })
@@ -330,13 +330,13 @@ context('v2 offences', () => {
 
     // now add the new path
     const aggravateByProtectedCharacteristic = new OffenceCodeSelection(
-      'Was the incident aggravated by a protected characteristic?'
+      'Was the incident aggravated by a protected characteristic?',
     )
     aggravateByProtectedCharacteristic.radio('1-4-2-1').check()
     whatTypeOfOffencePage.continue().click()
     // now this should lead to the new page
     const whichProtectedCharacteristic = new OffenceCodeSelection(
-      'Select which protected characteristics were part of the reason for the incident'
+      'Select which protected characteristics were part of the reason for the incident',
     )
     whichProtectedCharacteristic.checkbox('1-4-2-1-1').check()
     whichProtectedCharacteristic.checkbox('1-4-2-1-2').check()
@@ -349,7 +349,7 @@ context('v2 offences', () => {
       .find('dd')
       .then($summaryData => {
         expect($summaryData.get(5).innerText).to.contain(
-          'causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic'
+          'causes damage to, or destruction of, any part of a prison or any other property, other than his own, aggravated by a protected characteristic',
         )
       })
 
@@ -367,7 +367,7 @@ context('v2 offences', () => {
 
     // now this should lead to the new page
     const whichProtectedCharacteristic = new OffenceCodeSelection(
-      'Select which protected characteristics were part of the reason for the incident'
+      'Select which protected characteristics were part of the reason for the incident',
     )
     whichProtectedCharacteristic.checkbox('1-4-3-2').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
@@ -380,7 +380,7 @@ context('v2 offences', () => {
       .then($summaryData => {
         expect($summaryData.get(3).innerText).to.contain('Disability')
         expect($summaryData.get(4).innerText).to.contain(
-          'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic'
+          'uses threatening, abusive or insulting words or behaviour, which demonstrate, or are motivated (wholly or partly) by, hostility to persons based on them sharing a protected characteristic',
         )
       })
 
@@ -437,7 +437,7 @@ context('v2 offences', () => {
         expect($summaryData.get(2).innerText).to.contain('Sexual offence or obscene act')
         expect($summaryData.get(3).innerText).to.contain('Exposes themselves or any other indecent or obscene act')
         expect($summaryData.get(4).innerText).to.contain(
-          'exposes himself, or commits any other indecent or obscene act'
+          'exposes himself, or commits any other indecent or obscene act',
         )
       })
   })
@@ -479,7 +479,7 @@ context('v2 offences', () => {
 
     // now this should lead to the new page
     const whichProtectedCharacteristic = new OffenceCodeSelection(
-      'Select which protected characteristics were part of the reason for the incident'
+      'Select which protected characteristics were part of the reason for the incident',
     )
     whichProtectedCharacteristic.checkbox('1-4-3-2').check()
     whichProtectedCharacteristic.continueCheckboxes().click()
@@ -492,7 +492,7 @@ context('v2 offences', () => {
       adjudicationUrls.detailsOfOffence.urls.delete(100, {
         offenceCode: '2410124',
         protectedCharacteristics: ['1-4-3-2'],
-      })
+      }),
     )
   })
   it('delete offence from draft', () => {
@@ -505,7 +505,7 @@ context('v2 offences', () => {
       adjudicationUrls.detailsOfOffence.urls.delete(101, {
         offenceCode: '2410124',
         protectedCharacteristics: ['2'],
-      })
+      }),
     )
   })
 })
@@ -665,14 +665,14 @@ context('v2 offences - assault 1(a)', () => {
 
       // now add the new path
       const aggravateByProtectedCharacteristic = new OffenceCodeSelection(
-        'Was the incident aggravated by a protected characteristic?'
+        'Was the incident aggravated by a protected characteristic?',
       )
       aggravateByProtectedCharacteristic.radio(`1-1-1-${test.code}-1`).check()
       whatTypeOfOffencePage.continue().click()
 
       // now this should lead to the new page
       const whichProtectedCharacteristic = new OffenceCodeSelection(
-        'Select which protected characteristics were part of the reason for the incident'
+        'Select which protected characteristics were part of the reason for the incident',
       )
       whichProtectedCharacteristic.checkbox(`1-1-1-${test.code}-1-1`).check()
       whichProtectedCharacteristic.checkbox(`1-1-1-${test.code}-1-2`).check()
@@ -686,7 +686,7 @@ context('v2 offences - assault 1(a)', () => {
         .then($summaryData => {
           expect($summaryData.get(5).innerText).to.contain('Age, Disability')
           expect($summaryData.get(6).innerText).to.contain(
-            'commits any assault aggravated by a protected characteristic'
+            'commits any assault aggravated by a protected characteristic',
           )
         })
 
@@ -1105,7 +1105,7 @@ context('v2 offences ALO', () => {
           })
         } else if (test.skipProtectedYesNo !== true) {
           const aggravateByProtectedCharacteristic = new OffenceCodeSelection(
-            'Was the incident aggravated by a protected characteristic?'
+            'Was the incident aggravated by a protected characteristic?',
           )
           aggravateByProtectedCharacteristic.radio(`${test.key[0]}-1`).check()
           test.key.shift()
@@ -1118,7 +1118,7 @@ context('v2 offences ALO', () => {
           whoWasAssaulted.continue().click()
         }
         const whichProtectedCharacteristic = new OffenceCodeSelection(
-          'Select which protected characteristics were part of the reason for the incident'
+          'Select which protected characteristics were part of the reason for the incident',
         )
         whichProtectedCharacteristic.checkbox(`${test.key[0]}-1`).check()
         whichProtectedCharacteristic.continueCheckboxes().click()
@@ -1127,7 +1127,7 @@ context('v2 offences ALO', () => {
         detailsOfOffence.saveAndContinue().click()
         cy.url().should(
           'include',
-          adjudicationUrls.prisonerReport.urls.review(test.isYouthOffender ? '123456' : '12345')
+          adjudicationUrls.prisonerReport.urls.review(test.isYouthOffender ? '123456' : '12345'),
         )
       }
     })

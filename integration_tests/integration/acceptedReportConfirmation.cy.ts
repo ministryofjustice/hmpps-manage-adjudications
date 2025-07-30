@@ -88,13 +88,13 @@ context('Report has been accepted', () => {
       .p2()
       .should(
         'contain',
-        'Once John Smith has received the report, the first hearing should start by the end of the next day. If that day is a Sunday or a public holiday, then the hearing can be on the following working day.'
+        'Once John Smith has received the report, the first hearing should start by the end of the next day. If that day is a Sunday or a public holiday, then the hearing can be on the following working day.',
       )
     acceptedReportConfirmationPage
       .p3()
       .should(
         'contain',
-        'Begin to prepare for the hearing, including gathering details about any damages, evidence or witnesses.'
+        'Begin to prepare for the hearing, including gathering details about any damages, evidence or witnesses.',
       )
     acceptedReportConfirmationPage.scheduleHearingLink().should('contain', 'schedule a hearing')
     acceptedReportConfirmationPage

@@ -19,7 +19,7 @@ export default class EvidenceSessionService {
     index: number,
     isBaggedAndTagged: boolean,
     isOther: boolean,
-    id: number | string
+    id: number | string,
   ) {
     if (isBaggedAndTagged) return req.session.evidence?.[id]?.baggedAndTagged.splice(index - 1, 1)
     if (isOther) return req.session.evidence?.[id]?.other.splice(index - 1, 1)

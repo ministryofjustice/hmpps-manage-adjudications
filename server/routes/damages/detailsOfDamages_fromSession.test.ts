@@ -82,7 +82,7 @@ describe('POST', () => {
       .post(adjudicationUrls.detailsOfDamages.urls.modified('100'))
       .expect(302)
       .then(() =>
-        expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith('100', damagesToSave, expect.anything())
+        expect(placeOnReportService.saveDamageDetails).toHaveBeenCalledWith('100', damagesToSave, expect.anything()),
       )
   })
 })

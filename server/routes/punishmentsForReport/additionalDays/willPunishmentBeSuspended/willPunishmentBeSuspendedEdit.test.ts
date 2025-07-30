@@ -61,8 +61,8 @@ describe('POST punishment-suspended page', () => {
       .post(
         `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(
           '100',
-          'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=5`
+          'XYZ',
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=5`,
       )
       .send({
         suspended: 'yes',
@@ -72,8 +72,8 @@ describe('POST punishment-suspended page', () => {
         'Location',
         `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.edit(
           '100',
-          'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=5`
+          'XYZ',
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=5`,
       )
   })
   it('should redirect - not suspended', () => {
@@ -81,8 +81,8 @@ describe('POST punishment-suspended page', () => {
       .post(
         `${adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit(
           '100',
-          'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=6`
+          'XYZ',
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=6`,
       )
       .send({
         suspended: 'no',
@@ -92,8 +92,8 @@ describe('POST punishment-suspended page', () => {
         'Location',
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
           '100',
-          'XYZ'
-        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=6`
+          'XYZ',
+        )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=6`,
       )
   })
 })

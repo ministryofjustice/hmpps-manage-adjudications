@@ -6,7 +6,6 @@ import { FormError } from '../../@types/template'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { properCaseName } from '../../utils/utils'
 
-// eslint-disable-next-line no-shadow
 enum ErrorType {
   OTHER_PERSON_NAME = 'OTHER_PERSON_NAME',
 }

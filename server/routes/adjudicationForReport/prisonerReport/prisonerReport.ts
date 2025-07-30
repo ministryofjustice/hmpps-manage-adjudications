@@ -10,13 +10,13 @@ export default class prisonerReportRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.page = new PrisonerReportPage(
       PageRequestType.REPORTER,
       reportedAdjudicationsService,
       decisionTreeService,
-      userService
+      userService,
     )
   }
 

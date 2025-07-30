@@ -96,7 +96,7 @@ describe('POST', () => {
       .post(adjudicationUrls.detailsOfEvidence.urls.modified('100'))
       .expect(302)
       .then(() =>
-        expect(placeOnReportService.saveEvidenceDetails).toHaveBeenCalledWith('100', evidenceToSave, expect.anything())
+        expect(placeOnReportService.saveEvidenceDetails).toHaveBeenCalledWith('100', evidenceToSave, expect.anything()),
       )
   })
 })

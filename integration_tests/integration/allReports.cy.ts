@@ -66,7 +66,7 @@ context('All Completed Reports', () => {
       .first()
       .should(
         'contain.text',
-        'Destroys or damages any part of a young offender institution or any other property other than his own'
+        'Destroys or damages any part of a young offender institution or any other property other than his own',
       )
   })
 
@@ -315,7 +315,7 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.applyButton().click()
     cy.get('.govuk-error-summary__body').should(
       'contain.text',
-      'Enter a date that is before or the same as the ‘date to’'
+      'Enter a date that is before or the same as the ‘date to’',
     )
   })
 

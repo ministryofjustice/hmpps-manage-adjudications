@@ -21,7 +21,7 @@ export default function ReviewerEditOffenceWarningRoutes({
   const reviewerEditOffenceWarningRoute = new ReviewerEditOffenceWarningRoute(
     decisionTreeService,
     reportedAdjudicationsService,
-    userService
+    userService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

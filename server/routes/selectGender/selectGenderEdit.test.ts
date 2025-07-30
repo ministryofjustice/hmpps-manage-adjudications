@@ -35,7 +35,7 @@ describe('GET /select-gender edit', () => {
         firstName: 'UDFSANAYE',
         lastName: 'AIDETRIA',
         gender: 'Unknown',
-      })
+      }),
     )
   })
   it('should load the edit select gender page', () => {
@@ -45,7 +45,7 @@ describe('GET /select-gender edit', () => {
       .expect(res => {
         expect(res.text).toContain('What is the gender of the prisoner?')
         expect(res.text).toContain(
-          'This is the gender the prisoner identifies as. We’re asking this because there’s no gender specified on this prisoner’s profile.'
+          'This is the gender the prisoner identifies as. We’re asking this because there’s no gender specified on this prisoner’s profile.',
         )
       })
   })
@@ -62,7 +62,7 @@ describe('POST /select-gender edit', () => {
         expect(placeOnReportService.amendPrisonerGender).toHaveBeenCalledWith(
           4490,
           PrisonerGender.FEMALE,
-          expect.anything()
+          expect.anything(),
         )
         expect(placeOnReportService.setPrisonerGenderOnSession).toHaveBeenCalledTimes(0)
       })

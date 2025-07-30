@@ -37,7 +37,7 @@ context('Plea and finding', () => {
   describe('Submits successfully', () => {
     it('goes to the money recovered for damages page if data successfully submitted with PROVED finding', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="CHARGE_PROVED"]').click()
@@ -50,7 +50,7 @@ context('Plea and finding', () => {
     })
     it('goes to the reason for finding page if data successfully submitted with DISMISSED finding', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="DISMISSED"]').click()
@@ -63,7 +63,7 @@ context('Plea and finding', () => {
     })
     it('goes to the reason for not proceeding page if data successfully submitted with NOT_PROCEED finding', () => {
       cy.visit(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.start('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       const hearingPleaAndFindingPage = Page.verifyOnPage(HearingPleaAndFinding)
       hearingPleaAndFindingPage.findingRadioButtons().find('input[value="NOT_PROCEED"]').click()

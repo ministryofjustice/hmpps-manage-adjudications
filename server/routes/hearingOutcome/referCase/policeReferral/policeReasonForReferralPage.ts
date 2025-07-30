@@ -35,7 +35,7 @@ export default class ReasonForReferralPage {
     pageType: PageRequestType,
     private readonly outcomesService: OutcomesService,
     private readonly userService: UserService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -64,7 +64,7 @@ export default class ReasonForReferralPage {
       const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
         chargeNumber,
         [ReportedAdjudicationStatus.REFER_POLICE],
-        user
+        user,
       )
       refOutcome = lastOutcomeItem.outcome?.outcome
     }

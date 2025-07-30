@@ -11,7 +11,7 @@ export default class AcceptedReportConfirmationRoute {
     const { chargeNumber } = req.params
     const adjudicationDetails = await this.reportedAdjudicationsService.getAcceptedReportConfirmationDetails(
       chargeNumber,
-      user
+      user,
     )
 
     return res.render(`pages/acceptedReportConfirmation.njk`, {

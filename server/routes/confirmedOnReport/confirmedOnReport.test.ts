@@ -11,7 +11,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -42,10 +42,10 @@ describe('GET /prisoner-placed-on-report', () => {
         expect(res.text).toContain('Your report for John Smith has been submitted for review')
         expect(res.text).toContain('This report will be reviewed. The reviewer can do one of 3 thing')
         expect(res.text).toContain(
-          'Check your prison’s processes. For example, you may need to submit this report on paper as well as on this system.'
+          'Check your prison’s processes. For example, you may need to submit this report on paper as well as on this system.',
         )
         expect(res.text).toContain(
-          'If the prisoner is transferred, this report will need to be reviewed and accepted before it is sent to the new prison.'
+          'If the prisoner is transferred, this report will need to be reviewed and accepted before it is sent to the new prison.',
         )
       })
   })

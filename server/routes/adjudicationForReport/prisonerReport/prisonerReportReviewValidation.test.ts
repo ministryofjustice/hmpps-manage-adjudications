@@ -49,12 +49,12 @@ describe('validateForm - prisoner review', () => {
     })
     it('rejected details too large', () => {
       expect(
-        validateForm({ status: ReviewStatus.REJECTED, reason: 'reason', details: wordLimitExceedingString })
+        validateForm({ status: ReviewStatus.REJECTED, reason: 'reason', details: wordLimitExceedingString }),
       ).toStrictEqual([toTest.errors.REJECT_DETAILS_WORD_COUNT_EXCEEDED])
     })
     it('returned details too large', () => {
       expect(
-        validateForm({ status: ReviewStatus.RETURNED, reason: 'reason', details: wordLimitExceedingString })
+        validateForm({ status: ReviewStatus.RETURNED, reason: 'reason', details: wordLimitExceedingString }),
       ).toStrictEqual([toTest.errors.RETURN_DETAILS_WORD_COUNT_EXCEEDED])
     })
     it('accepted details too large', () => {

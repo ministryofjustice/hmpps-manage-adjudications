@@ -32,7 +32,7 @@ export default class PaybackPunishmentDetailsPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }

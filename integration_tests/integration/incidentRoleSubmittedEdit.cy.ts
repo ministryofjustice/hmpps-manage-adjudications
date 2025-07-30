@@ -88,8 +88,8 @@ context('Incident role (edit after completion of report)', () => {
   it('should submit form successfully if all data entered and redirect to offence details page - reporter version', () => {
     cy.visit(
       `${adjudicationUrls.incidentRole.urls.submittedEdit(34)}?referrer=${adjudicationUrls.prisonerReport.urls.report(
-        1524455
-      )}`
+        1524455,
+      )}`,
     )
     const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
     incidentRolePage.submitButton().click()
@@ -100,8 +100,8 @@ context('Incident role (edit after completion of report)', () => {
   it('should redirect to the prisoner report page if the user exits the page', () => {
     cy.visit(
       `${adjudicationUrls.incidentRole.urls.submittedEdit(34)}?referrer=${adjudicationUrls.prisonerReport.urls.report(
-        1524455
-      )}`
+        1524455,
+      )}`,
     )
     const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
     incidentRolePage.exitButton().click()
@@ -116,8 +116,8 @@ context('Incident role (edit after completion of report)', () => {
     it('should redirect back to incident details (edit) if an error occurs whilst calling the API', () => {
       cy.visit(
         `${adjudicationUrls.incidentRole.urls.submittedEdit(34)}?referrer=${adjudicationUrls.prisonerReport.urls.report(
-          1524455
-        )}`
+          1524455,
+        )}`,
       )
       const incidentRolePage: IncidentRole = Page.verifyOnPage(IncidentRole)
       incidentRolePage.submitButton().click()

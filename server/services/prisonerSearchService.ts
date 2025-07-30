@@ -104,7 +104,7 @@ export default class PrisonerSearchService {
     })
 
     return enhancedResults.sort((a: PrisonerSearchSummary, b: PrisonerSearchSummary) =>
-      a.displayName.localeCompare(b.displayName)
+      a.displayName.localeCompare(b.displayName),
     )
   }
 

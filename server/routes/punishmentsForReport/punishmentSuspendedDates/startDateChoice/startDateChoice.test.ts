@@ -21,7 +21,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -126,8 +126,8 @@ describe('POST ', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentStartDateChoice.urls.existing(
-          '100'
-        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`
+          '100',
+        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`,
       )
       .send({
         immediate: 'true',
@@ -136,16 +136,16 @@ describe('POST ', () => {
       .expect(
         'Location',
         `${adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(
-          '100'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
+          '100',
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`,
       )
   })
   it('redirects to the enter start date page if user does not select another date', () => {
     return request(app)
       .post(
         `${adjudicationUrls.suspendedPunishmentStartDateChoice.urls.existing(
-          '100'
-        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`
+          '100',
+        )}?punishmentType=CONFINEMENT&punishmentNumberToActivate=72`,
       )
       .send({
         immediate: 'false',
@@ -154,8 +154,8 @@ describe('POST ', () => {
       .expect(
         'Location',
         `${adjudicationUrls.suspendedPunishmentStartDate.urls.existing(
-          '100'
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`
+          '100',
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`,
       )
   })
 })

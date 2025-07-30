@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 export enum PunishmentType {
   PRIVILEGE = 'PRIVILEGE',
   EARNINGS = 'EARNINGS',
@@ -253,7 +251,7 @@ export function convertPunishmentType(
   type: PunishmentType,
   stoppage: number,
   privilege: PrivilegeType,
-  otherPrivilege: string
+  otherPrivilege: string,
 ) {
   switch (type) {
     case PunishmentType.ADDITIONAL_DAYS:

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { v4 as uuidv4 } from 'uuid'
 import { Request } from 'express'
 import HmppsAuthClient from '../data/hmppsAuthClient'
@@ -48,7 +47,7 @@ export interface ActivityDetails {
 export default class PunishmentsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly hmppsManageUsersClient: HmppsManageUsersClient
+    private readonly hmppsManageUsersClient: HmppsManageUsersClient,
   ) {}
 
   private createSessionForAdjudicationPunishmentIfNotExists(req: Request, chargeNumber: string) {
@@ -73,7 +72,7 @@ export default class PunishmentsService {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const { reportedAdjudication } = await new ManageAdjudicationsSystemTokensClient(
       token,
-      user
+      user,
     ).getReportedAdjudication(chargeNumber)
     return reportedAdjudication
   }
@@ -157,7 +156,7 @@ export default class PunishmentsService {
     chargeNumber: string,
     redisId: string,
     currentActivityNumber: number,
-    activityDetails: RehabilitativeActivity
+    activityDetails: RehabilitativeActivity,
   ) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     this.deleteSessionPunishments(req, redisId, chargeNumber)
@@ -181,7 +180,7 @@ export default class PunishmentsService {
     this.deleteSessionPunishments(req, redisId, chargeNumber)
 
     const updatedRehabActivityList = punishment.rehabilitativeActivities.filter(
-      (ra: RehabilitativeActivity) => ra.sessionId !== sessionId
+      (ra: RehabilitativeActivity) => ra.sessionId !== sessionId,
     )
 
     const updatedPunishment = {
@@ -202,7 +201,7 @@ export default class PunishmentsService {
     chargeNumber: string,
     redisId: string,
     sessionId: number,
-    activityDetails: RehabilitativeActivity
+    activityDetails: RehabilitativeActivity,
   ) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     this.deleteSessionPunishments(req, redisId, chargeNumber)
@@ -230,7 +229,7 @@ export default class PunishmentsService {
     completed: boolean,
     outcome?: NotCompletedOutcome,
     daysToActivate?: number,
-    suspendedUntil?: string
+    suspendedUntil?: string,
   ) {
     req.session.rehabCompletionInformation = {
       completed,
@@ -315,7 +314,7 @@ export default class PunishmentsService {
   async createPunishmentSet(
     punishments: PunishmentData[],
     chargeNumber: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsUserTokensClient(user).createPunishments(chargeNumber, punishments)
   }
@@ -323,7 +322,7 @@ export default class PunishmentsService {
   async editPunishmentSet(
     punishments: PunishmentData[],
     chargeNumber: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsUserTokensClient(user).amendPunishments(chargeNumber, punishments)
   }
@@ -346,7 +345,7 @@ export default class PunishmentsService {
 
     const suspendedPunishments = await manageAdjudicationsClient.getSuspendedPunishments(
       prisoner.offenderNo,
-      reportedAdjudication.chargeNumber
+      reportedAdjudication.chargeNumber,
     )
     return {
       prisonerName: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
@@ -359,7 +358,7 @@ export default class PunishmentsService {
     req: Request,
     chargeNumber: string,
     punishmentId: number,
-    user: User
+    user: User,
   ): Promise<ActivityDetails> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
@@ -385,7 +384,7 @@ export default class PunishmentsService {
     user: User,
     outcome?: NotCompletedOutcome,
     daysToActivate?: number,
-    suspendedUntil?: string
+    suspendedUntil?: string,
   ) {
     new ManageAdjudicationsUserTokensClient(user).completeRehabilitativeActivity(
       chargeNumber,
@@ -393,14 +392,14 @@ export default class PunishmentsService {
       completed,
       outcome,
       daysToActivate,
-      suspendedUntil
+      suspendedUntil,
     )
   }
 
   async getSuspendedPunishment(
     chargeNumber: string,
     punishmentId: number,
-    user: User
+    user: User,
   ): Promise<SuspendedPunishmentResult[]> {
     const punishments = (await this.getSuspendedPunishmentDetails(chargeNumber, user)).suspendedPunishments
     return punishments.filter(punishment => punishment.punishment.id === punishmentId)
@@ -409,7 +408,7 @@ export default class PunishmentsService {
   async createPunishmentComment(
     chargeNumber: string,
     punishmentComment: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsUserTokensClient(user).createPunishmentComment(chargeNumber, punishmentComment)
   }
@@ -418,12 +417,12 @@ export default class PunishmentsService {
     chargeNumber: string,
     detailsOfChange: string,
     reasonForChange: PunishmentReasonForChange,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsUserTokensClient(user).createPunishmentComment(
       chargeNumber,
       detailsOfChange,
-      reasonForChange
+      reasonForChange,
     )
   }
 
@@ -431,7 +430,7 @@ export default class PunishmentsService {
     chargeNumber: string,
     id: number,
     punishmentComment: string,
-    user: User
+    user: User,
   ): Promise<ReportedAdjudicationResult> {
     return new ManageAdjudicationsUserTokensClient(user).amendPunishmentComment(chargeNumber, id, punishmentComment)
   }
@@ -466,13 +465,13 @@ export default class PunishmentsService {
   async getPossibleConsecutivePunishments(
     chargeNumber: string,
     punishmentType: PunishmentType,
-    user: User
+    user: User,
   ): Promise<ConsecutiveAdditionalDaysReport[]> {
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
     return new ManageAdjudicationsUserTokensClient(user).getPossibleConsecutivePunishments(
       reportedAdjudication.prisonerNumber,
       punishmentType,
-      chargeNumber
+      chargeNumber,
     )
   }
 
@@ -480,7 +479,7 @@ export default class PunishmentsService {
     chargeNumber: string,
     type: PunishmentType,
     userEnteredChargeNumber: string,
-    user: User
+    user: User,
   ): Promise<boolean> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
@@ -492,7 +491,7 @@ export default class PunishmentsService {
       const response = await new PrisonApiClient(token).validateCharge(
         userEnteredChargeNumber,
         sanctionStatus,
-        reportedAdjudication.prisonerNumber
+        reportedAdjudication.prisonerNumber,
       )
       if (response) return true
       return true
@@ -506,10 +505,12 @@ export default class PunishmentsService {
     const { punishmentComments } = reportedAdjudication
     const usernames = new Set(punishmentComments.map(it => it.createdByUserId))
     const users = await Promise.all(
-      Array.from(usernames).map(async username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token))
+      Array.from(usernames).map(async username =>
+        this.hmppsManageUsersClient.getUserFromUsername(username, user.token),
+      ),
     )
     const names: { [key: string]: string } = Object.fromEntries(
-      users.map(it => [it.username, getFormattedOfficerName(it.name)])
+      users.map(it => [it.username, getFormattedOfficerName(it.name)]),
     )
 
     return punishmentComments.map(comment => {
@@ -585,12 +586,12 @@ export default class PunishmentsService {
     req: Request,
     chargeNumber: string,
     redisId: string,
-    sessionId: number
+    sessionId: number,
   ): Promise<RehabilitativeActivity> {
     const sessionPunishment = this.getSessionPunishment(req, chargeNumber, redisId)
 
     const rehabAct = sessionPunishment.rehabilitativeActivities.filter(
-      (ra: RehabilitativeActivity) => ra.sessionId === sessionId
+      (ra: RehabilitativeActivity) => ra.sessionId === sessionId,
     )[0]
     return {
       ...rehabAct,

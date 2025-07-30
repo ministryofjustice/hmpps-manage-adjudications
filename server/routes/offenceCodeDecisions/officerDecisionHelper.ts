@@ -10,7 +10,6 @@ import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 
-// eslint-disable-next-line no-shadow
 enum ErrorType {
   OFFICER_MISSING_NAME_INPUT_SUBMIT = 'OFFICER_MISSING_NAME_INPUT_SUBMIT',
   OFFICER_MISSING_NAME_INPUT_SEARCH = 'OFFICER_MISSING_NAME_INPUT_SEARCH',
@@ -35,7 +34,7 @@ const error: { [key in ErrorType]: FormError } = {
 export default class OfficerDecisionHelper extends DecisionHelper {
   constructor(
     private readonly userService: UserService,
-    readonly decisionTreeService: DecisionTreeService
+    readonly decisionTreeService: DecisionTreeService,
   ) {
     super(decisionTreeService)
   }

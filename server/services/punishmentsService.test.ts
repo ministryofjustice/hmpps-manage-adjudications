@@ -93,7 +93,7 @@ describe('PunishmentsService', () => {
           otherData: {
             punishments,
           },
-        })
+        }),
       )
       const result = await service.createPunishmentSet(punishments, '100', user)
       expect(result).toEqual(
@@ -103,7 +103,7 @@ describe('PunishmentsService', () => {
           otherData: {
             punishments,
           },
-        })
+        }),
       )
     })
     it('returns adjudication when punishments sent as singular object', async () => {
@@ -125,7 +125,7 @@ describe('PunishmentsService', () => {
           otherData: {
             punishments: [punishments],
           },
-        })
+        }),
       )
       const result = await service.createPunishmentSet([punishments], '100', user)
       expect(result).toEqual(
@@ -135,7 +135,7 @@ describe('PunishmentsService', () => {
           otherData: {
             punishments: [punishments],
           },
-        })
+        }),
       )
     })
   })
@@ -170,7 +170,7 @@ describe('PunishmentsService', () => {
           offenderNo: 'G6123VU',
           firstName: 'John',
           lastName: 'Smith',
-        })
+        }),
       )
       getSuspendedPunishments.mockResolvedValue(punishments)
       const result = await service.getSuspendedPunishmentDetails('100', user)
@@ -198,7 +198,7 @@ describe('PunishmentsService', () => {
           otherData: {
             punishmentComments,
           },
-        })
+        }),
       )
       const result = await service.createPunishmentComment('100', 'punishment comment text', user)
       expect(result).toEqual(
@@ -208,7 +208,7 @@ describe('PunishmentsService', () => {
           otherData: {
             punishmentComments,
           },
-        })
+        }),
       )
     })
   })
@@ -229,7 +229,7 @@ describe('PunishmentsService', () => {
           otherData: {
             punishmentComments,
           },
-        })
+        }),
       )
       const result = await service.editPunishmentComment('100', 50, 'new punishment comment text', user)
       expect(result).toEqual(
@@ -239,7 +239,7 @@ describe('PunishmentsService', () => {
           otherData: {
             punishmentComments,
           },
-        })
+        }),
       )
     })
   })
@@ -250,7 +250,7 @@ describe('PunishmentsService', () => {
           chargeNumber: '100',
           prisonerNumber: 'G6123VU',
           otherData: {},
-        })
+        }),
       )
       const result = await service.removePunishmentComment('100', 50, user)
       expect(result).toEqual(
@@ -258,7 +258,7 @@ describe('PunishmentsService', () => {
           chargeNumber: '100',
           prisonerNumber: 'G6123VU',
           otherData: {},
-        })
+        }),
       )
     })
   })

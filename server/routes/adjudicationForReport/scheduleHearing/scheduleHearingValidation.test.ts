@@ -16,7 +16,7 @@ describe('validateForm', () => {
           hearingDate: { date: '01/01/2030', time: { hour: '12', minute: '23' } },
           locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
-        })
+        }),
       ).toBeNull()
     })
   })
@@ -27,7 +27,7 @@ describe('validateForm', () => {
           hearingDate: { time: { hour: '12', minute: '23' } },
           locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
-        })
+        }),
       ).toEqual([
         {
           href: '#hearingDate[date]',
@@ -42,7 +42,7 @@ describe('validateForm', () => {
         validateForm({
           hearingDate: { time: { hour: '12', minute: '23' } },
           hearingType: OicHearingType.GOV_ADULT as string,
-        })
+        }),
       ).toEqual([
         {
           href: '#locationId',
@@ -58,7 +58,7 @@ describe('validateForm', () => {
           hearingDate: { date: '01/01/2030', time: { minute: '23' } },
           locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
-        })
+        }),
       ).toEqual([
         {
           href: '#hearingDate[time][hour]',
@@ -72,7 +72,7 @@ describe('validateForm', () => {
           hearingDate: { date: '01/01/2030', time: { hour: '12' } },
           locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
-        })
+        }),
       ).toEqual([
         {
           href: '#hearingDate[time][hour]',
@@ -86,7 +86,7 @@ describe('validateForm', () => {
           hearingDate: { date: '01/01/2030' },
           locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
-        })
+        }),
       ).toEqual([
         {
           href: '#hearingDate[time][hour]',
@@ -99,7 +99,7 @@ describe('validateForm', () => {
         validateForm({
           hearingDate: { date: '01/11/2022', time: { hour: '09', minute: '00' } },
           locationId: 'location-id-1',
-        })
+        }),
       ).toEqual([
         {
           href: '#hearingType',
@@ -116,7 +116,7 @@ describe('validateForm', () => {
           locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-02-02T10:00:00',
-        })
+        }),
       ).toEqual([
         {
           href: '#hearingDate[date]',
@@ -131,7 +131,7 @@ describe('validateForm', () => {
           locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-02-02T10:00:00',
-        })
+        }),
       ).toEqual([
         {
           href: '#hearingDate[time][hour]',
@@ -146,7 +146,7 @@ describe('validateForm', () => {
           locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-02-03T10:00:00',
-        })
+        }),
       ).toEqual([
         {
           href: '#hearingDate[date]',
@@ -165,7 +165,7 @@ describe('validateForm', () => {
           locationId: 'location-id-1',
           hearingType: OicHearingType.GOV_ADULT as string,
           latestExistingHearing: '2030-03-03T10:00:00',
-        })
+        }),
       ).toEqual([
         {
           href: '#hearingDate[time][hour]',

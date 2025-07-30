@@ -35,7 +35,7 @@ beforeEach(() => {
       offenderNo: 'A7937DY',
       firstName: 'UDFSANAYE',
       lastName: 'AIDETRIA',
-    })
+    }),
   )
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
@@ -125,7 +125,7 @@ describe('POST /incident-statement', () => {
             1041,
             'Lorem Ipsum',
             true,
-            expect.anything()
+            expect.anything(),
           )
         })
     })

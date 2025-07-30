@@ -47,8 +47,8 @@ context('What is the reason for the referral?', () => {
     it('goes to the referral confirmation page if data successfully submitted', () => {
       cy.visit(
         `${adjudicationUrls.hearingReasonForReferral.urls.start(
-          '100'
-        )}?adjudicator=Judge%20Red&hearingOutcome=REFER_POLICE`
+          '100',
+        )}?adjudicator=Judge%20Red&hearingOutcome=REFER_POLICE`,
       )
       const hearingReasonForReferralPage = Page.verifyOnPage(HearingReasonForReferral)
       hearingReasonForReferralPage.referralReason().type("This is the reason I'm referring this case to the police.")

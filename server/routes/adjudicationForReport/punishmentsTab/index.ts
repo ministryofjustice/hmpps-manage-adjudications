@@ -23,17 +23,17 @@ export default function PunishmentsAndDamagesRoutes({
   const punishmentsTabReviewerRoute = new PunishmentsTabReviewerRoute(
     reportedAdjudicationsService,
     userService,
-    punishmentsService
+    punishmentsService,
   )
   const punishmentsTabReporterRoute = new PunishmentsTabReporterRoute(
     reportedAdjudicationsService,
     punishmentsService,
-    userService
+    userService,
   )
   const punishmentsTabReadOnlyRoute = new PunishmentsTabViewRoute(
     reportedAdjudicationsService,
     punishmentsService,
-    userService
+    userService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

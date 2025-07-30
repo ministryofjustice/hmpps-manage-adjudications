@@ -65,28 +65,28 @@ export default class OffenceCodeSelection extends Page {
     adjudicationId: number,
     questionId: string,
     selectedAnswerId: string,
-    prisonerId: string
+    prisonerId: string,
   ) =>
     cy.visit(
       `${adjudicationUrls.offenceCodeSelection.urls.question(
         adjudicationId,
         'committed',
-        questionId
-      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${prisonerId}`
+        questionId,
+      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${prisonerId}`,
     )
 
   simulateReturnFromStaffSearch = (
     adjudicationId: number,
     questionId: string,
     selectedAnswerId: string,
-    staffId: string
+    staffId: string,
   ) =>
     cy.visit(
       `${adjudicationUrls.offenceCodeSelection.urls.question(
         adjudicationId,
         'committed',
-        questionId
-      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`
+        questionId,
+      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`,
     )
 
   checkOffenceCode = (offenceCode: number, text: string): PageElement =>

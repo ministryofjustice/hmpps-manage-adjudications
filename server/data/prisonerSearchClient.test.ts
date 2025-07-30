@@ -23,7 +23,7 @@ describe('prisonerSearchClient', () => {
       fakePrisonerSearchApi
         .post(
           `/prisoner-search/match-prisoners`,
-          '{"includeAliases":false,"prisonerIdentifier":"A1234AA","prisonIds":["PR1","PR2"]}'
+          '{"includeAliases":false,"prisonerIdentifier":"A1234AA","prisonIds":["PR1","PR2"]}',
         )
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, results)
@@ -38,7 +38,7 @@ describe('prisonerSearchClient', () => {
       fakePrisonerSearchApi
         .post(
           `/prisoner-search/match-prisoners`,
-          '{"includeAliases":false,"firstName":"John","lastName":"Smith","prisonIds":["PR1","PR2"]}'
+          '{"includeAliases":false,"firstName":"John","lastName":"Smith","prisonIds":["PR1","PR2"]}',
         )
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, results)

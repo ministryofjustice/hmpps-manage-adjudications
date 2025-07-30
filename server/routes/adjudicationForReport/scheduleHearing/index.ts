@@ -23,7 +23,7 @@ export default function scheduleHearingRoutes({
   const scheduleHearingEditRoute = new ScheduleHearingEditRoutes(
     reportedAdjudicationsService,
     locationService,
-    userService
+    userService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

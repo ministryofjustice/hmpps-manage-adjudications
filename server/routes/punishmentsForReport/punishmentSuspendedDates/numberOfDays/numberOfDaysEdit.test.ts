@@ -19,7 +19,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -50,8 +50,8 @@ describe('GET', () => {
       .get(
         `${adjudicationUrls.suspendedPunishmentNumberOfDays.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -66,8 +66,8 @@ describe('GET', () => {
       .get(
         `${adjudicationUrls.suspendedPunishmentNumberOfDays.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -82,8 +82,8 @@ describe('POST ', () => {
       .post(
         `${adjudicationUrls.suspendedPunishmentNumberOfDays.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&punishmentNumberToActivate=514`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&punishmentNumberToActivate=514`,
       )
       .send({
         duration: 2,
@@ -93,8 +93,8 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentStartDateChoice.urls.edit(
           '100',
-          'xyz'
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=2&punishmentNumberToActivate=514&chargeNumberForSuspendedPunishment=`
+          'xyz',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=2&punishmentNumberToActivate=514&chargeNumberForSuspendedPunishment=`,
       )
   })
 })

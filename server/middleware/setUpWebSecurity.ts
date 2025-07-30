@@ -65,7 +65,7 @@ export default function setUpWebSecurity(): Router {
       // and crossOriginResourcePolicy: true prevents the stylesheet loading for the PDFs.
       crossOriginEmbedderPolicy: false,
       crossOriginResourcePolicy: false,
-    })
+    }),
   )
   return router
 }

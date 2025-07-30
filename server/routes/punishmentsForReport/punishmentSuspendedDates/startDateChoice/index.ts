@@ -22,12 +22,12 @@ export default function SuspendedPunishmentStartDateChoiceRoutes({
   const startDateChoiceRoute = new PunishmentStartDateChoiceRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const startDateChoiceEditRoute = new PunishmentStartDateChoiceEditRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

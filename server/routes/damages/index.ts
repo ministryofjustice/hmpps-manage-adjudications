@@ -22,28 +22,28 @@ export default function detailsOfDamagesRoutes({
     PageRequestType.DAMAGES_FROM_API,
     placeOnReportService,
     damagesSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const detailsOfDamagesUsingSession = new DetailsOfDamagesPage(
     PageRequestType.DAMAGES_FROM_SESSION,
     placeOnReportService,
     damagesSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const submittedEditDetailsOfDamagesUsingDraft = new DetailsOfDamagesPage(
     PageRequestType.SUBMITTED_EDIT_DAMAGES_FROM_API,
     placeOnReportService,
     damagesSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const submittedEditDetailsOfDamagesUsingSession = new DetailsOfDamagesPage(
     PageRequestType.SUBMITTED_EDIT_DAMAGES_FROM_SESSION,
     placeOnReportService,
     damagesSessionService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const addDamage = new AddDamagesRoutes(damagesSessionService)
@@ -62,7 +62,7 @@ export default function detailsOfDamagesRoutes({
   get(adjudicationUrls.detailsOfDamages.matchers.submittedEditModified, submittedEditDetailsOfDamagesUsingSession.view)
   post(
     adjudicationUrls.detailsOfDamages.matchers.submittedEditModified,
-    submittedEditDetailsOfDamagesUsingSession.submit
+    submittedEditDetailsOfDamagesUsingSession.submit,
   )
 
   return router

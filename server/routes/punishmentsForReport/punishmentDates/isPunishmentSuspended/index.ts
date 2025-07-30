@@ -22,12 +22,12 @@ export default function IsPunishmentSuspendedRoutes({
   const isPunishmentSuspendedRoute = new IsPunishmentSuspendedRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const isPunishmentSuspendedEditRoute = new IsPunishmentSuspendedEditRoute(
     userService,
     punishmentsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

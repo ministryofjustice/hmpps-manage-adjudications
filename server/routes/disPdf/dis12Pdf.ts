@@ -11,7 +11,7 @@ import log from '../../log'
 export default class Dis12Pdf {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
   ) {}
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
@@ -23,11 +23,11 @@ export default class Dis12Pdf {
     try {
       // Retry fetching data to avoid intermittent failures
       const adjudicationDetails = await withRetry(() =>
-        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
+        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user),
       )
 
       const { reportedAdjudication, associatedPrisoner, prisoner } = await withRetry(() =>
-        this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user)
+        this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user),
       )
 
       const offences = await withRetry(() =>
@@ -37,8 +37,8 @@ export default class Dis12Pdf {
           associatedPrisoner,
           reportedAdjudication.incidentRole,
           user,
-          true
-        )
+          true,
+        ),
       )
 
       // Validate completeness of data
@@ -62,7 +62,7 @@ export default class Dis12Pdf {
         adjudicationDetails,
         offences,
         nextHearingDateTime,
-        reportedAdjudication.createdOnBehalfOfOfficer
+        reportedAdjudication.createdOnBehalfOfOfficer,
       )
 
       res.renderPdf(
@@ -75,7 +75,7 @@ export default class Dis12Pdf {
         {
           filename: `notice-of-being-placed-on-report-${chargeNumber}.pdf`,
           pdfMargins,
-        }
+        },
       )
     } catch (error) {
       log.error('Error rendering PDF:', error)

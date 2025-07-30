@@ -45,15 +45,15 @@ export default class Witnesses extends Page {
   simulateReturnFromOfficerSearch = (adjudicationId: number, selectedAnswerId: string, officerId: string) =>
     cy.visit(
       `${adjudicationUrls.detailsOfWitnesses.urls.add(
-        adjudicationId
-      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${officerId}`
+        adjudicationId,
+      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${officerId}`,
     )
 
   simulateReturnFromStaffSearch = (adjudicationId: number, selectedAnswerId: string, staffId: string) =>
     cy.visit(
       `${adjudicationUrls.detailsOfWitnesses.urls.add(
-        adjudicationId
-      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`
+        adjudicationId,
+      )}?selectedAnswerId=${selectedAnswerId}&selectedPerson=${staffId}`,
     )
 
   addWitnessSubmit = (): PageElement => cy.get('[data-qa="add-witness-submit"]')

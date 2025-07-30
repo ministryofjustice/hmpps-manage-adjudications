@@ -19,7 +19,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 
@@ -89,7 +89,7 @@ describe('GET /awarded-punishments-and-damages', () => {
           adjudicationUrls.awardedPunishmentsAndDamages.urls.filter({
             hearingDate: '04/12/2022',
             locationId: '722174',
-          })
+          }),
         )
         .expect('Content-Type', /html/)
         .expect(response => {
@@ -123,7 +123,7 @@ describe('POST /awarded-punishments-and-damages', () => {
       .send({ hearingDate: { date: '04/12/2022' }, locationId: null })
       .expect(
         'Location',
-        `${adjudicationUrls.awardedPunishmentsAndDamages.root}?hearingDate=04%2F12%2F2022&locationId=`
+        `${adjudicationUrls.awardedPunishmentsAndDamages.root}?hearingDate=04%2F12%2F2022&locationId=`,
       )
   })
   it('should use correct filter parameters from form - with location', () => {
@@ -132,7 +132,7 @@ describe('POST /awarded-punishments-and-damages', () => {
       .send({ hearingDate: { date: '04/12/2022' }, locationId: 722174 })
       .expect(
         'Location',
-        `${adjudicationUrls.awardedPunishmentsAndDamages.root}?hearingDate=04%2F12%2F2022&locationId=722174`
+        `${adjudicationUrls.awardedPunishmentsAndDamages.root}?hearingDate=04%2F12%2F2022&locationId=722174`,
       )
   })
 })

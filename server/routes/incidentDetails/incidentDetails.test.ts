@@ -20,14 +20,14 @@ beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
     { placeOnReportService, locationService },
-    { originalRadioSelection: 'incited', G6415GD: { gender: PrisonerGender.MALE } }
+    { originalRadioSelection: 'incited', G6415GD: { gender: PrisonerGender.MALE } },
   )
   placeOnReportService.getPrisonerDetails.mockResolvedValue(
     testData.prisonerResultSummary({
       offenderNo: 'G6415GD',
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
-    })
+    }),
   )
 
   placeOnReportService.startNewDraftAdjudication.mockResolvedValue({
@@ -134,7 +134,7 @@ describe('POST /incident-details', () => {
           'G6415GD',
           expect.anything(),
           PrisonerGender.MALE,
-          '2021-10-26T13:30'
+          '2021-10-26T13:30',
         )
       })
   })
@@ -171,7 +171,7 @@ describe('POST /incident-details', () => {
           'G6415GD',
           expect.anything(),
           PrisonerGender.MALE,
-          '2021-10-27T13:30'
+          '2021-10-27T13:30',
         )
       })
   })

@@ -23,7 +23,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 
@@ -35,7 +35,7 @@ const decisionTreeService = new DecisionTreeService(
   userService,
   reportedAdjudicationsService,
   testDecisionsTree,
-  []
+  [],
 )
 
 const offenceRule: OffenceRule = {
@@ -181,7 +181,7 @@ describe('GET /all-completed-reports', () => {
       {
         filename: 'prepare-and-record-adjudication-hearing-1524493.pdf',
         pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '1.0', scale: '0.93' },
-      }
+      },
     )
   })
 })

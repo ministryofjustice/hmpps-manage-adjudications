@@ -8,7 +8,7 @@ export default class WillPunishmentBeConsecutiveEditRoute {
 
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.page = new WillPunishmentBeConsecutivePage(PageRequestType.EDIT, userService, punishmentsService)
   }

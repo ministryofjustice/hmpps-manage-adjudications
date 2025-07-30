@@ -51,7 +51,7 @@ describe('GET ', () => {
         expect(res.text).toContain('What is the reason for this change?')
       })
       .then(() =>
-        expect(punishmentsService.getReasonForChangePunishments).toHaveBeenCalledWith(expect.anything(), '100')
+        expect(punishmentsService.getReasonForChangePunishments).toHaveBeenCalledWith(expect.anything(), '100'),
       )
   })
 })
@@ -73,8 +73,8 @@ describe('POST', () => {
             reasonForChange: PunishmentReasonForChange.OTHER,
             detailsOfChange: 'This is a reason for the change',
           },
-          '100'
-        )
+          '100',
+        ),
       )
   })
 })

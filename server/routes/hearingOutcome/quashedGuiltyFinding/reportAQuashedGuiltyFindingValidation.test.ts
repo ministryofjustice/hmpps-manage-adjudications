@@ -8,7 +8,7 @@ describe('validateForm', () => {
       validateForm({
         quashReason: QuashGuiltyFindingReason.APPEAL_UPHELD,
         quashDetails: 'Some details about the reason for quashing the guilty finding',
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when the reason is missing', () => {
@@ -16,7 +16,7 @@ describe('validateForm', () => {
       validateForm({
         quashReason: '',
         quashDetails: 'Some details about the reason for quashing the guilty finding',
-      })
+      }),
     ).toEqual({
       href: '#quashReason',
       text: 'Select why the guilty finding was quashed',
@@ -27,7 +27,7 @@ describe('validateForm', () => {
       validateForm({
         quashReason: QuashGuiltyFindingReason.APPEAL_UPHELD,
         quashDetails: '',
-      })
+      }),
     ).toEqual({
       href: '#quashDetails',
       text: 'Enter more details',
@@ -38,7 +38,7 @@ describe('validateForm', () => {
       validateForm({
         quashReason: QuashGuiltyFindingReason.APPEAL_UPHELD,
         quashDetails: wordLimitExceedingString,
-      })
+      }),
     ).toStrictEqual({
       href: '#quashDetails',
       text: 'Your statement must be 4,000 characters or fewer',

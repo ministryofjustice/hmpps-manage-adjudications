@@ -73,7 +73,7 @@ describe('GET', () => {
   it('should load the correct page', () => {
     return request(app)
       .get(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4())}?punishmentType=ADDITIONAL_DAYS`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4())}?punishmentType=ADDITIONAL_DAYS`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -83,15 +83,15 @@ describe('GET', () => {
   it('should call the endpoint to get consecutive punishments', () => {
     return request(app)
       .get(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4())}?punishmentType=ADDITIONAL_DAYS`
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4())}?punishmentType=ADDITIONAL_DAYS`,
       )
       .expect('Content-Type', /html/)
       .then(() =>
         expect(punishmentsService.getPossibleConsecutivePunishments).toHaveBeenCalledWith(
           '100',
           PunishmentType.ADDITIONAL_DAYS,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })
@@ -102,8 +102,8 @@ describe('POST', () => {
       .post(
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(
           '100',
-          uuidv4()
-        )}?punishmentType=ADDITIONAL_DAYS&duration=5`
+          uuidv4(),
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`,
       )
       .send({
         select: 'consecutive-report-101',
@@ -121,7 +121,7 @@ describe('POST', () => {
             rehabilitativeActivities: [],
           },
           '100',
-          expect.anything()
+          expect.anything(),
         )
       })
   })

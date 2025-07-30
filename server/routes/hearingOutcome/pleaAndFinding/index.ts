@@ -23,7 +23,7 @@ export default function pleaAndFindingRoutes({
   const pleaAndFindingEditRoute = new PleaAndFindingEditRoutes(
     userService,
     hearingsService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

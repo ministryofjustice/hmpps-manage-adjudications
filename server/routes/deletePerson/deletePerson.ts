@@ -15,7 +15,7 @@ type PageData = {
 export default class DeletePersonRoutes {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   private getAssociatedPrisonersName = async (associatedPrisonersNumber: string, user: User) => {

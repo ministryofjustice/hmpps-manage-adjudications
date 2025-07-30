@@ -17,7 +17,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 
@@ -116,7 +116,7 @@ beforeEach(() => {
   reportedAdjudicationsService.getConfirmationDetails.mockResolvedValue(confirmedOnReportData)
   prisonerSearchService.getPrisonerDetailsForDis5.mockResolvedValue(prisonerSearchDis5Data)
   reportedAdjudicationsService.getDis5Data.mockResolvedValue(
-    dis5Data as unknown as Dis5AdjudicationsAndMoneyPrintSupport
+    dis5Data as unknown as Dis5AdjudicationsAndMoneyPrintSupport,
   )
 })
 
@@ -219,7 +219,7 @@ describe('GET /dis5', () => {
       {
         filename: 'adjudication-history-for-current-sentence-1524493.pdf',
         pdfMargins: { marginBottom: '0.8', marginLeft: '0.0', marginRight: '0.0', marginTop: '1.0', scale: '0.93' },
-      }
+      },
     )
   })
 })

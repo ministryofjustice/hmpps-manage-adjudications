@@ -22,7 +22,7 @@ export default function reasonForFindingRoutes({
   const reasonForFindingEditRoute = new ReasonForFindingEditRoutes(
     reportedAdjudicationsService,
     hearingsService,
-    userService
+    userService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

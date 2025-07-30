@@ -23,14 +23,14 @@ export default class ContinueReportSelectRoutes {
     res: Response,
     uiFilter: ContinueReportUiFilter,
     results: ApiPageResponse<DraftAdjudication>,
-    errors: FormError[]
+    errors: FormError[],
   ): Promise<void> => {
     return res.render(`pages/continueReportSelect`, {
       reports: results,
       filter: uiFilter,
       pagination: mojPaginationFromPageResponse(
         results,
-        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`),
       ),
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
@@ -45,7 +45,7 @@ export default class ContinueReportSelectRoutes {
     const results = await this.placeOnReportService.getAllDraftAdjudicationsForUser(
       user,
       filter,
-      pageRequestFrom(20, +req.query.pageNumber || 1)
+      pageRequestFrom(20, +req.query.pageNumber || 1),
     )
 
     return this.renderView(req, res, uiFilter, results, [])

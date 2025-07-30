@@ -20,7 +20,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -60,7 +60,7 @@ describe('POST /hearing-plea-finding edit', () => {
   it('should redirect to the correct URL after correct submission - proved finding', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
@@ -70,14 +70,14 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingsCheckAnswers.urls.edit(
-          '100'
-        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=CHARGE_PROVED`
+          '100',
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=CHARGE_PROVED`,
       )
   })
   it('should redirect to the correct URL after correct submission - dismissed finding', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
@@ -87,14 +87,14 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(
         'Location',
         `${adjudicationUrls.hearingReasonForFinding.urls.edit(
-          '100'
-        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=DISMISSED`
+          '100',
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=DISMISSED`,
       )
   })
   it('should redirect to the correct URL after correct submission - not proceeded with finding', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
@@ -104,14 +104,14 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(
         'Location',
         `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(
-          '100'
-        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=NOT_PROCEED`
+          '100',
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=NOT_PROCEED`,
       )
   })
   it('should use the query parameter adjudicator name rather than api adjudicator name if one is present', () => {
     return request(app)
       .post(
-        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`
+        `${adjudicationUrls.hearingPleaAndFinding.urls.edit('100')}?adjudicator=Judge%20Red&hearingOutcome=COMPLETE`,
       )
       .send({
         hearingPlea: HearingOutcomePlea.GUILTY,
@@ -122,8 +122,8 @@ describe('POST /hearing-plea-finding edit', () => {
       .expect(
         'Location',
         `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingEdit(
-          '100'
-        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=NOT_PROCEED`
+          '100',
+        )}?adjudicator=Judge%20Red&plea=GUILTY&finding=NOT_PROCEED`,
       )
   })
 })

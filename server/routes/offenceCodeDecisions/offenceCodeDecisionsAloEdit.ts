@@ -24,7 +24,7 @@ export default class offenceCodeDecisionsAloEditRoutes {
       placeOnReportService,
       userService,
       decisionTreeService,
-      prisonerSearchService
+      prisonerSearchService,
     )
   }
 

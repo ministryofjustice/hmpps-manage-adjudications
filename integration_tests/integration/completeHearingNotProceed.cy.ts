@@ -88,7 +88,7 @@ context('Will this charge continue to prosecution?', () => {
     })
     it('redirects to hearing review when saved', () => {
       cy.visit(
-        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100')}?adjudicator=Rod%20Red&plea=GUILTY`
+        `${adjudicationUrls.reasonForNotProceeding.urls.completeHearingStart('100')}?adjudicator=Rod%20Red&plea=GUILTY`,
       )
       const notProceedPage = Page.verifyOnPage(NotProceedPage)
 

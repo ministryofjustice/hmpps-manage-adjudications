@@ -29,7 +29,7 @@ const reportedAdjudicationResponse = (
   status: ReportedAdjudicationStatus,
   hearings = [],
   outcomes = [],
-  outcomeEnteredInNomis = false
+  outcomeEnteredInNomis = false,
 ) => {
   return {
     reportedAdjudication: testData.reportedAdjudication({
@@ -527,7 +527,7 @@ context('Hearing details page', () => {
         '1524495',
         ReportedAdjudicationStatus.SCHEDULED,
         [singleHearingNoOutcome],
-        historyWithOneHearing
+        historyWithOneHearing,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -537,7 +537,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.SCHEDULED,
         [singleHearingNoOutcome],
         historyWithOneHearing,
-        true
+        true,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -550,7 +550,7 @@ context('Hearing details page', () => {
         '1524498',
         ReportedAdjudicationStatus.ADJOURNED,
         [hearingWithAdjournedOutcome],
-        historyWithOneAdjournedHearing
+        historyWithOneAdjournedHearing,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -560,7 +560,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.ADJOURNED,
         [hearingOutcomeEnteredInNOMIS],
         historyWithOneAdjournedHearingEnteredInNomis,
-        true
+        true,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -570,7 +570,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.SCHEDULED,
         [],
         historyWithReferAndHearingInNOMIS,
-        true
+        true,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -580,7 +580,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.ADJOURNED,
         [hearingWithAdjournedOutcome],
         historyWithOneAdjournedHearing,
-        true
+        true,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -589,7 +589,7 @@ context('Hearing details page', () => {
         '1524496',
         ReportedAdjudicationStatus.SCHEDULED,
         twoHearings,
-        historyWithTwoHearings
+        historyWithTwoHearings,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -599,7 +599,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.SCHEDULED,
         twoHearings,
         historyWithTwoHearings,
-        true
+        true,
       ),
     })
     // Adjudication with hearing - referred to police
@@ -609,7 +609,7 @@ context('Hearing details page', () => {
         '1524500',
         ReportedAdjudicationStatus.REFER_POLICE,
         [hearingWithReferToPoliceOutcome],
-        historyWithReferredHearing
+        historyWithReferredHearing,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -619,7 +619,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.REFER_POLICE,
         [hearingWithReferToPoliceOutcome],
         historyWithReferredHearing,
-        true
+        true,
       ),
     })
     // Adjudication with hearing - referred to ind ad
@@ -629,7 +629,7 @@ context('Hearing details page', () => {
         '1524506',
         ReportedAdjudicationStatus.REFER_INAD,
         [],
-        historyWithInAdReferredHearing
+        historyWithInAdReferredHearing,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -639,7 +639,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.REFER_INAD,
         [],
         historyWithInAdReferredHearing,
-        true
+        true,
       ),
     })
     // Adjudication with hearing - referred to ind ad with schedule hearing referral outcome
@@ -649,7 +649,7 @@ context('Hearing details page', () => {
         '1524507',
         ReportedAdjudicationStatus.REFER_INAD,
         [],
-        historyWithInAdReferredHearingAndScheduleHearingReferralOutcome
+        historyWithInAdReferredHearingAndScheduleHearingReferralOutcome,
       ),
     })
     // Adjudication with hearing - referred to police - with referral outcome - prosecution
@@ -659,7 +659,7 @@ context('Hearing details page', () => {
         '1524501',
         ReportedAdjudicationStatus.REFER_POLICE,
         [hearingWithReferToPoliceOutcome],
-        historyWithReferredHearingWithProsecutionOutcome
+        historyWithReferredHearingWithProsecutionOutcome,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -669,7 +669,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.REFER_POLICE,
         [hearingWithReferToPoliceOutcome],
         historyWithReferredHearingWithProsecutionOutcome,
-        true
+        true,
       ),
     })
     // Adjudication with hearing - referred to police - with referral outcome - not proceed
@@ -679,7 +679,7 @@ context('Hearing details page', () => {
         '1524505',
         ReportedAdjudicationStatus.NOT_PROCEED,
         [],
-        historyWithReferredHearingWithNotProceededOutcome
+        historyWithReferredHearingWithNotProceededOutcome,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -689,7 +689,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.NOT_PROCEED,
         [],
         historyWithReferredHearingWithNotProceededOutcome,
-        true
+        true,
       ),
     })
     // Adjudication not proceeded with
@@ -699,7 +699,7 @@ context('Hearing details page', () => {
         '1524502',
         ReportedAdjudicationStatus.NOT_PROCEED,
         [],
-        historyWithNotProceedOutcome
+        historyWithNotProceedOutcome,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -709,7 +709,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.NOT_PROCEED,
         [],
         historyWithNotProceedOutcome,
-        true
+        true,
       ),
     })
     // Adjudication referred to police no hearing
@@ -719,7 +719,7 @@ context('Hearing details page', () => {
         '1524503',
         ReportedAdjudicationStatus.REFER_POLICE,
         [],
-        historyWithPoliceRefer
+        historyWithPoliceRefer,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -729,7 +729,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.REFER_POLICE,
         [],
         historyWithPoliceRefer,
-        true
+        true,
       ),
     })
     // Adjudication referred to police no hearing, referral outcome - not proceed
@@ -739,7 +739,7 @@ context('Hearing details page', () => {
         '1524504',
         ReportedAdjudicationStatus.REFER_POLICE,
         [],
-        historyWithPoliceReferAndReferralOutcomeNotProceed
+        historyWithPoliceReferAndReferralOutcomeNotProceed,
       ),
     })
     // Adjudication hearing complete and dismissed
@@ -749,7 +749,7 @@ context('Hearing details page', () => {
         '1524508',
         ReportedAdjudicationStatus.DISMISSED,
         [historyWithCompleteAndDismissedFinding[0].hearing],
-        historyWithCompleteAndDismissedFinding
+        historyWithCompleteAndDismissedFinding,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -759,7 +759,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.DISMISSED,
         [historyWithCompleteAndDismissedFinding[0].hearing],
         historyWithCompleteAndDismissedFinding,
-        true
+        true,
       ),
     })
     // Adjudication hearing complete and not proceeded with
@@ -769,7 +769,7 @@ context('Hearing details page', () => {
         '1524509',
         ReportedAdjudicationStatus.NOT_PROCEED,
         [historyWithCompleteAndNotProceedFinding[0].hearing],
-        historyWithCompleteAndNotProceedFinding
+        historyWithCompleteAndNotProceedFinding,
       ),
     })
     // Adjudication hearing complete and proved
@@ -779,7 +779,7 @@ context('Hearing details page', () => {
         '1524510',
         ReportedAdjudicationStatus.CHARGE_PROVED,
         [historyWithCompleteAndProvedFinding[0].hearing],
-        historyWithCompleteAndProvedFinding
+        historyWithCompleteAndProvedFinding,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -789,7 +789,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.CHARGE_PROVED,
         [historyWithCompleteAndProvedFinding[0].hearing],
         historyWithCompleteAndProvedFinding,
-        true
+        true,
       ),
     })
     cy.task('stubGetReportedAdjudication', {
@@ -810,7 +810,7 @@ context('Hearing details page', () => {
             },
           },
         ],
-        true
+        true,
       ),
     })
     // InAd refers to gov, then hearing
@@ -821,7 +821,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.SCHEDULED,
         [],
         historyWithInAdReferringToGovThenHearing,
-        false
+        false,
       ),
     })
     // InAd refers to gov, then not proceed
@@ -832,7 +832,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.NOT_PROCEED,
         [],
         historyWithInAdReferringToGovThenNotProceed,
-        false
+        false,
       ),
     })
     // InAd hearing, refer to gov hearing outcome
@@ -843,7 +843,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.REFER_GOV,
         [],
         historyWithReferGovHearingOutcome,
-        false
+        false,
       ),
     })
     // Report with ADA punishment that has been linked to by an ADA punishment on another report
@@ -854,7 +854,7 @@ context('Hearing details page', () => {
         ReportedAdjudicationStatus.CHARGE_PROVED,
         [],
         historyWithNonRemovableOutcome,
-        false
+        false,
       ),
     })
     cy.task('stubGetAgency', {
@@ -1079,7 +1079,7 @@ context('Hearing details page', () => {
           '1524503',
           ReportedAdjudicationStatus.REFER_POLICE,
           [],
-          historyWithPoliceReferAndReferralOutcome
+          historyWithPoliceReferAndReferralOutcome,
         ),
       })
       cy.get('[data-qa="radio-buttons-prosecution"]').find('input[value="yes"]').check()
@@ -1123,7 +1123,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(1).innerText).to.contain('No')
           expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
           expect($summaryData.get(3).innerText).to.contain(
-            'Notice of report issued more than 48 hours after incident\n\nThe time on the notice has expired.'
+            'Notice of report issued more than 48 hours after incident\n\nThe time on the notice has expired.',
           )
         })
       hearingTabPage.removeReferralButton().contains('Remove this referral')
@@ -1216,7 +1216,7 @@ context('Hearing details page', () => {
               oicHearingType: OicHearingType.INAD_ADULT,
             }),
           },
-        ]
+        ],
       )
       cy.task('stubRemoveAdjourn', {
         chargeNumber: 1524498,
@@ -1307,7 +1307,7 @@ context('Hearing details page', () => {
           '1524497',
           ReportedAdjudicationStatus.SCHEDULED,
           twoHearings,
-          historyWithTwoHearings
+          historyWithTwoHearings,
         ),
       })
       cy.task('stubCancelHearing', {
@@ -1320,7 +1320,7 @@ context('Hearing details page', () => {
             {
               hearing: hearingWithAdjournedOutcome,
             },
-          ]
+          ],
         ),
       })
       cy.visit(adjudicationUrls.hearingDetails.urls.review('1524497'))
@@ -1335,7 +1335,7 @@ context('Hearing details page', () => {
             {
               hearing: hearingWithAdjournedOutcome,
             },
-          ]
+          ],
         ),
       })
       hearingTabPage.scheduleAnotherHearingButton().should('not.exist')
@@ -1463,7 +1463,7 @@ context('Hearing details page', () => {
           '1524500',
           ReportedAdjudicationStatus.SCHEDULED,
           [hearingNoOutcome],
-          [{ hearing: hearingNoOutcome }]
+          [{ hearing: hearingNoOutcome }],
         ),
       })
       cy.visit(adjudicationUrls.hearingDetails.urls.review('1524500'))
@@ -1475,7 +1475,7 @@ context('Hearing details page', () => {
           '1524500',
           ReportedAdjudicationStatus.SCHEDULED,
           [hearingNoOutcome],
-          [{ hearing: hearingNoOutcome }]
+          [{ hearing: hearingNoOutcome }],
         ),
       })
       hearingTabPage.referralChangeLink().should('exist')
@@ -1520,7 +1520,7 @@ context('Hearing details page', () => {
           expect($summaryData.get(1).innerText).to.contain('No')
           expect($summaryData.get(2).innerText).to.contain('Not proceed with the charge')
           expect($summaryData.get(3).innerText).to.contain(
-            'Resolved in another way\n\nThis is the reason why I am not proceeding'
+            'Resolved in another way\n\nThis is the reason why I am not proceeding',
           )
         })
 
@@ -1774,7 +1774,7 @@ context('Hearing details page', () => {
                 }),
               },
             },
-          ]
+          ],
         ),
       })
       cy.get('[data-qa="submit"]').click()
@@ -1797,7 +1797,7 @@ context('Hearing details page', () => {
           '1524510',
           ReportedAdjudicationStatus.CHARGE_PROVED,
           [historyWithCompleteAndProvedFinding[0].hearing],
-          historyWithCompleteAndProvedFinding
+          historyWithCompleteAndProvedFinding,
         ),
       })
       cy.task('stubRemoveNotProceedOrQuashed', {
@@ -1806,7 +1806,7 @@ context('Hearing details page', () => {
           '1524510',
           ReportedAdjudicationStatus.CHARGE_PROVED,
           [historyWithCompleteAndProvedFinding[0].hearing],
-          historyWithCompleteAndProvedFinding
+          historyWithCompleteAndProvedFinding,
         ),
       })
       hearingTabPage.removeQuashedOutcomeButton().click()
@@ -2074,7 +2074,7 @@ context('Hearing details page', () => {
         .find('dd')
         .then($summaryData => {
           expect($summaryData.get(0).innerText).to.contain(
-            'Notice of report issued more than 48 hours after incident\n\nToo late notice'
+            'Notice of report issued more than 48 hours after incident\n\nToo late notice',
           )
         })
       hearingTabPage.removeOutcomeButton().should('exist')

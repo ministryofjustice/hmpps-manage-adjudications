@@ -66,8 +66,8 @@ describe('POST', () => {
             reasonForChange: PunishmentReasonForChange.OTHER,
             detailsOfChange: 'This is a reason for the change',
           },
-          '100'
-        )
+          '100',
+        ),
       )
   })
 })

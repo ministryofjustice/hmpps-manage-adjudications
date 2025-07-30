@@ -21,7 +21,7 @@ import { AgencyReportCounts } from '../../../data/manageAdjudicationsSystemToken
 export default class ReportsTransferredInRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   private renderView = async (
@@ -30,7 +30,7 @@ export default class ReportsTransferredInRoutes {
     filter: TransfersUiFilter,
     results: ApiPageResponse<ReportedAdjudicationEnhanced>,
     transferCount: AgencyReportCounts,
-    errors: FormError[]
+    errors: FormError[],
   ): Promise<void> => {
     return res.render(`pages/viewTransferredReports/reportsTransferredIn.njk`, {
       allCompletedReports: results,
@@ -38,7 +38,7 @@ export default class ReportsTransferredInRoutes {
       checkboxes: transferredAdjudicationStatuses(filter, TransferredReportType.IN),
       pagination: mojPaginationFromPageResponse(
         results,
-        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`),
       ),
       transferCountAll: transferCount.transferAllTotal,
       transferCountIn: transferCount.transferReviewTotal,
@@ -56,7 +56,7 @@ export default class ReportsTransferredInRoutes {
         this.reportedAdjudicationsService.getTransferredAdjudicationReports(
           user,
           filter,
-          pageRequestFrom(20, +req.query.pageNumber || 1)
+          pageRequestFrom(20, +req.query.pageNumber || 1),
         ),
         this.reportedAdjudicationsService.getAgencyReportCounts(user),
       ])

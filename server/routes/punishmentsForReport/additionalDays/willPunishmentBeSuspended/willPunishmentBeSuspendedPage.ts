@@ -33,7 +33,7 @@ export default class WillPunishmentBeSuspendedPage {
   constructor(
     pageType: PageRequestType,
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -87,7 +87,7 @@ export default class WillPunishmentBeSuspendedPage {
         url.format({
           pathname: redirectUrlPrefixForNo,
           query: req.query as ParsedUrlQueryInput,
-        })
+        }),
       )
     }
 
@@ -96,7 +96,7 @@ export default class WillPunishmentBeSuspendedPage {
       url.format({
         pathname: redirectUrlPrefixForYes,
         query: req.query as ParsedUrlQueryInput,
-      })
+      }),
     )
   }
 

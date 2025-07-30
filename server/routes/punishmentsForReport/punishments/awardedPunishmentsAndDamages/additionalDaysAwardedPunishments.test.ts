@@ -19,7 +19,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const testData = new TestData() as jest.Mocked<TestData>
@@ -87,7 +87,7 @@ describe('GET /awarded-punishments-and-damages/additional-days', () => {
           adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDaysFilter({
             hearingDate: '04/12/2022',
             locationId: '722174',
-          })
+          }),
         )
         .expect('Content-Type', /html/)
         .expect(response => {
@@ -121,7 +121,7 @@ describe('POST /awarded-punishments-and-damages/additional-days', () => {
       .send({ hearingDate: { date: '04/12/2022' }, locationId: null })
       .expect(
         'Location',
-        `${adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays()}?hearingDate=04%2F12%2F2022&locationId=`
+        `${adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays()}?hearingDate=04%2F12%2F2022&locationId=`,
       )
   })
   it('should use correct filter parameters from form - with location', () => {
@@ -130,7 +130,7 @@ describe('POST /awarded-punishments-and-damages/additional-days', () => {
       .send({ hearingDate: { date: '04/12/2022' }, locationId: 722174 })
       .expect(
         'Location',
-        `${adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays()}?hearingDate=04%2F12%2F2022&locationId=722174`
+        `${adjudicationUrls.awardedPunishmentsAndDamages.urls.additionalDays()}?hearingDate=04%2F12%2F2022&locationId=722174`,
       )
   })
 })

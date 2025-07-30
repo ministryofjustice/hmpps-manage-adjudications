@@ -11,7 +11,7 @@ import { withRetry } from '../../utils/withRetry'
 export default class Dis3Pdf {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly decisionTreeService: DecisionTreeService
+    private readonly decisionTreeService: DecisionTreeService,
   ) {}
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
@@ -21,10 +21,10 @@ export default class Dis3Pdf {
 
     try {
       const adjudicationDetails = await withRetry(() =>
-        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
+        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user),
       )
       const { reportedAdjudication, associatedPrisoner, prisoner } = await withRetry(() =>
-        this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user)
+        this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user),
       )
 
       const offences = await withRetry(() =>
@@ -34,8 +34,8 @@ export default class Dis3Pdf {
           associatedPrisoner,
           reportedAdjudication.incidentRole,
           user,
-          true
-        )
+          true,
+        ),
       )
 
       // Validate completeness of data
@@ -56,7 +56,7 @@ export default class Dis3Pdf {
         offences,
         damages,
         { photoVideo, baggedAndTagged, other },
-        witnesses
+        witnesses,
       )
 
       res.renderPdf(
@@ -69,7 +69,7 @@ export default class Dis3Pdf {
         {
           filename: `prepare-and-record-adjudication-hearing-${chargeNumber}.pdf`,
           pdfMargins,
-        }
+        },
       )
     } catch (error) {
       log.error('Error rendering PDF:', error)

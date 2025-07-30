@@ -36,7 +36,7 @@ export default class SelectAssociatedPrisonerRoutes {
 
     const searchResults = await this.prisonerSearchService.search(
       { searchTerm, prisonIds: [user.meta.caseLoadId] },
-      user
+      user,
     )
 
     const queryConnector = redirectUrl && redirectUrl.includes('?') ? '&' : '?'
@@ -65,7 +65,7 @@ export default class SelectAssociatedPrisonerRoutes {
       url.format({
         pathname: adjudicationUrls.selectAssociatedPrisoner.root,
         query: { searchTerm, redirectUrl },
-      })
+      }),
     )
   }
 }

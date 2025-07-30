@@ -71,8 +71,8 @@ describe('POST', () => {
         expect(punishmentsService.createPunishmentSet).toHaveBeenCalledWith(
           punishmentsOnSession,
           '100',
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should redirect after submission', () => {

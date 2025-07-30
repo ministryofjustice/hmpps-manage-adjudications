@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { Request } from 'express'
 import { convertToTitleCase, hasAnyRole } from '../utils/utils'
 import HmppsAuthClient from '../data/hmppsAuthClient'
@@ -42,7 +41,7 @@ export const isCentralAdminCaseload = (caseloadId: string): boolean => {
 export default class UserService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
-    private readonly hmppsManageUsersClient: HmppsManageUsersClient
+    private readonly hmppsManageUsersClient: HmppsManageUsersClient,
   ) {}
 
   async getUserRoles(token: string): Promise<string[]> {
@@ -92,7 +91,7 @@ export default class UserService {
     const nomisUsernames = nomisUsers.map(nomisUser => nomisUser.username)
     const userDetails =
       (await Promise.all(
-        [...nomisUsernames].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, token))
+        [...nomisUsernames].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, token)),
       )) || []
     return new Map(userDetails.map(details => [details.username, details]))
   }

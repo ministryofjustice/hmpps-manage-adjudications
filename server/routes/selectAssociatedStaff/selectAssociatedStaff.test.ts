@@ -23,9 +23,9 @@ beforeEach(() => {
       redirectUrl: `${adjudicationUrls.offenceCodeSelection.urls.question(
         893,
         'committed',
-        '1-1-1'
+        '1-1-1',
       )}?selectedAnswerId=1-1-1-3&selectedPerson=`,
-    }
+    },
   )
 })
 
@@ -53,7 +53,7 @@ describe('GET /select-associated-staff', () => {
           expect(res.text).toContain('Moorland')
           expect(res.text).toContain('JSMITH_GEN')
           expect(res.text).toContain(
-            '/offence-code-selection/893/committed/1-1-1?selectedAnswerId=1-1-1-3&amp;selectedPerson=JSMITH_GEN'
+            '/offence-code-selection/893/committed/1-1-1?selectedAnswerId=1-1-1-3&amp;selectedPerson=JSMITH_GEN',
           )
         })
     })
@@ -84,7 +84,7 @@ describe('POST /select-associated-staff', () => {
       .send({ staffName: 'john doe' })
       .expect(
         'Location',
-        `${adjudicationUrls.selectAssociatedStaff.root}?staffName=john%20doe&redirectUrl=%2Foffence-code-selection%2F893%2Fcommitted%2F1-1-1%3FselectedAnswerId%3D1-1-1-3%26selectedPerson%3D`
+        `${adjudicationUrls.selectAssociatedStaff.root}?staffName=john%20doe&redirectUrl=%2Foffence-code-selection%2F893%2Fcommitted%2F1-1-1%3FselectedAnswerId%3D1-1-1-3%26selectedPerson%3D`,
       )
   })
 

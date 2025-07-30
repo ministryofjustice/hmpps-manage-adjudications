@@ -22,7 +22,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -43,7 +43,7 @@ const draftData = testData.draftAdjudication({
 beforeEach(() => {
   app = appWithAllRoutes(
     { production: false },
-    { placeOnReportService, locationService, decisionTreeService, reportedAdjudicationsService }
+    { placeOnReportService, locationService, decisionTreeService, reportedAdjudicationsService },
   )
   placeOnReportService.getPrisonerDetails.mockResolvedValue(prisonerData)
 
@@ -137,7 +137,7 @@ describe('GET /check-your-answers', () => {
         expect(response.text).toContain('Confirm changes')
         expect(response.text).not.toContain('What is the gender of the prisoner?')
         expect(response.text).not.toContain(
-          'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.'
+          'By accepting these details you are confirming that, to the best of your knowledge, these details are correct.',
         )
         expect(placeOnReportService.getCheckYourAnswersInfo).toHaveBeenCalledTimes(1)
       })

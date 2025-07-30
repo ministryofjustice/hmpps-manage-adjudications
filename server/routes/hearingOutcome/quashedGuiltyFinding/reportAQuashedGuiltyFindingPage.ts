@@ -37,7 +37,7 @@ export default class ReportAQuashedGuiltyFindingPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly outcomesService: OutcomesService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -67,7 +67,7 @@ export default class ReportAQuashedGuiltyFindingPage {
       const lastOutcomeItem = (await this.reportedAdjudicationsService.getLastOutcomeItem(
         chargeNumber,
         [ReportedAdjudicationStatus.QUASHED],
-        user
+        user,
       )) as OutcomeDetailsHistory
       readApi = lastOutcomeItem.outcome?.outcome
     }

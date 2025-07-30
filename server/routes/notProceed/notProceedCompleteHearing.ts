@@ -12,14 +12,14 @@ export default class NotProceedCompleteHearingRoutes {
     userService: UserService,
     outcomesService: OutcomesService,
     hearingsService: HearingsService,
-    reportedAdjudicationsService: ReportedAdjudicationsService
+    reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new NotProceedPage(
       PageRequestType.COMPLETE_HEARING,
       userService,
       outcomesService,
       hearingsService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

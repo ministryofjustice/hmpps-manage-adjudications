@@ -50,7 +50,7 @@ export default class AdjudicationConsolidatedView {
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -105,7 +105,7 @@ export default class AdjudicationConsolidatedView {
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
       user,
-      activeCaseLoadId
+      activeCaseLoadId,
     )
 
     if (prisoner.agencyId !== user.meta.caseLoadId) {
@@ -119,7 +119,7 @@ export default class AdjudicationConsolidatedView {
     const { reviewData, evidence, offence, prisonerReportDetails, transferBannerInfo } = await this.getInfoForReport(
       reportedAdjudication,
       prisoner,
-      user
+      user,
     )
     const { history, latestHearingId } = await this.getInfoForHearings(reportedAdjudication, user)
 
@@ -149,7 +149,7 @@ export default class AdjudicationConsolidatedView {
   private getInfoForReport = async (
     reportedAdjudication: ReportedAdjudication,
     prisoner: PrisonerResultSummary,
-    user: User
+    user: User,
   ) => {
     const reviewData = await this.reportedAdjudicationsService.getReviewDetails(reportedAdjudication, user)
     const evidence = await this.reportedAdjudicationsService.convertEvidenceToTableFormat(reportedAdjudication.evidence)
@@ -160,11 +160,11 @@ export default class AdjudicationConsolidatedView {
       associatedPrisoner,
       reportedAdjudication.incidentRole,
       user,
-      false
+      false,
     )
     const prisonerReportDetails = await this.reportedAdjudicationsService.getPrisonerReport(
       user,
-      reportedAdjudication as ReportedAdjudication & DraftAdjudication
+      reportedAdjudication as ReportedAdjudication & DraftAdjudication,
     )
 
     const transferBannerInfo = await this.reportedAdjudicationsService.getTransferBannerInfo(reportedAdjudication, user)
@@ -194,7 +194,7 @@ export default class AdjudicationConsolidatedView {
     const punishmentComments = await this.punishmentsService.formatPunishmentComments(
       reportedAdjudication,
       reportedAdjudication.chargeNumber,
-      user
+      user,
     )
     return {
       punishments,

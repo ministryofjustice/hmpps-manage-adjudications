@@ -101,13 +101,13 @@ export default class ManageAdjudicationsUserTokensClient {
       'Manage Adjudications API',
       config.apis.adjudications,
       user.token,
-      user.meta.caseLoadId
+      user.meta.caseLoadId,
     )
   }
 
   async updateAdjudicationStatus(
     chargeNumber: string,
-    payload: ReviewAdjudication
+    payload: ReviewAdjudication,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/status`,
@@ -119,7 +119,7 @@ export default class ManageAdjudicationsUserTokensClient {
     (prefix: string) =>
     async (
       filter: ReportedAdjudicationFilter,
-      pageRequest: ApiPageRequest
+      pageRequest: ApiPageRequest,
     ): Promise<ApiPageResponse<ReportedAdjudication>> => {
       const path =
         `${prefix}?page=${pageRequest.number}&size=${pageRequest.size}` +
@@ -136,7 +136,7 @@ export default class ManageAdjudicationsUserTokensClient {
 
   async getTransferredAdjudications(
     filter: TransferredAdjudicationFilter,
-    pageRequest: ApiPageRequest
+    pageRequest: ApiPageRequest,
   ): Promise<ApiPageResponse<ReportedAdjudication>> {
     const path =
       `/reported-adjudications/transfer-reports?page=${pageRequest.number}&size=${pageRequest.size}` +
@@ -182,7 +182,7 @@ export default class ManageAdjudicationsUserTokensClient {
 
   async createAdjourn(
     chargeNumber: string,
-    hearingOutcomeDetails: HearingOutcomeDetails
+    hearingOutcomeDetails: HearingOutcomeDetails,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/hearing/outcome/adjourn`,
@@ -197,7 +197,7 @@ export default class ManageAdjudicationsUserTokensClient {
 
   async createReferral(
     chargeNumber: string,
-    hearingOutcomeDetails: HearingOutcomeDetails
+    hearingOutcomeDetails: HearingOutcomeDetails,
   ): Promise<ReportedAdjudicationResult> {
     const { referGovReason } = hearingOutcomeDetails
     return this.restClient.post({
@@ -258,7 +258,7 @@ export default class ManageAdjudicationsUserTokensClient {
 
   async createDismissedHearingOutcome(
     chargeNumber: string,
-    hearingOutcomeDetails: HearingDismissedOutcomeDetails
+    hearingOutcomeDetails: HearingDismissedOutcomeDetails,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/complete-hearing/dismissed`,
@@ -268,7 +268,7 @@ export default class ManageAdjudicationsUserTokensClient {
 
   async createChargeProvedHearingOutcome(
     chargeNumber: string,
-    chargeProvedHearingOutcomeDetails: ChargeProvedHearingOutcomeDetails
+    chargeProvedHearingOutcomeDetails: ChargeProvedHearingOutcomeDetails,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/complete-hearing/charge-proved/v2`,
@@ -278,7 +278,7 @@ export default class ManageAdjudicationsUserTokensClient {
 
   async createNotProceedHearingOutcome(
     chargeNumber: string,
-    notProceedHearingOutcomeDetails: NotProceedHearingOutcomeDetails
+    notProceedHearingOutcomeDetails: NotProceedHearingOutcomeDetails,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/complete-hearing/not-proceed`,
@@ -296,7 +296,7 @@ export default class ManageAdjudicationsUserTokensClient {
   async amendHearingOutcome(
     chargeNumber: string,
     status: ReportedAdjudicationStatus,
-    amendedData: AmendedHearingOutcomeData
+    amendedData: AmendedHearingOutcomeData,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/hearing/outcome/${status}/v2`,
@@ -334,7 +334,7 @@ export default class ManageAdjudicationsUserTokensClient {
   async editRehabilitativeActivity(
     chargeNumber: string,
     id: number,
-    rehabilitativeActivity: RehabilitativeActivity
+    rehabilitativeActivity: RehabilitativeActivity,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/punishments/rehabilitative-activity/${id}`,
@@ -351,7 +351,7 @@ export default class ManageAdjudicationsUserTokensClient {
   async createPunishmentComment(
     chargeNumber: string,
     punishmentComment: string,
-    reasonForChange?: PunishmentReasonForChange
+    reasonForChange?: PunishmentReasonForChange,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/punishments/comment`,
@@ -362,7 +362,7 @@ export default class ManageAdjudicationsUserTokensClient {
   async amendPunishmentComment(
     chargeNumber: string,
     id: number,
-    punishmentComment: string
+    punishmentComment: string,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.put({
       path: `/reported-adjudications/${chargeNumber}/punishments/comment`,
@@ -379,7 +379,7 @@ export default class ManageAdjudicationsUserTokensClient {
   async getPossibleConsecutivePunishments(
     prisonerNumber: string,
     punishmentType: PunishmentType,
-    chargeNumber: string
+    chargeNumber: string,
   ): Promise<ConsecutiveAdditionalDaysReport[]> {
     return this.restClient.get({
       path: `/reported-adjudications/punishments/${prisonerNumber}/for-consecutive?type=${punishmentType}&chargeNumber=${chargeNumber}`,
@@ -392,7 +392,7 @@ export default class ManageAdjudicationsUserTokensClient {
     completed: boolean,
     outcome?: NotCompletedOutcome,
     daysToActivate?: number,
-    suspendedUntil?: string
+    suspendedUntil?: string,
   ): Promise<ReportedAdjudicationResult> {
     return this.restClient.post({
       path: `/reported-adjudications/${chargeNumber}/punishments/${punishmentId}/complete-rehabilitative-activity`,

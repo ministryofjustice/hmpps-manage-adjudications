@@ -76,7 +76,7 @@ context('Adjudication history', () => {
       .first()
       .should(
         'contain.text',
-        'Destroys or damages any part of a young offender institution or any other property other than his own'
+        'Destroys or damages any part of a young offender institution or any other property other than his own',
       )
   })
   it('should display the results correctly - punishments present', () => {
@@ -123,7 +123,7 @@ context('Adjudication history', () => {
       .first()
       .should(
         'contain.text',
-        'Destroys or damages any part of a young offender institution or any other property other than his own'
+        'Destroys or damages any part of a young offender institution or any other property other than his own',
       )
   })
   it('should contain the link to the report', () => {

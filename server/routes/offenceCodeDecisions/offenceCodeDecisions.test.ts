@@ -26,7 +26,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 
@@ -59,7 +59,7 @@ const testDecisionsTree = question([
   .child(anotherPersonAnswer.type(Type.OTHER_PERSON).offenceCode(4))
   .child(aStandardAnswer.offenceCode(5))
   .child(
-    aStandardAnswerWithChildQuestion.child(question('A child question').child(aStandardChildAnswer.offenceCode(6)))
+    aStandardAnswerWithChildQuestion.child(question('A child question').child(aStandardChildAnswer.offenceCode(6))),
   )
   .child(aPrisonerOutsideEstablishmentAnswer.type(Type.PRISONER_OUTSIDE_ESTABLISHMENT).offenceCode(11))
 
@@ -68,7 +68,7 @@ const decisionTreeService = new DecisionTreeService(
   userService,
   reportedAdjudicationsService,
   testDecisionsTree,
-  []
+  [],
 )
 let app: Express
 
@@ -80,7 +80,7 @@ beforeEach(() => {
       offenderNo: undefined,
       firstName: 'A_PRISONER_FIRST_NAME',
       lastName: 'A_PRISONER_LAST_NAME',
-    })
+    }),
   )
 
   placeOnReportService.getOffencePrisonerDetails.mockResolvedValue({
@@ -100,7 +100,7 @@ beforeEach(() => {
 
   app = appWithAllRoutes(
     { production: false },
-    { placeOnReportService, decisionTreeService, userService, prisonerSearchService }
+    { placeOnReportService, decisionTreeService, userService, prisonerSearchService },
   )
 })
 
@@ -115,7 +115,7 @@ describe('GET /offence-code-selection/100/assisted/1 view', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(
-          'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name'
+          'Assisted: Adjudication_prisoner_first_name Adjudication_prisoner_last_name. Associated: Adjudication_associated_prisoner_first_name Adjudication_associated_prisoner_last_name',
         )
         expect(res.text).toContain(aPrisonerAnswerText)
         expect(res.text).toContain(aPrisonOfficerAnswerText)
@@ -305,7 +305,7 @@ describe('POST /offence-code-selection/100/assisted/1 searching outgoing', () =>
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.detailsOfOffence.root}/100/add?victimOtherPersonsName=A%20Name&victimPrisonersNumber=A1234AA&victimStaffUsername=&offenceCode=11`
+        `${adjudicationUrls.detailsOfOffence.root}/100/add?victimOtherPersonsName=A%20Name&victimPrisonersNumber=A1234AA&victimStaffUsername=&offenceCode=11`,
       )
   })
 })
@@ -317,8 +317,8 @@ describe('GET /offence-code-selection/100/assisted/1 searching incoming', () => 
         `${adjudicationUrls.offenceCodeSelection.urls.question(
           100,
           'assisted',
-          '1'
-        )}?selectedAnswerId=${aPrisonerAnswer.id()}&selectedPerson=PRISONER_ID`
+          '1',
+        )}?selectedAnswerId=${aPrisonerAnswer.id()}&selectedPerson=PRISONER_ID`,
       )
       .expect(res => {
         expect(res.text).toContain(`value="${aPrisonerAnswer.id()}" checked`)
@@ -332,8 +332,8 @@ describe('GET /offence-code-selection/100/assisted/1 searching incoming', () => 
         `${adjudicationUrls.offenceCodeSelection.urls.question(
           100,
           'assisted',
-          '1'
-        )}?selectedAnswerId=${aPrisonOfficerAnswer.id()}&selectedPerson=STAFF_USERNAME`
+          '1',
+        )}?selectedAnswerId=${aPrisonOfficerAnswer.id()}&selectedPerson=STAFF_USERNAME`,
       )
       .expect(res => {
         expect(res.text).toContain(`value="${aPrisonOfficerAnswer.id()}" checked`)
@@ -347,8 +347,8 @@ describe('GET /offence-code-selection/100/assisted/1 searching incoming', () => 
         `${adjudicationUrls.offenceCodeSelection.urls.question(
           100,
           'assisted',
-          '1'
-        )}?selectedAnswerId=${aMemberOfStaffAnswer.id()}&selectedPerson=STAFF_USERNAME`
+          '1',
+        )}?selectedAnswerId=${aMemberOfStaffAnswer.id()}&selectedPerson=STAFF_USERNAME`,
       )
       .expect(res => {
         expect(res.text).toContain(`value="${aMemberOfStaffAnswer.id()}" checked`)
@@ -370,8 +370,8 @@ describe('POST /offence-code-selection/100/assisted/1 next page', () => {
         `${adjudicationUrls.offenceCodeSelection.urls.question(
           100,
           'assisted',
-          '1-6'
-        )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=&offenceCode=undefined`
+          '1-6',
+        )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=&offenceCode=undefined`,
       )
   })
 })
@@ -387,8 +387,8 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
       .expect(
         'Location',
         `${adjudicationUrls.detailsOfOffence.urls.add(
-          100
-        )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=&offenceCode=${aStandardAnswer.getOffenceCode()}`
+          100,
+        )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=&offenceCode=${aStandardAnswer.getOffenceCode()}`,
       )
   })
 
@@ -403,8 +403,8 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
       .expect(
         'Location',
         `${adjudicationUrls.detailsOfOffence.urls.add(
-          100
-        )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=USERNAME&offenceCode=${aPrisonOfficerAnswer.getOffenceCode()}`
+          100,
+        )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=USERNAME&offenceCode=${aPrisonOfficerAnswer.getOffenceCode()}`,
       )
   })
 
@@ -419,8 +419,8 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
       .expect(
         'Location',
         `${adjudicationUrls.detailsOfOffence.urls.add(
-          100
-        )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=USERNAME&offenceCode=${aMemberOfStaffAnswer.getOffenceCode()}`
+          100,
+        )}?victimOtherPersonsName=&victimPrisonersNumber=&victimStaffUsername=USERNAME&offenceCode=${aMemberOfStaffAnswer.getOffenceCode()}`,
       )
   })
 
@@ -435,8 +435,8 @@ describe('POST /offence-code-selection/100/assisted/1 finishing', () => {
       .expect(
         'Location',
         `${adjudicationUrls.detailsOfOffence.urls.add(
-          100
-        )}?victimOtherPersonsName=FIRSTNAME%20LASTNAME&victimPrisonersNumber=&victimStaffUsername=&offenceCode=${anotherPersonAnswer.getOffenceCode()}`
+          100,
+        )}?victimOtherPersonsName=FIRSTNAME%20LASTNAME&victimPrisonersNumber=&victimStaffUsername=&offenceCode=${anotherPersonAnswer.getOffenceCode()}`,
       )
   })
 })

@@ -18,7 +18,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -58,8 +58,8 @@ describe('POST /reason-for-finding', () => {
           'Joanne Rhubarb',
           HearingOutcomePlea.UNFIT,
           'This is a reason',
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should redirect the user back to the enter hearing outcome page if the adjudicator name and/or plea has been tampered/lost', () => {

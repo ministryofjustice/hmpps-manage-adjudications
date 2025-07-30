@@ -96,7 +96,7 @@ export default class IncidentDetailsPage {
   constructor(
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
-    private readonly locationService: LocationService
+    private readonly locationService: LocationService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -119,7 +119,7 @@ export default class IncidentDetailsPage {
       requestValues,
       originalReporterUsernameForPage,
       readApiIncidentDetails,
-      user
+      user,
     )
     renderData(res, pageData, null)
   }
@@ -142,7 +142,7 @@ export default class IncidentDetailsPage {
 
     const nomisLocationId = await this.locationService.getCorrespondingNomisLocationId(
       postValues.incidentDetails.locationId as string,
-      user
+      user,
     )
 
     postValues.incidentDetails.locationId = nomisLocationId
@@ -153,11 +153,11 @@ export default class IncidentDetailsPage {
         await this.saveToApiUpdate(postValues.draftId, incidentDetailsToUpdate, user as User)
         const { draftAdjudication } = await this.placeOnReportService.getDraftAdjudicationDetails(
           postValues.draftId,
-          user
+          user,
         )
         const nextPageUrl = await this.placeOnReportService.getNextOffencesUrl(
           draftAdjudication.offenceDetails,
-          draftAdjudication.id
+          draftAdjudication.id,
         )
         return res.redirect(nextPageUrl)
       }
@@ -191,7 +191,7 @@ export default class IncidentDetailsPage {
   saveToApiNew = async (
     prisonerNumber: string,
     data: IncidentDetailsAndGender,
-    currentUser: User
+    currentUser: User,
   ): Promise<DraftAdjudicationResult> => {
     // eslint-disable-next-line no-return-await
     return await this.placeOnReportService.startNewDraftAdjudication(
@@ -201,14 +201,14 @@ export default class IncidentDetailsPage {
       prisonerNumber,
       currentUser,
       data.gender,
-      formatDate(data.discoveryDate)
+      formatDate(data.discoveryDate),
     )
   }
 
   saveToApiUpdate = async (
     draftId: number,
     data: IncidentDetails,
-    currentUser: User
+    currentUser: User,
   ): Promise<DraftAdjudicationResult> => {
     // eslint-disable-next-line no-return-await
     return await this.placeOnReportService.editDraftIncidentDetails(
@@ -217,7 +217,7 @@ export default class IncidentDetailsPage {
       data.locationId as number, // TODO: MAP-2114: remove at a later date
       data.locationUuid,
       currentUser,
-      formatDate(data.discoveryDate)
+      formatDate(data.discoveryDate),
     )
   }
 
@@ -225,7 +225,7 @@ export default class IncidentDetailsPage {
     requestValues: RequestValues,
     originalReporterUsername: string,
     readApiIncidentDetails: ApiIncidentDetails,
-    currentUser: User
+    currentUser: User,
   ): Promise<PageData> => {
     let exitButtonData: ExitButtonData = null
     if (this.pageOptions.isEdit()) {
@@ -245,7 +245,7 @@ export default class IncidentDetailsPage {
     if (readApiIncidentDetails?.locationId) {
       locationId = await this.locationService.getCorrespondingDpsLocationId(
         readApiIncidentDetails.locationId as unknown as number,
-        currentUser
+        currentUser,
       )
     }
 
@@ -276,7 +276,7 @@ export default class IncidentDetailsPage {
       displayData: await this.getDisplayData(
         postValues.prisonerNumber,
         postValues.originalReporterUsername,
-        currentUser
+        currentUser,
       ),
       exitButtonData,
       formData: postValues,
@@ -286,7 +286,7 @@ export default class IncidentDetailsPage {
   getDisplayData = async (
     prisonerNumber: string,
     originalReporterUsername: string,
-    currentUser: User
+    currentUser: User,
   ): Promise<DisplayDataFromApis> => {
     const [prisoner, reporter] = await Promise.all([
       this.placeOnReportService.getPrisonerDetails(prisonerNumber, currentUser),
@@ -335,7 +335,7 @@ const calculateRadioValue = (dateTime: SubmittedDateTime, dateOfDiscovery: Submi
 const extractIncidentDetails = (readDraftIncidentDetails: ExistingDraftIncidentDetails): ApiIncidentDetails => {
   const radioValue = calculateRadioValue(
     readDraftIncidentDetails.dateTime,
-    readDraftIncidentDetails.dateTimeOfDiscovery
+    readDraftIncidentDetails.dateTimeOfDiscovery,
   )
 
   return {

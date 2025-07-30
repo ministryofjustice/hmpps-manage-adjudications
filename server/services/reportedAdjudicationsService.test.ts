@@ -138,7 +138,7 @@ describe('reportedAdjudicationsService', () => {
       hmppsManageUsersClient,
       curiousApiService,
       locationService,
-      userService
+      userService,
     )
   })
 
@@ -198,7 +198,7 @@ describe('reportedAdjudicationsService', () => {
         {
           size: 20,
           number: 0,
-        }
+        },
       )
       const expectedAdjudicationContent = [
         testData.reportedAdjudication({
@@ -281,7 +281,7 @@ describe('reportedAdjudicationsService', () => {
             firstName: 'JOHN',
             lastName: 'SMITH',
             language: 'Spanish',
-          })
+          }),
         )
 
         getSecondaryLanguages.mockResolvedValue([
@@ -358,7 +358,7 @@ describe('reportedAdjudicationsService', () => {
             offenderNo: 'A1234AA',
             firstName: 'JOHN',
             lastName: 'SMITH',
-          })
+          }),
         )
         getSecondaryLanguages.mockResolvedValue([])
       })
@@ -420,7 +420,7 @@ describe('reportedAdjudicationsService', () => {
         {
           size: 20,
           number: 0,
-        }
+        },
       )
 
       const expectedAdjudicationContent = [
@@ -635,7 +635,7 @@ describe('reportedAdjudicationsService', () => {
       status: ReportedAdjudicationStatus,
       reviewedByUserId: string = null,
       statusReason: string = null,
-      statusDetails: string = null
+      statusDetails: string = null,
     ) => {
       return testData.reportedAdjudication({
         chargeNumber: '123',
@@ -651,7 +651,7 @@ describe('reportedAdjudicationsService', () => {
     it('returns the correct information for a returned adjudication', async () => {
       const result = await service.getReviewDetails(
         adjudicationData(ReportedAdjudicationStatus.RETURNED, 'TEST_GEN', 'offence', 'wrong'),
-        user
+        user,
       )
       const expectedResult = {
         reviewStatus: 'Returned',
@@ -682,7 +682,7 @@ describe('reportedAdjudicationsService', () => {
     it('returns the correct information for an accepted adjudication', async () => {
       const result = await service.getReviewDetails(
         adjudicationData(ReportedAdjudicationStatus.ACCEPTED, 'TEST_GEN'),
-        user
+        user,
       )
       const expectedResult = {
         reviewStatus: 'Accepted',
@@ -698,7 +698,7 @@ describe('reportedAdjudicationsService', () => {
     it('returns the correct information for an unscheduled adjudication', async () => {
       const result = await service.getReviewDetails(
         adjudicationData(ReportedAdjudicationStatus.UNSCHEDULED, 'TEST_GEN'),
-        user
+        user,
       )
       const expectedResult = {
         reviewStatus: 'Unscheduled',
@@ -714,7 +714,7 @@ describe('reportedAdjudicationsService', () => {
     it('returns the correct information for an scheduled adjudication', async () => {
       const result = await service.getReviewDetails(
         adjudicationData(ReportedAdjudicationStatus.SCHEDULED, 'TEST_GEN'),
-        user
+        user,
       )
       const expectedResult = {
         reviewStatus: 'Scheduled',
@@ -733,9 +733,9 @@ describe('reportedAdjudicationsService', () => {
           ReportedAdjudicationStatus.REJECTED,
           'TEST_GEN',
           'alternative',
-          'Not worthy of adjudication, give them a fine instead.'
+          'Not worthy of adjudication, give them a fine instead.',
         ),
-        user
+        user,
       )
       const expectedResult = {
         reviewStatus: 'Rejected',
@@ -1212,7 +1212,7 @@ describe('reportedAdjudicationsService', () => {
       expect(result).toEqual(
         testData.singleHearing({
           dateTimeOfHearing: '2023-03-21T19:00:00',
-        })
+        }),
       )
     })
   })
@@ -1271,7 +1271,7 @@ describe('reportedAdjudicationsService', () => {
         testData.singleHearing({
           dateTimeOfHearing: '2023-03-21T10:05:00',
           id: 1,
-        })
+        }),
       )
     })
   })
@@ -1461,7 +1461,7 @@ describe('reportedAdjudicationsService', () => {
         agencies,
         { bookingType: AdjudicationHistoryBookingType.CURRENT, status: allStatuses },
         pageRequest,
-        user
+        user,
       )
       expect(getPrisonerAdjudicationHistoryAllBookings).not.toHaveBeenCalled()
       expect(getPrisonerAdjudicationHistory).toHaveBeenCalled()
@@ -1484,7 +1484,7 @@ describe('reportedAdjudicationsService', () => {
         agencies,
         { bookingType: AdjudicationHistoryBookingType.ALL, status: allStatuses },
         pageRequest,
-        user
+        user,
       )
       expect(getPrisonerAdjudicationHistoryAllBookings).toHaveBeenCalled()
       expect(getPrisonerAdjudicationHistory).not.toHaveBeenCalled()

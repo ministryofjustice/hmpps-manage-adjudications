@@ -8,7 +8,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.CONFINEMENT,
         duration: 10,
         isYOI: false,
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when no days entered', () => {
@@ -17,7 +17,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.CONFINEMENT,
         duration: null,
         isYOI: false,
-      })
+      }),
     ).toEqual({
       href: '#duration',
       text: 'Enter how many days the punishment will last',
@@ -29,7 +29,7 @@ describe('validateForm', () => {
         punishmentType: PunishmentType.CONFINEMENT,
         duration: 11,
         isYOI: true,
-      })
+      }),
     ).toEqual({
       href: '#duration',
       text: 'Cellular confinement cannot be more than 10 days for an offence under YOI rules',
@@ -40,7 +40,7 @@ describe('validateForm', () => {
       validateForm({
         // @ts-expect-error: Ignore typecheck here
         duration: 'hello',
-      })
+      }),
     ).toEqual({
       href: '#duration',
       text: 'Enter a number of days',
@@ -53,7 +53,7 @@ describe('validateForm', () => {
         // @ts-expect-error: Ignore typecheck here
         duration: '0', // this gets converted to a number for the check
         isYOI: false,
-      })
+      }),
     ).toEqual({
       href: '#duration',
       text: 'Enter one or more days',

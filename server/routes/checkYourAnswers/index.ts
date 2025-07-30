@@ -26,13 +26,13 @@ export default function CheckAnswersRoutes({
     placeOnReportService,
     locationService,
     decisionTreeService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const checkYourAnswersBeforeChangeReporter = new CheckYourAnswersBeforeChangeReporterRoutes(
     placeOnReportService,
     locationService,
     decisionTreeService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

@@ -6,7 +6,7 @@ describe('validateForm', () => {
       validateForm({
         prosecutionChosen: 'yes',
         nextStepChosen: null,
-      })
+      }),
     ).toBeNull()
   })
   it('Valid submit has no errors if no to prosecution', () => {
@@ -14,7 +14,7 @@ describe('validateForm', () => {
       validateForm({
         prosecutionChosen: 'no',
         nextStepChosen: 'schedule_hearing',
-      })
+      }),
     ).toBeNull()
   })
   it('shows error when no prosecution option selected', () => {
@@ -22,7 +22,7 @@ describe('validateForm', () => {
       validateForm({
         prosecutionChosen: null,
         nextStepChosen: null,
-      })
+      }),
     ).toEqual({
       href: '#prosecutionChosen',
       text: 'Select yes if this charge will continue to prosecution',
@@ -33,7 +33,7 @@ describe('validateForm', () => {
       validateForm({
         prosecutionChosen: 'no',
         nextStepChosen: null,
-      })
+      }),
     ).toEqual({
       href: '#nextStepChosen',
       text: 'Select the next step',

@@ -85,8 +85,8 @@ describe('GET', () => {
         expect(punishmentsService.getPossibleConsecutivePunishments).toHaveBeenCalledWith(
           '100',
           PunishmentType.ADDITIONAL_DAYS,
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })
@@ -96,8 +96,8 @@ describe('POST', () => {
     return request(app)
       .post(
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(
-          '100'
-        )}?punishmentType=ADDITIONAL_DAYS&duration=5`
+          '100',
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`,
       )
       .send({
         select: 'consecutive-report-101',
@@ -114,7 +114,7 @@ describe('POST', () => {
             stoppagePercentage: null,
             rehabilitativeActivities: [],
           },
-          '100'
+          '100',
         )
       })
   })

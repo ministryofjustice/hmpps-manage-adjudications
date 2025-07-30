@@ -20,11 +20,11 @@ export default function prisonerAssociatedPrisonerRoutes({
   const associatedPrisonerRoutes = new AssociatedPrisonerRoutes(placeOnReportService, prisonerSearchService)
   const associatedPrisonerSubmittedEditRoutes = new AssociatedPrisonerSubmittedEditRoutes(
     placeOnReportService,
-    prisonerSearchService
+    prisonerSearchService,
   )
   const associatedPrisonerAloEditRoutes = new AssociatedPrisonerAloEditRoutes(
     placeOnReportService,
-    prisonerSearchService
+    prisonerSearchService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

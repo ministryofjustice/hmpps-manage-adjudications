@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import url from 'url'
 import { Request, Response } from 'express'
 import { ParsedUrlQuery } from 'querystring'
@@ -20,7 +19,7 @@ type PageData = {
 export default class rehabilitativeActivityDetailsPage {
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -80,7 +79,7 @@ export default class rehabilitativeActivityDetailsPage {
       chargeNumber,
       redisId,
       Number(currentActivityNumber),
-      activityDetails
+      activityDetails,
     )
 
     if (currentActivityNumber === numberOfActivities) {
@@ -90,7 +89,7 @@ export default class rehabilitativeActivityDetailsPage {
       url.format({
         pathname: adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId),
         query: { numberOfActivities, currentActivityNumber: String(+currentActivityNumber + 1) } as ParsedUrlQuery,
-      })
+      }),
     )
   }
 }

@@ -28,7 +28,7 @@ export default class CuriousApiService {
       const uniqueListedNeurodiversities = Array.from(new Set(listedNeurodiversities))
 
       return uniqueListedNeurodiversities.filter(neurodiversity =>
-        applicableNeurodiversitiesForReportLowercase.includes(neurodiversity.toLowerCase())
+        applicableNeurodiversitiesForReportLowercase.includes(neurodiversity.toLowerCase()),
       )
     } catch (err) {
       if (err.response?.status === 404) {

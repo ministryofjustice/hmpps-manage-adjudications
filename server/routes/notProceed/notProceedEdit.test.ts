@@ -20,7 +20,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -85,8 +85,8 @@ describe('POST /not-proceed', () => {
           '100',
           NotProceedReason.NOT_FAIR,
           'details',
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

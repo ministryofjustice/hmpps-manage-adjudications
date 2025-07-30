@@ -10,13 +10,13 @@ export default class HearingReasonForReferralEditRoutes {
   constructor(
     hearingsService: HearingsService,
     userService: UserService,
-    reportedAdjudicationsService: ReportedAdjudicationsService
+    reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new HearingReasonForReferralPage(
       PageRequestType.EDIT,
       hearingsService,
       userService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

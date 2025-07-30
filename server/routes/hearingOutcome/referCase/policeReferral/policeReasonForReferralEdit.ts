@@ -10,13 +10,13 @@ export default class PoliceReasonForReferralRoutes {
   constructor(
     outcomesService: OutcomesService,
     userService: UserService,
-    reportedAdjudicationsService: ReportedAdjudicationsService
+    reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new PoliceReasonForReferralPage(
       PageRequestType.EDIT,
       outcomesService,
       userService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

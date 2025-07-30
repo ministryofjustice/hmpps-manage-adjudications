@@ -19,7 +19,7 @@ beforeEach(() => {
       offenderNo: 'G6415GD',
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
-    })
+    }),
   )
 
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
@@ -47,8 +47,8 @@ describe('GET /incident-role/<id>/submitted/edit', () => {
     return request(app)
       .get(
         `${adjudicationUrls.incidentRole.urls.submittedEdit(5)}?referrer=${adjudicationUrls.prisonerReport.urls.report(
-          1524455
-        )}`
+          1524455,
+        )}`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -79,8 +79,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
     return request(app)
       .post(
         `${adjudicationUrls.incidentRole.urls.submittedEdit(
-          100
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          100,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         currentRadioSelected: 'committed',
@@ -95,8 +95,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
       return request(app)
         .post(
           `${adjudicationUrls.incidentRole.urls.submittedEdit(
-            100
-          )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+            100,
+          )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
         )
         .send({
           currentRadioSelected: role,
@@ -104,14 +104,14 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
         })
         .expect(302)
         .expect('Location', adjudicationUrls.incidentAssociate.urls.submittedEdit(100, role))
-    }
+    },
   )
   it('should redirect to offence details page - reviewer', () => {
     return request(app)
       .post(
         `${adjudicationUrls.incidentRole.urls.submittedEdit(
-          100
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          100,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         currentRadioSelected: 'committed',
@@ -125,8 +125,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
     return request(app)
       .post(
         `${adjudicationUrls.incidentRole.urls.submittedEdit(
-          100
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          100,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         currentRadioSelected: 'committed',
@@ -140,8 +140,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
     return request(app)
       .post(
         `${adjudicationUrls.incidentRole.urls.submittedEdit(
-          100
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          100,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         currentRadioSelected: 'committed',
@@ -153,16 +153,16 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
           100,
           null,
           false, // RemoveOffences
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
   it('should remove existing offences if the radio selection is changed', () => {
     return request(app)
       .post(
         `${adjudicationUrls.incidentRole.urls.submittedEdit(
-          100
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`
+          100,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(1524455)}`,
       )
       .send({
         currentRadioSelected: 'committed',
@@ -174,8 +174,8 @@ describe('POST /incident-role/<id>/submitted/edit', () => {
           100,
           null,
           true, // RemoveOffences
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

@@ -12,14 +12,14 @@ export default class CheckYourAnswersRoutes {
     placeOnReportService: PlaceOnReportService,
     locationService: LocationService,
     decisionTreeService: DecisionTreeService,
-    reportedAdjudicationsService: ReportedAdjudicationsService
+    reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.page = new CheckYourAnswersPage(
       PageRequestType.CREATION,
       placeOnReportService,
       locationService,
       decisionTreeService,
-      reportedAdjudicationsService
+      reportedAdjudicationsService,
     )
   }
 

@@ -25,7 +25,6 @@ import config from '../../config'
 
 type PageData = { errors?: FormError[]; draftId: number; incidentRole: string } & DecisionForm
 
-// eslint-disable-next-line no-shadow
 enum ErrorType {
   MISSING_DECISION = 'MISSING_DECISION',
   MISSING_CHARACTERISTIC = 'MISSING_CHARACTERISTIC',
@@ -63,7 +62,7 @@ export default class OffenceCodeRoutes {
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService,
-    private readonly prisonerSearchService: PrisonerSearchService
+    private readonly prisonerSearchService: PrisonerSearchService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -111,7 +110,7 @@ export default class OffenceCodeRoutes {
     }
 
     const answerTypeHelper = this.answerTypeHelper(
-      typeof protectedCharacteristics === 'string' ? protectedCharacteristics : protectedCharacteristics[0]
+      typeof protectedCharacteristics === 'string' ? protectedCharacteristics : protectedCharacteristics[0],
     )
     const form = answerTypeHelper.formFromPost(req)
 
@@ -127,7 +126,7 @@ export default class OffenceCodeRoutes {
           protectedCharacteristics,
         },
       },
-      res
+      res,
     )
   }
 
@@ -173,13 +172,13 @@ export default class OffenceCodeRoutes {
         nextQuestionUrl = `${adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(
           draftChargeId,
           incidentRole,
-          selectedAnswer.getChildQuestion().id()
+          selectedAnswer.getChildQuestion().id(),
         )}`
       } else {
         nextQuestionUrl = `${adjudicationUrls.offenceCodeSelection.urls.question(
           draftChargeId,
           incidentRole,
-          selectedAnswer.getChildQuestion().id()
+          selectedAnswer.getChildQuestion().id(),
         )}`
       }
       return this.redirect(
@@ -187,7 +186,7 @@ export default class OffenceCodeRoutes {
           pathname: nextQuestionUrl,
           query: updatedOffenceData,
         },
-        res
+        res,
       )
     }
     // We have finished - remove the offence data from the session and redirect to the details of offence page with the
@@ -195,12 +194,12 @@ export default class OffenceCodeRoutes {
     if (this.pageOptions.isAloEdit()) {
       return this.redirect(
         { pathname: adjudicationUrls.detailsOfOffence.urls.aloAdd(draftChargeId), query: updatedOffenceData },
-        res
+        res,
       )
     }
     return this.redirect(
       { pathname: adjudicationUrls.detailsOfOffence.urls.add(draftChargeId), query: updatedOffenceData },
-      res
+      res,
     )
   }
 
@@ -245,11 +244,11 @@ export default class OffenceCodeRoutes {
         adjudicationUrls.offenceCodeSelection.urls.aloEditQuestion(
           draftChargeId,
           incidentRole,
-          this.decisions(null).id()
-        )
+          this.decisions(null).id(),
+        ),
       )
     return res.redirect(
-      adjudicationUrls.offenceCodeSelection.urls.question(draftChargeId, incidentRole, this.decisions(null).id())
+      adjudicationUrls.offenceCodeSelection.urls.question(draftChargeId, incidentRole, this.decisions(null).id()),
     )
   }
 
@@ -260,7 +259,7 @@ export default class OffenceCodeRoutes {
     const { questionId } = req.params
     const { prisoner, associatedPrisoner } = await this.placeOnReportService.getOffencePrisonerDetails(
       draftChargeId,
-      user
+      user,
     )
 
     const placeholderValues = getPlaceholderValues(prisoner, associatedPrisoner)

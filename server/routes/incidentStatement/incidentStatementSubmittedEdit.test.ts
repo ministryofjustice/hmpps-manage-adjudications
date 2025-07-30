@@ -19,7 +19,7 @@ beforeEach(() => {
       offenderNo: 'G6415GD',
       firstName: 'Udfsanaye',
       lastName: 'Aidetria',
-    })
+    }),
   )
   placeOnReportService.getDraftAdjudicationDetails.mockResolvedValue({
     draftAdjudication: testData.draftAdjudication({
@@ -61,7 +61,7 @@ describe('POST /incident-statement', () => {
           1,
           'Lorem Ipsum',
           true,
-          expect.anything()
+          expect.anything(),
         )
       })
   })

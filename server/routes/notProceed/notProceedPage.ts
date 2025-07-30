@@ -46,7 +46,7 @@ export default class NotProceedPage {
     private readonly userService: UserService,
     private readonly outcomesService: OutcomesService,
     private readonly hearingsService: HearingsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -79,7 +79,7 @@ export default class NotProceedPage {
         const lastOutcomeItem = await this.reportedAdjudicationsService.getLastOutcomeItem(
           chargeNumber,
           [ReportedAdjudicationStatus.NOT_PROCEED],
-          res.locals.user
+          res.locals.user,
         )
 
         if (lastOutcomeItem.outcome?.outcome.reason) {
@@ -125,7 +125,7 @@ export default class NotProceedPage {
             details,
             user,
             (adjudicator && (adjudicator as string)) || null,
-            (plea && HearingOutcomePlea[plea.toString() as keyof typeof HearingOutcomePlea]) || null
+            (plea && HearingOutcomePlea[plea.toString() as keyof typeof HearingOutcomePlea]) || null,
           )
         } else {
           await this.hearingsService.createNotProceedHearingOutcome(
@@ -134,7 +134,7 @@ export default class NotProceedPage {
             plea as HearingOutcomePlea,
             notProceedReason,
             details,
-            user
+            user,
           )
         }
       } else if (this.pageOptions.isEdit()) {

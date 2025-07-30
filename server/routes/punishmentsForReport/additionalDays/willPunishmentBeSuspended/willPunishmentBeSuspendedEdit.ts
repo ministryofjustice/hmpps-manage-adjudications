@@ -8,7 +8,7 @@ export default class willPunishmentBeSuspendedEditRoute {
 
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {
     this.page = new WillPunishmentBeSuspendedPage(PageRequestType.EDIT, userService, punishmentsService)
   }

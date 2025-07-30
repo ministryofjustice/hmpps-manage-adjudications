@@ -6,7 +6,6 @@ import { FormError } from '../../@types/template'
 import { OffenceData } from './offenceData'
 import DecisionTreeService from '../../services/decisionTreeService'
 
-// eslint-disable-next-line no-shadow
 enum ErrorType {
   OTHER_PERSON_MISSING_NAME_INPUT = 'OTHER_PERSON_MISSING_NAME_INPUT',
 }

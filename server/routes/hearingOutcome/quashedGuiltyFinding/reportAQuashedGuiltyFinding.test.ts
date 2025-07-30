@@ -64,8 +64,8 @@ describe('POST', () => {
           '100',
           QuashGuiltyFindingReason.APPEAL_UPHELD,
           'Some details about this decision',
-          expect.anything()
-        )
+          expect.anything(),
+        ),
       )
   })
 })

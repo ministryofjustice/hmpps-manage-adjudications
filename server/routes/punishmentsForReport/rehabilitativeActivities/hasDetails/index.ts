@@ -22,11 +22,11 @@ export default function PunishmentRoutes({
 
   get(
     adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.matchers.start,
-    isThereRehabilitativeActivityRoute.view
+    isThereRehabilitativeActivityRoute.view,
   )
   post(
     adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.matchers.start,
-    isThereRehabilitativeActivityRoute.submit
+    isThereRehabilitativeActivityRoute.submit,
   )
 
   return router

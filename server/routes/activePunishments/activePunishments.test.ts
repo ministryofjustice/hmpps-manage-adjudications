@@ -16,7 +16,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
 
@@ -30,7 +30,7 @@ beforeEach(() => {
       offenderNo: 'G7234VB',
       firstName: 'James',
       lastName: 'Smith',
-    })
+    }),
   )
 
   punishmentsService.getActivePunishmentsByOffender.mockResolvedValue([

@@ -17,7 +17,7 @@ import { formatDateForDatePicker } from '../../utils/utils'
 export default class confirmDISFormsIssuedRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly locationService: LocationService
+    private readonly locationService: LocationService,
   ) {}
 
   private renderView = async (
@@ -25,7 +25,7 @@ export default class confirmDISFormsIssuedRoutes {
     res: Response,
     filter: DISUiFilter,
     results: ReportedAdjudicationEnhancedWithIssuingDetails[],
-    errors: FormError[]
+    errors: FormError[],
   ): Promise<void> => {
     const { user } = res.locals
     const possibleLocations = await this.locationService.getLocationsForUser(user)

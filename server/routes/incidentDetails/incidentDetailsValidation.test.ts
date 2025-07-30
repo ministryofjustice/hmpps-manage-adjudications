@@ -11,7 +11,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toBeNull()
     })
   })
@@ -25,7 +25,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[date]',
         text: 'Enter the date of the incident',
@@ -41,7 +41,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: '',
-        })
+        }),
       ).toEqual({
         href: '#discoveryRadioSelected',
         text: 'Select yes if the incident was discovered at the same time',
@@ -57,7 +57,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'No',
-        })
+        }),
       ).toEqual({
         href: '#discoveryDate[date]',
         text: 'Enter the date of the incident discovery',
@@ -73,7 +73,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'No',
-        })
+        }),
       ).toEqual({
         href: '#discoveryDate[time]',
         text: 'Enter the time of the discovery',
@@ -97,7 +97,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][hour]',
         text: 'Enter the time of the incident',
@@ -112,7 +112,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][hour]',
         text: 'Enter an hour between 00 and 23',
@@ -127,7 +127,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][minute]',
         text: 'Enter the time of the incident',
@@ -142,7 +142,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][minute]',
         text: 'Enter a minute between 00 and 59',
@@ -157,7 +157,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time]',
         text: 'Enter the time of the incident',
@@ -172,7 +172,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][hour]',
         text: 'Enter the hour using 2 numbers - for example, 08 or 18',
@@ -187,7 +187,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][hour]',
         text: 'Enter the hour using 2 numbers - for example, 08 or 18',
@@ -202,7 +202,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][minute]',
         text: 'Enter the minute using 2 numbers - for example, 08 or 18',
@@ -217,7 +217,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][minute]',
         text: 'Enter the minute using 2 numbers - for example, 08 or 18',
@@ -232,7 +232,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][hour]',
         text: 'Enter an hour between 00 and 23',
@@ -247,7 +247,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time][minute]',
         text: 'Enter a minute between 00 and 59',
@@ -267,7 +267,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#incidentDate[time]',
         text: 'The incident time must be in the past',
@@ -282,7 +282,7 @@ describe('validateForm', () => {
           incidentRole: 'attempted',
           associatedPrisonersNumber: 'GF456CU',
           discoveryRadioSelected: 'Yes',
-        })
+        }),
       ).toEqual({
         href: '#locationId',
         text: 'Select the location of the incident',

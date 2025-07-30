@@ -84,7 +84,7 @@ describe('placeOnReportService', () => {
           offenderNo: 'A1234AA',
           firstName: 'John',
           lastName: 'Smith',
-        })
+        }),
       )
       startNewDraftAdjudication.mockResolvedValue({
         draftAdjudication: testData.draftAdjudication({
@@ -103,7 +103,7 @@ describe('placeOnReportService', () => {
         'G2996UX',
         user,
         PrisonerGender.MALE,
-        '2021-10-29T15:40:25.884'
+        '2021-10-29T15:40:25.884',
       )
       expect(startNewDraftAdjudication).toHaveBeenCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -132,7 +132,7 @@ describe('placeOnReportService', () => {
           firstName: 'John',
           lastName: 'Smith',
           agencyId: 'LEI',
-        })
+        }),
       )
 
       await service.startNewDraftAdjudication(
@@ -142,7 +142,7 @@ describe('placeOnReportService', () => {
         'G2996UX',
         user,
         PrisonerGender.MALE,
-        '2021-10-29T15:40:25.884'
+        '2021-10-29T15:40:25.884',
       )
       expect(startNewDraftAdjudication).toHaveBeenCalledWith({
         dateTimeOfIncident: '2021-10-28T15:40:25.884',
@@ -195,7 +195,7 @@ describe('placeOnReportService', () => {
             label: 'Reporting officer',
             value: 'T. User',
             changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.start(
-              '10'
+              '10',
             )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(10)}&editSubmittedAdjudication=false`,
             dataQa: 'reporting-officer-changeLink',
           },
@@ -256,7 +256,7 @@ describe('placeOnReportService', () => {
             label: 'Reporting officer',
             value: 'T. User',
             changeLinkHref: `${adjudicationUrls.createOnBehalfOf.urls.start(
-              '10'
+              '10',
             )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(10)}&editSubmittedAdjudication=false`,
             dataQa: 'reporting-officer-changeLink',
           },
@@ -367,7 +367,7 @@ describe('placeOnReportService', () => {
           offenderNo: 'A1234AA',
           firstName: 'John',
           lastName: 'Smith',
-        })
+        }),
       )
 
       const result = await service.getPrisonerDetails('A1234AA', user)
@@ -377,7 +377,7 @@ describe('placeOnReportService', () => {
           offenderNo: 'A1234AA',
           firstName: 'John',
           lastName: 'Smith',
-        })
+        }),
       )
       expect(PrisonApiClient).toBeCalledWith(token)
       expect(getPrisonerDetails).toBeCalledWith('A1234AA')
@@ -389,7 +389,7 @@ describe('placeOnReportService', () => {
           firstName: 'JOHN',
           lastName: 'SMITH',
           assignedLivingUnitDesc: 'CSWAP',
-        })
+        }),
       )
       const result = await service.getPrisonerDetails('A1234AA', user)
       expect(result.currentLocation).toEqual('No cell allocated')
@@ -479,7 +479,7 @@ describe('placeOnReportService', () => {
           chargeNumber: '234',
           dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
           prisonerNumber: 'G2996UX',
-        })
+        }),
       )
 
       const response = await service.completeDraftAdjudication(4, user)
@@ -533,7 +533,7 @@ describe('placeOnReportService', () => {
         12123123,
         '0194ac90-2def-7c63-9f46-b3ccc911fdff',
         user,
-        '2021-11-10T13:55:34.143Z'
+        '2021-11-10T13:55:34.143Z',
       )
       expect(response).toEqual(expectedResult)
       expect(editDraftIncidentDetails).toBeCalledWith(4, {
@@ -579,7 +579,7 @@ describe('placeOnReportService', () => {
         {
           size: 20,
           number: 0,
-        }
+        },
       )
       const expectedDraftAdjudicationsContent = [
         testData.draftAdjudication({
@@ -627,7 +627,7 @@ describe('placeOnReportService', () => {
         {
           size: 20,
           number: 0,
-        }
+        },
       )
       expect(response).toEqual({ content: [], number: 0, size: 10, totalElements: 0 })
     })

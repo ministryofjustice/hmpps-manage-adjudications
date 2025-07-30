@@ -72,7 +72,7 @@ export default class PlaceOnReportService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
     private readonly hmppsManageUsersClient: HmppsManageUsersClient,
-    private readonly locationService: LocationService
+    private readonly locationService: LocationService,
   ) {}
 
   async getPrisonerImage(prisonerNumber: string, user: User): Promise<Readable> {
@@ -112,7 +112,7 @@ export default class PlaceOnReportService {
     prisonerNumber: string,
     user: User,
     gender: PrisonerGender,
-    dateTimeOfDiscovery?: string
+    dateTimeOfDiscovery?: string,
   ): Promise<DraftAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const client = new ManageAdjudicationsSystemTokensClient(token, user)
@@ -135,7 +135,7 @@ export default class PlaceOnReportService {
     draftId: number,
     whichRuleChosen: string,
     removeExistingOffences: boolean,
-    user: User
+    user: User,
   ): Promise<DraftAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const client = new ManageAdjudicationsSystemTokensClient(token, user)
@@ -151,7 +151,7 @@ export default class PlaceOnReportService {
     draftId: number,
     incidentStatement: string,
     completed: boolean,
-    user: User
+    user: User,
   ): Promise<DraftAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const client = new ManageAdjudicationsSystemTokensClient(token, user)
@@ -176,7 +176,7 @@ export default class PlaceOnReportService {
     const { draftAdjudication } = draftAdjudicationInfo
     const reporter = await this.hmppsManageUsersClient.getUserFromUsername(
       draftAdjudication.startedByUserId,
-      user.token
+      user.token,
     )
 
     const dateTime = draftAdjudication.incidentDetails.dateTimeOfIncident
@@ -188,7 +188,7 @@ export default class PlaceOnReportService {
 
     const dpsLocationId = await this.locationService.getCorrespondingDpsLocationId(
       draftAdjudication.incidentDetails.locationId,
-      user
+      user,
     )
     const [locationObj] = locations.filter(loc => loc.locationId === dpsLocationId)
 
@@ -196,7 +196,7 @@ export default class PlaceOnReportService {
     let changeReportingOfficerDataQa
     if (!draftAdjudication.createdOnBehalfOfOfficer) {
       changeReportingOfficerLink = `${adjudicationUrls.createOnBehalfOf.urls.start(
-        draftId
+        draftId,
       )}?referrer=${adjudicationUrls.checkYourAnswers.urls.start(draftId)}&editSubmittedAdjudication=false`
       changeReportingOfficerDataQa = 'reporting-officer-changeLink'
     }
@@ -240,7 +240,7 @@ export default class PlaceOnReportService {
 
   async getDraftIncidentDetailsForEditing(
     chargeNumber: string | number,
-    user: User
+    user: User,
   ): Promise<ExistingDraftIncidentDetails> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
@@ -273,7 +273,7 @@ export default class PlaceOnReportService {
     location: number, // TODO: MAP-2114: remove at a later date
     locationUuid: string,
     user: User,
-    dateTimeOfDiscovery: string
+    dateTimeOfDiscovery: string,
   ): Promise<DraftAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
@@ -292,7 +292,7 @@ export default class PlaceOnReportService {
     id: number,
     roleCode: string,
     removeExistingOffences: boolean,
-    user: User
+    user: User,
   ): Promise<DraftAdjudicationResult> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const manageAdjudicationsClient = new ManageAdjudicationsSystemTokensClient(token, user)
@@ -322,20 +322,20 @@ export default class PlaceOnReportService {
   async getAllDraftAdjudicationsForUser(
     user: User,
     filter: ContinueReportApiFilter,
-    pageRequest: ApiPageRequest
+    pageRequest: ApiPageRequest,
   ): Promise<ApiPageResponse<DraftAdjudicationEnhanced>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const pageResponse = await new ManageAdjudicationsSystemTokensClient(token, user).getAllDraftAdjudicationsForUser(
       filter,
-      pageRequest
+      pageRequest,
     )
 
     const prisonerDetails = new Map(
       (
         await new PrisonApiClient(user.token).getBatchPrisonerDetails(
-          pageResponse.content.map(report => report.prisonerNumber)
+          pageResponse.content.map(report => report.prisonerNumber),
         )
-      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail])
+      ).map(prisonerDetail => [prisonerDetail.offenderNo, prisonerDetail]),
     )
 
     const getEnhancedReportsByUser = (draftAdjudication: DraftAdjudication) => {
@@ -344,7 +344,7 @@ export default class PlaceOnReportService {
       const friendlyName = convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`)
       const formattedDiscoveryDateTime = getDate(
         draftAdjudication.incidentDetails.dateTimeOfDiscovery,
-        'D MMMM YYYY - HH:mm'
+        'D MMMM YYYY - HH:mm',
       )
 
       return { ...draftAdjudication, displayName, friendlyName, formattedDiscoveryDateTime }
@@ -377,7 +377,7 @@ export default class PlaceOnReportService {
     const offenceDetailsUrl = this.getNextOffencesUrl(draftAdjudication.offenceDetails, draftAdjudication.id)
     const incidentStatementStatus = this.getIncidentStatementStatus(
       !!draftAdjudication.incidentStatement,
-      statementComplete
+      statementComplete,
     )
     const damagesStatus = this.getStatus(draftAdjudication.damagesSaved)
     const evidenceStatus = this.getStatus(draftAdjudication.evidenceSaved)
@@ -419,7 +419,7 @@ export default class PlaceOnReportService {
 
   async getAssociatedStaffDetails(
     staffMembers: StaffSearchByName[],
-    user: User
+    user: User,
   ): Promise<StaffSearchWithCurrentLocation[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const activeStaffMembers = staffMembers.filter(person => !!person.activeCaseLoadId)
@@ -439,7 +439,7 @@ export default class PlaceOnReportService {
       activeStaffMembers.map((staffMember: StaffSearchByName) => {
         const currentLocation = locations.find(location => location.agencyId === staffMember.activeCaseLoadId)
         return { ...staffMember, currentLocation: currentLocation.locationFullName }
-      })
+      }),
     )
   }
 
@@ -523,7 +523,7 @@ export default class PlaceOnReportService {
     chargeNumber: string,
     createdOnBehalfOfOfficer: string,
     createdOnBehalfOfReason: string,
-    user: User
+    user: User,
   ) {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const client = new ManageAdjudicationsSystemTokensClient(token, user)
@@ -534,7 +534,7 @@ export default class PlaceOnReportService {
     draftId: number,
     createdOnBehalfOfOfficer: string,
     createdOnBehalfOfReason: string,
-    user: User
+    user: User,
   ) {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const client = new ManageAdjudicationsSystemTokensClient(token, user)
@@ -559,7 +559,7 @@ export default class PlaceOnReportService {
   async getGenderDataForTable(
     draftCreationPath: boolean,
     prisoner: PrisonerResultSummary,
-    draftAdjudication: DraftAdjudication
+    draftAdjudication: DraftAdjudication,
   ) {
     const isPrisonerGenderKnownOnProfile = isPrisonerGenderKnown(prisoner.physicalAttributes.gender)
     if (!isPrisonerGenderKnownOnProfile && draftCreationPath) {

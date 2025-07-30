@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { RequestHandler } from 'express'
 
 import logger from '../../logger'

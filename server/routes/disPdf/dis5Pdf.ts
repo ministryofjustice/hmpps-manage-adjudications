@@ -10,7 +10,7 @@ import log from '../../log'
 export default class Dis5Pdf {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly prisonerSearchService: PrisonerSearchService
+    private readonly prisonerSearchService: PrisonerSearchService,
   ) {}
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
@@ -20,19 +20,19 @@ export default class Dis5Pdf {
 
     try {
       const adjudicationDetails = await withRetry(() =>
-        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user)
+        this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user),
       )
 
       const prisonerSearchDis5Data = await withRetry(() =>
-        this.prisonerSearchService.getPrisonerDetailsForDis5(adjudicationDetails.prisonerNumber, user)
+        this.prisonerSearchService.getPrisonerDetailsForDis5(adjudicationDetails.prisonerNumber, user),
       )
       const dis5Data = await withRetry(() =>
         this.reportedAdjudicationsService.getDis5Data(
           chargeNumber,
           adjudicationDetails.prisonerNumber,
           adjudicationDetails.bookingId,
-          user
-        )
+          user,
+        ),
       )
 
       // Validate completeness of data
@@ -44,7 +44,7 @@ export default class Dis5Pdf {
         chargeNumber,
         adjudicationDetails,
         dis5Data,
-        prisonerSearchDis5Data
+        prisonerSearchDis5Data,
       )
 
       res.renderPdf(
@@ -57,7 +57,7 @@ export default class Dis5Pdf {
         {
           filename: `adjudication-history-for-current-sentence-${chargeNumber}.pdf`,
           pdfMargins,
-        }
+        },
       )
     } catch (error) {
       log.error('Error rendering PDF:', error)

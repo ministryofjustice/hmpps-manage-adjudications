@@ -19,7 +19,7 @@ export default function whichPunishmentConsecutiveToRoutes({
   const whichPunishmentConsecutiveToRoute = new WhichPunishmentConsecutiveToRoute(userService, punishmentsService)
   const whichPunishmentConsecutiveToEditRoute = new WhichPunishmentConsecutiveToEditRoute(
     userService,
-    punishmentsService
+    punishmentsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

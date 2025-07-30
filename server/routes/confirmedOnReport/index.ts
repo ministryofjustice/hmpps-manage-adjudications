@@ -14,15 +14,15 @@ export default function prisonerConfirmedOnReportRoutes({
 
   const confirmedOnReportRoute = new ConfirmedOnReportPage(
     PageRequestType.ORIGINAL_REPORT_CONFIRMATION,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const confirmedOnReportChangeReportRoutes = new ConfirmedOnReportPage(
     PageRequestType.REPORT_CHANGE,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const confirmedOnReportPostReviewChangeRoutes = new ConfirmedOnReportPage(
     PageRequestType.POST_REVIEW_REPORT_CHANGE,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)
@@ -31,7 +31,7 @@ export default function prisonerConfirmedOnReportRoutes({
   get(adjudicationUrls.confirmedOnReport.matchers.confirmationOfChange, confirmedOnReportChangeReportRoutes.view)
   get(
     adjudicationUrls.confirmedOnReport.matchers.confirmationOfChangePostReview,
-    confirmedOnReportPostReviewChangeRoutes.view
+    confirmedOnReportPostReviewChangeRoutes.view,
   )
 
   return router

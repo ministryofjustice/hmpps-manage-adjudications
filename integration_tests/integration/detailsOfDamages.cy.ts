@@ -269,8 +269,8 @@ context('Details of damages', () => {
     it('page items present - no damages', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-          12345
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+          12345,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`,
       )
       const detailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
 
@@ -284,8 +284,8 @@ context('Details of damages', () => {
     it('page items present - damages present', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-          23456
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+          23456,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`,
       )
       const detailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
       detailsOfDamagePage.damagesTable().find('tr').should('have.length', 3) // This includes the header row plus two data rows
@@ -311,8 +311,8 @@ context('Details of damages', () => {
     it('should remove the correct damage if the remove link is used (first damage)', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-          23456
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(23456)}`
+          23456,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(23456)}`,
       )
       const detailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
       detailsOfDamagePage.removeLink(1).click()
@@ -332,8 +332,8 @@ context('Details of damages', () => {
     it('should remove the correct damage if the remove link is used (second damage)', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-          23456
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`
+          23456,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(23456)}`,
       )
       const detailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
       detailsOfDamagePage.removeLink(2).click()
@@ -353,8 +353,8 @@ context('Details of damages', () => {
     it('should not show the remove link for damages that the current user did not add', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-          34567
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`
+          34567,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(34567)}`,
       )
       const detailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
       detailsOfDamagePage.damagesTable().find('tr').should('have.length', 5) // This includes the header row plus four data rows
@@ -379,8 +379,8 @@ context('Details of damages', () => {
     it('should show any damages added to the session in the table', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-          12345
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(12345)}`
+          12345,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(12345)}`,
       )
       const detailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
       detailsOfDamagePage.damagesTable().should('not.exist')
@@ -405,8 +405,8 @@ context('Details of damages', () => {
     it('should return to the referrer stored in the session if the exit button is clicked - reporter', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-          12345
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`
+          12345,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.report(12345)}`,
       )
       const detailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
       detailsOfDamagePage.exitButton().click()
@@ -417,8 +417,8 @@ context('Details of damages', () => {
     it('should return to the referrer stored in the session if the exit button is clicked - reviewer', () => {
       cy.visit(
         `${adjudicationUrls.detailsOfDamages.urls.submittedEdit(
-          12345
-        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(12345)}`
+          12345,
+        )}?referrer=${adjudicationUrls.prisonerReport.urls.review(12345)}`,
       )
       const detailsOfDamagePage: DetailsOfDamages = Page.verifyOnPage(DetailsOfDamages)
       detailsOfDamagePage.exitButton().click()

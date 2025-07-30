@@ -20,7 +20,7 @@ import { FormError } from '../../../@types/template'
 export default class AllCompletedReportsRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   private renderView = async (
@@ -28,7 +28,7 @@ export default class AllCompletedReportsRoutes {
     res: Response,
     filter: UiFilter,
     results: ApiPageResponse<ReportedAdjudicationEnhanced>,
-    errors: FormError[]
+    errors: FormError[],
   ): Promise<void> =>
     res.render(`pages/viewAllHearingsAndReports/allReports`, {
       results,
@@ -36,7 +36,7 @@ export default class AllCompletedReportsRoutes {
       statuses: reportedAdjudicationStatuses(filter),
       pagination: mojPaginationFromPageResponse(
         results,
-        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`),
       ),
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
@@ -51,7 +51,7 @@ export default class AllCompletedReportsRoutes {
       const results = await this.reportedAdjudicationsService.getAllCompletedAdjudications(
         res.locals.user,
         { ...filter },
-        pageRequestFrom(20, +req.query.pageNumber || 1)
+        pageRequestFrom(20, +req.query.pageNumber || 1),
       )
       return this.renderView(req, res, uiFilter, results, [])
     })
@@ -67,7 +67,7 @@ export default class AllCompletedReportsRoutes {
           res,
           { ...uiFilter },
           { size: 20, number: 0, totalElements: 0, content: [] },
-          errors
+          errors,
         )
       }
       return res.redirect(adjudicationUrls.allCompletedReports.urls.filter(uiFilter))

@@ -112,7 +112,7 @@ describe('GET', () => {
       .get(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
       .expect('Content-Type', /html/)
       .then(() =>
-        expect(punishmentsService.getSuspendedPunishmentDetails).toHaveBeenCalledWith('100', expect.anything())
+        expect(punishmentsService.getSuspendedPunishmentDetails).toHaveBeenCalledWith('100', expect.anything()),
       )
   })
 })
@@ -127,8 +127,8 @@ describe('POST', () => {
       .expect(
         'Location',
         `${adjudicationUrls.suspendedPunishmentNumberOfDays.urls.existing(
-          '100'
-        )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE&duration=5`
+          '100',
+        )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE&duration=5`,
       )
   })
 })

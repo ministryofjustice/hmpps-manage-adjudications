@@ -22,12 +22,12 @@ export default function hearingReasonForReferralRoutes({
   const hearingReasonForReferralRoute = new HearingReasonForReferralRoutes(
     hearingsService,
     userService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
   const hearingReasonForReferralEditRoute = new HearingReasonForReferralEditRoutes(
     hearingsService,
     userService,
-    reportedAdjudicationsService
+    reportedAdjudicationsService,
   )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)

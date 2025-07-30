@@ -11,7 +11,7 @@ const reportedAdjudicationsService = new ReportedAdjudicationsService(
   null,
   null,
   null,
-  null
+  null,
 ) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
@@ -39,7 +39,7 @@ describe('GET /report-has-been-accepted', () => {
         expect(reportedAdjudicationsService.getAcceptedReportConfirmationDetails).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.getAcceptedReportConfirmationDetails).toHaveBeenCalledWith(
           '123',
-          expect.anything()
+          expect.anything(),
         )
         expect(response.text).toContain('John Smith’s report has been accepted')
       })
@@ -47,7 +47,7 @@ describe('GET /report-has-been-accepted', () => {
 
   it('should throw an error on api failure', () => {
     reportedAdjudicationsService.getAcceptedReportConfirmationDetails.mockRejectedValue(
-      new Error('error message content')
+      new Error('error message content'),
     )
     return request(app)
       .get(adjudicationUrls.acceptedReportConfirmation.urls.start('123'))

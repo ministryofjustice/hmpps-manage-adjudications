@@ -23,7 +23,7 @@ import UserService from '../../services/userService'
 export default class AdjudicationHistoryRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   private renderView = async (
@@ -34,7 +34,7 @@ export default class AdjudicationHistoryRoutes {
     errors: FormError[],
     prisoner: PrisonerResultSummary,
     uniqueListOfAgenciesForPrisoner: Array<EstablishmentInformation>,
-    forbidden?: boolean
+    forbidden?: boolean,
   ): Promise<void> => {
     res.render(`pages/adjudicationHistory.njk`, {
       prisonerNumber: req.params.prisonerNumber,
@@ -46,7 +46,7 @@ export default class AdjudicationHistoryRoutes {
       punishment: punishmentCheckboxes(filter),
       pagination: mojPaginationFromPageResponse(
         results,
-        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+        new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`),
       ),
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
@@ -71,14 +71,14 @@ export default class AdjudicationHistoryRoutes {
 
     const uniqueListOfAgenciesForPrisoner = await this.reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner(
       prisonerNumber,
-      user
+      user,
     )
     const results = await this.reportedAdjudicationsService.getAdjudicationHistory(
       prisoner,
       uniqueListOfAgenciesForPrisoner,
       filter,
       pageRequestFrom(20, +req.query.pageNumber || 1),
-      res.locals.user
+      res.locals.user,
     )
     return this.renderView(req, res, uiFilter, results, [], prisoner, uniqueListOfAgenciesForPrisoner, forbidden)
   }
@@ -99,7 +99,7 @@ export default class AdjudicationHistoryRoutes {
         { size: 20, number: 0, totalElements: 0, content: [] },
         errors,
         prisoner,
-        uniqueListOfAgenciesForPrisoner
+        uniqueListOfAgenciesForPrisoner,
       )
     }
     return res.redirect(adjudicationUrls.adjudicationHistory.urls.filter(prisonerNumber, uiFilter))

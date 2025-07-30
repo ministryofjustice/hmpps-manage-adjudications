@@ -61,7 +61,7 @@ context('Will this punishment be consecutive to another one?', () => {
         .find('li')
         .then($error => {
           expect($error.get(0).innerText).to.contain(
-            'Select yes if this punishment is consecutive to another punishment'
+            'Select yes if this punishment is consecutive to another punishment',
           )
         })
     })

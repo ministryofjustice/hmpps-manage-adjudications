@@ -90,7 +90,7 @@ describe('ValidateForm', () => {
         evidenceType: 'photo',
         bwcIdentifier: undefined,
         batIdentifier: undefined,
-      })
+      }),
     ).toStrictEqual({
       href: '#evidenceDescription',
       text: 'Your statement must be 4,000 characters or less',

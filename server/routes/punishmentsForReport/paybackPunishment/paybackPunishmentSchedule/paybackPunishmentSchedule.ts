@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import url from 'url'
 import { ParsedUrlQueryInput } from 'querystring'
 import { Request, Response } from 'express'
@@ -17,7 +16,7 @@ type PageData = {
 export default class PaybackPunishmentScheduleRoute {
   constructor(
     private readonly userService: UserService,
-    private readonly punishmentsService: PunishmentsService
+    private readonly punishmentsService: PunishmentsService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {

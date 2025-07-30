@@ -9,7 +9,7 @@ export default class ReviewerEditOffenceWarningRoute {
   constructor(
     private readonly decisionTreeService: DecisionTreeService,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   view = async (req: Request, res: Response): Promise<void> => {
@@ -36,7 +36,7 @@ export default class ReviewerEditOffenceWarningRoute {
       associatedPrisoner,
       reportedAdjudication.incidentRole,
       user,
-      false
+      false,
     )
 
     return res.render(`pages/reviewerEditOffenceWarning`, {
