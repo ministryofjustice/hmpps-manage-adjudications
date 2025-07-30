@@ -24,7 +24,7 @@
     <!-- End Google Tag Manager -->
   {% endif %}
   <!--[if !IE 8]><!-->
-  <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
+   <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
   <!--<![endif]-->
 
   <!--[if lt IE 9]>
@@ -75,10 +75,10 @@
 {% block bodyEnd %}
   {# Run JavaScript at end of the
   <body>, to avoid blocking the initial render. #}
-  <script type="module" src="/assets/js/frontend-init.js"></script>
+  <script type="module" src="{{ '/assets/js/frontend-init.js' | assetMap }}"></script>
 
-  <script src="/assets/js/main.js"></script>
-  <script src="/assets/date-picker.js"></script>
+  <script src="{{ '/assets/js/main.js' | assetMap }}"></script>
+  <script src="{{ '/assets/js/date-picker.js' | assetMap }}"></script>
 
   {% if feComponents.jsIncludes %}
     {% for js in feComponents.jsIncludes %}

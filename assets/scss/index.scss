@@ -1,0 +1,67 @@
+$govuk-global-styles: true;
+$path: "/assets/images/";
+$moj-page-width: 1170px;
+$govuk-page-width: $moj-page-width;
+$govuk-new-typography-scale: true;
+$govuk-font-family-print: 'GDS Transport';
+
+@import "govuk-frontend/dist/govuk/index";
+@import "@ministryofjustice/frontend/moj/all";
+
+@import './components/feedback-banner.scss';
+@import './components/header.scss';
+@import './components/header-bar.scss';
+@import './components/footer.scss';
+@import './components/date-picker.scss';
+@import './components/datePicker.scss';
+@import './components/prisoner-playback.scss';
+@import './components/results-table.scss';
+@import './components/confirmed-on-report.scss';
+@import './components/print-link.scss';
+@import './components/card.scss';
+@import './components/continue-report.scss';
+@import './components/taskList.scss';
+@import './components/adjudicationSummary.scss';
+@import './components/checkYourAnswers.scss';
+@import './components/conditionalRadios.scss';
+@import './components/details-of-offence.scss';
+@import './components/pdf.scss';
+@import './components/adjudication-pdf.scss';
+@import './components/evidenceTable.scss';
+@import './components/damagesWitnessesTable.scss';
+@import './components/timeSelect.scss';
+@import './components/hearingFilter.scss';
+@import './components/completedReports.scss';
+@import './components/confirmDISForm.scss';
+@import './components/alerts.scss';
+@import './components/printCompletedDISForms.scss';
+@import './components/punishments.scss';
+@import './components/data-insight.scss';
+@import './components/transferBanner.scss';
+@import './components/_adjudicationHistory.scss';
+
+@import 'homepage.scss';
+@import 'helpers.scss';
+@import 'horizontal-content.scss';
+
+@import 'local.scss';
+
+.flex-container {
+  display: flex;
+}
+
+.flex-center {
+  align-content: center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.word-break {
+  word-break: break-word;
+}
+
+.noBottomBorder {
+  border-bottom: none;
+}

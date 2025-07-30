@@ -1,3 +1,5 @@
+@import "govuk-frontend/dist/govuk/index";
+
 .dps-header {
   background-color: govuk-colour('black');
   @include govuk-responsive-padding(3, 'top');
@@ -65,7 +67,7 @@
 
     &__sub-text {
       display: none;
-      
+
       @include govuk-font(16);
       @include govuk-media-query($from: tablet) {
         display: block;
