@@ -27,9 +27,11 @@ import CreateOnBehalfOfSessionService from '../createOnBehalfOf/createOnBehalfOf
 import FrontendComponentService from '../../services/frontendComponentService'
 
 const testAppInfo: ApplicationInfo = {
+  productId: 'DPS001',
   applicationName: 'test',
   buildNumber: '1',
   gitRef: 'long ref',
+  branchName: 'test',
   gitShortHash: 'short ref',
 }
 

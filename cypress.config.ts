@@ -12,6 +12,7 @@ import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import users from './integration_tests/mockApis/users'
 import feComponent from './integration_tests/mockApis/feComponent'
 import alertApi from './integration_tests/mockApis/alertApi'
+import dataInsightsApi from './integration_tests/mockApis/dataInsightsApi'
 
 export default defineConfig({
   projectId: 'gy9q8q',
@@ -85,12 +86,16 @@ export default defineConfig({
 
         stubTokenPing: status => tokenVerification.stubPing(status),
         stubAuthPing: status => auth.stubPing(status),
+        stubAlertPing: status => alertApi.stubPing(status),
+        stubCuriousPing: status => curiousApi.stubPing(status),
+        stubDataInsightsPing: status => dataInsightsApi.stubPing(status),
         stubManageUsersApiPing: status => users.stubPing(status),
         stubPrisonerSearchPing: status => prisonerSearch.stubPing(status),
         stubPrisonApiPing: status => prisonApi.stubPing(status),
         stubLocationsInsidePrisonApiPing: status => locationsInsidePrisonApi.stubPing(status),
         stubNomisSyncPrisonerMappingApiPing: status => nomisSyncPrisonerMappingApi.stubPing(status),
         stubAdjudicationsPing: status => adjudications.stubPing(status),
+        stubFEComponentsAPIPing: status => feComponent.stubPing(status),
         stubGetPrisonerDetails: prisonApi.stubGetPrisonerDetails,
         stubGetLocations: locationsInsidePrisonApi.stubGetLocations,
         stubGetAdjudicationLocations: locationsInsidePrisonApi.stubGetAdjudicationLocations,
