@@ -1,5 +1,4 @@
 import TestData from '../../server/routes/testutils/testData'
-import adjudicationUrls from '../../server/utils/urlGenerator'
 
 const testData = new TestData()
 
