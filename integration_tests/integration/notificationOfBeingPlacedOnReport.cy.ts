@@ -68,12 +68,4 @@ context('Prisoner has been placed on report', () => {
 
     cy.signIn()
   })
-
-  xit('The notification of being on report should present on the print report page', () => {
-    cy.request(`${adjudicationUrls.printPdf.urls.dis12('1524242')}?copy=staff`).should(res => {
-      expect(res.status).to.eq(200)
-      expect(res.headers['content-disposition']).to.contain('notice-of-being-placed-on-report-1524242.pdf')
-      expect(res.headers['content-type']).to.eq('application/pdf')
-    })
-  })
 })
