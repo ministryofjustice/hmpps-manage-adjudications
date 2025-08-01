@@ -1,5 +1,6 @@
+@use "sass:map";
 .prisonerPlaybackSectionInner {
-  @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+  @media print, (min-width: #{map.get($govuk-breakpoints, 'tablet')}) {
     padding-bottom: 0;
     display: flex;
     align-items: center;
@@ -18,7 +19,7 @@
   }
 
 	&__item {
-    @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+    @media print, (min-width: #{map.get($govuk-breakpoints, 'tablet')}) {
       display: flex;
       flex-direction: column;
       justify-content: center;
