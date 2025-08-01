@@ -86,9 +86,21 @@ const stubFeComponentsFail = () =>
     },
   })
 
+const stubPing = (status = 200): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/components/health',
+    },
+    response: {
+      status,
+    },
+  })
+
 export default {
   stubFeComponents,
   stubFeComponentsCss,
   stubFeComponentsJs,
   stubFeComponentsFail,
+  stubPing,
 }

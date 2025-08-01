@@ -15,6 +15,18 @@ const stubGetPrisonersAlerts = ({ prisonerNumber, response = [], status = 200 })
     },
   })
 
+const stubPing = (status = 200): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/alertsApi/health/ping',
+    },
+    response: {
+      status,
+    },
+  })
+
 export default {
   stubGetPrisonersAlerts,
+  stubPing,
 }

@@ -22,6 +22,18 @@ const stubGetLearnerProfile = ({
     },
   })
 
+const stubPing = (status = 200): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/curious/ping',
+    },
+    response: {
+      status,
+    },
+  })
+
 export default {
   stubGetLearnerProfile,
+  stubPing,
 }

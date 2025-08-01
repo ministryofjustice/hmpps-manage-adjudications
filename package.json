@@ -70,7 +70,6 @@
   },
   "nodemonConfig": {
     "ignore": [
-      ".circleci/*",
       "migrations/*",
       "node_modules/*",
       "test/*",
@@ -90,6 +89,7 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^5.1.5",
+    "@ministryofjustice/hmpps-monitoring": "^0.0.1",
     "@types/jsonwebtoken": "^9.0.10",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.7",

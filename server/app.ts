@@ -47,7 +47,7 @@ export default function createApp(services: Services): express.Application {
   setUpEnvironmentName(app)
   nunjucksSetup(app, services.applicationInfo)
   app.use(setUpAuthentication())
-  app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
+  app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.url)))
   app.use(authorisationMiddleware())
   app.use('*"matcher"', getFrontendComponents(services))
 
