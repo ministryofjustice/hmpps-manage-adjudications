@@ -13,6 +13,7 @@ import users from './integration_tests/mockApis/users'
 import feComponent from './integration_tests/mockApis/feComponent'
 import alertApi from './integration_tests/mockApis/alertApi'
 import dataInsightsApi from './integration_tests/mockApis/dataInsightsApi'
+import gotenberg from './integration_tests/mockApis/gotenberg'
 
 export default defineConfig({
   projectId: 'gy9q8q',
@@ -89,6 +90,7 @@ export default defineConfig({
         stubAlertPing: status => alertApi.stubPing(status),
         stubCuriousPing: status => curiousApi.stubPing(status),
         stubDataInsightsPing: status => dataInsightsApi.stubPing(status),
+        stubGotenbergPing: status => gotenberg.stubPing(status),
         stubManageUsersApiPing: status => users.stubPing(status),
         stubPrisonerSearchPing: status => prisonerSearch.stubPing(status),
         stubPrisonApiPing: status => prisonApi.stubPing(status),
