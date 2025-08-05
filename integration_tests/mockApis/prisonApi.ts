@@ -127,25 +127,6 @@ const stubGetMovementByOffender = ({ response = [], status = 200 }): SuperAgentR
     },
   })
 
-const stubValidateChargeNumber = ({
-  chargeNumber,
-  sanctionStatus,
-  offenderNo,
-  responseBody = {},
-  status = 200,
-}): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: `/prisonApi/api/adjudications/adjudication/${chargeNumber}/sanction/${sanctionStatus}/${offenderNo}/validate`,
-    },
-    response: {
-      status,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: responseBody,
-    },
-  })
-
 export default {
   stubPing,
   stubUserCaseloads,
@@ -155,5 +136,4 @@ export default {
   stubGetBatchPrisonerDetails,
   stubGetUsersLocations,
   stubGetMovementByOffender,
-  stubValidateChargeNumber,
 }
