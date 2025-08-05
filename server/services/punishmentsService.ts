@@ -22,10 +22,9 @@ import {
 import ManageAdjudicationsSystemTokensClient, {
   ConsecutiveAdditionalDaysReport,
 } from '../data/manageAdjudicationsSystemTokensClient'
-import PrisonApiClient, { SanctionStatus } from '../data/prisonApiClient'
+import PrisonApiClient from '../data/prisonApiClient'
 import { convertToTitleCase, formatTimestampTo, getFormattedOfficerName } from '../utils/utils'
 import PrisonerResult from '../data/prisonerResult'
-import logger from '../../logger'
 import adjudicationUrls from '../utils/urlGenerator'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
@@ -473,32 +472,6 @@ export default class PunishmentsService {
       punishmentType,
       chargeNumber,
     )
-  }
-
-  async validateChargeNumber(
-    chargeNumber: string,
-    type: PunishmentType,
-    userEnteredChargeNumber: string,
-    user: User,
-  ): Promise<boolean> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
-    if (![PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(type)) return false
-    const sanctionStatus =
-      type === PunishmentType.ADDITIONAL_DAYS ? SanctionStatus.IMMEDIATE : SanctionStatus.PROSPECTIVE
-
-    try {
-      const response = await new PrisonApiClient(token).validateCharge(
-        userEnteredChargeNumber,
-        sanctionStatus,
-        reportedAdjudication.prisonerNumber,
-      )
-      if (response) return true
-      return true
-    } catch (error) {
-      logger.error(`Invalid charge number - ${error.status}: ${error.text}`)
-      return false
-    }
   }
 
   async formatPunishmentComments(reportedAdjudication: ReportedAdjudication, chargeNumber: string, user: User) {
