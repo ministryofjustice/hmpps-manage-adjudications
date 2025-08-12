@@ -8,7 +8,6 @@ import PrisonerSimpleResult from './prisonerSimpleResult'
 import PrisonerResult from './prisonerResult'
 import { Agency, AgencyId, Location } from './PrisonLocationResult'
 import { SecondaryLanguage } from './SecondaryLanguageResult'
-import { Alert, alertCodeString, PrisonerAlerts } from '../utils/alertHelper'
 
 export interface CaseLoad {
   caseLoadId: string
@@ -16,20 +15,6 @@ export interface CaseLoad {
   type: string
   caseloadFunction: string
   currentlyActive: boolean
-}
-
-export interface Inmate {
-  bookingId: number
-  bookingNo: string
-  offenderNo: string
-  firstName: string
-  lastName: string
-  dateOfBirth: string
-  age: number
-  agencyId: string
-  assignedLivingUnitId: number
-  alertsCodes: string[]
-  alertsDetails: string[]
 }
 
 export interface OffenderMovementInfo {
@@ -78,11 +63,6 @@ export interface Balances {
   damageObligations: number
 }
 
-export enum SanctionStatus {
-  IMMEDIATE = 'IMMEDIATE',
-  PROSPECTIVE = 'PROSPECTIVE',
-}
-
 export default class PrisonApiClient {
   restClient: RestClient
 
@@ -120,23 +100,6 @@ export default class PrisonApiClient {
     return result.map(_ => plainToClass(PrisonerResult, _, { excludeExtraneousValues: false }))
   }
 
-  async getAlertsForPrisoner(prisonerNumber: string): Promise<PrisonerAlerts> {
-    const alerts = await this.restClient
-      .get<Alert[]>({
-        path: `/api/offenders/${prisonerNumber}/alerts/v2?alertCodes=${alertCodeString}`,
-      })
-      .catch(error => {
-        if (error.status === 404) {
-          logger.info(`No alerts available for prisonerNumber: ${prisonerNumber}`)
-        }
-      })
-
-    return {
-      prisonerNumber,
-      alerts: alerts || [],
-    }
-  }
-
   async getUsersLocations(): Promise<Location[]> {
     return this.restClient.get({
       path: `/api/users/me/locations`,
@@ -159,12 +122,6 @@ export default class PrisonApiClient {
     return this.restClient.post({
       path: `/api/movements/offenders?movementType=ADM&latestOnly=false&allBookings=false`,
       data: [offenderNo],
-    })
-  }
-
-  async validateCharge(chargeNumber: string, status: SanctionStatus, offenderNo: string): Promise<{ status: number }> {
-    return this.restClient.get({
-      path: `/api/adjudications/adjudication/${chargeNumber}/sanction/${status}/${offenderNo}/validate`,
     })
   }
 
