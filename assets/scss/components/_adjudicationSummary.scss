@@ -1,13 +1,14 @@
+@use "sass:map";
 .adjudicationsSummary-heading, .prisoner-report-top-bar {
  display: flex;
  justify-content: space-between;
- @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+ @media print, (min-width: #{map.get($govuk-breakpoints, 'tablet')}) {
 		max-width: 60%;
 	}
 }
 
 .adjudicationsSummary, .adjudicationReviewStatusSummary-container {
-	@media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
+	@media print, (min-width: #{map.get($govuk-breakpoints, 'tablet')}) {
 		max-width: 60%;
 	}
 }
