@@ -47,7 +47,7 @@
     "ext": "js,json,html,njk"
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^5.1.5",
+    "@ministryofjustice/frontend": "^6.0.0",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1",
     "@types/jsonwebtoken": "^9.0.10",
     "agentkeepalive": "^4.6.0",
