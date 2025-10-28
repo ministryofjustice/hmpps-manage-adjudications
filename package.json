@@ -33,7 +33,7 @@
     "precommit:verify": "npm run typecheck && npm test"
   },
   "engines": {
-    "node": "^22",
+    "node": "^24",
     "npm": "^10 || ^11"
   },
   "nodemonConfig": {
