@@ -125,11 +125,11 @@ describe('TokenStore', () => {
     })
 
     it('never calls any redis client methods when disabled', async () => {
-      const fake = makeMockRedisClient(false)
+      const mockClient = makeMockRedisClient(false)
 
       jest.doMock('./redisClient', () => ({
         __esModule: true,
-        createRedisClient: () => fake,
+        createRedisClient: () => mockClient,
       }))
       await jest.isolateModulesAsync(async () => {
         const mod = await import('./tokenStore')
@@ -140,9 +140,9 @@ describe('TokenStore', () => {
       await store.setToken('k3', 'v3', 2)
       await store.getToken('k3')
 
-      expect(fake.connect as jest.Mock).not.toHaveBeenCalled()
-      expect(fake.get as jest.Mock).not.toHaveBeenCalled()
-      expect(fake.set as jest.Mock).not.toHaveBeenCalled()
+      expect(mockClient.connect as jest.Mock).not.toHaveBeenCalled()
+      expect(mockClient.get as jest.Mock).not.toHaveBeenCalled()
+      expect(mockClient.set as jest.Mock).not.toHaveBeenCalled()
     })
   })
 })
