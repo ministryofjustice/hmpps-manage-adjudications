@@ -62,8 +62,8 @@ describe('GET /print-completed-DIS-forms', () => {
           expect(response.text).toContain('Print notice of being placed on report')
           expect(response.text).toContain('Smith, James - G7234VB')
           expect(response.text).toContain('Tovey, Peter - G6123VU')
-          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
-          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
+          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toHaveBeenCalledTimes(1)
+          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toHaveBeenCalledTimes(0)
         })
     })
     it('should load the page with filter', () => {
@@ -78,8 +78,8 @@ describe('GET /print-completed-DIS-forms', () => {
         )
         .expect('Content-Type', /html/)
         .expect(response => {
-          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
-          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(1)
+          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toHaveBeenCalledTimes(1)
+          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toHaveBeenCalledTimes(1)
         })
     })
   })
@@ -94,8 +94,8 @@ describe('GET /print-completed-DIS-forms', () => {
         .expect(response => {
           expect(response.text).toContain('Print notice of being placed on report')
           expect(response.text).toContain('No scheduled hearings.')
-          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
-          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
+          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toHaveBeenCalledTimes(1)
+          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toHaveBeenCalledTimes(0)
         })
     })
   })

@@ -42,7 +42,7 @@ describe('load edit punishment comment page', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
-        expect(punishmentsService.editPunishmentComment).not.toBeCalled()
+        expect(punishmentsService.editPunishmentComment).not.toHaveBeenCalled()
       })
   })
   it('should load punishment comment page', () => {

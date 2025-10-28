@@ -42,7 +42,7 @@ describe('GET', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
-        expect(punishmentsService.removePunishmentComment).not.toBeCalled()
+        expect(punishmentsService.removePunishmentComment).not.toHaveBeenCalled()
       })
   })
   it('should not load deletion page if user does not have role "ADJUDICATIONS_REVIEWER"', () => {
@@ -52,7 +52,7 @@ describe('GET', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
-        expect(punishmentsService.removePunishmentComment).not.toBeCalled()
+        expect(punishmentsService.removePunishmentComment).not.toHaveBeenCalled()
       })
   })
 })
@@ -64,7 +64,7 @@ describe('POST', () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Select yes if you want to remove this comment')
-        expect(punishmentsService.removePunishmentComment).not.toBeCalled()
+        expect(punishmentsService.removePunishmentComment).not.toHaveBeenCalled()
       })
   })
   it('should not delete if "No" option chosen', () => {
@@ -73,7 +73,7 @@ describe('POST', () => {
       .send({
         removeComment: 'no',
       })
-      .then(() => expect(punishmentsService.removePunishmentComment).not.toBeCalled())
+      .then(() => expect(punishmentsService.removePunishmentComment).not.toHaveBeenCalled())
   })
   it('should not delete if user does not have role "ADJUDICATIONS_REVIEWER"', () => {
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
@@ -82,7 +82,7 @@ describe('POST', () => {
       .send({
         removeComment: 'yes',
       })
-      .then(() => expect(punishmentsService.removePunishmentComment).not.toBeCalled())
+      .then(() => expect(punishmentsService.removePunishmentComment).not.toHaveBeenCalled())
   })
   it('should successfully call the endpoint if "Yes" option chosen', () => {
     return request(app)

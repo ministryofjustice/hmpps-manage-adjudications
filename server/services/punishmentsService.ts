@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'crypto'
 import { Request } from 'express'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import {
@@ -78,7 +78,7 @@ export default class PunishmentsService {
 
   async addSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string): Promise<string> {
     this.createSessionForAdjudicationPunishmentIfNotExists(req, chargeNumber)
-    const redisId = uuidv4()
+    const redisId = randomUUID()
     const newPunishment = { ...punishmentData, redisId }
     await req.session.punishments[chargeNumber].push(newPunishment)
 
@@ -283,7 +283,7 @@ export default class PunishmentsService {
         rehabilitativeActivities,
         isThereRehabilitativeActivities,
         hasRehabilitativeActivitiesDetails,
-        redisId: uuidv4(),
+        redisId: randomUUID(),
       }
     })
     req.session.punishments[chargeNumber] = punishments

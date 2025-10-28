@@ -302,6 +302,6 @@ describe('POST /details-of-offence - ALO edits offence', () => {
             ),
           ),
       )
-      .then(() => expect(placeOnReportService.saveOffenceDetails).not.toBeCalled())
+      .then(() => expect(placeOnReportService.saveOffenceDetails).not.toHaveBeenCalled())
   })
 })

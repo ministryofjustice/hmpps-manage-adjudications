@@ -59,8 +59,8 @@ describe('curiousApiService', () => {
       it('makes the correct calls', async () => {
         await service.getNeurodiversitiesForReport('A1234AA', token)
 
-        expect(CuriousApiClient).toBeCalledWith(token)
-        expect(getLearnerProfiles).toBeCalledWith('A1234AA')
+        expect(CuriousApiClient).toHaveBeenCalledWith(token)
+        expect(getLearnerProfiles).toHaveBeenCalledWith('A1234AA')
       })
     })
 

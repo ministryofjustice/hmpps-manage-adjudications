@@ -127,7 +127,7 @@ describe('POST /incident-details', () => {
         discoveryRadioSelected: 'Yes',
       })
       .expect(() => {
-        expect(placeOnReportService.startNewDraftAdjudication).toBeCalledWith(
+        expect(placeOnReportService.startNewDraftAdjudication).toHaveBeenCalledWith(
           '2021-10-26T13:30',
           2,
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',
@@ -161,10 +161,10 @@ describe('POST /incident-details', () => {
         discoveryRadioSelected: 'Yes',
       })
       .expect(() => {
-        expect(placeOnReportService.getPrisonerDetails).toBeCalledTimes(0)
-        expect(placeOnReportService.getPrisonerGenderFromSession).toBeCalledTimes(1)
-        expect(placeOnReportService.getAndDeletePrisonerGenderFromSession).toBeCalledTimes(1)
-        expect(placeOnReportService.startNewDraftAdjudication).toBeCalledWith(
+        expect(placeOnReportService.getPrisonerDetails).toHaveBeenCalledTimes(0)
+        expect(placeOnReportService.getPrisonerGenderFromSession).toHaveBeenCalledTimes(1)
+        expect(placeOnReportService.getAndDeletePrisonerGenderFromSession).toHaveBeenCalledTimes(1)
+        expect(placeOnReportService.startNewDraftAdjudication).toHaveBeenCalledWith(
           '2021-10-27T13:30',
           2,
           '0194ac90-2def-7c63-9f46-b3ccc911fdff',

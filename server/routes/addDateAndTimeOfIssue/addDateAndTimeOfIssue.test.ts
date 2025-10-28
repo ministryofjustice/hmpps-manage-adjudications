@@ -50,8 +50,12 @@ describe('POST /add-issue-date-time', () => {
       )
       .send({ issuedDate: { date: '09/12/2022', time: { hour: '09', minute: '30' } } })
       .expect(() => {
-        expect(reportedAdjudicationsService.issueDISForm).toBeCalledTimes(1)
-        expect(reportedAdjudicationsService.issueDISForm).toBeCalledWith('12345', '2022-12-09T09:30', expect.anything())
+        expect(reportedAdjudicationsService.issueDISForm).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.issueDISForm).toHaveBeenCalledWith(
+          '12345',
+          '2022-12-09T09:30',
+          expect.anything(),
+        )
       })
       .expect(302)
       .expect('Location', adjudicationUrls.confirmDISFormsIssued.urls.start())

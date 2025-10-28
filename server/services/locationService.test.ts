@@ -40,7 +40,7 @@ describe('locationService', () => {
       const result = await service.getIncidentLocations('WRI', user)
 
       expect(result).toEqual([])
-      expect(getLocations).toBeCalledWith('WRI')
+      expect(getLocations).toHaveBeenCalledWith('WRI')
     })
     it('should assign internalLocationCode as userDescription when userDescription value is absent', async () => {
       getLocations.mockReturnValue([
@@ -388,7 +388,7 @@ describe('locationService', () => {
     it('should use token', async () => {
       await service.getIncidentLocations('WRI', user)
 
-      expect(LocationsInsidePrisonApiClient).toBeCalledWith(token)
+      expect(LocationsInsidePrisonApiClient).toHaveBeenCalledWith(token)
     })
   })
   describe('getHearingLocations', () => {
@@ -398,7 +398,7 @@ describe('locationService', () => {
       const result = await service.getHearingLocations('MDI', user)
 
       expect(result).toEqual([])
-      expect(getAdjudicationLocations).toBeCalledWith('MDI')
+      expect(getAdjudicationLocations).toHaveBeenCalledWith('MDI')
     })
     it('should assign internalLocationCode as userDescription when userDescription value is absent', async () => {
       getAdjudicationLocations.mockReturnValue([
@@ -485,7 +485,7 @@ describe('locationService', () => {
     it('should use token', async () => {
       await service.getIncidentLocations('WRI', user)
 
-      expect(LocationsInsidePrisonApiClient).toBeCalledWith(token)
+      expect(LocationsInsidePrisonApiClient).toHaveBeenCalledWith(token)
     })
   })
 })

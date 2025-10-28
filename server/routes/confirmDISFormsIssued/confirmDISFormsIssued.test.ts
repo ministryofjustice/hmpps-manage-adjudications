@@ -61,8 +61,8 @@ describe('GET /issue-DIS1-2', () => {
           expect(response.text).toContain('Confirm notice of being placed on report was issued')
           expect(response.text).toContain('Smith, James - G7234VB')
           expect(response.text).toContain('Tovey, Peter - G6123VU')
-          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
-          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
+          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toHaveBeenCalledTimes(1)
+          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toHaveBeenCalledTimes(0)
         })
     })
     it('should load confirm notice of being placed on report was issued page - with filter', () => {
@@ -77,8 +77,8 @@ describe('GET /issue-DIS1-2', () => {
         .expect('Content-Type', /html/)
         .expect(response => {
           expect(response.text).toContain('Confirm notice of being placed on report was issued')
-          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
-          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(1)
+          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toHaveBeenCalledTimes(1)
+          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toHaveBeenCalledTimes(1)
         })
     })
   })
@@ -93,8 +93,8 @@ describe('GET /issue-DIS1-2', () => {
         .expect(response => {
           expect(response.text).toContain('Confirm notice of being placed on report was issued')
           expect(response.text).toContain('No completed reports')
-          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
-          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
+          expect(reportedAdjudicationsService.getAdjudicationDISFormData).toHaveBeenCalledTimes(1)
+          expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toHaveBeenCalledTimes(0)
         })
     })
   })

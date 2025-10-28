@@ -355,8 +355,8 @@ describe('placeOnReportService', () => {
       const result = await service.getPrisonerImage('A1234AA', user)
 
       expect(result).toEqual('image data')
-      expect(PrisonApiClient).toBeCalledWith(token)
-      expect(getPrisonerImage).toBeCalledWith('A1234AA')
+      expect(PrisonApiClient).toHaveBeenCalledWith(token)
+      expect(getPrisonerImage).toHaveBeenCalledWith('A1234AA')
     })
   })
 
@@ -379,8 +379,8 @@ describe('placeOnReportService', () => {
           lastName: 'Smith',
         }),
       )
-      expect(PrisonApiClient).toBeCalledWith(token)
-      expect(getPrisonerDetails).toBeCalledWith('A1234AA')
+      expect(PrisonApiClient).toHaveBeenCalledWith(token)
+      expect(getPrisonerDetails).toHaveBeenCalledWith('A1234AA')
     })
     it('displays correct location when the prisoner is in CSWAP', async () => {
       getPrisonerDetails.mockResolvedValue(
@@ -425,7 +425,7 @@ describe('placeOnReportService', () => {
       })
       const response = await service.addOrUpdateDraftIncidentStatement(4, 'This is a statement', true, user)
 
-      expect(postDraftIncidentStatement).toBeCalledWith(4, { statement: 'This is a statement', completed: true })
+      expect(postDraftIncidentStatement).toHaveBeenCalledWith(4, { statement: 'This is a statement', completed: true })
 
       expect(response).toEqual({
         draftAdjudication: testData.draftAdjudication({
@@ -456,7 +456,7 @@ describe('placeOnReportService', () => {
       })
       const response = await service.addOrUpdateDraftIncidentStatement(4, 'This is a statement', true, user)
 
-      expect(putDraftIncidentStatement).toBeCalledWith(4, { statement: 'This is a statement', completed: true })
+      expect(putDraftIncidentStatement).toHaveBeenCalledWith(4, { statement: 'This is a statement', completed: true })
 
       expect(response).toEqual({
         draftAdjudication: testData.draftAdjudication({
@@ -536,7 +536,7 @@ describe('placeOnReportService', () => {
         '2021-11-10T13:55:34.143Z',
       )
       expect(response).toEqual(expectedResult)
-      expect(editDraftIncidentDetails).toBeCalledWith(4, {
+      expect(editDraftIncidentDetails).toHaveBeenCalledWith(4, {
         dateTimeOfIncident: '2021-11-09T13:55:34.143Z',
         dateTimeOfDiscovery: '2021-11-10T13:55:34.143Z',
         locationId: 12123123,
@@ -991,7 +991,7 @@ describe('placeOnReportService', () => {
       updateIncidentRole.mockResolvedValue(expectedResult)
       const response = await service.updateDraftIncidentRole(4, '25b', false, user)
       expect(response).toEqual(expectedResult)
-      expect(updateIncidentRole).toBeCalledWith(4, {
+      expect(updateIncidentRole).toHaveBeenCalledWith(4, {
         incidentRole: {
           roleCode: '25b',
         },
@@ -1009,7 +1009,7 @@ describe('placeOnReportService', () => {
       saveYouthOffenderStatus.mockResolvedValue(expectedResult)
       const response = await service.addDraftYouthOffenderStatus(2483, 'yoi', true, user)
       expect(response).toEqual(expectedResult)
-      expect(saveYouthOffenderStatus).toBeCalledWith(2483, {
+      expect(saveYouthOffenderStatus).toHaveBeenCalledWith(2483, {
         isYouthOffenderRule: true,
         removeExistingOffences: true,
       })
@@ -1022,7 +1022,7 @@ describe('placeOnReportService', () => {
       saveYouthOffenderStatus.mockResolvedValue(expectedResult)
       const response = await service.addDraftYouthOffenderStatus(2484, 'adult', false, user)
       expect(response).toEqual(expectedResult)
-      expect(saveYouthOffenderStatus).toBeCalledWith(2484, {
+      expect(saveYouthOffenderStatus).toHaveBeenCalledWith(2484, {
         isYouthOffenderRule: false,
         removeExistingOffences: false,
       })
