@@ -11,7 +11,7 @@ const url =
     : `redis://${config.redis.host}:${config.redis.port}`
 
 export const createRedisClient = (): RedisClient => {
-  const client: RedisClient = createClient({
+  const client = createClient({
     url,
     password: config.redis.password,
     socket: {
@@ -25,5 +25,6 @@ export const createRedisClient = (): RedisClient => {
   })
 
   client.on('error', (e: Error) => logger.error('Redis client error', e))
+
   return client
 }

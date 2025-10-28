@@ -1,20 +1,26 @@
-import addRequestId from 'express-request-id'
-import express, { Router } from 'express'
-import session, { Store } from 'express-session'
+import session, { MemoryStore, Store } from 'express-session'
 import { RedisStore } from 'connect-redis'
+import express, { Router } from 'express'
+import { randomUUID } from 'crypto'
 import { createRedisClient } from '../data/redisClient'
 import config from '../config'
 import logger from '../../logger'
 
 export default function setUpWebSession(): Router {
-  const client = createRedisClient()
-  client.connect().catch((e: Error) => logger.error('Failed to connect to Redis', e))
+  let store: Store
+  if (config.redis.enabled) {
+    const client = createRedisClient()
+    client.connect().catch((err: Error) => logger.error(`Error connecting to Redis`, err))
+    store = new RedisStore({ client })
+  } else {
+    store = new MemoryStore()
+  }
 
-  const store: Store = new RedisStore({ client })
   const router = express.Router()
   router.use(
     session({
       store,
+      name: 'hmpps-manage-adjudications.session',
       cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
       secret: config.session.secret,
       resave: false, // redis implements touch so shouldn't need this
@@ -23,14 +29,16 @@ export default function setUpWebSession(): Router {
     }),
   )
 
-  // Update a value in the cookie so that the set-cookie will be sent.
-  // Only changes every minute so that it's not sent with every request.
   router.use((req, res, next) => {
-    req.session.nowInMinutes = Math.floor(Date.now() / 60e3)
+    const headerName = 'X-Request-Id'
+    const oldValue = req.get(headerName)
+    const id = oldValue === undefined ? randomUUID() : oldValue
+
+    res.set(headerName, id)
+    req.id = id
+
     next()
   })
-
-  router.use(addRequestId())
 
   return router
 }
