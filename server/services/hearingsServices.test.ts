@@ -38,7 +38,7 @@ describe('hearingsService', () => {
   it('should convert amount to null', () => {
     service.createChargedProvedHearingOutcome('1', 'test', HearingOutcomePlea.GUILTY, user)
 
-    expect(createChargeProvedHearingOutcome).toBeCalledWith('1', {
+    expect(createChargeProvedHearingOutcome).toHaveBeenCalledWith('1', {
       plea: HearingOutcomePlea.GUILTY,
       adjudicator: 'test',
     })
@@ -46,7 +46,7 @@ describe('hearingsService', () => {
   it('should convert amount to number', () => {
     service.createChargedProvedHearingOutcome('1', 'test', HearingOutcomePlea.GUILTY, user)
 
-    expect(createChargeProvedHearingOutcome).toBeCalledWith('1', {
+    expect(createChargeProvedHearingOutcome).toHaveBeenCalledWith('1', {
       plea: HearingOutcomePlea.GUILTY,
       adjudicator: 'test',
     })

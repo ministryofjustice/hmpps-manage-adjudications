@@ -1,6 +1,6 @@
 import { Express } from 'express'
 import request from 'supertest'
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'crypto'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
@@ -61,7 +61,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4()))
+      .get(adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', randomUUID()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -73,7 +73,7 @@ describe('GET', () => {
   it('should load the correct page', () => {
     return request(app)
       .get(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4())}?punishmentType=ADDITIONAL_DAYS`,
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', randomUUID())}?punishmentType=ADDITIONAL_DAYS`,
       )
       .expect('Content-Type', /html/)
       .expect(res => {
@@ -83,7 +83,7 @@ describe('GET', () => {
   it('should call the endpoint to get consecutive punishments', () => {
     return request(app)
       .get(
-        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', uuidv4())}?punishmentType=ADDITIONAL_DAYS`,
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit('100', randomUUID())}?punishmentType=ADDITIONAL_DAYS`,
       )
       .expect('Content-Type', /html/)
       .then(() =>
@@ -102,7 +102,7 @@ describe('POST', () => {
       .post(
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.edit(
           '100',
-          uuidv4(),
+          randomUUID(),
         )}?punishmentType=ADDITIONAL_DAYS&duration=5`,
       )
       .send({

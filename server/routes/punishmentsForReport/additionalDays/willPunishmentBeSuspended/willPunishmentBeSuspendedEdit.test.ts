@@ -1,6 +1,6 @@
 import { Express } from 'express'
 import request from 'supertest'
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'crypto'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
@@ -36,7 +36,7 @@ describe('GET will this punishment be suspended page', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit('100', uuidv4()))
+      .get(adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit('100', randomUUID()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -47,7 +47,7 @@ describe('GET will this punishment be suspended page', () => {
 describe('GET punishment-suspended page', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit('100', uuidv4()))
+      .get(adjudicationUrls.isPunishmentSuspendedAdditionalDays.urls.edit('100', randomUUID()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Will this punishment be suspended?')

@@ -337,11 +337,11 @@ describe('reportedAdjudicationsService', () => {
       it('makes the correct calls', async () => {
         await service.getConfirmationDetails('123', user)
 
-        expect(ManageAdjudicationsSystemTokensClient).toBeCalledWith(token, user)
-        expect(getReportedAdjudication).toBeCalledWith('123')
-        expect(PrisonApiClient).toBeCalledWith(token)
-        expect(getPrisonerDetails).toBeCalledWith('A1234AA')
-        expect(getNeurodiversitiesForReport).toBeCalledWith('A1234AA', token)
+        expect(ManageAdjudicationsSystemTokensClient).toHaveBeenCalledWith(token, user)
+        expect(getReportedAdjudication).toHaveBeenCalledWith('123')
+        expect(PrisonApiClient).toHaveBeenCalledWith(token)
+        expect(getPrisonerDetails).toHaveBeenCalledWith('A1234AA')
+        expect(getNeurodiversitiesForReport).toHaveBeenCalledWith('A1234AA', token)
       })
     })
 

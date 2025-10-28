@@ -34,7 +34,7 @@ describe('GET /delete-report/:id', () => {
     return request(app)
       .get(adjudicationUrls.deleteReport.urls.delete(1041))
       .expect(() => {
-        expect(placeOnReportService.getPrisonerDetailsFromAdjNumber).toBeCalledWith(1041, expect.anything())
+        expect(placeOnReportService.getPrisonerDetailsFromAdjNumber).toHaveBeenCalledWith(1041, expect.anything())
       })
       .expect('Content-Type', /html/)
       .expect(response => {
@@ -53,8 +53,8 @@ describe('POST /delete-report/:id', () => {
     return request(app)
       .post(adjudicationUrls.deleteReport.urls.delete(10))
       .expect(() => {
-        expect(placeOnReportService.removeDraftAdjudication).toBeCalledTimes(1)
-        expect(placeOnReportService.removeDraftAdjudication).toBeCalledWith(10, expect.anything())
+        expect(placeOnReportService.removeDraftAdjudication).toHaveBeenCalledTimes(1)
+        expect(placeOnReportService.removeDraftAdjudication).toHaveBeenCalledWith(10, expect.anything())
       })
       .expect('Location', '/select-report')
   })

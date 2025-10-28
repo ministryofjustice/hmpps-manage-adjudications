@@ -1,6 +1,6 @@
 import { Express } from 'express'
 import request from 'supertest'
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'crypto'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
@@ -45,7 +45,7 @@ describe('GET', () => {
   })
   it('should load the `Page not found` page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentConsecutive.urls.edit('100', uuidv4()))
+      .get(adjudicationUrls.isPunishmentConsecutive.urls.edit('100', randomUUID()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Page not found')
@@ -56,7 +56,7 @@ describe('GET', () => {
 describe('GET', () => {
   it('should load the page', () => {
     return request(app)
-      .get(adjudicationUrls.isPunishmentConsecutive.urls.edit('100', uuidv4()))
+      .get(adjudicationUrls.isPunishmentConsecutive.urls.edit('100', randomUUID()))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Will this punishment be consecutive to another one?')
@@ -90,7 +90,7 @@ describe('POST', () => {
       .post(
         `${adjudicationUrls.isPunishmentConsecutive.urls.edit(
           '100',
-          uuidv4(),
+          randomUUID(),
         )}?punishmentType=ADDITIONAL_DAYS&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=10`,
       )
       .send({

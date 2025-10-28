@@ -46,8 +46,8 @@ describe('GET /scheduled-hearings', () => {
       .get(adjudicationUrls.viewScheduledHearings.root)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(reportedAdjudicationsService.getAllHearings).toBeCalledTimes(1)
-        expect(reportedAdjudicationsService.getAllHearings).toBeCalledWith(date, expect.anything())
+        expect(reportedAdjudicationsService.getAllHearings).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.getAllHearings).toHaveBeenCalledWith(date, expect.anything())
         expect(res.text).toContain('Adjudications')
       })
   })

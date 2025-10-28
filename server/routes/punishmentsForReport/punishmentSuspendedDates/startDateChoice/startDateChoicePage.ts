@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import url from 'url'
 import { ParsedUrlQueryInput } from 'querystring'
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'crypto'
 import { Request, Response } from 'express'
 import { FormError } from '../../../../@types/template'
 import UserService from '../../../../services/userService'
@@ -196,7 +196,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
   ): PunishmentData {
     const activePunishment = {
       ...existingPunishment,
-      redisId: uuidv4(),
+      redisId: randomUUID(),
       activatedFrom: activatedFromChargeNumber,
       schedule: {
         duration,

@@ -54,8 +54,8 @@ describe('GET /print-issue-forms', () => {
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('Notice of being placed on report')
-        expect(reportedAdjudicationsService.getAdjudicationDISFormData).toBeCalledTimes(1)
-        expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toBeCalledTimes(0)
+        expect(reportedAdjudicationsService.getAdjudicationDISFormData).toHaveBeenCalledTimes(1)
+        expect(reportedAdjudicationsService.filterAdjudicationsByLocation).toHaveBeenCalledTimes(0)
       })
   })
 

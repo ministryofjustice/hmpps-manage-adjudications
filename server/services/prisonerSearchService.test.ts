@@ -89,8 +89,8 @@ describe('prisonerSearchService', () => {
           startHref: adjudicationUrls.incidentDetails.urls.start('A1234AA'),
         }),
       ])
-      expect(PrisonerSearchClient).toBeCalledWith(token)
-      expect(search).toBeCalledWith({ prisonerIdentifier: 'A1234AA', prisonIds })
+      expect(PrisonerSearchClient).toHaveBeenCalledWith(token)
+      expect(search).toHaveBeenCalledWith({ prisonerIdentifier: 'A1234AA', prisonIds })
     })
 
     it('search by prisoner name', async () => {
@@ -111,28 +111,28 @@ describe('prisonerSearchService', () => {
           startHref: adjudicationUrls.incidentDetails.urls.start('A1234AA'),
         }),
       ])
-      expect(PrisonerSearchClient).toBeCalledWith(token)
-      expect(search).toBeCalledWith({ lastName: 'Smith', firstName: 'John', prisonIds })
+      expect(PrisonerSearchClient).toHaveBeenCalledWith(token)
+      expect(search).toHaveBeenCalledWith({ lastName: 'Smith', firstName: 'John', prisonIds })
     })
 
     it('search by prisoner surname only', async () => {
       await service.search({ searchTerm: 'Smith', prisonIds }, user)
-      expect(search).toBeCalledWith({ lastName: 'Smith', prisonIds })
+      expect(search).toHaveBeenCalledWith({ lastName: 'Smith', prisonIds })
     })
 
     it('search by prisoner name separated by a space', async () => {
       await service.search({ searchTerm: 'Smith John', prisonIds }, user)
-      expect(search).toBeCalledWith({ lastName: 'Smith', firstName: 'John', prisonIds })
+      expect(search).toHaveBeenCalledWith({ lastName: 'Smith', firstName: 'John', prisonIds })
     })
 
     it('search by prisoner name separated by many spaces', async () => {
       await service.search({ searchTerm: '    Smith   John ', prisonIds }, user)
-      expect(search).toBeCalledWith({ lastName: 'Smith', firstName: 'John', prisonIds })
+      expect(search).toHaveBeenCalledWith({ lastName: 'Smith', firstName: 'John', prisonIds })
     })
 
     it('search by prisoner identifier with extra spaces', async () => {
       await service.search({ searchTerm: '    A1234AA ', prisonIds }, user)
-      expect(search).toBeCalledWith({ prisonerIdentifier: 'A1234AA', prisonIds })
+      expect(search).toHaveBeenCalledWith({ prisonerIdentifier: 'A1234AA', prisonIds })
     })
   })
 
@@ -145,8 +145,8 @@ describe('prisonerSearchService', () => {
       const result = await service.isPrisonerNumberValid('A1234AA', user)
 
       expect(result).toEqual(true)
-      expect(PrisonerSearchClient).toBeCalledWith(token)
-      expect(searchPrisonerDetails).toBeCalledWith('A1234AA')
+      expect(PrisonerSearchClient).toHaveBeenCalledWith(token)
+      expect(searchPrisonerDetails).toHaveBeenCalledWith('A1234AA')
     })
 
     it('returns false if nothing returned', async () => {
@@ -179,8 +179,8 @@ describe('prisonerSearchService', () => {
       const result = await service.getPrisonerImage('A1234AA', testData.userFromUsername('user1'))
 
       expect(result).toEqual('image data')
-      expect(PrisonApiClient).toBeCalledWith(token)
-      expect(getPrisonerImage).toBeCalledWith('A1234AA')
+      expect(PrisonApiClient).toHaveBeenCalledWith(token)
+      expect(getPrisonerImage).toHaveBeenCalledWith('A1234AA')
     })
   })
 })
