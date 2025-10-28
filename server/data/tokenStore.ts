@@ -1,11 +1,14 @@
+import type { RedisClientType, RedisModules, RedisFunctions, RedisScripts } from 'redis'
 import { createRedisClient } from './redisClient'
 
+type Client = RedisClientType<RedisModules, RedisFunctions, RedisScripts>
+
 export default class TokenStore {
-  private client
+  private client: Client
 
   private prefix = 'systemToken:'
 
-  constructor(redisClient = createRedisClient()) {
+  constructor(redisClient: Client = createRedisClient() as Client) {
     this.client = redisClient
   }
 
@@ -16,13 +19,12 @@ export default class TokenStore {
   }
 
   public async setToken(key: string, token: string, durationSeconds: number): Promise<void> {
-    // For redis v4, the expiration is set via an options object:
     await this.ensureConnected()
-    await this.client.set(this.prefix + key, token, { EX: durationSeconds })
+    await this.client.set(`${this.prefix}${key}`, token, { EX: durationSeconds })
   }
 
   public async getToken(key: string): Promise<string | null> {
     await this.ensureConnected()
-    return this.client.get(this.prefix + key)
+    return (await this.client.get(`${this.prefix}${key}`)) as string | null
   }
 }
