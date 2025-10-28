@@ -1,59 +1,148 @@
 import type { RedisClientType, RedisModules, RedisFunctions, RedisScripts } from 'redis'
-import TokenStore from './tokenStore'
+import type TokenStoreClass from './tokenStore'
 
 type Client = RedisClientType<RedisModules, RedisFunctions, RedisScripts>
 
-// Build a minimal mock with a computed isOpen getter
-function makeMockRedisClient() {
-  let open = false
-
-  const mock = {
-    on: jest.fn(),
+function makeMockRedisClient(openAtStart = false) {
+  let open = openAtStart
+  const client = {
     get: jest.fn<Promise<string | null>, [string]>(),
     set: jest.fn<Promise<'OK'>, [string, string, { EX: number }]>(),
     connect: jest.fn(async () => {
       open = true
     }),
-  } as unknown as Partial<Client> & {
-    // expose isOpen as a getter
-    readonly isOpen: boolean
-  }
-
-  Object.defineProperty(mock, 'isOpen', {
-    get: () => open,
-  })
-
-  return mock as unknown as Client
+    quit: jest.fn(async () => {
+      open = false
+    }),
+  } as unknown as Partial<Client> & { readonly isOpen: boolean }
+  Object.defineProperty(client, 'isOpen', { get: () => open })
+  return client as unknown as Client
 }
 
-describe('tokenStore', () => {
-  let client: Client
-  let tokenStore: TokenStore
-
-  beforeEach(() => {
-    client = makeMockRedisClient()
-    tokenStore = new TokenStore(client)
-  })
-
+describe('TokenStore', () => {
   afterEach(() => {
-    jest.resetAllMocks()
+    jest.resetModules()
+    jest.clearAllMocks()
+    jest.restoreAllMocks()
   })
 
-  it('Can retrieve token', async () => {
-    ;(client.get as jest.Mock).mockResolvedValue('token-1')
+  describe('Redis mode', () => {
+    let TokenStore: typeof TokenStoreClass
+    let mockClient: Client
 
-    await expect(tokenStore.getToken('user-1')).resolves.toBe('token-1')
+    beforeEach(async () => {
+      mockClient = makeMockRedisClient(false)
 
-    expect(client.connect).toHaveBeenCalledTimes(1)
-    expect(client.get).toHaveBeenCalledWith('systemToken:user-1')
+      jest.doMock('../config', () => ({
+        __esModule: true,
+        default: { redis: { enabled: true } },
+      }))
+      jest.doMock('./redisClient', () => ({
+        __esModule: true,
+        createRedisClient: () => mockClient,
+      }))
+
+      await jest.isolateModulesAsync(async () => {
+        const mod = await import('./tokenStore')
+        TokenStore = mod.default
+      })
+    })
+
+    it('getToken connects once and fetches namespaced key', async () => {
+      const store = new TokenStore(mockClient)
+      ;(mockClient.get as jest.Mock).mockResolvedValue('t-123')
+
+      await expect(store.getToken('user-1')).resolves.toBe('t-123')
+      expect(mockClient.connect).toHaveBeenCalledTimes(1)
+      expect(mockClient.get).toHaveBeenCalledWith('systemToken:user-1')
+    })
+
+    it('setToken sets value with EX and connects once', async () => {
+      const store = new TokenStore(mockClient)
+      ;(mockClient.set as jest.Mock).mockResolvedValue('OK')
+
+      await store.setToken('user-1', 'tok', 15)
+
+      expect(mockClient.connect).toHaveBeenCalledTimes(1)
+      expect(mockClient.set).toHaveBeenCalledWith('systemToken:user-1', 'tok', { EX: 15 })
+    })
+
+    it('does not call connect when client.isOpen is already true', async () => {
+      mockClient = makeMockRedisClient(true)
+
+      jest.doMock('./redisClient', () => ({
+        __esModule: true,
+        createRedisClient: () => mockClient,
+      }))
+      await jest.isolateModulesAsync(async () => {
+        const mod = await import('./tokenStore')
+        TokenStore = mod.default
+      })
+
+      const store = new TokenStore(mockClient)
+      ;(mockClient.get as jest.Mock).mockResolvedValue('tok')
+
+      await store.getToken('abc')
+
+      expect(mockClient.connect).not.toHaveBeenCalled()
+      expect(mockClient.get).toHaveBeenCalledWith('systemToken:abc')
+    })
   })
 
-  it('Can set token', async () => {
-    ;(client.set as jest.Mock).mockResolvedValue('OK')
+  describe('Memory mode', () => {
+    let TokenStore: typeof TokenStoreClass
 
-    await tokenStore.setToken('user-1', 'token-1', 10)
+    beforeEach(async () => {
+      jest.doMock('../config', () => ({
+        __esModule: true,
+        default: { redis: { enabled: false } },
+      }))
 
-    expect(client.connect).toHaveBeenCalledTimes(1)
-    expect(client.set).toHaveBeenCalledWith('systemToken:user-1', 'token-1', { EX: 10 })
+      await jest.isolateModulesAsync(async () => {
+        const mod = await import('./tokenStore')
+        TokenStore = mod.default
+      })
+    })
+
+    it('setToken then getToken returns the token', async () => {
+      const store = new TokenStore()
+
+      await store.setToken('k1', 'v1', 5)
+      await expect(store.getToken('k1')).resolves.toBe('v1')
+    })
+
+    it('expired tokens return null and are destroyed on read', async () => {
+      const store = new TokenStore()
+      await store.setToken('k2', 'v2', 1)
+
+      const realNow = Date.now
+      const nowSpy = jest.spyOn(Date, 'now').mockImplementation(() => realNow() + 10_000)
+
+      await expect(store.getToken('k2')).resolves.toBeNull()
+      await expect(store.getToken('k2')).resolves.toBeNull()
+
+      nowSpy.mockRestore()
+    })
+
+    it('never calls any redis client methods when disabled', async () => {
+      const fake = makeMockRedisClient(false)
+
+      jest.doMock('./redisClient', () => ({
+        __esModule: true,
+        createRedisClient: () => fake,
+      }))
+      await jest.isolateModulesAsync(async () => {
+        const mod = await import('./tokenStore')
+        TokenStore = mod.default
+      })
+
+      const store = new TokenStore()
+      await store.setToken('k3', 'v3', 2)
+      await store.getToken('k3')
+
+      expect(fake.connect as jest.Mock).not.toHaveBeenCalled()
+      expect(fake.get as jest.Mock).not.toHaveBeenCalled()
+      expect(fake.set as jest.Mock).not.toHaveBeenCalled()
+    })
   })
 })

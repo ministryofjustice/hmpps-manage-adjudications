@@ -3,7 +3,6 @@ import { RedisStore } from 'connect-redis'
 import express, { Router } from 'express'
 import { randomUUID } from 'crypto'
 import { createRedisClient } from '../data/redisClient'
-import { getMemoryStore } from '../data/memoryStore'
 import config from '../config'
 import logger from '../../logger'
 
@@ -15,7 +14,7 @@ export default function setUpWebSession(): Router {
     client.connect().catch((err: Error) => logger.error('Error connecting to Redis', err))
     store = new RedisStore({ client })
   } else {
-    store = getMemoryStore()
+    store = new session.MemoryStore()
   }
 
   const router = express.Router()
