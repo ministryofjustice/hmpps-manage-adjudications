@@ -82,7 +82,7 @@
     "url": "^0.11.4"
   },
   "devDependencies": {
-    "@ministryofjustice/eslint-config-hmpps": "^0.0.5",
+    "@ministryofjustice/eslint-config-hmpps": "^1.0.1",
     "@ministryofjustice/hmpps-precommit-hooks": "^0.1.0",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
