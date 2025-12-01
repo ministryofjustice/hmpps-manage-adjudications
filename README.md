@@ -36,7 +36,7 @@ To start the main services excluding the manage adjudications app:
 
 `docker-compose up`
 
-Install dependencies using `npm run setup`, ensuring you are using >= `Node v20.x` and >= `npm v10`
+Install dependencies using `npm run setup`, ensuring you are using >= `Node v24.x` and >= `npm v11.x`
 
 And then, to build the assets and start the app with nodemon:
 
