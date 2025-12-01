@@ -36,7 +36,7 @@ To start the main services excluding the manage adjudications app:
 
 `docker-compose up`
 
-Install dependencies using `npm install`, ensuring you are using >= `Node v20.x` and >= `npm v10`
+Install dependencies using `npm run setup`, ensuring you are using >= `Node v24.x` and >= `npm v11.x`
 
 And then, to build the assets and start the app with nodemon:
 
@@ -75,7 +75,7 @@ with the questions grouped by paragraph.
 
 Its possible when policy changes, that some offences and their questions will be altered, amended, or a new series added, to go live on a specific date
 
-In order to meet this criteria the decisionTree now contains versioning.  The defaults will be all the versions.  To add a new version, add the new version to all of occurences of the 
+In order to meet this criteria the decisionTree now contains versioning.  The defaults will be all the versions.  To add a new version, add the new version to all of occurences of the
 
 ```applicableVersions: number[] ```
 
@@ -89,7 +89,7 @@ For the standard decision tree (ie a sequence of pages) examples include adding 
               .child(answer('No').offenceCode(20002)),
             question('Was the incident aggravated by a protected characteristic?', null, [2])
               .child(answer('Yes').child(protectedCharacteristicsQuestion(2000124)))
-              .child(answer('No').offenceCode(20002)) 
+              .child(answer('No').offenceCode(20002))
           ])
         )
 ```
@@ -101,12 +101,12 @@ answer(CHILD_1_Q, [1]).child(versionedQuestion1Answers),
 answer(CHILD_1_Q_V2, [2]).child(versionedQuestion1Answers),
   ```
 
-  For the ALO versions, the versions will go in the config such as 
+  For the ALO versions, the versions will go in the config such as
 
 ```
 new AloOffenceItem(CHILD_1_Q,['1', '1(a)', '4', '5'], [1]),
 new AloOffenceItem(CHILD_1_Q_V2,['1', '1(a)', '4', '5', '1(b)', '1(c)', '1(d)'], [2]),
-  
+
 new AloOffenceItem(CHILD_1_Q,['1', '2', '5', '6'], [1]),
 new AloOffenceItem(CHILD_1_Q_V2,['1', '2', '5', '6', '2(a)', '2(b)', '2(c)'], [2]),
 ```
@@ -118,7 +118,7 @@ new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionId, [1] ),
 new ParaToNextQuestion('2',adultPara1aYoiPara2OverrideQuestionIdV2, [2] ),
 ```
 
-finally to map the config back to the correct offence codes, this can also be versioned such as 
+finally to map the config back to the correct offence codes, this can also be versioned such as
 
 ```
 new ParaToOffenceCode('24(a)','24101', [1] ),
