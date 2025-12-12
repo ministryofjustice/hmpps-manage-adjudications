@@ -2,7 +2,7 @@ version: '3.1'
 services:
 
   hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:latest
+    image: ghcr.io/ministryofjustice/hmpps-auth:latest
     networks:
       - hmpps
     container_name: hmpps-auth
@@ -15,7 +15,7 @@ services:
       - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
 
   hmpps-manage-users-api:
-    image: quay.io/hmpps/hmpps-manage-users-api:latest
+    image: ghcr.io/ministryofjustice/hmpps-manage-users-api:latest
     networks:
       - hmpps
     container_name: hmpps-manage-users-api
