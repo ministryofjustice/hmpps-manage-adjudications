@@ -2,7 +2,6 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {% from "../../macros/dataInsights/dataInsightsTabHeaderSingular.njk" import dataInsightsTabHeaderSingular %}
 {% from "../../macros/dataInsights/officialSensitiveBanner.njk" import officialSensitiveBanner %}
 {% from "../../partials/charts/horizontalBarsChart.njk" import horizontalBarsChart %}
@@ -17,13 +16,6 @@
 {% block beforeContent %}
 
   {{ breadcrumb() }}
-
-  {{ mojAlert({
-    variant: "information",
-    title: "Minor changes to previous data",
-    dismissible: false,
-    html: 'Religion, Faith and Belief options within Prison-NOMIS have been updated, reducing the number of options from 69 to 36. As a result, we have revised how these options are grouped in the protected characteristic tab. This may cause changes to figures reported for each group from 24th July 2025.'
-  }) }}
 
 {% endblock %}
 

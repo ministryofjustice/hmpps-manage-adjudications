@@ -48,6 +48,7 @@ export default class YourCompletedReportsRoutes {
       filter,
       pageRequestFrom(20, +req.query.pageNumber || 1),
     )
+    console.log('RESULTS: ', results)
     return this.renderView(req, res, uiFilter, results, [])
   }
 
