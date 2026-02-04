@@ -40,7 +40,7 @@ export default class LocationService {
   async getIncidentLocations(agencyId: AgencyId, user: User): Promise<IncidentLocation[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
     const locations = await new LocationsInsidePrisonApiClient(token).getLocations(agencyId)
-    // mapping the reponse from locationsApi with that previosuly received from prisonApi
+    // mapping the response from locationsApi with that previously received from prisonApi
     const incidentLocations = locations.map(loc => ({
       locationId: loc.id, // TODO: MAP-2114: This is currently the Uuid - remove at a later date
       locationUuid: loc.id,
