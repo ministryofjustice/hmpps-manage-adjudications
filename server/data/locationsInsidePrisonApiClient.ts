@@ -10,21 +10,23 @@ export default class LocationsInsidePrisonApiClient {
     this.restClient = new RestClient('Locations inside prison API', config.apis.locationsInsidePrison, token)
   }
 
-  async getLocations(prisonId: string): Promise<LocationsApiLocation[]> {
-    return this.restClient.get({
-      path: `/locations/prison/${prisonId}/non-residential-usage-type/OCCURRENCE?formatLocalName=true&sortByLocalName=true`,
-    })
-  }
-
   async getLocation(id: string): Promise<LocationsApiLocation> {
     return this.restClient.get({
       path: `/locations/${id}?formatLocalName=true`,
     })
   }
 
+  async getLocations(prisonId: string): Promise<LocationsApiLocation[]> {
+    return this.getLocationsByServiceType(prisonId, 'LOCATION_OF_INCIDENT')
+  }
+
   async getAdjudicationLocations(prisonId: string): Promise<LocationsApiLocation[]> {
+    return this.getLocationsByServiceType(prisonId, 'HEARING_LOCATION')
+  }
+
+  private getLocationsByServiceType(prisonId: string, serviceType: string): Promise<LocationsApiLocation[]> {
     return this.restClient.get({
-      path: `/locations/prison/${prisonId}/location-type/ADJUDICATION_ROOM?formatLocalName=true&sortByLocalName=true`,
+      path: `/locations/non-residential/prison/${prisonId}/service/${serviceType}?formatLocalName=true&sortByLocalName=true`,
     })
   }
 }
