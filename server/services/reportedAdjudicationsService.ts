@@ -641,9 +641,18 @@ export default class ReportedAdjudicationsService {
   async handleDisIssueHistoryFormatting(reportedAdjudication: ReportedAdjudication, user: User) {
     const usernamesInPage = new Set<string>()
 
-    if (reportedAdjudication.issuingOfficer) {
-      usernamesInPage.add(reportedAdjudication.issuingOfficer)
+    const addUsername = (maybeUsername?: string) => {
+      const username = maybeUsername?.trim()
+      if (username) usernamesInPage.add(username)
     }
+
+    // Top-level issuing officer
+    if (reportedAdjudication.issuingOfficer) {
+      addUsername(reportedAdjudication.issuingOfficer)
+    }
+
+    // DIS issue history issuing officers
+    reportedAdjudication.disIssueHistory?.forEach(dis => addUsername(dis.issuingOfficer))
 
     logger.info(`Usernames in page for DIS issue history: ${JSON.stringify([...usernamesInPage])}`)
 
