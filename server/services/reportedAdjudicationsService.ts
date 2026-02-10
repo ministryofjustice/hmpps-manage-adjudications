@@ -654,14 +654,9 @@ export default class ReportedAdjudicationsService {
     // DIS issue history issuing officers
     reportedAdjudication.disIssueHistory?.forEach(dis => addUsername(dis.issuingOfficer))
 
-    logger.info(`Usernames in page for DIS issue history: ${JSON.stringify([...usernamesInPage])}`)
-
     const issuingOfficerNamesAndUsernames =
       (await Promise.all(
-        [...usernamesInPage].map(username => {
-          logger.info('Fetching user:', username)
-          return this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
-        }),
+        [...usernamesInPage].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, user.token)),
       )) || []
 
     const issuingOfficerNameByUsernameMap = new Map(
