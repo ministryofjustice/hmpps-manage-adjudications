@@ -140,6 +140,6 @@ context('Reports transferred in', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.reportsTransferredIn.urls.start())
       expect(loc.search).to.eq('?status=UNSCHEDULED&type=IN')
     })
-    transferredReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
+    transferredReportsPage.paginationResults().should('have.text', '1 total results')
   })
 })

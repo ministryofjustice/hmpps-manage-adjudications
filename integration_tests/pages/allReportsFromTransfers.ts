@@ -7,7 +7,7 @@ export default class AllTransferReportsPage extends Page {
 
   noResultsMessage = (): PageElement => cy.get('[data-qa="no-results-message"]')
 
-  paginationLinks = (): PageElement => cy.get('.moj-pagination').first().get('.moj-pagination__link')
+  paginationLinks = (): PageElement => cy.get('.moj-pagination').first().find('a.govuk-pagination__link')
 
   previousLink = (): PageElement => this.paginationLinks().contains('Previous')
 
@@ -19,8 +19,8 @@ export default class AllTransferReportsPage extends Page {
 
   nextLink = (): PageElement => this.paginationLinks().contains('Next')
 
-  paginationLink = (number: number): PageElement =>
-    this.paginationLinks().contains(new RegExp(`^${number.toString()}$`))
+  paginationLink = (pageNumber: number): PageElement =>
+    this.paginationLinks().filter(`[aria-label="Page ${pageNumber}"]`)
 
   paginationResults = (): PageElement => cy.get('.moj-pagination__results').first()
 

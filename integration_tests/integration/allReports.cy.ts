@@ -125,16 +125,16 @@ context('All Completed Reports', () => {
     const allCompletedReportsPage: AllCompletedReportsPage = Page.verifyOnPage(AllCompletedReportsPage)
     allCompletedReportsPage.previousLink().should('not.exist')
     allCompletedReportsPage.nextLink().should('exist')
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
-    allCompletedReportsPage.paginationLink(1).should('not.exist')
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 total results')
+    allCompletedReportsPage.paginationLink(1).should('have.attr', 'aria-current', 'page')
     allCompletedReportsPage.paginationLink(10).should('exist')
     allCompletedReportsPage.paginationLink(11).should('not.exist')
     // Page 10 - First
     allCompletedReportsPage.paginationLink(10).first().click()
     allCompletedReportsPage.previousLink().should('exist')
     allCompletedReportsPage.nextLink().should('exist')
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 181 to 200 of 300 results')
-    allCompletedReportsPage.paginationLink(10).should('not.exist')
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 181 to 200 of 300 total results')
+    allCompletedReportsPage.paginationLink(10).should('have.attr', 'aria-current', 'page')
     allCompletedReportsPage.paginationLink(4).should('not.exist')
     allCompletedReportsPage.paginationLink(5).should('exist')
     allCompletedReportsPage.paginationLink(14).should('exist')
@@ -143,8 +143,8 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.paginationLink(14).first().click()
     allCompletedReportsPage.previousLink().should('exist')
     allCompletedReportsPage.nextLink().should('exist')
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 261 to 280 of 300 results')
-    allCompletedReportsPage.paginationLink(14).should('not.exist')
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 261 to 280 of 300 total results')
+    allCompletedReportsPage.paginationLink(14).should('have.attr', 'aria-current', 'page')
     allCompletedReportsPage.paginationLink(5).should('not.exist')
     allCompletedReportsPage.paginationLink(6).should('exist')
     allCompletedReportsPage.paginationLink(15).should('exist')
@@ -153,11 +153,10 @@ context('All Completed Reports', () => {
     allCompletedReportsPage.paginationLink(15).first().click()
     allCompletedReportsPage.previousLink().should('exist')
     allCompletedReportsPage.nextLink().should('not.exist')
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 281 to 300 of 300 results')
-    allCompletedReportsPage.paginationLink(15).should('not.exist')
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 281 to 300 of 300 total results')
+    allCompletedReportsPage.paginationLink(15).should('have.attr', 'aria-current', 'page')
     allCompletedReportsPage.paginationLink(5).should('not.exist')
     allCompletedReportsPage.paginationLink(6).should('exist')
-    allCompletedReportsPage.paginationLink(15).should('not.exist')
     allCompletedReportsPage.paginationLink(16).should('not.exist')
   })
 
@@ -199,7 +198,7 @@ context('All Completed Reports', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=01%2F01%2F2022&toDate=09%2F01%2F2022&status=UNSCHEDULED')
     })
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 1 of 1 results')
+    allCompletedReportsPage.paginationResults().should('have.text', '1 total results')
   })
 
   it('Filtering and pagination should work together', () => {
@@ -244,14 +243,14 @@ context('All Completed Reports', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED')
     })
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 results')
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 20 of 300 total results')
     allCompletedReportsPage.paginationLink(2).first().click()
     cy.location().should(loc => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       // We expect the initial filter parameters to have been passed through on the links.
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&pageNumber=2')
     })
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 results')
+    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 21 to 40 of 300 total results')
   })
 
   it('SCHEDULED and UNSCHEDULED adjudications should show together', () => {
@@ -299,7 +298,7 @@ context('All Completed Reports', () => {
       expect(loc.pathname).to.eq(adjudicationUrls.allCompletedReports.root)
       expect(loc.search).to.eq('?fromDate=10%2F10%2F2021&toDate=19%2F10%2F2021&status=UNSCHEDULED&status=SCHEDULED')
     })
-    allCompletedReportsPage.paginationResults().should('have.text', 'Showing 1 to 5 of 5 results')
+    allCompletedReportsPage.paginationResults().should('have.text', '5 total results')
   })
 
   it('date range validation works', () => {

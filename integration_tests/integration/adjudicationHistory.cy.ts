@@ -37,7 +37,7 @@ context('Adjudication history', () => {
     const adjudicationHistoryPage: AdjudicationHistoryPage = Page.verifyOnPage(AdjudicationHistoryPage)
 
     adjudicationHistoryPage.noResultsMessage().should('exist')
-    adjudicationHistoryPage.paginationResults().should('exist')
+    adjudicationHistoryPage.paginationResults().should('not.exist')
   })
 
   it('should display the results correctly - no punishments present', () => {
@@ -230,11 +230,11 @@ context('Adjudication history', () => {
     cy.visit(adjudicationUrls.adjudicationHistory.urls.start('G6415GD'))
     const adjudicationHistoryPage: AdjudicationHistoryPage = Page.verifyOnPage(AdjudicationHistoryPage)
     adjudicationHistoryPage.card().should('have.length', 20)
-    adjudicationHistoryPage.paginationResults().should('have.text', 'Showing 1 to 20 of 40 results')
-    adjudicationHistoryPage.paginationLink(1).should('not.exist')
+    adjudicationHistoryPage.paginationResults().first().should('have.text', 'Showing 1 to 20 of 40 total results')
+    adjudicationHistoryPage.paginationLink(1).should('have.attr', 'aria-current', 'page')
     adjudicationHistoryPage.paginationLink(2).should('exist')
     adjudicationHistoryPage.paginationLink(2).click()
-    adjudicationHistoryPage.paginationResults().should('have.text', 'Showing 21 to 40 of 40 results')
+    adjudicationHistoryPage.paginationResults().first().should('have.text', 'Showing 21 to 40 of 40 total results')
   })
 
   it('filtering should work', () => {
