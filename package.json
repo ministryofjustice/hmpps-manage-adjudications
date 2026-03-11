@@ -85,7 +85,7 @@
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@ministryofjustice/hmpps-precommit-hooks": "^2.0.2",
-    "@types/express": "^4.17.25",
+    "@types/express": "^5.0.6",
     "@types/express-serve-static-core": "^4.19.8",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
