@@ -5,7 +5,6 @@ LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
 RUN apk --update-cache upgrade --available \
   && apk --no-cache add tzdata \
-  && apk add --upgrade zlib \
   && rm -rf /var/cache/apk/*
 
 ENV TZ=Europe/London
