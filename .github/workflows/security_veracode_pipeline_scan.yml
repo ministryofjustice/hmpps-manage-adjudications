@@ -5,6 +5,10 @@ on:
     - cron: "52 4 * * MON-FRI" # Every weekday at 04:52 UTC
 jobs:
   security-veracode-pipeline-scan:
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
     name: Project security veracode pipeline scan
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/security_veracode_pipeline_scan.yml@v2 # WORKFLOW_VERSION
     with:
