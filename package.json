@@ -103,7 +103,7 @@
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.9",
-    "@types/supertest": "^6.0.3",
+    "@types/supertest": "^7.2.0",
     "concurrently": "^9.2.1",
     "cypress": "^15.11.0",
     "cypress-multi-reporters": "^2.0.5",
