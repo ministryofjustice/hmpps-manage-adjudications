@@ -4,7 +4,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "sourceMap": true,
-    "noEmit": false,
+    "noEmit": true,
     "allowJs": true,
     "checkJs": true,
     "strict": false,
