@@ -53,7 +53,7 @@ export default function createApp(services: Services): express.Application {
 
   if (config.maintenanceModeFlag === 'true') {
     app.use('/', maintenanceRoutes(maintenancePageRouter(services.userService)))
-    app.all('*', (req, res) => {
+    app.use((req, res) => {
       res.redirect('/')
     })
   } else {
@@ -63,6 +63,7 @@ export default function createApp(services: Services): express.Application {
       res.redirect('/')
     })
   }
+
   app.get('/back-to-start', async (req, res) => {
     const { journeyStartUrl = '/' } = req.session
     delete req.session.journeyStartUrl

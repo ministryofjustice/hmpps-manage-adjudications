@@ -10,6 +10,7 @@ export default function getFrontendComponents({ frontendComponentService }: Serv
         ['header', 'footer', 'meta'],
         user.token,
       )
+      logger.info('META:', meta)
       res.locals.userMetadata = meta.activeCaseLoad
       res.locals.feComponents = {
         header: header.html,
