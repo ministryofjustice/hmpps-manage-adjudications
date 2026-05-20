@@ -1,3 +1,5 @@
+[![Pipeline](https://github.com/ministryofjustice/hmpps-manage-adjudications/actions/workflows/pipeline.yml/badge.svg?branch=main)](https://github.com/ministryofjustice/hmpps-manage-adjudications/actions/workflows/pipeline.yml?query=branch%3Amain)
+
 This app is the frontend client for the adjudications service, which is used to create adjudication details, log hearings, awarded punishments and create DIS forms.
 
 Backend client: hmpps-manage-adjudications-api
