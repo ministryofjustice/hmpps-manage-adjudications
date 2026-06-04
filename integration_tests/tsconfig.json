@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "ignoreDeprecations": "6.0",
     "noEmit": true,
     "lib": ["es5", "dom", "es2015.promise"],
     "types": ["cypress"],
