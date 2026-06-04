@@ -1,4 +1,5 @@
 import crypto from 'crypto'
+import type { IncomingMessage, ServerResponse } from 'http'
 import express, { Router, Request, Response, NextFunction } from 'express'
 import helmet from 'helmet'
 import config from '../config'
@@ -20,9 +21,10 @@ export default function setUpWebSecurity(): Router {
   // <link href="http://example.com/" rel="stylesheet" nonce="{{ cspNonce }}">
   // This ensures only scripts we trust are loaded, and not anything injected into the
   // page by an attacker.
+  const nonce = (_req: IncomingMessage, res: ServerResponse) => `'nonce-${(res as Response).locals.cspNonce}'`
   const scriptSrc = [
     "'self'",
-    (req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`,
+    nonce,
     'code.jquery.com',
     '*.googletagmanager.com',
     'www.google-analytics.com',
@@ -30,12 +32,7 @@ export default function setUpWebSecurity(): Router {
     "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
     "'sha256-nAqe0IpuDi7kXtyVDN2l4B56quokQ8ogSLknhoLa+UQ='",
   ]
-  const styleSrc = [
-    "'self'",
-    'code.jquery.com',
-    "'unsafe-inline'",
-    (req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`,
-  ]
+  const styleSrc = ["'self'", 'code.jquery.com', "'unsafe-inline'", nonce]
   const fontSrc = ["'self'"]
   const imgSrc = ["'self'", '*.googletagmanager.com', '*.google-analytics.com', 'code.jquery.com', 'data:']
   const formAction = [`'self' ${config.digitalPrisonServiceUrl}`]

@@ -1,5 +1,5 @@
-import { setup, defaultClient, TelemetryClient, DistributedTracingModes, Contracts } from 'applicationinsights'
-import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
+import { setup, defaultClient, TelemetryClient, DistributedTracingModes } from 'applicationinsights'
+import type { TelemetryItem } from 'applicationinsights/out/src/declarations/generated'
 import type { ApplicationInfo } from '../applicationInfo'
 
 export type ContextObject = {
@@ -29,8 +29,8 @@ export function buildAppInsightsClient(
   return null
 }
 
-export function addUserDataToRequests(envelope: EnvelopeTelemetry, contextObjects: ContextObject) {
-  const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
+export function addUserDataToRequests(envelope: TelemetryItem, contextObjects: ContextObject) {
+  const isRequest = envelope.data?.baseType === 'RequestData'
   if (isRequest) {
     const { username, activeCaseLoadId, meta } = contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
     if (username) {
