@@ -4,6 +4,8 @@
     "target": "es2018",
     "module": "commonjs",
     "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "types": ["node", "jest"],
     "outDir": "./dist",
     "sourceMap": true,
     "skipLibCheck": true,
@@ -14,6 +16,9 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "useUnknownInCatchVariables": false,
     "experimentalDecorators": true
   },
   "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "cypress.config.ts", "esbuild", "eslint.config.mjs"],
