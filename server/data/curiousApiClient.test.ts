@@ -1,5 +1,6 @@
 import nock from 'nock'
 import config from '../config'
+import type { LearnerProfile } from './CuriousLearnerProfile'
 import CuriousApiClient from './curiousApiClient'
 
 describe('curiousApiClient', () => {

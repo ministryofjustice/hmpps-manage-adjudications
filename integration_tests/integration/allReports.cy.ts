@@ -269,6 +269,7 @@ context('All Completed Reports', () => {
           {
             id: 68,
             locationId: 357596,
+            locationUuid: '0194ac90-2def-7c63-9f46-b3ccc911fdff',
             dateTimeOfHearing: '2022-11-23T17:00:00',
             oicHearingType: 'INAD_ADULT',
           },

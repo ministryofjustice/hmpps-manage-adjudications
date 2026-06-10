@@ -1,11 +1,13 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "ignoreDeprecations": "6.0",
     "noEmit": true,
     "lib": ["es5", "dom", "es2015.promise"],
+    "noImplicitAny": false,
+    "typeRoots": ["../server/@types", "../node_modules/@types", "../node_modules"],
     "types": ["cypress"],
-    "esModuleInterop": true
+    "skipLibCheck": true
   },
-  "include": ["**/*.ts"]
+  "exclude": ["../node_modules", "../dist"],
+  "include": ["**/*.ts", "../server/@types/**/*.d.ts"]
 }

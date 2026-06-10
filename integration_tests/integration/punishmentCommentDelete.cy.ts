@@ -42,8 +42,6 @@ context('Delete punishment comment', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  amount: 100.5,
-                  caution: false,
                 }),
               },
             },

@@ -130,8 +130,6 @@ context('What is the reason for this finding?', () => {
               outcome: {
                 outcome: testData.outcome({
                   code: OutcomeCode.CHARGE_PROVED,
-                  caution: true,
-                  amount: 100.5,
                   details: null,
                 }),
               },

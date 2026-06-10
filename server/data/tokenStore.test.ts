@@ -42,8 +42,8 @@ describe('TokenStore', () => {
         createRedisClient: () => mockClient,
       }))
 
-      await jest.isolateModulesAsync(async () => {
-        const mod = await import('./tokenStore')
+      jest.isolateModules(() => {
+        const mod = jest.requireActual('./tokenStore') as { default: typeof TokenStoreClass }
         TokenStore = mod.default
       })
     })
@@ -74,8 +74,8 @@ describe('TokenStore', () => {
         __esModule: true,
         createRedisClient: () => mockClient,
       }))
-      await jest.isolateModulesAsync(async () => {
-        const mod = await import('./tokenStore')
+      jest.isolateModules(() => {
+        const mod = jest.requireActual('./tokenStore') as { default: typeof TokenStoreClass }
         TokenStore = mod.default
       })
 
@@ -98,8 +98,8 @@ describe('TokenStore', () => {
         default: { redis: { enabled: false } },
       }))
 
-      await jest.isolateModulesAsync(async () => {
-        const mod = await import('./tokenStore')
+      jest.isolateModules(() => {
+        const mod = jest.requireActual('./tokenStore') as { default: typeof TokenStoreClass }
         TokenStore = mod.default
       })
     })
@@ -131,8 +131,8 @@ describe('TokenStore', () => {
         __esModule: true,
         createRedisClient: () => mockClient,
       }))
-      await jest.isolateModulesAsync(async () => {
-        const mod = await import('./tokenStore')
+      jest.isolateModules(() => {
+        const mod = jest.requireActual('./tokenStore') as { default: typeof TokenStoreClass }
         TokenStore = mod.default
       })
 
