@@ -5,8 +5,7 @@
     "lib": ["es5", "dom", "es2015.promise"],
     "noImplicitAny": false,
     "typeRoots": ["../server/@types", "../node_modules/@types", "../node_modules"],
-    "types": ["cypress"],
-    "skipLibCheck": true
+    "types": ["cypress"]
   },
   "exclude": ["../node_modules", "../dist"],
   "include": ["**/*.ts", "../server/@types/**/*.d.ts"]
