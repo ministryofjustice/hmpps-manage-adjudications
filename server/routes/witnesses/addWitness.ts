@@ -35,19 +35,21 @@ const error: { [key in ErrorType]: FormError } = {
 }
 
 export default class AddWitnessRoutes {
+  private helpers: Map<WitnessCode, DecisionHelper>
+
   constructor(
     private readonly witnessesSessionService: WitnessesSessionService,
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService,
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-  ) {}
-
-  private helpers = new Map<WitnessCode, DecisionHelper>([
-    [WitnessCode.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
-    [WitnessCode.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
-    [WitnessCode.OTHER_PERSON, new OtherPersonWitnesDecisionHelper(this.decisionTreeService)],
-  ])
+  ) {
+    this.helpers = new Map<WitnessCode, DecisionHelper>([
+      [WitnessCode.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
+      [WitnessCode.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
+      [WitnessCode.OTHER_PERSON, new OtherPersonWitnesDecisionHelper(this.decisionTreeService)],
+    ])
+  }
 
   private renderView = async (req: Request, res: Response, pageData?: PageData): Promise<void> => {
     const { chargeNumber, errors } = pageData

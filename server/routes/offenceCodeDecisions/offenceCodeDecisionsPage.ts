@@ -57,6 +57,8 @@ class PageOptions {
 export default class OffenceCodeRoutes {
   pageOptions: PageOptions
 
+  private helpers: Map<AnswerType, DecisionHelper>
+
   constructor(
     pageType: PageRequestType,
     private readonly placeOnReportService: PlaceOnReportService,
@@ -65,20 +67,19 @@ export default class OffenceCodeRoutes {
     private readonly prisonerSearchService: PrisonerSearchService,
   ) {
     this.pageOptions = new PageOptions(pageType)
+    this.helpers = new Map<AnswerType, DecisionHelper>([
+      [AnswerType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService, this.decisionTreeService)],
+      [
+        AnswerType.PRISONER_OUTSIDE_ESTABLISHMENT,
+        new PrisonerOutsideEstablishmentDecisionHelper(this.decisionTreeService, this.prisonerSearchService),
+      ],
+      [AnswerType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
+      [AnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
+      [AnswerType.OTHER_PERSON, new OtherPersonDecisionHelper(this.decisionTreeService)],
+      [AnswerType.RADIO_SELECTION_ONLY, new DecisionHelper(this.decisionTreeService)],
+      [AnswerType.CHECKBOXES_ONLY, new ProtectedCharacterisiticsDecisionHelper(this.decisionTreeService)],
+    ])
   }
-
-  private helpers = new Map<AnswerType, DecisionHelper>([
-    [AnswerType.PRISONER, new PrisonerDecisionHelper(this.placeOnReportService, this.decisionTreeService)],
-    [
-      AnswerType.PRISONER_OUTSIDE_ESTABLISHMENT,
-      new PrisonerOutsideEstablishmentDecisionHelper(this.decisionTreeService, this.prisonerSearchService),
-    ],
-    [AnswerType.STAFF, new StaffDecisionHelper(this.userService, this.decisionTreeService)],
-    [AnswerType.OFFICER, new OfficerDecisionHelper(this.userService, this.decisionTreeService)],
-    [AnswerType.OTHER_PERSON, new OtherPersonDecisionHelper(this.decisionTreeService)],
-    [AnswerType.RADIO_SELECTION_ONLY, new DecisionHelper(this.decisionTreeService)],
-    [AnswerType.CHECKBOXES_ONLY, new ProtectedCharacterisiticsDecisionHelper(this.decisionTreeService)],
-  ])
 
   view = async (req: Request, res: Response): Promise<void> => {
     const draftId = Number(req.params.draftId)

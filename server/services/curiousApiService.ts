@@ -1,4 +1,5 @@
 import CuriousApiClient from '../data/curiousApiClient'
+import type { LearnerProfile } from '../data/CuriousLearnerProfile'
 import log from '../log'
 
 const applicableNeurodiversitiesForReportLowercase = [

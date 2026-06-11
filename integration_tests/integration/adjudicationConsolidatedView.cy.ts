@@ -198,6 +198,7 @@ const punishmentsChoc = [
       startDate: '2023-04-10',
       endDate: '2023-04-20',
     },
+    rehabilitativeActivities: [],
   },
 ]
 const punishmentsCautionDamages = [
@@ -207,6 +208,7 @@ const punishmentsCautionDamages = [
     schedule: {
       duration: 0,
     },
+    rehabilitativeActivities: [],
   },
   {
     id: 2,
@@ -216,6 +218,7 @@ const punishmentsCautionDamages = [
       duration: 0,
     },
     damagesOwedAmount: 50,
+    rehabilitativeActivities: [],
   },
 ]
 

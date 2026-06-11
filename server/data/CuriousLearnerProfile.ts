@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-interface LearnerProfile {
+export interface LearnerProfile {
   establishmentId?: string
   prn?: string
   uln?: string

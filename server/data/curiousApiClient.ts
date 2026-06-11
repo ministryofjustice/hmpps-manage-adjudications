@@ -1,4 +1,5 @@
 import config from '../config'
+import type { LearnerProfile } from './CuriousLearnerProfile'
 import RestClient from './restClient'
 
 export default class CuriousApiClient {

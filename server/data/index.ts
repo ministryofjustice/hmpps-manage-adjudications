@@ -17,4 +17,4 @@ export const dataAccess = () => ({
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { RestClientBuilder }
+export type { RestClientBuilder }
