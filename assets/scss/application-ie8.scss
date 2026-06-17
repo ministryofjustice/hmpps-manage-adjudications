@@ -1,5 +1,3 @@
-$govuk-global-styles: true;
-$path: "/assets/images/";
-
-@import './components/header';
-@import 'local';
+@use 'dist/govuk/index' as *;
+@use './components/header';
+@use 'local';

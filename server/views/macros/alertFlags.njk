@@ -7,7 +7,7 @@
     {% endif %}
   {% endset %}
   {% if alerts.length %}
-    <ul class={{ alertClass }}>
+    <ul class="govuk-list govuk-!-margin-bottom-0 {{ alertClass }}">
         {% for alert in alerts %}
           <li class="{{ alert.classes }}">
             {{ alert.label }}

@@ -10,8 +10,6 @@ export default configureAllowedScripts({
     'node_modules/dtrace-provider@0.8.8': 'ALLOW',
     // Needed by jest for running tests in watch mode
     'node_modules/fsevents@2.3.3': 'ALLOW',
-    // Only checks dependency version prefix compatibility
-    'node_modules/protobufjs@8.5.0': 'FORBID',
     // Native solution to quickly resolve module paths, used by jest and eslint
     'node_modules/unrs-resolver@1.11.1': 'ALLOW',
   },

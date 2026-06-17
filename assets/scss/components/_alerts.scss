@@ -1,3 +1,5 @@
+@use 'dist/govuk/index' as *;
+
 %status-style {
     @media screen {
       display: inline-flex;
@@ -26,19 +28,21 @@
   }
 
 .alerts-list-no-flex {
-    @extend %govuk-list;
-    margin-bottom: 0;
+  > li {
+    margin-bottom: govuk-spacing(1);
   }
+}
 
-  .alerts-list {
-    @extend %govuk-list;
-    margin-bottom: 0;
-  
-    @media screen {
-      display: flex;
-      flex-wrap: wrap;
-    }
+.alerts-list {
+  > li {
+    margin-bottom: govuk-spacing(1);
   }
+  
+  @media screen {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
 
 .alert-status {
   @extend %status-style;

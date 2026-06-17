@@ -1,3 +1,4 @@
+@use 'dist/govuk/index' as *;
 .homepage {
   &-content {
     padding: govuk-spacing(6) 0;

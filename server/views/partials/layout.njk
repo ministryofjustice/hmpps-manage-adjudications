@@ -31,12 +31,6 @@
   <script src="/assets/js/html5shiv-3.7.3.min.js"></script>
   <![endif]-->
 
-  <script src="/assets/js/jquery.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-          integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-          crossorigin="anonymous"></script>
-  <link href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
-
 {% if feComponents.cssIncludes %}
   {% for css in feComponents.cssIncludes %}
     <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
@@ -77,8 +71,7 @@
   <body>, to avoid blocking the initial render. #}
   <script type="module" src="/assets/js/frontend-init.js"></script>
 
-  <script src="/assets/js/main.js"></script>
-  <script src="/assets/date-picker.js"></script>
+  <script src="/assets/js/date-picker.js"></script>
 
   {% if feComponents.jsIncludes %}
     {% for js in feComponents.jsIncludes %}

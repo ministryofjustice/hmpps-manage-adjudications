@@ -2,12 +2,13 @@
    COMPONENTS / #CARD
    ========================================================================== */
 
-@use "sass:color";
+@use 'dist/govuk/index' as *;
 
 $card-border-width: 1px;
 $card-border-bottom-width: govuk-spacing(1);
 $card-border-hover-color: $govuk-border-colour;
-$card-border-color: color.adjust($card-border-hover-color, $lightness: 15%);
+$card-border-color: color-mix(in srgb, #{$card-border-hover-color} 50%, #{$govuk-body-background-colour});
+$card-link-hover-color: govuk-colour("blue", $variant: "shade-50");
 
 .card {
   margin-bottom: govuk-spacing(7);
@@ -41,8 +42,12 @@ $card-border-color: color.adjust($card-border-hover-color, $lightness: 15%);
 
       .card__heading a,
       .card__link {
-        color: $govuk-link-hover-colour;
+        color: $card-link-hover-color;
         text-decoration: none;
+
+        &:active {
+          color: $card-link-hover-color;
+        }
 
         &:focus {
           @include govuk-focused-text;

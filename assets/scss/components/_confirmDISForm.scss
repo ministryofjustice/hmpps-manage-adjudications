@@ -1,3 +1,4 @@
+@use 'dist/govuk/index' as *;
 .confirmDISFormTable {
   &-lastIssued, &-discDateTime, &-officerName, &-prisonerLocation  {
     width: 15%;

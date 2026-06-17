@@ -1,3 +1,4 @@
+@use 'dist/govuk/index' as *;
 .printCompletedDISForms {
   &-hearingDateTime {
     width: 20%;

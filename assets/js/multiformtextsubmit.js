@@ -1,14 +1,11 @@
-jQuery(function () {
+document.addEventListener('DOMContentLoaded', () => {
   function searchSubmit(event) {
-    if (event.which == 13) {
+    if (event.key === 'Enter') {
       event.preventDefault()
-      $('.assistedSearchSubmit').trigger('click')
+      document.querySelectorAll('.assistedSearchSubmit').forEach(element => element.click())
     }
   }
-  $('#assistedInput').on('keypress', function (event) {
-    searchSubmit(event)
-  })
-  $('#currentRadioSelected-4').on('keypress', function (event) {
-    searchSubmit(event)
-  })
+
+  document.getElementById('assistedInput')?.addEventListener('keypress', searchSubmit)
+  document.getElementById('currentRadioSelected-4')?.addEventListener('keypress', searchSubmit)
 })
