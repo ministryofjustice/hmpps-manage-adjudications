@@ -48,7 +48,7 @@
     "ext": "js,json,html,njk"
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "9.0.0",
+    "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@types/jsonwebtoken": "^9.0.10",
     "agentkeepalive": "^4.6.0",
@@ -67,7 +67,7 @@
     "express": "^5.2.1",
     "express-request-id": "^3.0.0",
     "express-session": "^1.19.0",
-    "govuk-frontend": "6.2.0",
+    "govuk-frontend": "^6.2.0",
     "helmet": "^8.2.0",
     "http-errors": "^2.0.1",
     "jwt-decode": "^4.0.0",
