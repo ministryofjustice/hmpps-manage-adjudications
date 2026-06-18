@@ -25,16 +25,15 @@ export default function setUpWebSecurity(): Router {
   const scriptSrc = [
     "'self'",
     nonce,
-    'code.jquery.com',
     '*.googletagmanager.com',
     'www.google-analytics.com',
     // Hash allows inline script pulled in from https://github.com/alphagov/govuk-frontend/blob/master/src/govuk/template.njk
     "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
     "'sha256-nAqe0IpuDi7kXtyVDN2l4B56quokQ8ogSLknhoLa+UQ='",
   ]
-  const styleSrc = ["'self'", 'code.jquery.com', "'unsafe-inline'", nonce]
+  const styleSrc = ["'self'", "'unsafe-inline'", nonce]
   const fontSrc = ["'self'"]
-  const imgSrc = ["'self'", '*.googletagmanager.com', '*.google-analytics.com', 'code.jquery.com', 'data:']
+  const imgSrc = ["'self'", '*.googletagmanager.com', '*.google-analytics.com', 'data:']
   const formAction = [`'self' ${config.digitalPrisonServiceUrl}`]
 
   if (config.apis.frontendComponents.url) {

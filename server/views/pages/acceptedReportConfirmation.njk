@@ -32,10 +32,10 @@
     <p class="govuk-body">You can:</p>
     <ul class="govuk-list govuk-list--bullet">
       {% if allowScheduleHearing %}
-      <li><a href={{ scheduleHearingLink }} data-qa="schedule-hearing-link">schedule a hearing</a></li>
+      <li><a href="{{ scheduleHearingLink }}" class="govuk-link" data-qa="schedule-hearing-link">schedule a hearing</a></li>
       {% endif %}
-      <li><a href={{ viewReportLink }} data-qa="view-report-link">view the report and add damages, evidence or witnesses</a></li>
-      <li><a href={{ allCompletedReportsLink }} data-qa="all-completed-reports-link">review another report</a></li>
+      <li><a href="{{ viewReportLink }}" class="govuk-link" data-qa="view-report-link">view the report and add damages, evidence or witnesses</a></li>
+      <li><a href="{{ allCompletedReportsLink }}" class="govuk-link" data-qa="all-completed-reports-link">review another report</a></li>
     </ul>
 
     <h3 class="govuk-heading-s">Prisoner transfers</h3>

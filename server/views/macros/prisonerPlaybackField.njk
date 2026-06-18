@@ -1,6 +1,6 @@
 {% macro prisonerPlaybackField(name, label, value) %}
-	<p class="govuk-!-margin-bottom-1 govuk-label--s">{{ label }}</p>
-	<p class="govuk-!-margin-bottom-1 govuk-label--xs" data-qa={{ name }}>
+	<p class="govuk-label govuk-label--s govuk-!-margin-top-0 govuk-!-margin-bottom-1">{{ label }}</p>
+	<p class="govuk-body govuk-!-margin-bottom-1" data-qa={{ name }}>
 		{{ value }}
 	</p>
 {% endmacro %}

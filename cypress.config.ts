@@ -17,6 +17,7 @@ import gotenberg from './integration_tests/mockApis/gotenberg'
 
 export default defineConfig({
   projectId: 'gy9q8q',
+  allowCypressEnv: false,
   chromeWebSecurity: false,
   fixturesFolder: 'integration_tests/fixtures',
   screenshotsFolder: 'integration_tests/screenshots',

@@ -5,9 +5,9 @@
     <div data-qa="question-answer-section-1">
         {% for questionAndAnswer in questionsAndAnswers %}
             {% set questionAndAnswerIndex = loop.index %}
-            <p class="govuk-!-margin-bottom-1 govuk-label--s"
+            <p class="govuk-label govuk-label--s govuk-!-margin-top-0 govuk-!-margin-bottom-1"
                data-qa="question-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.question }}</p>
-            <p class="govuk-!-margin-bottom-5 govuk-label--xs"
+            <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-5"
                data-qa="answer-{{ questionAndAnswerIndex }}">{{ questionAndAnswer.answer }}</p>
         {% endfor %}
     </div>

@@ -1,4 +1,5 @@
 @use "sass:map";
+@use 'dist/govuk/index' as *;
 .prisonerPlaybackSectionInner {
   @media print, (min-width: #{map.get($govuk-breakpoints, 'tablet')}) {
     padding-bottom: 0;

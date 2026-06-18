@@ -1,49 +1,47 @@
-$govuk-global-styles: true;
-$path: "/assets/images/";
-$govuk-page-width: 1170px;
-$govuk-new-typography-scale: true;
-$govuk-font-family-print: 'GDS Transport';
+@use 'moj/settings/all' with (
+  $moj-page-width: 1170px,
+  $moj-assets-path: "/assets/",
+  $moj-font-family: 'GDS Transport'
+);
+@use 'moj/all' as *;
+@use 'dist/govuk/index' as *;
 
-@import 'dist/govuk/index';
-@import 'moj/all';
+@use './components/feedback-banner';
+@use './components/header';
+@use './components/header-bar';
+@use './components/footer';
+@use './components/date-picker';
+@use './components/prisoner-playback';
+@use './components/results-table';
+@use './components/confirmed-on-report';
+@use './components/print-link';
+@use './components/card';
+@use './components/continue-report';
+@use './components/taskList';
+@use './components/adjudicationSummary';
+@use './components/checkYourAnswers';
+@use './components/conditionalRadios';
+@use './components/details-of-offence';
+@use './components/pdf';
+@use './components/adjudication-pdf';
+@use './components/evidenceTable';
+@use './components/damagesWitnessesTable';
+@use './components/timeSelect';
+@use './components/hearingFilter';
+@use './components/completedReports';
+@use './components/confirmDISForm';
+@use './components/alerts';
+@use './components/printCompletedDISForms';
+@use './components/punishments';
+@use './components/data-insight';
+@use './components/transferBanner';
+@use './components/adjudicationHistory';
 
-@import './components/feedback-banner';
-@import './components/header';
-@import './components/header-bar';
-@import './components/footer';
-@import './components/date-picker.scss';
-@import './components/datePicker.scss';
-@import './components/prisoner-playback.scss';
-@import './components/results-table.scss';
-@import './components/confirmed-on-report.scss';
-@import './components/print-link.scss';
-@import './components/card';
-@import './components/continue-report.scss';
-@import './components/taskList.scss';
-@import './components/adjudicationSummary.scss';
-@import './components/checkYourAnswers.scss';
-@import './components/conditionalRadios.scss';
-@import './components/details-of-offence.scss';
-@import './components/pdf.scss';
-@import './components/adjudication-pdf.scss';
-@import './components/evidenceTable.scss';
-@import './components/damagesWitnessesTable.scss';
-@import './components/timeSelect.scss';
-@import './components/hearingFilter.scss';
-@import './components/completedReports.scss';
-@import './components/confirmDISForm.scss';
-@import './components/alerts.scss';
-@import './components/printCompletedDISForms.scss';
-@import './components/punishments.scss';
-@import './components/data-insight.scss';
-@import './components/transferBanner.scss';
-@import './components/_adjudicationHistory.scss';
+@use 'homepage';
+@use 'helpers';
+@use 'horizontal-content';
 
-@import 'homepage.scss';
-@import 'helpers';
-@import 'horizontal-content';
-
-@import 'local';
+@use 'local';
 
 .flex-container {
   display: flex;
