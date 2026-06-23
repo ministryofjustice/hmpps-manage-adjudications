@@ -1,9 +1,9 @@
-import { Request, Response } from 'express'
-import DecisionTreeService from '../../services/decisionTreeService'
-import UserService from '../../services/userService'
+import type { Request, Response } from 'express'
+import type DecisionTreeService from '../../services/decisionTreeService'
+import type UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole } from '../../utils/utils'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import type ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 export default class ReviewerEditOffenceWarningRoute {
   constructor(
