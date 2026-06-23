@@ -21,14 +21,12 @@ export default class ReviewerEditOffenceWarningRoute {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const [newDraftAdjudicationId, reportedAdjudicationResult, incidentData] = await Promise.all([
+    const [newDraftAdjudicationId, incidentData] = await Promise.all([
       this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(user, chargeNumber),
-      this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user),
       this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user),
     ])
 
-    const { reportedAdjudication } = reportedAdjudicationResult
-    const { prisoner, associatedPrisoner } = incidentData
+    const { prisoner, associatedPrisoner, reportedAdjudication } = incidentData
 
     const offence = await this.decisionTreeService.getAdjudicationOffences(
       reportedAdjudication.offenceDetails,
