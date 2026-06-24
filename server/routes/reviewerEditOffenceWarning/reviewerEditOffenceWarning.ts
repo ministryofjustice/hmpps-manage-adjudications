@@ -1,9 +1,9 @@
-import { Request, Response } from 'express'
-import DecisionTreeService from '../../services/decisionTreeService'
-import UserService from '../../services/userService'
+import type { Request, Response } from 'express'
+import type DecisionTreeService from '../../services/decisionTreeService'
+import type UserService from '../../services/userService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { hasAnyRole } from '../../utils/utils'
-import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
+import type ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 
 export default class ReviewerEditOffenceWarningRoute {
   constructor(
@@ -21,14 +21,12 @@ export default class ReviewerEditOffenceWarningRoute {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const [newDraftAdjudicationId, reportedAdjudicationResult, incidentData] = await Promise.all([
+    const [newDraftAdjudicationId, incidentData] = await Promise.all([
       this.reportedAdjudicationsService.createDraftFromCompleteAdjudication(user, chargeNumber),
-      this.reportedAdjudicationsService.getReportedAdjudicationDetails(chargeNumber, user),
       this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user),
     ])
 
-    const { reportedAdjudication } = reportedAdjudicationResult
-    const { prisoner, associatedPrisoner } = incidentData
+    const { prisoner, associatedPrisoner, reportedAdjudication } = incidentData
 
     const offence = await this.decisionTreeService.getAdjudicationOffences(
       reportedAdjudication.offenceDetails,

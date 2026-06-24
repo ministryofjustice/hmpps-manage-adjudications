@@ -26,7 +26,7 @@ export default class DecisionTreeService {
   constructor(
     private readonly placeOnReportService: PlaceOnReportService,
     private readonly userService: UserService,
-    private readonly reportedAdjudicationService: ReportedAdjudicationsService,
+    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly decisionTree: Question,
     private readonly additionalQuestions: Question[],
   ) {}
@@ -58,7 +58,7 @@ export default class DecisionTreeService {
   }
 
   async reportedAdjudicationIncidentData(chargeNumber: string, user: User) {
-    const { reportedAdjudication } = await this.reportedAdjudicationService.getReportedAdjudicationDetails(
+    const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
       user,
     )
