@@ -55,13 +55,27 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
     const lastMonthText = getLastMonthText()
     const chartSettingMap = {} as Record<string, unknown>
 
-    const chartDetails2a = await this.chartApiService.getChart(username, agencyId, '2a')
+    const [
+      chartDetails2a,
+      lastModifiedChart,
+      chartDetails2b,
+      chartDetails2d,
+      chartDetails2e,
+      chartDetails2f,
+      chartDetails2g,
+    ] = await Promise.all([
+      this.chartApiService.getChart(username, agencyId, '2a'),
+      this.chartApiService.getLastModifiedChart(username, '2a'),
+      this.chartApiService.getChart(username, agencyId, '2b'),
+      this.chartApiService.getChart(username, agencyId, '2d'),
+      this.chartApiService.getChart(username, agencyId, '2e'),
+      this.chartApiService.getChart(username, agencyId, '2f'),
+      this.chartApiService.getChart(username, agencyId, '2g'),
+    ])
     const characteristics: DropDownEntry[] = getUniqueItems(chartDetails2a.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.characteristic,
     })
-    const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '2a')).lastModifiedDate,
-    )
+    const lastModifiedDate = getFullDate(lastModifiedChart.lastModifiedDate)
     const characteristic: DropDownEntry | undefined = DropDownEntry.getByValueOrElse(
       characteristics,
       req.query.characteristic as string,
@@ -98,7 +112,7 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       `Adjudication reports by protected or responsivity characteristic - ${lastMonthText}`,
       'Use this chart to explore any imbalances in adjudication reports by this characteristic. You can use the overview of prisoners chart for context, but note that the overview shows the number of people, not the number of reports. A prisoner may have more than one report',
       '',
-      await this.chartApiService.getChart(username, agencyId, '2b'),
+      chartDetails2b,
       { filter: (row: ChartEntryHorizontalBar) => row.characteristic === characteristic?.text },
       { source: (row: ChartEntryHorizontalBar) => row.value },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
@@ -111,7 +125,6 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       'Percentage',
     )
 
-    const chartDetails2d = await this.chartApiService.getChart(username, agencyId, '2d')
     const offenceTypes: DropDownEntry[] = getUniqueItems(chartDetails2d.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.offence_type,
     })
@@ -143,7 +156,6 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       'Percentage',
     )
 
-    const chartDetails2e = await this.chartApiService.getChart(username, agencyId, '2e')
     const punishments: DropDownEntry[] = getUniqueItems(chartDetails2e.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.sanction,
     })
@@ -179,7 +191,6 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       'Percentage',
     )
 
-    const chartDetails2f = await this.chartApiService.getChart(username, agencyId, '2f')
     const pleas: DropDownEntry[] = getUniqueItems(chartDetails2f.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.plea,
     })
@@ -211,7 +222,6 @@ export default class ProtectedAndResponsivityCharacteristicsTabPage {
       'Percentage',
     )
 
-    const chartDetails2g = await this.chartApiService.getChart(username, agencyId, '2g')
     const findings: DropDownEntry[] = getUniqueItems(chartDetails2g.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.finding,
     })

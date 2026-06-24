@@ -35,9 +35,12 @@ export default class PleasAndFindingsTabPage {
     const agencyId: AgencyId = user.meta.caseLoadId
 
     const chartSettingMap = {} as Record<string, unknown>
-    const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '5a')).lastModifiedDate,
-    )
+    const [lastModifiedChart, chartDetails5a, chartDetails5b] = await Promise.all([
+      this.chartApiService.getLastModifiedChart(username, '5a'),
+      this.chartApiService.getChart(username, agencyId, '5a'),
+      this.chartApiService.getChart(username, agencyId, '5b'),
+    ])
+    const lastModifiedDate = getFullDate(lastModifiedChart.lastModifiedDate)
 
     chartSettingMap['5a'] = await produceLinesCharts(
       '5a',
@@ -45,7 +48,7 @@ export default class PleasAndFindingsTabPage {
       agencyId,
       'Hearing pleas given - current month and previous 12 months',
       'This chart shows the numbers of each plea given over time. Are there any insights or trends which can inform any actions?',
-      await this.chartApiService.getChart(username, agencyId, '5a'),
+      chartDetails5a,
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.plea },
       { source: (row: ChartEntryHorizontalBar) => row.count },
@@ -58,7 +61,7 @@ export default class PleasAndFindingsTabPage {
       agencyId,
       'Hearing findings - current month and previous 12 months',
       'This chart shows the numbers of each recorded finding over time. Are there any insights or trends which can inform any actions?',
-      await this.chartApiService.getChart(username, agencyId, '5b'),
+      chartDetails5b,
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.finding },
       { source: (row: ChartEntryHorizontalBar) => row.count },

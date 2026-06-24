@@ -72,15 +72,13 @@ export default class CheckPunishmentsPage {
             req,
             chargeNumber,
           )
-          Promise.all([
-            await this.punishmentsService.editPunishmentSet(punishments, chargeNumber, user),
-            await this.punishmentsService.createReasonForChangingPunishmentComment(
-              chargeNumber,
-              detailsOfChange,
-              reasonForChange,
-              user,
-            ),
-          ])
+          await this.punishmentsService.editPunishmentSet(punishments, chargeNumber, user)
+          await this.punishmentsService.createReasonForChangingPunishmentComment(
+            chargeNumber,
+            detailsOfChange,
+            reasonForChange,
+            user,
+          )
         } else {
           await this.punishmentsService.editPunishmentSet(punishments, chargeNumber, user)
         }

@@ -44,9 +44,14 @@ export default class PunishmentsTabPage {
 
     const chartSettingMap = {} as Record<string, unknown>
 
-    const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '4a')).lastModifiedDate,
-    )
+    const [lastModifiedChart, chartDetails4a, chartDetails4b, chartDetails4c, chartDetails4d] = await Promise.all([
+      this.chartApiService.getLastModifiedChart(username, '4a'),
+      this.chartApiService.getChart(username, agencyId, '4a'),
+      this.chartApiService.getChart(username, agencyId, '4b'),
+      this.chartApiService.getChart(username, agencyId, '4c'),
+      this.chartApiService.getChart(username, agencyId, '4d'),
+    ])
+    const lastModifiedDate = getFullDate(lastModifiedChart.lastModifiedDate)
 
     chartSettingMap['4a'] = await produceLinesCharts(
       '4a',
@@ -54,14 +59,13 @@ export default class PunishmentsTabPage {
       agencyId,
       'Punishments given – current month and previous 12 months',
       'This chart shows how many times different punishments were given. This includes suspended punishments. Are there any patterns or surprises that can inform actions?',
-      await this.chartApiService.getChart(username, agencyId, '4a'),
+      chartDetails4a,
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.sanction },
       { source: (row: ChartEntryHorizontalBar) => row.count },
       'Count',
     )
 
-    const chartDetails4b = await this.chartApiService.getChart(username, agencyId, '4b')
     const offenceTypes: DropDownEntry[] = getUniqueItems(chartDetails4b.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.offence_type,
     })
@@ -79,7 +83,7 @@ export default class PunishmentsTabPage {
       '',
       'In',
       'of cases this was used in combination with other punishments.',
-      await this.chartApiService.getChart(username, agencyId, '4d'),
+      chartDetails4d,
       {
         source: (row: ChartEntryHorizontalBar): ChartEntryCommentary => {
           return {
@@ -109,7 +113,7 @@ export default class PunishmentsTabPage {
       agencyId,
       'Suspended and activated punishments - current month and last 12 months',
       'This chart shows suspended punishments as a proportion of total punishments given. Are you content with these levels and any trends shown?',
-      await this.chartApiService.getChart(username, agencyId, '4c'),
+      chartDetails4c,
       { source: (row: ChartEntryLine) => row.status },
       { source: (row: ChartEntryLine) => Math.trunc(row.proportion * 100) },
       { source: (row: ChartEntryLine) => `${row.year}-${row.month}` },

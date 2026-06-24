@@ -33,9 +33,16 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
     const { user } = res.locals
     const { username } = user
     const agencyId: AgencyId = user.meta.caseLoadId
-    const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '1a')).lastModifiedDate,
-    )
+    const [lastModifiedChart, chartDetails1a, chartDetails1b, chartDetails1c, chartDetails1d, chartDetails1f] =
+      await Promise.all([
+        this.chartApiService.getLastModifiedChart(username, '1a'),
+        this.chartApiService.getChart(username, agencyId, '1a'),
+        this.chartApiService.getChart(username, agencyId, '1b'),
+        this.chartApiService.getChart(username, agencyId, '1c'),
+        this.chartApiService.getChart(username, agencyId, '1d'),
+        this.chartApiService.getChart(username, agencyId, '1f'),
+      ])
+    const lastModifiedDate = getFullDate(lastModifiedChart.lastModifiedDate)
     const lastMonthText = getLastMonthText()
     const chartSettingMap = {} as Record<string, unknown>
 
@@ -45,7 +52,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Adjudication reports created - over 24 months',
       'This is a high-level view of adjudication reports created over time. What do recent numbers tell you about prison stability? Are there any surprises or possible actions?',
-      await this.chartApiService.getChart(username, agencyId, '1a'),
+      chartDetails1a,
       'Number',
     )
 
@@ -55,7 +62,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       agencyId,
       'Adjudication reports referred to independent adjudicator - over 24 months',
       'This chart shows adjudications which had at least 1 hearing with an independent adjudicator. Use it to explore any concerns you may have about numbers being referred to IAs. What do the numbers tell you about possible actions and future trends?',
-      await this.chartApiService.getChart(username, agencyId, '1b'),
+      chartDetails1b,
       'Number',
     )
 
@@ -67,7 +74,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       '',
       'This is approximately',
       'of your population over this period.',
-      await this.chartApiService.getChart(username, agencyId, '1c'),
+      chartDetails1c,
       {
         source: (row: ChartEntryHorizontalBar): ChartEntryCommentary => {
           return {
@@ -85,7 +92,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       'Adjudication reports by location of adjudication incident - last 30 days',
       'Use this chart to see where recent rule-breaking took place. Are there any patterns or surprises? This can help inform actions around hotspots and possible interventions, for example staff awareness.',
       'Where more than 15 locations, only highest 15 are shown.',
-      await this.chartApiService.getChart(username, agencyId, '1d'),
+      chartDetails1d,
       { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.incident_loc },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
@@ -105,7 +112,7 @@ export default class TotalsAdjudicationsAndLocationsTabPage {
       'Adjudication reports by residential location of prisoner - last 30 days',
       'Use this chart to explore where prisoners who broke the rules live. This may give you insights into the different residential populations, staff cultures, and could help inform keyworker priorities.',
       'Where more than 15 locations, only highest 15 are shown.',
-      await this.chartApiService.getChart(username, agencyId, '1f'),
+      chartDetails1f,
       { filter: () => true },
       { source: (row: ChartEntryHorizontalBar) => row.wing_loc },
       { source: (row: ChartEntryHorizontalBar) => Math.trunc(row.proportion * 100) },
