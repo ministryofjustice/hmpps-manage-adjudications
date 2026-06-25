@@ -56,9 +56,12 @@ export default class OffenceTypeTabPage {
     const agencyId: AgencyId = user.meta.caseLoadId
 
     const chartSettingMap = {} as Record<string, unknown>
-    const lastModifiedDate = getFullDate(
-      (await this.chartApiService.getLastModifiedChart(username, '3a')).lastModifiedDate,
-    )
+    const [lastModifiedChart, chartDetails3a, chartDetails3b] = await Promise.all([
+      this.chartApiService.getLastModifiedChart(username, '3a'),
+      this.chartApiService.getChart(username, agencyId, '3a'),
+      this.chartApiService.getChart(username, agencyId, '3b'),
+    ])
+    const lastModifiedDate = getFullDate(lastModifiedChart.lastModifiedDate)
 
     chartSettingMap['3a'] = await produceLinesCharts(
       '3a',
@@ -66,14 +69,13 @@ export default class OffenceTypeTabPage {
       agencyId,
       'Adjudication offence types - current month and previous 12 months',
       'This chart shows the frequency of the different offence types leading to an adjudication. Are there any insights or trends which can inform any actions?',
-      await this.chartApiService.getChart(username, agencyId, '3a'),
+      chartDetails3a,
       ALL_DATA_FILTER,
       { source: (row: ChartEntryLine) => row.offence_type },
       { source: (row: ChartEntryHorizontalBar) => row.count },
       'Count',
     )
 
-    const chartDetails3b = await this.chartApiService.getChart(username, agencyId, '3b')
     const offenceTypes: DropDownEntry[] = getUniqueItems(chartDetails3b.chartEntries as ChartEntryHorizontalBar[], {
       source: (row: ChartEntryHorizontalBar) => row.offence_type,
     })
