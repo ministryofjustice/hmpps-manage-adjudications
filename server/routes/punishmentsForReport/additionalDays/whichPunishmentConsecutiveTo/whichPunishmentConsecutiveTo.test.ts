@@ -91,6 +91,32 @@ describe('GET', () => {
   })
 })
 
+describe('GET', () => {
+  it('should not show a charge that is already consecutive to this charge (would create a loop)', () => {
+    punishmentsService.getPossibleConsecutivePunishments.mockResolvedValue([
+      {
+        chargeNumber: '101',
+        chargeProvedDate: '2023-07-18',
+        punishment: {
+          id: 1,
+          type: PunishmentType.ADDITIONAL_DAYS,
+          rehabilitativeActivities: [] as RehabilitativeActivity[],
+          schedule: { duration: 5 },
+          // already consecutive back to charge 100 - selecting it would create a loop
+          consecutiveChargeNumber: '100',
+        },
+      },
+    ])
+    return request(app)
+      .get(`${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS`)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('There are no existing punishments to select.')
+        expect(res.text).not.toContain('consecutive-report-101')
+      })
+  })
+})
+
 describe('POST', () => {
   it('should add punishment to session with consecutive punishment report number present', () => {
     return request(app)
@@ -116,6 +142,37 @@ describe('POST', () => {
           },
           '100',
         )
+      })
+  })
+
+  it('should reject a selection that would create a consecutive loop and not save it', () => {
+    punishmentsService.getPossibleConsecutivePunishments.mockResolvedValue([
+      {
+        chargeNumber: '101',
+        chargeProvedDate: '2023-07-18',
+        punishment: {
+          id: 1,
+          type: PunishmentType.ADDITIONAL_DAYS,
+          rehabilitativeActivities: [] as RehabilitativeActivity[],
+          schedule: { duration: 5 },
+          consecutiveChargeNumber: '100',
+        },
+      },
+    ])
+    return request(app)
+      .post(
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(
+          '100',
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`,
+      )
+      .send({
+        select: 'consecutive-report-101',
+      })
+      .expect(res => {
+        expect(res.text).toContain('You cannot select this punishment because it is already consecutive to this charge')
+      })
+      .then(() => {
+        expect(punishmentsService.addSessionPunishment).not.toHaveBeenCalled()
       })
   })
 })
