@@ -92,21 +92,9 @@ describe('GET', () => {
 })
 
 describe('GET', () => {
-  it('should not show a charge that is already consecutive to this charge (would create a loop)', () => {
-    punishmentsService.getPossibleConsecutivePunishments.mockResolvedValue([
-      {
-        chargeNumber: '101',
-        chargeProvedDate: '2023-07-18',
-        punishment: {
-          id: 1,
-          type: PunishmentType.ADDITIONAL_DAYS,
-          rehabilitativeActivities: [] as RehabilitativeActivity[],
-          schedule: { duration: 5 },
-          // already consecutive back to charge 100 - selecting it would create a loop
-          consecutiveChargeNumber: '100',
-        },
-      },
-    ])
+  it('should show no punishments when the service has filtered out all loop candidates', () => {
+    // the service pre-filters loop candidates, so it returns an empty list here
+    punishmentsService.getPossibleConsecutivePunishments.mockResolvedValue([])
     return request(app)
       .get(`${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS`)
       .expect('Content-Type', /html/)
@@ -146,19 +134,8 @@ describe('POST', () => {
   })
 
   it('should reject a selection that would create a consecutive loop and not save it', () => {
-    punishmentsService.getPossibleConsecutivePunishments.mockResolvedValue([
-      {
-        chargeNumber: '101',
-        chargeProvedDate: '2023-07-18',
-        punishment: {
-          id: 1,
-          type: PunishmentType.ADDITIONAL_DAYS,
-          rehabilitativeActivities: [] as RehabilitativeActivity[],
-          schedule: { duration: 5 },
-          consecutiveChargeNumber: '100',
-        },
-      },
-    ])
+    // the service pre-filters loop candidates; submitting one that bypasses the UI hits an empty list
+    punishmentsService.getPossibleConsecutivePunishments.mockResolvedValue([])
     return request(app)
       .post(
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(

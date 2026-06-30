@@ -2,7 +2,6 @@ import { FormError } from '../../../../@types/template'
 import { ConsecutiveAdditionalDaysReport } from '../../../../data/manageAdjudicationsUserTokensClient'
 
 type WhichPunishmentConsecutiveToForm = {
-  chargeNumber: string
   selectedChargeNumber?: string
   possibleConsecutivePunishments: ConsecutiveAdditionalDaysReport[]
 }
@@ -15,16 +14,13 @@ const errors: { [key: string]: FormError } = {
 }
 
 export default function validateForm({
-  chargeNumber,
   selectedChargeNumber,
   possibleConsecutivePunishments,
 }: WhichPunishmentConsecutiveToForm): FormError | null {
   if (!selectedChargeNumber) return null
 
-  const selected = possibleConsecutivePunishments.find(report => report.chargeNumber === selectedChargeNumber)
-  if (selected && selected.punishment.consecutiveChargeNumber === chargeNumber) {
-    return errors.CONSECUTIVE_LOOP
-  }
+  const isValidSelection = possibleConsecutivePunishments.some(report => report.chargeNumber === selectedChargeNumber)
+  if (!isValidSelection) return errors.CONSECUTIVE_LOOP
 
   return null
 }

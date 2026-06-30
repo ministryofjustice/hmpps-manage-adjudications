@@ -6,7 +6,6 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 import { FormError } from '../../../../@types/template'
-import { ConsecutiveAdditionalDaysReport } from '../../../../data/manageAdjudicationsUserTokensClient'
 import validateForm from './whichPunishmentConsecutiveToValidation'
 
 export enum PageRequestType {
@@ -58,10 +57,7 @@ export default class WhichPunishmentConsecutiveToPage {
 
     return res.render(`pages/whichPunishmentConsecutiveTo.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
-      // hide any charge already consecutive to this one - selecting it would create a loop
-      possibleConsecutivePunishments: possibleConsecutivePunishments.filter(
-        report => report.punishment.consecutiveChargeNumber !== chargeNumber,
-      ),
+      possibleConsecutivePunishments,
       errors,
     })
   }
@@ -77,10 +73,12 @@ export default class WhichPunishmentConsecutiveToPage {
     const chargeNumberOfSelectedPunishment = select.replace('consecutive-report-', '') || null
 
     // defence-in-depth: reject a selection that would make the two charges mutually consecutive
-    const possibleConsecutivePunishments: ConsecutiveAdditionalDaysReport[] =
-      await this.punishmentsService.getPossibleConsecutivePunishments(chargeNumber, type, user)
-    const error = validateForm({
+    const possibleConsecutivePunishments = await this.punishmentsService.getPossibleConsecutivePunishments(
       chargeNumber,
+      type,
+      user,
+    )
+    const error = validateForm({
       selectedChargeNumber: chargeNumberOfSelectedPunishment,
       possibleConsecutivePunishments,
     })

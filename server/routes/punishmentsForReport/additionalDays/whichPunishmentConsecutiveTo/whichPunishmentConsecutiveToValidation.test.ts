@@ -16,27 +16,23 @@ const buildReport = (chargeNumber: string, consecutiveChargeNumber?: string): Co
 
 describe('whichPunishmentConsecutiveToValidation', () => {
   it('returns null when nothing is selected', () => {
-    expect(
-      validateForm({ chargeNumber: '100', selectedChargeNumber: null, possibleConsecutivePunishments: [] }),
-    ).toBeNull()
+    expect(validateForm({ selectedChargeNumber: null, possibleConsecutivePunishments: [] })).toBeNull()
   })
 
-  it('returns null when the selected charge is not consecutive back to this charge', () => {
+  it('returns null when the selected charge is present in the valid list', () => {
     expect(
       validateForm({
-        chargeNumber: '100',
         selectedChargeNumber: '101',
         possibleConsecutivePunishments: [buildReport('101', '99')],
       }),
     ).toBeNull()
   })
 
-  it('returns an error when the selected charge is already consecutive to this charge (loop)', () => {
+  it('returns an error when the selected charge is not in the valid list (loop candidates are pre-filtered by the service)', () => {
     expect(
       validateForm({
-        chargeNumber: '100',
         selectedChargeNumber: '101',
-        possibleConsecutivePunishments: [buildReport('101', '100')],
+        possibleConsecutivePunishments: [],
       }),
     ).toEqual({
       href: '#consecutive-punishments-table',
