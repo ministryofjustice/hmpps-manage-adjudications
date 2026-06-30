@@ -205,7 +205,7 @@ div.adjudication-pdf {
       width: 60%;
       padding-right: govuk-spacing(3);
     }
-    &:nth-child(2) {  
+    &:nth-child(2) {
       padding-right: govuk-spacing(3);
     }
   }
@@ -375,7 +375,8 @@ div.adjudication-pdf {
 
 .adjudication-pdf-section-hearing-details {
   display: flex;
-  align-items: space-between;
+  justify-content: space-between;
+  background-color: red;
 
   &__item {
     padding-right: govuk-spacing(4);
@@ -466,7 +467,7 @@ div.adjudication-pdf {
     font-weight: bold;
     font-size: 24px;
   }
-  
+
   &-subheader {
     margin-bottom: govuk-spacing(3);
     font-weight: bold;
