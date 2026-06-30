@@ -91,6 +91,20 @@ describe('GET', () => {
   })
 })
 
+describe('GET', () => {
+  it('should show no punishments when the service has filtered out all loop candidates', () => {
+    // the service pre-filters loop candidates, so it returns an empty list here
+    punishmentsService.getPossibleConsecutivePunishments.mockResolvedValue([])
+    return request(app)
+      .get(`${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start('100')}?punishmentType=ADDITIONAL_DAYS`)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('There are no existing punishments to select.')
+        expect(res.text).not.toContain('consecutive-report-101')
+      })
+  })
+})
+
 describe('POST', () => {
   it('should add punishment to session with consecutive punishment report number present', () => {
     return request(app)
@@ -116,6 +130,26 @@ describe('POST', () => {
           },
           '100',
         )
+      })
+  })
+
+  it('should reject a selection that would create a consecutive loop and not save it', () => {
+    // the service pre-filters loop candidates; submitting one that bypasses the UI hits an empty list
+    punishmentsService.getPossibleConsecutivePunishments.mockResolvedValue([])
+    return request(app)
+      .post(
+        `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.urls.start(
+          '100',
+        )}?punishmentType=ADDITIONAL_DAYS&duration=5`,
+      )
+      .send({
+        select: 'consecutive-report-101',
+      })
+      .expect(res => {
+        expect(res.text).toContain('You cannot select this punishment because it is already consecutive to this charge')
+      })
+      .then(() => {
+        expect(punishmentsService.addSessionPunishment).not.toHaveBeenCalled()
       })
   })
 })

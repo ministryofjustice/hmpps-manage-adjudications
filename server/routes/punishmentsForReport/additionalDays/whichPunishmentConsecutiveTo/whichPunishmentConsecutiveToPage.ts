@@ -5,6 +5,8 @@ import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
+import { FormError } from '../../../../@types/template'
+import validateForm from './whichPunishmentConsecutiveToValidation'
 
 export enum PageRequestType {
   CREATION,
@@ -33,13 +35,19 @@ export default class WhichPunishmentConsecutiveToPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const userRoles = await this.userService.getUserRoles(user.token)
-    const { chargeNumber } = req.params
-    const { punishmentType } = req.query
-    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
 
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
+
+    return this.renderView(req, res, [])
+  }
+
+  private renderView = async (req: Request, res: Response, errors: FormError[]): Promise<void> => {
+    const { user } = res.locals
+    const { chargeNumber } = req.params
+    const { punishmentType } = req.query
+    const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
 
     const possibleConsecutivePunishments = await this.punishmentsService.getPossibleConsecutivePunishments(
       chargeNumber,
@@ -50,10 +58,12 @@ export default class WhichPunishmentConsecutiveToPage {
     return res.render(`pages/whichPunishmentConsecutiveTo.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       possibleConsecutivePunishments,
+      errors,
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
     const { chargeNumber } = req.params
     const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
     const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
@@ -61,6 +71,19 @@ export default class WhichPunishmentConsecutiveToPage {
 
     // We're grabbing the value of the button clicked, which has `consecutive-report-` before the charge number, so we need to strip that out first
     const chargeNumberOfSelectedPunishment = select.replace('consecutive-report-', '') || null
+
+    // defence-in-depth: reject a selection that would make the two charges mutually consecutive
+    const possibleConsecutivePunishments = await this.punishmentsService.getPossibleConsecutivePunishments(
+      chargeNumber,
+      type,
+      user,
+    )
+    const error = validateForm({
+      selectedChargeNumber: chargeNumberOfSelectedPunishment,
+      possibleConsecutivePunishments,
+    })
+    if (error) return this.renderView(req, res, [error])
+
     try {
       const punishmentData = {
         type,
