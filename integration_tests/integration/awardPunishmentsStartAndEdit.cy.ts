@@ -201,7 +201,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       chargeNumber: 101,
       response: [
         {
-          chargeNumber: 90,
+          chargeNumber: '90',
           chargeProvedDate: '2023-06-21',
           punishment: {
             id: 70,
@@ -212,7 +212,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           },
         },
         {
-          chargeNumber: 95,
+          chargeNumber: '95',
           chargeProvedDate: '2023-06-15',
           punishment: {
             type: PunishmentType.PROSPECTIVE_DAYS,
