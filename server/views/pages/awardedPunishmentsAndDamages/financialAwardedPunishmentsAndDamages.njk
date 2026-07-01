@@ -27,7 +27,7 @@
 
   {{ awardedPunishmentsAndDamagesTabHeader(activeTab, allAwardedPunishmentsAndDamagesHref, financialAwardedPunishmentsAndDamagesHref, additionalDaysAwardedPunishmentsHref) }}
 
-  <p class="govuk-!-padding-top-2 govuk-!-padding-bottom-2" data-qa="financial-guidance">Financial punishments include recovery of money for damages and stoppage of earnings.</p>
+  <p class="govuk-body govuk-!-padding-top-2 govuk-!-padding-bottom-2" data-qa="financial-guidance">Financial punishments include recovery of money for damages and stoppage of earnings.</p>
 
   {{ hearingsAndResidentalLocationFilter({filter: filter, locations: possibleLocations, clearUrl: clearUrl, csrfToken: csrfToken}) }}
 
@@ -75,7 +75,7 @@
       }) }}
     </div>
   {% else %}
-    <p class="govuk-!-padding-top-3" data-qa="no-results-message">{{ emptyStateText }}</p>
+    <p class="govuk-body govuk-!-padding-top-3" data-qa="no-results-message">{{ emptyStateText }}</p>
   {% endif %}
 
 {% endblock %}
