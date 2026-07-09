@@ -1,7 +1,7 @@
 {% macro prepareAndRecordAnAdjudicationHearingDetails_v2(prepareAndRecordAnAdjudicationHearingData) %}
   <div class='govuk-!-margin-left-8 govuk-!-margin-right-8'>
     <h2 class='adjudication-pdf-section-header'>Section 2 - Details of hearing</h2>
-    <div class="restricted-width">
+    <div>
       <p>
         There is space for 1 hearing to be recorded in this section. If there are more hearings, use the extra pages at the end of the form.
     </p>
@@ -9,9 +9,8 @@
         If the prisoner refuses to attend, make sure they are kept informed of key points in the hearing. If you decide not to do this, record your reasons in the ‘Record of hearing’ box.
     </p>
     </div>
-    {% for hearing in range(0, 4) %}
       <section class="page-break-before-always">
-        <h3 class='adjudication-pdf-section-header-inner'>{{ loop.index | convertToWord | toUpperCase }} hearing</h3>
+        <h3 class='adjudication-pdf-section-header-inner'>First hearing</h3>
         <div class='adjudication-pdf-section-hearing-details'>
           <div class="adjudication-pdf-section-hearing-details__item">
             <p class='govuk-!-margin-bottom-1'>Date (DD/MM/YYYY)</p>
@@ -32,7 +31,7 @@
           </div>
           <div class='adjudication-pdf-section-hearing-details__item'>
             <p class='govuk-!-margin-bottom-1'>Name of adjudicator</p>
-            <input class='adjudication-pdf-input adjudication-pdf-input-issuing-officer' type='text'>
+            <input class='adjudication-pdf-input adjudication-pdf-input-adjudicator' type='text'>
           </div>
         </div>
         <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
@@ -47,34 +46,29 @@
         <div class='govuk-!-margin-top-3 break-inside-avoid'>
           <p class='govuk-!-margin-top-3'>If no, a refusal to attend form must be completed and included in the paperwork for the hearing. </p>
         </div>
-        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
-          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner require help?</p>
-          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
-            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
-            <span> None</span>
-            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
-            <span> Support with disability</span>
-            <br>
-            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
-            <span> Interpreter</span>
-          </div>
-          <div class='adjudication-pdf-section-hearing-details__item'>
-            <p class='govuk-!-margin-bottom-1'>Other (specify)</p>
-            <input class='adjudication-pdf-input adjudication-pdf-input-issuing-officer' type='text'>
-          </div>
-        </div>
-        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
-          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner require help?</p>
-          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
-            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
-            <span> None</span>
-            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
-            <span> Support with disability</span>
-            <br>
-            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
-            <span> Interpreter</span>
-            <span> Other (specify)</span>
-            <input class='adjudication-pdf-input adjudication-pdf-input-issuing-officer' type='text'>
+        <div class="adjudication-pdf-section-prepare-record-checkboxes">
+          <p class="adjudication-pdf-section-prepare-record-checkboxes__question">Does the prisoner require help?</p>
+          <div class="adjudication-pdf-section-prepare-record-checkboxes__options">
+            <div class="option-row">
+              <label class="checkbox-option">
+                <input type="text" class="adjudication-pdf-input adjudication-pdf-input__multi-small-square">
+                <span>None</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="text" class="adjudication-pdf-input adjudication-pdf-input__multi-small-square">
+                <span>Support with disability</span>
+              </label>
+            </div>
+            <div class="option-row">
+              <label class="checkbox-option">
+                <input type="text" class="adjudication-pdf-input adjudication-pdf-input__multi-small-square">
+                <span>Interpreter</span>
+              </label>
+              <div class="other-option">
+                <span>Other (specify)</span>
+                <input class="adjudication-pdf-input adjudication-pdf-input-specify" type="text">
+              </div>
+            </div>
           </div>
         </div>
         <div class='govuk-!-margin-top-3 break-inside-avoid'>
@@ -159,10 +153,9 @@
           </div>
         </div>
 
-{% if loop.index === 1 %}
-            <section>
-      <h3 class='adjudication-pdf-section-header-inner'>Legal advice and preparation of a defence</h3>
-      <p>Before proceeding further, has the prisoner asked for legal help, such as:</p>
+      <section>
+      <h3 class='adjudication-pdf-section-header-inner'>Requests for legal support</h3>
+      <p>Has the prisoner requested any of the following?</p>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Advice</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
@@ -172,7 +165,7 @@
           <span> No</span>
         </div>
       </div>
-      <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
+      <div class='adjudication-pdf-section-prepare-record-checkboxes'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Legal advice</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
@@ -181,7 +174,7 @@
           <span> No</span>
         </div>
       </div>
-      <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
+      <div class='adjudication-pdf-section-prepare-record-checkboxes'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Representation at the hearing</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
@@ -190,7 +183,7 @@
           <span> No</span>
         </div>
       </div>
-      <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
+      <div class='adjudication-pdf-section-prepare-record-checkboxes'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>A McKenzie friend</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
@@ -199,7 +192,7 @@
           <span> No</span>
         </div>
       </div>
-      <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
+      <div class='adjudication-pdf-section-prepare-record-checkboxes'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Other (please specify)</p>
         <input type="text" class="adjudication-pdf-input adjudication-pdf-input-issuing-officer">
       </div>
@@ -212,7 +205,7 @@
         </p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
           <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>The seriousness of the charge and of the potential penalty</p>
-<div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
               <span> Yes</span>
               <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
@@ -291,24 +284,21 @@
         </div>
       </div>
     </section>
-    {% endif %}
 
+      <div class='govuk-!-margin-top-3 break-inside-avoid'>
+        <h3 class='adjudication-pdf-section-header-inner'>The accused’s plea</h3>
 
-        <div class='govuk-!-margin-top-3 break-inside-avoid'>
-          <h3 class='adjudication-pdf-section-header-inner'>The accused’s plea</h3>
-
-          <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
-            <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>How does the prisoner plead to the charge?</p>
-            <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
-              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
-              <span> Guilty</span>
-              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
-              <span> Not guilty</span>
-            </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>How does the prisoner plead to the charge?</p>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+            <span> Guilty</span>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+            <span> Not guilty</span>
           </div>
         </div>
-      </section>
-    {% endfor %}
+      </div>
+    </section>
     <section class="page-break-before-always">
       <h3 class='adjudication-pdf-section-header-inner'>Section 3 - Record of the hearing</h3>
       <p class="govuk-!-margin-bottom-0">Record:</p>
@@ -317,14 +307,15 @@
         <li>all evidence given, including physical evidence such as CCTV and body-worn video camera evidence</li>
         <li>any damage impact assessments</li>
         <li>reasons for decisions made during the course of the hearing, such as adjournments</li>
-        <li>reasons for finding  thecharge proved or not</li>
+        <li>reasons for finding the charge proved or not</li>
         <li>any other relevant points</li>
       </ul>
       <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-large-full-width'>
     </section>
 
     <section class="break-inside-avoid page-break-before-always">
-      <h3 class='adjudication-pdf-section-header-inner'>Finding</h3>
+      <h3 class='adjudication-pdf-section-header-inner'>Section 4 - Finding</h3>
+      <h3 class='adjudication-pdf-section-header-inner'>Outcome of the hearing</h3>
       <div class="adjudication-pdf-section-finding-checkboxes">
         <div class="adjudication-pdf-section-finding-checkboxes__item">
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
@@ -332,15 +323,15 @@
         </div>
         <div class="adjudication-pdf-section-finding-checkboxes__item">
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
-          <span> Charge dismissed due to ‘not guilty’ finding</span>
+          <span> Charge dismissed (not guilty finding)</span>
         </div>
       </div>
       <div class="adjudication-pdf-section-finding-checkboxes__item govuk-!-margin-top-3">
         <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
-        <span> Charge not proceeded with for any other reason</span>
+        <span> Charge 'not proceeded with'</span>
       </div>
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
-        <p class='govuk-!-margin-top-3'>If charge not proceeded with, give reasons why (see the Adjudications Policy Framework, paragraph 4.48).</p>
+        <p class='govuk-!-margin-top-3'>If charge 'not proceeded with', record the reasons:</p>
         <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
       </div>
       <div class="govuk-!-margin-top-3">
@@ -355,12 +346,12 @@
       </div>
     </section>
     <section>
-      <h2 class='adjudication-pdf-section-header-inner'>To be completed if the charge is proved beyond reasonable doubt</h2>
+      <h3 class='adjudication-pdf-section-header-inner'>If the charge is proved beyond reasonable doubt</h3>
       <h3 class='adjudication-pdf-section-subheader-inner'>Mitigation</h3>
       <p>Ask the prisoner if there are reasons why a lesser punishment than normal should be given for this offence, which have not been mentioned before.</p>
 
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
-        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner wish to mention any reasons?</p>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner wish to present mitigation?</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
           <span> Yes</span>
@@ -369,9 +360,8 @@
         </div>
       </div>
 
-      <div class='govuk-!-margin-top-3 break-inside-avoid'>
-        <p class='govuk-!-margin-top-3'>If Yes, record any mitigating evidence.</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
+      <div class='break-inside-avoid'>
+        <p class='govuk-!-margin-top-3'>If Yes, record any mitigating evidence in Section 3.</p>
       </div>
 
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
@@ -384,36 +374,34 @@
         </div>
       </div>
 
-      <div class='govuk-!-margin-top-3 break-inside-avoid'>
-        <p class='govuk-!-margin-top-3'>If Yes, enter their names</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-small-text-area'>
+      <div class='break-inside-avoid'>
+        <p class='govuk-!-margin-top-3'>If Yes, record their names and evidence in Section 3.</p>
       </div>
     </section>
 
     <section>
       <div class="break-inside-avoid">
         <h3 class='adjudication-pdf-section-subheader-inner'>Adjudication report</h3>
-        <p>Read out the DIS5 ‘Adjudication history for current sentence’.</p>
-      </div>
-      <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+        <p>Read out the DIS 5 ‘Adjudication history for current sentence’.</p>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes break-inside-avoid'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner wish to comment on this report, or do they have any questions they wish to ask about it?</p>
-        <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
-          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
-          <span> Yes</span>
-          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
-          <span> No</span>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+            <span> Yes</span>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+            <span> No</span>
+          </div>
         </div>
       </div>
 
       <div class='break-inside-avoid'>
-        <p class="govuk-body govuk-!-margin-bottom-0">If Yes, enter their comments and/or questions.</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
+        <p class="govuk-body govuk-!-margin-bottom-0">If Yes, enter their comments and/or questions in Section 3.</p>
       </div>
     </section>
 
     <section>
       <h3 class='adjudication-pdf-section-subheader-inner'>Conduct report</h3>
-      <p class="restricted-width">Read out the DIS6 ‘Conduct report’ on the prisoner’s behaviour during their current sentence. Any safer custody terms must be entered on the prisoner’s record and Digital Prison Services (DPS), and appropriate action must be taken.</p>
+      <p>Read out the DIS6 ‘Conduct report’ on the prisoner’s behaviour during their current sentence. Any safer custody terms must be entered on the prisoner’s record and Digital Prison Services (DPS), and appropriate action must be taken.</p>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
         <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner wish to comment on this report, or do they have any questions they wish to ask about it?</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
@@ -424,17 +412,16 @@
         </div>
       </div>
       <div class='break-inside-avoid'>
-        <p class="govuk-body govuk-!-margin-bottom-0">If Yes, enter their comments and/or questions.</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
+        <p class="govuk-body govuk-!-margin-bottom-0">If Yes, enter their comments and/or questions in Section 3.</p>
       </div>
     </section>
 
     <section>
       <h2 class='adjudication-pdf-section-header-inner'>Punishment</h2>
       <h3 class='adjudication-pdf-section-subheader-inner'>Punishment guidelines</h3>
-      <p class="restricted-width">Take account of the Adjudications Policy Framework paragraph 6.132, including whether the prisoner is on an open ACCT or had an ACCT closed within 3 months of the charge being laid.</p>
+      <p>Take account of the Adjudications Policy Framework paragraph 6.132, including whether the prisoner is on an open ACCT or had an ACCT closed within 3 months of the charge being made.</p>
       <div class="break-inside-avoid">
-        <p class='restricted-width'>If so, consider whether there are any risk factors that should be considered when imposing a punishment. Record any relevant points.</p>
+        <p>If so, consider whether there are any risk factors that should be considered when imposing a punishment. Record any relevant points.</p>
         <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
       </div>
     </section>
@@ -442,20 +429,29 @@
     <section class="break-inside-avoid">
       <h2 class='adjudication-pdf-section-header-inner'>Recovery for damages to the prison or prison property</h2>
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
-        <p class='govuk-!-margin-top-3 restricted-width'>If relevant, record details of any non-punitive compensation requirement for recovery of money for damage to the prison or prison property. Take account of the Adjudications Policy Framework, paragraphs 6.118 to 6.125 and 6.132.</p>
+        <p class='govuk-!-margin-top-3'>If relevant, record details of any non-punitive compensation requirement for recovery of money for damage to the prison or prison property. Take account of the Adjudications Policy Framework, paragraphs 6.118 to 6.125 and 6.132.</p>
         <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
       </div>
     </section>
 
-    <section>
+    <section class="break-inside-avoid">
       <h3 class='adjudication-pdf-section-subheader-inner'>For governor/director only</h3>
-      <div class="restricted-width">
+      <div>
         <p>Consider whether additional days may be an appropriate punishment, and if so refer the case to the independent adjudicator.</p>
         <div class="break-inside-avoid">
           <h3 class='adjudication-pdf-section-subheader-inner'>Cellular confinement</h3>
           <p>If considering cellular confinement (CC), confirm Initial Segregation Health Screen (ISHS) recording fitness for this punishment has been completed before a decision on punishment is made, and take the recommendation into account.</p>
           <p>If the ISHS has not been completed, adjourn and ensure it’s completed. Record the outcome of the assessment. <span class="govuk-!-font-weight-bold">Attach the ISHS to this record.</span></p>
           <p>If imposing suspended cellular confinement, ensure a further ISHS is completed before any punishment is activated.</p>
+        </div>
+        <br>
+        <div class="break-inside-avoid">
+          <h3 class='adjudication-pdf-section-subheader-inner'>Loss or restriction of social visits </h3>
+          <p>If you are considering restricting or removing social visits as a punishment, first check whether the prisoner has any children under 18 who they are responsible for. Take this into account before you decide on the punishment.</p>
+          <p>The governor should adjourn the hearing to establish the parental status of the prisoner before awarding a social visits punishment when necessary.</p>
+          <p>If the prisoner has children, visits with those children must not be restricted. This also applies to any adults who attend with the children.</p>
+          <p>Where the prisoner has a child, the governor can consider a different punishment which might be more effective.</p>
+          <p>There are limits on the number of times a social visit punishment can be given. Further details can be found in the adjudication framework.</p>
         </div>
       </div>
       <div class="break-inside-avoid">
@@ -485,7 +481,7 @@
         </div>
       </div>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
-        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>It’s important that a record of the finding, punishment and any non-punitive compensation requirement is recorded on DPS and the prisoner’s record, and that this is retained in line with data retention guidelines. Have you directed a member of staff to do this?</p>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Ensure the finding, punishment and any non-punitive compensation are recorded on DPS and the prisoner's record, and are kept in line with data retention guidelines. Have you asked a member of staff to do this?</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
           <span> Yes</span>
@@ -519,6 +515,300 @@
         </div>
       </div>
     </section>
-  </div>
+
+      {% for hearing in range(0, 3) %}
+        <section class="page-break-before-always">
+          <h3 class='adjudication-pdf-section-header-inner'>{{ (loop.index + 1) | convertToWord | toUpperCase }} hearing</h3>
+        <div class='adjudication-pdf-section-hearing-details'>
+          <div class="adjudication-pdf-section-hearing-details__item">
+            <p class='govuk-!-margin-bottom-1'>Date (DD/MM/YYYY)</p>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+            <span>
+              <strong> / </strong>
+            </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+            <span>
+              <strong> / </strong>
+            </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
+          </div>
+          <div class='adjudication-pdf-section-hearing-details__item'>
+            <p class='govuk-!-margin-bottom-1'>Start time (24-hour clock)</p>
+            <input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
+            <span>
+              <strong> : </strong>
+            </span><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'><input class='adjudication-pdf-input adjudication-pdf-input__square' type='text'>
+          </div>
+          <div class='adjudication-pdf-section-hearing-details__item'>
+            <p class='govuk-!-margin-bottom-1'>Name of adjudicator</p>
+            <input class='adjudication-pdf-input adjudication-pdf-input-adjudicator' type='text'>
+          </div>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Is the prisoner attending the hearing?</p>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+            <span> Yes</span>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+            <span> No</span>
+          </div>
+        </div>
+        <div class='govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='govuk-!-margin-top-3'>If no, a refusal to attend form must be completed and included in the paperwork for the hearing. </p>
+        </div>
+        <div class="adjudication-pdf-section-prepare-record-checkboxes">
+          <p class="adjudication-pdf-section-prepare-record-checkboxes__question">Does the prisoner require help?</p>
+          <div class="adjudication-pdf-section-prepare-record-checkboxes__options">
+            <div class="option-row">
+              <label class="checkbox-option">
+                <input type="text" class="adjudication-pdf-input adjudication-pdf-input__multi-small-square">
+                <span>None</span>
+              </label>
+              <label class="checkbox-option">
+                <input type="text" class="adjudication-pdf-input adjudication-pdf-input__multi-small-square">
+                <span>Support with disability</span>
+              </label>
+            </div>
+            <div class="option-row">
+              <label class="checkbox-option">
+                <input type="text" class="adjudication-pdf-input adjudication-pdf-input__multi-small-square">
+                <span>Interpreter</span>
+              </label>
+              <div class="other-option">
+                <span>Other (specify)</span>
+                <input class="adjudication-pdf-input adjudication-pdf-input-specify" type="text">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='govuk-!-margin-top-3'>Did the prisoner receive the DIS1/2 ‘Notice of being placed on report’ at least 2 hours before the start of this adjudication hearing?</p>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>If not, the charge must not proceed.</p>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+            <span> Yes</span>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+            <span> No</span>
+          </div>
+        </div>
+        <div class='govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='govuk-!-margin-top-3'>If there has been damage and the prisoner has been charged under prison rule 51 (17 or 17A) or YOI rule 55 (18 or 19), explain that if they are found guilty, compensation will be taken from their accounts. Record this in Section 3.</p>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner understand the charge?</p>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+            <span> Yes</span>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+            <span> No</span>
+          </div>
+        </div>
+        <div class='govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='govuk-!-margin-top-3'>If No, provide further explanation and record this in Section 3 before proceeding.</p>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Is an assessment of the cost of the damage attached?</p>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+            <span> Yes</span>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+            <span> No</span>
+          </div>
+        </div>
+        <div class='govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='govuk-!-margin-top-3'>Does the prisoner have any questions at this stage? If yes, record the details in Section 3. </p>
+        </div>
+
+        <div class='govuk-!-margin-top-3 break-inside-avoid'>
+          <h3 class='adjudication-pdf-section-header-inner'>Prisoner’s preparation for the hearing</h3>
+
+          <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+            <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Did the prisoner have enough time to prepare for this hearing?</p>
+            <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+          </div>
+
+          <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+            <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Did the prisoner prepare a written statement? (Read it out when the prisoner gives evidence or at the mitigation stage.)</p>
+            <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+          </div>
+        </div>
+
+        <div class='govuk-!-margin-top-3 break-inside-avoid'>
+          <h3 class='adjudication-pdf-section-header-inner'>Witnesses asked to the hearing</h3>
+
+          <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+            <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Does the prisoner wish to call any witnesses?</p>
+            <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+          </div>
+          <div class='govuk-!-margin-top-3 break-inside-avoid'>
+            <p class='govuk-!-margin-top-3'>If Yes, list the witnesses and state why they were accepted or refused.</p>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
+          </div>
+        </div>
+
+      <section>
+      <h3 class='adjudication-pdf-section-header-inner'>Requests for legal support</h3>
+      <p>Has the prisoner requested any of the following?</p>
+      <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Advice</p>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+          <span> Yes</span>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+          <span> No</span>
+        </div>
+      </div>
+      <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Legal advice</p>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+          <span> Yes</span>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+          <span> No</span>
+        </div>
+      </div>
+      <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Representation at the hearing</p>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+          <span> Yes</span>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+          <span> No</span>
+        </div>
+      </div>
+      <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>A McKenzie friend</p>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+          <span> Yes</span>
+          <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+          <span> No</span>
+        </div>
+      </div>
+      <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Other (please specify)</p>
+        <input type="text" class="adjudication-pdf-input adjudication-pdf-input-issuing-officer">
+      </div>
+      <div class="break-inside-avoid">
+        <p class="govuk-!-margin-top-3 restricted-width">
+          If legal representation or a McKenzie friend is requested, consider the Tarrant criteria and record your decision and reasons in Section 3.
+        </p>
+        <p class="govuk-!-margin-top-3 restricted-width">
+          Select all that apply:
+        </p>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>The seriousness of the charge and of the potential penalty</p>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Where any points of law are likely to arise</p>
+<div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>The capacity of a particular prisoner to present their own case</p>
+<div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Procedural difficulties</p>
+<div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>The need for reasonable speed</p>
+<div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>The need for fairness</p>
+<div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item govuk-!-margin-left-3'>Anything else the prisoner raises</p>
+<div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+              <span> Yes</span>
+              <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+              <span> No</span>
+            </div>
+        </div>
+      </div>
+      <div class='break-inside-avoid'>
+        <h3 class='adjudication-pdf-section-header-inner'>Independent adjudicator only</h3>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Has the prisoner had time to arrange legal representation?</p>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+            <span> Yes</span>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+            <span> No</span>
+          </div>
+        </div>
+        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Record name and status of any legal representative</p>
+          <input type="text" class="adjudication-pdf-section-other-underline">
+        </div>
+      </div>
+    </section>
+
+      <div class='govuk-!-margin-top-3 break-inside-avoid'>
+        <h3 class='adjudication-pdf-section-header-inner'>The accused’s plea</h3>
+
+        <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3 break-inside-avoid'>
+          <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>How does the prisoner plead to the charge?</p>
+          <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
+            <span> Guilty</span>
+            <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square govuk-!-margin-left-3'>
+            <span> Not guilty</span>
+          </div>
+        </div>
+      </div>
+    </section>
+      {% endfor %}
+      </div>
+
 
 {% endmacro %}

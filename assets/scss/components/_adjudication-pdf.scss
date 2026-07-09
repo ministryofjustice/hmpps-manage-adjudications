@@ -68,6 +68,13 @@ div.adjudication-pdf {
 .adjudication-pdf-input__small-square {
   height: 15px;
   width: 15px;
+  margin-top: 10px;
+}
+
+.adjudication-pdf-input__multi-small-square {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
 }
 
 .adjudication-pdf-input-text-box-sixty-width {
@@ -120,6 +127,17 @@ div.adjudication-pdf {
   height: 30px;
   width: 50%;
 }
+
+.adjudication-pdf-input-adjudicator {
+  height: 30px;
+  width: 200px;
+}
+
+.adjudication-pdf-input-specify {
+  height: 30px;
+  width: 200px;
+}
+
 .adjudication-pdf-prisoner-statement {
   height: 400px;
   width: 100%;
@@ -343,8 +361,10 @@ div.adjudication-pdf {
   }
 }
 
+
 .adjudication-pdf-section-prepare-record-checkboxes {
   display: flex;
+  align-items: flex-start;
 
   &__item {
     &:nth-child(1) {
@@ -356,6 +376,36 @@ div.adjudication-pdf {
       width: 45%;
     }
   }
+
+  &__question {
+    width: 35%;
+    margin: 0;
+    padding-right: 20px;
+  }
+
+  &__options {
+    width: 65%;
+  }
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 40px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.other-option {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
 }
 
 .adjudication-pdf-section-finding-checkboxes {
