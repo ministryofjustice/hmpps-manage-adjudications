@@ -150,7 +150,7 @@ describe('GET /dis7', () => {
           stoppageOfEarningsDaysMax: 84,
           cellularConfinementDaysMax: 21,
           removalDaysMax: 28,
-          daysAddedDaysMax: 42,
+          daysAddedDaysMax: 84,
           prospectiveDaysMax: 42,
           applyMonths: 6,
           reportedDate: '21 December 2020',
