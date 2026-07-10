@@ -61,7 +61,7 @@ export default class adjudicationResultReportData {
     this.stoppageOfEarningsDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 84
     this.cellularConfinementDaysMax = confirmedOnReportData.isYouthOffender ? 10 : 21
     this.removalDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 28
-    this.daysAddedDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 42
+    this.daysAddedDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 84
     this.prospectiveDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 42
     this.applyMonths = confirmedOnReportData.isYouthOffender ? 4 : 6
   }
