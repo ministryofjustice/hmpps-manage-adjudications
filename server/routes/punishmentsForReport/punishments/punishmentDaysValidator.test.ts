@@ -2,14 +2,37 @@ import { convertPrivilegeType, PrivilegeType, PunishmentType } from '../../../da
 import validateForm from './punishmentDaysValidator'
 
 describe('validateForm', () => {
-  it('Valid submit has no errors - punishment type additional days', () => {
-    expect(validateForm(PunishmentType.ADDITIONAL_DAYS, 42, false)).toBeNull()
-  })
+  describe('Additional days validation', () => {
+    describe('for adults', () => {
+      const IS_YOI = false
+      const MAX_DAYS = 84
 
-  it('shows error when additional days above max', () => {
-    expect(validateForm(PunishmentType.ADDITIONAL_DAYS, 43, false)).toEqual({
-      href: '#duration',
-      text: 'Number of additional days cannot be more than 42',
+      it('when valid number of additional days, has no errors', () => {
+        expect(validateForm(PunishmentType.ADDITIONAL_DAYS, MAX_DAYS, IS_YOI)).toBeNull()
+      })
+
+      it('when additional days above max, returns error', () => {
+        expect(validateForm(PunishmentType.ADDITIONAL_DAYS, MAX_DAYS + 1, IS_YOI)).toEqual({
+          href: '#duration',
+          text: 'Number of additional days cannot be more than 84 for an offence under Adult rules',
+        })
+      })
+    })
+
+    describe('for YOI', () => {
+      const IS_YOI = true
+      const MAX_DAYS = 42
+
+      it('when valid number of additional days, has no errors', () => {
+        expect(validateForm(PunishmentType.ADDITIONAL_DAYS, MAX_DAYS, IS_YOI)).toBeNull()
+      })
+
+      it('when additional days above max, returns error', () => {
+        expect(validateForm(PunishmentType.ADDITIONAL_DAYS, MAX_DAYS + 1, IS_YOI)).toEqual({
+          href: '#duration',
+          text: 'Number of additional days cannot be more than 42 for an offence under YOI rules',
+        })
+      })
     })
   })
 
