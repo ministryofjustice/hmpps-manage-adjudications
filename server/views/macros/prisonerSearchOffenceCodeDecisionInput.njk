@@ -9,11 +9,11 @@
     {% if selectedAnswerId == answerId and prisonerId != null %}
         <input type="hidden" name="prisonerId" value="{{ prisonerId }}" id="prisonerId"/>
         <div>
-            <p data-qa="victim-prisoner-name">
-                <span class="govuk-!-font-weight-bold">Name</span> - {{ prisonerName }}
+            <p class= "govuk-body" data-qa="victim-prisoner-name">
+                <span class="govuk-body govuk-!-font-weight-bold">Name</span> - {{ prisonerName }}
             </p>
-            <p data-qa="victim-prisoner-number">
-                <span class="govuk-!-font-weight-bold">PRN</span> - {{ prisonerId }}
+            <p class= "govuk-body" data-qa="victim-prisoner-number">
+                <span class="govuk-body govuk-!-font-weight-bold">PRN</span> - {{ prisonerId }}
             </p>
             <div>
                 {{ govukButton({

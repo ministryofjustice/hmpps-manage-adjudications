@@ -17,6 +17,7 @@ const amendPunishmentComment = jest.fn()
 const removePunishmentComment = jest.fn()
 const getPrisonerDetails = jest.fn()
 const getSuspendedPunishments = jest.fn()
+const getPossibleConsecutivePunishments = jest.fn()
 const getUserFromUsername = jest.fn()
 
 jest.mock('../data/manageAdjudicationsUserTokensClient', () => {
@@ -27,6 +28,7 @@ jest.mock('../data/manageAdjudicationsUserTokensClient', () => {
       amendPunishmentComment,
       removePunishmentComment,
       getSuspendedPunishments,
+      getPossibleConsecutivePunishments,
     }
   })
 })
@@ -352,6 +354,40 @@ describe('PunishmentsService', () => {
           time: '06:00',
         },
       ])
+    })
+  })
+
+  describe('getPossibleConsecutivePunishments', () => {
+    it('filters out entries that are already consecutive to the requested charge (would create a loop)', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({ chargeNumber: '100', prisonerNumber: 'G6123VU' }),
+      })
+      getPossibleConsecutivePunishments.mockResolvedValue([
+        {
+          chargeNumber: '101',
+          chargeProvedDate: '2023-07-18',
+          punishment: {
+            id: 1,
+            type: PunishmentType.ADDITIONAL_DAYS,
+            rehabilitativeActivities: [] as RehabilitativeActivity[],
+            schedule: { duration: 5 },
+          },
+        },
+        {
+          chargeNumber: '102',
+          chargeProvedDate: '2023-07-19',
+          punishment: {
+            id: 2,
+            type: PunishmentType.ADDITIONAL_DAYS,
+            rehabilitativeActivities: [] as RehabilitativeActivity[],
+            schedule: { duration: 3 },
+            consecutiveChargeNumber: '100',
+          },
+        },
+      ])
+      const result = await service.getPossibleConsecutivePunishments('100', PunishmentType.ADDITIONAL_DAYS, user)
+      expect(result).toHaveLength(1)
+      expect(result[0].chargeNumber).toBe('101')
     })
   })
 })

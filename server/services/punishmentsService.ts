@@ -467,11 +467,12 @@ export default class PunishmentsService {
     user: User,
   ): Promise<ConsecutiveAdditionalDaysReport[]> {
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
-    return new ManageAdjudicationsUserTokensClient(user).getPossibleConsecutivePunishments(
+    const results = await new ManageAdjudicationsUserTokensClient(user).getPossibleConsecutivePunishments(
       reportedAdjudication.prisonerNumber,
       punishmentType,
       chargeNumber,
     )
+    return results.filter(report => report.punishment.consecutiveChargeNumber !== chargeNumber)
   }
 
   async formatPunishmentComments(reportedAdjudication: ReportedAdjudication, chargeNumber: string, user: User) {
