@@ -34,6 +34,7 @@
     <h2 class='adjudication-pdf-section-header'>Section 1 - Prepare for hearing</h2>
     <section>
       <h3 class='adjudication-pdf-section-header-inner'>Outline of alleged offence</h3>
+      <p class='restricted-width'>The prisoner has been charged with the following offence (describe what the prisoner is accused of doing. Include any key facts and what is said to have happened.)</p>
       <div class='break-inside-avoid'>
         {% for questionAndAnswer in offences.questionsAndAnswers %}
           <p class='govuk-!-margin-bottom-0'>{{ questionAndAnswer.question }}</p>
@@ -79,7 +80,7 @@
         </span><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
       </div>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
-        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Is the prisoner on an open Assessment, Care in Custody and Teamwork (ACCT) or were they on an ACCT that closed within 3 months before the charge?</p>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Is the prisoner on an open ACCT or were they on an ACCT that closed within 3 months before the charge?</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
           <span> Yes</span>
@@ -186,7 +187,7 @@
         {% endif %}
       </div>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
-        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Was the charge laid within 48 hours of discovery of the alleged offence?</p>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Was the charge made within 48 hours of discovering the alleged offence?</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
           <span> Yes</span>
@@ -213,15 +214,26 @@
         </div>
       </div>
       <div class='govuk-!-margin-top-3 break-inside-avoid'>
-        <p class=''>If No, seek further advice from Healthcare. Record their advice and any decision taken.</p>
+        <p class=''>If no, get advice from Healthcare. Record their advice and any decision.</p>
         <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
       </div>
     </section>
 
     <section class='break-inside-avoid page-break-before-always'>
+      <h3 class='adjudication-pdf-section-header-inner'>Victim consultation</h3>
+      <p class='restricted-width'>In cases where a staff member is the victim, consider their wishes and explain all available options. Including:</p>
+      <ul>
+        <li>Police referral</li>
+        <li>governor’s adjudication</li>
+        <li>IA referral</li>
+      </ul>
+      <p>The victim’s preferred option is <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'></p>
+    </section>
+
+    <section class='break-inside-avoid'>
       <h3 class='adjudication-pdf-section-header-inner'>Referral to the police (to be completed by governor or director only)</h3>
       <div class='adjudication-pdf-section-prepare-record-checkboxes govuk-!-margin-top-3'>
-        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Is this charge being referred to the police?</p>
+        <p class='adjudication-pdf-section-prepare-record-checkboxes__item'>Is the charge being referred to the police?</p>
         <div class='adjudication-pdf-section-prepare-record-checkboxes__item'>
           <input type='text' class='adjudication-pdf-input adjudication-pdf-input__small-square'>
           <span> Yes</span>
@@ -229,12 +241,14 @@
           <span> No</span>
         </div>
       </div>
-      <p>(See Crime in Prison Referral Agreement and the Adjudications Policy Framework in paragraphs 6.52 to 6.57)</p>
-      <p class="restricted-width">If it’s considered serious enough to be referred to the police, adjourn and record the reason here. <span class="govuk-!-font-weight-bold">Do not take a plea.</span> Attach prison community impact assessment. Do not refer to the independent adjudicator at this stage but wait for the police decision. and record it in ‘Police decision’.</p>
-      <div class='govuk-!-margin-top-3'>
-        <p class=''>Reason for referral to the police</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-brief-text-area'>
-      </div>
+      <p>If the charge is being referred to the police:</p>
+      <ul>
+        <li>adjourn the hearing</li>
+        <li>do not take a plea</li>
+        <li>record the reasons for referral in Section 3</li>
+        <li>attach the prison community impact assessment</li>
+        <li>await the police decision before progressing.</li>
+      </ul>
       <div class='govuk-!-margin-top-3'>
         <p>Date referred (DD/MM/YYYY)</p>
         <input type='text' class='adjudication-pdf-input adjudication-pdf-input__square'><input type='text'  class='adjudication-pdf-input adjudication-pdf-input__square'>
@@ -265,17 +279,15 @@
       <h3 class='adjudication-pdf-section-header-inner restricted-width'>Referral to the independent adjudicator (to be completed by governor or director only)</h3>
       <div class="restricted-width">
         <p>
-          If it’s not referred to police, or the police confirm that no prosecution is to take place, consider whether the charge is serious enough to refer to the independent adjudicator (IA). (See the Adjudications Policy Framework paragraphs 6.58 to 6.66) Only determinate sentence prisoners and licence recalls still within their sentence expiry date can receive added days.
+          If the case is not referred to the police, or the police decide not to prosecute, consider whether the charge is serious enough for referral to an Independent Adjudicator (IA).
         </p>
-        <p>
-          If it’s referred to the IA, adjourn and record reasons in the record of hearing (for example, why this is considered serious enough to be referred). Attach any relevant documents, including prison community impact assessment, damage impact assessment, statements and evidence. Arrange for the IA to hear the charge(s) within 28 days of referral. Otherwise, the case will be dismissed.
-        </p>
-        <p>
-          In some cases, it may become apparent at a later stage (for example, after the first hearing) that a referral to the IA is the most appropriate course of action. You may do this at any point up to the imposition of punishment. See the Adjudications Policy Framework paragraphs 6.58 to 6.66 for further guidance.
-        </p>
-        <p>
-          If it’s not referred, proceed with the rest of the hearing.
-        </p>
+        <p>If you refer the case:</p>
+        <ul>
+          <li>adjourn the hearing</li>
+          <li>record the reasons for referral in Section 3 (include reasons for seriousness and any impact on the prison or security)</li>
+          <li>attach all relevant documents.</li>
+        </ul>
+        <p>The hearing must take place within 28 days after the date of referral. If not, the case cannot proceed to the Independent Adjudicator.</p>
       </div>
     </section>
   </div>
