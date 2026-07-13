@@ -36,14 +36,37 @@ describe('validateForm', () => {
     })
   })
 
-  it('Valid submit has no errors - punishment type prospective days', () => {
-    expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, 42, false)).toBeNull()
-  })
+  describe('Prospective additional days validation', () => {
+    describe('for adults', () => {
+      const IS_YOI = false
+      const MAX_DAYS = 84
 
-  it('shows error when prospective days above max', () => {
-    expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, 43, false)).toEqual({
-      href: '#duration',
-      text: 'Number of prospective additional days cannot be more than 42',
+      it('when valid number of prospective additional days, has no errors', () => {
+        expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, MAX_DAYS, IS_YOI)).toBeNull()
+      })
+
+      it('when additional days above max, returns error', () => {
+        expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, MAX_DAYS + 1, IS_YOI)).toEqual({
+          href: '#duration',
+          text: 'Number of prospective additional days cannot be more than 84 for an offence under Adult rules',
+        })
+      })
+    })
+
+    describe('for YOI', () => {
+      const IS_YOI = true
+      const MAX_DAYS = 42
+
+      it('when valid number of additional days, has no errors', () => {
+        expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, MAX_DAYS, IS_YOI)).toBeNull()
+      })
+
+      it('when additional days above max, returns error', () => {
+        expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, MAX_DAYS + 1, IS_YOI)).toEqual({
+          href: '#duration',
+          text: 'Number of prospective additional days cannot be more than 42 for an offence under YOI rules',
+        })
+      })
     })
   })
 

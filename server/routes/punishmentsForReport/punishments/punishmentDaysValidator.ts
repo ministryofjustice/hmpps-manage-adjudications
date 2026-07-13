@@ -10,9 +10,13 @@ const errors: { [key: string]: FormError } = {
     href: '#duration',
     text: 'Number of additional days cannot be more than 42 for an offence under YOI rules',
   },
-  PROSPECTIVE_DAYS_MAX: {
+  PROSPECTIVE_DAYS_MAX_ADULT: {
     href: '#duration',
-    text: 'Number of prospective additional days cannot be more than 42',
+    text: 'Number of prospective additional days cannot be more than 84 for an offence under Adult rules',
+  },
+  PROSPECTIVE_DAYS_MAX_YOI: {
+    href: '#duration',
+    text: 'Number of prospective additional days cannot be more than 42 for an offence under YOI rules',
   },
   EARNINGS_DAYS_MAX_ADULT: {
     href: '#duration',
@@ -77,8 +81,13 @@ export default function validatePunishmentDays(
     }
   }
 
-  if (punishmentType === PunishmentType.PROSPECTIVE_DAYS && duration > 42) {
-    return errors.PROSPECTIVE_DAYS_MAX
+  if (punishmentType === PunishmentType.PROSPECTIVE_DAYS) {
+    if (isAdult && duration > 84) {
+      return errors.PROSPECTIVE_DAYS_MAX_ADULT
+    }
+    if (isYOI && duration > 42) {
+      return errors.PROSPECTIVE_DAYS_MAX_YOI
+    }
   }
 
   if (punishmentType === PunishmentType.EARNINGS) {
