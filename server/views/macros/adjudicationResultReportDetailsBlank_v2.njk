@@ -154,6 +154,7 @@
         </div>
     </div>
 
+    {% if adjudicationResultReportDataBlank.isYOI === false %}
     <div class='adjudication-pdf-section-punishment-details'>
         <div class='adjudication-pdf-section-punishment-details__item'>
             <p class='govuk-!-margin-bottom-1 govuk-!-margin-top-3'><strong>Forfeiture of social visits</strong></p>
@@ -198,6 +199,7 @@
             <input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-sixty-width'value="    Yes"><input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-sixty-width' value="    No"><input type='text' class='adjudication-pdf-input adjudication-pdf-input-text-box-sixty-width' hidden>
         </div>
     </div>
+    {% endif %}
 
     <div class='adjudication-pdf-section-punishment-details'>
         <div class='adjudication-pdf-section-punishment-details__item'>
