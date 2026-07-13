@@ -151,7 +151,7 @@ describe('GET /dis7', () => {
           cellularConfinementDaysMax: 21,
           removalDaysMax: 28,
           daysAddedDaysMax: 84,
-          prospectiveDaysMax: 42,
+          prospectiveDaysMax: 84,
           applyMonths: 6,
           reportedDate: '21 December 2020',
         },
