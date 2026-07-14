@@ -2,13 +2,21 @@ import { FormError } from '../../../@types/template'
 import { convertPrivilegeType, PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 
 const errors: { [key: string]: FormError } = {
-  ADDITIONAL_DAYS_MAX: {
+  ADDITIONAL_DAYS_MAX_ADULT: {
     href: '#duration',
-    text: 'Number of additional days cannot be more than 42',
+    text: 'Number of additional days cannot be more than 84 for an offence under Adult rules',
   },
-  PROSPECTIVE_DAYS_MAX: {
+  ADDITIONAL_DAYS_MAX_YOI: {
     href: '#duration',
-    text: 'Number of prospective additional days cannot be more than 42',
+    text: 'Number of additional days cannot be more than 42 for an offence under YOI rules',
+  },
+  PROSPECTIVE_DAYS_MAX_ADULT: {
+    href: '#duration',
+    text: 'Number of prospective additional days cannot be more than 84 for an offence under Adult rules',
+  },
+  PROSPECTIVE_DAYS_MAX_YOI: {
+    href: '#duration',
+    text: 'Number of prospective additional days cannot be more than 42 for an offence under YOI rules',
   },
   EARNINGS_DAYS_MAX_ADULT: {
     href: '#duration',
@@ -62,16 +70,28 @@ export default function validatePunishmentDays(
   isYOI: boolean,
   privilegeType?: PrivilegeType,
 ): FormError | null {
-  if (punishmentType === PunishmentType.ADDITIONAL_DAYS && duration > 42) {
-    return errors.ADDITIONAL_DAYS_MAX
+  const isAdult = !isYOI
+
+  if (punishmentType === PunishmentType.ADDITIONAL_DAYS) {
+    if (isAdult && duration > 84) {
+      return errors.ADDITIONAL_DAYS_MAX_ADULT
+    }
+    if (isYOI && duration > 42) {
+      return errors.ADDITIONAL_DAYS_MAX_YOI
+    }
   }
 
-  if (punishmentType === PunishmentType.PROSPECTIVE_DAYS && duration > 42) {
-    return errors.PROSPECTIVE_DAYS_MAX
+  if (punishmentType === PunishmentType.PROSPECTIVE_DAYS) {
+    if (isAdult && duration > 84) {
+      return errors.PROSPECTIVE_DAYS_MAX_ADULT
+    }
+    if (isYOI && duration > 42) {
+      return errors.PROSPECTIVE_DAYS_MAX_YOI
+    }
   }
 
   if (punishmentType === PunishmentType.EARNINGS) {
-    if (!isYOI && duration > 84) {
+    if (isAdult && duration > 84) {
       return errors.EARNINGS_DAYS_MAX_ADULT
     }
     if (isYOI && duration > 42) {
@@ -79,11 +99,11 @@ export default function validatePunishmentDays(
     }
   }
 
-  if (punishmentType === PunishmentType.EXCLUSION_WORK && !isYOI && duration > 21) {
+  if (punishmentType === PunishmentType.EXCLUSION_WORK && isAdult && duration > 21) {
     return errors.EXCLUSION_WORK_DAYS_MAX_ADULT
   }
   if (punishmentType === PunishmentType.CONFINEMENT) {
-    if (!isYOI && duration > 21) {
+    if (isAdult && duration > 21) {
       return errors.CONFINEMENT_DAYS_MAX_ADULT
     }
     if (isYOI && duration > 10) {
@@ -92,7 +112,7 @@ export default function validatePunishmentDays(
   }
 
   if (punishmentType === PunishmentType.PRIVILEGE) {
-    if (!isYOI && duration > 42) {
+    if (isAdult && duration > 42) {
       return formatPrivilegeErrorText(
         privilegeType,
         errors.PRIVILEGE_DAYS_MAX_ADULT.href,
@@ -109,7 +129,7 @@ export default function validatePunishmentDays(
   }
 
   if (punishmentType === PunishmentType.REMOVAL_WING) {
-    if (!isYOI && duration > 28) {
+    if (isAdult && duration > 28) {
       return errors.REMOVAL_WING_DAYS_MAX_ADULT
     }
     if (isYOI && duration > 21) {

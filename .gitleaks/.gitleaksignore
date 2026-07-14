@@ -1,1 +1,3 @@
 # The Fingerprint of false positive alerts can be added here to be excluded from future scans.
+server/routes/punishmentsForReport/punishments/punishmentDaysValidator.test.ts:token:49
+server/routes/punishmentsForReport/punishments/punishmentDaysValidator.test.ts:token:65
