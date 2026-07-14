@@ -205,7 +205,7 @@ div.adjudication-pdf {
       width: 60%;
       padding-right: govuk-spacing(3);
     }
-    &:nth-child(2) {  
+    &:nth-child(2) {
       padding-right: govuk-spacing(3);
     }
   }
@@ -466,7 +466,7 @@ div.adjudication-pdf {
     font-weight: bold;
     font-size: 24px;
   }
-  
+
   &-subheader {
     margin-bottom: govuk-spacing(3);
     font-weight: bold;
@@ -488,6 +488,11 @@ div.adjudication-pdf {
       width: 50%;
     }
   }
+
+  .dis7-sub-question {
+    margin-left: 20px;
+  }
+
   .grey-box {
     background-color: govuk-colour("light-grey");
     padding: govuk-spacing(3) govuk-spacing(5);
