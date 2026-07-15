@@ -15,11 +15,16 @@
         .adjudication-pdf-header {
             background-color: #d8d8d8;
             width: 100%;
+            padding: 0px 30px;
+        }
+        .adjudication-pdf-header-official {
+            text-align: center;
+            margin: 5px 0 0 0;
+        }
+        .adjudication-pdf-header-main {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-left:30px;
-            padding-right: 30px;
         }
         .adjudication-pdf-header-bold {
             font-weight: bold;
@@ -31,8 +36,11 @@
 </head>
 <body>
     <div class='adjudication-pdf-header'>
-        <h1>{{ header }}</h1>
-        <h2><span class='adjudication-pdf-header-bold'>Charge number:</span> <span class="adjudication-pdf-header-normal">{{ chargeNumber }}</span></h2>
+        <h2 class="adjudication-pdf-header-official">Official</h2>
+        <div class="adjudication-pdf-header-main">
+          <h1>{{ header }}</h1>
+          <h2><span class='adjudication-pdf-header-bold'>Charge number:</span> <span class="adjudication-pdf-header-normal">{{ chargeNumber }}</span></h2>
+        </div>
     </div>
 </body>
 </html>
