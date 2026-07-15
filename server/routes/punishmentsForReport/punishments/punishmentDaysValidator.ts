@@ -113,18 +113,10 @@ export default function validatePunishmentDays(
 
   if (punishmentType === PunishmentType.PRIVILEGE) {
     if (isAdult && duration > 42) {
-      return formatPrivilegeErrorText(
-        privilegeType,
-        errors.PRIVILEGE_DAYS_MAX_ADULT.href,
-        errors.PRIVILEGE_DAYS_MAX_ADULT.text,
-      )
+      return formatPrivilegeErrorText(privilegeType, errors.PRIVILEGE_DAYS_MAX_ADULT)
     }
     if (isYOI && duration > 21) {
-      return formatPrivilegeErrorText(
-        privilegeType,
-        errors.PRIVILEGE_DAYS_MAX_YOI.href,
-        errors.PRIVILEGE_DAYS_MAX_YOI.text,
-      )
+      return formatPrivilegeErrorText(privilegeType, errors.PRIVILEGE_DAYS_MAX_YOI)
     }
   }
 
@@ -148,10 +140,10 @@ export default function validatePunishmentDays(
   return null
 }
 
-function formatPrivilegeErrorText(privilegeType: PrivilegeType, href: string, text: string): FormError {
+function formatPrivilegeErrorText(privilegeType: PrivilegeType, error: FormError): FormError {
   return {
-    href,
-    text: text.replace(
+    ...error,
+    text: error.text.replace(
       '[thing]',
       privilegeType === PrivilegeType.OTHER ? 'privilege' : convertPrivilegeType(privilegeType),
     ),
