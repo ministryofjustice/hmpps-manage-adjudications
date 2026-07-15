@@ -1,3 +1,9 @@
 # The Fingerprint of false positive alerts can be added here to be excluded from future scans.
+
+# `MAX_DAYS + 1` mistaken for a secret?
 server/routes/punishmentsForReport/punishments/punishmentDaysValidator.test.ts:token:49
 server/routes/punishmentsForReport/punishments/punishmentDaysValidator.test.ts:token:65
+server/routes/punishmentsForReport/punishments/punishmentDaysValidator.test.ts:token:138
+server/routes/punishmentsForReport/punishments/punishmentDaysValidator.test.ts:token:145
+server/routes/punishmentsForReport/punishments/punishmentDaysValidator.test.ts:token:161
+server/routes/punishmentsForReport/punishments/punishmentDaysValidator.test.ts:token:168
