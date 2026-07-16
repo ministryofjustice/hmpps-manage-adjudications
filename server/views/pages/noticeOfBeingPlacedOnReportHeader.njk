@@ -12,15 +12,24 @@
             font-size: 10px;
             font-weight: normal;
         }
+
         .adjudication-pdf-header {
             background-color: #d8d8d8;
             width: 100%;
+            padding: 0px 30px;
+        }
+
+        .adjudication-pdf-header-official {
+            text-align: center;
+            margin: 5px 0 0 0;
+        }
+
+        .adjudication-pdf-header-main {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-left:30px;
-            padding-right: 30px;
         }
+
         .adjudication-pdf-header-bold {
             font-weight: bold;
         }
@@ -29,10 +38,21 @@
         }
     </style>
 </head>
-<body>
-    <div class='adjudication-pdf-header'>
-        <h1>Notice of being placed on report</h1>
-        <h2><span class='adjudication-pdf-header-bold'>Charge number:</span> <span class="adjudication-pdf-header-normal">{{ chargeNumber }}</span></h2>
+
+<div class="adjudication-pdf-header">
+    <h2 class="adjudication-pdf-header-official">Official</h2>
+
+    <div class="adjudication-pdf-header-main">
+        {% if isPrisonerCopy %}
+        <h1>DIS1 and 2 Notice of being placed on report</h1>
+        {% else %}
+        <h1>DIS1 Notice of being placed on report</h1>
+        {% endif %}
+        <h2>
+            <span class="adjudication-pdf-header-bold">Charge number:</span>
+            <span class="adjudication-pdf-header-normal">{{ chargeNumber }}</span>
+        </h2>
     </div>
+</div>
 </body>
 </html>
