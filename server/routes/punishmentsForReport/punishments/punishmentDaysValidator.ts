@@ -40,7 +40,7 @@ const errors: { [key: string]: FormError } = {
   },
   PRIVILEGE_DAYS_MAX_ADULT: {
     href: '#duration',
-    text: 'Days for loss of [thing] cannot be more than 42 days for an offence under Adult rules',
+    text: 'Days for loss of [thing] cannot be more than 84 days for an offence under Adult rules',
   },
   PRIVILEGE_DAYS_MAX_YOI: {
     href: '#duration',
@@ -112,7 +112,7 @@ export default function validatePunishmentDays(
   }
 
   if (punishmentType === PunishmentType.PRIVILEGE) {
-    if (isAdult && duration > 42) {
+    if (isAdult && duration > 84) {
       return formatPrivilegeErrorText(privilegeType, errors.PRIVILEGE_DAYS_MAX_ADULT)
     }
     if (isYOI && duration > 21) {

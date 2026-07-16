@@ -128,7 +128,7 @@ describe('validateForm', () => {
   describe('Loss of privileges days validation', () => {
     describe('for adults', () => {
       const IS_YOI = false
-      const MAX_DAYS = 42
+      const MAX_DAYS = 84
 
       it('when valid number, has no errors', () => {
         expect(validateForm(PunishmentType.PRIVILEGE, MAX_DAYS, IS_YOI, PrivilegeType.CANTEEN)).toBeNull()
@@ -137,14 +137,14 @@ describe('validateForm', () => {
       it('when days above max, returns error', () => {
         expect(validateForm(PunishmentType.PRIVILEGE, MAX_DAYS + 1, IS_YOI, PrivilegeType.CANTEEN)).toEqual({
           href: '#duration',
-          text: 'Days for loss of canteen cannot be more than 42 days for an offence under Adult rules',
+          text: 'Days for loss of canteen cannot be more than 84 days for an offence under Adult rules',
         })
       })
 
       it('when days above max and privilege type is Other, error wording is generic', () => {
         expect(validateForm(PunishmentType.PRIVILEGE, MAX_DAYS + 1, IS_YOI, PrivilegeType.OTHER)).toEqual({
           href: '#duration',
-          text: 'Days for loss of privilege cannot be more than 42 days for an offence under Adult rules',
+          text: 'Days for loss of privilege cannot be more than 84 days for an offence under Adult rules',
         })
       })
     })
