@@ -103,7 +103,7 @@ describe('validateForm', () => {
     })
   })
 
-  it('Valid submit has no errors - confinement type earnings for adult', () => {
+  it('Valid submit has no errors - punishment type confinement for adult', () => {
     expect(validateForm(PunishmentType.CONFINEMENT, 21, false)).toBeNull()
   })
 
