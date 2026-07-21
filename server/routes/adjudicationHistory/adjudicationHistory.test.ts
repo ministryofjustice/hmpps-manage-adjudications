@@ -92,6 +92,46 @@ describe('GET /adjudication-history', () => {
         expect(response.text).toContain('Happened at: Moorland (HMP)')
       })
   })
+
+  it('should load the history for a prisoner in a non-active caseload the user holds', () => {
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue(
+      testData.prisonerResultSummary({
+        offenderNo: 'G7234VB',
+        firstName: 'James',
+        lastName: 'Smith',
+        agencyId: 'LEI',
+      }),
+    )
+
+    return request(app)
+      .get(adjudicationUrls.adjudicationHistory.urls.start('G7234VB'))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('James Smith’s adjudication history')
+        expect(response.text).toContain('MDI-100001')
+      })
+  })
+
+  it('should not show the history for a prisoner outside the users caseloads', () => {
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue(
+      testData.prisonerResultSummary({
+        offenderNo: 'G7234VB',
+        firstName: 'James',
+        lastName: 'Smith',
+        agencyId: 'BXI',
+      }),
+    )
+
+    return request(app)
+      .get(adjudicationUrls.adjudicationHistory.urls.start('G7234VB'))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('You do not have permission to view people outside of your establishment')
+        expect(response.text).not.toContain('MDI-100001')
+        expect(reportedAdjudicationsService.getAdjudicationHistory).not.toHaveBeenCalled()
+        expect(reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner).not.toHaveBeenCalled()
+      })
+  })
 })
 
 describe('POST /adjudication-history', () => {

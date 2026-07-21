@@ -15,8 +15,8 @@
       href: digitalPrisonServiceUrl
     },
     {
-      text: prisoner.displayName,
-      href: prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
+      text: 'Adjudications' if forbidden else prisoner.displayName,
+      href: '/place-a-prisoner-on-report' if forbidden else prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
     }
     ],
     classes: "govuk-!-display-none-print"
@@ -24,6 +24,9 @@
 {% endblock %}
 
 {% block content %}
+  {% if forbidden %}
+    {% include '../partials/forbiddenEstablishment.njk' %}
+  {% else %}
   <h1 class="govuk-heading-l">{{ prisoner.friendlyName | possessive }} active punishments</h1>
   <div>
     {% if punishments | length %}
@@ -36,4 +39,5 @@
       <a href="{{ adjudicationHistoryHref }}" class="govuk-link" data-qa="adjudicationHistory-link">View adjudication history</a>
     </p>
   </div>
+  {% endif %}
 {% endblock %}

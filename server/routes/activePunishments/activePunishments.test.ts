@@ -59,4 +59,42 @@ describe('GET /active-punishments', () => {
         expect(response.text).toContain('James Smith’s active punishments')
       })
   })
+
+  it('should load the details for a prisoner in a non-active caseload the user holds', () => {
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue(
+      testData.prisonerResultSummary({
+        offenderNo: 'G7234VB',
+        firstName: 'James',
+        lastName: 'Smith',
+        agencyId: 'LEI',
+      }),
+    )
+
+    return request(app)
+      .get(adjudicationUrls.activePunishments.urls.start('G7234VB'))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('James Smith’s active punishments')
+      })
+  })
+
+  it('should not show punishments for a prisoner outside the users caseloads', () => {
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue(
+      testData.prisonerResultSummary({
+        offenderNo: 'G7234VB',
+        firstName: 'James',
+        lastName: 'Smith',
+        agencyId: 'BXI',
+      }),
+    )
+
+    return request(app)
+      .get(adjudicationUrls.activePunishments.urls.start('G7234VB'))
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('You do not have permission to view people outside of your establishment')
+        expect(response.text).not.toContain('James Smith')
+        expect(punishmentsService.getActivePunishmentsByOffender).not.toHaveBeenCalled()
+      })
+  })
 })

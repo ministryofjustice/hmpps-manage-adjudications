@@ -8,7 +8,7 @@ import HmppsManageUsersClient, { NomisUserResult, User } from '../data/hmppsMana
 interface UserDetails {
   name: string
   displayName: string
-  allCaseLoads: CaseLoad[] | string[]
+  allCaseLoads: CaseLoad[]
   activeCaseLoad: CaseLoad
 }
 

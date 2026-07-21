@@ -1,7 +1,8 @@
 import path from 'path'
-import express, { Router } from 'express'
+import express, { Response, Router } from 'express'
 
 import PlaceOnReportService from '../services/placeOnReportService'
+import { prisonerIsInUsersCaseloads } from '../utils/caseloadHelper'
 
 export default function prisonerRoutes({
   placeOnReportService,
@@ -10,16 +11,29 @@ export default function prisonerRoutes({
 }): Router {
   const router = express.Router()
 
+  const sendPlaceholder = (res: Response) => res.sendFile(path.join(process.cwd(), '/assets/images/image-missing.jpg'))
+
   router.get('/:prisonerNumber/image', async (req, res, next) => {
-    placeOnReportService
-      .getPrisonerImage(req.params.prisonerNumber, res.locals.user)
+    const { prisonerNumber } = req.params
+    const { user } = res.locals
+
+    try {
+      const prisoner = await placeOnReportService.getPrisonerDetails(prisonerNumber, user)
+      if (!prisonerIsInUsersCaseloads(prisoner.agencyId, user)) {
+        return sendPlaceholder(res)
+      }
+    } catch {
+      return sendPlaceholder(res)
+    }
+
+    return placeOnReportService
+      .getPrisonerImage(prisonerNumber, user)
       .then(data => {
         res.type('image/jpeg')
         data.pipe(res)
       })
       .catch(() => {
-        const placeHolder = path.join(process.cwd(), '/assets/images/image-missing.jpg')
-        res.sendFile(placeHolder)
+        sendPlaceholder(res)
       })
   })
 

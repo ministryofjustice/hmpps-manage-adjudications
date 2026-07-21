@@ -4,12 +4,20 @@ import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import { ActivePunishment } from '../../data/PunishmentResult'
 import PunishmentsService from '../../services/punishmentsService'
+import { prisonerIsInUsersCaseloads } from '../../utils/caseloadHelper'
 
 export default class ActivePunishmentsRoutes {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
     private readonly punishmentsService: PunishmentsService,
   ) {}
+
+  private renderForbiddenView = async (req: Request, res: Response): Promise<void> => {
+    res.render(`pages/activePunishments.njk`, {
+      prisonerNumber: req.params.prisonerNumber,
+      forbidden: true,
+    })
+  }
 
   private renderView = async (
     req: Request,
@@ -29,6 +37,11 @@ export default class ActivePunishmentsRoutes {
     const { prisonerNumber } = req.params
     const { user } = res.locals
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
+
+    if (!prisonerIsInUsersCaseloads(prisoner.agencyId, user)) {
+      return this.renderForbiddenView(req, res)
+    }
+
     const punishments = await this.punishmentsService.getActivePunishmentsByOffender(prisoner.bookingId, user)
     return this.renderView(req, res, prisoner, punishments)
   }
