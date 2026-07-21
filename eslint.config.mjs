@@ -1,6 +1,13 @@
 import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
 
-export default hmppsConfig({
-  extraIgnorePaths: ['assets'],
-  extraPathsAllowingDevDependencies: ['.allowed-scripts.mjs'],
-})
+export default [
+  ...hmppsConfig({
+    extraIgnorePaths: ['assets'],
+    extraPathsAllowingDevDependencies: ['.allowed-scripts.mjs'],
+  }),
+  {
+    rules: {
+      'import/prefer-default-export': 'off',
+    },
+  },
+]
