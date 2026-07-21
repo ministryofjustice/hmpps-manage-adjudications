@@ -77,11 +77,11 @@ const errors: { [key: string]: FormError } = {
   },
   RESTRICTION_OF_SOCIAL_VISITS_MAX: {
     href: '#duration',
-    text: 'Restriction of social visits cannot be more than 84 days',
+    text: 'Days for Restriction of Social Visits cannot be more than 84 days',
   },
   LOSS_OF_SOCIAL_VISITS_MAX: {
     href: '#duration',
-    text: 'Loss of social visits cannot be more than 27 days',
+    text: 'Days for Loss of Social Visits cannot be more than 27 days',
   },
 }
 

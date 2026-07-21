@@ -1,4 +1,4 @@
-import { NotCompletedOutcome, PunishmentType } from '../../../../data/PunishmentResult'
+import { NotCompletedOutcome } from '../../../../data/PunishmentResult'
 import validateForm from './incompleteRehabilitativeActivityValidation'
 
 describe('incomplete rehab activity validation', () => {
@@ -80,21 +80,6 @@ describe('incomplete rehab activity validation', () => {
     ).toEqual({
       href: '#daysToActivate',
       text: `The number of days for the punishment must be 5 or fewer`,
-    })
-  })
-  it('limits partial activation of a social visits punishment to 28 days', () => {
-    expect(
-      validateForm({
-        outcome: NotCompletedOutcome.PARTIAL_ACTIVATE,
-        daysToActivate: 29,
-        suspendedUntil: null,
-        prisonerName: 'John Smith',
-        actualDays: 84,
-        punishmentType: PunishmentType.RESTRICTION_OF_SOCIAL_VISITS,
-      }),
-    ).toEqual({
-      href: '#daysToActivate',
-      text: 'The number of days for a social visits punishment must be 28 or fewer',
     })
   })
   it('Extended chosen but no date entered', () => {

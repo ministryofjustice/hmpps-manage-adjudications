@@ -11,8 +11,12 @@ describe('validateForm', () => {
     })
 
     it.each([
-      [PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, 85, 'Restriction of social visits cannot be more than 84 days'],
-      [PunishmentType.LOSS_OF_SOCIAL_VISITS, 28, 'Loss of social visits cannot be more than 27 days'],
+      [
+        PunishmentType.RESTRICTION_OF_SOCIAL_VISITS,
+        85,
+        'Days for Restriction of Social Visits cannot be more than 84 days',
+      ],
+      [PunishmentType.LOSS_OF_SOCIAL_VISITS, 28, 'Days for Loss of Social Visits cannot be more than 27 days'],
     ])('rejects %s above its policy maximum', (punishmentType, duration, text) => {
       expect(validateForm(punishmentType, duration, false)).toEqual({ href: '#duration', text })
     })
