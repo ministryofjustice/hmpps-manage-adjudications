@@ -101,4 +101,26 @@ describe('POST ', () => {
         ),
       )
   })
+
+  it('saves the child answer for a social visits punishment', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.punishmentStartDate.urls.start(
+          '100',
+        )}?punishmentType=LOSS_OF_SOCIAL_VISITS&hasChildUnder18=false&duration=27`,
+      )
+      .send({ startDate: '13/12/2023' })
+      .expect(302)
+      .then(() =>
+        expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            type: PunishmentType.LOSS_OF_SOCIAL_VISITS,
+            hasChildUnder18: false,
+            duration: 27,
+          }),
+          '100',
+        ),
+      )
+  })
 })

@@ -390,6 +390,10 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
           return 'Removal from wing or unit'
         case PunishmentType.PAYBACK:
           return 'Payback punishment'
+        case PunishmentType.RESTRICTION_OF_SOCIAL_VISITS:
+          return 'Restriction of social visits'
+        case PunishmentType.LOSS_OF_SOCIAL_VISITS:
+          return 'Loss of social visits'
         default:
           return null
       }

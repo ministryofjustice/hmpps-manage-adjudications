@@ -11,6 +11,8 @@ export enum PunishmentType {
   CAUTION = 'CAUTION',
   DAMAGES_OWED = 'DAMAGES_OWED',
   PAYBACK = 'PAYBACK',
+  RESTRICTION_OF_SOCIAL_VISITS = 'RESTRICTION_OF_SOCIAL_VISITS',
+  LOSS_OF_SOCIAL_VISITS = 'LOSS_OF_SOCIAL_VISITS',
 }
 
 export enum PrivilegeType {
@@ -65,6 +67,7 @@ export type PunishmentData = {
   consecutiveChargeNumber?: string
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
+  hasChildUnder18?: boolean
   canRemove?: boolean
   canEdit?: boolean
   rehabilitativeActivities: RehabilitativeActivity[]
@@ -95,6 +98,7 @@ export type PunishmentDataWithSchedule = {
   consecutiveChargeNumber?: string
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
+  hasChildUnder18?: boolean
   canRemove?: boolean
   canEdit?: boolean
   rehabilitativeActivities: RehabilitativeActivity[]
@@ -279,6 +283,10 @@ export function convertPunishmentType(
       return 'Recovery of money for damages'
     case PunishmentType.PAYBACK:
       return 'Payback punishment'
+    case PunishmentType.RESTRICTION_OF_SOCIAL_VISITS:
+      return 'Restriction of social visits'
+    case PunishmentType.LOSS_OF_SOCIAL_VISITS:
+      return 'Loss of social visits'
     default:
       return null
   }
@@ -297,6 +305,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     consecutiveChargeNumber,
     consecutiveReportAvailable,
     damagesOwedAmount,
+    hasChildUnder18,
     canRemove,
     canEdit,
     rehabilitativeActivities,
@@ -323,11 +332,22 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     ...(consecutiveChargeNumber && { consecutiveChargeNumber }),
     ...(consecutiveReportAvailable && { consecutiveReportAvailable }),
     ...(damagesOwedAmount && { damagesOwedAmount }),
+    ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
     rehabilitativeActivities,
     rehabilitativeActivitiesCompleted,
     rehabilitativeActivitiesNotCompletedOutcome,
     previousSuspendedUntilDate,
   }
+}
+
+export function isSocialVisitsPunishment(type?: PunishmentType): boolean {
+  return [PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, PunishmentType.LOSS_OF_SOCIAL_VISITS].includes(type)
+}
+
+export function parseHasChildUnder18(value: unknown): boolean | undefined {
+  if (value === true || value === 'true') return true
+  if (value === false || value === 'false') return false
+  return undefined
 }
 
 export function flattenPunishments(punishments: PunishmentDataWithSchedule[]): PunishmentData[] {

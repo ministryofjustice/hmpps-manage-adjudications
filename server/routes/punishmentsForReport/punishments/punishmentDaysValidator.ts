@@ -1,5 +1,10 @@
 import { FormError } from '../../../@types/template'
-import { convertPrivilegeType, PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import {
+  convertPrivilegeType,
+  PrivilegeType,
+  PunishmentType,
+  isSocialVisitsPunishment,
+} from '../../../data/PunishmentResult'
 
 const errors: { [key: string]: FormError } = {
   ADDITIONAL_DAYS_MAX_ADULT: {
@@ -62,6 +67,22 @@ const errors: { [key: string]: FormError } = {
     href: '#duration',
     text: 'Days for extra work cannot be more than 21 days for an offence under YOI rules',
   },
+  SOCIAL_VISITS_YOI: {
+    href: '#duration',
+    text: 'Social visits punishments are only available for offences under Adult rules',
+  },
+  SOCIAL_VISITS_WHOLE_DAYS: {
+    href: '#duration',
+    text: 'Enter the number of whole days the social visits punishment will last',
+  },
+  RESTRICTION_OF_SOCIAL_VISITS_MAX: {
+    href: '#duration',
+    text: 'Restriction of social visits cannot be more than 84 days',
+  },
+  LOSS_OF_SOCIAL_VISITS_MAX: {
+    href: '#duration',
+    text: 'Loss of social visits cannot be more than 27 days',
+  },
 }
 
 export default function validatePunishmentDays(
@@ -71,6 +92,22 @@ export default function validatePunishmentDays(
   privilegeType?: PrivilegeType,
 ): FormError | null {
   const isAdult = !isYOI
+
+  if (isSocialVisitsPunishment(punishmentType) && isYOI) {
+    return errors.SOCIAL_VISITS_YOI
+  }
+
+  if (isSocialVisitsPunishment(punishmentType) && !Number.isInteger(duration)) {
+    return errors.SOCIAL_VISITS_WHOLE_DAYS
+  }
+
+  if (punishmentType === PunishmentType.RESTRICTION_OF_SOCIAL_VISITS && duration > 84) {
+    return errors.RESTRICTION_OF_SOCIAL_VISITS_MAX
+  }
+
+  if (punishmentType === PunishmentType.LOSS_OF_SOCIAL_VISITS && duration > 27) {
+    return errors.LOSS_OF_SOCIAL_VISITS_MAX
+  }
 
   if (punishmentType === PunishmentType.ADDITIONAL_DAYS) {
     if (isAdult && duration > 84) {

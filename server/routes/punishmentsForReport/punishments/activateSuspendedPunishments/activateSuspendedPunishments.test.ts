@@ -131,4 +131,30 @@ describe('POST', () => {
         )}?punishmentNumberToActivate=60&punishmentType=PRIVILEGE&duration=5`,
       )
   })
+
+  it('skips the duration page when activating a social visits punishment', () => {
+    punishmentsService.getSuspendedPunishment.mockResolvedValue([
+      {
+        chargeNumber: '101',
+        corrupted: false,
+        punishment: {
+          id: 80,
+          type: PunishmentType.RESTRICTION_OF_SOCIAL_VISITS,
+          hasChildUnder18: true,
+          rehabilitativeActivities: [],
+          schedule: { duration: 84, suspendedUntil: '2023-05-20' },
+        },
+      },
+    ])
+
+    return request(app)
+      .post(adjudicationUrls.activateSuspendedPunishments.urls.start('100'))
+      .send({ activate: 'suspended-punishment-80' })
+      .expect(
+        'Location',
+        `${adjudicationUrls.suspendedPunishmentStartDateChoice.urls.existing(
+          '100',
+        )}?punishmentNumberToActivate=80&punishmentType=RESTRICTION_OF_SOCIAL_VISITS&duration=84`,
+      )
+  })
 })
