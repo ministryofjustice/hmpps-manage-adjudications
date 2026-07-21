@@ -41,7 +41,6 @@ export interface ActivityDetails {
   daysToActivate?: number
   suspendedUntil?: string
   actualDays: number
-  punishmentType?: PunishmentType
 }
 
 export default class PunishmentsService {
@@ -374,7 +373,6 @@ export default class PunishmentsService {
       daysToActivate: completedSessionData?.daysToActivate,
       suspendedUntil: completedSessionData?.suspendedUntil,
       actualDays: punishment.schedule.duration,
-      punishmentType: punishment.type,
     }
   }
 

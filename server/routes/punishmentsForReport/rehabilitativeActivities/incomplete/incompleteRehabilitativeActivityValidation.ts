@@ -1,5 +1,5 @@
 import { FormError } from '../../../../@types/template'
-import { NotCompletedOutcome, PunishmentType, isSocialVisitsPunishment } from '../../../../data/PunishmentResult'
+import { NotCompletedOutcome } from '../../../../data/PunishmentResult'
 import { isValidDateFormat, possessive } from '../../../../utils/utils'
 
 type NotCompletedForm = {
@@ -8,7 +8,6 @@ type NotCompletedForm = {
   suspendedUntil: string
   prisonerName: string
   actualDays: number
-  punishmentType?: PunishmentType
 }
 
 export default function validateForm({
@@ -17,7 +16,6 @@ export default function validateForm({
   suspendedUntil,
   prisonerName,
   actualDays,
-  punishmentType,
 }: NotCompletedForm): FormError | null {
   if (!outcome) {
     return {
@@ -42,12 +40,6 @@ export default function validateForm({
       return {
         href: '#daysToActivate',
         text: `The number of days for the punishment must be ${actualDays} or fewer`,
-      }
-    }
-    if (isSocialVisitsPunishment(punishmentType) && daysToActivate > 28) {
-      return {
-        href: '#daysToActivate',
-        text: 'The number of days for a social visits punishment must be 28 or fewer',
       }
     }
   }

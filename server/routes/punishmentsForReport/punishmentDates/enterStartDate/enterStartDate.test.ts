@@ -118,6 +118,8 @@ describe('POST ', () => {
             type: PunishmentType.LOSS_OF_SOCIAL_VISITS,
             hasChildUnder18: false,
             duration: 27,
+            startDate: '2023-12-13',
+            endDate: '2024-01-08',
           }),
           '100',
         ),
