@@ -28,7 +28,7 @@ export class AdjudicationResultReportDataBlank {
 
   anyPrivilegeDaysMax: number
 
-  forfeitureOfVisitsDaysMax: number
+  lossOfVisitsDaysMax: number
 
   restrictionOfVisitsDaysMax: number
 
@@ -62,7 +62,7 @@ export class AdjudicationResultReportDataBlank {
     this.tvDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 84
     this.associationDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 84
     this.anyPrivilegeDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 84
-    this.forfeitureOfVisitsDaysMax = confirmedOnReportData.isYouthOffender ? 0 : 27
+    this.lossOfVisitsDaysMax = confirmedOnReportData.isYouthOffender ? 0 : 27
     this.restrictionOfVisitsDaysMax = confirmedOnReportData.isYouthOffender ? 0 : 84
     this.stoppageOfEarningsDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 84
     this.cellularConfinementDaysMax = confirmedOnReportData.isYouthOffender ? 10 : 21
