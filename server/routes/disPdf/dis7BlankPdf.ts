@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import config from '../../config'
-import AdjudicationResultReportDataBlank from '../../data/adjudicationResultReportDataBlank'
+import { AdjudicationResultReportDataBlank } from '../../data/adjudicationResultReportDataBlank'
 import { withRetry } from '../../utils/withRetry'
 import log from '../../log'
 

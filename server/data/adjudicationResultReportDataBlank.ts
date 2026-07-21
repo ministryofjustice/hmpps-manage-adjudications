@@ -1,7 +1,7 @@
 import { ConfirmedOnReportData } from './ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
 
-export default class adjudicationResultReportData {
+export class AdjudicationResultReportDataBlank {
   chargeNumber: string
 
   establishmentName: string
