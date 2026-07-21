@@ -27,6 +27,10 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.addSessionPunishment.mockResolvedValue('abc')
+  punishmentsService.getPunishmentAvailability.mockResolvedValue({
+    isIndependentAdjudicatorHearing: false,
+    socialVisitsAvailable: true,
+  })
 })
 
 afterEach(() => {
@@ -92,6 +96,29 @@ describe('POST ', () => {
             stoppagePercentage: null,
             rehabilitativeActivities: [],
           },
+          '100',
+        ),
+      )
+  })
+
+  it('saves a suspended social visits punishment and offers rehabilitative activities', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.punishmentSuspendedUntil.urls.start(
+          '100',
+        )}?punishmentType=RESTRICTION_OF_SOCIAL_VISITS&hasChildUnder18=true&duration=84`,
+      )
+      .send({ suspendedUntil: '13/12/2023' })
+      .expect(302)
+      .expect('Location', adjudicationUrls.punishmentHasRehabilitativeActivities.urls.start('100', 'abc'))
+      .then(() =>
+        expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            type: PunishmentType.RESTRICTION_OF_SOCIAL_VISITS,
+            hasChildUnder18: true,
+            duration: 84,
+          }),
           '100',
         ),
       )

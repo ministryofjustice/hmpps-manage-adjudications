@@ -1,5 +1,5 @@
 import { FormError } from '../../../@types/template'
-import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType, isSocialVisitsPunishment } from '../../../data/PunishmentResult'
 
 type PunishmentForm = {
   punishmentType: PunishmentType
@@ -8,6 +8,7 @@ type PunishmentForm = {
   stoppagePercentage?: number
   damagesOwedAmount?: number
   damagesAlreadyAdded?: boolean
+  hasChildUnder18?: boolean
 }
 
 const errors: { [key: string]: FormError } = {
@@ -47,6 +48,10 @@ const errors: { [key: string]: FormError } = {
     href: '#amount',
     text: 'Enter the amount in numbers',
   },
+  MISSING_CHILD_UNDER_18: {
+    href: '#hasChildUnder18',
+    text: 'Select whether the prisoner has any children under 18',
+  },
 }
 
 export default function validateForm({
@@ -56,12 +61,23 @@ export default function validateForm({
   stoppagePercentage,
   damagesOwedAmount,
   damagesAlreadyAdded,
+  hasChildUnder18,
 }: PunishmentForm): FormError | null {
   if (!punishmentType) {
     if (damagesAlreadyAdded) {
       return errors.MISSING_PUNISHMENT_TYPE_DAMAGES_PRESENT
     }
     return errors.MISSING_PUNISHMENT_TYPE
+  }
+
+  if (isSocialVisitsPunishment(punishmentType) && hasChildUnder18 === undefined) {
+    return {
+      ...errors.MISSING_CHILD_UNDER_18,
+      href:
+        punishmentType === PunishmentType.LOSS_OF_SOCIAL_VISITS
+          ? '#lossHasChildUnder18'
+          : '#restrictionHasChildUnder18',
+    }
   }
 
   if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE

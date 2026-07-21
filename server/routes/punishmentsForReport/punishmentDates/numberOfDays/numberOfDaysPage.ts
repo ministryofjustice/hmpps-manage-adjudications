@@ -75,7 +75,7 @@ export default class PunishmentNumberOfDaysPage {
     const { chargeNumber } = req.params
     const { user } = res.locals
     const { duration } = req.body
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, hasChildUnder18 } = req.query
     const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
 
     const trimmedDays = duration ? Number(String(duration).trim()) : null
@@ -103,6 +103,7 @@ export default class PunishmentNumberOfDaysPage {
           privilegeType,
           otherPrivilege,
           stoppagePercentage,
+          ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
           duration: trimmedDays,
         } as ParsedUrlQueryInput,
       }),
