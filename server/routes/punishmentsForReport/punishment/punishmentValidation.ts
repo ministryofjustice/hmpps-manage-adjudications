@@ -48,8 +48,12 @@ const errors: { [key: string]: FormError } = {
     href: '#amount',
     text: 'Enter the amount in numbers',
   },
-  MISSING_CHILD_UNDER_18: {
-    href: '#hasChildUnder18',
+  MISSING_CHILD_UNDER_18_LOSS_OF_SOCIAL_VISITS: {
+    href: '#lossHasChildUnder18',
+    text: 'Select whether the prisoner has any children under 18',
+  },
+  MISSING_CHILD_UNDER_18_RESTRICTION_OF_SOCIAL_VISITS: {
+    href: '#restrictionHasChildUnder18',
     text: 'Select whether the prisoner has any children under 18',
   },
 }
@@ -71,13 +75,9 @@ export default function validateForm({
   }
 
   if (isSocialVisitsPunishment(punishmentType) && hasChildUnder18 === undefined) {
-    return {
-      ...errors.MISSING_CHILD_UNDER_18,
-      href:
-        punishmentType === PunishmentType.LOSS_OF_SOCIAL_VISITS
-          ? '#lossHasChildUnder18'
-          : '#restrictionHasChildUnder18',
-    }
+    return punishmentType === PunishmentType.LOSS_OF_SOCIAL_VISITS
+      ? errors.MISSING_CHILD_UNDER_18_LOSS_OF_SOCIAL_VISITS
+      : errors.MISSING_CHILD_UNDER_18_RESTRICTION_OF_SOCIAL_VISITS
   }
 
   if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE
