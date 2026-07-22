@@ -36,6 +36,7 @@ import {
   convertPrivilegeDTypeDescriptionForDIS7Suspended,
   convertPrivilegeTypeForDIS7,
   convertPunishmentType,
+  isSocialVisitsPunishment,
   NotCompletedOutcome,
   PrivilegeType,
   PunishmentData,
@@ -529,6 +530,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('convertHearingOutcomeFinding', convertHearingOutcomeFinding)
   njkEnv.addFilter('reportedAdjudicationStatusDisplayName', reportedAdjudicationStatusDisplayName)
   njkEnv.addFilter('convertPunishmentType', convertPunishmentType)
+  njkEnv.addFilter('isSocialVisitsPunishment', isSocialVisitsPunishment)
   njkEnv.addFilter('toUpperCase', (input: string) => input.replace(/\b\w/g, match => match.toUpperCase()))
   njkEnv.addFilter('convertNotCompletedOutcome', convertNotCompletedOutcome)
   njkEnv.addGlobal('IssueStatus', IssueStatus)

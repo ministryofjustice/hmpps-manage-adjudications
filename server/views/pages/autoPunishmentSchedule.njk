@@ -28,7 +28,7 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
         <h2 class="govuk-heading-m" data-qa="punishment-name">{{ type | convertPunishmentType(stoppagePercentage, privilegeType, otherPrivilege) }}</h2>
-        {% if type === PunishmentType.LOSS_OF_SOCIAL_VISITS or type === PunishmentType.RESTRICTION_OF_SOCIAL_VISITS %}
+        {% if type | isSocialVisitsPunishment %}
           <p class="govuk-body" data-qa="has-child-under-18"><strong>Prisoner has children under 18:</strong> {{ 'Yes' if hasChildUnder18 else 'No' }}</p>
         {% endif %}
         {{ autoPunishmentScheduleSummary(startDate, duration, endDate, startDateChangeHref, daysChangeHref) }}
