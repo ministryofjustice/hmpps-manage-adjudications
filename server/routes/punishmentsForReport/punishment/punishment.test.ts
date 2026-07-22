@@ -105,13 +105,18 @@ describe('POST /punishment', () => {
       )
   })
 
-  it('shows an error when the child question is not answered', () => {
+  it.each([
+    [PunishmentType.LOSS_OF_SOCIAL_VISITS, 'lossHasChildUnder18'],
+    [PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, 'restrictionHasChildUnder18'],
+  ])('links the missing child-answer error to the %s question', (punishmentType, childField) => {
     return request(app)
       .post(adjudicationUrls.punishment.urls.start('100'))
-      .send({ punishmentType: PunishmentType.LOSS_OF_SOCIAL_VISITS })
+      .send({ punishmentType })
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Select whether the prisoner has any children under 18')
+        expect(res.text).toContain(`href="#${childField}"`)
+        expect(res.text).toContain(`id="${childField}"`)
       })
   })
 })
