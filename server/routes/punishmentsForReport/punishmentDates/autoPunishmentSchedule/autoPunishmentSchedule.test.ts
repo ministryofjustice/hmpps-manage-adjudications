@@ -72,6 +72,7 @@ describe('GET', () => {
         expect(res.text).toContain('10 Apr 2023')
         expect(res.text).toContain('10')
         expect(res.text).toContain('19 Apr 2023')
+        expect(res.text).not.toContain('Prisoner has children under 18:')
       })
   })
 
