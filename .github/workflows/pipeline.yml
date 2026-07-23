@@ -34,10 +34,10 @@ jobs:
     name: Check publish flag
     runs-on: ubuntu-latest
     outputs:
-      enabled: ${{ github.ref == 'refs/heads/main' && (inputs.push || inputs.push == null) }}
+      enabled: ${{ (github.ref == 'refs/heads/main' && (inputs.push || inputs.push == null)) || (github.event_name == 'workflow_dispatch' && inputs.push == true) }}
     steps:
       - name: Set publish flag
-        run: echo "Publishing enabled ${{ github.ref == 'refs/heads/main' && (inputs.push || inputs.push == null) }}"
+        run: echo "Publishing enabled ${{ (github.ref == 'refs/heads/main' && (inputs.push || inputs.push == null)) || (github.event_name == 'workflow_dispatch' && inputs.push == true) }}"
   node_build:
     name: node build
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2 # WORKFLOW_VERSION
@@ -81,7 +81,7 @@ jobs:
       sign_image: ${{ needs.check_publish.outputs.enabled == 'true' }}
   deploy_dev:
     name: Deploy to the dev environment
-    if: needs.check_publish.outputs.enabled == 'true'
+    if: github.ref == 'refs/heads/main'
     needs:
       - build
       - helm_lint
@@ -93,7 +93,7 @@ jobs:
       app_version: '${{ needs.build.outputs.app_version }}'
   deploy_preprod:
     name: Deploy to the preprod environment
-    if: needs.check_publish.outputs.enabled == 'true'
+    if: github.ref == 'refs/heads/main'
     needs:
       - build
       - helm_lint
@@ -105,6 +105,7 @@ jobs:
       app_version: '${{ needs.build.outputs.app_version }}'
   deploy_prod:
     name: Deploy to the prod environment
+    if: github.ref == 'refs/heads/main'
     needs:
       - build
       - helm_lint
