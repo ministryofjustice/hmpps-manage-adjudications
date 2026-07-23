@@ -155,6 +155,7 @@
   {% endset -%}
 
   {% set radioButtonItems = [] %}
+
   {% if punishmentsAvailable.damages %}
     {% set radioButtonItems = (radioButtonItems.push({
       value: "DAMAGES_OWED",
@@ -165,6 +166,7 @@
       }
     }), radioButtonItems) %}
   {% endif %}
+
   {% if punishmentsAvailable.caution %}
     {% set radioButtonItems = (radioButtonItems.push({
       value: "CAUTION",
@@ -172,6 +174,7 @@
       checked: punishmentType == 'CAUTION'
     }), radioButtonItems) %}
   {% endif %}
+
   {% set radioButtonItems = (radioButtonItems.push({
     value: "PRIVILEGE",
     text: "Loss of privileges",
@@ -213,25 +216,36 @@
       hint: {
         text: "There must be an Initial Segregation Health Screen (ISHS) for the prisoner."
       }
-    }, {
-      value: "REMOVAL_ACTIVITY",
-      text: "Removal from activity",
-      checked: punishmentType == 'REMOVAL_ACTIVITY'
-    }, {
+    }), radioButtonItems) %}
+
+    {% if punishmentsAvailable.removalFromActivity %}
+      {% set radioButtonItems = (radioButtonItems.push({
+        value: "REMOVAL_ACTIVITY",
+        text: "Removal from activity",
+        checked: punishmentType == 'REMOVAL_ACTIVITY'
+      }), radioButtonItems) %}
+    {% endif %}
+
+    {% set radioButtonItems = (radioButtonItems.push({
       value: "EXCLUSION_WORK",
       text: "Exclusion from associated work",
       checked: punishmentType == 'EXCLUSION_WORK'
-    }, {
-      value: "EXTRA_WORK",
-      text: "Extra work",
-      checked: punishmentType == 'EXTRA_WORK'
-    }, {
+    }), radioButtonItems) %}
+
+    {% if punishmentsAvailable.extraWork %}
+      {% set radioButtonItems = (radioButtonItems.push({
+        value: "EXTRA_WORK",
+        text: "Extra work",
+        checked: punishmentType == 'EXTRA_WORK'
+      }), radioButtonItems) %}
+    {% endif %}
+
+    {% set radioButtonItems = (radioButtonItems.push({
       value: "REMOVAL_WING",
       text: "Removal from wing or unit",
       checked: punishmentType == 'REMOVAL_WING'
-    }), radioButtonItems) %}
-
-  {% set radioButtonItems = (radioButtonItems.push({
+    },
+    {
       value: "PAYBACK",
       text: "Payback punishment",
       checked: punishmentType == 'PAYBACK'
