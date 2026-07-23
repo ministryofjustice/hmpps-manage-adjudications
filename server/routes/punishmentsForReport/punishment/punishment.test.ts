@@ -19,7 +19,7 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getPunishmentAvailability.mockResolvedValue({
     isIndependentAdjudicatorHearing: false,
-    socialVisitsAvailable: true,
+    isAdult: true,
   })
 })
 
@@ -58,7 +58,7 @@ describe('GET /punishment', () => {
   it('does not offer social visits punishments for a YOI adjudication', async () => {
     punishmentsService.getPunishmentAvailability.mockResolvedValue({
       isIndependentAdjudicatorHearing: false,
-      socialVisitsAvailable: false,
+      isAdult: false,
     })
 
     await request(app)
