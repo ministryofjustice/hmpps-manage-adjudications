@@ -4,18 +4,15 @@ import AdjudicationHistory from './adjudicationHistory'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
-import UserService from '../../services/userService'
 
 export default function adjudicationHistoryRoutes({
   reportedAdjudicationsService,
-  userService,
 }: {
   reportedAdjudicationsService: ReportedAdjudicationsService
-  userService: UserService
 }): Router {
   const router = express.Router()
 
-  const adjudicationHistoryRoute = new AdjudicationHistory(reportedAdjudicationsService, userService)
+  const adjudicationHistoryRoute = new AdjudicationHistory(reportedAdjudicationsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)
   const post = (path: string, handler: RequestHandler) => router.post(path, handler)

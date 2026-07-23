@@ -510,10 +510,7 @@ export default function routes(
       reportedAdjudicationsService,
     }),
   )
-  router.use(
-    adjudicationUrls.adjudicationHistory.root,
-    adjudicationHistoryRoutes({ reportedAdjudicationsService, userService }),
-  )
+  router.use(adjudicationUrls.adjudicationHistory.root, adjudicationHistoryRoutes({ reportedAdjudicationsService }))
   router.use(
     adjudicationUrls.activePunishments.root,
     activePunishmentsRoutes({ reportedAdjudicationsService, punishmentsService }),
@@ -522,7 +519,6 @@ export default function routes(
     adjudicationUrls.prisonerReportConsolidated.root,
     adjudicationConsolidatedViewRoutes({
       reportedAdjudicationsService,
-      userService,
       decisionTreeService,
       punishmentsService,
     }),

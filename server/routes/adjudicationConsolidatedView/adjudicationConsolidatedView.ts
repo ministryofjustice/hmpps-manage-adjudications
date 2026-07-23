@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import ReportedAdjudicationsService, { ConvertedEvidence } from '../../services/reportedAdjudicationsService'
-import UserService from '../../services/userService'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import DecisionTreeService, { IncidentAndOffences } from '../../services/decisionTreeService'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
@@ -14,7 +13,7 @@ import {
   PunishmentDataWithSchedule,
   flattenPunishments,
 } from '../../data/PunishmentResult'
-import { hasAnyRole } from '../../utils/utils'
+import { prisonerIsInUsersCaseloads } from '../../utils/caseloadHelper'
 
 type PageData = {
   prisoner: PrisonerResultSummary
@@ -42,16 +41,21 @@ type PageData = {
   quashed: boolean
   chargeProved: boolean
   corrupted: boolean
-  forbidden?: boolean
 }
 
 export default class AdjudicationConsolidatedView {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService,
     private readonly punishmentsService: PunishmentsService,
   ) {}
+
+  private renderForbiddenView = async (res: Response, prisoner: PrisonerResultSummary): Promise<void> => {
+    res.render(`pages/adjudicationConsolidatedView.njk`, {
+      prisonerNumber: prisoner.prisonerNumber,
+      forbidden: true,
+    })
+  }
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const {
@@ -70,7 +74,6 @@ export default class AdjudicationConsolidatedView {
       quashed,
       chargeProved,
       corrupted,
-      forbidden,
     } = pageData
     res.render(`pages/adjudicationConsolidatedView.njk`, {
       prisonerNumber: prisoner.prisonerNumber,
@@ -91,7 +94,6 @@ export default class AdjudicationConsolidatedView {
       quashed,
       chargeProved,
       corrupted,
-      forbidden,
     })
   }
 
@@ -99,21 +101,23 @@ export default class AdjudicationConsolidatedView {
     const { chargeNumber, prisonerNumber } = req.params
     const { user } = res.locals
     const activeCaseLoadId = req.query.agency as string
-    let forbidden = false
 
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
+
+    // The agency query param becomes the API's Active-Caseload header, so it must not be trusted
+    // until we know the prisoner belongs to this user, and that the charge belongs to the prisoner.
+    if (!prisonerIsInUsersCaseloads(prisoner.agencyId, user)) {
+      return this.renderForbiddenView(res, prisoner)
+    }
+
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
       user,
       activeCaseLoadId,
     )
 
-    if (prisoner.agencyId !== user.meta.caseLoadId) {
-      const userRoles = await this.userService.getUserRoles(user.token)
-      forbidden = !hasAnyRole(['GLOBAL_SEARCH'], userRoles)
-    }
     if (prisoner.prisonerNumber !== reportedAdjudication.prisonerNumber) {
-      forbidden = true
+      return this.renderForbiddenView(res, prisoner)
     }
 
     const { reviewData, evidence, offence, prisonerReportDetails, transferBannerInfo } = await this.getInfoForReport(
@@ -142,7 +146,6 @@ export default class AdjudicationConsolidatedView {
       quashed,
       chargeProved,
       corrupted,
-      forbidden,
     })
   }
 

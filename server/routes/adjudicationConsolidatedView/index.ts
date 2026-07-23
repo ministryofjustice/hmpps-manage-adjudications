@@ -3,19 +3,16 @@ import express, { RequestHandler, Router } from 'express'
 import AdjudicationConsolidatedView from './adjudicationConsolidatedView'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import UserService from '../../services/userService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import PunishmentsService from '../../services/punishmentsService'
 
 export default function adjudicationConsolidatedViewRoutes({
   reportedAdjudicationsService,
-  userService,
   decisionTreeService,
   punishmentsService,
 }: {
   reportedAdjudicationsService: ReportedAdjudicationsService
-  userService: UserService
   decisionTreeService: DecisionTreeService
   punishmentsService: PunishmentsService
 }): Router {
@@ -23,7 +20,6 @@ export default function adjudicationConsolidatedViewRoutes({
 
   const adjudicationConsolidatedViewRoute = new AdjudicationConsolidatedView(
     reportedAdjudicationsService,
-    userService,
     decisionTreeService,
     punishmentsService,
   )
