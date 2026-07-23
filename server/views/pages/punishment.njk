@@ -6,8 +6,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "../macros/punishmentRadios.njk" import punishmentRadios %}
 
-{% set title = "Add a punishment" if damagesUnavailable else
-  "Add a punishment or money for damages" %}
+{% set title = "Add a punishment or money for damages" if punishmentsAvailable.damages else "Add a punishment" %}
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
@@ -26,7 +25,7 @@
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      {{ punishmentRadios(punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, hasChildUnder18, isIndependentAdjudicatorHearing, isAdult, damagesUnavailable, cautionUnavailable, errors, title) }}
+      {{ punishmentRadios(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, hasChildUnder18, isIndependentAdjudicatorHearing, isAdult, damagesAlreadyAdded, cautionUnavailable, errors, title) }}
       <div class="govuk-button-group">
         {{ govukButton({
               text: 'Continue',
