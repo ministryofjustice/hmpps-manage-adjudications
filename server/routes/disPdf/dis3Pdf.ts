@@ -4,7 +4,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import config from '../../config'
 import PrepareAndRecordAnAdjudicationHearingData from '../../data/prepareAndRecordAnAdjudicationHearingData'
 import DecisionTreeService from '../../services/decisionTreeService'
-import { getEvidenceCategory } from '../../utils/utils'
+import { getEvidenceCategory, calculateAge } from '../../utils/utils'
 import log from '../../log'
 import { withRetry } from '../../utils/withRetry'
 
@@ -38,6 +38,10 @@ export default class Dis3Pdf {
         ),
       )
 
+      const prisonerDateOfBirth = new Date(prisoner.dateOfBirth).toLocaleDateString('en-GB')
+
+      const prisonerAge = calculateAge(prisoner.dateOfBirth, new Date().toString())
+
       // Validate completeness of data
       if (!adjudicationDetails || !reportedAdjudication || !offences) {
         throw new Error('Incomplete data for PDF rendering')
@@ -57,6 +61,8 @@ export default class Dis3Pdf {
         damages,
         { photoVideo, baggedAndTagged, other },
         witnesses,
+        prisonerDateOfBirth,
+        prisonerAge,
       )
 
       res.renderPdf(

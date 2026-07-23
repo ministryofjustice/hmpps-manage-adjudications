@@ -26,10 +26,25 @@
         </p>
       </div>
       <div class='adjudication-pdf-section-prisoner__item'>
+        <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Date of birth (DD/MM/YYYY)</p>
+        <p class='govuk-!-margin-bottom-0'
+                   data-qa='prepare-and-record-adjudication-hearing-prisoner-dob'>
+          {{ prepareAndRecordAnAdjudicationHearingData.prisonerDateOfBirth }}
+        </p>
+      </div>
+      <div class='adjudication-pdf-section-prisoner__item__narrow'>
+        <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Age</p>
+        <p class='govuk-!-margin-bottom-0'
+                   data-qa='prepare-and-record-adjudication-hearing-prisoner-age'>
+          {{ prepareAndRecordAnAdjudicationHearingData.prisonerAge.years }}
+        </p>
+      </div>
+      <div class='adjudication-pdf-section-prisoner__item'>
         <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Key worker</p>
-        <input type='text' class='adjudication-pdf-input adjudication-pdf-input-issuing-officer'>
+        <input type='text' class='adjudication-pdf-input adjudication-pdf-input-keyworker'>
       </div>
     </div>
+
     <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
     <h2 class='adjudication-pdf-section-header'>Section 1 - Prepare for hearing</h2>
     <section>

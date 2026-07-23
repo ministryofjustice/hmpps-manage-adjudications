@@ -128,6 +128,11 @@ div.adjudication-pdf {
   width: 50%;
 }
 
+.adjudication-pdf-input-keyworker {
+  height: 30px;
+  width: 70%;
+}
+
 .adjudication-pdf-input-adjudicator {
   height: 30px;
   width: 200px;
@@ -189,6 +194,9 @@ div.adjudication-pdf {
     width: 20%;
     &:last-child {
       width: 40%;
+    }
+    &__narrow {
+      width: 10%;
     }
   }
 }
