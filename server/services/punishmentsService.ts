@@ -441,12 +441,12 @@ export default class PunishmentsService {
   async getPunishmentAvailability(
     chargeNumber: string,
     user: User,
-  ): Promise<{ isIndependentAdjudicatorHearing: boolean; socialVisitsAvailable: boolean }> {
+  ): Promise<{ isIndependentAdjudicatorHearing: boolean; isAdult: boolean }> {
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
     const lastHearing = reportedAdjudication.hearings?.[reportedAdjudication.hearings.length - 1]
     return {
       isIndependentAdjudicatorHearing: lastHearing?.oicHearingType.includes('INAD') || false,
-      socialVisitsAvailable: !reportedAdjudication.isYouthOffender,
+      isAdult: !reportedAdjudication.isYouthOffender,
     }
   }
 

@@ -29,7 +29,7 @@ beforeEach(() => {
   punishmentsService.addSessionPunishment.mockResolvedValue('abc')
   punishmentsService.getPunishmentAvailability.mockResolvedValue({
     isIndependentAdjudicatorHearing: false,
-    socialVisitsAvailable: true,
+    isAdult: true,
   })
 })
 
