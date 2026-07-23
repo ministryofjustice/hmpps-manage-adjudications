@@ -10,7 +10,8 @@ on:
         options:
           - dev
           - preprod
-          - prod
+          # Deploy to Production only from `main` branch, using normal process
+          # - prod
         default: 'dev'
       version:
         description: version to be deployed to the environment - must already exist.
