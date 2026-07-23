@@ -28,7 +28,7 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getPunishmentAvailability.mockResolvedValue({
     isIndependentAdjudicatorHearing: false,
-    socialVisitsAvailable: true,
+    isAdult: true,
   })
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.PRIVILEGE,

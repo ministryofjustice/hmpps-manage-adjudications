@@ -274,7 +274,7 @@ describe('PunishmentsService', () => {
         }),
       })
       const result = await service.getPunishmentAvailability('100', user)
-      expect(result).toEqual({ isIndependentAdjudicatorHearing: false, socialVisitsAvailable: true })
+      expect(result).toEqual({ isIndependentAdjudicatorHearing: false, isAdult: true })
     })
     it('returns false if the last hearing on the adjudication is a governor hearing', async () => {
       getReportedAdjudication.mockResolvedValue({
@@ -292,7 +292,7 @@ describe('PunishmentsService', () => {
         }),
       })
       const result = await service.getPunishmentAvailability('100', user)
-      expect(result).toEqual({ isIndependentAdjudicatorHearing: false, socialVisitsAvailable: true })
+      expect(result).toEqual({ isIndependentAdjudicatorHearing: false, isAdult: true })
     })
     it('returns true if the last hearing on the adjudication is an independent adjudicator hearing', async () => {
       getReportedAdjudication.mockResolvedValue({
@@ -310,7 +310,7 @@ describe('PunishmentsService', () => {
         }),
       })
       const result = await service.getPunishmentAvailability('100', user)
-      expect(result).toEqual({ isIndependentAdjudicatorHearing: true, socialVisitsAvailable: true })
+      expect(result).toEqual({ isIndependentAdjudicatorHearing: true, isAdult: true })
     })
     it('does not make social visits punishments available for a YOI adjudication', async () => {
       getReportedAdjudication.mockResolvedValue({
@@ -322,7 +322,7 @@ describe('PunishmentsService', () => {
         }),
       })
       const result = await service.getPunishmentAvailability('100', user)
-      expect(result).toEqual({ isIndependentAdjudicatorHearing: false, socialVisitsAvailable: false })
+      expect(result).toEqual({ isIndependentAdjudicatorHearing: false, isAdult: false })
     })
   })
   describe('formatPunishmentComments', () => {
