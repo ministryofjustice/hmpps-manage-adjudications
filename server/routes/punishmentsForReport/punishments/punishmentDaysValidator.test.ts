@@ -2,6 +2,43 @@ import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 import validateForm from './punishmentDaysValidator'
 
 describe('validateForm', () => {
+  describe('Social visits validation', () => {
+    it.each([
+      [PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, 84],
+      [PunishmentType.LOSS_OF_SOCIAL_VISITS, 27],
+    ])('allows %s at its policy maximum', (punishmentType, duration) => {
+      expect(validateForm(punishmentType, duration, false)).toBeNull()
+    })
+
+    it.each([
+      [
+        PunishmentType.RESTRICTION_OF_SOCIAL_VISITS,
+        85,
+        'Days for Restriction of Social Visits cannot be more than 84 days',
+      ],
+      [PunishmentType.LOSS_OF_SOCIAL_VISITS, 28, 'Days for Loss of Social Visits cannot be more than 27 days'],
+    ])('rejects %s above its policy maximum', (punishmentType, duration, text) => {
+      expect(validateForm(punishmentType, duration, false)).toEqual({ href: '#duration', text })
+    })
+
+    it.each([PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, PunishmentType.LOSS_OF_SOCIAL_VISITS])(
+      'rejects %s for a YOI adjudication',
+      punishmentType => {
+        expect(validateForm(punishmentType, 1, true)).toEqual({
+          href: '#duration',
+          text: 'Social visits punishments are only available for offences under Adult rules',
+        })
+      },
+    )
+
+    it.each([1.5, Number.NaN])('rejects a non-whole social visits duration: %s', duration => {
+      expect(validateForm(PunishmentType.LOSS_OF_SOCIAL_VISITS, duration, false)).toEqual({
+        href: '#duration',
+        text: 'Enter the number of whole days the social visits punishment will last',
+      })
+    })
+  })
+
   describe('Additional days validation', () => {
     describe('for adults', () => {
       const IS_YOI = false

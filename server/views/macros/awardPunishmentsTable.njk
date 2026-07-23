@@ -8,6 +8,9 @@
     {% set punishmentLockedForRemove = data.canRemove === false %}
 
     {% set typeColumnValue = data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege) %}
+    {% if data.type | isSocialVisitsPunishment %}
+      {% set typeColumnValue = typeColumnValue + '<br><span class="govuk-body-s">Children under 18: ' + ('Yes' if data.hasChildUnder18 else 'No') + '</span>' %}
+    {% endif %}
 
     {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+redirectAfterRemoveUrl+redisId+'" data-qa="delete-punishment" class="govuk-link">Remove <span class="govuk-visually-hidden">' + typeColumnValue + '</span></a></p>' %}
 

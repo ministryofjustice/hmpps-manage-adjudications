@@ -8,6 +8,9 @@
       {% set activateButton = '<button type="submit" name="activate"  value="activate-punishment-'+sanction.id+'" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button" data-qa="activate-button" >Activate</button>' %}
 
     {% set typeColumnValue = sanction.type | convertPunishmentType(sanction.stoppagePercentage, sanction.privilegeType, sanction.otherPrivilege) %}
+    {% if sanction.type | isSocialVisitsPunishment %}
+      {% set typeColumnValue = typeColumnValue + '<br><span class="govuk-body-s">Children under 18: ' + ('Yes' if sanction.hasChildUnder18 else 'No') + '</span>' %}
+    {% endif %}
 
     {% set rows = (rows.push(
       [

@@ -26,6 +26,10 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  punishmentsService.getPunishmentAvailability.mockResolvedValue({
+    isIndependentAdjudicatorHearing: false,
+    socialVisitsAvailable: true,
+  })
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.PRIVILEGE,
     PrivilegeType: PrivilegeType.OTHER,
