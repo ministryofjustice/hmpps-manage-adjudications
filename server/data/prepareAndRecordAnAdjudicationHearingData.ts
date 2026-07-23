@@ -28,6 +28,10 @@ export default class prepareAndRecordAnAdjudicationHearingData {
 
   witnesses: WitnessDetails[]
 
+  prisonerDateOfBirth: string
+
+  prisonerAge: { years: number; months: number }
+
   constructor(
     chargeNumber: string,
     confirmedOnReportData: ConfirmedOnReportData,
@@ -35,6 +39,8 @@ export default class prepareAndRecordAnAdjudicationHearingData {
     damages: DamageDetails[],
     evidence: EvidenceDetailsSplit,
     witnesses: WitnessDetails[],
+    prisonerDateOfBirth: string,
+    prisonerAge: { years: number; months: number },
   ) {
     this.chargeNumber = chargeNumber
     this.prisonerDisplayName = convertToTitleCase(
@@ -50,5 +56,7 @@ export default class prepareAndRecordAnAdjudicationHearingData {
     this.damages = damages
     this.evidence = evidence
     this.witnesses = witnesses
+    this.prisonerDateOfBirth = prisonerDateOfBirth
+    this.prisonerAge = prisonerAge
   }
 }

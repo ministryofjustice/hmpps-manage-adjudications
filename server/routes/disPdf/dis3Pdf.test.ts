@@ -146,6 +146,11 @@ describe('GET /all-completed-reports', () => {
           prisonerDisplayName: 'Smith, John',
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           prisonerNumber: 'H5123BY',
+          prisonerAge: {
+            months: 9,
+            years: 35,
+          },
+          prisonerDateOfBirth: '11/10/1990',
           witnesses: [
             {
               code: 'OTHER_PERSON',
