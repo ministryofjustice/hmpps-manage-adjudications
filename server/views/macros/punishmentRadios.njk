@@ -1,7 +1,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% macro punishmentRadios(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, hasChildUnder18, isIndependentAdjudicatorHearing, isAdult, damagesAlreadyAdded, cautionUnavailable, errors, title) %}
+{% macro punishmentRadios(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, hasChildUnder18, errors, title) %}
   {% set otherPrivilegeHtml %}
   {{ govukInput({
       id: "otherPrivilege",
@@ -165,7 +165,7 @@
     }
   ] %}
 
-  {% if isAdult %}
+  {% if punishmentsAvailable.socialVisits %}
     {% set radioButtonItems = (radioButtonItems.push({
       value: 'LOSS_OF_SOCIAL_VISITS',
       text: 'Loss of social visits',
@@ -221,7 +221,7 @@
       checked: punishmentType == 'PAYBACK'
     }), radioButtonItems) %}
 
-  {% if isIndependentAdjudicatorHearing %}
+  {% if punishmentsAvailable.addedDays %}
     {% set radioButtonItems = (radioButtonItems.push({
       value: "ADDITIONAL_DAYS",
       text: "Additional days",
@@ -233,14 +233,14 @@
     }), radioButtonItems) %}
   {% endif %}
 
-    {% if not cautionUnavailable %}
+    {% if punishmentsAvailable.caution %}
       {% set radioButtonItems = (radioButtonItems.unshift({
         value: "CAUTION",
         text: "Caution",
         checked: punishmentType == 'CAUTION'
       }), radioButtonItems) %}
     {% endif %}
-    {% if not damagesAlreadyAdded %}
+    {% if punishmentsAvailable.damages %}
       {% set radioButtonItems = (radioButtonItems.unshift({
         value: "DAMAGES_OWED",
         text: "Recovery of money for damages",
