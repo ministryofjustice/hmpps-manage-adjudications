@@ -154,16 +154,32 @@
     }) }}
   {% endset -%}
 
-  {% set radioButtonItems = [
-    {
-      value: "PRIVILEGE",
-      text: "Loss of privileges",
-      checked: punishmentType == 'PRIVILEGE',
+  {% set radioButtonItems = [] %}
+  {% if punishmentsAvailable.damages %}
+    {% set radioButtonItems = (radioButtonItems.push({
+      value: "DAMAGES_OWED",
+      text: "Recovery of money for damages",
+      checked: punishmentType == 'DAMAGES_OWED',
       conditional: {
-        html: privilegeHtml
+        html: amountOwedHtml
       }
+    }), radioButtonItems) %}
+  {% endif %}
+  {% if punishmentsAvailable.caution %}
+    {% set radioButtonItems = (radioButtonItems.push({
+      value: "CAUTION",
+      text: "Caution",
+      checked: punishmentType == 'CAUTION'
+    }), radioButtonItems) %}
+  {% endif %}
+  {% set radioButtonItems = (radioButtonItems.push({
+    value: "PRIVILEGE",
+    text: "Loss of privileges",
+    checked: punishmentType == 'PRIVILEGE',
+    conditional: {
+      html: privilegeHtml
     }
-  ] %}
+  }), radioButtonItems) %}
 
   {% if punishmentsAvailable.socialVisits %}
     {% set radioButtonItems = (radioButtonItems.push({
@@ -232,24 +248,6 @@
       checked: punishmentType == 'PROSPECTIVE_DAYS'
     }), radioButtonItems) %}
   {% endif %}
-
-    {% if punishmentsAvailable.caution %}
-      {% set radioButtonItems = (radioButtonItems.unshift({
-        value: "CAUTION",
-        text: "Caution",
-        checked: punishmentType == 'CAUTION'
-      }), radioButtonItems) %}
-    {% endif %}
-    {% if punishmentsAvailable.damages %}
-      {% set radioButtonItems = (radioButtonItems.unshift({
-        value: "DAMAGES_OWED",
-        text: "Recovery of money for damages",
-        checked: punishmentType == 'DAMAGES_OWED',
-        conditional: {
-          html: amountOwedHtml
-        }
-      }), radioButtonItems) %}
-    {% endif %}
 
   {{ govukRadios({
     idPrefix: 'punishmentType',
