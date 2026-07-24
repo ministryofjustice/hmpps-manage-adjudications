@@ -73,7 +73,7 @@ context('What is the reason for this change', () => {
       // Need to set up a punishment in the session first
       cy.visit(adjudicationUrls.awardPunishments.urls.modified('100'))
       cy.get('[data-qa="add-new-punishment-button"]').click()
-      cy.get('#punishmentType-4').click()
+      cy.get('input[name="punishmentType"][value="EARNINGS"]').check()
       cy.get('#stoppagePercentage').type('25')
       cy.get('[data-qa="punishment-submit"]').click()
 

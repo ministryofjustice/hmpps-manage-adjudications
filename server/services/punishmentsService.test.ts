@@ -264,8 +264,8 @@ describe('PunishmentsService', () => {
       )
     })
   })
-  describe('checkAdditionalDaysAvailability', () => {
-    it('returns false if there are no hearings present on the adjudication', async () => {
+  describe('getPunishmentAvailability', () => {
+    it('returns adult availability when there are no hearings present on the adjudication', async () => {
       getReportedAdjudication.mockResolvedValue({
         reportedAdjudication: testData.reportedAdjudication({
           chargeNumber: '100',
@@ -273,8 +273,8 @@ describe('PunishmentsService', () => {
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
         }),
       })
-      const result = await service.checkAdditionalDaysAvailability('100', user)
-      expect(result).toEqual(false)
+      const result = await service.getPunishmentAvailability('100', user)
+      expect(result).toEqual({ isIndependentAdjudicatorHearing: false, socialVisitsAvailable: true })
     })
     it('returns false if the last hearing on the adjudication is a governor hearing', async () => {
       getReportedAdjudication.mockResolvedValue({
@@ -291,8 +291,8 @@ describe('PunishmentsService', () => {
           ],
         }),
       })
-      const result = await service.checkAdditionalDaysAvailability('100', user)
-      expect(result).toEqual(false)
+      const result = await service.getPunishmentAvailability('100', user)
+      expect(result).toEqual({ isIndependentAdjudicatorHearing: false, socialVisitsAvailable: true })
     })
     it('returns true if the last hearing on the adjudication is an independent adjudicator hearing', async () => {
       getReportedAdjudication.mockResolvedValue({
@@ -309,8 +309,20 @@ describe('PunishmentsService', () => {
           ],
         }),
       })
-      const result = await service.checkAdditionalDaysAvailability('100', user)
-      expect(result).toEqual(true)
+      const result = await service.getPunishmentAvailability('100', user)
+      expect(result).toEqual({ isIndependentAdjudicatorHearing: true, socialVisitsAvailable: true })
+    })
+    it('does not make social visits punishments available for a YOI adjudication', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '100',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          isYouthOffender: true,
+        }),
+      })
+      const result = await service.getPunishmentAvailability('100', user)
+      expect(result).toEqual({ isIndependentAdjudicatorHearing: false, socialVisitsAvailable: false })
     })
   })
   describe('formatPunishmentComments', () => {

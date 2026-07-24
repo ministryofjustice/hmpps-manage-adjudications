@@ -10,7 +10,12 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import validateForm from './startDateChoiceValidation'
 import { User } from '../../../../data/hmppsManageUsersClient'
-import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
+import {
+  PrivilegeType,
+  PunishmentType,
+  RehabilitativeActivity,
+  parseHasChildUnder18,
+} from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -81,8 +86,9 @@ export default class PunishmentStartDateChoicePage {
     const { chargeNumber } = req.params
     const { immediate } = req.body
     const { user } = res.locals
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, hasChildUnder18, duration } = req.query
     const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
+    const childUnder18 = parseHasChildUnder18(hasChildUnder18)
 
     const error = validateForm({
       immediate,
@@ -106,6 +112,7 @@ export default class PunishmentStartDateChoicePage {
           privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
           otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
           stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
+          ...(childUnder18 !== undefined && { hasChildUnder18: childUnder18 }),
           duration: numberOfDays,
           startDate,
           endDate: calculatePunishmentEndDate(lastHearingDate, numberOfDays, 'YYYY-MM-DD'),
@@ -131,6 +138,7 @@ export default class PunishmentStartDateChoicePage {
           privilegeType,
           otherPrivilege,
           stoppagePercentage,
+          ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
           duration,
           startDate: lastHearingDate,
         } as ParsedUrlQueryInput,

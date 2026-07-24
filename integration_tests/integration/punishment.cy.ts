@@ -37,6 +37,7 @@ context('Add a new punishment', () => {
           chargeNumber: '101',
           prisonerNumber: 'G6123VU',
           status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          isYouthOffender: true,
           hearings: [
             testData.singleHearing({
               dateTimeOfHearing: '2024-11-23T17:00:00',
@@ -67,10 +68,8 @@ context('Add a new punishment', () => {
     })
     it('should show additional days and prospective additional days radios if the hearing is IA', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('101'))
-      cy.get('#punishmentType-11').should('exist')
-      cy.get('[for="punishmentType-11"]').should('include.text', 'Additional days')
-      cy.get('#punishmentType-12').should('exist')
-      cy.get('[for="punishmentType-12"]').should('include.text', 'Prospective additional days')
+      cy.get('input[name="punishmentType"][value="ADDITIONAL_DAYS"]').should('exist')
+      cy.get('input[name="punishmentType"][value="PROSPECTIVE_DAYS"]').should('exist')
     })
     it('should contain caution and damages radio buttons', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('101'))
@@ -78,6 +77,21 @@ context('Add a new punishment', () => {
       cy.get('[for="punishmentType"]').should('include.text', 'Recovery of money for damages')
       cy.get('#punishmentType-2').should('exist')
       cy.get('[for="punishmentType-2"]').should('include.text', 'Caution')
+    })
+    it('shows social visits punishments and the child question for an adult adjudication', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
+
+      cy.get('input[value="LOSS_OF_SOCIAL_VISITS"]').check()
+      cy.get('label[for="lossHasChildUnder18"]').should('be.visible')
+      cy.contains('Does the prisoner have any children under 18?').should('be.visible')
+
+      cy.get('input[value="RESTRICTION_OF_SOCIAL_VISITS"]').check()
+      cy.get('label[for="restrictionHasChildUnder18"]').should('be.visible')
+    })
+    it('does not show social visits punishments for a YOI adjudication', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start('101'))
+      cy.get('input[value="LOSS_OF_SOCIAL_VISITS"]').should('not.exist')
+      cy.get('input[value="RESTRICTION_OF_SOCIAL_VISITS"]').should('not.exist')
     })
   })
 
@@ -137,6 +151,14 @@ context('Add a new punishment', () => {
           expect($error.get(0).innerText).to.contain('Enter the percentage of earnings to be stopped')
         })
     })
+    it('should error when the child question is not answered', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+      punishmentPage.punishment().find('input[value="LOSS_OF_SOCIAL_VISITS"]').check()
+      punishmentPage.submitButton().click()
+
+      punishmentPage.errorSummary().should('contain.text', 'Select whether the prisoner has any children under 18')
+    })
   })
 
   describe('Submit', () => {
@@ -191,6 +213,21 @@ context('Add a new punishment', () => {
 
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
+      })
+    })
+
+    it('should carry the child answer when adding a social visits punishment', () => {
+      cy.visit(adjudicationUrls.punishment.urls.start('100'))
+      const punishmentPage = Page.verifyOnPage(PunishmentPage)
+
+      punishmentPage.punishment().find('input[value="RESTRICTION_OF_SOCIAL_VISITS"]').check()
+      cy.get('input[name="restrictionHasChildUnder18"][value="false"]').check()
+      punishmentPage.submitButton().click()
+
+      cy.location().should(loc => {
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
+        expect(loc.search).to.contain('punishmentType=RESTRICTION_OF_SOCIAL_VISITS')
+        expect(loc.search).to.contain('hasChildUnder18=false')
       })
     })
   })

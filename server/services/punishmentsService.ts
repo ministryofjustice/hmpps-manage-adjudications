@@ -438,11 +438,16 @@ export default class PunishmentsService {
     return new ManageAdjudicationsUserTokensClient(user).removePunishmentComment(chargeNumber, id)
   }
 
-  async checkAdditionalDaysAvailability(chargeNumber: string, user: User): Promise<boolean> {
+  async getPunishmentAvailability(
+    chargeNumber: string,
+    user: User,
+  ): Promise<{ isIndependentAdjudicatorHearing: boolean; socialVisitsAvailable: boolean }> {
     const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
-    if (!reportedAdjudication.hearings?.length) return false
-    const lastHearing = reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1]
-    return lastHearing.oicHearingType.includes('INAD')
+    const lastHearing = reportedAdjudication.hearings?.[reportedAdjudication.hearings.length - 1]
+    return {
+      isIndependentAdjudicatorHearing: lastHearing?.oicHearingType.includes('INAD') || false,
+      socialVisitsAvailable: !reportedAdjudication.isYouthOffender,
+    }
   }
 
   async getPrisonerDetails(chargeNumber: string, user: User): Promise<PrisonerResult & { friendlyName: string }> {

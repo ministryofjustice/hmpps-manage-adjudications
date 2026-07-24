@@ -6,6 +6,7 @@ import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import TestData from '../../../testutils/testData'
+import { PunishmentType } from '../../../../data/PunishmentResult'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
@@ -91,6 +92,38 @@ describe('POST ', () => {
         `${adjudicationUrls.punishmentIsSuspended.urls.start(
           '100',
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=2`,
+      )
+  })
+
+  it('shows the ticket validation message and keeps the invalid loss duration editable', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.punishmentNumberOfDays.urls.start(
+          '100',
+        )}?punishmentType=${PunishmentType.LOSS_OF_SOCIAL_VISITS}&hasChildUnder18=false`,
+      )
+      .send({ duration: 28 })
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Days for Loss of Social Visits cannot be more than 27 days')
+        expect(res.text).toContain('value="28"')
+      })
+  })
+
+  it('accepts the corrected maximum loss duration and carries the child answer forward', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.punishmentNumberOfDays.urls.start(
+          '100',
+        )}?punishmentType=${PunishmentType.LOSS_OF_SOCIAL_VISITS}&hasChildUnder18=false`,
+      )
+      .send({ duration: 27 })
+      .expect(302)
+      .expect(
+        'Location',
+        `${adjudicationUrls.punishmentIsSuspended.urls.start(
+          '100',
+        )}?punishmentType=LOSS_OF_SOCIAL_VISITS&privilegeType=&otherPrivilege=&stoppagePercentage=&hasChildUnder18=false&duration=27`,
       )
   })
 })

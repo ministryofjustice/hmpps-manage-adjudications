@@ -430,6 +430,7 @@ export default class TestData {
       suspendedUntil: '2023-04-03',
     },
     activatedFrom = '0',
+    hasChildUnder18,
   }: {
     redisId?: string
     id?: number
@@ -439,6 +440,7 @@ export default class TestData {
     stoppagePercentage?: number
     schedule?: PunishmentSchedule
     activatedFrom?: string
+    hasChildUnder18?: boolean
   }): PunishmentDataWithSchedule => {
     return {
       id,
@@ -449,6 +451,7 @@ export default class TestData {
       stoppagePercentage,
       schedule,
       activatedFrom,
+      ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
       rehabilitativeActivities: [],
     }
   }

@@ -87,6 +87,20 @@ beforeEach(() => {
           },
         },
       },
+      {
+        chargeNumber: '105',
+        corrupted: false,
+        punishment: {
+          id: 75,
+          type: PunishmentType.LOSS_OF_SOCIAL_VISITS,
+          hasChildUnder18: false,
+          rehabilitativeActivities: [],
+          schedule: {
+            duration: 27,
+            suspendedUntil: '18/5/2023',
+          },
+        },
+      },
     ],
   })
 })
@@ -156,6 +170,29 @@ describe('POST ', () => {
         `${adjudicationUrls.suspendedPunishmentStartDate.urls.existing(
           '100',
         )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`,
+      )
+  })
+
+  it('preserves the child answer when activating a social visits punishment', () => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.suspendedPunishmentStartDateChoice.urls.existing(
+          '100',
+        )}?punishmentType=LOSS_OF_SOCIAL_VISITS&duration=27&punishmentNumberToActivate=75`,
+      )
+      .send({ immediate: 'true' })
+      .expect(302)
+      .then(() =>
+        expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            type: PunishmentType.LOSS_OF_SOCIAL_VISITS,
+            hasChildUnder18: false,
+            duration: 27,
+            activatedFrom: '105',
+          }),
+          '100',
+        ),
       )
   })
 })

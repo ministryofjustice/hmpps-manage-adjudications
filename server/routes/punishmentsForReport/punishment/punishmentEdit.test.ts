@@ -6,36 +6,26 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
-import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
-import TestData from '../../testutils/testData'
 
-const testData = new TestData()
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
-jest.mock('../../../services/reportedAdjudicationsService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
-const reportedAdjudicationsService = new ReportedAdjudicationsService(
-  null,
-  null,
-  null,
-  null,
-  null,
-) as jest.Mocked<ReportedAdjudicationsService>
 
 let app: Express
 
 beforeEach(() => {
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockResolvedValue({
     type: PunishmentType.EARNINGS,
     stoppagePercentage: 25,
   })
-  reportedAdjudicationsService.getLatestHearing.mockResolvedValue(
-    testData.singleHearing({ id: 100, dateTimeOfHearing: '2022-11-03T11:00:00' }),
-  )
+  punishmentsService.getPunishmentAvailability.mockResolvedValue({
+    isIndependentAdjudicatorHearing: false,
+    socialVisitsAvailable: true,
+  })
 })
 
 afterEach(() => {
@@ -44,7 +34,7 @@ afterEach(() => {
 
 describe('GET /punishment', () => {
   beforeEach(() => {
-    app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
+    app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
     userService.getUserRoles.mockResolvedValue(['NOT_REVIEWER'])
   })
   it('should load the `Page not found` page', () => {
@@ -96,6 +86,22 @@ describe('POST /punishment', () => {
       .expect(
         'Location',
         `${adjudicationUrls.punishmentNumberOfDays.urls.edit('100', 'XYZ')}?punishmentType=EXTRA_WORK`,
+      )
+  })
+  it('preserves the child answer when editing a social visits punishment', () => {
+    return request(app)
+      .post(adjudicationUrls.punishment.urls.edit('100', 'XYZ'))
+      .send({
+        punishmentType: PunishmentType.RESTRICTION_OF_SOCIAL_VISITS,
+        restrictionHasChildUnder18: 'false',
+      })
+      .expect(302)
+      .expect(
+        'Location',
+        `${adjudicationUrls.punishmentNumberOfDays.urls.edit(
+          '100',
+          'XYZ',
+        )}?punishmentType=RESTRICTION_OF_SOCIAL_VISITS&hasChildUnder18=false`,
       )
   })
 })

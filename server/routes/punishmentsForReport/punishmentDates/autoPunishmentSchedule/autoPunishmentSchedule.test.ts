@@ -72,6 +72,30 @@ describe('GET', () => {
         expect(res.text).toContain('10 Apr 2023')
         expect(res.text).toContain('10')
         expect(res.text).toContain('19 Apr 2023')
+        expect(res.text).not.toContain('Prisoner has children under 18:')
+      })
+  })
+
+  it('displays the calculated last day and child answer for a social visits punishment', () => {
+    punishmentsService.getAllSessionPunishments.mockResolvedValue([
+      {
+        type: PunishmentType.LOSS_OF_SOCIAL_VISITS,
+        duration: 27,
+        startDate: '2023-12-13',
+        endDate: '2024-01-08',
+        hasChildUnder18: false,
+      },
+    ])
+
+    return request(app)
+      .get(adjudicationUrls.punishmentAutomaticDateSchedule.urls.start('100'))
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Loss of social visits')
+        expect(res.text).toContain('Prisoner has children under 18:')
+        expect(res.text).toContain('No')
+        expect(res.text).toContain('Last day')
+        expect(res.text).toContain('8 Jan 2024')
       })
   })
 })
