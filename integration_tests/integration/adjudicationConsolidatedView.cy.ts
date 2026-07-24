@@ -227,6 +227,7 @@ context('Consolidated report', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubGetPrisonerPermissionDetails')
     cy.task('stubUserOriginatingAgency', 'MDI')
     // Prisoner
     cy.task('stubGetPrisonerDetails', {

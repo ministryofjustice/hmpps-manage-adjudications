@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import ReportedAdjudicationsService, { ConvertedEvidence } from '../../services/reportedAdjudicationsService'
-import UserService from '../../services/userService'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
+import renderForbidden from '../../utils/renderForbidden'
 import DecisionTreeService, { IncidentAndOffences } from '../../services/decisionTreeService'
 import { ReportedAdjudication, ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
 import { DraftAdjudication } from '../../data/DraftAdjudicationResult'
@@ -14,7 +14,6 @@ import {
   PunishmentDataWithSchedule,
   flattenPunishments,
 } from '../../data/PunishmentResult'
-import { hasAnyRole } from '../../utils/utils'
 
 type PageData = {
   prisoner: PrisonerResultSummary
@@ -42,13 +41,11 @@ type PageData = {
   quashed: boolean
   chargeProved: boolean
   corrupted: boolean
-  forbidden?: boolean
 }
 
 export default class AdjudicationConsolidatedView {
   constructor(
     private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService,
     private readonly decisionTreeService: DecisionTreeService,
     private readonly punishmentsService: PunishmentsService,
   ) {}
@@ -70,7 +67,6 @@ export default class AdjudicationConsolidatedView {
       quashed,
       chargeProved,
       corrupted,
-      forbidden,
     } = pageData
     res.render(`pages/adjudicationConsolidatedView.njk`, {
       prisonerNumber: prisoner.prisonerNumber,
@@ -91,7 +87,6 @@ export default class AdjudicationConsolidatedView {
       quashed,
       chargeProved,
       corrupted,
-      forbidden,
     })
   }
 
@@ -99,8 +94,10 @@ export default class AdjudicationConsolidatedView {
     const { chargeNumber, prisonerNumber } = req.params
     const { user } = res.locals
     const activeCaseLoadId = req.query.agency as string
-    let forbidden = false
 
+    // The permissions guard has already proved the user may see this prisoner. It cannot know the
+    // charge belongs to them though, so still refuse a chargeNumber that resolves to someone else -
+    // this is the defence against tampering with the agency query param / charge number.
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
       chargeNumber,
@@ -108,12 +105,8 @@ export default class AdjudicationConsolidatedView {
       activeCaseLoadId,
     )
 
-    if (prisoner.agencyId !== user.meta.caseLoadId) {
-      const userRoles = await this.userService.getUserRoles(user.token)
-      forbidden = !hasAnyRole(['GLOBAL_SEARCH'], userRoles)
-    }
     if (prisoner.prisonerNumber !== reportedAdjudication.prisonerNumber) {
-      forbidden = true
+      return renderForbidden(res, prisoner.prisonerNumber)
     }
 
     const { reviewData, evidence, offence, prisonerReportDetails, transferBannerInfo } = await this.getInfoForReport(
@@ -142,7 +135,6 @@ export default class AdjudicationConsolidatedView {
       quashed,
       chargeProved,
       corrupted,
-      forbidden,
     })
   }
 

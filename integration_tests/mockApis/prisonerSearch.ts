@@ -47,8 +47,25 @@ const stubSearchPrisonerDetails = ({ prisonerNumber, status = 200 }): SuperAgent
     },
   })
 
+// The hmpps-prison-permissions-lib guard looks up the prisoner in prisoner-search (GET /prisoner/{n})
+// using a system token and only reads prisonId / restrictedPatient to decide access, so a catch-all
+// stub returning a prisoner inside the user's caseload (MDI) is enough to let the guarded pages load.
+const stubGetPrisonerPermissionDetails = ({ prisonId = 'MDI', restrictedPatient = false } = {}): SuperAgentRequest =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPathPattern: '/search/prisoner/[A-Za-z0-9]+',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: { prisonId, restrictedPatient },
+    },
+  })
+
 export default {
   stubPing,
   stubSearch,
   stubSearchPrisonerDetails,
+  stubGetPrisonerPermissionDetails,
 }

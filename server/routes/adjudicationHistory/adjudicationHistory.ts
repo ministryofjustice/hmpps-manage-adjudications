@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
-import { formatDateForDatePicker, hasAnyRole } from '../../utils/utils'
+import { formatDateForDatePicker } from '../../utils/utils'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
 import { ApiPageResponse } from '../../data/ApiData'
 import adjudicationUrls from '../../utils/urlGenerator'
@@ -18,13 +18,9 @@ import {
 import { EstablishmentInformation, FormError } from '../../@types/template'
 import { PrisonerResultSummary } from '../../services/placeOnReportService'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
-import UserService from '../../services/userService'
 
 export default class AdjudicationHistoryRoutes {
-  constructor(
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
 
   private renderView = async (
     req: Request,
@@ -34,7 +30,6 @@ export default class AdjudicationHistoryRoutes {
     errors: FormError[],
     prisoner: PrisonerResultSummary,
     uniqueListOfAgenciesForPrisoner: Array<EstablishmentInformation>,
-    forbidden?: boolean,
   ): Promise<void> => {
     res.render(`pages/adjudicationHistory.njk`, {
       prisonerNumber: req.params.prisonerNumber,
@@ -51,7 +46,6 @@ export default class AdjudicationHistoryRoutes {
       errors,
       maxDate: formatDateForDatePicker(new Date().toISOString(), 'short'),
       uniqueListOfAgenciesForPrisoner,
-      forbidden,
     })
   }
 
@@ -61,13 +55,6 @@ export default class AdjudicationHistoryRoutes {
     const uiFilter = fillInAdjudicationHistoryDefaults(uiAdjudicationHistoryFilterFromRequest(req))
     const filter = adjudicationHistoryFilterFromUiFilter(uiFilter)
     const prisoner = await this.reportedAdjudicationsService.getPrisonerDetails(prisonerNumber, user)
-    const activeCaseLoadId = user.meta.caseLoadId
-    let forbidden = false
-
-    if (prisoner.agencyId !== activeCaseLoadId) {
-      const roles = await this.userService.getUserRoles(user.token)
-      forbidden = !hasAnyRole(['GLOBAL_SEARCH'], roles)
-    }
 
     const uniqueListOfAgenciesForPrisoner = await this.reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner(
       prisonerNumber,
@@ -80,7 +67,7 @@ export default class AdjudicationHistoryRoutes {
       pageRequestFrom(20, +req.query.pageNumber || 1),
       res.locals.user,
     )
-    return this.renderView(req, res, uiFilter, results, [], prisoner, uniqueListOfAgenciesForPrisoner, forbidden)
+    return this.renderView(req, res, uiFilter, results, [], prisoner, uniqueListOfAgenciesForPrisoner)
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {

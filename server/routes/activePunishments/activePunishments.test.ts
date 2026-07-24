@@ -6,6 +6,7 @@ import adjudicationUrls from '../../utils/urlGenerator'
 import TestData from '../testutils/testData'
 import PunishmentsService from '../../services/punishmentsService'
 import { PunishmentMeasurement, PunishmentType } from '../../data/PunishmentResult'
+import { mockPermissionsService } from '../testutils/mockPermissions'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/punishmentsService.ts')
@@ -57,6 +58,23 @@ describe('GET /active-punishments', () => {
       .expect('Content-Type', /html/)
       .expect(response => {
         expect(response.text).toContain('James Smith’s active punishments')
+      })
+  })
+
+  it('should not show punishments when the user may not view the prisoner', () => {
+    const deniedApp = appWithAllRoutes(
+      { production: false },
+      { reportedAdjudicationsService, punishmentsService, permissionsService: mockPermissionsService(false) },
+    )
+
+    return request(deniedApp)
+      .get(adjudicationUrls.activePunishments.urls.start('G7234VB'))
+      .expect(403)
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('You do not have permission to view people outside of your establishment')
+        expect(response.text).not.toContain('James Smith')
+        expect(punishmentsService.getActivePunishmentsByOffender).not.toHaveBeenCalled()
       })
   })
 })

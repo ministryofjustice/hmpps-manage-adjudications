@@ -25,6 +25,7 @@ import type { ApplicationInfo } from '../../applicationInfo'
 import ChartApiService from '../../services/chartApiService'
 import CreateOnBehalfOfSessionService from '../createOnBehalfOf/createOnBehalfOfSessionService'
 import FrontendComponentService from '../../services/frontendComponentService'
+import { mockPermissionsService } from './mockPermissions'
 
 const testAppInfo: ApplicationInfo = {
   productId: 'DPS001',
@@ -147,6 +148,7 @@ export default function appWithAllRoutes(
       chartApiService: {} as ChartApiService,
       createOnBehalfOfSessionService: {} as CreateOnBehalfOfSessionService,
       frontendComponentService: {} as FrontendComponentService,
+      permissionsService: mockPermissionsService(),
       ...overrides,
     }),
     production,

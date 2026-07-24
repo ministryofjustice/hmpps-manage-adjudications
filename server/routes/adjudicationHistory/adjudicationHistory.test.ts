@@ -4,6 +4,7 @@ import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import TestData from '../testutils/testData'
+import { mockPermissionsService } from '../testutils/mockPermissions'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
@@ -90,6 +91,24 @@ describe('GET /adjudication-history', () => {
         expect(response.text).toContain('Awaiting review')
         expect(response.text).toContain('Date of discovery: 20/11/2021 - 13:30')
         expect(response.text).toContain('Happened at: Moorland (HMP)')
+      })
+  })
+
+  it('should not show the history when the user may not view the prisoner', () => {
+    const deniedApp = appWithAllRoutes(
+      { production: false },
+      { reportedAdjudicationsService, permissionsService: mockPermissionsService(false) },
+    )
+
+    return request(deniedApp)
+      .get(adjudicationUrls.adjudicationHistory.urls.start('G7234VB'))
+      .expect(403)
+      .expect('Content-Type', /html/)
+      .expect(response => {
+        expect(response.text).toContain('You do not have permission to view people outside of your establishment')
+        expect(response.text).not.toContain('MDI-100001')
+        expect(reportedAdjudicationsService.getAdjudicationHistory).not.toHaveBeenCalled()
+        expect(reportedAdjudicationsService.getUniqueListOfAgenciesForPrisoner).not.toHaveBeenCalled()
       })
   })
 })

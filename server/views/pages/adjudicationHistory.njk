@@ -20,8 +20,8 @@
       href: digitalPrisonServiceUrl
     },
     {
-      text: 'Adjudications' if forbidden else prisoner.displayName,
-      href: '/place-a-prisoner-on-report' if forbidden else prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
+      text: prisoner.displayName,
+      href: prisonerProfileServiceUrl + '/prisoner/' + prisonerNumber
     }
     ],
     classes: "govuk-!-display-none-print"
@@ -36,11 +36,6 @@
       }) }}
   {% endif %}
 
-  {% if forbidden %}
-    <h1 class="govuk-heading-l">You do not have permission to view people outside of your establishment.</h1>
-    <p class="govuk-body">You need extra permission to be able to view and create reports for people who are not in your establishment.</p>
-    <p class="govuk-body">Contact a local system administrator (LSA) in your establishment to discuss the permission you need.</p>
-  {% else %}
   <h1 class="govuk-heading-l" data-qa="title">{{ prisoner.friendlyName | possessive }} adjudication history</h1>
 
   <div class="govuk-grid-row">
@@ -51,5 +46,4 @@
       {% include '../partials/adjudicationHistoryList.njk' %}
     </div>
   </div>
-  {% endif %}
 {% endblock %}
