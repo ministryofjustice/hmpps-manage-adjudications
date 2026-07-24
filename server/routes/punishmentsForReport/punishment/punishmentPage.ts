@@ -67,25 +67,33 @@ export default class PunishmentPage {
       this.punishmentsService.getPunishmentAvailability(chargeNumber, user),
       this.punishmentsService.getAllSessionPunishments(req, chargeNumber),
     ])
-    const { isIndependentAdjudicatorHearing, socialVisitsAvailable } = punishmentAvailability
-    const [damagesUnavailable, punishmentsAlreadyAdded, cautionAlreadyAdded] = await Promise.all([
+    const { isIndependentAdjudicatorHearing, isAdult } = punishmentAvailability
+    const [damagesAlreadyAdded, punishmentsAlreadyAdded, cautionAlreadyAdded] = await Promise.all([
       this.damagesAlreadyAdded(sessionPunishments),
       this.punishmentsAlreadyAdded(sessionPunishments),
       this.cautionAlreadyAdded(sessionPunishments),
     ])
+
+    const punishmentsAvailable = {
+      addedDays: isIndependentAdjudicatorHearing,
+      caution: !(punishmentsAlreadyAdded || cautionAlreadyAdded),
+      damages: !damagesAlreadyAdded,
+      extraWork: !isAdult,
+      removalFromActivity: !isAdult,
+      socialVisits: isAdult,
+    }
+
     return res.render(`pages/punishment.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
+      punishmentsAvailable,
       punishmentType,
       privilegeType,
       otherPrivilege,
       stoppagePercentage,
-      isIndependentAdjudicatorHearing,
-      damagesUnavailable,
-      cautionUnavailable: punishmentsAlreadyAdded || cautionAlreadyAdded,
       damagesOwedAmount,
       hasChildUnder18,
-      socialVisitsAvailable,
+      isAdult,
     })
   }
 
