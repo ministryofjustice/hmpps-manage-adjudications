@@ -69,7 +69,7 @@ export default class Dis12Pdf {
         `pages/noticeOfBeingPlacedOnReport`,
         { adjudicationsUrl, noticeOfBeingPlacedOnReportData },
         `pages/noticeOfBeingPlacedOnReportHeader`,
-        { chargeNumber },
+        { chargeNumber, isPrisonerCopy },
         `pages/noticeOfBeingPlacedOnReportFooter`,
         {},
         {

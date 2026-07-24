@@ -156,7 +156,7 @@ describe('GET /all-completed-reports', () => {
         },
       },
       'pages/noticeOfBeingPlacedOnReportHeader',
-      { chargeNumber: '1524493' },
+      { chargeNumber: '1524493', isPrisonerCopy: true },
       'pages/noticeOfBeingPlacedOnReportFooter',
       {},
       {
@@ -230,7 +230,7 @@ describe('GET /all-completed-reports', () => {
         },
       },
       'pages/noticeOfBeingPlacedOnReportHeader',
-      { chargeNumber: '1524493' },
+      { chargeNumber: '1524493', isPrisonerCopy: true },
       'pages/noticeOfBeingPlacedOnReportFooter',
       {},
       {
@@ -293,7 +293,7 @@ describe('GET /all-completed-reports', () => {
         },
       },
       'pages/noticeOfBeingPlacedOnReportHeader',
-      { chargeNumber: '1524493' },
+      { chargeNumber: '1524493', isPrisonerCopy: false },
       'pages/noticeOfBeingPlacedOnReportFooter',
       {},
       {
