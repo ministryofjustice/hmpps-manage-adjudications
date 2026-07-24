@@ -1,16 +1,24 @@
 import { Express } from 'express'
 import request from 'supertest'
 import { Readable } from 'stream'
+import { PrisonerAdjudicationsPermission } from '@ministryofjustice/hmpps-prison-permissions-lib'
 import appWithAllRoutes from './testutils/appSetup'
 import PlaceOnReportService from '../services/placeOnReportService'
-import { mockPermissionsService } from './testutils/mockPermissions'
+import mockPermissions from './testutils/mockPermissions'
 
 jest.mock('../services/placeOnReportService.ts')
+jest.mock('@ministryofjustice/hmpps-prison-permissions-lib', () => ({
+  ...jest.requireActual('@ministryofjustice/hmpps-prison-permissions-lib'),
+  isGranted: jest.fn(),
+  prisonerPermissionsGuard: jest.fn(),
+}))
 
 const placeOnReportService = new PlaceOnReportService(null, null, null) as jest.Mocked<PlaceOnReportService>
 
-const buildApp = (granted: boolean): Express =>
-  appWithAllRoutes({ production: false }, { placeOnReportService, permissionsService: mockPermissionsService(granted) })
+const buildApp = (granted: boolean): Express => {
+  mockPermissions({ [PrisonerAdjudicationsPermission.read]: granted })
+  return appWithAllRoutes({ production: false }, { placeOnReportService })
+}
 
 afterEach(() => jest.resetAllMocks())
 

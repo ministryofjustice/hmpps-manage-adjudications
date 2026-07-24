@@ -293,6 +293,7 @@ context('Adjudication history - as ALO', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubGetPrisonerPermissionDetails')
     cy.task('stubGetPrisonerDetails', {
       prisonerNumber: 'G6415GD',
       response: testData.prisonerResultSummary({

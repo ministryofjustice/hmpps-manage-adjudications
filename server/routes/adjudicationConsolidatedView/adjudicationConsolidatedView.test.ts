@@ -1,16 +1,22 @@
 import { Express } from 'express'
 import request from 'supertest'
+import { PrisonerAdjudicationsPermission } from '@ministryofjustice/hmpps-prison-permissions-lib'
 import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import DecisionTreeService from '../../services/decisionTreeService'
 import PunishmentsService from '../../services/punishmentsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import TestData from '../testutils/testData'
-import { mockPermissionsService } from '../testutils/mockPermissions'
+import mockPermissions from '../testutils/mockPermissions'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/decisionTreeService.ts')
 jest.mock('../../services/punishmentsService.ts')
+jest.mock('@ministryofjustice/hmpps-prison-permissions-lib', () => ({
+  ...jest.requireActual('@ministryofjustice/hmpps-prison-permissions-lib'),
+  isGranted: jest.fn(),
+  prisonerPermissionsGuard: jest.fn(),
+}))
 
 const testData = new TestData()
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -25,16 +31,13 @@ const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<Pun
 
 const url = adjudicationUrls.prisonerReportConsolidated.urls.view('G7234VB', 'MDI-100001')
 
-const buildApp = (granted: boolean): Express =>
-  appWithAllRoutes(
+const buildApp = (granted: boolean): Express => {
+  mockPermissions({ [PrisonerAdjudicationsPermission.read]: granted })
+  return appWithAllRoutes(
     { production: false },
-    {
-      reportedAdjudicationsService,
-      decisionTreeService,
-      punishmentsService,
-      permissionsService: mockPermissionsService(granted),
-    },
+    { reportedAdjudicationsService, decisionTreeService, punishmentsService },
   )
+}
 
 beforeEach(() => {
   reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue(

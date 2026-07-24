@@ -1,15 +1,21 @@
 import { Express } from 'express'
 import request from 'supertest'
+import { PrisonerAdjudicationsPermission } from '@ministryofjustice/hmpps-prison-permissions-lib'
 import appWithAllRoutes from '../testutils/appSetup'
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import TestData from '../testutils/testData'
 import PunishmentsService from '../../services/punishmentsService'
 import { PunishmentMeasurement, PunishmentType } from '../../data/PunishmentResult'
-import { mockPermissionsService } from '../testutils/mockPermissions'
+import mockPermissions from '../testutils/mockPermissions'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 jest.mock('../../services/punishmentsService.ts')
+jest.mock('@ministryofjustice/hmpps-prison-permissions-lib', () => ({
+  ...jest.requireActual('@ministryofjustice/hmpps-prison-permissions-lib'),
+  isGranted: jest.fn(),
+  prisonerPermissionsGuard: jest.fn(),
+}))
 
 const testData = new TestData()
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -24,6 +30,7 @@ const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<Pun
 let app: Express
 
 beforeEach(() => {
+  mockPermissions({ [PrisonerAdjudicationsPermission.read]: true })
   app = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, punishmentsService })
 
   reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue(
@@ -62,10 +69,8 @@ describe('GET /active-punishments', () => {
   })
 
   it('should not show punishments when the user may not view the prisoner', () => {
-    const deniedApp = appWithAllRoutes(
-      { production: false },
-      { reportedAdjudicationsService, punishmentsService, permissionsService: mockPermissionsService(false) },
-    )
+    mockPermissions({ [PrisonerAdjudicationsPermission.read]: false })
+    const deniedApp = appWithAllRoutes({ production: false }, { reportedAdjudicationsService, punishmentsService })
 
     return request(deniedApp)
       .get(adjudicationUrls.activePunishments.urls.start('G7234VB'))

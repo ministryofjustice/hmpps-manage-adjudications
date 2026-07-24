@@ -1,29 +1,48 @@
-import { PermissionsService, PrisonerAdjudicationsPermission } from '@ministryofjustice/hmpps-prison-permissions-lib'
+import {
+  isGranted,
+  PermissionsService,
+  PrisonerPermission,
+  prisonerPermissionsGuard,
+} from '@ministryofjustice/hmpps-prison-permissions-lib'
 
 /**
- * Builds the minimal PrisonerPermissions shape that the library's isGranted() reads for the
- * adjudications read permission (path: domainGroups.prisonerSpecific.prisonerAdjudications.<perm>).
+ * Test helper recommended by the permissions library
+ * (https://github.com/ministryofjustice/hmpps-prison-permissions-lib/blob/main/readme/mocking.md):
+ * mock the library's isGranted and prisonerPermissionsGuard rather than depending on the internal
+ * shape of the permissions object.
+ *
+ * Each test file that uses this must first mock the library, keeping the real enums/PermissionsService
+ * but replacing the two functions:
+ *
+ *   jest.mock('@ministryofjustice/hmpps-prison-permissions-lib', () => ({
+ *     ...jest.requireActual('@ministryofjustice/hmpps-prison-permissions-lib'),
+ *     isGranted: jest.fn(),
+ *     prisonerPermissionsGuard: jest.fn(),
+ *   }))
+ *
+ * Call mockPermissions(...) before building the app, since the guard middleware is created when the
+ * routes are wired.
  */
-export const adjudicationsPermissions = (granted: boolean) => ({
-  domainGroups: {
-    prisonerSpecific: {
-      prisonerAdjudications: {
-        [PrisonerAdjudicationsPermission.read]: granted,
-      },
+export default function mockPermissions(permissions: Partial<Record<PrisonerPermission, boolean>>): void {
+  ;(isGranted as jest.MockedFunction<typeof isGranted>).mockImplementation(perm => permissions[perm] ?? false)
+  ;(prisonerPermissionsGuard as jest.MockedFunction<typeof prisonerPermissionsGuard>).mockImplementation(
+    (_service, options) => async (_req, _res, next) => {
+      const denied = options.requestDependentOn.filter(perm => !permissions[perm])
+      return denied.length ? next(permissionDeniedError(denied)) : next()
     },
-  },
-})
+  )
+}
 
-/**
- * A stand-in PermissionsService for route tests. getPrisonerPermissions returns a granted or denied
- * adjudications permission so the prisonerPermissionsGuard lets the request through or rejects it,
- * without touching prisoner-search.
- */
-export const mockPermissionsService = (
-  granted = true,
-  prisoner: unknown = { prisonerNumber: 'G7234VB', prisonId: 'MDI' },
-): PermissionsService =>
+// Mimics the library's PrisonerPermissionError (which is not publicly exported) so the app's error
+// handler recognises it via deniedPermissionChecks and renders the forbidden page, not a generic 500.
+function permissionDeniedError(denied: PrisonerPermission[]): Error {
+  return Object.assign(new Error('Permission denied'), { status: 403, deniedPermissionChecks: denied })
+}
+
+// Minimal PermissionsService for the app harness. With the guard and isGranted mocked, its methods
+// are only reached by the prisoner image route, which just needs them not to throw.
+export const stubPermissionsService = (): PermissionsService =>
   ({
-    getPrisonerDetails: jest.fn().mockResolvedValue(prisoner),
-    getPrisonerPermissions: jest.fn().mockReturnValue(adjudicationsPermissions(granted)),
+    getPrisonerDetails: jest.fn().mockResolvedValue({}),
+    getPrisonerPermissions: jest.fn().mockReturnValue({}),
   }) as unknown as PermissionsService
