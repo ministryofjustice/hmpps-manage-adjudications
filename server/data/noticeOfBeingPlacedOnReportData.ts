@@ -42,6 +42,10 @@ export default class noticeOfBeingPlacedOnReportData {
 
   isYouthOffender: boolean
 
+  prisonerDateOfBirth: string
+
+  prisonerAge: { years: number; months: number }
+
   constructor(
     isPrisonerCopy: boolean,
     chargeNumber: string,
@@ -49,6 +53,8 @@ export default class noticeOfBeingPlacedOnReportData {
     offences: IncidentAndOffences,
     nextHearingDateTime: string,
     createdOnBehalfOfOfficer: string,
+    prisonerDateOfBirth: string,
+    prisonerAge: { years: number; months: number },
   ) {
     this.isPrisonerCopy = isPrisonerCopy
     this.chargeNumber = chargeNumber
@@ -82,5 +88,7 @@ export default class noticeOfBeingPlacedOnReportData {
     this.expirationTime = formatTimestampToTime(confirmedOnReportData.reportExpirationDateTime)
     this.expirationDay = formatTimestampToDate(confirmedOnReportData.reportExpirationDateTime, 'dddd, D MMMM YYYY')
     this.isYouthOffender = confirmedOnReportData.isYouthOffender
+    this.prisonerDateOfBirth = prisonerDateOfBirth
+    this.prisonerAge = prisonerAge
   }
 }

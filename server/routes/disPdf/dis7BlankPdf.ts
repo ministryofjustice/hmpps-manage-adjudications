@@ -4,6 +4,7 @@ import ReportedAdjudicationsService from '../../services/reportedAdjudicationsSe
 import config from '../../config'
 import AdjudicationResultReportDataBlank from '../../data/adjudicationResultReportDataBlank'
 import { withRetry } from '../../utils/withRetry'
+import calculateAge from '../../utils/utils'
 import log from '../../log'
 
 export default class Dis7PdfBlank {
@@ -28,7 +29,7 @@ export default class Dis7PdfBlank {
         ? 'Adjudication result – Young Offender (YOI Rule 55)'
         : 'Adjudication result – Adult (Prison Rule 51)'
       const adjudicationResultReportDataBlank = new AdjudicationResultReportDataBlank(chargeNumber, adjudicationDetails)
-
+      console.log('adjudicationDetails: ', adjudicationDetails)
       res.renderPdf(
         `pages/adjudicationResultReportBlank`,
         { adjudicationsUrl, data: adjudicationResultReportDataBlank },

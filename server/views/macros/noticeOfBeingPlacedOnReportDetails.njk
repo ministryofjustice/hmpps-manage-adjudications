@@ -33,6 +33,20 @@
                     {{ noticeOfBeingPlacedOnReportData.prisonerLocationDescription }}
                 </p>
             </div>
+            <div class='adjudication-pdf-section-prisoner__item'>
+              <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Date of birth (DD/MM/YYYY)</p>
+              <p class='govuk-!-margin-bottom-0'
+                         data-qa='prepare-and-record-adjudication-hearing-prisoner-dob'>
+                {{ noticeOfBeingPlacedOnReportData.prisonerDateOfBirth }}
+              </p>
+            </div>
+            <div class='adjudication-pdf-section-prisoner__item__narrow'>
+              <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Age</p>
+              <p class='govuk-!-margin-bottom-0'
+                         data-qa='prepare-and-record-adjudication-hearing-prisoner-age'>
+                {{ noticeOfBeingPlacedOnReportData.prisonerAge.years }}
+              </p>
+            </div>
         </div>
 
         <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
