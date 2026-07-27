@@ -50,7 +50,7 @@
   "dependencies": {
     "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
-    "@ministryofjustice/hmpps-prison-permissions-lib": "4.2.0",
+    "@ministryofjustice/hmpps-prison-permissions-lib": "4.1.0",
     "@ministryofjustice/hmpps-rest-client": "2.2.0",
     "@types/jsonwebtoken": "^9.0.10",
     "agentkeepalive": "^4.6.0",
