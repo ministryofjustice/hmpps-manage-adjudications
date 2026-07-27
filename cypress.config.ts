@@ -80,6 +80,7 @@ export default defineConfig({
         stubGetUserFromUsername: users.stubGetUserFromUsername,
         stubSearch: prisonerSearch.stubSearch,
         stubSearchPrisonerDetails: prisonerSearch.stubSearchPrisonerDetails,
+        stubGetPrisonerPermissionDetails: prisonerSearch.stubGetPrisonerPermissionDetails,
         stubAuthUser: users.stubAuthUser,
         stubUserOriginatingAgency: users.stubUserOriginatingAgency,
         stubGetUser: users.stubGetUser,

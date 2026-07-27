@@ -1,0 +1,31 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% set title = 'You do not have permission to view this page' %}
+
+{% block pageTitle %}
+  {{ title }} - Digital Prison Services
+{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    collapseOnMobile: true,
+    items: [
+      {
+        text: "Digital Prison Services",
+        href: digitalPrisonServiceUrl
+      },
+      {
+        text: "Adjudications",
+        href: '/place-a-prisoner-on-report'
+      }
+    ],
+    classes: "govuk-!-display-none-print"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l" data-qa="forbidden">You do not have permission to view people outside of your establishment.</h1>
+  <p class="govuk-body">You need extra permission to be able to view and create reports for people who are not in your establishment.</p>
+  <p class="govuk-body">Contact a local system administrator (LSA) in your establishment to discuss the permission you need.</p>
+{% endblock %}

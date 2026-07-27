@@ -1,4 +1,7 @@
+import { PermissionsService } from '@ministryofjustice/hmpps-prison-permissions-lib'
 import { dataAccess } from '../data'
+import config from '../config'
+import logger from '../../logger'
 import UserService from './userService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import TokenStore from '../data/tokenStore'
@@ -76,6 +79,17 @@ const outcomesService = new OutcomesService()
 const punishmentsService = new PunishmentsService(hmppsAuthClient, hmppsManageUsersClient)
 const createOnBehalfOfSessionService = new CreateOnBehalfOfSessionService()
 const frontendComponentService = new FrontendComponentService(frontendComponentApiClient)
+
+// Shared HMPPS logic for "may this member of staff see this prisoner's adjudications?". The library
+// fetches prisoner data from prisoner-search itself using a system (client-credentials) token, which
+// the existing HmppsAuthClient already provides and caches. The system client must hold
+// ROLE_VIEW_PRISONER_DATA for these calls to succeed.
+const permissionsService = PermissionsService.create({
+  prisonerSearchConfig: config.apis.prisonerSearch,
+  authenticationClient: { getToken: (username?: string) => hmppsAuthClient.getSystemClientToken(username) },
+  logger,
+})
+
 const { applicationInfo } = dataAccess()
 
 export const services = {
@@ -95,6 +109,7 @@ export const services = {
   chartApiService,
   createOnBehalfOfSessionService,
   frontendComponentService,
+  permissionsService,
 }
 
 export type Services = typeof services
