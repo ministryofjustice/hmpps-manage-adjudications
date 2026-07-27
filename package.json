@@ -93,7 +93,7 @@
     "@types/csurf": "^1.11.5",
     "@types/escape-html": "^1.0.4",
     "@types/express": "4.17.25",
-    "@types/express-serve-static-core": "4.19.8",
+    "@types/express-serve-static-core": "4.19.9",
     "@types/express-session": "^1.19.0",
     "@types/http-errors": "^2.0.5",
     "@types/jest": "^30.0.0",
@@ -127,13 +127,13 @@
     "csurf": {
       "cookie": "1.1.1"
     },
-    "diff": "^8.0.3",
+    "diff": "^8.0.4",
     "brace-expansion": "^5.0.8",
     "js-yaml": "^4.3.0",
-    "@opentelemetry/core": "^2.8.0",
+    "@opentelemetry/core": "^2.9.0",
     "@opentelemetry/propagator-jaeger": "^2.10.0",
     "protobufjs": "^8.7.1",
     "uuid": "^11.1.1",
-    "serialize-javascript": "^7.0.3"
+    "serialize-javascript": "^7.0.7"
   }
 }
