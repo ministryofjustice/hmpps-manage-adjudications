@@ -23,7 +23,6 @@ export default class Dis7PdfBlank {
       const prisoner = await withRetry(() =>
         this.reportedAdjudicationsService.getPrisonerDetails(adjudicationDetails.prisonerNumber, user),
       )
-      console.log('prisoner: ', prisoner)
       const prisonerDateOfBirth = new Date(prisoner.dateOfBirth).toLocaleDateString('en-GB')
 
       const prisonerAge = calculateAge(prisoner.dateOfBirth, new Date().toString())

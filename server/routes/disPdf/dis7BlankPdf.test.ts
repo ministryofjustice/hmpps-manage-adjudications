@@ -2,12 +2,9 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
-// import { PrisonerSimpleResult } from '../../data/prisonerSimpleResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import TestData from '../testutils/testData'
 import Dis7BlackPdf from './dis7BlankPdf'
-import { calculateAge } from '../../utils/utils'
-// import { PrisonerResultSummary } from '../../services/placeOnReportService'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
@@ -54,8 +51,6 @@ const confirmedOnReportData = (isYoi: boolean): ConfirmedOnReportData => {
     prisonName: 'MDI',
   }
 }
-
-const expectedAge = calculateAge('1990-10-11', new Date().toString())
 
 beforeEach(() => {
   jest.useFakeTimers().setSystemTime(new Date('2026-07-28'))
