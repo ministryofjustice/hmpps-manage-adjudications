@@ -16,6 +16,20 @@
         </p>
     </div>
     <div class='adjudication-pdf-section-prisoner__item'>
+      <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Date of birth (DD/MM/YYYY)</p>
+      <p class='govuk-!-margin-bottom-0'
+                 data-qa='prepare-and-record-adjudication-hearing-prisoner-dob'>
+        {{ data.prisonerDateOfBirth }}
+      </p>
+    </div>
+    <div class='adjudication-pdf-section-prisoner__item__narrow'>
+      <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Age</p>
+      <p class='govuk-!-margin-bottom-0'
+                 data-qa='prepare-and-record-adjudication-hearing-prisoner-age'>
+        {{ data.prisonerAge.years }}
+      </p>
+    </div>
+    <div class='adjudication-pdf-section-prisoner__item'>
         <p class='govuk-!-margin-bottom-0 govuk-!-font-weight-bold'>Location</p>
         <p class='govuk-!-margin-bottom-0'
             data-qa='notice-of-being-placed-on-report-prisoner-location-description'>

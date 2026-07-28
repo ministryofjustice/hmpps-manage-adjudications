@@ -2,9 +2,11 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import { ReportedAdjudication } from '../../data/ReportedAdjudicationResult'
+// import { PrisonerSimpleResult } from '../../data/prisonerSimpleResult'
 import { ConfirmedOnReportData } from '../../data/ConfirmedOnReportData'
 import TestData from '../testutils/testData'
 import Dis7BlackPdf from './dis7BlankPdf'
+// import { PrisonerResultSummary } from '../../services/placeOnReportService'
 
 jest.mock('../../services/reportedAdjudicationsService.ts')
 
@@ -64,10 +66,17 @@ describe('GET /dis7', () => {
       reportedAdjudication: reportedAdjudicationYoi,
     })
 
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue({
+      prisonerNumber: 'H5123BY',
+      dateOfBirth: '1990-10-11',
+    } as never)
+
     const res: Response = {
       render: jest.fn(),
       renderPdf: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
       locals: {},
     } as unknown as Response
 
@@ -102,6 +111,11 @@ describe('GET /dis7', () => {
           prospectiveDaysMax: 42,
           applyMonths: 4,
           reportedDate: '21 December 2020',
+          prisonerAge: {
+            months: 9,
+            years: 35,
+          },
+          prisonerDateOfBirth: '11/10/1990',
         },
       },
       'pages/adjudicationResultReportHeader',
@@ -119,11 +133,17 @@ describe('GET /dis7', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: reportedAdjudicationAdult,
     })
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue({
+      prisonerNumber: 'H5123BY',
+      dateOfBirth: '1990-10-11',
+    } as never)
 
     const res: Response = {
       render: jest.fn(),
       renderPdf: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
       locals: {},
     } as unknown as Response
 
@@ -158,6 +178,11 @@ describe('GET /dis7', () => {
           prospectiveDaysMax: 84,
           applyMonths: 6,
           reportedDate: '21 December 2020',
+          prisonerAge: {
+            months: 9,
+            years: 35,
+          },
+          prisonerDateOfBirth: '11/10/1990',
         },
       },
       'pages/adjudicationResultReportHeader',
