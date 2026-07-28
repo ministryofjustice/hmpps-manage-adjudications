@@ -92,6 +92,7 @@ const confirmedOnReportData: ConfirmedOnReportData = {
 }
 
 beforeEach(() => {
+  jest.useFakeTimers().setSystemTime(new Date('2026-07-28'))
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({ reportedAdjudication })
   placeOnReportService.getOffenceRule.mockResolvedValue(offenceRule)
   placeOnReportService.getPrisonerDetails.mockResolvedValue(prisonerResultSummary)
@@ -99,6 +100,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  jest.resetAllMocks()
   jest.resetAllMocks()
 })
 
