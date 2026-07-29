@@ -10,10 +10,10 @@
     {% if selectedAnswerId == answerId and officerId != null %}
         <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}"/>
         <div>
-            <p data-qa="victim-officer-name">
+            <p class="govuk-body" data-qa="victim-officer-name">
                 <span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }}
             </p>
-            <p>
+            <p class="govuk-body">
                 <span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }}
             </p>
             <div>
