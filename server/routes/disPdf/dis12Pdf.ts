@@ -5,6 +5,7 @@ import NoticeOfBeingPlacedOnReportData from '../../data/noticeOfBeingPlacedOnRep
 import config from '../../config'
 import DecisionTreeService from '../../services/decisionTreeService'
 import { ReportedAdjudicationStatus } from '../../data/ReportedAdjudicationResult'
+import { calculateAge } from '../../utils/utils'
 import { withRetry } from '../../utils/withRetry'
 import log from '../../log'
 
@@ -41,6 +42,10 @@ export default class Dis12Pdf {
         ),
       )
 
+      const prisonerDateOfBirth = new Date(prisoner.dateOfBirth).toLocaleDateString('en-GB')
+
+      const prisonerAge = calculateAge(prisoner.dateOfBirth, adjudicationDetails.incidentDate)
+
       // Validate completeness of data
       if (!adjudicationDetails || !reportedAdjudication || !offences) {
         throw new Error('Incomplete data for PDF rendering')
@@ -63,6 +68,8 @@ export default class Dis12Pdf {
         offences,
         nextHearingDateTime,
         reportedAdjudication.createdOnBehalfOfOfficer,
+        prisonerDateOfBirth,
+        prisonerAge,
       )
 
       res.renderPdf(

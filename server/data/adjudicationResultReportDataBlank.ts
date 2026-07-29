@@ -44,7 +44,16 @@ export class AdjudicationResultReportDataBlank {
 
   applyMonths: number
 
-  constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData) {
+  prisonerDateOfBirth: string
+
+  prisonerAge: { years: number; months: number }
+
+  constructor(
+    chargeNumber: string,
+    confirmedOnReportData: ConfirmedOnReportData,
+    prisonerDateOfBirth: string,
+    prisonerAge: { years: number; months: number },
+  ) {
     this.chargeNumber = chargeNumber
     this.establishmentName = confirmedOnReportData.prisonName
     this.prisonerDisplayName = convertToTitleCase(
@@ -70,5 +79,7 @@ export class AdjudicationResultReportDataBlank {
     this.daysAddedDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 84
     this.prospectiveDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 84
     this.applyMonths = confirmedOnReportData.isYouthOffender ? 4 : 6
+    this.prisonerDateOfBirth = prisonerDateOfBirth
+    this.prisonerAge = prisonerAge
   }
 }
