@@ -26,7 +26,6 @@ export default class Dis3Pdf {
       const { reportedAdjudication, associatedPrisoner, prisoner } = await withRetry(() =>
         this.decisionTreeService.reportedAdjudicationIncidentData(chargeNumber, user),
       )
-      console.log('adjudicationDetails: ', adjudicationDetails)
 
       const offences = await withRetry(() =>
         this.decisionTreeService.getAdjudicationOffences(
