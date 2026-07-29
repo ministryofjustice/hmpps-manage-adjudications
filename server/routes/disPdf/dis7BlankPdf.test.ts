@@ -52,12 +52,7 @@ const confirmedOnReportData = (isYoi: boolean): ConfirmedOnReportData => {
   }
 }
 
-beforeEach(() => {
-  jest.useFakeTimers().setSystemTime(new Date('2026-07-28'))
-})
-
 afterEach(() => {
-  jest.useRealTimers()
   jest.resetAllMocks()
 })
 
@@ -115,8 +110,8 @@ describe('GET /dis7', () => {
           applyMonths: 4,
           reportedDate: '21 December 2020',
           prisonerAge: {
-            months: 9,
-            years: 35,
+            months: 2,
+            years: 30,
           },
           prisonerDateOfBirth: '11/10/1990',
         },
@@ -182,8 +177,8 @@ describe('GET /dis7', () => {
           applyMonths: 6,
           reportedDate: '21 December 2020',
           prisonerAge: {
-            months: 9,
-            years: 35,
+            months: 2,
+            years: 30,
           },
           prisonerDateOfBirth: '11/10/1990',
         },

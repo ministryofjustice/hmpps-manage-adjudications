@@ -92,7 +92,6 @@ const confirmedOnReportData: ConfirmedOnReportData = {
 }
 
 beforeEach(() => {
-  jest.useFakeTimers().setSystemTime(new Date('2026-07-28'))
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({ reportedAdjudication })
   placeOnReportService.getOffenceRule.mockResolvedValue(offenceRule)
   placeOnReportService.getPrisonerDetails.mockResolvedValue(prisonerResultSummary)
@@ -100,7 +99,6 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  jest.resetAllMocks()
   jest.resetAllMocks()
 })
 
@@ -148,8 +146,8 @@ describe('GET /all-completed-reports', () => {
             ],
           },
           prisonerAge: {
-            months: 9,
-            years: 35,
+            months: 2,
+            years: 30,
           },
           prisonerDateOfBirth: '11/10/1990',
           prisonerDisplayName: 'Smith, John',
@@ -227,8 +225,8 @@ describe('GET /all-completed-reports', () => {
             ],
           },
           prisonerAge: {
-            months: 9,
-            years: 35,
+            months: 2,
+            years: 30,
           },
           prisonerDateOfBirth: '11/10/1990',
           prisonerDisplayName: 'Smith, John',
@@ -295,8 +293,8 @@ describe('GET /all-completed-reports', () => {
             ],
           },
           prisonerAge: {
-            months: 9,
-            years: 35,
+            months: 2,
+            years: 30,
           },
           prisonerDateOfBirth: '11/10/1990',
           prisonerDisplayName: 'Smith, John',

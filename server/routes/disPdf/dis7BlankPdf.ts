@@ -25,7 +25,7 @@ export default class Dis7PdfBlank {
       )
       const prisonerDateOfBirth = new Date(prisoner.dateOfBirth).toLocaleDateString('en-GB')
 
-      const prisonerAge = calculateAge(prisoner.dateOfBirth, new Date().toString())
+      const prisonerAge = calculateAge(prisoner.dateOfBirth, adjudicationDetails.incidentDate)
 
       // Validate completeness of data
       if (!adjudicationDetails) {
