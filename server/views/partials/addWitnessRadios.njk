@@ -14,10 +14,10 @@
 {% if selectedAnswerId == "OFFICER" and officerId != null %}
   <input id="officerId" type="hidden" name="officerId" value="{{ officerId }}"/>
   <div>
-    <p data-qa="officer-name">
+    <p class="govuk-body" data-qa="officer-name">
       <span class="govuk-!-font-weight-bold">Name</span> - {{ officerName }}
     </p>
-    <p>
+    <p class="govuk-body">
       <span class="govuk-!-font-weight-bold">User ID</span> - {{ officerId }}
     </p>
     <div>
@@ -63,10 +63,10 @@
 {% if selectedAnswerId == "STAFF" and staffId != null %}
   <input type="hidden" id="staffId" name="staffId" value="{{ staffId }}"/>
   <div>
-    <p data-qa="staff-name">
+    <p class="govuk-body" data-qa="staff-name">
       <span class="govuk-!-font-weight-bold">Name</span> - {{ staffName }}
     </p>
-    <p>
+    <p class="govuk-body">
       <span class="govuk-!-font-weight-bold">User ID</span> - {{ staffId }}
     </p>
     <div>
