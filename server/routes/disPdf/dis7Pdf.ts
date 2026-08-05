@@ -25,7 +25,6 @@ export default class Dis7Pdf {
       }
       const adjudicationResultReportData = new AdjudicationResultReportData(chargeNumber, adjudicationDetails)
       const header = 'Result of your adjudication'
-
       res.renderPdf(
         `pages/adjudicationResultReport`,
         { adjudicationsUrl, data: adjudicationResultReportData },
