@@ -91,11 +91,17 @@ describe('GET /dis7', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: reportedAdjudicationYoi,
     })
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue({
+      prisonerNumber: 'H5123BY',
+      dateOfBirth: '1990-10-11',
+    } as never)
 
     const res: Response = {
       render: jest.fn(),
       renderPdf: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
       locals: {},
     } as unknown as Response
 
@@ -114,6 +120,11 @@ describe('GET /dis7', () => {
           prisonerNumber: 'H5123BY',
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           reportedDate: '21 December 2020',
+          prisonerAge: {
+            months: 2,
+            years: 30,
+          },
+          prisonerDateOfBirth: '11/10/1990',
           adjudicatorType: 'GOV',
           ccPunishmentAwarded: false,
           adaGiven: false,
@@ -143,11 +154,17 @@ describe('GET /dis7', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: reportedAdjudicationAdult,
     })
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue({
+      prisonerNumber: 'H5123BY',
+      dateOfBirth: '1990-10-11',
+    } as never)
 
     const res: Response = {
       render: jest.fn(),
       renderPdf: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
       locals: {},
     } as unknown as Response
 
@@ -166,6 +183,11 @@ describe('GET /dis7', () => {
           prisonerNumber: 'H5123BY',
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
           reportedDate: '21 December 2020',
+          prisonerAge: {
+            months: 2,
+            years: 30,
+          },
+          prisonerDateOfBirth: '11/10/1990',
           adjudicatorType: 'GOV',
           ccPunishmentAwarded: false,
           adaGiven: false,
