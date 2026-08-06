@@ -38,7 +38,6 @@ export default class Dis7Pdf {
         prisonerAge,
       )
       const header = 'Result of your adjudication'
-
       res.renderPdf(
         `pages/adjudicationResultReport`,
         { adjudicationsUrl, data: adjudicationResultReportData },

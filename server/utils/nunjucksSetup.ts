@@ -424,6 +424,10 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
           return 'You will not be able to take part in a particular activity or activities. You can stil go to education, training courses and physical education'
         case PunishmentType.REMOVAL_WING:
           return "You'll be moved somewhere else in the prison. You'll be able to continue to take part, as far as possible, in normal prison activities."
+        case PunishmentType.RESTRICTION_OF_SOCIAL_VISITS:
+          return 'You can now only have one in-person social visit every 28 days. This does not apply for visits with your child if they are under 18.'
+        case PunishmentType.LOSS_OF_SOCIAL_VISITS:
+          return 'You can no longer have in-person social visits. This does not include visits with your child if they are under 18.'
         default:
           return null
       }
