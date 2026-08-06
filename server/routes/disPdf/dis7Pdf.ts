@@ -5,6 +5,7 @@ import config from '../../config'
 import AdjudicationResultReportData from '../../data/adjudicationResultReportData'
 import { withRetry } from '../../utils/withRetry'
 import log from '../../log'
+import { calculateAge } from '../../utils/utils'
 
 export default class Dis7Pdf {
   constructor(private readonly reportedAdjudicationsService: ReportedAdjudicationsService) {}
@@ -23,7 +24,19 @@ export default class Dis7Pdf {
       if (!adjudicationDetails) {
         throw new Error('Incomplete data for PDF rendering')
       }
-      const adjudicationResultReportData = new AdjudicationResultReportData(chargeNumber, adjudicationDetails)
+
+      const prisoner = await withRetry(() =>
+        this.reportedAdjudicationsService.getPrisonerDetails(adjudicationDetails.prisonerNumber, user),
+      )
+      const prisonerDateOfBirth = new Date(prisoner.dateOfBirth).toLocaleDateString('en-GB')
+      const prisonerAge = calculateAge(prisoner.dateOfBirth, adjudicationDetails.incidentDate)
+
+      const adjudicationResultReportData = new AdjudicationResultReportData(
+        chargeNumber,
+        adjudicationDetails,
+        prisonerDateOfBirth,
+        prisonerAge,
+      )
       const header = 'Result of your adjudication'
 
       res.renderPdf(
