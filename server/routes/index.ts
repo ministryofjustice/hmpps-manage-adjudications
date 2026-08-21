@@ -127,6 +127,7 @@ export default function routes(
     punishmentsService,
     chartApiService,
     createOnBehalfOfSessionService,
+    permissionsService,
   }: Services,
 ): Router {
   router.use(
@@ -156,7 +157,7 @@ export default function routes(
   )
   router.use(adjudicationUrls.confirmedOnReport.root, confirmedOnReportRoutes({ reportedAdjudicationsService }))
   router.use(adjudicationUrls.taskList.root, taskListRoutes({ placeOnReportService }))
-  router.use('/prisoner', prisonerRoutes({ placeOnReportService }))
+  router.use('/prisoner', prisonerRoutes({ placeOnReportService, permissionsService }))
   router.use(adjudicationUrls.searchForPrisoner.root, prisonerSearchRoutes({ userService }))
   router.use(adjudicationUrls.selectPrisoner.root, prisonerSelectRoutes({ prisonerSearchService, userService }))
   router.use(adjudicationUrls.selectAssociatedPrisoner.root, selectAssociatedPrisonerRoutes({ prisonerSearchService }))
@@ -512,19 +513,19 @@ export default function routes(
   )
   router.use(
     adjudicationUrls.adjudicationHistory.root,
-    adjudicationHistoryRoutes({ reportedAdjudicationsService, userService }),
+    adjudicationHistoryRoutes({ reportedAdjudicationsService, permissionsService }),
   )
   router.use(
     adjudicationUrls.activePunishments.root,
-    activePunishmentsRoutes({ reportedAdjudicationsService, punishmentsService }),
+    activePunishmentsRoutes({ reportedAdjudicationsService, punishmentsService, permissionsService }),
   )
   router.use(
     adjudicationUrls.prisonerReportConsolidated.root,
     adjudicationConsolidatedViewRoutes({
       reportedAdjudicationsService,
-      userService,
       decisionTreeService,
       punishmentsService,
+      permissionsService,
     }),
   )
 
