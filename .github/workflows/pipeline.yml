@@ -51,9 +51,12 @@ jobs:
     secrets: inherit
   node_integration_tests:
     name: node integration tests
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests_redis.yml@v2 # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests.yml@cf3cb3edee6cdfc2ed83ed725e547406de9509ba # WORKFLOW_VERSION
     needs: [ node_build ]
     secrets: inherit
+    with:
+      redis_tag: '7.4'
+      shard_count: 6
   helm_lint:
     strategy:
       matrix:
