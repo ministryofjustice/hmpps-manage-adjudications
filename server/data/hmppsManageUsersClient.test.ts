@@ -98,8 +98,6 @@ describe('hmppsManangeUsersClient', () => {
     })
   })
 
-  // test comment
-
   describe('getUserEmail', () => {
     it('should return data from api', async () => {
       const response = {
