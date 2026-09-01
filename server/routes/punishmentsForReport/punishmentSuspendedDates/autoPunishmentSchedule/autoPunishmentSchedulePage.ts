@@ -5,7 +5,7 @@ import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType, isSocialVisitsPunishment } from '../../../../data/PunishmentResult'
 
 type PageData = {
   startDate?: string
@@ -17,6 +17,7 @@ type PageData = {
   stoppagePercentage?: number
   redisId?: string
   chargeNumberForSuspendedPunishment?: string
+  hasChildUnder18?: boolean
 }
 
 export default class AutoPunishmentSuspendedSchedulePage {
@@ -37,6 +38,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
       stoppagePercentage,
       redisId,
       chargeNumberForSuspendedPunishment,
+      hasChildUnder18,
     } = pageData
     const { punishmentNumberToActivate } = req.query
 
@@ -56,18 +58,20 @@ export default class AutoPunishmentSuspendedSchedulePage {
       } as ParsedUrlQueryInput,
     })
 
-    const daysChangeHref = url.format({
-      pathname: daysPath,
-      query: {
-        punishmentType: type,
-        privilegeType,
-        otherPrivilege,
-        stoppagePercentage,
-        duration,
-        punishmentNumberToActivate,
-        chargeNumberForSuspendedPunishment,
-      } as ParsedUrlQueryInput,
-    })
+    const daysChangeHref = isSocialVisitsPunishment(type)
+      ? null
+      : url.format({
+          pathname: daysPath,
+          query: {
+            punishmentType: type,
+            privilegeType,
+            otherPrivilege,
+            stoppagePercentage,
+            duration,
+            punishmentNumberToActivate,
+            chargeNumberForSuspendedPunishment,
+          } as ParsedUrlQueryInput,
+        })
 
     return res.render(`pages/autoPunishmentSchedule.njk`, {
       chargeNumber,
@@ -82,6 +86,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
       otherPrivilege,
       stoppagePercentage,
       redisId,
+      hasChildUnder18,
     })
   }
 
@@ -108,6 +113,7 @@ export default class AutoPunishmentSuspendedSchedulePage {
       stoppagePercentage: lastAddedPunishment.stoppagePercentage,
       redisId: lastAddedPunishment.redisId,
       chargeNumberForSuspendedPunishment: lastAddedPunishment.activatedFrom,
+      hasChildUnder18: lastAddedPunishment.hasChildUnder18,
     })
   }
 

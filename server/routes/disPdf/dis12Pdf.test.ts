@@ -145,6 +145,11 @@ describe('GET /all-completed-reports', () => {
               },
             ],
           },
+          prisonerAge: {
+            months: 2,
+            years: 30,
+          },
+          prisonerDateOfBirth: '11/10/1990',
           prisonerDisplayName: 'Smith, John',
           prisonerFriendlyName: 'John Smith',
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
@@ -156,7 +161,7 @@ describe('GET /all-completed-reports', () => {
         },
       },
       'pages/noticeOfBeingPlacedOnReportHeader',
-      { chargeNumber: '1524493' },
+      { chargeNumber: '1524493', isPrisonerCopy: true },
       'pages/noticeOfBeingPlacedOnReportFooter',
       {},
       {
@@ -219,6 +224,11 @@ describe('GET /all-completed-reports', () => {
               },
             ],
           },
+          prisonerAge: {
+            months: 2,
+            years: 30,
+          },
+          prisonerDateOfBirth: '11/10/1990',
           prisonerDisplayName: 'Smith, John',
           prisonerFriendlyName: 'John Smith',
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
@@ -230,7 +240,7 @@ describe('GET /all-completed-reports', () => {
         },
       },
       'pages/noticeOfBeingPlacedOnReportHeader',
-      { chargeNumber: '1524493' },
+      { chargeNumber: '1524493', isPrisonerCopy: true },
       'pages/noticeOfBeingPlacedOnReportFooter',
       {},
       {
@@ -282,6 +292,11 @@ describe('GET /all-completed-reports', () => {
               },
             ],
           },
+          prisonerAge: {
+            months: 2,
+            years: 30,
+          },
+          prisonerDateOfBirth: '11/10/1990',
           prisonerDisplayName: 'Smith, John',
           prisonerFriendlyName: 'John Smith',
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
@@ -293,7 +308,7 @@ describe('GET /all-completed-reports', () => {
         },
       },
       'pages/noticeOfBeingPlacedOnReportHeader',
-      { chargeNumber: '1524493' },
+      { chargeNumber: '1524493', isPrisonerCopy: false },
       'pages/noticeOfBeingPlacedOnReportFooter',
       {},
       {

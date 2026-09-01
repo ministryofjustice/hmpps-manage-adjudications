@@ -2,8 +2,9 @@ import { Request, Response } from 'express'
 
 import ReportedAdjudicationsService from '../../services/reportedAdjudicationsService'
 import config from '../../config'
-import AdjudicationResultReportDataBlank from '../../data/adjudicationResultReportDataBlank'
+import { AdjudicationResultReportDataBlank } from '../../data/adjudicationResultReportDataBlank'
 import { withRetry } from '../../utils/withRetry'
+import { calculateAge } from '../../utils/utils'
 import log from '../../log'
 
 export default class Dis7PdfBlank {
@@ -19,6 +20,13 @@ export default class Dis7PdfBlank {
         this.reportedAdjudicationsService.getConfirmationDetails(chargeNumber, user),
       )
 
+      const prisoner = await withRetry(() =>
+        this.reportedAdjudicationsService.getPrisonerDetails(adjudicationDetails.prisonerNumber, user),
+      )
+      const prisonerDateOfBirth = new Date(prisoner.dateOfBirth).toLocaleDateString('en-GB')
+
+      const prisonerAge = calculateAge(prisoner.dateOfBirth, adjudicationDetails.incidentDate)
+
       // Validate completeness of data
       if (!adjudicationDetails) {
         throw new Error('Incomplete data for PDF rendering')
@@ -27,8 +35,12 @@ export default class Dis7PdfBlank {
       const header = adjudicationDetails.isYouthOffender
         ? 'Adjudication result – Young Offender (YOI Rule 55)'
         : 'Adjudication result – Adult (Prison Rule 51)'
-      const adjudicationResultReportDataBlank = new AdjudicationResultReportDataBlank(chargeNumber, adjudicationDetails)
-
+      const adjudicationResultReportDataBlank = new AdjudicationResultReportDataBlank(
+        chargeNumber,
+        adjudicationDetails,
+        prisonerDateOfBirth,
+        prisonerAge,
+      )
       res.renderPdf(
         `pages/adjudicationResultReportBlank`,
         { adjudicationsUrl, data: adjudicationResultReportDataBlank },

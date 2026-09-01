@@ -7,7 +7,12 @@ import { hasAnyRole, apiDateToDatePicker, datePickerToApi } from '../../../../ut
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
-import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
+import {
+  PrivilegeType,
+  PunishmentType,
+  RehabilitativeActivity,
+  parseHasChildUnder18,
+} from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -72,8 +77,9 @@ export default class SuspendedUntilDatePage {
     const { chargeNumber } = req.params
     const { suspendedUntil } = req.body
     const { user } = res.locals
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, hasChildUnder18, duration } = req.query
     const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
+    const childUnder18 = parseHasChildUnder18(hasChildUnder18)
 
     const error = validateForm({
       suspendedUntil,
@@ -92,6 +98,7 @@ export default class SuspendedUntilDatePage {
         privilegeType: privilegeType ? PrivilegeType[privilegeType as keyof typeof PrivilegeType] : null,
         otherPrivilege: otherPrivilege ? (otherPrivilege as string) : null,
         stoppagePercentage: stoppagePercentage ? Number(stoppagePercentage) : null,
+        ...(childUnder18 !== undefined && { hasChildUnder18: childUnder18 }),
         duration: Number(duration),
         suspendedUntil: suspendedUntil ? datePickerToApi(suspendedUntil) : null,
         rehabilitativeActivities: [] as RehabilitativeActivity[],
@@ -106,7 +113,11 @@ export default class SuspendedUntilDatePage {
       throw postError
     }
 
-    const isGovernerHearing = !(await this.punishmentsService.checkAdditionalDaysAvailability(chargeNumber, user))
+    const { isIndependentAdjudicatorHearing } = await this.punishmentsService.getPunishmentAvailability(
+      chargeNumber,
+      user,
+    )
+    const isGovernerHearing = !isIndependentAdjudicatorHearing
 
     if (
       isGovernerHearing &&
@@ -118,6 +129,8 @@ export default class SuspendedUntilDatePage {
         PunishmentType.PRIVILEGE,
         PunishmentType.REMOVAL_ACTIVITY,
         PunishmentType.REMOVAL_WING,
+        PunishmentType.RESTRICTION_OF_SOCIAL_VISITS,
+        PunishmentType.LOSS_OF_SOCIAL_VISITS,
       ].includes(type)
     ) {
       return res.redirect(adjudicationUrls.punishmentHasRehabilitativeActivities.urls.start(chargeNumber, redisId))

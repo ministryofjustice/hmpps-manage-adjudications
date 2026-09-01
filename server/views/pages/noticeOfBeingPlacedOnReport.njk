@@ -7,9 +7,9 @@
 {% block content %}
     <div class='adjudication-pdf'>
         {{ noticeOfBeingPlacedOnReportDetails(noticeOfBeingPlacedOnReportData) }}
+        {{ noticeOfBeingPlacedOnReportAdjournment(noticeOfBeingPlacedOnReportData.chargeNumber) }}
         {% if noticeOfBeingPlacedOnReportData.isPrisonerCopy %}
             {{ noticeOfBeingPlacedOnReportLegal_v2(noticeOfBeingPlacedOnReportData.chargeNumber) }}
         {% endif %}
-        {{ noticeOfBeingPlacedOnReportAdjournment(noticeOfBeingPlacedOnReportData.chargeNumber) }}
     </div>
 {% endblock %}

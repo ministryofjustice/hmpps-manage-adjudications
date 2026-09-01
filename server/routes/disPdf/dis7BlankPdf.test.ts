@@ -64,10 +64,17 @@ describe('GET /dis7', () => {
       reportedAdjudication: reportedAdjudicationYoi,
     })
 
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue({
+      prisonerNumber: 'H5123BY',
+      dateOfBirth: '1990-10-11',
+    } as never)
+
     const res: Response = {
       render: jest.fn(),
       renderPdf: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
       locals: {},
     } as unknown as Response
 
@@ -93,6 +100,8 @@ describe('GET /dis7', () => {
           tvDaysMax: 21,
           associationDaysMax: 21,
           anyPrivilegeDaysMax: 21,
+          lossOfVisitsDaysMax: 0,
+          restrictionOfVisitsDaysMax: 0,
           stoppageOfEarningsDaysMax: 42,
           cellularConfinementDaysMax: 10,
           removalDaysMax: 21,
@@ -100,6 +109,11 @@ describe('GET /dis7', () => {
           prospectiveDaysMax: 42,
           applyMonths: 4,
           reportedDate: '21 December 2020',
+          prisonerAge: {
+            months: 2,
+            years: 30,
+          },
+          prisonerDateOfBirth: '11/10/1990',
         },
       },
       'pages/adjudicationResultReportHeader',
@@ -117,11 +131,17 @@ describe('GET /dis7', () => {
     reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
       reportedAdjudication: reportedAdjudicationAdult,
     })
+    reportedAdjudicationsService.getPrisonerDetails.mockResolvedValue({
+      prisonerNumber: 'H5123BY',
+      dateOfBirth: '1990-10-11',
+    } as never)
 
     const res: Response = {
       render: jest.fn(),
       renderPdf: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
       locals: {},
     } as unknown as Response
 
@@ -141,19 +161,26 @@ describe('GET /dis7', () => {
           prisonerNumber: 'H5123BY',
           isYOI: false,
           prisonerLocationDescription: 'Moorland (HMP & YOI) - 5-2-A-050',
-          canteenDaysMax: 42,
-          facilitiesDaysMax: 42,
-          privateCashDaysMax: 42,
-          tvDaysMax: 42,
-          associationDaysMax: 42,
-          anyPrivilegeDaysMax: 42,
+          canteenDaysMax: 84,
+          facilitiesDaysMax: 84,
+          privateCashDaysMax: 84,
+          tvDaysMax: 84,
+          associationDaysMax: 84,
+          anyPrivilegeDaysMax: 84,
+          lossOfVisitsDaysMax: 27,
+          restrictionOfVisitsDaysMax: 84,
           stoppageOfEarningsDaysMax: 84,
           cellularConfinementDaysMax: 21,
           removalDaysMax: 28,
-          daysAddedDaysMax: 42,
-          prospectiveDaysMax: 42,
+          daysAddedDaysMax: 84,
+          prospectiveDaysMax: 84,
           applyMonths: 6,
           reportedDate: '21 December 2020',
+          prisonerAge: {
+            months: 2,
+            years: 30,
+          },
+          prisonerDateOfBirth: '11/10/1990',
         },
       },
       'pages/adjudicationResultReportHeader',

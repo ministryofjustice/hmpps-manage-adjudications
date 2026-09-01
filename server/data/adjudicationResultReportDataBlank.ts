@@ -1,7 +1,7 @@
 import { ConfirmedOnReportData } from './ConfirmedOnReportData'
 import { convertToTitleCase, formatTimestampTo } from '../utils/utils'
 
-export default class adjudicationResultReportData {
+export class AdjudicationResultReportDataBlank {
   chargeNumber: string
 
   establishmentName: string
@@ -28,6 +28,10 @@ export default class adjudicationResultReportData {
 
   anyPrivilegeDaysMax: number
 
+  lossOfVisitsDaysMax: number
+
+  restrictionOfVisitsDaysMax: number
+
   stoppageOfEarningsDaysMax: number
 
   cellularConfinementDaysMax: number
@@ -40,7 +44,16 @@ export default class adjudicationResultReportData {
 
   applyMonths: number
 
-  constructor(chargeNumber: string, confirmedOnReportData: ConfirmedOnReportData) {
+  prisonerDateOfBirth: string
+
+  prisonerAge: { years: number; months: number }
+
+  constructor(
+    chargeNumber: string,
+    confirmedOnReportData: ConfirmedOnReportData,
+    prisonerDateOfBirth: string,
+    prisonerAge: { years: number; months: number },
+  ) {
     this.chargeNumber = chargeNumber
     this.establishmentName = confirmedOnReportData.prisonName
     this.prisonerDisplayName = convertToTitleCase(
@@ -52,17 +65,21 @@ export default class adjudicationResultReportData {
     this.reportedDate = formatTimestampTo(confirmedOnReportData.createdDateTime, 'D MMMM YYYY')
     this.prisonerNumber = confirmedOnReportData.prisonerNumber
     this.isYOI = confirmedOnReportData.isYouthOffender
-    this.canteenDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 42
-    this.facilitiesDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 42
-    this.privateCashDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 42
-    this.tvDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 42
-    this.associationDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 42
-    this.anyPrivilegeDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 42
+    this.canteenDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 84
+    this.facilitiesDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 84
+    this.privateCashDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 84
+    this.tvDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 84
+    this.associationDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 84
+    this.anyPrivilegeDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 84
+    this.lossOfVisitsDaysMax = confirmedOnReportData.isYouthOffender ? 0 : 27
+    this.restrictionOfVisitsDaysMax = confirmedOnReportData.isYouthOffender ? 0 : 84
     this.stoppageOfEarningsDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 84
     this.cellularConfinementDaysMax = confirmedOnReportData.isYouthOffender ? 10 : 21
     this.removalDaysMax = confirmedOnReportData.isYouthOffender ? 21 : 28
-    this.daysAddedDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 42
-    this.prospectiveDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 42
+    this.daysAddedDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 84
+    this.prospectiveDaysMax = confirmedOnReportData.isYouthOffender ? 42 : 84
     this.applyMonths = confirmedOnReportData.isYouthOffender ? 4 : 6
+    this.prisonerDateOfBirth = prisonerDateOfBirth
+    this.prisonerAge = prisonerAge
   }
 }
