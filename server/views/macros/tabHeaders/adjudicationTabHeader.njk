@@ -35,7 +35,7 @@
       }), items) %}
     {% endif %}
 
-  <h1 class="govuk-heading-l">Adjudication for charge {{ chargeNumber }}</h1>
+  <h1 id="adjudication-heading" class="govuk-heading-l">Adjudication for charge {{ chargeNumber }}</h1>
   <h2 class="govuk-heading-m" data-qa="review-status">Status: {{ reviewStatusText }}</h2>
 
   {% if status == ReportedAdjudicationStatus.INVALID_OUTCOME %}

@@ -10,6 +10,7 @@ import { OutcomeDetailsHistory, QuashGuiltyFindingReason } from '../../../data/H
 import OutcomesService from '../../../services/outcomesService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { getApiValidationMessage } from '../../../utils/apiError'
 
 export enum PageRequestType {
   CREATION,
@@ -20,24 +21,6 @@ type PageData = {
   error?: FormError
   quashReason?: QuashGuiltyFindingReason
   quashDetails?: string
-}
-
-type ApiError = {
-  status?: number
-  data?: {
-    userMessage?: unknown
-  }
-}
-
-const getValidationMessage = (error: unknown): string | null => {
-  if (typeof error !== 'object' || error === null) return null
-
-  const apiError = error as ApiError
-  const userMessage = apiError.data?.userMessage
-
-  if (apiError.status !== 400 || typeof userMessage !== 'string') return null
-
-  return userMessage.replace(/^Validation failure:\s*/, '')
 }
 
 class PageOptions {
@@ -119,7 +102,7 @@ export default class ReportAQuashedGuiltyFindingPage {
       }
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
     } catch (postError) {
-      const validationMessage = getValidationMessage(postError)
+      const validationMessage = getApiValidationMessage(postError)
       if (validationMessage) {
         return this.renderView(req, res, {
           error: { href: '#quash-error', text: validationMessage },

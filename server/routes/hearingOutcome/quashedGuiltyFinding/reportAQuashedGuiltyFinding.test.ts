@@ -74,7 +74,7 @@ describe('POST', () => {
       status: 400,
       data: {
         userMessage:
-          'Validation failure: Unable to quash LGI-011192 because additional days on LGI-011206 are consecutive to it. Remove the consecutive links first',
+          'Validation failure: Unable to quash LGI-011192 because additional days on LGI-011206 are consecutive to it. Remove consecutive links starting with the last charge in the chain',
       },
     })
 
@@ -88,7 +88,7 @@ describe('POST', () => {
       .expect(res => {
         expect(res.text).toContain('There is a problem')
         expect(res.text).toContain(
-          'Unable to quash LGI-011192 because additional days on LGI-011206 are consecutive to it. Remove the consecutive links first',
+          'Unable to quash LGI-011192 because additional days on LGI-011206 are consecutive to it. Remove consecutive links starting with the last charge in the chain',
         )
         expect(res.text).toContain('href="#quash-error"')
         expect(res.text).toContain('Some details about this decision')

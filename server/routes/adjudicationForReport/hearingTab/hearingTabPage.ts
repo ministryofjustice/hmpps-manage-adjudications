@@ -7,11 +7,17 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import { getNextPageForChosenStep, getSchedulingUnavailableStatuses } from './hearingTabHelper'
 import UserService from '../../../services/userService'
 import { OutcomeHistory } from '../../../data/HearingAndOutcomeResult'
+import { FormError } from '../../../@types/template'
+import { getApiValidationMessage } from '../../../utils/apiError'
 
 export enum PageRequestType {
   REPORTER,
   REVIEWER,
   VIEW,
+}
+
+type PageData = {
+  error?: FormError
 }
 
 class PageOptions {
@@ -63,7 +69,8 @@ export default class HearingTabPage {
     this.pageOptions = new PageOptions(pageType)
   }
 
-  view = async (req: Request, res: Response): Promise<void> => {
+  view = async (req: Request, res: Response, pageData: PageData = {}): Promise<void> => {
+    const { error } = pageData
     const { user } = res.locals
     const { chargeNumber } = req.params
     const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
@@ -126,6 +133,7 @@ export default class HearingTabPage {
       showTransferHearingWarning: getTransferBannerInfo.originatingAgencyToAddOutcome,
       overrideAgencyId: reportedAdjudication.overrideAgencyId,
       outcomeRemovable: this.outcomeRemovable(reportedAdjudication.outcomes),
+      errors: error ? [error] : [],
     })
   }
 
@@ -142,7 +150,17 @@ export default class HearingTabPage {
       removeQuashedFindingButton,
     } = req.body
     if (removeOutcomeButton || removeQuashedFindingButton) {
-      await this.outcomesService.removeNotProceedOrQuashed(chargeNumber, user)
+      try {
+        await this.outcomesService.removeNotProceedOrQuashed(chargeNumber, user)
+      } catch (postError) {
+        const validationMessage = removeQuashedFindingButton ? getApiValidationMessage(postError) : null
+        if (validationMessage) {
+          return this.view(req, res, {
+            error: { href: '#adjudication-heading', text: validationMessage },
+          })
+        }
+        throw postError
+      }
     }
     if (removeAdjournHearingOutcomeButton) {
       await this.outcomesService.removeAdjournOutcome(chargeNumber, user)
