@@ -113,7 +113,6 @@ export default defineConfig({
         stubGetUsersLocations: prisonApi.stubGetUsersLocations,
         stubGetPrisonersAlerts: alertApi.stubGetPrisonersAlerts,
         stubGetMovementByOffender: prisonApi.stubGetMovementByOffender,
-        stubValidateChargeNumber: prisonApi.stubValidateChargeNumber,
 
         stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
         stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
@@ -184,7 +183,7 @@ export default defineConfig({
       })
     },
 
-    baseUrl: 'http://localhost:3007',
+    baseUrl: 'http://localhost:3000',
     specPattern: 'integration_tests/integration/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
   },
