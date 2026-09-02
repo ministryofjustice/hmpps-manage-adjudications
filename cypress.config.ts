@@ -113,7 +113,6 @@ export default defineConfig({
         stubGetUsersLocations: prisonApi.stubGetUsersLocations,
         stubGetPrisonersAlerts: alertApi.stubGetPrisonersAlerts,
         stubGetMovementByOffender: prisonApi.stubGetMovementByOffender,
-        stubValidateChargeNumber: prisonApi.stubValidateChargeNumber,
 
         stubStartNewDraftAdjudication: adjudications.stubStartNewDraftAdjudication,
         stubPostDraftIncidentStatement: adjudications.stubPostDraftIncidentStatement,
