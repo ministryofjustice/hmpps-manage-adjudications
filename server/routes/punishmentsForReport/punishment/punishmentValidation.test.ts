@@ -34,6 +34,21 @@ describe('validateForm', () => {
       }),
     ).toBeNull()
   })
+  it.each([PunishmentType.LOSS_OF_SOCIAL_VISITS, PunishmentType.RESTRICTION_OF_SOCIAL_VISITS])(
+    'Valid submit has no errors for %s when the child question is answered',
+    punishmentType => {
+      expect(validateForm({ punishmentType, hasChildUnder18: false })).toBeNull()
+    },
+  )
+  it.each([
+    [PunishmentType.LOSS_OF_SOCIAL_VISITS, '#lossHasChildUnder18'],
+    [PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, '#restrictionHasChildUnder18'],
+  ])('shows an error when the child question is not answered for %s', (punishmentType, href) => {
+    expect(validateForm({ punishmentType })).toEqual({
+      href,
+      text: 'Select whether the prisoner has any children under 18',
+    })
+  })
   it('shows error when no punishment option selected - damages previously added', () => {
     expect(
       validateForm({

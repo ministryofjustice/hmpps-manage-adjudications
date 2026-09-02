@@ -11,6 +11,8 @@ import {
   PunishmentDataWithSchedule,
   PunishmentType,
   RehabilitativeActivity,
+  isSocialVisitsPunishment,
+  parseHasChildUnder18,
 } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
 
@@ -21,6 +23,7 @@ type PageData = {
   otherPrivilege?: string
   stoppagePercentage?: number
   damagesOwedAmount?: number
+  hasChildUnder18?: boolean
 }
 
 export enum PageRequestType {
@@ -50,30 +53,47 @@ export default class PunishmentPage {
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
     const { user } = res.locals
-    const { error, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount } = pageData
-
-    const isIndependentAdjudicatorHearing = await this.punishmentsService.checkAdditionalDaysAvailability(
-      chargeNumber,
-      user,
-    )
-
-    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
-    const [damagesUnavailable, punishmentsAlreadyAdded, cautionAlreadyAdded] = await Promise.all([
-      this.damagesAlreadyAdded(sessionPunishments),
-      this.punishmentsAlreadyAdded(sessionPunishments),
-      this.cautionAlreadyAdded(sessionPunishments),
-    ])
-    return res.render(`pages/punishment.njk`, {
-      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
-      errors: error ? [error] : [],
+    const {
+      error,
       punishmentType,
       privilegeType,
       otherPrivilege,
       stoppagePercentage,
-      isIndependentAdjudicatorHearing,
-      damagesUnavailable,
-      cautionUnavailable: punishmentsAlreadyAdded || cautionAlreadyAdded,
       damagesOwedAmount,
+      hasChildUnder18,
+    } = pageData
+
+    const [punishmentAvailability, sessionPunishments] = await Promise.all([
+      this.punishmentsService.getPunishmentAvailability(chargeNumber, user),
+      this.punishmentsService.getAllSessionPunishments(req, chargeNumber),
+    ])
+    const { isIndependentAdjudicatorHearing, isAdult } = punishmentAvailability
+    const [damagesAlreadyAdded, punishmentsAlreadyAdded, cautionAlreadyAdded] = await Promise.all([
+      this.damagesAlreadyAdded(sessionPunishments),
+      this.punishmentsAlreadyAdded(sessionPunishments),
+      this.cautionAlreadyAdded(sessionPunishments),
+    ])
+
+    const punishmentsAvailable = {
+      addedDays: isIndependentAdjudicatorHearing,
+      caution: !(punishmentsAlreadyAdded || cautionAlreadyAdded),
+      damages: !damagesAlreadyAdded,
+      extraWork: !isAdult,
+      removalFromActivity: !isAdult,
+      socialVisits: isAdult,
+    }
+
+    return res.render(`pages/punishment.njk`, {
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
+      errors: error ? [error] : [],
+      punishmentsAvailable,
+      punishmentType,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      damagesOwedAmount,
+      hasChildUnder18,
+      isAdult,
     })
   }
 
@@ -93,6 +113,7 @@ export default class PunishmentPage {
         privilegeType: sessionData.privilegeType,
         otherPrivilege: sessionData.otherPrivilege,
         stoppagePercentage: sessionData.stoppagePercentage,
+        hasChildUnder18: sessionData.hasChildUnder18,
       })
     }
 
@@ -101,7 +122,18 @@ export default class PunishmentPage {
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, redisId } = req.params
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount } = req.body
+    const {
+      punishmentType,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      damagesOwedAmount,
+      lossHasChildUnder18,
+      restrictionHasChildUnder18,
+    } = req.body
+    const hasChildUnder18 = parseHasChildUnder18(
+      punishmentType === PunishmentType.LOSS_OF_SOCIAL_VISITS ? lossHasChildUnder18 : restrictionHasChildUnder18,
+    )
 
     const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
     const damagesAlreadyAdded = await this.damagesAlreadyAdded(sessionPunishments)
@@ -114,6 +146,7 @@ export default class PunishmentPage {
       stoppagePercentage: stoppageOfEarningsPercentage,
       damagesOwedAmount,
       damagesAlreadyAdded,
+      hasChildUnder18,
     })
     if (error)
       return this.renderView(req, res, {
@@ -123,6 +156,7 @@ export default class PunishmentPage {
         otherPrivilege,
         stoppagePercentage: stoppageOfEarningsPercentage,
         damagesOwedAmount,
+        hasChildUnder18,
       })
 
     if ([PunishmentType.CAUTION, PunishmentType.DAMAGES_OWED].includes(punishmentType)) {
@@ -141,7 +175,13 @@ export default class PunishmentPage {
     }
 
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req, punishmentType as PunishmentType)
-    const query = this.getQueryParamsToPass(punishmentType, privilegeType, otherPrivilege, stoppageOfEarningsPercentage)
+    const query = this.getQueryParamsToPass(
+      punishmentType,
+      privilegeType,
+      otherPrivilege,
+      stoppageOfEarningsPercentage,
+      hasChildUnder18,
+    )
     return res.redirect(
       url.format({
         pathname: redirectUrlPrefix,
@@ -155,7 +195,9 @@ export default class PunishmentPage {
     privilegeType: PrivilegeType,
     otherPrivilege: string,
     stoppageOfEarningsPercentage: number,
+    hasChildUnder18?: boolean,
   ) => {
+    if (isSocialVisitsPunishment(punishmentType)) return { punishmentType, hasChildUnder18 }
     if (this.pageOptions.isEdit()) {
       if (punishmentType === PunishmentType.PRIVILEGE && privilegeType === PrivilegeType.OTHER)
         return { punishmentType, privilegeType, otherPrivilege }

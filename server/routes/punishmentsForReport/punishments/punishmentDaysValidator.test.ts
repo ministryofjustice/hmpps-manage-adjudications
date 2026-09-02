@@ -1,26 +1,109 @@
-import { convertPrivilegeType, PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 import validateForm from './punishmentDaysValidator'
 
 describe('validateForm', () => {
-  it('Valid submit has no errors - punishment type additional days', () => {
-    expect(validateForm(PunishmentType.ADDITIONAL_DAYS, 42, false)).toBeNull()
-  })
+  describe('Social visits validation', () => {
+    it.each([
+      [PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, 84],
+      [PunishmentType.LOSS_OF_SOCIAL_VISITS, 27],
+    ])('allows %s at its policy maximum', (punishmentType, duration) => {
+      expect(validateForm(punishmentType, duration, false)).toBeNull()
+    })
 
-  it('shows error when additional days above max', () => {
-    expect(validateForm(PunishmentType.ADDITIONAL_DAYS, 43, false)).toEqual({
-      href: '#duration',
-      text: 'Number of additional days cannot be more than 42',
+    it.each([
+      [
+        PunishmentType.RESTRICTION_OF_SOCIAL_VISITS,
+        85,
+        'Days for Restriction of Social Visits cannot be more than 84 days',
+      ],
+      [PunishmentType.LOSS_OF_SOCIAL_VISITS, 28, 'Days for Loss of Social Visits cannot be more than 27 days'],
+    ])('rejects %s above its policy maximum', (punishmentType, duration, text) => {
+      expect(validateForm(punishmentType, duration, false)).toEqual({ href: '#duration', text })
+    })
+
+    it.each([PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, PunishmentType.LOSS_OF_SOCIAL_VISITS])(
+      'rejects %s for a YOI adjudication',
+      punishmentType => {
+        expect(validateForm(punishmentType, 1, true)).toEqual({
+          href: '#duration',
+          text: 'Social visits punishments are only available for offences under Adult rules',
+        })
+      },
+    )
+
+    it.each([1.5, Number.NaN])('rejects a non-whole social visits duration: %s', duration => {
+      expect(validateForm(PunishmentType.LOSS_OF_SOCIAL_VISITS, duration, false)).toEqual({
+        href: '#duration',
+        text: 'Enter the number of whole days the social visits punishment will last',
+      })
     })
   })
 
-  it('Valid submit has no errors - punishment type prospective days', () => {
-    expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, 42, false)).toBeNull()
+  describe('Additional days validation', () => {
+    describe('for adults', () => {
+      const IS_YOI = false
+      const MAX_DAYS = 84
+
+      it('when valid number of additional days, has no errors', () => {
+        expect(validateForm(PunishmentType.ADDITIONAL_DAYS, MAX_DAYS, IS_YOI)).toBeNull()
+      })
+
+      it('when additional days above max, returns error', () => {
+        expect(validateForm(PunishmentType.ADDITIONAL_DAYS, MAX_DAYS + 1, IS_YOI)).toEqual({
+          href: '#duration',
+          text: 'Number of additional days cannot be more than 84 for an offence under Adult rules',
+        })
+      })
+    })
+
+    describe('for YOI', () => {
+      const IS_YOI = true
+      const MAX_DAYS = 42
+
+      it('when valid number of additional days, has no errors', () => {
+        expect(validateForm(PunishmentType.ADDITIONAL_DAYS, MAX_DAYS, IS_YOI)).toBeNull()
+      })
+
+      it('when additional days above max, returns error', () => {
+        expect(validateForm(PunishmentType.ADDITIONAL_DAYS, MAX_DAYS + 1, IS_YOI)).toEqual({
+          href: '#duration',
+          text: 'Number of additional days cannot be more than 42 for an offence under YOI rules',
+        })
+      })
+    })
   })
 
-  it('shows error when prospective days above max', () => {
-    expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, 43, false)).toEqual({
-      href: '#duration',
-      text: 'Number of prospective additional days cannot be more than 42',
+  describe('Prospective additional days validation', () => {
+    describe('for adults', () => {
+      const IS_YOI = false
+      const MAX_DAYS = 84
+
+      it('when valid number of prospective additional days, has no errors', () => {
+        expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, MAX_DAYS, IS_YOI)).toBeNull()
+      })
+
+      it('when additional days above max, returns error', () => {
+        expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, MAX_DAYS + 1, IS_YOI)).toEqual({
+          href: '#duration',
+          text: 'Number of prospective additional days cannot be more than 84 for an offence under Adult rules',
+        })
+      })
+    })
+
+    describe('for YOI', () => {
+      const IS_YOI = true
+      const MAX_DAYS = 42
+
+      it('when valid number of additional days, has no errors', () => {
+        expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, MAX_DAYS, IS_YOI)).toBeNull()
+      })
+
+      it('when additional days above max, returns error', () => {
+        expect(validateForm(PunishmentType.PROSPECTIVE_DAYS, MAX_DAYS + 1, IS_YOI)).toEqual({
+          href: '#duration',
+          text: 'Number of prospective additional days cannot be more than 42 for an offence under YOI rules',
+        })
+      })
     })
   })
 
@@ -57,7 +140,7 @@ describe('validateForm', () => {
     })
   })
 
-  it('Valid submit has no errors - confinement type earnings for adult', () => {
+  it('Valid submit has no errors - punishment type confinement for adult', () => {
     expect(validateForm(PunishmentType.CONFINEMENT, 21, false)).toBeNull()
   })
 
@@ -79,43 +162,51 @@ describe('validateForm', () => {
     })
   })
 
-  it('Valid submit has no errors - privilege type earnings for adult', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 42, false, PrivilegeType.CANTEEN)).toBeNull()
-  })
+  describe('Loss of privileges days validation', () => {
+    describe('for adults', () => {
+      const IS_YOI = false
+      const MAX_DAYS = 84
 
-  it('shows error when privilege days above max for adult', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 43, false, PrivilegeType.CANTEEN)).toEqual({
-      href: '#duration',
-      text: `Days for loss of ${convertPrivilegeType(
-        PrivilegeType.CANTEEN,
-      )} cannot be more than 42 days for an offence under Adult rules`,
+      it('when valid number, has no errors', () => {
+        expect(validateForm(PunishmentType.PRIVILEGE, MAX_DAYS, IS_YOI, PrivilegeType.CANTEEN)).toBeNull()
+      })
+
+      it('when days above max, returns error', () => {
+        expect(validateForm(PunishmentType.PRIVILEGE, MAX_DAYS + 1, IS_YOI, PrivilegeType.CANTEEN)).toEqual({
+          href: '#duration',
+          text: 'Days for loss of canteen cannot be more than 84 days for an offence under Adult rules',
+        })
+      })
+
+      it('when days above max and privilege type is Other, error wording is generic', () => {
+        expect(validateForm(PunishmentType.PRIVILEGE, MAX_DAYS + 1, IS_YOI, PrivilegeType.OTHER)).toEqual({
+          href: '#duration',
+          text: 'Days for loss of privilege cannot be more than 84 days for an offence under Adult rules',
+        })
+      })
     })
-  })
 
-  it('shows error when privilege other days above max for adult', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 43, false, PrivilegeType.OTHER)).toEqual({
-      href: '#duration',
-      text: `Days for loss of privilege cannot be more than 42 days for an offence under Adult rules`,
-    })
-  })
+    describe('for YOI', () => {
+      const IS_YOI = true
+      const MAX_DAYS = 21
 
-  it('shows error when privilege other days above max for adult', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 22, true, PrivilegeType.OTHER)).toEqual({
-      href: '#duration',
-      text: `Days for loss of privilege cannot be more than 21 days for an offence under YOI rules`,
-    })
-  })
+      it('when valid number, has no errors', () => {
+        expect(validateForm(PunishmentType.PRIVILEGE, MAX_DAYS, IS_YOI, PrivilegeType.CANTEEN)).toBeNull()
+      })
 
-  it('Valid submit has no errors - punishment type privilege for YOI', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 21, true, PrivilegeType.CANTEEN)).toBeNull()
-  })
+      it('when days above max, returns error', () => {
+        expect(validateForm(PunishmentType.PRIVILEGE, MAX_DAYS + 1, IS_YOI, PrivilegeType.CANTEEN)).toEqual({
+          href: '#duration',
+          text: 'Days for loss of canteen cannot be more than 21 days for an offence under YOI rules',
+        })
+      })
 
-  it('shows error when privilege days above max for YOI', () => {
-    expect(validateForm(PunishmentType.PRIVILEGE, 22, true, PrivilegeType.CANTEEN)).toEqual({
-      href: '#duration',
-      text: `Days for loss of ${convertPrivilegeType(
-        PrivilegeType.CANTEEN,
-      )} cannot be more than 21 days for an offence under YOI rules`,
+      it('when days above max and privilege type is Other, error wording is generic', () => {
+        expect(validateForm(PunishmentType.PRIVILEGE, MAX_DAYS + 1, IS_YOI, PrivilegeType.OTHER)).toEqual({
+          href: '#duration',
+          text: 'Days for loss of privilege cannot be more than 21 days for an offence under YOI rules',
+        })
+      })
     })
   })
 

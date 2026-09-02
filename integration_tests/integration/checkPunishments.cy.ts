@@ -272,7 +272,7 @@ context('Check punishments', () => {
     it('can submit edited punishments', () => {
       cy.visit(adjudicationUrls.awardPunishments.urls.start('456'))
       cy.get('[data-qa="add-new-punishment-button"]').click()
-      cy.get('#punishmentType-3').click()
+      cy.get('input[name="punishmentType"][value="EARNINGS"]').check()
       cy.get('#stoppagePercentage').type('25')
       cy.get('[data-qa="punishment-submit"]').click()
 

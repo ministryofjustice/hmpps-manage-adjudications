@@ -72,7 +72,7 @@ export default class PunishmentSuspendedPage {
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const { suspended } = req.body
-    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, duration } = req.query
+    const { punishmentType, privilegeType, otherPrivilege, stoppagePercentage, hasChildUnder18, duration } = req.query
 
     const error = validateForm({
       suspended,
@@ -93,6 +93,7 @@ export default class PunishmentSuspendedPage {
           privilegeType,
           otherPrivilege,
           stoppagePercentage,
+          ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
           duration,
         } as ParsedUrlQueryInput,
       }),

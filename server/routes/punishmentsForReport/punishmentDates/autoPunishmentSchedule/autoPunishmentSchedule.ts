@@ -17,6 +17,7 @@ type PageData = {
   otherPrivilege?: string
   stoppagePercentage?: number
   redisId?: string
+  hasChildUnder18?: boolean
 }
 
 export default class AutoPunishmentSchedulePage {
@@ -28,7 +29,17 @@ export default class AutoPunishmentSchedulePage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { startDate, endDate, duration, type, privilegeType, otherPrivilege, stoppagePercentage, redisId } = pageData
+    const {
+      startDate,
+      endDate,
+      duration,
+      type,
+      privilegeType,
+      otherPrivilege,
+      stoppagePercentage,
+      redisId,
+      hasChildUnder18,
+    } = pageData
 
     const startDateChangeHref = url.format({
       pathname: adjudicationUrls.punishmentStartDate.urls.edit(chargeNumber, redisId),
@@ -37,6 +48,7 @@ export default class AutoPunishmentSchedulePage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage,
+        ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
         duration,
       } as ParsedUrlQueryInput,
     })
@@ -48,6 +60,7 @@ export default class AutoPunishmentSchedulePage {
         privilegeType,
         otherPrivilege,
         stoppagePercentage,
+        ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
         duration,
       } as ParsedUrlQueryInput,
     })
@@ -64,6 +77,7 @@ export default class AutoPunishmentSchedulePage {
       otherPrivilege,
       stoppagePercentage,
       redisId,
+      hasChildUnder18,
     })
   }
 
@@ -89,6 +103,7 @@ export default class AutoPunishmentSchedulePage {
       otherPrivilege: lastAddedPunishment.otherPrivilege,
       stoppagePercentage: lastAddedPunishment.stoppagePercentage,
       redisId: lastAddedPunishment.redisId,
+      hasChildUnder18: lastAddedPunishment.hasChildUnder18,
     })
   }
 }

@@ -1,14 +1,27 @@
 import { FormError } from '../../../@types/template'
-import { convertPrivilegeType, PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import {
+  convertPrivilegeType,
+  PrivilegeType,
+  PunishmentType,
+  isSocialVisitsPunishment,
+} from '../../../data/PunishmentResult'
 
 const errors: { [key: string]: FormError } = {
-  ADDITIONAL_DAYS_MAX: {
+  ADDITIONAL_DAYS_MAX_ADULT: {
     href: '#duration',
-    text: 'Number of additional days cannot be more than 42',
+    text: 'Number of additional days cannot be more than 84 for an offence under Adult rules',
   },
-  PROSPECTIVE_DAYS_MAX: {
+  ADDITIONAL_DAYS_MAX_YOI: {
     href: '#duration',
-    text: 'Number of prospective additional days cannot be more than 42',
+    text: 'Number of additional days cannot be more than 42 for an offence under YOI rules',
+  },
+  PROSPECTIVE_DAYS_MAX_ADULT: {
+    href: '#duration',
+    text: 'Number of prospective additional days cannot be more than 84 for an offence under Adult rules',
+  },
+  PROSPECTIVE_DAYS_MAX_YOI: {
+    href: '#duration',
+    text: 'Number of prospective additional days cannot be more than 42 for an offence under YOI rules',
   },
   EARNINGS_DAYS_MAX_ADULT: {
     href: '#duration',
@@ -32,7 +45,7 @@ const errors: { [key: string]: FormError } = {
   },
   PRIVILEGE_DAYS_MAX_ADULT: {
     href: '#duration',
-    text: 'Days for loss of [thing] cannot be more than 42 days for an offence under Adult rules',
+    text: 'Days for loss of [thing] cannot be more than 84 days for an offence under Adult rules',
   },
   PRIVILEGE_DAYS_MAX_YOI: {
     href: '#duration',
@@ -54,6 +67,22 @@ const errors: { [key: string]: FormError } = {
     href: '#duration',
     text: 'Days for extra work cannot be more than 21 days for an offence under YOI rules',
   },
+  SOCIAL_VISITS_YOI: {
+    href: '#duration',
+    text: 'Social visits punishments are only available for offences under Adult rules',
+  },
+  SOCIAL_VISITS_WHOLE_DAYS: {
+    href: '#duration',
+    text: 'Enter the number of whole days the social visits punishment will last',
+  },
+  RESTRICTION_OF_SOCIAL_VISITS_MAX: {
+    href: '#duration',
+    text: 'Days for Restriction of Social Visits cannot be more than 84 days',
+  },
+  LOSS_OF_SOCIAL_VISITS_MAX: {
+    href: '#duration',
+    text: 'Days for Loss of Social Visits cannot be more than 27 days',
+  },
 }
 
 export default function validatePunishmentDays(
@@ -62,16 +91,44 @@ export default function validatePunishmentDays(
   isYOI: boolean,
   privilegeType?: PrivilegeType,
 ): FormError | null {
-  if (punishmentType === PunishmentType.ADDITIONAL_DAYS && duration > 42) {
-    return errors.ADDITIONAL_DAYS_MAX
+  const isAdult = !isYOI
+
+  if (isSocialVisitsPunishment(punishmentType) && isYOI) {
+    return errors.SOCIAL_VISITS_YOI
   }
 
-  if (punishmentType === PunishmentType.PROSPECTIVE_DAYS && duration > 42) {
-    return errors.PROSPECTIVE_DAYS_MAX
+  if (isSocialVisitsPunishment(punishmentType) && !Number.isInteger(duration)) {
+    return errors.SOCIAL_VISITS_WHOLE_DAYS
+  }
+
+  if (punishmentType === PunishmentType.RESTRICTION_OF_SOCIAL_VISITS && duration > 84) {
+    return errors.RESTRICTION_OF_SOCIAL_VISITS_MAX
+  }
+
+  if (punishmentType === PunishmentType.LOSS_OF_SOCIAL_VISITS && duration > 27) {
+    return errors.LOSS_OF_SOCIAL_VISITS_MAX
+  }
+
+  if (punishmentType === PunishmentType.ADDITIONAL_DAYS) {
+    if (isAdult && duration > 84) {
+      return errors.ADDITIONAL_DAYS_MAX_ADULT
+    }
+    if (isYOI && duration > 42) {
+      return errors.ADDITIONAL_DAYS_MAX_YOI
+    }
+  }
+
+  if (punishmentType === PunishmentType.PROSPECTIVE_DAYS) {
+    if (isAdult && duration > 84) {
+      return errors.PROSPECTIVE_DAYS_MAX_ADULT
+    }
+    if (isYOI && duration > 42) {
+      return errors.PROSPECTIVE_DAYS_MAX_YOI
+    }
   }
 
   if (punishmentType === PunishmentType.EARNINGS) {
-    if (!isYOI && duration > 84) {
+    if (isAdult && duration > 84) {
       return errors.EARNINGS_DAYS_MAX_ADULT
     }
     if (isYOI && duration > 42) {
@@ -79,11 +136,11 @@ export default function validatePunishmentDays(
     }
   }
 
-  if (punishmentType === PunishmentType.EXCLUSION_WORK && !isYOI && duration > 21) {
+  if (punishmentType === PunishmentType.EXCLUSION_WORK && isAdult && duration > 21) {
     return errors.EXCLUSION_WORK_DAYS_MAX_ADULT
   }
   if (punishmentType === PunishmentType.CONFINEMENT) {
-    if (!isYOI && duration > 21) {
+    if (isAdult && duration > 21) {
       return errors.CONFINEMENT_DAYS_MAX_ADULT
     }
     if (isYOI && duration > 10) {
@@ -92,24 +149,16 @@ export default function validatePunishmentDays(
   }
 
   if (punishmentType === PunishmentType.PRIVILEGE) {
-    if (!isYOI && duration > 42) {
-      return formatPrivilegeErrorText(
-        privilegeType,
-        errors.PRIVILEGE_DAYS_MAX_ADULT.href,
-        errors.PRIVILEGE_DAYS_MAX_ADULT.text,
-      )
+    if (isAdult && duration > 84) {
+      return formatPrivilegeErrorText(privilegeType, errors.PRIVILEGE_DAYS_MAX_ADULT)
     }
     if (isYOI && duration > 21) {
-      return formatPrivilegeErrorText(
-        privilegeType,
-        errors.PRIVILEGE_DAYS_MAX_YOI.href,
-        errors.PRIVILEGE_DAYS_MAX_YOI.text,
-      )
+      return formatPrivilegeErrorText(privilegeType, errors.PRIVILEGE_DAYS_MAX_YOI)
     }
   }
 
   if (punishmentType === PunishmentType.REMOVAL_WING) {
-    if (!isYOI && duration > 28) {
+    if (isAdult && duration > 28) {
       return errors.REMOVAL_WING_DAYS_MAX_ADULT
     }
     if (isYOI && duration > 21) {
@@ -128,10 +177,10 @@ export default function validatePunishmentDays(
   return null
 }
 
-function formatPrivilegeErrorText(privilegeType: PrivilegeType, href: string, text: string): FormError {
+function formatPrivilegeErrorText(privilegeType: PrivilegeType, error: FormError): FormError {
   return {
-    href,
-    text: text.replace(
+    ...error,
+    text: error.text.replace(
       '[thing]',
       privilegeType === PrivilegeType.OTHER ? 'privilege' : convertPrivilegeType(privilegeType),
     ),
