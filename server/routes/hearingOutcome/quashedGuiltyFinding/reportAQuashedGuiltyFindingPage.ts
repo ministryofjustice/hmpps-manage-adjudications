@@ -17,9 +17,27 @@ export enum PageRequestType {
 }
 
 type PageData = {
-  error?: FormError | FormError[]
+  error?: FormError
   quashReason?: QuashGuiltyFindingReason
   quashDetails?: string
+}
+
+type ApiError = {
+  status?: number
+  data?: {
+    userMessage?: unknown
+  }
+}
+
+const getValidationMessage = (error: unknown): string | null => {
+  if (typeof error !== 'object' || error === null) return null
+
+  const apiError = error as ApiError
+  const userMessage = apiError.data?.userMessage
+
+  if (apiError.status !== 400 || typeof userMessage !== 'string') return null
+
+  return userMessage.replace(/^Validation failure:\s*/, '')
 }
 
 class PageOptions {
@@ -101,6 +119,15 @@ export default class ReportAQuashedGuiltyFindingPage {
       }
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
     } catch (postError) {
+      const validationMessage = getValidationMessage(postError)
+      if (validationMessage) {
+        return this.renderView(req, res, {
+          error: { href: '#quash-error', text: validationMessage },
+          quashReason,
+          quashDetails: trimmedQuashDetails,
+        })
+      }
+
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
       throw postError
     }
