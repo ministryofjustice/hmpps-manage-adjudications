@@ -183,7 +183,7 @@ export default defineConfig({
       })
     },
 
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'http://localhost:3007',
     specPattern: 'integration_tests/integration/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
   },

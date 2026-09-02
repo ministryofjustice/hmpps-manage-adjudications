@@ -40,7 +40,13 @@ const stubUser = ({ username = 'USER1', activeCaseLoadId = 'MDI' }: { username?:
     },
   })
 
-const stubGetUser = ({ username, response }: { username: string; response: { username; name } }): SuperAgentRequest =>
+const stubGetUser = ({
+  username,
+  response,
+}: {
+  username: string
+  response: { username: string; name: string }
+}): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
