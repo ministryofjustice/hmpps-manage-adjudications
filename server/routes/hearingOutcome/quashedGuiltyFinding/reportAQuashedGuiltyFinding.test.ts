@@ -68,4 +68,30 @@ describe('POST', () => {
         ),
       )
   })
+
+  it('should show the dependent charges when the API rejects an unsafe quash', () => {
+    outcomesService.quashAGuiltyFinding.mockRejectedValue({
+      status: 400,
+      data: {
+        userMessage:
+          'Validation failure: Unable to quash LGI-011192 because additional days on LGI-011206 are consecutive to it. Remove consecutive links starting with the last charge in the chain',
+      },
+    })
+
+    return request(app)
+      .post(adjudicationUrls.reportAQuashedGuiltyFinding.urls.start('LGI-011192'))
+      .send({
+        quashReason: QuashGuiltyFindingReason.APPEAL_UPHELD,
+        quashDetails: 'Some details about this decision',
+      })
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('There is a problem')
+        expect(res.text).toContain(
+          'Unable to quash LGI-011192 because additional days on LGI-011206 are consecutive to it. Remove consecutive links starting with the last charge in the chain',
+        )
+        expect(res.text).toContain('href="#quash-error"')
+        expect(res.text).toContain('Some details about this decision')
+      })
+  })
 })

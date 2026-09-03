@@ -10,6 +10,7 @@ import { OutcomeDetailsHistory, QuashGuiltyFindingReason } from '../../../data/H
 import OutcomesService from '../../../services/outcomesService'
 import ReportedAdjudicationsService from '../../../services/reportedAdjudicationsService'
 import { ReportedAdjudicationStatus } from '../../../data/ReportedAdjudicationResult'
+import { getApiValidationMessage } from '../../../utils/apiError'
 
 export enum PageRequestType {
   CREATION,
@@ -17,7 +18,7 @@ export enum PageRequestType {
 }
 
 type PageData = {
-  error?: FormError | FormError[]
+  error?: FormError
   quashReason?: QuashGuiltyFindingReason
   quashDetails?: string
 }
@@ -101,6 +102,15 @@ export default class ReportAQuashedGuiltyFindingPage {
       }
       return res.redirect(adjudicationUrls.hearingDetails.urls.review(chargeNumber))
     } catch (postError) {
+      const validationMessage = getApiValidationMessage(postError)
+      if (validationMessage) {
+        return this.renderView(req, res, {
+          error: { href: '#quash-error', text: validationMessage },
+          quashReason,
+          quashDetails: trimmedQuashDetails,
+        })
+      }
+
       res.locals.redirectUrl = adjudicationUrls.hearingDetails.urls.review(chargeNumber)
       throw postError
     }

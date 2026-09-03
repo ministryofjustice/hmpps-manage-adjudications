@@ -11,6 +11,7 @@ import OutcomesService from '../../../services/outcomesService'
 
 jest.mock('../../../services/reportedAdjudicationsService.ts')
 jest.mock('../../../services/userService.ts')
+jest.mock('../../../services/outcomesService.ts')
 
 const testData = new TestData()
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -118,6 +119,30 @@ describe('POST cancel hearing', () => {
       .expect(() => {
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledTimes(1)
         expect(reportedAdjudicationsService.deleteHearing).toHaveBeenCalledWith('1524494', expect.anything())
+      })
+  })
+})
+
+describe('POST remove quashed finding', () => {
+  it('shows the validation message when the API rejects an unsafe unquash', () => {
+    const validationMessage =
+      'Unable to unquash LGI-011206 because the following consecutive target charges do not have a live charge-proved additional days punishment: LGI-011192. Restore the target punishments first'
+
+    reportedAdjudicationsService.getOutcomesHistory.mockResolvedValue([])
+    outcomesService.removeNotProceedOrQuashed.mockRejectedValue({
+      status: 400,
+      data: { userMessage: `Validation failure: ${validationMessage}` },
+    })
+
+    return request(app)
+      .post(adjudicationUrls.hearingDetails.urls.review('LGI-011206'))
+      .send({ removeQuashedFindingButton: 'removeQuashedFinding' })
+      .expect(200)
+      .expect(response => {
+        expect(response.text).toContain('There is a problem')
+        expect(response.text).toContain(validationMessage)
+        expect(response.text).toContain('href="#adjudication-heading"')
+        expect(outcomesService.removeNotProceedOrQuashed).toHaveBeenCalledWith('LGI-011206', expect.anything())
       })
   })
 })

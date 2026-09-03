@@ -2,6 +2,7 @@
 {% from "../../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../../macros/tabHeaders/adjudicationTabHeader.njk" import adjudicationTabHeader %}
 {% from "../../macros/transferBanner.njk" import transferBanner%}
 
@@ -17,6 +18,14 @@
   {{ breadcrumb() }}
 {% endblock %}
 {% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+
   {% if overrideAgencyId and transferBannerContent %}
     {{ transferBanner(transferBannerContent, showTransferHearingWarning) }}
   {% endif %}
