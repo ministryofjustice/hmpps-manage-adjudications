@@ -25,6 +25,7 @@ generic-service:
   # Environment variables to load into the deployment
   env:
     NODE_ENV: "production"
+    LOG_LEVEL: 'info'
     REDIS_ENABLED: "true"
     REDIS_TLS_ENABLED: "true"
     TOKEN_VERIFICATION_ENABLED: "true"
@@ -50,8 +51,11 @@ generic-service:
       REDIS_AUTH_TOKEN: "auth_token"
 
   allowlist:
+    # Other IP allowlist groups are here:
+    # https://github.com/ministryofjustice/hmpps-ip-allowlists/blob/main/ip-allowlist-groups.yaml
     groups:
-      - internal
+      - digital_staff_and_mojo
+      - moj_cloud_platform
 
 generic-prometheus-alerts:
   targetApplication: hmpps-manage-adjudications

@@ -27,15 +27,15 @@
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open --e2e --browser chrome",
     "clean": "rm -rf dist build node_modules stylesheets",
-    "rebuild": "npm run clean && npm i && npm run build",
+    "rebuild": "npm run clean && npm run setup && npm run build",
     "precommit:secrets": "gitleaks git --pre-commit --redact --staged --verbose --config .gitleaks/config.toml",
     "precommit:lint": "node_modules/.bin/lint-staged",
     "precommit:verify": "npm run typecheck && npm test",
-    "setup": "npm ci && hmpps-npm-script-run-allowlist"
+    "setup": "npm ci"
   },
   "engines": {
     "node": "^24",
-    "npm": "^10 || ^11"
+    "npm": "^12"
   },
   "nodemonConfig": {
     "ignore": [
@@ -84,7 +84,6 @@
   },
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
-    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-precommit-hooks": "^3.0.2",
     "@tsconfig/node24": "24.0.4",
     "@types/bunyan": "^1.8.11",
@@ -137,5 +136,12 @@
     "protobufjs": "^8.7.2",
     "uuid": "^11.1.1",
     "serialize-javascript": "^7.1.0"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.5.6": true,
+    "cypress@15.20.1": true,
+    "dtrace-provider@0.8.8": false,
+    "fsevents@2.3.3": true,
+    "unrs-resolver@1.11.1": true
   }
 }

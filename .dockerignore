@@ -12,4 +12,3 @@ eslint-report.html
 test-report.html
 docker-compose.yml
 !.npmrc
-!.allowed-scripts.mjs
