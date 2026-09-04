@@ -36,7 +36,7 @@ REDIS_HOST=localhost
 
 To start the main services excluding the manage adjudications app:
 
-`docker-compose up`
+`docker compose up`
 
 Install dependencies using `npm run setup`, ensuring you are using >= `Node v24.x` and >= `npm v11.x`
 
@@ -56,7 +56,7 @@ And then, to build the assets and start the app with nodemon:
 
 For local running, start a test db, redis, and wiremock instance by:
 
-`docker-compose -f docker-compose-test.yml up`
+`docker compose -f docker-compose-test.yml up`
 
 Then run the server in test mode by:
 
