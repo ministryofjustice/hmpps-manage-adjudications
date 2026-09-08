@@ -98,11 +98,22 @@ export default class UserService {
 
   async getStaffFromNames(name: string, user: User): Promise<StaffSearchByName[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const users = await this.hmppsManageUsersClient.getUsersFromName(name, token)
 
-    const userDetailsMapById = await this.getUserDetailsMap(users.content, token)
+    const firstPage = await this.hmppsManageUsersClient.getUsersFromName(name, token, 0)
 
-    return users.content.map(nomisUser => {
+    const users = [...firstPage.content]
+
+    const remainingPages = Array.from({ length: firstPage.totalPages - 1 }, (_, i) => i + 1)
+
+    const results = await Promise.all(
+      remainingPages.map(page => this.hmppsManageUsersClient.getUsersFromName(name, token, page)),
+    )
+
+    results.forEach(result => users.push(...result.content))
+
+    const userDetailsMapById = await this.getUserDetailsMap(users, token)
+
+    return users.map(nomisUser => {
       const userDetails = userDetailsMapById.get(nomisUser.username)
 
       return {
