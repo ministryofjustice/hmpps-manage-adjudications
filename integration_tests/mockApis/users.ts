@@ -40,7 +40,13 @@ const stubUser = ({ username = 'USER1', activeCaseLoadId = 'MDI' }: { username?:
     },
   })
 
-const stubGetUser = ({ username, response }: { username: string; response: { username; name } }): SuperAgentRequest =>
+const stubGetUser = ({
+  username,
+  response,
+}: {
+  username: string
+  response: { username: string; name: string }
+}): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
@@ -77,16 +83,18 @@ const stubGetUserFromUsername = ({
 const stubGetUserFromNames = ({
   staffFirstName,
   staffLastName,
+  page,
   response = {},
 }: {
   staffFirstName: string
   staffLastName: string
+  page: number
   response: Record<string, unknown>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: `/users/users/search?name=${staffFirstName}%20${staffLastName}&authSources=nomis`,
+      url: `/users/users/search?name=${staffFirstName}%20${staffLastName}&page=${page}&authSources=nomis`,
     },
     response: {
       status: 200,
