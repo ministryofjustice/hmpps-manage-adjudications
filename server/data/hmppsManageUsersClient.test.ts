@@ -80,20 +80,20 @@ describe('hmppsManangeUsersClient', () => {
     }
     it('should return data from api', async () => {
       fakeManangeUsersUrl
-        .get('/users/search?name=bob%20smith&authSources=nomis')
+        .get('/users/search?name=bob%20smith&page=0&authSources=nomis')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, response)
 
-      const output = await hmppsManangeUsersClient.getUsersFromName('bob smith', token.access_token)
+      const output = await hmppsManangeUsersClient.getUsersFromName('bob smith', token.access_token, 0)
       expect(output).toEqual(response)
     })
     it('should trim the names', async () => {
       fakeManangeUsersUrl
-        .get('/users/search?name=bob%20smith&authSources=nomis')
+        .get('/users/search?name=bob%20smith&page=0&authSources=nomis')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, response)
 
-      const output = await hmppsManangeUsersClient.getUsersFromName('bob smith  ', token.access_token)
+      const output = await hmppsManangeUsersClient.getUsersFromName('bob smith  ', token.access_token, 0)
       expect(output).toEqual(response)
     })
   })
