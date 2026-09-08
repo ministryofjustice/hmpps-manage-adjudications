@@ -38,7 +38,6 @@ context('Select associated staff', () => {
     cy.task('stubGetUserFromNames', {
       staffFirstName: 'John',
       staffLastName: 'Smith',
-      page: 0,
       response: [testData.staffFromName()],
     })
     // Staff Member

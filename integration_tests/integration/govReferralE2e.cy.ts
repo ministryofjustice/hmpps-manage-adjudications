@@ -37,7 +37,6 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
     cy.task('stubGetUserFromNames', {
       staffFirstName: 'John',
       staffLastName: 'Smith',
-      page: 0,
       response: [testData.staffFromName()],
     })
     // Staff Member
@@ -263,7 +262,6 @@ context('Inad refers to gov after hearing', () => {
     cy.task('stubGetUserFromNames', {
       staffFirstName: 'John',
       staffLastName: 'Smith',
-      page: 0,
       response: [testData.staffFromName()],
     })
     // Staff Member
