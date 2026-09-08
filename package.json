@@ -108,7 +108,7 @@
     "cypress": "^15.21.1",
     "cypress-multi-reporters": "^2.0.5",
     "dotenv": "^17.4.2",
-    "jest": "^30.5.0",
+    "jest": "^30.5.1",
     "jest-html-reporter": "^4.4.0",
     "jest-junit": "^17.0.0",
     "jsonwebtoken": "^9.0.3",
