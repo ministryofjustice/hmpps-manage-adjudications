@@ -3,7 +3,8 @@ import { Request } from 'express'
 import { convertToTitleCase, hasAnyRole } from '../utils/utils'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
-import HmppsManageUsersClient, { NomisUserResult, User } from '../data/hmppsManageUsersClient'
+import HmppsManageUsersClient, { type User } from '../data/hmppsManageUsersClient'
+import type { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 
 interface UserDetails {
   name: string
@@ -87,45 +88,31 @@ export default class UserService {
     return this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
   }
 
-  getUserDetailsMap = async (nomisUsers: NomisUserResult[], token: string): Promise<Map<string, User>> => {
-    const nomisUsernames = nomisUsers.map(nomisUser => nomisUser.username)
-    const userDetails =
-      (await Promise.all(
-        [...nomisUsernames].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, token)),
-      )) || []
-    return new Map(userDetails.map(details => [details.username, details]))
-  }
-
-  async getStaffFromNames(name: string, user: User): Promise<StaffSearchByName[]> {
+  async getStaffFromNames(
+    name: string,
+    user: User,
+    pageRequest: ApiPageRequest,
+  ): Promise<ApiPageResponse<StaffSearchByName>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
 
-    const firstPage = await this.hmppsManageUsersClient.getUsersFromName(name, token, 0)
+    const users = await this.hmppsManageUsersClient.getUsersFromName(name, token, pageRequest)
 
-    const users = [...firstPage.content]
+    const result: ApiPageResponse<StaffSearchByName> = {
+      ...users,
+      content: users.content.map(prisonUser => {
+        return {
+          username: prisonUser.username,
+          firstName: prisonUser.firstName,
+          lastName: prisonUser.lastName,
+          name: `${prisonUser.firstName} ${prisonUser.lastName}`,
+          email: prisonUser.email,
+          activeCaseLoadId: prisonUser.activeCaseload?.id,
+          staffId: prisonUser.staffId,
+          verified: true,
+        }
+      }),
+    }
 
-    const remainingPages = Array.from({ length: firstPage.totalPages - 1 }, (_, i) => i + 1)
-
-    const results = await Promise.all(
-      remainingPages.map(page => this.hmppsManageUsersClient.getUsersFromName(name, token, page)),
-    )
-
-    results.forEach(result => users.push(...result.content))
-
-    const userDetailsMapById = await this.getUserDetailsMap(users, token)
-
-    return users.map(nomisUser => {
-      const userDetails = userDetailsMapById.get(nomisUser.username)
-
-      return {
-        username: nomisUser.username,
-        firstName: nomisUser.firstName,
-        lastName: nomisUser.lastName,
-        name: `${nomisUser.firstName} ${nomisUser.lastName}`,
-        email: nomisUser.email,
-        activeCaseLoadId: userDetails.activeCaseLoadId,
-        staffId: Number(userDetails.userId),
-        verified: true,
-      }
-    })
+    return result
   }
 }
