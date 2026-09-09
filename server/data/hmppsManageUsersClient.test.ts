@@ -71,29 +71,48 @@ describe('hmppsManangeUsersClient', () => {
   })
 
   describe('getUsersFromName', () => {
-    const response = {
+    const prisonUser = {
       email: 'bsmith@justice.gov.uk',
       firstName: 'Bob',
       lastName: 'Smith',
       // name: 'Bob Smith',
       username: 'BSMITH_GEN',
+      staffId: 1234,
+      activeCaseload: {
+        id: 'WWI',
+        name: 'WANDSWORTH (HMP)',
+      },
     }
-    it('should return data from api', async () => {
+    const response = {
+      content: [prisonUser],
+      totalElements: 1,
+      number: 0,
+      size: 20,
+    }
+
+    it('returns data from api', async () => {
       fakeManangeUsersUrl
-        .get('/users/search?name=bob%20smith&page=0&authSources=nomis')
+        .get('/prisonusers/search?nameFilter=bob%20smith&status=ACTIVE&page=0&size=20')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, response)
 
-      const output = await hmppsManangeUsersClient.getUsersFromName('bob smith', token.access_token, 0)
+      const output = await hmppsManangeUsersClient.getUsersFromName('bob smith', token.access_token, {
+        number: 0,
+        size: 20,
+      })
       expect(output).toEqual(response)
     })
-    it('should trim the names', async () => {
+
+    it('trims the names', async () => {
       fakeManangeUsersUrl
-        .get('/users/search?name=bob%20smith&page=0&authSources=nomis')
+        .get('/prisonusers/search?nameFilter=bob%20smith&status=ACTIVE&page=0&size=20')
         .matchHeader('authorization', `Bearer ${token.access_token}`)
         .reply(200, response)
 
-      const output = await hmppsManangeUsersClient.getUsersFromName('bob smith  ', token.access_token, 0)
+      const output = await hmppsManangeUsersClient.getUsersFromName('bob smith  ', token.access_token, {
+        number: 0,
+        size: 20,
+      })
       expect(output).toEqual(response)
     })
   })
