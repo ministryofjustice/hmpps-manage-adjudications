@@ -1,25 +1,21 @@
 import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../@types/template'
-import UserService from '../../services/userService'
+import UserService, { type StaffSearchByName } from '../../services/userService'
 import validateForm from './staffSearchValidation'
-import PlaceOnReportService, { StaffSearchWithCurrentLocation } from '../../services/placeOnReportService'
 import adjudicationUrls from '../../utils/urlGenerator'
 import mojPaginationFromPageResponse, { pageRequestFrom } from '../../utils/mojPagination/pagination'
 import type { ApiPageResponse } from '../../data/ApiData'
 
 type PageData = {
   error?: FormError
-  searchResults?: ApiPageResponse<StaffSearchWithCurrentLocation>
+  searchResults?: ApiPageResponse<StaffSearchByName>
   staffName: string
   redirectUrl?: string
 }
 
 export default class SelectAssociatedPrisonerRoutes {
-  constructor(
-    private readonly userService: UserService,
-    private readonly placeOnReportService: PlaceOnReportService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { error, searchResults, staffName, redirectUrl } = pageData
@@ -46,12 +42,11 @@ export default class SelectAssociatedPrisonerRoutes {
     if (!staffName)
       return res.render(`pages/notFound.njk`, { url: req.headers.referer || adjudicationUrls.homepage.root })
 
-    const results = await this.userService.getStaffFromNames(
+    const searchResults = await this.userService.getStaffFromNames(
       staffName,
       user,
       pageRequestFrom(20, +req.query.pageNumber || 1),
     )
-    const searchResults = await this.placeOnReportService.getAssociatedStaffDetails(results)
     return this.renderView(req, res, {
       searchResults,
       staffName,

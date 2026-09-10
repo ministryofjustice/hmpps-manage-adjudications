@@ -32,7 +32,6 @@ import {
   OffenceRule,
 } from '../data/DraftAdjudicationResult'
 import { SubmittedDateTime } from '../@types/template'
-import { isCentralAdminCaseload, StaffSearchByName } from './userService'
 import adjudicationUrls from '../utils/urlGenerator'
 import { isPrisonerGenderKnown } from './prisonerSearchService'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
@@ -53,10 +52,6 @@ interface DraftAdjudicationEnhanced extends DraftAdjudication {
   displayName: string
   friendlyName: string
   formattedDiscoveryDateTime: string
-}
-
-export interface StaffSearchWithCurrentLocation extends StaffSearchByName {
-  currentLocation: string
 }
 
 export type ExistingDraftIncidentDetails = {
@@ -415,32 +410,6 @@ export default class PlaceOnReportService {
   getStatus = (adjudicationsSectionCompleted: boolean): AdjudicationSectionStatus => {
     if (adjudicationsSectionCompleted) return { classes: 'govuk-tag', text: 'COMPLETED' }
     return { classes: 'govuk-tag govuk-tag--grey', text: 'NOT STARTED' }
-  }
-
-  async getAssociatedStaffDetails(
-    staffMembers: ApiPageResponse<StaffSearchByName>,
-  ): Promise<ApiPageResponse<StaffSearchWithCurrentLocation>> {
-    const getCurrentLocation = (activeCaseLoad?: { id: string; name: string }) => {
-      if (!activeCaseLoad) {
-        return ''
-      }
-
-      if (isCentralAdminCaseload(activeCaseLoad.id)) {
-        return 'Central Admin'
-      }
-
-      return activeCaseLoad.name
-    }
-
-    return {
-      ...staffMembers,
-      content: staffMembers.content.map(staffMember => {
-        return {
-          ...staffMember,
-          currentLocation: getCurrentLocation(staffMember.activeCaseLoad),
-        }
-      }),
-    }
   }
 
   async getOffencePrisonerDetails(draftId: number, user: User) {
