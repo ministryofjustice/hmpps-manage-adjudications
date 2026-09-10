@@ -103,13 +103,9 @@ export default class UserService {
       ...users,
       content: users.content.map(prisonUser => {
         return {
-          username: prisonUser.username,
-          firstName: prisonUser.firstName,
-          lastName: prisonUser.lastName,
-          email: prisonUser.email,
+          ...prisonUser,
+          // NOTE: Slightly difference spelling
           activeCaseLoad: prisonUser.activeCaseload,
-          staffId: prisonUser.staffId,
-          verified: true,
         }
       }),
     }
