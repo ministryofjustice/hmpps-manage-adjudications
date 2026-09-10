@@ -12,6 +12,7 @@ import {
   convertOicHearingType,
   agencyIdToName,
   formatName,
+  activeCaseLoadLocation,
 } from './utils'
 import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
@@ -99,6 +100,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     // this check is for the authError page
     return getFormattedOfficerName(fullName)
   })
+
+  njkEnv.addFilter('activeCaseLoadLocation', activeCaseLoadLocation)
 
   njkEnv.addFilter('fullName', (person: { firstName: string; lastName: string }) => {
     return formatName(person.firstName, person.lastName)
