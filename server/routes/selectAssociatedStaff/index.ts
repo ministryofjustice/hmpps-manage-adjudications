@@ -8,14 +8,13 @@ import adjudicationUrls from '../../utils/urlGenerator'
 
 export default function selectAssociatedStaffRoutes({
   userService,
-  placeOnReportService,
 }: {
   userService: UserService
   placeOnReportService: PlaceOnReportService
 }): Router {
   const router = express.Router()
 
-  const selectAssociatedStaffRoute = new SelectAssociatedStaffRoutes(userService, placeOnReportService)
+  const selectAssociatedStaffRoute = new SelectAssociatedStaffRoutes(userService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)
   const post = (path: string, handler: RequestHandler) => router.post(path, handler)

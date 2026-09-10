@@ -44,16 +44,6 @@ describe('GET /select-associated-staff', () => {
         size: 20,
       }
       userService.getStaffFromNames.mockResolvedValue(prisonUsersResponse)
-
-      placeOnReportService.getAssociatedStaffDetails.mockResolvedValue({
-        ...prisonUsersResponse,
-        content: [
-          {
-            ...prisonUser,
-            currentLocation: 'Moorland',
-          },
-        ],
-      })
     })
 
     it('should load the search for a prisoner page', () => {

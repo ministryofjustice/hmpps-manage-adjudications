@@ -951,42 +951,6 @@ describe('placeOnReportService', () => {
     })
   })
 
-  describe('getAssociatedStaffDetails()', () => {
-    it('returns the correct response', async () => {
-      const staffMembers = {
-        content: [testData.staffFromName(), testData.staffFromName(null)],
-        totalElements: 2,
-        size: 10,
-        number: 0,
-      }
-
-      const response = await service.getAssociatedStaffDetails(staffMembers)
-      expect(response.number).toEqual(staffMembers.number)
-      expect(response.size).toEqual(staffMembers.size)
-      expect(response.totalElements).toEqual(staffMembers.totalElements)
-      expect(response.content[0]).toEqual({ ...staffMembers.content[0], currentLocation: 'Moorland (HMP & YOI)' })
-      expect(response.content[1]).toEqual({ ...staffMembers.content[1], currentLocation: '' })
-    })
-
-    it('returns the correct response when the caseload is the central agency id', async () => {
-      const staffMembers = {
-        content: [testData.staffFromName('CADM_I')],
-        totalElements: 1,
-        size: 10,
-        number: 0,
-      }
-
-      const response = await service.getAssociatedStaffDetails(staffMembers)
-      expect(response.number).toEqual(staffMembers.number)
-      expect(response.size).toEqual(staffMembers.size)
-      expect(response.totalElements).toEqual(staffMembers.totalElements)
-      expect(response.content[0]).toEqual({
-        ...staffMembers.content[0],
-        currentLocation: 'Central Admin',
-      })
-    })
-  })
-
   describe('updateIncidentRole', () => {
     it('creates the incident role object and sends', async () => {
       const expectedResult = testData.reportedAdjudication({
