@@ -36,7 +36,7 @@ import { isCentralAdminCaseload, StaffSearchByName } from './userService'
 import adjudicationUrls from '../utils/urlGenerator'
 import { isPrisonerGenderKnown } from './prisonerSearchService'
 import { ContinueReportApiFilter } from '../routes/continueReport/continueReportFilterHelper'
-import { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
+import type { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 import HmppsManageUsersClient, { User } from '../data/hmppsManageUsersClient'
 import ManageAdjudicationsUserTokensClient from '../data/manageAdjudicationsUserTokensClient'
 import config from '../config'
@@ -418,29 +418,29 @@ export default class PlaceOnReportService {
   }
 
   async getAssociatedStaffDetails(
-    staffMembers: StaffSearchByName[],
-    user: User,
-  ): Promise<StaffSearchWithCurrentLocation[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const activeStaffMembers = staffMembers.filter(person => !!person.activeCaseLoadId)
+    staffMembers: ApiPageResponse<StaffSearchByName>,
+  ): Promise<ApiPageResponse<StaffSearchWithCurrentLocation>> {
+    const getCurrentLocation = (activeCaseLoad?: { id: string; name: string }) => {
+      if (!activeCaseLoad) {
+        return ''
+      }
 
-    const agencyIds = [...new Set(activeStaffMembers.map(person => person.activeCaseLoadId))]
+      if (isCentralAdminCaseload(activeCaseLoad.id)) {
+        return 'Central Admin'
+      }
 
-    const getLocationName = async (agencyId: string) => {
-      if (isCentralAdminCaseload(agencyId)) return { agencyId, locationFullName: 'Central Admin' }
-
-      const locationName = await new PrisonApiClient(token).getAgency(agencyId)
-      return { agencyId, locationFullName: locationName?.description }
+      return activeCaseLoad.name
     }
 
-    const locations = await Promise.all(agencyIds.map((agencyId: string) => getLocationName(agencyId)))
-
-    return Promise.all(
-      activeStaffMembers.map((staffMember: StaffSearchByName) => {
-        const currentLocation = locations.find(location => location.agencyId === staffMember.activeCaseLoadId)
-        return { ...staffMember, currentLocation: currentLocation.locationFullName }
+    return {
+      ...staffMembers,
+      content: staffMembers.content.map(staffMember => {
+        return {
+          ...staffMember,
+          currentLocation: getCurrentLocation(staffMember.activeCaseLoad),
+        }
       }),
-    )
+    }
   }
 
   async getOffencePrisonerDetails(draftId: number, user: User) {

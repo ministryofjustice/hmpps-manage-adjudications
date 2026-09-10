@@ -561,6 +561,15 @@ export default class TestData {
     firstName = 'John',
     lastName = 'Smith',
   ) => {
+    let activeCaseLoad
+    if (activeCaseLoadId) {
+      activeCaseLoad = {
+        id: activeCaseLoadId,
+        // hardcoding name for simplicity sake
+        name: 'Moorland (HMP & YOI)',
+      }
+    }
+
     return {
       username,
       staffId: 485592,
@@ -570,6 +579,7 @@ export default class TestData {
       lastName,
       name,
       activeCaseLoadId,
+      activeCaseLoad,
     }
   }
 
