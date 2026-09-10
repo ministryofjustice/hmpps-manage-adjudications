@@ -15,6 +15,10 @@ interface UserDetails {
 
 export interface StaffSearchByName {
   activeCaseLoadId?: string
+  activeCaseLoad?: {
+    id: string
+    name: string
+  }
   email?: string
   firstName?: string
   lastName?: string
@@ -106,6 +110,7 @@ export default class UserService {
           lastName: prisonUser.lastName,
           name: `${prisonUser.firstName} ${prisonUser.lastName}`,
           email: prisonUser.email,
+          activeCaseLoad: prisonUser.activeCaseload,
           activeCaseLoadId: prisonUser.activeCaseload?.id,
           staffId: prisonUser.staffId,
           verified: true,
