@@ -2,6 +2,7 @@ import moment from 'moment'
 import { EstablishmentInformation, SubmittedDateTime } from '../@types/template'
 import { DraftAdjudication, EvidenceCode, EvidenceDetails } from '../data/DraftAdjudicationResult'
 import { ReportedAdjudication } from '../data/ReportedAdjudicationResult'
+import { isCentralAdminCaseload } from '../services/userService'
 
 const DATE_TIME_FORMAT_SPEC = 'YYYY-MM-DDTHH:mm:ss'
 const DATE_PICKER_FORMAT_SPEC = 'DD/MM/YYYY'
@@ -52,6 +53,22 @@ export const formatLocation = (locationName: string): string => {
   if (!locationName) return 'Unknown'
   if (locationName.includes('CSWAP')) return 'No cell allocated'
   return locationName
+}
+
+export const activeCaseLoadLocation = ({
+  activeCaseLoad,
+}: {
+  activeCaseLoad?: { id: string; name: string }
+}): string => {
+  if (!activeCaseLoad) {
+    return ''
+  }
+
+  if (isCentralAdminCaseload(activeCaseLoad.id)) {
+    return 'Central Admin'
+  }
+
+  return activeCaseLoad.name
 }
 
 const buildDateTime = ({ date, hours, minutes, dateFormat = 'DD/MM/YYYY' }: DateTimeInput) => {
@@ -249,6 +266,7 @@ export default {
   numberRange,
   convertToTitleCase,
   formatLocation,
+  activeCaseLoadLocation,
   formatDate,
   getTime,
   getDate,
