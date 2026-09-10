@@ -17,6 +17,7 @@ import {
   getFullDate,
   agencyIdToName,
   getLastMonthText,
+  formatName,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -157,6 +158,12 @@ describe('getFormattedOfficerName', () => {
   })
   it('should return a correctly formatted name if lots of spaces are used', () => {
     expect(getFormattedOfficerName(' John     Smith')).toEqual('J. Smith')
+  })
+})
+
+describe('formatName()', () => {
+  it('returns the concatenation of first name and last name', () => {
+    expect(formatName('John', 'Doe')).toEqual('John Doe')
   })
 })
 

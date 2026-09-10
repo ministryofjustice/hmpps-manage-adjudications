@@ -5,7 +5,14 @@ import express from 'express'
 import escapeHtml from 'escape-html'
 import config from '../config'
 import { FormError } from '../@types/template'
-import { possessive, getFormattedOfficerName, formatTimestampTo, convertOicHearingType, agencyIdToName } from './utils'
+import {
+  possessive,
+  getFormattedOfficerName,
+  formatTimestampTo,
+  convertOicHearingType,
+  agencyIdToName,
+  formatName,
+} from './utils'
 import adjudicationUrls from './urlGenerator'
 import { DamageCode, EvidenceCode, WitnessCode } from '../data/DraftAdjudicationResult'
 import {
@@ -91,6 +98,10 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('initialiseName', (fullName: string) => {
     // this check is for the authError page
     return getFormattedOfficerName(fullName)
+  })
+
+  njkEnv.addFilter('fullName', (person: { firstName: string; lastName: string }) => {
+    return formatName(person.firstName, person.lastName)
   })
 
   njkEnv.addFilter('findError', (formFieldId: string, array: FormError[] = []) => {
