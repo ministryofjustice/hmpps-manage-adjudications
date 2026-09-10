@@ -105,7 +105,7 @@
     "@types/superagent": "^8.1.11",
     "@types/supertest": "^7.2.1",
     "concurrently": "^10.0.5",
-    "cypress": "^15.21.1",
+    "cypress": "^16.0.0",
     "cypress-multi-reporters": "^2.0.5",
     "dotenv": "^17.4.2",
     "jest": "^30.5.1",
