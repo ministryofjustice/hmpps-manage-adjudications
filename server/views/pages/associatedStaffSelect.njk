@@ -55,13 +55,13 @@
   {% set rows = [] %}
   {% for staffMember in searchResults.content %}
     {% set startReportlLinkHtml %}
-    <a href="{{ redirectUrl }}{{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select {{ staffMember.name }}</a>
+    <a href="{{ redirectUrl }}{{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select {{ staffMember | fullName }}</a>
     {% endset -%}
     {% set rows = (rows.push([
       {
-        text: staffMember.name,
+        text: staffMember | fullName,
         attributes: {
-          "data-sort-value": staffMember.name
+          "data-sort-value": staffMember | fullName
         }
       },
       { text: staffMember.currentLocation },
