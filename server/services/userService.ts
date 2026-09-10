@@ -22,7 +22,6 @@ export interface StaffSearchByName {
   email?: string
   firstName?: string
   lastName?: string
-  name: string
   staffId: number
   username: string
   verified?: boolean
@@ -101,14 +100,13 @@ export default class UserService {
 
     const users = await this.hmppsManageUsersClient.getUsersFromName(name, token, pageRequest)
 
-    const result: ApiPageResponse<StaffSearchByName> = {
+    return {
       ...users,
       content: users.content.map(prisonUser => {
         return {
           username: prisonUser.username,
           firstName: prisonUser.firstName,
           lastName: prisonUser.lastName,
-          name: `${prisonUser.firstName} ${prisonUser.lastName}`,
           email: prisonUser.email,
           activeCaseLoad: prisonUser.activeCaseload,
           activeCaseLoadId: prisonUser.activeCaseload?.id,
@@ -117,7 +115,5 @@ export default class UserService {
         }
       }),
     }
-
-    return result
   }
 }
