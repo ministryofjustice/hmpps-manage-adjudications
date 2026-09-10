@@ -951,30 +951,39 @@ describe('placeOnReportService', () => {
     })
   })
 
-  describe('getAssociatedStaffDetails', () => {
+  describe('getAssociatedStaffDetails()', () => {
     it('returns the correct response', async () => {
-      getAgency.mockResolvedValue({
-        agencyId: 'MDI',
-        description: 'Moorland (HMP & YOI)',
-        longDescription: 'HMP & YOI Moorland Prison near Doncaster',
-        agencyType: 'INST',
-        active: true,
-      })
-      const staffMembers = [testData.staffFromName(), testData.staffFromName(null)]
+      const staffMembers = {
+        content: [testData.staffFromName(), testData.staffFromName(null)],
+        totalElements: 2,
+        size: 10,
+        number: 0,
+      }
 
-      const response = await service.getAssociatedStaffDetails(staffMembers, user)
-      expect(response).toEqual([{ ...staffMembers[0], currentLocation: 'Moorland (HMP & YOI)' }])
+      const response = await service.getAssociatedStaffDetails(staffMembers)
+      expect(response.number).toEqual(staffMembers.number)
+      expect(response.size).toEqual(staffMembers.size)
+      expect(response.totalElements).toEqual(staffMembers.totalElements)
+      expect(response.content[0]).toEqual({ ...staffMembers.content[0], currentLocation: 'Moorland (HMP & YOI)' })
+      expect(response.content[1]).toEqual({ ...staffMembers.content[1], currentLocation: '' })
     })
-    it('returns the correct response when the caseload is the central agency id', async () => {
-      const staffMembers = [testData.staffFromName('CADM_I')]
 
-      const response = await service.getAssociatedStaffDetails(staffMembers, user)
-      expect(response).toEqual([
-        {
-          ...staffMembers[0],
-          currentLocation: 'Central Admin',
-        },
-      ])
+    it('returns the correct response when the caseload is the central agency id', async () => {
+      const staffMembers = {
+        content: [testData.staffFromName('CADM_I')],
+        totalElements: 1,
+        size: 10,
+        number: 0,
+      }
+
+      const response = await service.getAssociatedStaffDetails(staffMembers)
+      expect(response.number).toEqual(staffMembers.number)
+      expect(response.size).toEqual(staffMembers.size)
+      expect(response.totalElements).toEqual(staffMembers.totalElements)
+      expect(response.content[0]).toEqual({
+        ...staffMembers.content[0],
+        currentLocation: 'Central Admin',
+      })
     })
   })
 
