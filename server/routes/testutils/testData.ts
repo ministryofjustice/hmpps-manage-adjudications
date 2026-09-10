@@ -554,13 +554,7 @@ export default class TestData {
     }
   }
 
-  staffFromName = (
-    activeCaseLoadId = 'MDI',
-    username = 'JSMITH_GEN',
-    name = 'John Smith',
-    firstName = 'John',
-    lastName = 'Smith',
-  ) => {
+  staffFromName = (activeCaseLoadId = 'MDI', username = 'JSMITH_GEN', firstName = 'John', lastName = 'Smith') => {
     let activeCaseLoad
     if (activeCaseLoadId) {
       activeCaseLoad = {
@@ -577,8 +571,6 @@ export default class TestData {
       verified: true,
       firstName,
       lastName,
-      name,
-      activeCaseLoadId,
       activeCaseLoad,
     }
   }
