@@ -27,7 +27,6 @@ context('Enter hearing outcome', () => {
         size: 20,
       },
     })
-    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.task('stubGetUserFromUsername', {
       username: 'JSMITH_GEN',
       response: testData.userFromUsername('JSMITH_GEN', 'Jennifer Smith'),
@@ -221,15 +220,6 @@ context('Governor username not present due to migration', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
-    cy.task('stubGetUserFromUsername', {
-      username: '',
-      response: {},
-    })
-    cy.task('stubGetEmail', {
-      username: '',
-      response: {},
-    })
     cy.task('stubGetReportedAdjudication', {
       id: 100,
       response: {

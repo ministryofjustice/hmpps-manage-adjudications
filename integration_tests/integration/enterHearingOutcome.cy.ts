@@ -13,10 +13,6 @@ context('Enter hearing outcome', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetUserFromUsername', {
-      username: 'USER1',
-      response: testData.userFromUsername(),
-    })
     // Staff Member
     cy.task('stubGetUserFromNames', {
       staffFirstName: 'John',
@@ -77,7 +73,6 @@ context('Enter hearing outcome', () => {
         }),
       },
     })
-    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
 
     cy.signIn()
   })

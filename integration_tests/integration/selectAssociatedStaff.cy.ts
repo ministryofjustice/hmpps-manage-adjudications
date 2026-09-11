@@ -14,7 +14,6 @@ context('Select associated staff', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     // Committed draft
     cy.task('stubGetDraftAdjudication', {
       id: 100,
