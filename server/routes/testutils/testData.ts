@@ -575,6 +575,23 @@ export default class TestData {
     }
   }
 
+  staffFromManageUsersApi = (
+    ...args: Parameters<typeof this.staffFromName>
+  ): Omit<ReturnType<typeof this.staffFromName>, 'activeCaseLoad'> & {
+    activeCaseload: {
+      id: string
+      name: string
+    }
+  } => {
+    const userResponse = this.staffFromName(...args)
+
+    return {
+      ...userResponse,
+      // NOTE: Manage Users API response has a different case for "active case load"
+      activeCaseload: userResponse.activeCaseLoad,
+    }
+  }
+
   emailFromUsername = (username = 'USER1') => {
     return {
       username,
