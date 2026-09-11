@@ -22,7 +22,12 @@ context('Enter hearing outcome', () => {
       staffFirstName: 'John',
       staffLastName: 'Smith',
       page: 0,
-      response: [testData.staffFromName()],
+      response: {
+        content: [testData.staffFromManageUsersApi()],
+        totalElements: 0,
+        number: 0,
+        size: 20,
+      },
     })
     // Staff Member
     cy.task('stubGetUserFromUsername', {

@@ -1,5 +1,7 @@
 import { Response, SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
+import type { ApiPageResponse } from '../../server/data/ApiData'
+import type { StaffSearchByName } from '../../server/services/userService'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -84,26 +86,29 @@ const stubGetUserFromNames = ({
   staffFirstName,
   staffLastName,
   page,
-  response = {},
+  response = {
+    content: [],
+    totalElements: 0,
+    number: 0,
+    size: 20,
+  },
 }: {
   staffFirstName: string
   staffLastName: string
   page: number
-  response: Record<string, unknown>
+  response: ApiPageResponse<StaffSearchByName>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: `/users/users/search?name=${staffFirstName}%20${staffLastName}&page=${page}&authSources=nomis`,
+      url: `/users/prisonusers/search?nameFilter=${staffFirstName}%20${staffLastName}&status=ACTIVE&page=${page}&size=20`,
     },
     response: {
       status: 200,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      jsonBody: {
-        content: response,
-      },
+      jsonBody: response,
     },
   })
 
