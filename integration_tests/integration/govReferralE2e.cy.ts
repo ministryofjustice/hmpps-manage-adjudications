@@ -29,10 +29,6 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetUserFromUsername', {
-      username: 'USER1',
-      response: testData.userFromUsername(),
-    })
     // Staff Member
     cy.task('stubGetUserFromNames', {
       staffFirstName: 'John',
@@ -44,15 +40,6 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
         number: 0,
         size: 20,
       },
-    })
-    // Staff Member
-    cy.task('stubGetUserFromUsername', {
-      username: 'JSMITH_GEN',
-      response: testData.userFromUsername('JSMITH_GEN'),
-    })
-    cy.task('stubGetEmail', {
-      username: 'JSMITH_GEN',
-      response: testData.emailFromUsername('JSMITH_GEN'),
     })
     cy.task('stubGetReportedAdjudication', {
       id: 100,
@@ -118,7 +105,6 @@ context("Inad refers to gov who doesn't proceed - hearing outcome is REFER_GOV",
         }),
       },
     })
-    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
 
     cy.signIn()
   })
@@ -260,10 +246,6 @@ context('Inad refers to gov after hearing', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetUserFromUsername', {
-      username: 'USER1',
-      response: testData.userFromUsername(),
-    })
     // Staff Member
     cy.task('stubGetUserFromNames', {
       staffFirstName: 'John',
@@ -357,7 +339,6 @@ context('Inad refers to gov after hearing', () => {
         },
       ],
     })
-    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.task('stubCreateGovReferral', {
       chargeNumber: '101',
       response: {
