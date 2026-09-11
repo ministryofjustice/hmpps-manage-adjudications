@@ -20,7 +20,12 @@ context('Enter hearing outcome', () => {
       staffFirstName: 'John',
       staffLastName: 'Black',
       page: 0,
-      response: [testData.staffFromName('MDI', 'JBLACK_GEN', 'John Black')],
+      response: {
+        content: [testData.staffFromManageUsersApi('MDI', 'JBLACK_GEN', 'John Black')],
+        totalElements: 1,
+        number: 0,
+        size: 20,
+      },
     })
     cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     cy.task('stubGetUserFromUsername', {
