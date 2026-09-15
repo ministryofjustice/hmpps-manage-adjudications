@@ -3,7 +3,8 @@ import { Request } from 'express'
 import { convertToTitleCase, hasAnyRole } from '../utils/utils'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient, { CaseLoad } from '../data/prisonApiClient'
-import HmppsManageUsersClient, { NomisUserResult, User } from '../data/hmppsManageUsersClient'
+import HmppsManageUsersClient, { type User } from '../data/hmppsManageUsersClient'
+import type { ApiPageRequest, ApiPageResponse } from '../data/ApiData'
 
 interface UserDetails {
   name: string
@@ -13,11 +14,13 @@ interface UserDetails {
 }
 
 export interface StaffSearchByName {
-  activeCaseLoadId?: string
+  activeCaseLoad?: {
+    id: string
+    name: string
+  }
   email?: string
   firstName?: string
   lastName?: string
-  name: string
   staffId: number
   username: string
   verified?: boolean
@@ -32,10 +35,6 @@ export interface StaffDetails {
   email?: string
   name: string
   username: string
-}
-
-export const isCentralAdminCaseload = (caseloadId: string): boolean => {
-  return caseloadId === 'CADM_I'
 }
 
 export default class UserService {
@@ -87,34 +86,24 @@ export default class UserService {
     return this.hmppsManageUsersClient.getUserFromUsername(username, user.token)
   }
 
-  getUserDetailsMap = async (nomisUsers: NomisUserResult[], token: string): Promise<Map<string, User>> => {
-    const nomisUsernames = nomisUsers.map(nomisUser => nomisUser.username)
-    const userDetails =
-      (await Promise.all(
-        [...nomisUsernames].map(username => this.hmppsManageUsersClient.getUserFromUsername(username, token)),
-      )) || []
-    return new Map(userDetails.map(details => [details.username, details]))
-  }
-
-  async getStaffFromNames(name: string, user: User): Promise<StaffSearchByName[]> {
+  async getStaffFromNames(
+    name: string,
+    user: User,
+    pageRequest: ApiPageRequest,
+  ): Promise<ApiPageResponse<StaffSearchByName>> {
     const token = await this.hmppsAuthClient.getSystemClientToken(user.username)
-    const users = await this.hmppsManageUsersClient.getUsersFromName(name, token)
 
-    const userDetailsMapById = await this.getUserDetailsMap(users.content, token)
+    const users = await this.hmppsManageUsersClient.getUsersFromName(name, token, pageRequest)
 
-    return users.content.map(nomisUser => {
-      const userDetails = userDetailsMapById.get(nomisUser.username)
-
-      return {
-        username: nomisUser.username,
-        firstName: nomisUser.firstName,
-        lastName: nomisUser.lastName,
-        name: `${nomisUser.firstName} ${nomisUser.lastName}`,
-        email: nomisUser.email,
-        activeCaseLoadId: userDetails.activeCaseLoadId,
-        staffId: Number(userDetails.userId),
-        verified: true,
-      }
-    })
+    return {
+      ...users,
+      content: users.content.map(prisonUser => {
+        return {
+          ...prisonUser,
+          // NOTE: Slightly difference spelling
+          activeCaseLoad: prisonUser.activeCaseload,
+        }
+      }),
+    }
   }
 }
