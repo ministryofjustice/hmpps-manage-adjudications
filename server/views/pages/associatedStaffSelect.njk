@@ -58,12 +58,7 @@
     <a href="{{ redirectUrl }}{{ staffMember.username }}" class="govuk-link" data-qa="select-staffMember-link-{{ staffMember.username }}">Select {{ staffMember | fullName }}</a>
     {% endset -%}
     {% set rows = (rows.push([
-      {
-        text: staffMember | fullName,
-        attributes: {
-          "data-sort-value": staffMember | fullName
-        }
-      },
+      { text: staffMember | fullName },
       { text: staffMember | activeCaseLoadLocation },
       { text: staffMember.username },
       { text: staffMember.email or "No email address" },
@@ -74,30 +69,17 @@
   {% if rows | length %}
     <div class="results-table">
       {{ govukTable({
-        caption: "Staff members, column headers with buttons are sortable",
+        caption: "Staff members",
         captionClasses: "govuk-visually-hidden",
         head: [
-          {
-            text: "Name",
-            attributes: {
-              "aria-sort": "ascending",
-              "data-qa": "staff-name-sort"
-            }
-          },
-          {
-            text: "Location",
-            attributes: {
-              "aria-sort": "none"
-            }
-          },
+          { text: "Name" },
+          { text: "Location" },
           { text: "User ID" },
-          {
-            text: "Email address"
-          },
+          { text: "Email address" },
           { text: "" }
         ],
         rows: rows,
-        attributes: { "data-qa": "staffMember-search-results-table", "data-module": "moj-sortable-table" }
+        attributes: { "data-qa": "staffMember-search-results-table" }
       }) }}
     </div>
 
