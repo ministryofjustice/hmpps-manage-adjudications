@@ -126,7 +126,7 @@ describe('POST cancel hearing', () => {
 describe('POST remove quashed finding', () => {
   it('shows the validation message when the API rejects an unsafe unquash', () => {
     const validationMessage =
-      'Unable to unquash LGI-011206 because the following consecutive target charges do not have a live charge-proved additional days punishment: LGI-011192. Restore the target punishments first'
+      'You cannot remove the quashed finding from LGI-011206 because the following consecutive charges do not have a live charge-proved additional days punishment: LGI-011192. Restore the target punishments first, then try again.'
 
     reportedAdjudicationsService.getOutcomesHistory.mockResolvedValue([])
     outcomesService.removeNotProceedOrQuashed.mockRejectedValue({
