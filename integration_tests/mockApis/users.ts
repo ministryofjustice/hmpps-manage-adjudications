@@ -1,5 +1,7 @@
 import { Response, SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
+import type { ApiPageResponse } from '../../server/data/ApiData'
+import type { StaffSearchByName } from '../../server/services/userService'
 
 const stubPing = (status = 200): SuperAgentRequest =>
   stubFor({
@@ -40,7 +42,13 @@ const stubUser = ({ username = 'USER1', activeCaseLoadId = 'MDI' }: { username?:
     },
   })
 
-const stubGetUser = ({ username, response }: { username: string; response: { username; name } }): SuperAgentRequest =>
+const stubGetUser = ({
+  username,
+  response,
+}: {
+  username: string
+  response: { username: string; name: string }
+}): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
@@ -77,25 +85,30 @@ const stubGetUserFromUsername = ({
 const stubGetUserFromNames = ({
   staffFirstName,
   staffLastName,
-  response = {},
+  page,
+  response = {
+    content: [],
+    totalElements: 0,
+    number: 0,
+    size: 20,
+  },
 }: {
   staffFirstName: string
   staffLastName: string
-  response: Record<string, unknown>
+  page: number
+  response: ApiPageResponse<StaffSearchByName>
 }): SuperAgentRequest =>
   stubFor({
     request: {
       method: 'GET',
-      url: `/users/users/search?name=${staffFirstName}%20${staffLastName}&authSources=nomis`,
+      url: `/users/prisonusers/search?nameFilter=${staffFirstName}%20${staffLastName}&status=ACTIVE&page=${page}&size=20`,
     },
     response: {
       status: 200,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      jsonBody: {
-        content: response,
-      },
+      jsonBody: response,
     },
   })
 

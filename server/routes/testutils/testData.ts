@@ -554,13 +554,16 @@ export default class TestData {
     }
   }
 
-  staffFromName = (
-    activeCaseLoadId = 'MDI',
-    username = 'JSMITH_GEN',
-    name = 'John Smith',
-    firstName = 'John',
-    lastName = 'Smith',
-  ) => {
+  staffFromName = (activeCaseLoadId = 'MDI', username = 'JSMITH_GEN', firstName = 'John', lastName = 'Smith') => {
+    let activeCaseLoad
+    if (activeCaseLoadId) {
+      activeCaseLoad = {
+        id: activeCaseLoadId,
+        // hardcoding name for simplicity sake
+        name: 'Moorland (HMP & YOI)',
+      }
+    }
+
     return {
       username,
       staffId: 485592,
@@ -568,8 +571,24 @@ export default class TestData {
       verified: true,
       firstName,
       lastName,
-      name,
-      activeCaseLoadId,
+      activeCaseLoad,
+    }
+  }
+
+  staffFromManageUsersApi = (
+    ...args: Parameters<typeof this.staffFromName>
+  ): Omit<ReturnType<typeof this.staffFromName>, 'activeCaseLoad'> & {
+    activeCaseload: {
+      id: string
+      name: string
+    }
+  } => {
+    const userResponse = this.staffFromName(...args)
+
+    return {
+      ...userResponse,
+      // NOTE: Manage Users API response has a different case for "active case load"
+      activeCaseload: userResponse.activeCaseLoad,
     }
   }
 

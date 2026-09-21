@@ -951,33 +951,6 @@ describe('placeOnReportService', () => {
     })
   })
 
-  describe('getAssociatedStaffDetails', () => {
-    it('returns the correct response', async () => {
-      getAgency.mockResolvedValue({
-        agencyId: 'MDI',
-        description: 'Moorland (HMP & YOI)',
-        longDescription: 'HMP & YOI Moorland Prison near Doncaster',
-        agencyType: 'INST',
-        active: true,
-      })
-      const staffMembers = [testData.staffFromName(), testData.staffFromName(null)]
-
-      const response = await service.getAssociatedStaffDetails(staffMembers, user)
-      expect(response).toEqual([{ ...staffMembers[0], currentLocation: 'Moorland (HMP & YOI)' }])
-    })
-    it('returns the correct response when the caseload is the central agency id', async () => {
-      const staffMembers = [testData.staffFromName('CADM_I')]
-
-      const response = await service.getAssociatedStaffDetails(staffMembers, user)
-      expect(response).toEqual([
-        {
-          ...staffMembers[0],
-          currentLocation: 'Central Admin',
-        },
-      ])
-    })
-  })
-
   describe('updateIncidentRole', () => {
     it('creates the incident role object and sends', async () => {
       const expectedResult = testData.reportedAdjudication({

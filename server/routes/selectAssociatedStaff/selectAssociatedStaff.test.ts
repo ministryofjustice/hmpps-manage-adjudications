@@ -36,11 +36,14 @@ afterEach(() => {
 describe('GET /select-associated-staff', () => {
   describe('with results', () => {
     beforeEach(() => {
-      userService.getStaffFromNames.mockResolvedValue([testData.staffFromName()])
-
-      placeOnReportService.getAssociatedStaffDetails.mockResolvedValue([
-        { ...testData.staffFromName(), currentLocation: 'Moorland' },
-      ])
+      const prisonUser = testData.staffFromName()
+      const prisonUsersResponse = {
+        content: [prisonUser],
+        totalElements: 1,
+        number: 0,
+        size: 20,
+      }
+      userService.getStaffFromNames.mockResolvedValue(prisonUsersResponse)
     })
 
     it('should load the search for a prisoner page', () => {
@@ -61,7 +64,12 @@ describe('GET /select-associated-staff', () => {
 
   describe('without results', () => {
     beforeEach(() => {
-      userService.getStaffFromNames.mockResolvedValue([])
+      userService.getStaffFromNames.mockResolvedValue({
+        content: [],
+        number: 0,
+        size: 20,
+        totalElements: 0,
+      })
     })
 
     it('should load the search for a prisoner page', () => {

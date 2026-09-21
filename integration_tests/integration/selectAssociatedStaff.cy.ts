@@ -14,7 +14,6 @@ context('Select associated staff', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetAgency', { agencyId: 'MDI', response: { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' } })
     // Committed draft
     cy.task('stubGetDraftAdjudication', {
       id: 100,
@@ -38,7 +37,13 @@ context('Select associated staff', () => {
     cy.task('stubGetUserFromNames', {
       staffFirstName: 'John',
       staffLastName: 'Smith',
-      response: [testData.staffFromName()],
+      page: 0,
+      response: {
+        content: [testData.staffFromManageUsersApi()],
+        totalElements: 1,
+        number: 0,
+        size: 20,
+      },
     })
     // Staff Member
     cy.task('stubGetUserFromUsername', {

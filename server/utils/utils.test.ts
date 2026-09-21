@@ -17,6 +17,8 @@ import {
   getFullDate,
   agencyIdToName,
   getLastMonthText,
+  formatName,
+  activeCaseLoadLocation,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -61,6 +63,22 @@ describe('formatLocation()', () => {
   })
   it('should convert CSWAP', () => {
     expect(formatLocation('CSWAP')).not.toEqual('CSWAP')
+  })
+})
+
+describe('activeCaseLoadLocation()', () => {
+  it('when no active case load returns empty string', () => {
+    expect(activeCaseLoadLocation({ activeCaseLoad: undefined })).toEqual('')
+  })
+
+  it('when is central admin returns Central Admin', () => {
+    expect(activeCaseLoadLocation({ activeCaseLoad: { id: 'CADM_I', name: 'CADM_I' } })).toEqual('Central Admin')
+  })
+
+  it('for normal case loads return the name', () => {
+    expect(activeCaseLoadLocation({ activeCaseLoad: { id: 'MDI', name: 'Moorland (HMP & YOI)' } })).toEqual(
+      'Moorland (HMP & YOI)',
+    )
   })
 })
 
@@ -157,6 +175,12 @@ describe('getFormattedOfficerName', () => {
   })
   it('should return a correctly formatted name if lots of spaces are used', () => {
     expect(getFormattedOfficerName(' John     Smith')).toEqual('J. Smith')
+  })
+})
+
+describe('formatName()', () => {
+  it('returns the concatenation of first name and last name', () => {
+    expect(formatName('John', 'Doe')).toEqual('John Doe')
   })
 })
 

@@ -54,6 +54,26 @@ export const formatLocation = (locationName: string): string => {
   return locationName
 }
 
+function isCentralAdminCaseload(caseloadId: string): boolean {
+  return caseloadId === 'CADM_I'
+}
+
+export const activeCaseLoadLocation = ({
+  activeCaseLoad,
+}: {
+  activeCaseLoad?: { id: string; name: string }
+}): string => {
+  if (!activeCaseLoad) {
+    return ''
+  }
+
+  if (isCentralAdminCaseload(activeCaseLoad.id)) {
+    return 'Central Admin'
+  }
+
+  return activeCaseLoad.name
+}
+
 const buildDateTime = ({ date, hours, minutes, dateFormat = 'DD/MM/YYYY' }: DateTimeInput) => {
   const time =
     date &&
@@ -249,6 +269,7 @@ export default {
   numberRange,
   convertToTitleCase,
   formatLocation,
+  activeCaseLoadLocation,
   formatDate,
   getTime,
   getDate,
