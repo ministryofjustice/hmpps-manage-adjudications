@@ -85,7 +85,7 @@
       <hr class='govuk-section-break govuk-section-break--m govuk-section-break--visible'>
     </div>
   </div>
-  
+
   {# Punishments #}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -119,7 +119,7 @@
         </div>
       {% endif %}
 
-      {% if (chargeProved or quashed) 
+      {% if (chargeProved or quashed)
         and not reportedAdjudication.outcomeEnteredInNomis %}
         <div data-qa="punishment-comments-section">
           {% if punishmentComments | length > 0 %}
@@ -128,7 +128,6 @@
           {% endif %}
         </div>
       {% endif %}
-      </div>
     </div>
   </div>
 
