@@ -11,8 +11,6 @@ export default class SelectAssociatedStaff extends Page {
 
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
 
-  nameSort = (): PageElement => cy.get('[data-qa="staff-name-sort"]')
-
   resultsTable = (): PageElement => cy.get('[data-qa="staffMember-search-results-table"]')
 
   resultsRows = (): PageElement => this.resultsTable().get('tbody tr')

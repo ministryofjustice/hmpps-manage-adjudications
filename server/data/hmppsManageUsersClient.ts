@@ -4,6 +4,7 @@ import logger from '../../logger'
 import config from '../config'
 import RestClient from './restClient'
 import { ActiveCaseLoad } from '../@types/template'
+import type { ApiPageRequest, ApiPageResponse } from './ApiData'
 
 export interface User {
   username: string
@@ -19,15 +20,16 @@ export interface UserRole {
   roleCode: string
 }
 
-export type NomisUserResponse = {
-  content: NomisUserResult[]
-}
-
-export type NomisUserResult = {
+export type PrisonUser = {
   username: string
-  email: string
+  email?: string
   firstName: string
   lastName: string
+  staffId: number
+  activeCaseload?: {
+    id: string
+    name: string
+  }
 }
 
 export type UserEmail = {
@@ -55,10 +57,15 @@ export default class HmppsManageUsersClient {
     }
   }
 
-  getUsersFromName(name: string, token: string): Promise<NomisUserResponse> {
+  getUsersFromName(name: string, token: string, pageRequest: ApiPageRequest): Promise<ApiPageResponse<PrisonUser>> {
     return this.restClient(token).get({
-      path: `/users/search`,
-      query: querystring.stringify({ name: name?.trim(), authSources: ['nomis'] }),
+      path: `/prisonusers/search`,
+      query: querystring.stringify({
+        nameFilter: name.trim(),
+        status: 'ACTIVE',
+        page: pageRequest.number,
+        size: pageRequest.size,
+      }),
     })
   }
 
