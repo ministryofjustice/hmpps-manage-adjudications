@@ -4,6 +4,8 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import UserService from '../../../../services/userService'
+import { getApiValidationMessage } from '../../../../utils/apiError'
+import { FormError } from '../../../../@types/template'
 
 export enum PageRequestType {
   CREATION,
@@ -36,6 +38,10 @@ export default class CheckPunishmentsPage {
     if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
+    return this.renderView(req, res)
+  }
+
+  private renderView = async (req: Request, res: Response, error?: FormError): Promise<void> => {
     const { chargeNumber } = req.params
 
     const punishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
@@ -50,6 +56,7 @@ export default class CheckPunishmentsPage {
 
     return res.render(`pages/checkPunishments.njk`, {
       chargeNumber,
+      errors: error ? [error] : [],
       punishments,
       filteredPunishments,
       reasonForChange,
@@ -66,6 +73,7 @@ export default class CheckPunishmentsPage {
     const punishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
 
     if (this.pageOptions.isPreviouslySubmitted()) {
+      let punishmentsSaved = false
       try {
         if (req.query.punishmentsChanged) {
           const { reasonForChange, detailsOfChange } = this.punishmentsService.getReasonForChangePunishments(
@@ -73,6 +81,7 @@ export default class CheckPunishmentsPage {
             chargeNumber,
           )
           await this.punishmentsService.editPunishmentSet(punishments, chargeNumber, user)
+          punishmentsSaved = true
           await this.punishmentsService.createReasonForChangingPunishmentComment(
             chargeNumber,
             detailsOfChange,
@@ -84,6 +93,10 @@ export default class CheckPunishmentsPage {
         }
         return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
       } catch (postError) {
+        const validationMessage = !punishmentsSaved && getApiValidationMessage(postError)
+        if (validationMessage) {
+          return this.renderView(req, res, { href: '#change-punishments', text: validationMessage })
+        }
         res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
         throw postError
       }
@@ -93,6 +106,10 @@ export default class CheckPunishmentsPage {
       await this.punishmentsService.createPunishmentSet(punishments, chargeNumber, user)
       return res.redirect(adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber))
     } catch (postError) {
+      const validationMessage = getApiValidationMessage(postError)
+      if (validationMessage) {
+        return this.renderView(req, res, { href: '#change-punishments', text: validationMessage })
+      }
       res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
       throw postError
     }
