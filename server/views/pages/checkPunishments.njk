@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
 {% from "../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
@@ -10,13 +11,20 @@
 {% set title = "Check your answers before submitting" %}
 
 {% block pageTitle %}
-  {{ title }} - Adjudications - Digital Prison Services
+  {% if errors | length %}Error: {% endif %}{{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
 {% block beforeContent %}
   {{ breadcrumb() }}
 {% endblock %}
 
 {% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
@@ -29,7 +37,7 @@
       <div class="punishmentsTitleRow">
         <h2 class="govuk-heading-m">Punishments</h2>
         <p class="govuk-body">
-          <a class="govuk-link" href="{{ changePunishmentLink }}" data-qa="changePunishmentsLink">Change punishments</a>
+          <a class="govuk-link" href="{{ changePunishmentLink }}" id="change-punishments" data-qa="changePunishmentsLink">Change punishments</a>
         </p>
       </div>
 
@@ -41,7 +49,7 @@
 
       {% if rehabActivities | length %}
          <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
-         {{ awardRehabilitativeActivitiesTable(rehabActivities, true) }} 
+         {{ awardRehabilitativeActivitiesTable(rehabActivities, true) }}
       {% endif %}
 
       {% if reasonForChange %}
