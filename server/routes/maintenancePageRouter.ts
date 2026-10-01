@@ -3,6 +3,7 @@ import csurf from 'csurf'
 import auth from '../authentication/auth'
 import tokenVerifier from '../data/tokenVerification'
 import populateCurrentUser from '../middleware/populateCurrentUser'
+import userTelemetry from '../middleware/userTelemetry'
 import type UserService from '../services/userService'
 
 const testMode = process.env.NODE_ENV === 'test'
@@ -12,6 +13,7 @@ export default function maintenancePageRouter(userService: UserService): Router 
 
   router.use(auth.authenticationMiddleware(tokenVerifier))
   router.use(populateCurrentUser(userService))
+  router.use(userTelemetry())
 
   // CSRF protection
   if (!testMode) {
