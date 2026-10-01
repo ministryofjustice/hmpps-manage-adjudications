@@ -1,3 +1,4 @@
+import type { PageViewEventDetails } from '@ministryofjustice/hmpps-audit-client'
 import { SubmittedDateTime } from '../template'
 import { OffenceData } from '../../routes/offenceCodeDecisions/offenceData'
 import { PdfFooterData, PdfHeaderData, PdfPageData } from '../../utils/pdfRenderer'
@@ -50,6 +51,11 @@ export declare global {
       verified?: boolean
       id: string
       logout(done: (err: unknown) => void): void
+    }
+
+    interface Locals {
+      /** the page view being audited to HMPPS Audit, see auditPageView middleware */
+      auditEvent?: PageViewEventDetails
     }
 
     interface Response {

@@ -1,3 +1,4 @@
+import type { AuditService } from '@ministryofjustice/hmpps-audit-client'
 import express, { Router, Express } from 'express'
 import cookieSession from 'cookie-session'
 import createError from 'http-errors'
@@ -149,6 +150,7 @@ export default function appWithAllRoutes(
       createOnBehalfOfSessionService: {} as CreateOnBehalfOfSessionService,
       frontendComponentService: {} as FrontendComponentService,
       permissionsService: stubPermissionsService(),
+      auditService: {} as AuditService,
       ...overrides,
     }),
     production,

@@ -101,7 +101,15 @@ const token = (roles: string[] = ['ROLE_ADJUDICATIONS_REVIEWER', 'ROLE_GLOBAL_SE
     },
   })
 
+/** the audit SQS queue; the client posts SendMessage to the root path */
+const stubAuditSqs = (): SuperAgentRequest =>
+  stubFor({
+    request: { method: 'POST', url: '/' },
+    response: { status: 200, headers: { 'Content-Type': 'text/xml' }, body: '{}' },
+  })
+
 export default {
+  stubAuditSqs,
   getSignInUrl,
   stubPing,
   stubSignIn: (
