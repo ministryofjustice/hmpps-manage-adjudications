@@ -41,6 +41,7 @@ const user = {
   firstName: 'john',
   lastName: 'smith',
   username: 'user1',
+  userUuid: '11111111-1111-1111-1111-111111111111',
   displayName: 'John Smith',
   activeCaseLoadId: 'MDI',
   allCaseLoads: [

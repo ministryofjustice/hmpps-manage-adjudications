@@ -13,6 +13,7 @@ export interface User {
   token: string
   authSource: string
   userId?: string
+  userUuid?: string
   meta?: ActiveCaseLoad
 }
 

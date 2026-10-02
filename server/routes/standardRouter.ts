@@ -4,6 +4,7 @@ import auth from '../authentication/auth'
 import tokenVerifier from '../data/tokenVerification'
 import populateCurrentUser from '../middleware/populateCurrentUser'
 import mapUserForPrisonPermissions from '../middleware/mapUserForPrisonPermissions'
+import userTelemetry from '../middleware/userTelemetry'
 import type UserService from '../services/userService'
 
 const testMode = process.env.NODE_ENV === 'test'
@@ -14,6 +15,7 @@ export default function standardRouter(userService: UserService): Router {
   router.use(auth.authenticationMiddleware(tokenVerifier))
   router.use(populateCurrentUser(userService))
   router.use(mapUserForPrisonPermissions())
+  router.use(userTelemetry())
 
   // CSRF protection
   if (!testMode) {
