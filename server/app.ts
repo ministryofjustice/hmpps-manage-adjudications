@@ -16,6 +16,7 @@ import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+import auditPageView from './middleware/auditPageView'
 
 import logger from '../logger'
 import { Services } from './services'
@@ -47,6 +48,8 @@ export default function createApp(services: Services): express.Application {
   setUpEnvironmentName(app)
   nunjucksSetup(app, services.applicationInfo)
   app.use(setUpAuthentication())
+  // before authorisation, so that refused requests are still audited as access attempts
+  app.get('*any', auditPageView(services.auditService))
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.url)))
   app.use(authorisationMiddleware())
   app.use('*"matcher"', getFrontendComponents(services))

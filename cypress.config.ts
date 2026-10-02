@@ -1,6 +1,6 @@
 import { defineConfig } from 'cypress'
 
-import { resetStubs } from './integration_tests/mockApis/wiremock'
+import { resetStubs, getSentAuditEvents } from './integration_tests/mockApis/wiremock'
 import prisonApi from './integration_tests/mockApis/prisonApi'
 import locationsInsidePrisonApi from './integration_tests/mockApis/locationsInsidePrisonApi'
 import nomisSyncPrisonerMappingApi from './integration_tests/mockApis/nomisSyncPrisonerMappingApi'
@@ -33,6 +33,7 @@ export default defineConfig({
     setupNodeEvents(on) {
       on('task', {
         reset: resetStubs,
+        getSentAuditEvents,
         getSignInUrl: auth.getSignInUrl,
         stubSignIn: (roles: string[] = ['ROLE_ADJUDICATIONS_REVIEWER', 'ROLE_GLOBAL_SEARCH']) => {
           const userCaseLoads = [
@@ -60,6 +61,7 @@ export default defineConfig({
 
           return Promise.all([
             auth.stubSignIn(roles),
+            auth.stubAuditSqs(),
             adjudications.stubGetAgencyReportCounts({
               response: {
                 reviewTotal: 2,

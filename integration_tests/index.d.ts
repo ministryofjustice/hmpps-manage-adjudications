@@ -4,5 +4,10 @@ declare namespace Cypress {
      * @example cy.signIn({ failOnStatusCode: boolean })
      */
     signIn<S = unknown>(options?: { failOnStatusCode: false }): Chainable<S>
+
+    /**
+     * Asserts on the audit events sent to HMPPS Audit so far for one page
+     */
+    verifyAuditEvents(pageUrl: string, events: object[]): Chainable<unknown>
   }
 }

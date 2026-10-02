@@ -31,6 +31,26 @@ context('Adjudication history', () => {
     cy.signIn()
   })
 
+  it('sends page view events to HMPPS Audit', () => {
+    cy.task('stubGetPrisonerAdjudicationHistory', { bookingId: '123', number: 0, allContent: [] })
+
+    const pageUrl = adjudicationUrls.adjudicationHistory.urls.start('G6415GD')
+    cy.visit(pageUrl)
+    Page.verifyOnPage(AdjudicationHistoryPage)
+
+    const event = {
+      who: 'USER1',
+      service: 'hmpps-manage-adjudications',
+      subjectId: 'G6415GD',
+      subjectType: 'PRISONER_ID',
+      details: JSON.stringify({ pageUrl }),
+    }
+    cy.verifyAuditEvents(pageUrl, [
+      { ...event, what: 'PAGE_VIEW' },
+      { ...event, what: 'PAGE_VIEW_ACCESS_ATTEMPT' },
+    ])
+  })
+
   it('should say when there are no results', () => {
     cy.task('stubGetPrisonerAdjudicationHistory', { bookingId: '123', number: 0, allContent: [] })
 
