@@ -1,3 +1,4 @@
+import { AuditServiceFactory } from '@ministryofjustice/hmpps-audit-client'
 import { PermissionsService } from '@ministryofjustice/hmpps-prison-permissions-lib'
 import { dataAccess } from '../data'
 import config from '../config'
@@ -90,6 +91,8 @@ const permissionsService = PermissionsService.create({
   logger,
 })
 
+const auditService = AuditServiceFactory.createInstance(config.sqs.audit, logger)
+
 const { applicationInfo } = dataAccess()
 
 export const services = {
@@ -110,6 +113,7 @@ export const services = {
   createOnBehalfOfSessionService,
   frontendComponentService,
   permissionsService,
+  auditService,
 }
 
 export type Services = typeof services
