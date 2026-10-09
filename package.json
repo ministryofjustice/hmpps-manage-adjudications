@@ -121,7 +121,7 @@
     "prettier": "^3.9.9",
     "prettier-plugin-jinja-template": "^2.2.0",
     "sass": "^1.105.1",
-    "supertest": "^7.3.0",
+    "supertest": "^7.3.1",
     "ts-jest": "^29.4.14",
     "typescript": "^6.0.3",
     "wait-on": "^9.5.1"
