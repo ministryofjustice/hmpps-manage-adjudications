@@ -107,7 +107,7 @@
     "@types/superagent": "^8.1.11",
     "@types/supertest": "^7.2.1",
     "concurrently": "^10.0.5",
-    "cypress": "^15.21.1",
+    "cypress": "^16.1.1",
     "cypress-multi-reporters": "^2.0.5",
     "dotenv": "^17.4.2",
     "jest": "^30.5.2",
@@ -145,7 +145,7 @@
   },
   "allowScripts": {
     "@parcel/watcher@2.6.0": true,
-    "cypress@15.21.1": true,
+    "cypress@16.1.1": true,
     "dtrace-provider@0.8.8": false,
     "fsevents@2.3.3": true,
     "unrs-resolver@1.12.2": true
