@@ -1,7 +1,13 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
 import { User } from '../../../../data/hmppsManageUsersClient'
-import { PunishmentDataWithSchedule, PunishmentType, flattenPunishments } from '../../../../data/PunishmentResult'
+import {
+  PunishmentData,
+  PunishmentDataWithSchedule,
+  PunishmentType,
+  canHaveRehabilitativeActivity,
+  flattenPunishments,
+} from '../../../../data/PunishmentResult'
 import PunishmentsService from '../../../../services/punishmentsService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
@@ -62,6 +68,15 @@ export default class AwardPunishmentsPage {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
 
+    const multiPrivilegePunishments = !!res.locals.featureToggles?.multiPrivilegePunishments
+    let successMessage: string = null
+    if (multiPrivilegePunishments) {
+      // Leaving a punishment or rehabilitative activity loop keeps what was answered and drops the rest
+      this.punishmentsService.clearPunishmentBatch(req, chargeNumber)
+      this.punishmentsService.clearRehabBatch(req, chargeNumber)
+      successMessage = this.punishmentsService.takeSuccessMessage(req, chargeNumber)
+    }
+
     const continueHref = await this.getContinueHref(chargeNumber, user)
 
     const filteredPunishments = await this.punishmentsService.filteredPunishments(punishments)
@@ -78,7 +93,20 @@ export default class AwardPunishmentsPage {
       cautionAdded,
       continueHref,
       rehabActivities,
+      successMessage,
+      canAddRehabilitativeActivity:
+        multiPrivilegePunishments && (await this.canAddRehabilitativeActivity(chargeNumber, user, punishments)),
     })
+  }
+
+  canAddRehabilitativeActivity = async (chargeNumber: string, user: User, punishments: PunishmentData[]) => {
+    if (!punishments?.some(punishment => canHaveRehabilitativeActivity(punishment))) return false
+    const { isIndependentAdjudicatorHearing } = await this.punishmentsService.getPunishmentAvailability(
+      chargeNumber,
+      user,
+    )
+    // only a governor can award a rehabilitative activity condition
+    return !isIndependentAdjudicatorHearing
   }
 
   getPunishments = async (req: Request, chargeNumber: string, user: User) => {
