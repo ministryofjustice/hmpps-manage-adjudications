@@ -535,6 +535,41 @@ describe('PunishmentsService session batches', () => {
     })
   })
 
+  describe('updating a session punishment', () => {
+    it('keeps it in its place in the list', () => {
+      const req = newRequest({
+        punishments: {
+          100: [
+            { ...canteen, redisId: 'a', duration: 5, rehabilitativeActivities: [] },
+            { ...library, redisId: 'b', duration: 5, rehabilitativeActivities: [] },
+          ],
+        },
+      })
+      service.updateSessionPunishment(req, { ...canteen, duration: 9, rehabilitativeActivities: [] }, '100', 'a')
+      expect(service.getAllSessionPunishments(req, '100').map((p: { redisId: string }) => p.redisId)).toEqual([
+        'a',
+        'b',
+      ])
+      expect(service.getSessionPunishment(req, '100', 'a').duration).toEqual(9)
+    })
+
+    it('keeps an edited activity in its place', () => {
+      const activities = [
+        { sessionId: 1, details: 'first' },
+        { sessionId: 2, details: 'second' },
+      ]
+      const req = newRequest({
+        punishments: { 100: [{ ...library, redisId: 'b', rehabilitativeActivities: activities }] },
+      })
+      service.editRehabilitativeActivity(req, '100', 'b', 1, { sessionId: 1, details: 'changed' })
+      expect(
+        service
+          .getSessionPunishment(req, '100', 'b')
+          .rehabilitativeActivities.map((a: { details: string }) => a.details),
+      ).toEqual(['changed', 'second'])
+    })
+  })
+
   describe('success message', () => {
     it('is returned once only', () => {
       const req = newRequest()
