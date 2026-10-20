@@ -926,6 +926,64 @@ const adjudicationUrls = {
         `${adjudicationUrls.punishmentStartDate.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
+  punishmentSameDuration: {
+    root: '/punishment-same-duration',
+    matchers: {
+      start: '/:chargeNumber',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentSameDuration.root}/${chargeNumber}`,
+    },
+  },
+  punishmentDuration: {
+    root: '/punishment-duration',
+    matchers: {
+      start: '/:chargeNumber',
+      edit: '/:chargeNumber/edit/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentDuration.root}/${chargeNumber}`,
+      edit: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.punishmentDuration.root}/${chargeNumber}/edit/${redisId}`,
+    },
+  },
+  punishmentSchedule: {
+    root: '/punishment-schedule',
+    matchers: {
+      start: '/:chargeNumber',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.punishmentSchedule.root}/${chargeNumber}`,
+    },
+  },
+  whichPunishmentsHaveRehabilitativeActivities: {
+    root: '/which-punishments-rehabilitative-activities',
+    matchers: {
+      start: '/:chargeNumber',
+    },
+    urls: {
+      start: (chargeNumber: string) =>
+        `${adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.root}/${chargeNumber}`,
+    },
+  },
+  sameRehabilitativeActivity: {
+    root: '/same-rehabilitative-activity',
+    matchers: {
+      start: '/:chargeNumber',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.sameRehabilitativeActivity.root}/${chargeNumber}`,
+    },
+  },
+  rehabilitativeActivitiesSchedule: {
+    root: '/rehabilitative-activities-schedule',
+    matchers: {
+      start: '/:chargeNumber',
+    },
+    urls: {
+      start: (chargeNumber: string) => `${adjudicationUrls.rehabilitativeActivitiesSchedule.root}/${chargeNumber}`,
+    },
+  },
   punishmentAutomaticDateSchedule: {
     root: '/punishment-automatic-date-schedule',
     matchers: {

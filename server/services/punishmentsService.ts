@@ -6,9 +6,12 @@ import {
   NotCompletedOutcome,
   PunishmentComment,
   PunishmentData,
+  PunishmentBatch,
+  PunishmentBatchItem,
   PunishmentDataWithSchedule,
   PunishmentReasonForChange,
   PunishmentType,
+  RehabBatch,
   RehabilitativeActivity,
   SuspendedPunishmentDetails,
   SuspendedPunishmentResult,
@@ -290,7 +293,135 @@ export default class PunishmentsService {
   }
 
   deleteAllSessionPunishments(req: Request, chargeNumber: string) {
+    this.clearPunishmentBatch(req, chargeNumber)
+    this.clearRehabBatch(req, chargeNumber)
+    delete req.session?.punishmentSuccessMessage?.[chargeNumber]
     return delete req.session?.punishments?.[chargeNumber]
+  }
+
+  // The punishments chosen on the type page that are being given a duration and start date.
+  // Answered items are already in req.session.punishments; the batch only records the loop's progress.
+  startPunishmentBatch(req: Request, chargeNumber: string, items: PunishmentBatchItem[]) {
+    if (!req.session.punishmentBatch) req.session.punishmentBatch = {}
+    req.session.punishmentBatch[chargeNumber] = { items: items.map(item => ({ ...item })) }
+  }
+
+  getPunishmentBatch(req: Request, chargeNumber: string): PunishmentBatch {
+    return req.session?.punishmentBatch?.[chargeNumber]
+  }
+
+  setPunishmentBatchSameForAll(req: Request, chargeNumber: string, sameForAll: boolean) {
+    const batch = this.getPunishmentBatch(req, chargeNumber)
+    if (batch) batch.sameForAll = sameForAll
+  }
+
+  // Index into batch.items of the first item without an answer, or -1
+  nextUnansweredBatchItemIndex(req: Request, chargeNumber: string): number {
+    const batch = this.getPunishmentBatch(req, chargeNumber)
+    return batch ? batch.items.findIndex(item => !item.redisId) : -1
+  }
+
+  markBatchItemAnswered(req: Request, chargeNumber: string, index: number, redisId: string) {
+    const batch = this.getPunishmentBatch(req, chargeNumber)
+    if (batch?.items[index]) batch.items[index].redisId = redisId
+  }
+
+  isInPunishmentBatch(req: Request, chargeNumber: string, redisId: string): boolean {
+    return !!this.getPunishmentBatch(req, chargeNumber)?.items.some(item => item.redisId === redisId)
+  }
+
+  clearPunishmentBatch(req: Request, chargeNumber: string) {
+    delete req.session?.punishmentBatch?.[chargeNumber]
+  }
+
+  nextPunishmentBatchUrl(req: Request, chargeNumber: string): string {
+    const batch = this.getPunishmentBatch(req, chargeNumber)
+    if (!batch?.items.length) return adjudicationUrls.awardPunishments.urls.modified(chargeNumber)
+    if (batch.items.some(item => !item.redisId)) return adjudicationUrls.punishmentDuration.urls.start(chargeNumber)
+    return adjudicationUrls.punishmentSchedule.urls.start(chargeNumber)
+  }
+
+  // The suspended punishments ticked for a rehabilitative activity condition
+  startRehabBatch(req: Request, chargeNumber: string, redisIds: string[]) {
+    if (!req.session.rehabBatch) req.session.rehabBatch = {}
+    req.session.rehabBatch[chargeNumber] = { redisIds: [...redisIds], completedRedisIds: [] }
+  }
+
+  getRehabBatch(req: Request, chargeNumber: string): RehabBatch {
+    return req.session?.rehabBatch?.[chargeNumber]
+  }
+
+  setRehabBatchSameForAll(req: Request, chargeNumber: string, sameForAll: boolean) {
+    const batch = this.getRehabBatch(req, chargeNumber)
+    if (batch) batch.sameForAll = sameForAll
+  }
+
+  nextPendingRehabRedisId(req: Request, chargeNumber: string): string {
+    const batch = this.getRehabBatch(req, chargeNumber)
+    return batch?.redisIds.find(redisId => !batch.completedRedisIds.includes(redisId))
+  }
+
+  // Marks a punishment's rehabilitative questions answered. When one answer covers the whole batch,
+  // its activities are copied to every other punishment in the batch and they are all complete.
+  completeRehabBatchItem(req: Request, chargeNumber: string, redisId: string) {
+    const batch = this.getRehabBatch(req, chargeNumber)
+    if (!batch?.redisIds.includes(redisId)) return
+    if (batch.sameForAll) {
+      this.copyRehabilitativeActivities(
+        req,
+        chargeNumber,
+        redisId,
+        batch.redisIds.filter(id => id !== redisId),
+      )
+      batch.completedRedisIds = [...batch.redisIds]
+      return
+    }
+    if (!batch.completedRedisIds.includes(redisId)) batch.completedRedisIds.push(redisId)
+  }
+
+  isInRehabBatch(req: Request, chargeNumber: string, redisId: string): boolean {
+    return !!this.getRehabBatch(req, chargeNumber)?.redisIds.includes(redisId)
+  }
+
+  clearRehabBatch(req: Request, chargeNumber: string) {
+    delete req.session?.rehabBatch?.[chargeNumber]
+  }
+
+  nextRehabBatchUrl(req: Request, chargeNumber: string): string {
+    const batch = this.getRehabBatch(req, chargeNumber)
+    if (!batch?.redisIds.length) return adjudicationUrls.awardPunishments.urls.modified(chargeNumber)
+    const next = this.nextPendingRehabRedisId(req, chargeNumber)
+    if (next) return adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.urls.start(chargeNumber, next)
+    return adjudicationUrls.rehabilitativeActivitiesSchedule.urls.start(chargeNumber)
+  }
+
+  copyRehabilitativeActivities(req: Request, chargeNumber: string, fromRedisId: string, toRedisIds: string[]) {
+    const from = this.getSessionPunishment(req, chargeNumber, fromRedisId)
+    if (!from) return
+    toRedisIds.forEach(redisId => {
+      const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+      if (!punishment) return
+      Object.assign(punishment, {
+        isThereRehabilitativeActivities: from.isThereRehabilitativeActivities,
+        hasRehabilitativeActivitiesDetails: from.hasRehabilitativeActivitiesDetails,
+        rehabilitativeActivities: from.rehabilitativeActivities.map((activity: RehabilitativeActivity) => ({
+          ...activity,
+          id: undefined as number,
+        })),
+      })
+    })
+  }
+
+  // A one-off message for the success banner on the award punishments page
+  setSuccessMessage(req: Request, chargeNumber: string, message: string) {
+    if (!req.session.punishmentSuccessMessage) req.session.punishmentSuccessMessage = {}
+    req.session.punishmentSuccessMessage[chargeNumber] = message
+  }
+
+  takeSuccessMessage(req: Request, chargeNumber: string): string {
+    const message = req.session?.punishmentSuccessMessage?.[chargeNumber]
+    delete req.session?.punishmentSuccessMessage?.[chargeNumber]
+    return message
   }
 
   setReasonForChangePunishments(req: Request, reasonForChange: punishmentChangeReasonAndDetails, chargeNumber: string) {
@@ -448,6 +579,13 @@ export default class PunishmentsService {
       isIndependentAdjudicatorHearing: lastHearing?.oicHearingType.includes('INAD') || false,
       isAdult: !reportedAdjudication.isYouthOffender,
     }
+  }
+
+  // The last day of the hearing, as YYYY-MM-DD — the date an "immediate" punishment starts
+  async getLastHearingDate(chargeNumber: string, user: User): Promise<string> {
+    const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
+    const lastHearing = reportedAdjudication.hearings?.[reportedAdjudication.hearings.length - 1]
+    return lastHearing?.dateTimeOfHearing ? formatTimestampTo(lastHearing.dateTimeOfHearing, 'YYYY-MM-DD') : null
   }
 
   async getPrisonerDetails(chargeNumber: string, user: User): Promise<PrisonerResult & { friendlyName: string }> {

@@ -128,6 +128,64 @@ export type RehabilitativeActivity = {
   multipleActivitiesNotLast?: boolean
 }
 
+// A punishment chosen on the type page that still needs its duration and start date.
+// redisId is set once it has been answered and added to the session punishments.
+export type PunishmentBatchItem = {
+  type: PunishmentType
+  privilegeType?: PrivilegeType
+  otherPrivilege?: string
+  stoppagePercentage?: number
+  hasChildUnder18?: boolean
+  redisId?: string
+}
+
+export type PunishmentBatch = {
+  items: PunishmentBatchItem[]
+  sameForAll?: boolean
+}
+
+// Suspended punishments ticked for a rehabilitative activity condition, by session redisId
+export type RehabBatch = {
+  redisIds: string[]
+  completedRedisIds: string[]
+  sameForAll?: boolean
+}
+
+// Punishment types that can have a rehabilitative activity condition when suspended on a governor hearing.
+// The API applies the same rule (PunishmentType.rehabilitativeActivitiesAllowed).
+export const REHAB_ELIGIBLE_PUNISHMENT_TYPES = [
+  PunishmentType.EARNINGS,
+  PunishmentType.CONFINEMENT,
+  PunishmentType.EXCLUSION_WORK,
+  PunishmentType.EXTRA_WORK,
+  PunishmentType.PRIVILEGE,
+  PunishmentType.REMOVAL_ACTIVITY,
+  PunishmentType.REMOVAL_WING,
+  PunishmentType.RESTRICTION_OF_SOCIAL_VISITS,
+  PunishmentType.LOSS_OF_SOCIAL_VISITS,
+]
+
+// Punishment types that are entered as a number of days plus a start date or a suspended-until date
+export function isDayBasedPunishment(type: PunishmentType): boolean {
+  return ![
+    PunishmentType.CAUTION,
+    PunishmentType.DAMAGES_OWED,
+    PunishmentType.PAYBACK,
+    PunishmentType.ADDITIONAL_DAYS,
+    PunishmentType.PROSPECTIVE_DAYS,
+  ].includes(type)
+}
+
+export function canHaveRehabilitativeActivity(punishment: PunishmentData): boolean {
+  return (
+    !!punishment.suspendedUntil &&
+    !punishment.activatedFrom &&
+    REHAB_ELIGIBLE_PUNISHMENT_TYPES.includes(punishment.type) &&
+    (punishment.rehabilitativeActivitiesCompleted === undefined ||
+      punishment.rehabilitativeActivitiesCompleted === null)
+  )
+}
+
 export interface PunishmentWithConvertedName extends PunishmentData {
   punishmentName: string
 }

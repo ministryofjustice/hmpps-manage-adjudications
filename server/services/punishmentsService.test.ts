@@ -264,6 +264,29 @@ describe('PunishmentsService', () => {
       )
     })
   })
+  describe('getLastHearingDate', () => {
+    it('returns the date of the last hearing', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '100',
+          prisonerNumber: 'G6123VU',
+          hearings: [
+            testData.singleHearing({ dateTimeOfHearing: '2026-08-10T10:00:00', id: 1 }),
+            testData.singleHearing({ dateTimeOfHearing: '2026-08-17T14:30:00', id: 2 }),
+          ],
+        }),
+      })
+      expect(await service.getLastHearingDate('100', user)).toEqual('2026-08-17')
+    })
+
+    it('returns null when there is no hearing', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({ chargeNumber: '100', prisonerNumber: 'G6123VU' }),
+      })
+      expect(await service.getLastHearingDate('100', user)).toBeNull()
+    })
+  })
+
   describe('getPunishmentAvailability', () => {
     it('returns adult availability when there are no hearings present on the adjudication', async () => {
       getReportedAdjudication.mockResolvedValue({
@@ -400,6 +423,124 @@ describe('PunishmentsService', () => {
       const result = await service.getPossibleConsecutivePunishments('100', PunishmentType.ADDITIONAL_DAYS, user)
       expect(result).toHaveLength(1)
       expect(result[0].chargeNumber).toBe('101')
+    })
+  })
+})
+
+describe('PunishmentsService session batches', () => {
+  const service = new PunishmentsService(null, null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const newRequest = (session: Record<string, unknown> = {}): any => ({ session })
+
+  const canteen = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN }
+  const library = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.OTHER, otherPrivilege: 'library' }
+
+  describe('punishment batch', () => {
+    it('falls back to the award punishments page when there is no batch', () => {
+      expect(service.nextPunishmentBatchUrl(newRequest(), '100')).toEqual('/award-punishments/100/modified')
+      expect(service.nextUnansweredBatchItemIndex(newRequest(), '100')).toEqual(-1)
+    })
+
+    it('moves through the unanswered items then to the schedule', () => {
+      const req = newRequest()
+      service.startPunishmentBatch(req, '100', [canteen, library])
+      expect(service.nextPunishmentBatchUrl(req, '100')).toEqual('/punishment-duration/100')
+      expect(service.nextUnansweredBatchItemIndex(req, '100')).toEqual(0)
+
+      service.markBatchItemAnswered(req, '100', 0, 'a')
+      expect(service.nextUnansweredBatchItemIndex(req, '100')).toEqual(1)
+      expect(service.isInPunishmentBatch(req, '100', 'a')).toBe(true)
+
+      service.markBatchItemAnswered(req, '100', 1, 'b')
+      expect(service.nextUnansweredBatchItemIndex(req, '100')).toEqual(-1)
+      expect(service.nextPunishmentBatchUrl(req, '100')).toEqual('/punishment-schedule/100')
+    })
+
+    it('replaces an earlier batch and keeps charges apart', () => {
+      const req = newRequest()
+      service.startPunishmentBatch(req, '100', [canteen])
+      service.markBatchItemAnswered(req, '100', 0, 'a')
+      service.startPunishmentBatch(req, '200', [library])
+      service.startPunishmentBatch(req, '100', [library])
+
+      expect(service.getPunishmentBatch(req, '100')).toEqual({ items: [library] })
+      expect(service.getPunishmentBatch(req, '200')).toEqual({ items: [library] })
+    })
+
+    it('records whether one answer applies to all items', () => {
+      const req = newRequest()
+      service.startPunishmentBatch(req, '100', [canteen, library])
+      service.setPunishmentBatchSameForAll(req, '100', true)
+      expect(service.getPunishmentBatch(req, '100').sameForAll).toBe(true)
+    })
+
+    it('is cleared when the session punishments are deleted', () => {
+      const req = newRequest({ punishments: { 100: [] } })
+      service.startPunishmentBatch(req, '100', [canteen])
+      service.startRehabBatch(req, '100', ['a'])
+      service.setSuccessMessage(req, '100', 'Loss of canteen added')
+
+      service.deleteAllSessionPunishments(req, '100')
+
+      expect(service.getPunishmentBatch(req, '100')).toBeUndefined()
+      expect(service.getRehabBatch(req, '100')).toBeUndefined()
+      expect(service.takeSuccessMessage(req, '100')).toBeUndefined()
+    })
+  })
+
+  describe('rehab batch', () => {
+    const suspended = (redisId: string, rehabilitativeActivities: RehabilitativeActivity[] = []) => ({
+      ...canteen,
+      redisId,
+      duration: 10,
+      suspendedUntil: '2026-11-30',
+      rehabilitativeActivities,
+    })
+
+    it('falls back to the award punishments page when there is no batch', () => {
+      expect(service.nextRehabBatchUrl(newRequest(), '100')).toEqual('/award-punishments/100/modified')
+    })
+
+    it('asks about each punishment in turn then shows the schedule', () => {
+      const req = newRequest()
+      service.startRehabBatch(req, '100', ['a', 'b'])
+      expect(service.nextRehabBatchUrl(req, '100')).toEqual('/punishment-has-rehabilitative-activities-details/100/a')
+
+      service.completeRehabBatchItem(req, '100', 'a')
+      expect(service.nextRehabBatchUrl(req, '100')).toEqual('/punishment-has-rehabilitative-activities-details/100/b')
+
+      service.completeRehabBatchItem(req, '100', 'b')
+      expect(service.nextRehabBatchUrl(req, '100')).toEqual('/rehabilitative-activities-schedule/100')
+    })
+
+    it('ignores a punishment that is not in the batch', () => {
+      const req = newRequest()
+      service.startRehabBatch(req, '100', ['a'])
+      service.completeRehabBatchItem(req, '100', 'z')
+      expect(service.getRehabBatch(req, '100').completedRedisIds).toEqual([])
+    })
+
+    it('copies the activities to every punishment when one answer applies to all', () => {
+      const activity = { sessionId: 1, details: 'Course', monitor: 'Thomas', endDate: '2026-11-01', id: 9 }
+      const req = newRequest({ punishments: { 100: [suspended('a', [activity]), suspended('b')] } })
+      service.startRehabBatch(req, '100', ['a', 'b'])
+      service.setRehabBatchSameForAll(req, '100', true)
+
+      service.completeRehabBatchItem(req, '100', 'a')
+
+      expect(service.nextRehabBatchUrl(req, '100')).toEqual('/rehabilitative-activities-schedule/100')
+      expect(service.getSessionPunishment(req, '100', 'b').rehabilitativeActivities).toEqual([
+        { ...activity, id: undefined },
+      ])
+    })
+  })
+
+  describe('success message', () => {
+    it('is returned once only', () => {
+      const req = newRequest()
+      service.setSuccessMessage(req, '100', '2 punishments added')
+      expect(service.takeSuccessMessage(req, '100')).toEqual('2 punishments added')
+      expect(service.takeSuccessMessage(req, '100')).toBeUndefined()
     })
   })
 })
