@@ -25,7 +25,7 @@
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-      {{ punishmentRadios(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, hasChildUnder18, errors, title) }}
+      {{ punishmentRadios(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, amount, hasChildUnder18, errors, title, multiplePrivileges, privilegeTypes, privilegesAlreadyAdded) }}
       <div class="govuk-button-group">
         {{ govukButton({
               text: 'Continue',
@@ -35,7 +35,18 @@
               attributes: { "data-qa": "punishment-submit" }
               }) }}
 
-        <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to ‘Award punishments and add money for damages’</a>
+        {% if featureToggles.multiPrivilegePunishments %}
+          {{ govukButton({
+            text: 'Save and exit',
+            type: "submit",
+            name: "action",
+            value: "exit",
+            classes: "govuk-button--secondary",
+            attributes: { "data-qa": "punishment-save-and-exit" }
+          }) }}
+        {% else %}
+          <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to ‘Award punishments and add money for damages’</a>
+        {% endif %}
       </div>
 
     </form>
