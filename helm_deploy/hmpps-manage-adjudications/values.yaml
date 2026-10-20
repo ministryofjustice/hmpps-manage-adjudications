@@ -37,6 +37,8 @@ generic-service:
     AUDIT_ENABLED: "true"
     AUDIT_SQS_REGION: "eu-west-2"
     AUDIT_SERVICE_NAME: "hmpps-manage-adjudications"
+    # Prisons on the new award-punishments journey (IR-1904): comma-separated agency ids, ALL, or empty for none
+    MULTI_PRIVILEGE_PUNISHMENTS_PRISONS: ""
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:

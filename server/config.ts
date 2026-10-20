@@ -209,4 +209,11 @@ export default {
   maintenanceModeFlag: get('MAINTENANCE_MODE', false, requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   offenceVersion: get('OFFENCE_VERSION', 1, requiredInProduction),
+  featureToggles: {
+    // comma-separated agency ids, the literal ALL, or empty = off everywhere
+    multiPrivilegePunishmentsPrisons: String(get('MULTI_PRIVILEGE_PUNISHMENTS_PRISONS', ''))
+      .split(',')
+      .map(prisonId => prisonId.trim().toUpperCase())
+      .filter(Boolean),
+  },
 }
