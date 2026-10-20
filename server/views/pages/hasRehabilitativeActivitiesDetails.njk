@@ -5,7 +5,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% set title = "Do you have the details of the rehabilitative activity?" %}
+{% set title = title or "Do you have the details of the rehabilitative activity?" %}
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
@@ -13,11 +13,27 @@
   {{ breadcrumb() }}
 {% endblock %}
 
+{% set numberOfActivitiesHtml %}
+  {{ govukInput({
+      id: "numberOfActivities",
+      name: "numberOfActivities",
+      inputmode: "numeric",
+      value: numberOfActivities,
+      classes: "govuk-input--width-2",
+      attributes: { "data-qa": "number-of-activities" },
+      errorMessage: errors | findErrors(["numberOfActivities"]),
+      label: {
+          text: "Enter the number of rehabilitative activities"
+      }
+    }) }}
+{% endset -%}
+
 {% set items = [
     {
         value: "YES",
         text: "Yes",
-        checked: hasRehabilitativeActivitiesDetails === 'YES'
+        checked: hasRehabilitativeActivitiesDetails === 'YES',
+        conditional: { html: numberOfActivitiesHtml } if askNumberOfActivities else undefined
     },
     {
         value: "NO",
@@ -40,7 +56,16 @@
   {% endif %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-    <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
+    {% if appliesTo | length %}
+      <h1 class="govuk-heading-l govuk-!-margin-top-5">{{ title }}</h1>
+      <p class="govuk-body">These answers will be applied to:</p>
+      <ul class="govuk-list govuk-list--bullet" data-qa="applies-to">
+        {% for name in appliesTo %}
+          <li>{{ name }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <form method="POST" novalidate="novalidate" class="{{ 'govuk-!-margin-top-5' if not appliesTo | length }}">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
         {{ govukRadios({
@@ -55,9 +80,9 @@
     items: items,
     fieldset: {
     legend: {
-      text: title,
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
+      text: "Rehabilitative activity details" if appliesTo | length else title,
+      isPageHeading: not appliesTo | length,
+      classes: "govuk-visually-hidden" if appliesTo | length else "govuk-fieldset__legend--l"
     }
   }
  }) }}

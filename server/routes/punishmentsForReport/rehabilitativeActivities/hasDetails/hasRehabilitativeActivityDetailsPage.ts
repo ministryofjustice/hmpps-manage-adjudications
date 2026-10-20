@@ -5,13 +5,26 @@ import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
-import validateForm from './validation'
+import validateForm, { validateBatchForm } from './validation'
 import PunishmentsService from '../../../../services/punishmentsService'
+import { PunishmentData, convertPunishmentType } from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
   hasRehabilitativeActivitiesDetails?: string
+  numberOfActivities?: string
 }
+
+const punishmentName = (punishment: PunishmentData) =>
+  convertPunishmentType(
+    punishment.type,
+    punishment.stoppagePercentage,
+    punishment.privilegeType,
+    punishment.otherPrivilege,
+  )
+
+// "Loss of TV" → "loss of TV", for use mid-sentence
+const lowerFirst = (text: string) => (text ? text.charAt(0).toLowerCase() + text.slice(1) : text)
 
 export default class HasRehabilitativeActivitiesDetailsPage {
   constructor(
@@ -19,14 +32,38 @@ export default class HasRehabilitativeActivitiesDetailsPage {
     private readonly punishmentsService: PunishmentsService,
   ) {}
 
+  // With the toggle on (IR-1904) the number of activities is asked here, and the journey moves through
+  // the punishments ticked on "Which punishments have a rehabilitative activity condition?"
+  private isBatchJourney = (res: Response) => !!res.locals.featureToggles?.multiPrivilegePunishments
+
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
-    const { chargeNumber } = req.params
-    const { error, hasRehabilitativeActivitiesDetails } = pageData
+    const { chargeNumber, redisId } = req.params
+    const { error, hasRehabilitativeActivitiesDetails, numberOfActivities } = pageData
+
+    let title = 'Do you have the details of the rehabilitative activity?'
+    let appliesTo: string[] = []
+    if (this.isBatchJourney(res)) {
+      const batch = this.punishmentsService.getRehabBatch(req, chargeNumber)
+      if (batch?.sameForAll && batch.redisIds.length > 1) {
+        title = 'Do you have the details of the rehabilitative activities?'
+        appliesTo = batch.redisIds
+          .map(id => this.punishmentsService.getSessionPunishment(req, chargeNumber, id))
+          .filter(Boolean)
+          .map(punishmentName)
+      } else {
+        const punishment = this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
+        title = `Do you have the details of the rehabilitative activities for ${lowerFirst(punishmentName(punishment))}?`
+      }
+    }
 
     return res.render(`pages/hasRehabilitativeActivitiesDetails.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       hasRehabilitativeActivitiesDetails,
+      numberOfActivities,
+      askNumberOfActivities: this.isBatchJourney(res),
+      title,
+      appliesTo,
     })
   }
 
@@ -48,10 +85,20 @@ export default class HasRehabilitativeActivitiesDetailsPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, { hasRehabilitativeActivitiesDetails })
+    if (this.isBatchJourney(res) && !sessionData) {
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    }
+
+    const numberOfActivities =
+      hasRehabilitativeActivitiesDetails === 'YES' && sessionData.rehabilitativeActivities?.length
+        ? String(sessionData.rehabilitativeActivities.length)
+        : null
+    return this.renderView(req, res, { hasRehabilitativeActivitiesDetails, numberOfActivities })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
+    if (this.isBatchJourney(res)) return this.submitBatch(req, res)
+
     const { numberOfActivities } = req.query
     const { chargeNumber, redisId } = req.params
     const { hasRehabilitativeActivitiesDetails } = req.body
@@ -82,5 +129,33 @@ export default class HasRehabilitativeActivitiesDetailsPage {
       Number(numberOfActivities),
     )
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+  }
+
+  private submitBatch = async (req: Request, res: Response): Promise<void> => {
+    const { chargeNumber, redisId } = req.params
+    const { hasRehabilitativeActivitiesDetails } = req.body
+    const numberOfActivities = String(req.body.numberOfActivities ?? '').trim()
+
+    if (!this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)) {
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    }
+
+    const error = validateBatchForm({ hasDetails: hasRehabilitativeActivitiesDetails, numberOfActivities })
+    if (error) return this.renderView(req, res, { error, hasRehabilitativeActivitiesDetails, numberOfActivities })
+
+    if (hasRehabilitativeActivitiesDetails === 'YES') {
+      await this.punishmentsService.removeAnyRehabilitativeActivities(req, chargeNumber, redisId)
+      return res.redirect(
+        url.format({
+          pathname: adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId),
+          query: { numberOfActivities, currentActivityNumber: '1' } as ParsedUrlQuery,
+        }),
+      )
+    }
+
+    // No details yet: one "Not entered" activity, which can be completed from the report later
+    await this.punishmentsService.addEmptyRehabilitativeActivities(req, chargeNumber, redisId, 1)
+    this.punishmentsService.completeRehabBatchItem(req, chargeNumber, redisId)
+    return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
   }
 }
