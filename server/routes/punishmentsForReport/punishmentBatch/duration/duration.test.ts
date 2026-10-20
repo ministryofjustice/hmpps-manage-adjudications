@@ -276,6 +276,26 @@ describe('changing a punishment', () => {
       })
   })
 
+  it('will not move the suspended-until date before a rehabilitative activity it keeps', () => {
+    punishmentsService.getSessionPunishment.mockReturnValue({
+      ...existing,
+      startDate: undefined,
+      endDate: undefined,
+      suspendedUntil: '2026-11-30',
+      rehabilitativeActivities: [{ sessionId: 1, details: 'Course', endDate: '2026-11-15' }],
+    })
+    return request(app)
+      .post(adjudicationUrls.punishmentDuration.urls.edit('100', 'xyz'))
+      .send({ duration: '21', startMode: 'SUSPENDED', suspendedUntil: '1/11/2026' })
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain(
+          'Date suspended until must be on or after 15 November 2026, when its rehabilitative activity must be completed',
+        )
+        expect(punishmentsService.updateSessionPunishment).not.toHaveBeenCalled()
+      })
+  })
+
   it('returns to the award punishments page otherwise, dropping activities from a punishment no longer suspended', () => {
     punishmentsService.getSessionPunishment.mockReturnValue(existing)
     punishmentsService.isInPunishmentBatch.mockReturnValue(false)

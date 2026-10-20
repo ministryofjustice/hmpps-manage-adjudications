@@ -179,6 +179,14 @@ describe('POST /punishment with multiple privileges switched on', () => {
       .then(() => expect(punishmentsService.startPunishmentBatch).not.toHaveBeenCalled())
   })
 
+  it('Save and exit leaves a change without checking the answers', () => {
+    return request(app)
+      .post(adjudicationUrls.punishment.urls.edit('100', 'xyz'))
+      .send({ action: 'exit' })
+      .expect(302)
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
+  })
+
   it('sends a change to a day-based punishment through the duration page', () => {
     return request(app)
       .post(adjudicationUrls.punishment.urls.edit('100', 'xyz'))

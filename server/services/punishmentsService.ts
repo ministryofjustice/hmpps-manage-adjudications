@@ -107,6 +107,8 @@ export default class PunishmentsService {
     const updatedPunishment = {
       ...punishment,
       isThereRehabilitativeActivities: false,
+      // no details are held any more, so the punishment can be changed again
+      hasRehabilitativeActivitiesDetails: false,
       rehabilitativeActivities: [],
       redisId,
       id: punishment.id,

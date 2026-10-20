@@ -4,7 +4,7 @@ import { apiDateToDatePicker, datePickerToApi, formatDateForDatePicker, hasAnyRo
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import PunishmentsService from '../../../../services/punishmentsService'
-import validateForm from '../activityDetails/activityDetailsValidation'
+import validateForm, { validateCompletionDate } from '../activityDetails/activityDetailsValidation'
 
 type PageData = {
   error?: FormError
@@ -62,7 +62,14 @@ export default class editRehabilitativeActivityPage {
 
     const { friendlyName } = await this.punishmentsService.getPrisonerDetails(chargeNumber, res.locals.user)
 
-    const error = validateForm({ prisonerName: friendlyName, details, monitorName, endDate, totalSessions })
+    const error =
+      validateForm({ prisonerName: friendlyName, details, monitorName, endDate, totalSessions }) ||
+      (res.locals.featureToggles?.multiPrivilegePunishments &&
+        validateCompletionDate({
+          endDate,
+          latestDate: this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)?.suspendedUntil,
+          coversSeveralPunishments: false,
+        }))
     if (error)
       return this.renderView(req, res, {
         error,

@@ -188,6 +188,10 @@ export default class DurationPage {
       this.punishmentsService.getPunishmentAvailability(chargeNumber, user),
     ])
     const errors = validateForm({ ...values, punishments: subject.punishments, isYOI: !isAdult, lastHearingDate })
+    if (!errors.length && this.pageOptions.isEdit()) {
+      const activityError = this.activitiesStillFit(req, values)
+      if (activityError) errors.push(activityError)
+    }
     if (errors.length) return this.renderView(req, res, subject, lastHearingDate, values, errors)
 
     const schedule = this.getSchedule(values, lastHearingDate)
@@ -227,6 +231,25 @@ export default class DurationPage {
       this.punishmentsService.markBatchItemAnswered(req, chargeNumber, subject.batchIndexes[i], newRedisId),
     )
     return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
+  }
+
+  // A suspended punishment keeps its rehabilitative activities when changed, so it cannot become suspended
+  // until a date before one of them has to be completed
+  private activitiesStillFit = (req: Request, values: FormValues): FormError => {
+    if (values.startMode !== StartMode.SUSPENDED) return null
+    const { chargeNumber, redisId } = req.params
+    const punishment = this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
+    const latestActivity = (punishment?.rehabilitativeActivities || [])
+      .map((activity: RehabilitativeActivity) => activity.endDate)
+      .filter(Boolean)
+      .sort()
+      .pop()
+    const suspendedUntil = parseDatePickerDate(values.suspendedUntil)
+    if (!latestActivity || !suspendedUntil || !suspendedUntil.isBefore(latestActivity, 'day')) return null
+    return {
+      href: '#suspendedUntil',
+      text: `Date suspended until must be on or after ${formatTimestampTo(latestActivity, 'D MMMM YYYY')}, when its rehabilitative activity must be completed`,
+    }
   }
 
   private getSchedule = (values: FormValues, lastHearingDate: string) => {

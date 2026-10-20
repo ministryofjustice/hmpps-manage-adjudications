@@ -147,7 +147,8 @@ export default class PunishmentPage {
       action,
     } = req.body
     const multiplePrivileges = this.isMultiplePrivileges(res)
-    if (multiplePrivileges && action === 'exit') {
+    // Save and exit is shown whenever the toggle is on, including when changing a punishment
+    if (res.locals.featureToggles?.multiPrivilegePunishments && action === 'exit') {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
     const privilegeTypes = multiplePrivileges ? toArray<PrivilegeType>(req.body.privilegeTypes) : []

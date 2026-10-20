@@ -570,6 +570,32 @@ describe('PunishmentsService session batches', () => {
     })
   })
 
+  describe('removing a rehabilitative activity condition', () => {
+    it('clears the activities and unlocks the punishment for changes', () => {
+      const req = newRequest({
+        punishments: {
+          100: [
+            {
+              ...library,
+              redisId: 'b',
+              isThereRehabilitativeActivities: true,
+              hasRehabilitativeActivitiesDetails: true,
+              rehabilitativeActivities: [{ sessionId: 1, details: 'Course' }],
+            },
+          ],
+        },
+      })
+      service.noRehabilitativeActivities(req, '100', 'b')
+      expect(service.getSessionPunishment(req, '100', 'b')).toEqual(
+        expect.objectContaining({
+          isThereRehabilitativeActivities: false,
+          hasRehabilitativeActivitiesDetails: false,
+          rehabilitativeActivities: [],
+        }),
+      )
+    })
+  })
+
   describe('success message', () => {
     it('is returned once only', () => {
       const req = newRequest()
