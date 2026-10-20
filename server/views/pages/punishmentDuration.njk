@@ -1,0 +1,124 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "../components/datepicker/macro.njk" import hmppsDatepicker %}
+
+{% block pageTitle %}
+  {{ heading }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if caption %}
+        <span class="govuk-caption-l" data-qa="punishment-caption">{{ caption }}</span>
+      {% endif %}
+      <h1 class="govuk-heading-l" data-qa="punishment-duration-heading">{{ heading }}</h1>
+      {% if appliesTo | length %}
+        <p class="govuk-body" data-qa="applies-to">These answers will be applied to: {{ appliesTo | join(', ') }}.</p>
+      {% endif %}
+
+      <form method="POST" novalidate="novalidate">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+        {{ govukInput({
+          id: "duration",
+          name: "duration",
+          value: duration,
+          classes: "govuk-input--width-3",
+          inputmode: "numeric",
+          spellcheck: false,
+          label: {
+            text: "How many days will " + these + " last?",
+            classes: "govuk-label--s"
+          },
+          attributes: { "data-qa": "duration" },
+          errorMessage: "duration" | findError(errors)
+        }) }}
+
+        {% set startDateHtml %}
+          {{ hmppsDatepicker({
+            id: 'startDate',
+            name: 'startDate',
+            label: { text: "Enter start date" },
+            classes: 'hmpps-datepicker--fixed-width',
+            value: startDate,
+            minDate: minStartDate,
+            dataQa: 'startDate',
+            errorMessage: errors | findErrors(['startDate'])
+          }) }}
+        {% endset -%}
+
+        {% set suspendedUntilHtml %}
+          {{ hmppsDatepicker({
+            id: 'suspendedUntil',
+            name: 'suspendedUntil',
+            label: { text: "Enter date suspended until" },
+            classes: 'hmpps-datepicker--fixed-width',
+            value: suspendedUntil,
+            minDate: minStartDate,
+            dataQa: 'suspendedUntil',
+            errorMessage: errors | findErrors(['suspendedUntil'])
+          }) }}
+        {% endset -%}
+
+        {{ govukRadios({
+          idPrefix: 'startMode',
+          name: 'startMode',
+          attributes: { "data-qa": "start-mode-radio-buttons" },
+          errorMessage: "startMode" | findError(errors),
+          fieldset: {
+            legend: {
+              text: "When will " + these + " take effect?",
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+            {
+              value: "IMMEDIATE",
+              text: "Immediately, on the last day of the hearing: " + lastHearingDate,
+              checked: startMode == 'IMMEDIATE'
+            },
+            {
+              value: "LATER",
+              text: "On a later date",
+              checked: startMode == 'LATER',
+              conditional: { html: startDateHtml }
+            },
+            {
+              value: "SUSPENDED",
+              text: "It is a suspended sentence",
+              checked: startMode == 'SUSPENDED',
+              conditional: { html: suspendedUntilHtml }
+            }
+          ]
+        }) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: 'Save and continue',
+            type: "submit",
+            preventDoubleClick: true,
+            classes: "govuk-button--submit govuk-!-margin-right-3",
+            attributes: { "data-qa": "submit" }
+          }) }}
+          <a class="govuk-link" href="{{ cancelHref }}" data-qa="cancel">Return to ‘Award punishments and add money for damages’</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
