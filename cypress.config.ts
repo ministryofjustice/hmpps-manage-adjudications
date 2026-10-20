@@ -182,6 +182,7 @@ export default defineConfig({
         stubPrisonerActivePunishments: adjudications.stubPrisonerActivePunishments,
         stubCompleteRehabActivity: adjudications.stubCompleteRehabActivity,
         stubFeComponents: feComponent.stubFeComponents,
+        getSentPunishments: adjudications.getSentPunishments,
       })
     },
 
