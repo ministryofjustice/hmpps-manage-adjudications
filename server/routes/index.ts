@@ -72,6 +72,9 @@ import paybackPunishmentDurationRoutes from './punishmentsForReport/paybackPunis
 import isThereRehabilitativeActivitiesRoutes from './punishmentsForReport/rehabilitativeActivities/isThere'
 import HasRehabilitativeActivitiesDetailsRoutes from './punishmentsForReport/rehabilitativeActivities/hasDetails'
 import rehabilitativeActivityDetailsRoutes from './punishmentsForReport/rehabilitativeActivities/activityDetails'
+import whichPunishmentsRehabilitativeActivitiesRoutes from './punishmentsForReport/rehabilitativeActivities/whichPunishments'
+import sameRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/sameActivity'
+import rehabilitativeActivitiesScheduleRoutes from './punishmentsForReport/rehabilitativeActivities/schedule'
 import RemoveRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/remove'
 import CompleteRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/complete'
 import IncompleteRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/incomplete'
@@ -93,6 +96,9 @@ import whichPunishmentConsecutiveToRoutes from './punishmentsForReport/additiona
 import damagesAmountRoutes from './punishmentsForReport/punishments/damagesAmount'
 import reasonForChangeRoutes from './punishmentsForReport/punishments/reasonForChange'
 import punishmentNumberOfDaysRoutes from './punishmentsForReport/punishmentDates/numberOfDays'
+import punishmentSameDurationRoutes from './punishmentsForReport/punishmentBatch/sameDuration'
+import punishmentDurationRoutes from './punishmentsForReport/punishmentBatch/duration'
+import punishmentScheduleRoutes from './punishmentsForReport/punishmentBatch/schedule'
 import punishmentSuspendedRoutes from './punishmentsForReport/punishmentDates/isPunishmentSuspended'
 import punishmentSuspendedUntilDateRoutes from './punishmentsForReport/punishmentDates/suspendedUntilDate'
 import punishmentStartDateChoiceRoutes from './punishmentsForReport/punishmentDates/startDateChoice'
@@ -357,6 +363,21 @@ export default function routes(
   )
 
   router.use(
+    adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.root,
+    whichPunishmentsRehabilitativeActivitiesRoutes({ userService, punishmentsService }),
+  )
+
+  router.use(
+    adjudicationUrls.sameRehabilitativeActivity.root,
+    sameRehabilitativeActivityRoutes({ userService, punishmentsService }),
+  )
+
+  router.use(
+    adjudicationUrls.rehabilitativeActivitiesSchedule.root,
+    rehabilitativeActivitiesScheduleRoutes({ userService, punishmentsService }),
+  )
+
+  router.use(
     adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.root,
     HasRehabilitativeActivitiesDetailsRoutes({ userService, punishmentsService }),
   )
@@ -448,6 +469,12 @@ export default function routes(
 
   router.use(adjudicationUrls.isPrisonerStillInEstablishment.root, isPrisonerStillInEstablishmentRoutes())
 
+  router.use(
+    adjudicationUrls.punishmentSameDuration.root,
+    punishmentSameDurationRoutes({ userService, punishmentsService }),
+  )
+  router.use(adjudicationUrls.punishmentDuration.root, punishmentDurationRoutes({ userService, punishmentsService }))
+  router.use(adjudicationUrls.punishmentSchedule.root, punishmentScheduleRoutes({ userService, punishmentsService }))
   router.use(
     adjudicationUrls.punishmentNumberOfDays.root,
     punishmentNumberOfDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService }),

@@ -81,6 +81,13 @@ export default class editRehabilitativeActivityPage {
     }
 
     await this.punishmentsService.editRehabilitativeActivity(req, chargeNumber, redisId, +id, updatedRehabActivity)
+    // a change made from the rehabilitative schedule read-back returns there
+    if (
+      res.locals.featureToggles?.multiPrivilegePunishments &&
+      this.punishmentsService.isInRehabBatch(req, chargeNumber, redisId)
+    ) {
+      return res.redirect(adjudicationUrls.rehabilitativeActivitiesSchedule.urls.start(chargeNumber))
+    }
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

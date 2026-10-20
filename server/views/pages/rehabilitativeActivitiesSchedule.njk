@@ -1,0 +1,73 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = "Rehabilitative schedule" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ title }}</h1>
+      <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
+
+      {% for activity in activities %}
+        {% set which = (activity.punishmentName | lower) %}
+        {% if activity.heading %}
+          <h3 class="govuk-heading-s" data-qa="activity-heading-{{ loop.index }}">{{ activity.heading }}</h3>
+        {% endif %}
+        {{ govukSummaryList({
+          classes: "govuk-!-margin-bottom-8",
+          attributes: { "data-qa": "rehabilitative-schedule-" + loop.index },
+          rows: [
+            {
+              key: { text: "Suspended punishment" },
+              value: { text: activity.punishmentName },
+              actions: { items: [{ href: whichPunishmentsHref, text: "Change", visuallyHiddenText: "suspended punishment for the activity for " + which }] }
+            },
+            {
+              key: { text: "Activity details" },
+              value: { text: activity.details or "Not entered" },
+              actions: { items: [{ href: activity.changeHref, text: "Change", visuallyHiddenText: "details of the activity for " + which }] }
+            },
+            {
+              key: { text: "Who is monitoring the prisoner" },
+              value: { text: activity.monitor or "Not entered" },
+              actions: { items: [{ href: activity.changeHref, text: "Change", visuallyHiddenText: "who is monitoring the prisoner on the activity for " + which }] }
+            },
+            {
+              key: { text: "End date" },
+              value: { text: activity.endDate or "Not entered" },
+              actions: { items: [{ href: activity.changeHref, text: "Change", visuallyHiddenText: "end date of the activity for " + which }] }
+            },
+            {
+              key: { text: "Number of sessions" },
+              value: { text: activity.totalSessions or "Not entered" },
+              actions: { items: [{ href: activity.changeHref, text: "Change", visuallyHiddenText: "number of sessions for the activity for " + which }] }
+            }
+          ]
+        }) }}
+      {% endfor %}
+
+      <form method="POST" novalidate="novalidate">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: 'Continue',
+            type: "submit",
+            preventDoubleClick: true,
+            classes: "govuk-button--submit govuk-!-margin-right-3",
+            attributes: { "data-qa": "submit" }
+          }) }}
+          <a class="govuk-link" href="{{ cancelHref }}" data-qa="cancel">Return to ‘Award punishments’</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
