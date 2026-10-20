@@ -1,0 +1,79 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = "Punishment schedule" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ title }}</h1>
+
+      {% for punishment in punishments %}
+        {% set rows = [] %}
+        {% if punishment.suspendedUntil %}
+          {% set rows = (rows.push(
+            {
+              key: { text: "Suspended until" },
+              value: { text: punishment.suspendedUntil },
+              actions: { items: [{ href: punishment.changeHref, text: "Change", visuallyHiddenText: "suspended until date for " + punishment.name | lower }] }
+            },
+            {
+              key: { text: "Number of days" },
+              value: { text: punishment.duration },
+              actions: { items: [{ href: punishment.changeHref, text: "Change", visuallyHiddenText: "number of days for " + punishment.name | lower }] }
+            }
+          ), rows) %}
+        {% else %}
+          {% set rows = (rows.push(
+            {
+              key: { text: "Start date" },
+              value: { text: punishment.startDate },
+              actions: { items: [{ href: punishment.changeHref, text: "Change", visuallyHiddenText: "start date for " + punishment.name | lower }] }
+            },
+            {
+              key: { text: "Number of days" },
+              value: { text: punishment.duration },
+              actions: { items: [{ href: punishment.changeHref, text: "Change", visuallyHiddenText: "number of days for " + punishment.name | lower }] }
+            },
+            {
+              key: { text: "Last day" },
+              value: { text: punishment.endDate }
+            }
+          ), rows) %}
+        {% endif %}
+
+        <h2 class="govuk-heading-m" data-qa="punishment-name-{{ loop.index }}">{{ punishment.name }}</h2>
+        {% if punishment.showChildrenUnder18 %}
+          <p class="govuk-body" data-qa="has-child-under-18-{{ loop.index }}"><strong>Prisoner has children under 18:</strong> {{ 'Yes' if punishment.hasChildUnder18 else 'No' }}</p>
+        {% endif %}
+        {{ govukSummaryList({
+          classes: "govuk-!-margin-bottom-8",
+          rows: rows,
+          attributes: { "data-qa": "punishment-schedule-" + loop.index }
+        }) }}
+      {% endfor %}
+
+      <form method="POST" novalidate="novalidate">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: 'Continue',
+            type: "submit",
+            preventDoubleClick: true,
+            classes: "govuk-button--submit govuk-!-margin-right-3",
+            attributes: { "data-qa": "submit" }
+          }) }}
+          <a class="govuk-link" href="{{ cancelHref }}" data-qa="cancel">Return to ‘Award punishments’</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
