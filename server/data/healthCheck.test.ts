@@ -65,18 +65,10 @@ describe('Service healthcheck', () => {
     })
 
     it('Should fail if request times out three times', async () => {
-      fakeServiceApi
-        .get('/ping')
-        .delay(10000) // delay set to 10s, timeout to 900/3=300ms
-        .reply(200, { failure: 'one' })
-        .get('/ping')
-        .delay(10000)
-        .reply(200, { failure: 'two' })
-        .get('/ping')
-        .delay(10000)
-        .reply(200, { failure: 'three' })
+      fakeServiceApi.get('/ping').times(3).delay(300).reply(200, { failure: 'slow' })
 
-      await expect(healthcheck()).rejects.toThrow('Response timeout of 100ms exceeded')
+      await expect(healthcheck()).rejects.toMatchObject({ code: 'ECONNABORTED' })
+      expect(fakeServiceApi.isDone()).toBe(true) // all three attempts were made
     })
   })
 })
