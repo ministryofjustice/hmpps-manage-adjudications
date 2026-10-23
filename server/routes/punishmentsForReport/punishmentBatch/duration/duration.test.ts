@@ -25,7 +25,9 @@ const withBatch = (batch: PunishmentBatch) => {
     ...batch,
     items: batch.items.map((item, index) => ({ batchItemId: `item-${index}`, ...item })),
   })
-  punishmentsService.nextUnansweredBatchItemIndex.mockReturnValue(batch.items.findIndex(item => !item.redisId))
+  punishmentsService.nextUnansweredBatchItemIndex.mockReturnValue(
+    batch.items.findIndex(item => !item.redisId || item.askAgain),
+  )
 }
 
 beforeEach(() => {
@@ -92,6 +94,33 @@ describe('GET duration and start date', () => {
         expect(res.text).toContain('Duration and start date for all 2 punishments')
         expect(res.text).toContain('These answers will be applied to: Loss of canteen, Loss of library.')
         expect(res.text).toContain('name="batchItemIds" value="item-0,item-1"')
+      })
+  })
+
+  it('starts from the saved answers of a punishment asked about again', () => {
+    withBatch({
+      items: [
+        { ...canteen, redisId: 'a', askAgain: true },
+        { ...library, redisId: 'b' },
+      ],
+    })
+    punishmentsService.getSessionPunishment.mockReturnValue({
+      ...canteen,
+      redisId: 'a',
+      duration: 10,
+      startDate: '2026-09-16',
+      endDate: '2026-09-25',
+      rehabilitativeActivities: [],
+    })
+    return request(app)
+      .get(adjudicationUrls.punishmentDuration.urls.start('100'))
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Punishment 1 of 2')
+        expect(res.text).toContain('value="10"')
+        expect(res.text).toMatch(/value="LATER" checked/)
+        expect(res.text).toContain('16/09/2026')
+        expect(punishmentsService.getSessionPunishment).toHaveBeenCalledWith(expect.anything(), '100', 'a')
       })
   })
 
@@ -231,8 +260,33 @@ describe('POST duration and start date', () => {
           expect.objectContaining({ otherPrivilege: 'library', duration: 7 }),
           '100',
         )
-        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledTimes(1)
+        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledTimes(2)
+        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 0, 'a')
         expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 1, 'first')
+      })
+  })
+
+  it('updates a saved punishment that is being asked about again, rather than adding another', () => {
+    // the same-duration answer was changed back to no after both had been saved
+    withBatch({
+      items: [
+        { ...canteen, redisId: 'a', askAgain: true },
+        { ...library, redisId: 'b', askAgain: true },
+      ],
+    })
+    return request(app)
+      .post(adjudicationUrls.punishmentDuration.urls.start('100'))
+      .send({ batchItemIds: 'item-0', duration: '5', startMode: 'IMMEDIATE' })
+      .expect(302)
+      .then(() => {
+        expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ privilegeType: PrivilegeType.CANTEEN, duration: 5 }),
+          '100',
+          'a',
+        )
+        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 0, 'a')
+        expect(punishmentsService.addSessionPunishment).not.toHaveBeenCalled()
       })
   })
 

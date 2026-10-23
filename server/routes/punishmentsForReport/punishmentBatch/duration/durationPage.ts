@@ -159,9 +159,13 @@ export default class DurationPage {
     if (!subject) return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
 
     const lastHearingDate = await this.punishmentsService.getLastHearingDate(chargeNumber, user)
-    if (!this.pageOptions.isEdit()) return this.renderView(req, res, subject, lastHearingDate, {})
+    // a punishment being changed, or asked about again in the batch, starts from its saved answers
+    const savedRedisId = this.pageOptions.isEdit()
+      ? redisId
+      : subject.punishments.length === 1 && subject.punishments[0].redisId
+    const punishment = savedRedisId && this.punishmentsService.getSessionPunishment(req, chargeNumber, savedRedisId)
+    if (!punishment) return this.renderView(req, res, subject, lastHearingDate, {})
 
-    const punishment = this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
     let startMode = StartMode.LATER
     if (punishment.suspendedUntil) startMode = StartMode.SUSPENDED
     else if (punishment.startDate === lastHearingDate) startMode = StartMode.IMMEDIATE
@@ -235,14 +239,15 @@ export default class DurationPage {
     const answered = subject.punishments.map((punishment, i) => ({ punishment, index: subject.batchIndexes[i] }))
     answered
       .filter(({ punishment }) => punishment.redisId)
-      .forEach(({ punishment }) =>
+      .forEach(({ punishment, index }) => {
         this.punishmentsService.updateSessionPunishment(
           req,
           punishmentData(punishment),
           chargeNumber,
           punishment.redisId,
-        ),
-      )
+        )
+        this.punishmentsService.markBatchItemAnswered(req, chargeNumber, index, punishment.redisId)
+      })
     const unsaved = answered.filter(({ punishment }) => !punishment.redisId)
     const newRedisIds = await Promise.all(
       unsaved.map(({ punishment }) =>

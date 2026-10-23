@@ -46,6 +46,8 @@ export interface ActivityDetails {
   actualDays: number
 }
 
+const isUnanswered = (item: PunishmentBatchItem) => !item.redisId || item.askAgain
+
 export default class PunishmentsService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
@@ -314,20 +316,28 @@ export default class PunishmentsService {
     return req.session?.punishmentBatch?.[chargeNumber]
   }
 
+  // Changing the answer asks about the punishments again. Those already saved keep their place on the
+  // report and are updated when the new answers are given.
   setPunishmentBatchSameForAll(req: Request, chargeNumber: string, sameForAll: boolean) {
     const batch = this.getPunishmentBatch(req, chargeNumber)
-    if (batch) batch.sameForAll = sameForAll
+    if (!batch) return
+    if (batch.sameForAll !== undefined && batch.sameForAll !== sameForAll) {
+      batch.items.filter(item => item.redisId).forEach(item => Object.assign(item, { askAgain: true }))
+    }
+    batch.sameForAll = sameForAll
   }
 
   // Index into batch.items of the first item without an answer, or -1
   nextUnansweredBatchItemIndex(req: Request, chargeNumber: string): number {
     const batch = this.getPunishmentBatch(req, chargeNumber)
-    return batch ? batch.items.findIndex(item => !item.redisId) : -1
+    return batch ? batch.items.findIndex(isUnanswered) : -1
   }
 
   markBatchItemAnswered(req: Request, chargeNumber: string, index: number, redisId: string) {
-    const batch = this.getPunishmentBatch(req, chargeNumber)
-    if (batch?.items[index]) batch.items[index].redisId = redisId
+    const item = this.getPunishmentBatch(req, chargeNumber)?.items[index]
+    if (!item) return
+    item.redisId = redisId
+    delete item.askAgain
   }
 
   isInPunishmentBatch(req: Request, chargeNumber: string, redisId: string): boolean {
@@ -341,7 +351,7 @@ export default class PunishmentsService {
   nextPunishmentBatchUrl(req: Request, chargeNumber: string): string {
     const batch = this.getPunishmentBatch(req, chargeNumber)
     if (!batch?.items.length) return adjudicationUrls.awardPunishments.urls.modified(chargeNumber)
-    if (batch.items.some(item => !item.redisId)) return adjudicationUrls.punishmentDuration.urls.start(chargeNumber)
+    if (batch.items.some(isUnanswered)) return adjudicationUrls.punishmentDuration.urls.start(chargeNumber)
     return adjudicationUrls.punishmentSchedule.urls.start(chargeNumber)
   }
 

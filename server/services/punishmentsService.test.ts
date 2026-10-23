@@ -488,6 +488,29 @@ describe('PunishmentsService session batches', () => {
       expect(service.getPunishmentBatch(req, '100').sameForAll).toBe(true)
     })
 
+    it('asks about saved items again when the answer changes, keeping their rows', () => {
+      const req = newRequest()
+      service.startPunishmentBatch(req, '100', [canteen, library])
+      service.setPunishmentBatchSameForAll(req, '100', false)
+      service.markBatchItemAnswered(req, '100', 0, 'a')
+      service.markBatchItemAnswered(req, '100', 1, 'b')
+      expect(service.nextPunishmentBatchUrl(req, '100')).toEqual('/punishment-schedule/100')
+
+      // the same answer again changes nothing
+      service.setPunishmentBatchSameForAll(req, '100', false)
+      expect(service.nextUnansweredBatchItemIndex(req, '100')).toEqual(-1)
+
+      service.setPunishmentBatchSameForAll(req, '100', true)
+      expect(service.nextPunishmentBatchUrl(req, '100')).toEqual('/punishment-duration/100')
+      expect(service.nextUnansweredBatchItemIndex(req, '100')).toEqual(0)
+      expect(service.getPunishmentBatch(req, '100').items.map(item => item.redisId)).toEqual(['a', 'b'])
+
+      service.markBatchItemAnswered(req, '100', 0, 'a')
+      service.markBatchItemAnswered(req, '100', 1, 'b')
+      expect(service.nextUnansweredBatchItemIndex(req, '100')).toEqual(-1)
+      expect(service.isInPunishmentBatch(req, '100', 'a')).toBe(true)
+    })
+
     it('is cleared when the session punishments are deleted', () => {
       const req = newRequest({ punishments: { 100: [] } })
       service.startPunishmentBatch(req, '100', [canteen])

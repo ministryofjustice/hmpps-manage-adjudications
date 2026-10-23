@@ -139,6 +139,8 @@ export type PunishmentBatchItem = {
   // set when the batch starts; the duration form posts it back so a stale form cannot answer a later item
   batchItemId?: string
   redisId?: string
+  // saved, but to be asked about again because the answer to "Do they all have the same duration?" changed
+  askAgain?: boolean
 }
 
 export type PunishmentBatch = {
