@@ -390,6 +390,45 @@ export default class PunishmentsService {
     if (!batch.completedRedisIds.includes(redisId)) batch.completedRedisIds.push(redisId)
   }
 
+  // The activities entered for a punishment in the batch are held here until the last one is saved, so a
+  // punishment keeps the activities it already had if staff leave part way through.
+  startRehabDraft(req: Request, chargeNumber: string, redisId: string) {
+    const batch = this.getRehabBatch(req, chargeNumber)
+    if (batch) batch.drafts = { ...batch.drafts, [redisId]: [] }
+  }
+
+  getRehabDraft(req: Request, chargeNumber: string, redisId: string): RehabilitativeActivity[] {
+    return this.getRehabBatch(req, chargeNumber)?.drafts?.[redisId]
+  }
+
+  saveRehabDraftActivity(
+    req: Request,
+    chargeNumber: string,
+    redisId: string,
+    activityNumber: number,
+    activity: RehabilitativeActivity,
+  ) {
+    const draft = this.getRehabDraft(req, chargeNumber, redisId)
+    if (draft) draft[activityNumber - 1] = activity
+  }
+
+  // Replaces the punishment's activities with those entered
+  applyRehabDraft(req: Request, chargeNumber: string, redisId: string) {
+    const batch = this.getRehabBatch(req, chargeNumber)
+    const draft = batch?.drafts?.[redisId]
+    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+    if (!draft || !punishment) return
+    this.replaceSessionPunishment(req, chargeNumber, redisId, {
+      ...punishment,
+      isThereRehabilitativeActivities: true,
+      hasRehabilitativeActivitiesDetails: true,
+      rehabilitativeActivities: draft.filter(Boolean),
+      redisId,
+      id: punishment.id,
+    })
+    delete batch.drafts[redisId]
+  }
+
   isInRehabBatch(req: Request, chargeNumber: string, redisId: string): boolean {
     return !!this.getRehabBatch(req, chargeNumber)?.redisIds.includes(redisId)
   }

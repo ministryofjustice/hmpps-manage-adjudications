@@ -2,12 +2,18 @@ import url from 'url'
 import { Request, Response } from 'express'
 import { ParsedUrlQuery } from 'querystring'
 import UserService from '../../../../services/userService'
-import { datePickerToApi, formatDateForDatePicker, formatTimestampTo, hasAnyRole } from '../../../../utils/utils'
+import {
+  apiDateToDatePicker,
+  datePickerToApi,
+  formatDateForDatePicker,
+  formatTimestampTo,
+  hasAnyRole,
+} from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import PunishmentsService from '../../../../services/punishmentsService'
 import validateForm, { validateCompletionDate } from './activityDetailsValidation'
-import { PunishmentData, convertPunishmentType } from '../../../../data/PunishmentResult'
+import { PunishmentData, RehabilitativeActivity, convertPunishmentType } from '../../../../data/PunishmentResult'
 
 type PageData = {
   error?: FormError
@@ -86,7 +92,39 @@ export default class rehabilitativeActivityDetailsPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    return this.renderView(req, res, {})
+    if (!this.isBatchJourney(res)) return this.renderView(req, res, {})
+    const activity = this.activityToShow(req, Number(req.query.currentActivityNumber))
+    return this.renderView(req, res, {
+      details: activity?.details,
+      monitorName: activity?.monitor,
+      endDate: activity?.endDate ? apiDateToDatePicker(activity.endDate) : undefined,
+      totalSessions: activity?.totalSessions ? String(activity.totalSessions) : undefined,
+    })
+  }
+
+  // What was entered for this activity, or else what the punishment already has, so a condition that is
+  // being entered again starts from its current details
+  private activityToShow = (req: Request, activityNumber: number): RehabilitativeActivity => {
+    const { chargeNumber, redisId } = req.params
+    const entered = this.punishmentsService.getRehabDraft(req, chargeNumber, redisId)?.[activityNumber - 1]
+    if (entered) return entered
+    const punishment = this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
+    const existing = punishment?.hasRehabilitativeActivitiesDetails
+      ? punishment.rehabilitativeActivities?.[activityNumber - 1]
+      : undefined
+    return existing?.details ? existing : undefined
+  }
+
+  // The form must be for the current batch, with the activities before this one already entered
+  private isExpectedForm = (req: Request, activityNumber: number): boolean => {
+    const { chargeNumber, redisId } = req.params
+    if (!this.punishmentsService.isCurrentRehabBatchForm(req, chargeNumber, redisId, req.body.rehabBatchId)) {
+      return false
+    }
+    const draft = this.punishmentsService.getRehabDraft(req, chargeNumber, redisId)
+    return (
+      !!draft && activityNumber >= 1 && Array.from({ length: activityNumber - 1 }, (_, i) => draft[i]).every(Boolean)
+    )
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
@@ -94,10 +132,7 @@ export default class rehabilitativeActivityDetailsPage {
     const { chargeNumber, redisId } = req.params
     const { details, monitorName, endDate, totalSessions } = req.body
 
-    if (
-      this.isBatchJourney(res) &&
-      !this.punishmentsService.isCurrentRehabBatchForm(req, chargeNumber, redisId, req.body.rehabBatchId)
-    ) {
+    if (this.isBatchJourney(res) && !this.isExpectedForm(req, Number(currentActivityNumber))) {
       return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
     }
 
@@ -127,21 +162,30 @@ export default class rehabilitativeActivityDetailsPage {
       totalSessions: totalSessions ? Number(totalSessions) : null,
       sessionId: +currentActivityNumber,
     }
-    this.punishmentsService.addRehabilitativeActivity(
-      req,
-      chargeNumber,
-      redisId,
-      Number(currentActivityNumber),
-      activityDetails,
-    )
-
-    if (currentActivityNumber === numberOfActivities) {
-      if (this.isBatchJourney(res)) {
+    if (this.isBatchJourney(res)) {
+      this.punishmentsService.saveRehabDraftActivity(
+        req,
+        chargeNumber,
+        redisId,
+        Number(currentActivityNumber),
+        activityDetails,
+      )
+      if (currentActivityNumber === numberOfActivities) {
+        this.punishmentsService.applyRehabDraft(req, chargeNumber, redisId)
         this.punishmentsService.completeRehabBatchItem(req, chargeNumber, redisId)
-        // with no rehab batch this is the award punishments page, as before
         return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
       }
-      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    } else {
+      this.punishmentsService.addRehabilitativeActivity(
+        req,
+        chargeNumber,
+        redisId,
+        Number(currentActivityNumber),
+        activityDetails,
+      )
+      if (currentActivityNumber === numberOfActivities) {
+        return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+      }
     }
     return res.redirect(
       url.format({

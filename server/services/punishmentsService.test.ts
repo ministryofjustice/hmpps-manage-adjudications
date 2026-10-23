@@ -561,6 +561,42 @@ describe('PunishmentsService session batches', () => {
         { ...activity, id: undefined },
       ])
     })
+
+    it('keeps the activities a punishment has until all the new ones are entered', () => {
+      const existing = { sessionId: 1, details: 'Course', monitor: 'Thomas', endDate: '2026-11-01', id: 9 }
+      const first = { sessionId: 1, details: 'Victim awareness', monitor: 'Ann', endDate: '2026-11-10' }
+      const second = { sessionId: 2, details: 'Gym', monitor: 'Jo', endDate: '2026-11-20' }
+      const req = newRequest({ punishments: { 100: [suspended('a', [existing])] } })
+      service.startRehabBatch(req, '100', ['a'])
+
+      service.startRehabDraft(req, '100', 'a')
+      service.saveRehabDraftActivity(req, '100', 'a', 1, first)
+      service.saveRehabDraftActivity(req, '100', 'a', 2, second)
+      expect(service.getSessionPunishment(req, '100', 'a').rehabilitativeActivities).toEqual([existing])
+      expect(service.getRehabDraft(req, '100', 'a')).toEqual([first, second])
+
+      service.applyRehabDraft(req, '100', 'a')
+      expect(service.getSessionPunishment(req, '100', 'a')).toEqual(
+        expect.objectContaining({
+          isThereRehabilitativeActivities: true,
+          hasRehabilitativeActivitiesDetails: true,
+          rehabilitativeActivities: [first, second],
+        }),
+      )
+      expect(service.getRehabDraft(req, '100', 'a')).toBeUndefined()
+    })
+
+    it('starts the activities afresh when asked again, replacing one entered in place', () => {
+      const req = newRequest({ punishments: { 100: [suspended('a')] } })
+      service.startRehabBatch(req, '100', ['a'])
+      service.startRehabDraft(req, '100', 'a')
+      service.saveRehabDraftActivity(req, '100', 'a', 1, { sessionId: 1, details: 'Course' })
+      service.saveRehabDraftActivity(req, '100', 'a', 1, { sessionId: 1, details: 'Gym' })
+      expect(service.getRehabDraft(req, '100', 'a')).toEqual([{ sessionId: 1, details: 'Gym' }])
+
+      service.startRehabDraft(req, '100', 'a')
+      expect(service.getRehabDraft(req, '100', 'a')).toEqual([])
+    })
   })
 
   describe('updating a session punishment', () => {

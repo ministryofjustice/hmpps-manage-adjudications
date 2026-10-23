@@ -153,6 +153,8 @@ export type RehabBatch = {
   redisIds: string[]
   completedRedisIds: string[]
   sameForAll?: boolean
+  // activities being entered, by redisId; they replace the punishment's own only when the last one is saved
+  drafts?: { [redisId: string]: RehabilitativeActivity[] }
 }
 
 // Punishment types that can have a rehabilitative activity condition when suspended on a governor hearing.

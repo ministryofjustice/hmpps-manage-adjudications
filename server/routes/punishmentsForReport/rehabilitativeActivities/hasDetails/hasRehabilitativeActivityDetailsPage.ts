@@ -150,7 +150,8 @@ export default class HasRehabilitativeActivitiesDetailsPage {
     if (error) return this.renderView(req, res, { error, hasRehabilitativeActivitiesDetails, numberOfActivities })
 
     if (hasRehabilitativeActivitiesDetails === 'YES') {
-      await this.punishmentsService.removeAnyRehabilitativeActivities(req, chargeNumber, redisId)
+      // the punishment keeps any activities it has until all the new ones are entered
+      this.punishmentsService.startRehabDraft(req, chargeNumber, redisId)
       return res.redirect(
         url.format({
           pathname: adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId),

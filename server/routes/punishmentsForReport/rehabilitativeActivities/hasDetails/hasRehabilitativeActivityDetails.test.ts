@@ -86,7 +86,7 @@ describe('Do you have the details of the rehabilitative activities?', () => {
       })
   })
 
-  it('goes on to the first activity when the details are known', () => {
+  it('goes on to the first activity when the details are known, keeping the activities it has for now', () => {
     return request(app)
       .post(adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.urls.start('100', 'library'))
       .send({ hasRehabilitativeActivitiesDetails: 'YES', numberOfActivities: '2' })
@@ -95,13 +95,10 @@ describe('Do you have the details of the rehabilitative activities?', () => {
         'Location',
         `${adjudicationUrls.rehabilitativeActivityDetails.urls.start('100', 'library')}?numberOfActivities=2&currentActivityNumber=1`,
       )
-      .then(() =>
-        expect(punishmentsService.removeAnyRehabilitativeActivities).toHaveBeenCalledWith(
-          expect.anything(),
-          '100',
-          'library',
-        ),
-      )
+      .then(() => {
+        expect(punishmentsService.startRehabDraft).toHaveBeenCalledWith(expect.anything(), '100', 'library')
+        expect(punishmentsService.removeAnyRehabilitativeActivities).not.toHaveBeenCalled()
+      })
   })
 
   it('records one activity to be entered later when the details are not known', () => {
@@ -157,7 +154,7 @@ describe('Do you have the details of the rehabilitative activities?', () => {
           'library',
           'old-batch',
         )
-        expect(punishmentsService.removeAnyRehabilitativeActivities).not.toHaveBeenCalled()
+        expect(punishmentsService.startRehabDraft).not.toHaveBeenCalled()
         expect(punishmentsService.addEmptyRehabilitativeActivities).not.toHaveBeenCalled()
         expect(punishmentsService.completeRehabBatchItem).not.toHaveBeenCalled()
       })
