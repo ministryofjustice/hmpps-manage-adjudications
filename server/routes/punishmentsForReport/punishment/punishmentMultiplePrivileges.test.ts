@@ -110,6 +110,46 @@ describe('POST /punishment with multiple privileges switched on', () => {
       )
   })
 
+  it('will not add a privilege again from a form that still offers it', () => {
+    punishmentsService.getAllSessionPunishments.mockReturnValue([
+      { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN, rehabilitativeActivities: [] },
+      {
+        type: PunishmentType.PRIVILEGE,
+        privilegeType: PrivilegeType.OTHER,
+        otherPrivilege: 'library',
+        rehabilitativeActivities: [],
+      },
+    ])
+    return request(app)
+      .post(adjudicationUrls.punishment.urls.start('100'))
+      .send({
+        punishmentType: PunishmentType.PRIVILEGE,
+        privilegeTypes: [PrivilegeType.TV, PrivilegeType.CANTEEN],
+      })
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Loss of canteen has already been added. Select a different privilege')
+        expect(res.text).not.toContain('value="CANTEEN"')
+        expect(punishmentsService.startPunishmentBatch).not.toHaveBeenCalled()
+      })
+  })
+
+  it('still allows another Other privilege', () => {
+    punishmentsService.getAllSessionPunishments.mockReturnValue([
+      {
+        type: PunishmentType.PRIVILEGE,
+        privilegeType: PrivilegeType.OTHER,
+        otherPrivilege: 'library',
+        rehabilitativeActivities: [],
+      },
+    ])
+    return request(app)
+      .post(adjudicationUrls.punishment.urls.start('100'))
+      .send({ punishmentType: PunishmentType.PRIVILEGE, privilegeTypes: PrivilegeType.OTHER, otherPrivilege: 'gym' })
+      .expect(302)
+      .expect('Location', adjudicationUrls.punishmentDuration.urls.start('100'))
+  })
+
   it('goes straight to the duration page for one privilege', () => {
     return request(app)
       .post(adjudicationUrls.punishment.urls.start('100'))

@@ -100,9 +100,7 @@ export default class PunishmentPage {
       privilegeType,
       multiplePrivileges: this.isMultiplePrivileges(res),
       privilegeTypes: privilegeTypes || [],
-      privilegesAlreadyAdded: (sessionPunishments || [])
-        .filter((punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.PRIVILEGE)
-        .map((punishment: PunishmentDataWithSchedule) => punishment.privilegeType),
+      privilegesAlreadyAdded: this.privilegesAlreadyAdded(sessionPunishments),
       otherPrivilege,
       stoppagePercentage,
       damagesOwedAmount,
@@ -169,6 +167,8 @@ export default class PunishmentPage {
       stoppagePercentage: stoppageOfEarningsPercentage,
       damagesOwedAmount,
       damagesAlreadyAdded,
+      // also checked here, as a form from another tab or the browser history can still offer them
+      privilegesAlreadyAdded: multiplePrivileges ? this.privilegesAlreadyAdded(sessionPunishments) : [],
       hasChildUnder18,
     })
     if (error)
@@ -300,6 +300,11 @@ export default class PunishmentPage {
       return adjudicationUrls.paybackPunishmentSpecifics.urls.start(chargeNumber)
     return adjudicationUrls.punishmentNumberOfDays.urls.start(chargeNumber)
   }
+
+  private privilegesAlreadyAdded = (sessionPunishments: PunishmentDataWithSchedule[]): PrivilegeType[] =>
+    (sessionPunishments || [])
+      .filter((punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.PRIVILEGE)
+      .map((punishment: PunishmentDataWithSchedule) => punishment.privilegeType)
 
   private damagesAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
     if (sessionPunishments) {
