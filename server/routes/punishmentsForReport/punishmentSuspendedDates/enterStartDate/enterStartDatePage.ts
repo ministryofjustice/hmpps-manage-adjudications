@@ -130,12 +130,14 @@ export default class PunishmentSuspendedStartDatePage {
       res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
       throw postError
     }
-    const redirectUrl = this.getRedirectUrl(chargeNumber)
+    const redirectUrl = this.getRedirectUrl(chargeNumber, req)
     return res.redirect(redirectUrl)
   }
 
-  getRedirectUrl = (chargeNumber: string) => {
-    return adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(chargeNumber)
+  // in edit mode the schedule is told which punishment was changed
+  getRedirectUrl = (chargeNumber: string, req: Request) => {
+    const query = this.pageOptions.isEdit() ? `?redisId=${encodeURIComponent(req.params.redisId)}` : ''
+    return `${adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(chargeNumber)}${query}`
   }
 
   getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {

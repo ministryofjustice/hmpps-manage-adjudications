@@ -94,6 +94,8 @@ export default class PaybackPunishmentDetailsPage {
       await this.punishmentsService.addSessionPunishment(req, playbackPunishmentData, chargeNumber)
     }
 
-    return res.redirect(adjudicationUrls.paybackPunishmentSchedule.urls.start(chargeNumber))
+    // so the schedule shows the punishment that was changed
+    const query = this.pageOptions.isEdit() ? `?redisId=${encodeURIComponent(redisId)}` : ''
+    return res.redirect(`${adjudicationUrls.paybackPunishmentSchedule.urls.start(chargeNumber)}${query}`)
   }
 }

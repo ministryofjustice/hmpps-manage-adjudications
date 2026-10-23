@@ -69,7 +69,13 @@ export default class PaybackPunishmentScheduleRoute {
     }
 
     const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
-    const lastAddedPunishment = sessionPunishments[sessionPunishments.length - 1] || {}
+    // the punishment just changed, when named, or else the one just added, which is last.
+    // A changed punishment keeps its place in the list, so it is not always the last.
+    const { redisId } = req.query
+    const lastAddedPunishment =
+      (redisId && sessionPunishments.find((punishment: { redisId?: string }) => punishment.redisId === redisId)) ||
+      sessionPunishments[sessionPunishments.length - 1] ||
+      {}
     if (!lastAddedPunishment) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
