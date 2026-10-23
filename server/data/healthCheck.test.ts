@@ -1,4 +1,5 @@
 import nock from 'nock'
+import { Readable } from 'stream'
 import { serviceCheckFactory } from './healthCheck'
 import { AgentConfig } from '../config'
 
@@ -52,11 +53,9 @@ describe('Service healthcheck', () => {
     it('Should retry twice if request times out', async () => {
       fakeServiceApi
         .get('/ping')
-        .delay(10000) // delay set to 10s, timeout to 900/3=300ms
-        .reply(200, { failure: 'one' })
-        .get('/ping')
-        .delay(10000)
-        .reply(200, { failure: 'two' })
+        .times(2)
+        // eslint-disable-next-line no-empty-function
+        .reply(200, () => new Readable({ read() {} }))
         .get('/ping')
         .reply(200, 'pong')
 
@@ -65,7 +64,11 @@ describe('Service healthcheck', () => {
     })
 
     it('Should fail if request times out three times', async () => {
-      fakeServiceApi.get('/ping').times(3).delay(300).reply(200, { failure: 'slow' })
+      fakeServiceApi
+        .get('/ping')
+        .times(3)
+        // eslint-disable-next-line no-empty-function
+        .reply(200, () => new Readable({ read() {} }))
 
       await expect(healthcheck()).rejects.toMatchObject({ code: 'ECONNABORTED' })
       expect(fakeServiceApi.isDone()).toBe(true) // all three attempts were made
