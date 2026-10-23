@@ -83,6 +83,18 @@ describe('GET duration and start date', () => {
       })
   })
 
+  it('asks about every punishment when they share a duration, including one already saved', () => {
+    withBatch({ items: [{ ...canteen, redisId: 'a' }, library], sameForAll: true })
+    return request(app)
+      .get(adjudicationUrls.punishmentDuration.urls.start('100'))
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Duration and start date for all 2 punishments')
+        expect(res.text).toContain('These answers will be applied to: Loss of canteen, Loss of library.')
+        expect(res.text).toContain('name="batchItemIds" value="item-0,item-1"')
+      })
+  })
+
   it('has no caption for a single punishment', () => {
     withBatch({ items: [{ type: PunishmentType.CONFINEMENT }] })
     return request(app)
@@ -191,6 +203,36 @@ describe('POST duration and start date', () => {
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledTimes(2)
         expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 0, 'first')
         expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 1, 'second')
+      })
+  })
+
+  it('gives a punishment saved before the duration was shared the shared answer too', () => {
+    // separate durations were chosen and canteen saved, then the answer was changed to the same for all
+    withBatch({ items: [{ ...canteen, redisId: 'a' }, library], sameForAll: true })
+    return request(app)
+      .post(adjudicationUrls.punishmentDuration.urls.start('100'))
+      .send({ batchItemIds: 'item-0,item-1', duration: '7', startMode: 'IMMEDIATE' })
+      .expect(302)
+      .then(() => {
+        expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            privilegeType: PrivilegeType.CANTEEN,
+            duration: 7,
+            startDate: '2026-08-17',
+            endDate: '2026-08-23',
+          }),
+          '100',
+          'a',
+        )
+        expect(punishmentsService.addSessionPunishment).toHaveBeenCalledTimes(1)
+        expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ otherPrivilege: 'library', duration: 7 }),
+          '100',
+        )
+        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledTimes(1)
+        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 1, 'first')
       })
   })
 

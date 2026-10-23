@@ -120,13 +120,13 @@ export default class DurationPage {
     const nextIndex = this.punishmentsService.nextUnansweredBatchItemIndex(req, chargeNumber)
     if (!batch || nextIndex === -1) return null
 
+    // One answer covers every punishment in the batch, including any saved before the answer to
+    // "Do they all have the same duration?" was changed to yes
     if (batch.sameForAll && batch.items.length > 1) {
-      const batchIndexes = batch.items.map((item, index) => (item.redisId ? -1 : index)).filter(index => index > -1)
-      const punishments = batchIndexes.map(index => batch.items[index])
       return {
-        punishments,
-        batchIndexes,
-        heading: `Duration and start date for all ${punishments.length} punishments`,
+        punishments: batch.items,
+        batchIndexes: batch.items.map((item, index) => index),
+        heading: `Duration and start date for all ${batch.items.length} punishments`,
       }
     }
 
@@ -230,14 +230,27 @@ export default class DurationPage {
       )
     }
 
-    // addSessionPunishment appends as soon as it is called, so the session keeps the order chosen
+    // Punishments already saved are given the new answers in place. addSessionPunishment appends as soon
+    // as it is called, so the session keeps the order chosen.
+    const answered = subject.punishments.map((punishment, i) => ({ punishment, index: subject.batchIndexes[i] }))
+    answered
+      .filter(({ punishment }) => punishment.redisId)
+      .forEach(({ punishment }) =>
+        this.punishmentsService.updateSessionPunishment(
+          req,
+          punishmentData(punishment),
+          chargeNumber,
+          punishment.redisId,
+        ),
+      )
+    const unsaved = answered.filter(({ punishment }) => !punishment.redisId)
     const newRedisIds = await Promise.all(
-      subject.punishments.map(punishment =>
+      unsaved.map(({ punishment }) =>
         this.punishmentsService.addSessionPunishment(req, punishmentData(punishment), chargeNumber),
       ),
     )
     newRedisIds.forEach((newRedisId, i) =>
-      this.punishmentsService.markBatchItemAnswered(req, chargeNumber, subject.batchIndexes[i], newRedisId),
+      this.punishmentsService.markBatchItemAnswered(req, chargeNumber, unsaved[i].index, newRedisId),
     )
     return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
   }
