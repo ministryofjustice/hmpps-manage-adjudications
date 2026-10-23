@@ -373,10 +373,13 @@ export default class PunishmentsService {
   }
 
   // Changing the answer asks about the punishments again. Each keeps its activities until new ones are entered.
+  // Forms shown for the old answer no longer belong to the batch, and anything half entered on them is dropped.
   setRehabBatchSameForAll(req: Request, chargeNumber: string, sameForAll: boolean) {
     const batch = this.getRehabBatch(req, chargeNumber)
     if (!batch) return
-    if (batch.sameForAll !== undefined && batch.sameForAll !== sameForAll) batch.completedRedisIds = []
+    if (batch.sameForAll !== undefined && batch.sameForAll !== sameForAll) {
+      Object.assign(batch, { id: randomUUID(), completedRedisIds: [], drafts: {} })
+    }
     batch.sameForAll = sameForAll
   }
 

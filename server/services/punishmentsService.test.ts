@@ -602,6 +602,22 @@ describe('PunishmentsService session batches', () => {
       expect(service.getSessionPunishment(req, '100', 'b').rehabilitativeActivities).toEqual([activity])
     })
 
+    it('no longer takes forms shown for the old same-activity answer', () => {
+      const req = newRequest({ punishments: { 100: [suspended('a'), suspended('b')] } })
+      service.startRehabBatch(req, '100', ['a', 'b'])
+      service.setRehabBatchSameForAll(req, '100', false)
+      const { id } = service.getRehabBatch(req, '100')
+      service.startRehabDraft(req, '100', 'a')
+      service.saveRehabDraftActivity(req, '100', 'a', 1, { sessionId: 1, details: 'Course' })
+
+      service.setRehabBatchSameForAll(req, '100', false)
+      expect(service.isCurrentRehabBatchForm(req, '100', 'a', id)).toBe(true)
+
+      service.setRehabBatchSameForAll(req, '100', true)
+      expect(service.isCurrentRehabBatchForm(req, '100', 'a', id)).toBe(false)
+      expect(service.getRehabDraft(req, '100', 'a')).toBeUndefined()
+    })
+
     it('keeps the activities a punishment has until all the new ones are entered', () => {
       const existing = { sessionId: 1, details: 'Course', monitor: 'Thomas', endDate: '2026-11-01', id: 9 }
       const first = { sessionId: 1, details: 'Victim awareness', monitor: 'Ann', endDate: '2026-11-10' }
