@@ -115,7 +115,8 @@ export default class rehabilitativeActivityDetailsPage {
     return existing?.details ? existing : undefined
   }
 
-  // The form must be for the current batch, with the activities before this one already entered
+  // The form must be for the current batch, with the activities before this one already entered.
+  // The activity number comes from the page address, so it is checked against the draft before it is used.
   private isExpectedForm = (req: Request, activityNumber: number): boolean => {
     const { chargeNumber, redisId } = req.params
     if (!this.punishmentsService.isCurrentRehabBatchForm(req, chargeNumber, redisId, req.body.rehabBatchId)) {
@@ -123,7 +124,11 @@ export default class rehabilitativeActivityDetailsPage {
     }
     const draft = this.punishmentsService.getRehabDraft(req, chargeNumber, redisId)
     return (
-      !!draft && activityNumber >= 1 && Array.from({ length: activityNumber - 1 }, (_, i) => draft[i]).every(Boolean)
+      !!draft &&
+      Number.isInteger(activityNumber) &&
+      activityNumber >= 1 &&
+      activityNumber <= draft.length + 1 &&
+      draft.slice(0, activityNumber - 1).every(Boolean)
     )
   }
 

@@ -128,12 +128,17 @@ describe('Rehabilitative activity details', () => {
   })
 
   it.each([
-    ['the details question has not been answered', undefined],
-    ['an earlier activity has not been entered', []],
-  ])('changes nothing when %s', (_, draft) => {
+    ['the details question has not been answered', undefined, '2'],
+    ['an earlier activity has not been entered', [], '2'],
+    ['the activity number is far beyond those entered', [enteredFirst], '1000000000'],
+    ['the activity number is not a whole number', [enteredFirst], '1.5'],
+    ['the activity number is missing', [enteredFirst], ''],
+  ])('changes nothing when %s', (_, draft, current) => {
     punishmentsService.getRehabDraft.mockReturnValue(draft)
     return request(app)
-      .post(activityPage(2))
+      .post(
+        `${adjudicationUrls.rehabilitativeActivityDetails.urls.start('100', 'library')}?numberOfActivities=2&currentActivityNumber=${current}`,
+      )
       .send({ rehabBatchId: 'batch-1', ...activity })
       .expect(302)
       .expect('Location', '/next')
