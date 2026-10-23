@@ -67,6 +67,9 @@
     {% endif %}
     <form method="POST" novalidate="novalidate" class="{{ 'govuk-!-margin-top-5' if not appliesTo | length }}">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {% if rehabBatchId !== null %}
+        <input type="hidden" name="rehabBatchId" value="{{ rehabBatchId }}"/>
+      {% endif %}
 
         {{ govukRadios({
     idPrefix: 'hasRehabilitativeActivitiesDetails',

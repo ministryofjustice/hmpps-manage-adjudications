@@ -42,8 +42,10 @@ export default class HasRehabilitativeActivitiesDetailsPage {
 
     let title = 'Do you have the details of the rehabilitative activity?'
     let appliesTo: string[] = []
+    let rehabBatchId: string = null
     if (this.isBatchJourney(res)) {
       const batch = this.punishmentsService.getRehabBatch(req, chargeNumber)
+      rehabBatchId = batch?.id ?? ''
       if (batch?.sameForAll && batch.redisIds.length > 1) {
         title = 'Do you have the details of the rehabilitative activities?'
         appliesTo = batch.redisIds
@@ -64,6 +66,7 @@ export default class HasRehabilitativeActivitiesDetailsPage {
       askNumberOfActivities: this.isBatchJourney(res),
       title,
       appliesTo,
+      rehabBatchId,
     })
   }
 
@@ -138,6 +141,9 @@ export default class HasRehabilitativeActivitiesDetailsPage {
 
     if (!this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    }
+    if (!this.punishmentsService.isCurrentRehabBatchForm(req, chargeNumber, redisId, req.body.rehabBatchId)) {
+      return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
     }
 
     const error = validateBatchForm({ hasDetails: hasRehabilitativeActivitiesDetails, numberOfActivities })

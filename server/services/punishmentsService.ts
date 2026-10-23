@@ -348,7 +348,14 @@ export default class PunishmentsService {
   // The suspended punishments ticked for a rehabilitative activity condition
   startRehabBatch(req: Request, chargeNumber: string, redisIds: string[]) {
     if (!req.session.rehabBatch) req.session.rehabBatch = {}
-    req.session.rehabBatch[chargeNumber] = { redisIds: [...redisIds], completedRedisIds: [] }
+    req.session.rehabBatch[chargeNumber] = { id: randomUUID(), redisIds: [...redisIds], completedRedisIds: [] }
+  }
+
+  // A rehabilitative activity form belongs to the batch it was shown in. One from an earlier batch, or left open
+  // in another tab while a new batch was started, must not change the punishments in this one.
+  isCurrentRehabBatchForm(req: Request, chargeNumber: string, redisId: string, rehabBatchId: string): boolean {
+    const batch = this.getRehabBatch(req, chargeNumber)
+    return !!batch && (batch.id ?? '') === (rehabBatchId ?? '') && batch.redisIds.includes(redisId)
   }
 
   getRehabBatch(req: Request, chargeNumber: string): RehabBatch {

@@ -148,6 +148,8 @@ export type PunishmentBatch = {
 
 // Suspended punishments ticked for a rehabilitative activity condition, by session redisId
 export type RehabBatch = {
+  // new for each batch; the activity forms post it back so a form from another batch cannot change this one
+  id?: string
   redisIds: string[]
   completedRedisIds: string[]
   sameForAll?: boolean

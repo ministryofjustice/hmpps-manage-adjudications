@@ -527,6 +527,20 @@ describe('PunishmentsService session batches', () => {
       expect(service.nextRehabBatchUrl(req, '100')).toEqual('/rehabilitative-activities-schedule/100')
     })
 
+    it('knows whether a form belongs to the current batch', () => {
+      const req = newRequest()
+      expect(service.isCurrentRehabBatchForm(req, '100', 'a', undefined)).toBe(false)
+
+      service.startRehabBatch(req, '100', ['a', 'b'])
+      const { id } = service.getRehabBatch(req, '100')
+      expect(service.isCurrentRehabBatchForm(req, '100', 'a', id)).toBe(true)
+      expect(service.isCurrentRehabBatchForm(req, '100', 'c', id)).toBe(false)
+      expect(service.isCurrentRehabBatchForm(req, '100', 'a', undefined)).toBe(false)
+
+      service.startRehabBatch(req, '100', ['a', 'c'])
+      expect(service.isCurrentRehabBatchForm(req, '100', 'a', id)).toBe(false)
+    })
+
     it('ignores a punishment that is not in the batch', () => {
       const req = newRequest()
       service.startRehabBatch(req, '100', ['a'])

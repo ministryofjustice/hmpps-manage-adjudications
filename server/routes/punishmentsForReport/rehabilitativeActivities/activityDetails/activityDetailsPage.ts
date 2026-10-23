@@ -42,7 +42,9 @@ export default class rehabilitativeActivityDetailsPage {
 
     let caption: string = null
     let endDateHint: string = null
+    let rehabBatchId: string = null
     if (this.isBatchJourney(res)) {
+      rehabBatchId = this.punishmentsService.getRehabBatch(req, chargeNumber)?.id ?? ''
       const punishments = this.coveredPunishments(req)
       const latest = this.latestCompletionDate(punishments)
       if (punishments.length === 1) {
@@ -66,6 +68,7 @@ export default class rehabilitativeActivityDetailsPage {
       errors: error ? [error] : [],
       caption,
       endDateHint,
+      rehabBatchId,
       numberOfActivities,
       currentActivityNumber,
       today: formatDateForDatePicker(new Date().toISOString(), 'short'),
@@ -90,6 +93,13 @@ export default class rehabilitativeActivityDetailsPage {
     const { numberOfActivities, currentActivityNumber } = req.query
     const { chargeNumber, redisId } = req.params
     const { details, monitorName, endDate, totalSessions } = req.body
+
+    if (
+      this.isBatchJourney(res) &&
+      !this.punishmentsService.isCurrentRehabBatchForm(req, chargeNumber, redisId, req.body.rehabBatchId)
+    ) {
+      return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
+    }
 
     const { friendlyName } = await this.punishmentsService.getPrisonerDetails(chargeNumber, res.locals.user)
 

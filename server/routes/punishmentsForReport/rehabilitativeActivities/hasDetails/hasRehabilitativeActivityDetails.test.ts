@@ -43,7 +43,12 @@ beforeEach(() => {
   punishmentsService.getSessionPunishment.mockImplementation(
     (req, chargeNumber, redisId) => sessionPunishments[redisId],
   )
-  punishmentsService.getRehabBatch.mockReturnValue({ redisIds: ['library', 'tv'], completedRedisIds: [] })
+  punishmentsService.getRehabBatch.mockReturnValue({
+    id: 'batch-1',
+    redisIds: ['library', 'tv'],
+    completedRedisIds: [],
+  })
+  punishmentsService.isCurrentRehabBatchForm.mockReturnValue(true)
   punishmentsService.nextRehabBatchUrl.mockReturnValue('/next')
 })
 
@@ -60,6 +65,7 @@ describe('Do you have the details of the rehabilitative activities?', () => {
       .expect(res => {
         expect(res.text).toContain('Do you have the details of the rehabilitative activities for loss of library?')
         expect(res.text).toContain('Enter the number of rehabilitative activities')
+        expect(res.text).toContain('name="rehabBatchId" value="batch-1"')
       })
   })
 
@@ -132,6 +138,29 @@ describe('Do you have the details of the rehabilitative activities?', () => {
       .send(body)
       .expect(200)
       .expect(res => expect(res.text).toContain(message))
+  })
+
+  it.each([
+    ['YES', { hasRehabilitativeActivitiesDetails: 'YES', numberOfActivities: '2' }],
+    ['NO', { hasRehabilitativeActivitiesDetails: 'NO' }],
+  ])('changes nothing when answered %s on a form from another batch', (_, body) => {
+    punishmentsService.isCurrentRehabBatchForm.mockReturnValue(false)
+    return request(app)
+      .post(adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.urls.start('100', 'library'))
+      .send({ rehabBatchId: 'old-batch', ...body })
+      .expect(302)
+      .expect('Location', '/next')
+      .then(() => {
+        expect(punishmentsService.isCurrentRehabBatchForm).toHaveBeenCalledWith(
+          expect.anything(),
+          '100',
+          'library',
+          'old-batch',
+        )
+        expect(punishmentsService.removeAnyRehabilitativeActivities).not.toHaveBeenCalled()
+        expect(punishmentsService.addEmptyRehabilitativeActivities).not.toHaveBeenCalled()
+        expect(punishmentsService.completeRehabBatchItem).not.toHaveBeenCalled()
+      })
   })
 
   it('keeps the old page when the prison is not switched on', () => {

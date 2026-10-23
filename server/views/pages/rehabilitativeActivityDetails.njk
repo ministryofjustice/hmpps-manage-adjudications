@@ -32,6 +32,9 @@
 
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {% if rehabBatchId !== null %}
+        <input type="hidden" name="rehabBatchId" value="{{ rehabBatchId }}"/>
+      {% endif %}
 
       {% if caption %}
         <span class="govuk-caption-l" data-qa="activity-caption">{{ caption }}</span>
