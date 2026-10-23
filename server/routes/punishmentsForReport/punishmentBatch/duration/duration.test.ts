@@ -5,6 +5,7 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
 import { PrivilegeType, PunishmentBatch, PunishmentType } from '../../../../data/PunishmentResult'
+import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
@@ -16,6 +17,7 @@ const canteen = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.C
 const library = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.OTHER, otherPrivilege: 'library' }
 
 let app: Express
+const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 // Items are given the ids item-0, item-1 and so on, which the form posts back as batchItemIds
 const withBatch = (batch: PunishmentBatch) => {
@@ -27,6 +29,7 @@ const withBatch = (batch: PunishmentBatch) => {
 }
 
 beforeEach(() => {
+  config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getLastHearingDate.mockResolvedValue('2026-08-17')
@@ -39,6 +42,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  config.featureToggles.multiPrivilegePunishmentsPrisons = originalPrisons
   jest.resetAllMocks()
 })
 

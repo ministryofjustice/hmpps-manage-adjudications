@@ -4,6 +4,7 @@ import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
+import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
@@ -12,8 +13,10 @@ const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
 
 let app: Express
+const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
+  config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getRehabBatch.mockReturnValue({ redisIds: ['a', 'b'], completedRedisIds: [] })
@@ -21,6 +24,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  config.featureToggles.multiPrivilegePunishmentsPrisons = originalPrisons
   jest.resetAllMocks()
 })
 

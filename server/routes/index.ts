@@ -115,6 +115,7 @@ import adjudicationHistoryRoutes from './adjudicationHistory'
 import activePunishmentsRoutes from './activePunishments'
 import adjudicationConsolidatedViewRoutes from './adjudicationConsolidatedView'
 import adjudicationUrls from '../utils/urlGenerator'
+import multiPrivilegePunishmentsOnly from '../middleware/multiPrivilegePunishmentsOnly'
 
 export default function routes(
   router: Router,
@@ -364,16 +365,19 @@ export default function routes(
 
   router.use(
     adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.root,
+    multiPrivilegePunishmentsOnly(),
     whichPunishmentsRehabilitativeActivitiesRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.sameRehabilitativeActivity.root,
+    multiPrivilegePunishmentsOnly(),
     sameRehabilitativeActivityRoutes({ userService, punishmentsService }),
   )
 
   router.use(
     adjudicationUrls.rehabilitativeActivitiesSchedule.root,
+    multiPrivilegePunishmentsOnly(),
     rehabilitativeActivitiesScheduleRoutes({ userService, punishmentsService }),
   )
 
@@ -471,10 +475,19 @@ export default function routes(
 
   router.use(
     adjudicationUrls.punishmentSameDuration.root,
+    multiPrivilegePunishmentsOnly(),
     punishmentSameDurationRoutes({ userService, punishmentsService }),
   )
-  router.use(adjudicationUrls.punishmentDuration.root, punishmentDurationRoutes({ userService, punishmentsService }))
-  router.use(adjudicationUrls.punishmentSchedule.root, punishmentScheduleRoutes({ userService, punishmentsService }))
+  router.use(
+    adjudicationUrls.punishmentDuration.root,
+    multiPrivilegePunishmentsOnly(),
+    punishmentDurationRoutes({ userService, punishmentsService }),
+  )
+  router.use(
+    adjudicationUrls.punishmentSchedule.root,
+    multiPrivilegePunishmentsOnly(),
+    punishmentScheduleRoutes({ userService, punishmentsService }),
+  )
   router.use(
     adjudicationUrls.punishmentNumberOfDays.root,
     punishmentNumberOfDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
