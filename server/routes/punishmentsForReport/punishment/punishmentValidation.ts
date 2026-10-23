@@ -98,16 +98,20 @@ export default function validateForm({
 
   if (punishmentType === PunishmentType.PRIVILEGE && multiplePrivileges) {
     if (!privilegeTypes.length) return errors.MISSING_PRIVILEGE_TYPES
-    const alreadyAdded = privilegeTypes.find(
+  } else if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE
+
+  if (punishmentType === PunishmentType.PRIVILEGE) {
+    const chosen = multiplePrivileges ? privilegeTypes : [privilegeType]
+    const alreadyAdded = chosen.find(
       privilege => privilege !== PrivilegeType.OTHER && privilegesAlreadyAdded.includes(privilege),
     )
     if (alreadyAdded) {
       return {
-        href: '#privilegeTypes',
+        href: multiplePrivileges ? '#privilegeTypes' : '#privilegeType',
         text: `${convertPunishmentType(PunishmentType.PRIVILEGE, null, alreadyAdded, null)} has already been added. Select a different privilege`,
       }
     }
-  } else if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE
+  }
 
   const otherPrivilegeChosen = multiplePrivileges
     ? privilegeTypes.includes(PrivilegeType.OTHER)

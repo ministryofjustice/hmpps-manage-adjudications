@@ -150,6 +150,47 @@ describe('POST /punishment with multiple privileges switched on', () => {
       .expect('Location', adjudicationUrls.punishmentDuration.urls.start('100'))
   })
 
+  describe('changing a punishment', () => {
+    beforeEach(() =>
+      punishmentsService.getAllSessionPunishments.mockReturnValue([
+        {
+          redisId: 'canteen',
+          type: PunishmentType.PRIVILEGE,
+          privilegeType: PrivilegeType.CANTEEN,
+          rehabilitativeActivities: [],
+        },
+        {
+          redisId: 'tv',
+          type: PunishmentType.PRIVILEGE,
+          privilegeType: PrivilegeType.TV,
+          rehabilitativeActivities: [],
+        },
+      ]),
+    )
+
+    it('will not change it to a privilege another punishment already withdraws', () =>
+      request(app)
+        .post(adjudicationUrls.punishment.urls.edit('100', 'canteen'))
+        .send({ punishmentType: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.TV })
+        .expect(200)
+        .expect(res => expect(res.text).toContain('Loss of TV has already been added. Select a different privilege')))
+
+    it('keeps its own privilege', () =>
+      request(app)
+        .post(adjudicationUrls.punishment.urls.edit('100', 'tv'))
+        .send({ punishmentType: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.TV })
+        .expect(302)
+        .expect('Location', /^\/punishment-duration\/100\/edit\/tv/))
+
+    it('is not checked where the prison is not switched on', () => {
+      config.featureToggles.multiPrivilegePunishmentsPrisons = ['LEI']
+      return request(app)
+        .post(adjudicationUrls.punishment.urls.edit('100', 'canteen'))
+        .send({ punishmentType: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.TV })
+        .expect(302)
+    })
+  })
+
   it('goes straight to the duration page for one privilege', () => {
     return request(app)
       .post(adjudicationUrls.punishment.urls.start('100'))
