@@ -76,6 +76,37 @@ describe('GET', () => {
       })
   })
 
+  it('shows the punishment that was changed, which keeps its place in the list', () => {
+    punishmentsService.getAllSessionPunishments.mockResolvedValue([
+      {
+        redisId: 'changed',
+        type: PunishmentType.CONFINEMENT,
+        duration: 5,
+        startDate: '2023-05-01',
+        endDate: '2023-05-05',
+      },
+      {
+        redisId: 'other',
+        type: PunishmentType.PRIVILEGE,
+        privilegeType: PrivilegeType.OTHER,
+        otherPrivilege: 'nintendo switch',
+        duration: 10,
+        startDate: '2023-04-10',
+        endDate: '2023-04-19',
+      },
+    ])
+    return request(app)
+      .get(`${adjudicationUrls.punishmentAutomaticDateSchedule.urls.start('100')}?redisId=changed`)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('1 May 2023')
+        expect(res.text).toContain('5 May 2023')
+        expect(res.text).not.toContain('10 Apr 2023')
+        expect(res.text).toContain(adjudicationUrls.punishmentNumberOfDays.urls.edit('100', 'changed'))
+        expect(res.text).not.toContain(adjudicationUrls.punishmentNumberOfDays.urls.edit('100', 'other'))
+      })
+  })
+
   it('displays the calculated last day and child answer for a social visits punishment', () => {
     punishmentsService.getAllSessionPunishments.mockResolvedValue([
       {

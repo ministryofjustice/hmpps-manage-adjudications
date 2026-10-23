@@ -1,6 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
 import moment from 'moment'
-import { stubFor, verifyRequest } from './wiremock'
+import { getMatchingRequests, stubFor, verifyRequest } from './wiremock'
 import { apiPageResponseFrom } from '../../server/test/mojPaginationUtils'
 import { OffenceDetails, PrisonerGender } from '../../server/data/DraftAdjudicationResult'
 import {
@@ -997,6 +997,15 @@ const stubCreatePunishments = ({ chargeNumber, response }): SuperAgentRequest =>
     },
   })
 
+// The punishments sent to the API by each POST for a charge, oldest first
+const getSentPunishments = async ({ chargeNumber }: { chargeNumber: string }): Promise<unknown[]> => {
+  const requests = await getMatchingRequests({
+    method: 'POST',
+    url: `/adjudications/reported-adjudications/${chargeNumber}/punishments/v2`,
+  })
+  return requests.map(({ body }) => JSON.parse(body).punishments)
+}
+
 const stubAmendPunishments = ({ chargeNumber, response }): SuperAgentRequest =>
   stubFor({
     request: {
@@ -1285,6 +1294,7 @@ export default {
   stubAmendOutcome,
   stubDeleteReport,
   stubCreatePunishments,
+  getSentPunishments,
   stubAmendPunishments,
   stubGetSuspendedPunishments,
   stubCreatePunishmentComment,

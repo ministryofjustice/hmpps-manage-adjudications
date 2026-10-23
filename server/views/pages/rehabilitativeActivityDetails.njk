@@ -32,7 +32,13 @@
 
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {% if rehabBatchId !== null %}
+        <input type="hidden" name="rehabBatchId" value="{{ rehabBatchId }}"/>
+      {% endif %}
 
+      {% if caption %}
+        <span class="govuk-caption-l" data-qa="activity-caption">{{ caption }}</span>
+      {% endif %}
       <h1 class="govuk-heading-l">{{ pageHeader }}</h1>
 
       <div class="govuk-grid-column-two-thirds">
@@ -74,6 +80,7 @@
               classes: "govuk-label--s",
               isPageHeading: false
           },
+          hint: { text: endDateHint } if endDateHint else undefined,
           classes: 'hmpps-datepicker--fixed-width',
           value: endDate,
           minDate: today,
@@ -99,7 +106,7 @@
 
         <div class="govuk-button-group">
           {{ govukButton({
-              text: 'Continue',
+              text: 'Save and continue' if featureToggles.multiPrivilegePunishments else 'Continue',
               type: "submit",
               preventDoubleClick: true,
               classes: "govuk-button--submit govuk-!-margin-right-3",

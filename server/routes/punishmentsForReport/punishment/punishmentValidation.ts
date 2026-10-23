@@ -1,13 +1,22 @@
 import { FormError } from '../../../@types/template'
-import { PrivilegeType, PunishmentType, isSocialVisitsPunishment } from '../../../data/PunishmentResult'
+import {
+  PrivilegeType,
+  PunishmentType,
+  convertPunishmentType,
+  isSocialVisitsPunishment,
+} from '../../../data/PunishmentResult'
 
 type PunishmentForm = {
   punishmentType: PunishmentType
   privilegeType?: PrivilegeType
+  privilegeTypes?: PrivilegeType[]
+  multiplePrivileges?: boolean
   otherPrivilege?: string
   stoppagePercentage?: number
   damagesOwedAmount?: number
   damagesAlreadyAdded?: boolean
+  // privileges other than Other can only be withdrawn once on a charge
+  privilegesAlreadyAdded?: PrivilegeType[]
   hasChildUnder18?: boolean
 }
 
@@ -23,6 +32,10 @@ const errors: { [key: string]: FormError } = {
   MISSING_PRIVILEGE_TYPE: {
     href: '#privilegeType',
     text: 'Select the type of privilege',
+  },
+  MISSING_PRIVILEGE_TYPES: {
+    href: '#privilegeTypes',
+    text: 'Select which privileges will be withdrawn',
   },
   MISSING_OTHER_PRIVILEGE: {
     href: '#otherPrivilege',
@@ -61,10 +74,13 @@ const errors: { [key: string]: FormError } = {
 export default function validateForm({
   punishmentType,
   privilegeType,
+  privilegeTypes = [],
+  multiplePrivileges = false,
   otherPrivilege,
   stoppagePercentage,
   damagesOwedAmount,
   damagesAlreadyAdded,
+  privilegesAlreadyAdded = [],
   hasChildUnder18,
 }: PunishmentForm): FormError | null {
   if (!punishmentType) {
@@ -80,10 +96,28 @@ export default function validateForm({
       : errors.MISSING_CHILD_UNDER_18_RESTRICTION_OF_SOCIAL_VISITS
   }
 
-  if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE
+  if (punishmentType === PunishmentType.PRIVILEGE && multiplePrivileges) {
+    if (!privilegeTypes.length) return errors.MISSING_PRIVILEGE_TYPES
+  } else if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE
 
-  if (punishmentType === PunishmentType.PRIVILEGE && privilegeType === PrivilegeType.OTHER) {
-    if (!otherPrivilege) return errors.MISSING_OTHER_PRIVILEGE
+  if (punishmentType === PunishmentType.PRIVILEGE) {
+    const chosen = multiplePrivileges ? privilegeTypes : [privilegeType]
+    const alreadyAdded = chosen.find(
+      privilege => privilege !== PrivilegeType.OTHER && privilegesAlreadyAdded.includes(privilege),
+    )
+    if (alreadyAdded) {
+      return {
+        href: multiplePrivileges ? '#privilegeTypes' : '#privilegeType',
+        text: `${convertPunishmentType(PunishmentType.PRIVILEGE, null, alreadyAdded, null)} has already been added. Select a different privilege`,
+      }
+    }
+  }
+
+  const otherPrivilegeChosen = multiplePrivileges
+    ? privilegeTypes.includes(PrivilegeType.OTHER)
+    : privilegeType === PrivilegeType.OTHER
+  if (punishmentType === PunishmentType.PRIVILEGE && otherPrivilegeChosen) {
+    if (!otherPrivilege?.trim()) return errors.MISSING_OTHER_PRIVILEGE
     if (otherPrivilege.length > 32) return errors.OTHER_PRIVILEGE_LENGTH
   }
 

@@ -22,4 +22,8 @@ export default class AwardPunishmentsPage extends Page {
   removeActivity = (): PageElement => cy.get('[data-qa="delete-activity"]')
 
   continue = (): PageElement => cy.get('[data-qa="punishments-continue"]')
+
+  successBanner = (): PageElement => cy.get('[data-qa="success-banner"]')
+
+  addRehabilitativeActivity = (): PageElement => cy.get('[data-qa="add-rehabilitative-activity-button"]')
 }

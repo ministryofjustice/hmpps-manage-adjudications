@@ -133,7 +133,7 @@ describe('POST ', () => {
         startDate: '13/12/2023',
       })
       .expect(302)
-      .expect('Location', adjudicationUrls.suspendedPunishmentAutoDates.urls.existing('100'))
+      .expect('Location', `${adjudicationUrls.suspendedPunishmentAutoDates.urls.existing('100')}?redisId=xyz`)
       .then(() =>
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(
           expect.anything(),

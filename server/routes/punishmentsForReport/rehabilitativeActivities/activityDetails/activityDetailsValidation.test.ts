@@ -1,4 +1,4 @@
-import validateForm from './activityDetailsValidation'
+import validateForm, { validateCompletionDate } from './activityDetailsValidation'
 
 const prisonerName = 'Geoff Fish'
 const details = 'Dish washing'
@@ -51,5 +51,36 @@ describe('', () => {
       href: '#monitorName',
       text: `Enter who is monitoring the prisoner on the activity`,
     })
+  })
+})
+
+describe('validateCompletionDate', () => {
+  it('accepts a date on or before the date the punishment is suspended until', () => {
+    expect(
+      validateCompletionDate({ endDate: '16/09/2026', latestDate: '2026-09-16', coversSeveralPunishments: false }),
+    ).toBeNull()
+  })
+
+  it('rejects a date after the date the punishment is suspended until', () => {
+    expect(
+      validateCompletionDate({ endDate: '17/9/2026', latestDate: '2026-09-16', coversSeveralPunishments: false }),
+    ).toEqual({
+      href: '#endDate',
+      text: 'Completion date must be on or before 16 September 2026, the date the punishment is suspended until',
+    })
+  })
+
+  it('names the earliest date when the activity covers several punishments', () => {
+    expect(
+      validateCompletionDate({ endDate: '1/10/2026', latestDate: '2026-09-16', coversSeveralPunishments: true }).text,
+    ).toEqual(
+      'Completion date must be on or before 16 September 2026, the earliest date these punishments are suspended until',
+    )
+  })
+
+  it('rejects a date that does not exist', () => {
+    expect(
+      validateCompletionDate({ endDate: '31/9/2026', latestDate: '2026-09-16', coversSeveralPunishments: false }).text,
+    ).toContain('Completion date must be a real date')
   })
 })
