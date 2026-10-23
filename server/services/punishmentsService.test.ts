@@ -463,8 +463,22 @@ describe('PunishmentsService session batches', () => {
       service.startPunishmentBatch(req, '200', [library])
       service.startPunishmentBatch(req, '100', [library])
 
-      expect(service.getPunishmentBatch(req, '100')).toEqual({ items: [library] })
-      expect(service.getPunishmentBatch(req, '200')).toEqual({ items: [library] })
+      expect(service.getPunishmentBatch(req, '100')).toEqual({
+        items: [{ ...library, batchItemId: expect.any(String) }],
+      })
+      expect(service.getPunishmentBatch(req, '200')).toEqual({
+        items: [{ ...library, batchItemId: expect.any(String) }],
+      })
+    })
+
+    it('gives every item an id of its own, new for each batch', () => {
+      const req = newRequest()
+      service.startPunishmentBatch(req, '100', [canteen, library])
+      const firstIds = service.getPunishmentBatch(req, '100').items.map(item => item.batchItemId)
+      service.startPunishmentBatch(req, '100', [canteen, library])
+      const secondIds = service.getPunishmentBatch(req, '100').items.map(item => item.batchItemId)
+
+      expect(new Set([...firstIds, ...secondIds]).size).toEqual(4)
     })
 
     it('records whether one answer applies to all items', () => {

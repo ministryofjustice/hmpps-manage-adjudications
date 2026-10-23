@@ -307,7 +307,7 @@ export default class PunishmentsService {
   // Answered items are already in req.session.punishments; the batch only records the loop's progress.
   startPunishmentBatch(req: Request, chargeNumber: string, items: PunishmentBatchItem[]) {
     if (!req.session.punishmentBatch) req.session.punishmentBatch = {}
-    req.session.punishmentBatch[chargeNumber] = { items: items.map(item => ({ ...item })) }
+    req.session.punishmentBatch[chargeNumber] = { items: items.map(item => ({ ...item, batchItemId: randomUUID() })) }
   }
 
   getPunishmentBatch(req: Request, chargeNumber: string): PunishmentBatch {

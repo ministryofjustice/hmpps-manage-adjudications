@@ -17,8 +17,12 @@ const library = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.O
 
 let app: Express
 
+// Items are given the ids item-0, item-1 and so on, which the form posts back as batchItemIds
 const withBatch = (batch: PunishmentBatch) => {
-  punishmentsService.getPunishmentBatch.mockReturnValue(batch)
+  punishmentsService.getPunishmentBatch.mockReturnValue({
+    ...batch,
+    items: batch.items.map((item, index) => ({ batchItemId: `item-${index}`, ...item })),
+  })
   punishmentsService.nextUnansweredBatchItemIndex.mockReturnValue(batch.items.findIndex(item => !item.redisId))
 }
 
@@ -57,6 +61,7 @@ describe('GET duration and start date', () => {
         expect(res.text).toContain('How many days will this punishment last?')
         expect(res.text).toContain('When will this punishment take effect?')
         expect(res.text).toContain('Immediately, on the last day of the hearing: 17 August 2026')
+        expect(res.text).toContain('name="batchItemIds" value="item-1"')
       })
   })
 
@@ -70,6 +75,7 @@ describe('GET duration and start date', () => {
         expect(res.text).toContain('These answers will be applied to: Loss of canteen, Loss of library.')
         expect(res.text).toContain('How many days will the punishments last?')
         expect(res.text).not.toContain('Punishment 1 of 2')
+        expect(res.text).toContain('name="batchItemIds" value="item-0,item-1"')
       })
   })
 
@@ -98,7 +104,7 @@ describe('POST duration and start date', () => {
     withBatch({ items: [canteen, library] })
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.start('100'))
-      .send({ duration: '21', startMode: 'IMMEDIATE' })
+      .send({ batchItemIds: 'item-0', duration: '21', startMode: 'IMMEDIATE' })
       .expect(302)
       .expect('Location', adjudicationUrls.punishmentSchedule.urls.start('100'))
       .then(() => {
@@ -124,7 +130,13 @@ describe('POST duration and start date', () => {
     withBatch({ items: [{ ...canteen, redisId: 'a' }, library] })
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.start('100'))
-      .send({ duration: '21', startMode: 'LATER', startDate: '16/9/2026', suspendedUntil: '1/1/2027' })
+      .send({
+        batchItemIds: 'item-1',
+        duration: '21',
+        startMode: 'LATER',
+        startDate: '16/9/2026',
+        suspendedUntil: '1/1/2027',
+      })
       .expect(302)
       .then(() => {
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledWith(
@@ -145,7 +157,7 @@ describe('POST duration and start date', () => {
     withBatch({ items: [{ type: PunishmentType.EARNINGS, stoppagePercentage: 20 }] })
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.start('100'))
-      .send({ duration: '10', startMode: 'SUSPENDED', suspendedUntil: '31/10/2026' })
+      .send({ batchItemIds: 'item-0', duration: '10', startMode: 'SUSPENDED', suspendedUntil: '31/10/2026' })
       .expect(302)
       .expect('Location', adjudicationUrls.punishmentSchedule.urls.start('100'))
       .then(() =>
@@ -169,7 +181,7 @@ describe('POST duration and start date', () => {
     withBatch({ items: [canteen, library], sameForAll: true })
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.start('100'))
-      .send({ duration: '7', startMode: 'IMMEDIATE' })
+      .send({ batchItemIds: 'item-0,item-1', duration: '7', startMode: 'IMMEDIATE' })
       .expect(302)
       .then(() => {
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledTimes(2)
@@ -182,7 +194,7 @@ describe('POST duration and start date', () => {
     withBatch({ items: [canteen] })
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.start('100'))
-      .send({})
+      .send({ batchItemIds: 'item-0' })
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Enter how many days the punishment will last')
@@ -208,7 +220,7 @@ describe('POST duration and start date', () => {
     withBatch({ items: [canteen] })
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.start('100'))
-      .send(body)
+      .send({ batchItemIds: 'item-0', ...body })
       .expect(200)
       .expect(res => expect(res.text).toContain(message))
   })
@@ -221,9 +233,28 @@ describe('POST duration and start date', () => {
     withBatch({ items: [{ type: PunishmentType.CONFINEMENT }] })
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.start('100'))
-      .send({ duration: '11', startMode: 'IMMEDIATE' })
+      .send({ batchItemIds: 'item-0', duration: '11', startMode: 'IMMEDIATE' })
       .expect(200)
       .expect(res => expect(res.text).toContain('Cellular confinement cannot be more than 10 days'))
+  })
+
+  it.each([
+    ['already answered, for example in another tab', { items: [{ ...canteen, redisId: 'a' }, library] }, 'item-0'],
+    ['from an earlier batch', { items: [canteen, library] }, 'old-item'],
+    ['for one punishment when the answers now apply to all', { items: [canteen, library], sameForAll: true }, 'item-0'],
+    ['without the punishments it was shown for', { items: [canteen, library] }, undefined],
+  ])('saves nothing from a form for punishments %s, and shows the current question', (_, batch, ids) => {
+    withBatch(batch)
+    punishmentsService.nextPunishmentBatchUrl.mockReturnValue(adjudicationUrls.punishmentDuration.urls.start('100'))
+    return request(app)
+      .post(adjudicationUrls.punishmentDuration.urls.start('100'))
+      .send({ batchItemIds: ids, duration: '21', startMode: 'IMMEDIATE' })
+      .expect(302)
+      .expect('Location', adjudicationUrls.punishmentDuration.urls.start('100'))
+      .then(() => {
+        expect(punishmentsService.addSessionPunishment).not.toHaveBeenCalled()
+        expect(punishmentsService.markBatchItemAnswered).not.toHaveBeenCalled()
+      })
   })
 })
 

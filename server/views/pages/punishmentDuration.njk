@@ -34,6 +34,9 @@
 
       <form method="POST" novalidate="novalidate">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        {% if batchItemIds !== null %}
+          <input type="hidden" name="batchItemIds" value="{{ batchItemIds }}"/>
+        {% endif %}
 
         {{ govukInput({
           id: "duration",

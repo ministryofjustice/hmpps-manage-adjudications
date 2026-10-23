@@ -45,6 +45,9 @@ type Subject = {
   caption?: string
 }
 
+// Identifies the batch items a form was shown for
+const batchItemIds = (subject: Subject) => subject.punishments.map(punishment => punishment.batchItemId).join(',')
+
 const punishmentName = (punishment: PunishmentBatchItem) =>
   convertPunishmentType(
     punishment.type,
@@ -80,6 +83,7 @@ export default class DurationPage {
       errors,
       heading: subject.heading,
       caption: subject.caption,
+      batchItemIds: this.pageOptions.isEdit() ? null : batchItemIds(subject),
       appliesTo: many ? subject.punishments.map(punishmentName) : [],
       these: many ? 'the punishments' : 'this punishment',
       lastHearingDate: formatTimestampTo(lastHearingDate, 'D MMMM YYYY'),
@@ -182,6 +186,11 @@ export default class DurationPage {
 
     const subject = this.getSubject(req)
     if (!subject) return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
+    // A form left open in another tab, or resubmitted from the browser history, can be for a punishment already
+    // answered. Its answers must not be saved against whichever punishment is next, so show the current question.
+    if (!this.pageOptions.isEdit() && req.body.batchItemIds !== batchItemIds(subject)) {
+      return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
+    }
 
     const [lastHearingDate, { isAdult }] = await Promise.all([
       this.punishmentsService.getLastHearingDate(chargeNumber, user),

@@ -136,6 +136,8 @@ export type PunishmentBatchItem = {
   otherPrivilege?: string
   stoppagePercentage?: number
   hasChildUnder18?: boolean
+  // set when the batch starts; the duration form posts it back so a stale form cannot answer a later item
+  batchItemId?: string
   redisId?: string
 }
 
