@@ -585,6 +585,23 @@ describe('PunishmentsService session batches', () => {
       ])
     })
 
+    it('asks about the punishments again when the same-activity answer changes, keeping their activities', () => {
+      const activity = { sessionId: 1, details: 'Course', monitor: 'Thomas', endDate: '2026-11-01' }
+      const req = newRequest({ punishments: { 100: [suspended('a', [activity]), suspended('b', [activity])] } })
+      service.startRehabBatch(req, '100', ['a', 'b'])
+      service.setRehabBatchSameForAll(req, '100', false)
+      service.completeRehabBatchItem(req, '100', 'a')
+      service.completeRehabBatchItem(req, '100', 'b')
+      expect(service.nextRehabBatchUrl(req, '100')).toEqual('/rehabilitative-activities-schedule/100')
+
+      service.setRehabBatchSameForAll(req, '100', false)
+      expect(service.nextRehabBatchUrl(req, '100')).toEqual('/rehabilitative-activities-schedule/100')
+
+      service.setRehabBatchSameForAll(req, '100', true)
+      expect(service.nextRehabBatchUrl(req, '100')).toEqual('/punishment-has-rehabilitative-activities-details/100/a')
+      expect(service.getSessionPunishment(req, '100', 'b').rehabilitativeActivities).toEqual([activity])
+    })
+
     it('keeps the activities a punishment has until all the new ones are entered', () => {
       const existing = { sessionId: 1, details: 'Course', monitor: 'Thomas', endDate: '2026-11-01', id: 9 }
       const first = { sessionId: 1, details: 'Victim awareness', monitor: 'Ann', endDate: '2026-11-10' }

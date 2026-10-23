@@ -372,9 +372,12 @@ export default class PunishmentsService {
     return req.session?.rehabBatch?.[chargeNumber]
   }
 
+  // Changing the answer asks about the punishments again. Each keeps its activities until new ones are entered.
   setRehabBatchSameForAll(req: Request, chargeNumber: string, sameForAll: boolean) {
     const batch = this.getRehabBatch(req, chargeNumber)
-    if (batch) batch.sameForAll = sameForAll
+    if (!batch) return
+    if (batch.sameForAll !== undefined && batch.sameForAll !== sameForAll) batch.completedRedisIds = []
+    batch.sameForAll = sameForAll
   }
 
   nextPendingRehabRedisId(req: Request, chargeNumber: string): string {
