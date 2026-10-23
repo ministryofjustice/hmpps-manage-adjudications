@@ -175,7 +175,7 @@ export default class rehabilitativeActivityDetailsPage {
         Number(currentActivityNumber),
         activityDetails,
       )
-      if (currentActivityNumber === numberOfActivities) {
+      if (Number(currentActivityNumber) === Number(numberOfActivities)) {
         this.punishmentsService.applyRehabDraft(req, chargeNumber, redisId)
         this.punishmentsService.completeRehabBatchItem(req, chargeNumber, redisId)
         return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
@@ -188,7 +188,7 @@ export default class rehabilitativeActivityDetailsPage {
         Number(currentActivityNumber),
         activityDetails,
       )
-      if (currentActivityNumber === numberOfActivities) {
+      if (Number(currentActivityNumber) === Number(numberOfActivities)) {
         return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
       }
     }

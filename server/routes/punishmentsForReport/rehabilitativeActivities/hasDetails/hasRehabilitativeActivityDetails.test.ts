@@ -101,6 +101,16 @@ describe('Do you have the details of the rehabilitative activities?', () => {
       })
   })
 
+  it('passes the number of activities on as a plain number', () =>
+    request(app)
+      .post(adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.urls.start('100', 'library'))
+      .send({ hasRehabilitativeActivitiesDetails: 'YES', numberOfActivities: '02' })
+      .expect(302)
+      .expect(
+        'Location',
+        `${adjudicationUrls.rehabilitativeActivityDetails.urls.start('100', 'library')}?numberOfActivities=2&currentActivityNumber=1`,
+      ))
+
   it('records one activity to be entered later when the details are not known', () => {
     return request(app)
       .post(adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.urls.start('100', 'library'))

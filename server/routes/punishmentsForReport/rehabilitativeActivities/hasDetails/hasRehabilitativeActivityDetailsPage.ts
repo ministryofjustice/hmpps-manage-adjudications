@@ -155,7 +155,11 @@ export default class HasRehabilitativeActivitiesDetailsPage {
       return res.redirect(
         url.format({
           pathname: adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId),
-          query: { numberOfActivities, currentActivityNumber: '1' } as ParsedUrlQuery,
+          // as a plain number, so "02" becomes 2 and matches the activity number on the last activity
+          query: {
+            numberOfActivities: String(Number(numberOfActivities)),
+            currentActivityNumber: '1',
+          } as ParsedUrlQuery,
         }),
       )
     }

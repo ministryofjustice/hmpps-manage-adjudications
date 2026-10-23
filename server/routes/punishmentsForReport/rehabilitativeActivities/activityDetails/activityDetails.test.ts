@@ -127,6 +127,18 @@ describe('Rehabilitative activity details', () => {
       })
   })
 
+  it('knows the last activity whichever way its number is written', () => {
+    punishmentsService.getRehabDraft.mockReturnValue([enteredFirst])
+    return request(app)
+      .post(
+        `${adjudicationUrls.rehabilitativeActivityDetails.urls.start('100', 'library')}?numberOfActivities=02&currentActivityNumber=2`,
+      )
+      .send({ rehabBatchId: 'batch-1', ...activity })
+      .expect(302)
+      .expect('Location', '/next')
+      .then(() => expect(punishmentsService.applyRehabDraft).toHaveBeenCalled())
+  })
+
   it.each([
     ['the details question has not been answered', undefined, '2'],
     ['an earlier activity has not been entered', [], '2'],
