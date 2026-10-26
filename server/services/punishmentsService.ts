@@ -270,19 +270,20 @@ export default class PunishmentsService {
     for (let i = punishments.length - 1; i >= 0; i -= 1) {
       const punishment = punishments[i]
       if (!punishment.id && !punishment.duplicateConfirmed) {
-        // a copy the user has already chosen to keep settles it for the punishment it matches too
-        const matches = punishments.find(
-          other => other !== punishment && !other.duplicateConfirmed && isSamePunishment(other, punishment),
-        )
+        // confirmed punishments still count as matches, so a later copy of them is asked about
+        const matches = punishments.find(other => other !== punishment && isSamePunishment(other, punishment))
         if (matches) return { punishment, matches }
       }
     }
     return null
   }
 
+  // Keeping a copy settles the question for the punishment it matches too, so neither is asked about again
   confirmDuplicatePunishment(req: Request, chargeNumber: string, redisId: string) {
+    const duplicate = this.getUnconfirmedDuplicate(req, chargeNumber)
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
     if (punishment) punishment.duplicateConfirmed = true
+    if (punishment && duplicate?.punishment === punishment) duplicate.matches.duplicateConfirmed = true
   }
 
   setAllSessionPunishments(req: Request, punishmentData: PunishmentData[], chargeNumber: string) {
