@@ -81,6 +81,7 @@ import paybackPunishmentCompletionRoutes from './punishmentsForReport/paybackPun
 import PaybackPunishmentDetailsRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentDetails'
 import paybackPunishmentScheduleRoutes from './punishmentsForReport/paybackPunishment/paybackPunishmentSchedule'
 import awardPunishmentsRoutes from './punishmentsForReport/punishments/awardPunishments'
+import punishmentAlreadyAddedRoutes from './punishmentsForReport/punishments/punishmentAlreadyAdded'
 import numberOfAdditionalDaysRoutes from './punishmentsForReport/additionalDays/numberOfAdditionalDays'
 import willPunishmentBeSuspendedRoutes from './punishmentsForReport/additionalDays/willPunishmentBeSuspended'
 import punishmentSuspendedUntilAdditionalDays from './punishmentsForReport/additionalDays/suspendedUntilDate'
@@ -425,6 +426,10 @@ export default function routes(
     whichPunishmentConsecutiveToRoutes({ userService, punishmentsService }),
   )
   router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
+  router.use(
+    adjudicationUrls.punishmentAlreadyAdded.root,
+    punishmentAlreadyAddedRoutes({ userService, punishmentsService }),
+  )
   router.use(adjudicationUrls.checkPunishments.root, checkPunishmentRoutes({ punishmentsService, userService }))
   router.use(
     adjudicationUrls.activateSuspendedPunishments.root,

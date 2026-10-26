@@ -999,6 +999,16 @@ const adjudicationUrls = {
         `${adjudicationUrls.whichPunishmentIsItConsecutiveTo.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
+  punishmentAlreadyAdded: {
+    root: '/punishment-already-added',
+    matchers: {
+      start: '/:chargeNumber/:redisId',
+    },
+    urls: {
+      start: (chargeNumber: string, redisId: string) =>
+        `${adjudicationUrls.punishmentAlreadyAdded.root}/${chargeNumber}/${redisId}`,
+    },
+  },
   awardPunishments: {
     root: '/award-punishments',
     matchers: {

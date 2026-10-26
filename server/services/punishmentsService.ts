@@ -12,6 +12,7 @@ import {
   RehabilitativeActivity,
   SuspendedPunishmentDetails,
   SuspendedPunishmentResult,
+  isSamePunishment,
   punishmentChangeReasonAndDetails,
 } from '../data/PunishmentResult'
 import {
@@ -257,6 +258,31 @@ export default class PunishmentsService {
 
   getAllSessionPunishments(req: Request, chargeNumber: string) {
     return req.session?.punishments?.[chargeNumber]
+  }
+
+  // The latest punishment added in this session that matches another on the charge in every detail,
+  // and that the user has not yet said they want to keep
+  getUnconfirmedDuplicate(
+    req: Request,
+    chargeNumber: string,
+  ): { punishment: PunishmentData; matches: PunishmentData } | null {
+    const punishments: PunishmentData[] = this.getAllSessionPunishments(req, chargeNumber) || []
+    for (let i = punishments.length - 1; i >= 0; i -= 1) {
+      const punishment = punishments[i]
+      if (!punishment.id && !punishment.duplicateConfirmed) {
+        // a copy the user has already chosen to keep settles it for the punishment it matches too
+        const matches = punishments.find(
+          other => other !== punishment && !other.duplicateConfirmed && isSamePunishment(other, punishment),
+        )
+        if (matches) return { punishment, matches }
+      }
+    }
+    return null
+  }
+
+  confirmDuplicatePunishment(req: Request, chargeNumber: string, redisId: string) {
+    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+    if (punishment) punishment.duplicateConfirmed = true
   }
 
   setAllSessionPunishments(req: Request, punishmentData: PunishmentData[], chargeNumber: string) {

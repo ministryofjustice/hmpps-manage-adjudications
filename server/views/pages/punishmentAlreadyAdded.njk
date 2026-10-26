@@ -1,0 +1,64 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/breadCrumb.njk" import breadcrumb %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
+
+{% set title = "This punishment has already been added" %}
+{% block pageTitle %}
+  {{ title }} - Adjudications - Digital Prison Services
+{% endblock %}
+{% block beforeContent %}
+  {{ breadcrumb() }}
+{% endblock %}
+
+{% block content %}
+  {% if errors | length %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: errors,
+      attributes: { "data-qa": "error-summary" }
+    }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <p class="govuk-body">A punishment with exactly the same details is already on this charge.</p>
+
+  <div data-qa="duplicate-punishment">
+    {{ awardPunishmentsTable([punishment], '', chargeNumber, true, false) }}
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="POST" novalidate="novalidate">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+
+        {{ govukRadios({
+          idPrefix: 'addAgain',
+          name: 'addAgain',
+          attributes: { "data-qa": "add-again-radios" },
+          errorMessage: "addAgain" | findError(errors),
+          fieldset: {
+            legend: {
+              text: "Do you want to add it again?",
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: [
+            { value: "NO", text: "No, remove the copy" },
+            { value: "YES", text: "Yes, this punishment is being given twice" }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Continue',
+          type: "submit",
+          preventDoubleClick: true,
+          classes: "govuk-button--submit",
+          attributes: { "data-qa": "punishment-already-added-submit" }
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

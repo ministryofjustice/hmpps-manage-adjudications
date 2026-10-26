@@ -76,6 +76,7 @@ export type PunishmentData = {
   rehabilitativeActivitiesCompleted?: boolean
   rehabilitativeActivitiesNotCompletedOutcome?: NotCompletedOutcome
   previousSuspendedUntilDate?: string
+  duplicateConfirmed?: boolean
 }
 
 export type PunishmentSchedule = {
@@ -348,6 +349,26 @@ export function parseHasChildUnder18(value: unknown): boolean | undefined {
   if (value === true || value === 'true') return true
   if (value === false || value === 'false') return false
   return undefined
+}
+
+const sameValue = (a: unknown, b: unknown): boolean => (a ?? null) === (b ?? null) || `${a ?? ''}` === `${b ?? ''}`
+
+// Two punishments with every detail the same - the second is usually the same punishment entered twice by mistake
+export function isSamePunishment(a: PunishmentData, b: PunishmentData): boolean {
+  return (
+    a.type === b.type &&
+    sameValue(a.privilegeType, b.privilegeType) &&
+    sameValue(a.otherPrivilege?.trim().toLowerCase(), b.otherPrivilege?.trim().toLowerCase()) &&
+    sameValue(a.stoppagePercentage, b.stoppagePercentage) &&
+    sameValue(a.damagesOwedAmount, b.damagesOwedAmount) &&
+    sameValue(a.duration, b.duration) &&
+    sameValue(a.startDate, b.startDate) &&
+    sameValue(a.endDate, b.endDate) &&
+    sameValue(a.suspendedUntil, b.suspendedUntil) &&
+    sameValue(a.consecutiveChargeNumber, b.consecutiveChargeNumber) &&
+    sameValue(a.activatedFrom, b.activatedFrom) &&
+    sameValue(a.hasChildUnder18, b.hasChildUnder18)
+  )
 }
 
 export function flattenPunishments(punishments: PunishmentDataWithSchedule[]): PunishmentData[] {
