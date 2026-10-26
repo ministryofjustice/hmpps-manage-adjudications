@@ -96,6 +96,24 @@ describe('Award punishments with the new journey switched on', () => {
       })
   })
 
+  it('asks about a punishment added twice before showing the success message', () => {
+    withPunishments([canteen])
+    punishmentsService.getUnconfirmedDuplicate.mockReturnValue({
+      punishment: { ...canteen, redisId: 'copy' },
+      matches: { ...canteen, redisId: 'original' },
+    })
+    punishmentsService.takeSuccessMessage.mockReturnValue('Loss of canteen added')
+    return request(app)
+      .get(adjudicationUrls.awardPunishments.urls.modified('100'))
+      .expect(302)
+      .expect('Location', adjudicationUrls.punishmentAlreadyAdded.urls.start('100', 'copy'))
+      .then(() => {
+        // kept for when staff come back to the table
+        expect(punishmentsService.takeSuccessMessage).not.toHaveBeenCalled()
+        expect(punishmentBatchSessionService.clear).toHaveBeenCalledWith(expect.anything(), '100')
+      })
+  })
+
   it('offers a rehabilitative activity when a punishment is suspended on a governor hearing', () => {
     withPunishments([canteen, suspendedLibrary])
     return request(app)

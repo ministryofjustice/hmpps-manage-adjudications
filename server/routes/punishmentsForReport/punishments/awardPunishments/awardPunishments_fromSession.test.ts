@@ -70,6 +70,17 @@ afterEach(() => {
 })
 
 describe('GET', () => {
+  it('asks about a punishment added again with the same details before showing the table', () => {
+    punishmentsService.getUnconfirmedDuplicate.mockReturnValue({
+      punishment: { ...punishmentsOnSession[0], redisId: 'copy' },
+      matches: punishmentsOnSession[0],
+    })
+    return request(app)
+      .get(adjudicationUrls.awardPunishments.urls.modified('100'))
+      .expect(302)
+      .expect('Location', adjudicationUrls.punishmentAlreadyAdded.urls.start('100', 'copy'))
+  })
+
   it('should load the page with details from the session', () => {
     return request(app)
       .get(adjudicationUrls.awardPunishments.urls.modified('100'))

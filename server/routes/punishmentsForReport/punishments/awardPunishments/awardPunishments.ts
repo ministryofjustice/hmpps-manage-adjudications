@@ -73,13 +73,26 @@ export default class AwardPunishmentsPage {
     }
 
     const multiPrivilegePunishments = !!res.locals.featureToggles?.multiPrivilegePunishments
-    let successMessage: string = null
     if (multiPrivilegePunishments) {
       // Leaving a punishment or rehabilitative activity loop keeps what was answered and drops the rest
       this.punishmentBatchSessionService.clear(req, chargeNumber)
       this.rehabBatchSessionService.clear(req, chargeNumber)
-      successMessage = this.punishmentsService.takeSuccessMessage(req, chargeNumber)
     }
+
+    // a punishment added with exactly the same details as another is usually a mistake, so ask before showing it
+    if (this.pageOptions.displaySessionData()) {
+      const duplicate = this.punishmentsService.getUnconfirmedDuplicate(req, chargeNumber)
+      if (duplicate) {
+        return res.redirect(
+          adjudicationUrls.punishmentAlreadyAdded.urls.start(chargeNumber, duplicate.punishment.redisId),
+        )
+      }
+    }
+
+    // taken after the duplicate question, so the banner is still there when staff come back from it
+    const successMessage = multiPrivilegePunishments
+      ? this.punishmentsService.takeSuccessMessage(req, chargeNumber)
+      : null
 
     const continueHref = await this.getContinueHref(chargeNumber, user)
 

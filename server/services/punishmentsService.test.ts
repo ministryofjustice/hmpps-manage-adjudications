@@ -425,6 +425,140 @@ describe('PunishmentsService', () => {
       expect(result[0].chargeNumber).toBe('101')
     })
   })
+
+  describe('getUnconfirmedDuplicate', () => {
+    const tv = (extra = {}) => ({
+      type: PunishmentType.PRIVILEGE,
+      privilegeType: PrivilegeType.TV,
+      duration: 14,
+      startDate: '2026-08-04',
+      endDate: '2026-08-17',
+      rehabilitativeActivities: [] as RehabilitativeActivity[],
+      ...extra,
+    })
+    const reqWith = (punishments: unknown[]) => ({ session: { punishments: { '100': punishments } } }) as never
+
+    it('finds a punishment added again with the same details', () => {
+      const original = tv({ redisId: 'a' })
+      const copy = tv({ redisId: 'b' })
+      expect(service.getUnconfirmedDuplicate(reqWith([original, copy]), '100')).toEqual({
+        punishment: copy,
+        matches: original,
+      })
+    })
+
+    it('ignores punishments whose details differ', () => {
+      const req = reqWith([tv({ redisId: 'a' }), tv({ redisId: 'b', suspendedUntil: '2026-11-30', startDate: null })])
+      expect(service.getUnconfirmedDuplicate(req, '100')).toBeNull()
+    })
+
+    it('treats Other privileges as the same regardless of case and spaces', () => {
+      const req = reqWith([
+        tv({ redisId: 'a', privilegeType: PrivilegeType.OTHER, otherPrivilege: 'Library' }),
+        tv({ redisId: 'b', privilegeType: PrivilegeType.OTHER, otherPrivilege: ' library ' }),
+      ])
+      expect(service.getUnconfirmedDuplicate(req, '100')?.punishment.redisId).toEqual('b')
+    })
+
+    it('does not ask again once the copy is confirmed', () => {
+      const req = reqWith([tv({ redisId: 'a' }), tv({ redisId: 'b' })])
+      service.confirmDuplicatePunishment(req, '100', 'b')
+      expect(service.getUnconfirmedDuplicate(req, '100')).toBeNull()
+    })
+
+    it('still asks about a third copy after the second was kept', () => {
+      const req = reqWith([tv({ redisId: 'a' }), tv({ redisId: 'b' }), tv({ redisId: 'c' })])
+      service.confirmDuplicatePunishment(req, '100', 'b')
+      expect(service.getUnconfirmedDuplicate(req, '100')?.punishment.redisId).toEqual('c')
+    })
+
+    it('does not ask about the original either once the copy is kept', () => {
+      const original = tv({ redisId: 'a' })
+      const req = reqWith([original, tv({ redisId: 'b' })])
+      service.confirmDuplicatePunishment(req, '100', 'b')
+      expect(original).toHaveProperty('duplicateConfirmed', true)
+    })
+
+    it('asks about a new copy of a punishment that was kept, after the original is removed', async () => {
+      const req = reqWith([tv({ redisId: 'a' }), tv({ redisId: 'b' })])
+      service.confirmDuplicatePunishment(req, '100', 'b')
+      await service.deleteSessionPunishments(req, 'a', '100')
+      await service.addSessionPunishment(req, tv(), '100')
+      const duplicate = service.getUnconfirmedDuplicate(req, '100')
+      expect(duplicate?.matches.redisId).toEqual('b')
+      expect(duplicate?.punishment.redisId).not.toEqual('b')
+    })
+
+    it('treats payback punishments with different notes as different', () => {
+      const payback = (extra = {}) => ({
+        type: PunishmentType.PAYBACK,
+        duration: 10,
+        endDate: '2026-12-01',
+        rehabilitativeActivities: [] as RehabilitativeActivity[],
+        ...extra,
+      })
+      const different = reqWith([
+        payback({ redisId: 'a', paybackNotes: 'Clean the wing' }),
+        payback({ redisId: 'b', paybackNotes: 'Wash the kitchen floor' }),
+      ])
+      expect(service.getUnconfirmedDuplicate(different, '100')).toBeNull()
+      const same = reqWith([
+        payback({ redisId: 'a', paybackNotes: 'Clean the wing' }),
+        payback({ redisId: 'b', paybackNotes: ' clean the wing' }),
+      ])
+      expect(service.getUnconfirmedDuplicate(same, '100')?.punishment.redisId).toEqual('b')
+    })
+
+    it('treats suspended punishments with different rehabilitative activities as different', () => {
+      const activity = (details: string, extra = {}) => ({
+        details,
+        monitor: 'Officer Smith',
+        endDate: '2026-11-30',
+        totalSessions: 4,
+        ...extra,
+      })
+      const suspended = (extra = {}) => tv({ startDate: null, endDate: null, suspendedUntil: '2026-12-31', ...extra })
+      const different = reqWith([
+        suspended({ redisId: 'a', rehabilitativeActivities: [activity('Victim awareness')] }),
+        suspended({ redisId: 'b', rehabilitativeActivities: [activity('Anger management')] }),
+      ])
+      expect(service.getUnconfirmedDuplicate(different, '100')).toBeNull()
+      const none = reqWith([
+        suspended({ redisId: 'a', rehabilitativeActivities: [activity('Victim awareness')] }),
+        suspended({ redisId: 'b' }),
+      ])
+      expect(service.getUnconfirmedDuplicate(none, '100')).toBeNull()
+      const sameInAnotherOrder = reqWith([
+        suspended({
+          redisId: 'a',
+          rehabilitativeActivities: [activity('Victim awareness', { id: 7 }), activity('Anger management', { id: 8 })],
+        }),
+        suspended({
+          redisId: 'b',
+          rehabilitativeActivities: [
+            activity('Anger management', { sessionId: 0, totalSessions: '4' }),
+            activity('Victim awareness', { sessionId: 1 }),
+          ],
+        }),
+      ])
+      expect(service.getUnconfirmedDuplicate(sameInAnotherOrder, '100')?.punishment.redisId).toEqual('b')
+    })
+
+    it('does not ask about copies already saved on the charge', () => {
+      const req = reqWith([tv({ redisId: 'a', id: 1 }), tv({ redisId: 'b', id: 2 })])
+      expect(service.getUnconfirmedDuplicate(req, '100')).toBeNull()
+    })
+
+    it('asks about the new copy when the saved original comes later in the list', () => {
+      const req = reqWith([tv({ redisId: 'b' }), tv({ redisId: 'a', id: 1 })])
+      expect(service.getUnconfirmedDuplicate(req, '100')?.punishment.redisId).toEqual('b')
+    })
+
+    it('does not treat an activated suspended punishment as a copy of a new one', () => {
+      const req = reqWith([tv({ redisId: 'a', activatedFrom: '99' }), tv({ redisId: 'b' })])
+      expect(service.getUnconfirmedDuplicate(req, '100')).toBeNull()
+    })
+  })
 })
 
 describe('PunishmentsService session punishments', () => {
