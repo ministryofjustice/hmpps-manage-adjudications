@@ -1,17 +1,21 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PrivilegeType, PunishmentData, PunishmentType } from '../../../../data/PunishmentResult'
+import RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
+import type { PunishmentData } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/rehabBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const rehabBatchSessionService = new RehabBatchSessionService(null) as jest.Mocked<RehabBatchSessionService>
 
 const library: PunishmentData = {
   redisId: 'library',
@@ -35,14 +39,14 @@ const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, rehabBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockReturnValue(library)
   punishmentsService.getPrisonerDetails.mockResolvedValue({ friendlyName: 'John Smith' } as never)
-  punishmentsService.getRehabBatch.mockReturnValue({ id: 'batch-1', redisIds: ['library'], completedRedisIds: [] })
-  punishmentsService.isCurrentRehabBatchForm.mockReturnValue(true)
-  punishmentsService.getRehabDraft.mockReturnValue([])
-  punishmentsService.nextRehabBatchUrl.mockReturnValue('/next')
+  rehabBatchSessionService.get.mockReturnValue({ id: 'batch-1', redisIds: ['library'], completedRedisIds: [] })
+  rehabBatchSessionService.isCurrentForm.mockReturnValue(true)
+  rehabBatchSessionService.getDraft.mockReturnValue([])
+  rehabBatchSessionService.nextUrl.mockReturnValue('/next')
 })
 
 afterEach(() => {
@@ -79,7 +83,7 @@ describe('Rehabilitative activity details', () => {
       hasRehabilitativeActivitiesDetails: true,
       rehabilitativeActivities: [{ sessionId: 1, details: 'Course', monitor: 'Thomas', endDate: '2026-11-01' }],
     })
-    punishmentsService.getRehabDraft.mockReturnValue([enteredFirst])
+    rehabBatchSessionService.getDraft.mockReturnValue([enteredFirst])
     return request(app)
       .get(firstOfTwo)
       .expect(200)
@@ -96,39 +100,45 @@ describe('Rehabilitative activity details', () => {
       .expect(302)
       .expect('Location', activityPage(2))
       .then(() => {
-        expect(punishmentsService.saveRehabDraftActivity).toHaveBeenCalledWith(expect.anything(), '100', 'library', 1, {
-          details: 'Victim awareness',
-          monitor: 'Sam Smith',
-          endDate: '2026-12-01',
-          totalSessions: 4,
-          sessionId: 1,
-        })
+        expect(rehabBatchSessionService.saveDraftActivity).toHaveBeenCalledWith(
+          expect.anything(),
+          '100',
+          'library',
+          1,
+          {
+            details: 'Victim awareness',
+            monitor: 'Sam Smith',
+            endDate: '2026-12-01',
+            totalSessions: 4,
+            sessionId: 1,
+          },
+        )
         expect(punishmentsService.addRehabilitativeActivity).not.toHaveBeenCalled()
-        expect(punishmentsService.applyRehabDraft).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.applyDraft).not.toHaveBeenCalled()
       }))
 
   it('gives the punishment its new activities once the last one is entered', () => {
-    punishmentsService.getRehabDraft.mockReturnValue([enteredFirst])
+    rehabBatchSessionService.getDraft.mockReturnValue([enteredFirst])
     return request(app)
       .post(activityPage(2))
       .send({ rehabBatchId: 'batch-1', ...activity })
       .expect(302)
       .expect('Location', '/next')
       .then(() => {
-        expect(punishmentsService.saveRehabDraftActivity).toHaveBeenCalledWith(
+        expect(rehabBatchSessionService.saveDraftActivity).toHaveBeenCalledWith(
           expect.anything(),
           '100',
           'library',
           2,
           expect.objectContaining({ details: 'Victim awareness' }),
         )
-        expect(punishmentsService.applyRehabDraft).toHaveBeenCalledWith(expect.anything(), '100', 'library')
-        expect(punishmentsService.completeRehabBatchItem).toHaveBeenCalledWith(expect.anything(), '100', 'library')
+        expect(rehabBatchSessionService.applyDraft).toHaveBeenCalledWith(expect.anything(), '100', 'library')
+        expect(rehabBatchSessionService.completeItem).toHaveBeenCalledWith(expect.anything(), '100', 'library')
       })
   })
 
   it('knows the last activity whichever way its number is written', () => {
-    punishmentsService.getRehabDraft.mockReturnValue([enteredFirst])
+    rehabBatchSessionService.getDraft.mockReturnValue([enteredFirst])
     return request(app)
       .post(
         `${adjudicationUrls.rehabilitativeActivityDetails.urls.start('100', 'library')}?numberOfActivities=02&currentActivityNumber=2`,
@@ -136,7 +146,7 @@ describe('Rehabilitative activity details', () => {
       .send({ rehabBatchId: 'batch-1', ...activity })
       .expect(302)
       .expect('Location', '/next')
-      .then(() => expect(punishmentsService.applyRehabDraft).toHaveBeenCalled())
+      .then(() => expect(rehabBatchSessionService.applyDraft).toHaveBeenCalled())
   })
 
   it.each([
@@ -146,7 +156,7 @@ describe('Rehabilitative activity details', () => {
     ['the activity number is not a whole number', [enteredFirst], '1.5'],
     ['the activity number is missing', [enteredFirst], ''],
   ])('changes nothing when %s', (_, draft, current) => {
-    punishmentsService.getRehabDraft.mockReturnValue(draft)
+    rehabBatchSessionService.getDraft.mockReturnValue(draft)
     return request(app)
       .post(
         `${adjudicationUrls.rehabilitativeActivityDetails.urls.start('100', 'library')}?numberOfActivities=2&currentActivityNumber=${current}`,
@@ -155,8 +165,8 @@ describe('Rehabilitative activity details', () => {
       .expect(302)
       .expect('Location', '/next')
       .then(() => {
-        expect(punishmentsService.saveRehabDraftActivity).not.toHaveBeenCalled()
-        expect(punishmentsService.applyRehabDraft).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.saveDraftActivity).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.applyDraft).not.toHaveBeenCalled()
       })
   })
 
@@ -175,26 +185,26 @@ describe('Rehabilitative activity details', () => {
           1,
           expect.objectContaining({ details: 'Victim awareness' }),
         )
-        expect(punishmentsService.saveRehabDraftActivity).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.saveDraftActivity).not.toHaveBeenCalled()
       })
   })
 
   it('changes nothing from a form for another batch', () => {
-    punishmentsService.isCurrentRehabBatchForm.mockReturnValue(false)
+    rehabBatchSessionService.isCurrentForm.mockReturnValue(false)
     return request(app)
       .post(firstOfTwo)
       .send({ rehabBatchId: 'old-batch', ...activity })
       .expect(302)
       .expect('Location', '/next')
       .then(() => {
-        expect(punishmentsService.isCurrentRehabBatchForm).toHaveBeenCalledWith(
+        expect(rehabBatchSessionService.isCurrentForm).toHaveBeenCalledWith(
           expect.anything(),
           '100',
           'library',
           'old-batch',
         )
-        expect(punishmentsService.saveRehabDraftActivity).not.toHaveBeenCalled()
-        expect(punishmentsService.completeRehabBatchItem).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.saveDraftActivity).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.completeItem).not.toHaveBeenCalled()
       })
   })
 })

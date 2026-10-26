@@ -1,4 +1,4 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'

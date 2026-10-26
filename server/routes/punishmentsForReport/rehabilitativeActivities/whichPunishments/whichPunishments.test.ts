@@ -1,17 +1,21 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PrivilegeType, PunishmentData, PunishmentType } from '../../../../data/PunishmentResult'
+import RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
+import type { PunishmentData } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/rehabBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const rehabBatchSessionService = new RehabBatchSessionService(null) as jest.Mocked<RehabBatchSessionService>
 
 const punishment = (redisId: string, overrides: Partial<PunishmentData>): PunishmentData => ({
   redisId,
@@ -39,14 +43,14 @@ const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, rehabBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getAllSessionPunishments.mockReturnValue(sessionPunishments)
   punishmentsService.getPunishmentAvailability.mockResolvedValue({
     isIndependentAdjudicatorHearing: false,
     isAdult: true,
   })
-  punishmentsService.nextRehabBatchUrl.mockReturnValue('/next')
+  rehabBatchSessionService.nextUrl.mockReturnValue('/next')
 })
 
 afterEach(() => {
@@ -89,7 +93,7 @@ describe('Which punishments have a rehabilitative activity condition?', () => {
       .expect(302)
       .expect('Location', '/next')
       .then(() => {
-        expect(punishmentsService.startRehabBatch).toHaveBeenCalledWith(expect.anything(), '100', ['tv'])
+        expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv'])
         // library had a condition and was unticked
         expect(punishmentsService.noRehabilitativeActivities).toHaveBeenCalledWith(expect.anything(), '100', 'library')
       })
@@ -102,7 +106,7 @@ describe('Which punishments have a rehabilitative activity condition?', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.sameRehabilitativeActivity.urls.start('100'))
       .then(() =>
-        expect(punishmentsService.startRehabBatch).toHaveBeenCalledWith(expect.anything(), '100', ['tv', 'library']),
+        expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv', 'library']),
       )
   })
 

@@ -1,16 +1,22 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../testutils/appSetup'
 import adjudicationUrls from '../../utils/urlGenerator'
 import UserService from '../../services/userService'
 import PunishmentsService from '../../services/punishmentsService'
+import PunishmentBatchSessionService from '../../services/punishmentBatchSessionService'
+import RehabBatchSessionService from '../../services/rehabBatchSessionService'
 import config from '../../config'
 
 jest.mock('../../services/userService')
 jest.mock('../../services/punishmentsService')
+jest.mock('../../services/punishmentBatchSessionService')
+jest.mock('../../services/rehabBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const punishmentBatchSessionService = new PunishmentBatchSessionService() as jest.Mocked<PunishmentBatchSessionService>
+const rehabBatchSessionService = new RehabBatchSessionService(null) as jest.Mocked<RehabBatchSessionService>
 
 let app: Express
 const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
@@ -18,7 +24,11 @@ const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 beforeEach(() => {
   // the test user's caseload is MDI
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['LEI']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes(
+    { production: false },
+    { userService, punishmentsService, punishmentBatchSessionService, rehabBatchSessionService },
+    {},
+  )
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
 })
 
@@ -52,9 +62,9 @@ describe('pages that only exist in the award-several-punishments journey', () =>
       .then(() => {
         expect(punishmentsService.addSessionPunishment).not.toHaveBeenCalled()
         expect(punishmentsService.updateSessionPunishment).not.toHaveBeenCalled()
-        expect(punishmentsService.startRehabBatch).not.toHaveBeenCalled()
-        expect(punishmentsService.setPunishmentBatchSameForAll).not.toHaveBeenCalled()
-        expect(punishmentsService.setRehabBatchSameForAll).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.start).not.toHaveBeenCalled()
+        expect(punishmentBatchSessionService.setSameForAll).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.setSameForAll).not.toHaveBeenCalled()
       }),
   )
 })

@@ -1,26 +1,29 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
+import RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/rehabBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const rehabBatchSessionService = new RehabBatchSessionService(null) as jest.Mocked<RehabBatchSessionService>
 
 let app: Express
 const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, rehabBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  punishmentsService.getRehabBatch.mockReturnValue({ redisIds: ['a', 'b'], completedRedisIds: [] })
-  punishmentsService.nextRehabBatchUrl.mockReturnValue('/next')
+  rehabBatchSessionService.get.mockReturnValue({ redisIds: ['a', 'b'], completedRedisIds: [] })
+  rehabBatchSessionService.nextUrl.mockReturnValue('/next')
 })
 
 afterEach(() => {
@@ -37,7 +40,7 @@ describe('Do they all have the same rehabilitative activity?', () => {
   })
 
   it('skips the question for a single punishment', () => {
-    punishmentsService.getRehabBatch.mockReturnValue({ redisIds: ['a'], completedRedisIds: [] })
+    rehabBatchSessionService.get.mockReturnValue({ redisIds: ['a'], completedRedisIds: [] })
     return request(app)
       .get(adjudicationUrls.sameRehabilitativeActivity.urls.start('100'))
       .expect(302)
@@ -50,9 +53,7 @@ describe('Do they all have the same rehabilitative activity?', () => {
       .send({ sameForAll: 'yes' })
       .expect(302)
       .expect('Location', '/next')
-      .then(() =>
-        expect(punishmentsService.setRehabBatchSameForAll).toHaveBeenCalledWith(expect.anything(), '100', true),
-      )
+      .then(() => expect(rehabBatchSessionService.setSameForAll).toHaveBeenCalledWith(expect.anything(), '100', true))
   })
 
   it('asks for an answer', () => {

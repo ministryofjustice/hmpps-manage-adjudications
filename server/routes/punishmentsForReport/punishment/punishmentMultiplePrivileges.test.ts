@@ -1,24 +1,27 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
+import PunishmentBatchSessionService from '../../../services/punishmentBatchSessionService'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
 import config from '../../../config'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
+jest.mock('../../../services/punishmentBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const punishmentBatchSessionService = new PunishmentBatchSessionService() as jest.Mocked<PunishmentBatchSessionService>
 
 let app: Express
 const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['MDI']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, punishmentBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getPunishmentAvailability.mockResolvedValue({
     isIndependentAdjudicatorHearing: false,
@@ -103,7 +106,7 @@ describe('POST /punishment with multiple privileges switched on', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.punishmentSameDuration.urls.start('100'))
       .then(() =>
-        expect(punishmentsService.startPunishmentBatch).toHaveBeenCalledWith(expect.anything(), '100', [
+        expect(punishmentBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', [
           { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN },
           { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.OTHER, otherPrivilege: 'library' },
         ]),
@@ -129,7 +132,7 @@ describe('POST /punishment with multiple privileges switched on', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.punishmentSameDuration.urls.start('100'))
       .then(() =>
-        expect(punishmentsService.startPunishmentBatch).toHaveBeenCalledWith(expect.anything(), '100', [
+        expect(punishmentBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', [
           { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN },
           { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.TV },
         ]),
@@ -209,9 +212,7 @@ describe('POST /punishment with multiple privileges switched on', () => {
       .send(body)
       .expect(302)
       .expect('Location', adjudicationUrls.punishmentDuration.urls.start('100'))
-      .then(() =>
-        expect(punishmentsService.startPunishmentBatch).toHaveBeenCalledWith(expect.anything(), '100', [item]),
-      )
+      .then(() => expect(punishmentBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', [item]))
   })
 
   it('keeps payback punishment on its own journey', () => {
@@ -220,7 +221,7 @@ describe('POST /punishment with multiple privileges switched on', () => {
       .send({ punishmentType: PunishmentType.PAYBACK })
       .expect(302)
       .expect('Location', /payback-punishment-specifics/)
-      .then(() => expect(punishmentsService.startPunishmentBatch).not.toHaveBeenCalled())
+      .then(() => expect(punishmentBatchSessionService.start).not.toHaveBeenCalled())
   })
 
   it('asks for a privilege when none is ticked', () => {
@@ -251,7 +252,7 @@ describe('POST /punishment with multiple privileges switched on', () => {
       .send({ action: 'exit' })
       .expect(302)
       .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
-      .then(() => expect(punishmentsService.startPunishmentBatch).not.toHaveBeenCalled())
+      .then(() => expect(punishmentBatchSessionService.start).not.toHaveBeenCalled())
   })
 
   it('Save and exit leaves a change without checking the answers', () => {

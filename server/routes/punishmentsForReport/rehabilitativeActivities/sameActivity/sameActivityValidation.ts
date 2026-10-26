@@ -1,4 +1,4 @@
-import { FormError } from '../../../../@types/template'
+import type { FormError } from '../../../../@types/template'
 
 type SameActivityForm = {
   sameForAll?: string
@@ -12,6 +12,8 @@ const errors: { [key: string]: FormError } = {
 }
 
 export default function validateForm({ sameForAll }: SameActivityForm): FormError | null {
-  if (!['yes', 'no'].includes(sameForAll)) return errors.MISSING_CHOICE
+  if (!['yes', 'no'].includes(sameForAll)) {
+    return errors.MISSING_CHOICE
+  }
   return null
 }

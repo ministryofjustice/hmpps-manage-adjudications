@@ -6,7 +6,9 @@ export type FeatureToggles = {
 
 export const isMultiPrivilegePunishmentsEnabled = (caseLoadId: string): boolean => {
   const prisons = config.featureToggles.multiPrivilegePunishmentsPrisons
-  if (prisons.includes('ALL')) return true
+  if (prisons.includes('ALL')) {
+    return true
+  }
   return !!caseLoadId && prisons.includes(caseLoadId.trim().toUpperCase())
 }
 

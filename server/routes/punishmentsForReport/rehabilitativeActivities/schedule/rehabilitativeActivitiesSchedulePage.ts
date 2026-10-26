@@ -1,7 +1,9 @@
-import { Request, Response } from 'express'
-import UserService from '../../../../services/userService'
-import PunishmentsService from '../../../../services/punishmentsService'
-import { PunishmentData, convertPunishmentType } from '../../../../data/PunishmentResult'
+import type { Request, Response } from 'express'
+import type UserService from '../../../../services/userService'
+import type PunishmentsService from '../../../../services/punishmentsService'
+import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
+import type { PunishmentData } from '../../../../data/PunishmentResult'
+import { convertPunishmentType } from '../../../../data/PunishmentResult'
 import { formatTimestampTo, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 
@@ -9,11 +11,12 @@ export default class RehabilitativeActivitiesSchedulePage {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly rehabBatchSessionService: RehabBatchSessionService,
   ) {}
 
   // The punishments in the open rehab batch, in the order they were ticked
   private batchPunishments = (req: Request, chargeNumber: string): PunishmentData[] =>
-    (this.punishmentsService.getRehabBatch(req, chargeNumber)?.redisIds || [])
+    (this.rehabBatchSessionService.get(req, chargeNumber)?.redisIds || [])
       .map(redisId => this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId))
       .filter((punishment: PunishmentData) => punishment?.rehabilitativeActivities?.length)
 
@@ -26,7 +29,9 @@ export default class RehabilitativeActivitiesSchedulePage {
     }
 
     const punishments = this.batchPunishments(req, chargeNumber)
-    if (!punishments.length) return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    if (!punishments.length) {
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    }
 
     const activities = punishments.flatMap(punishment => {
       const name = convertPunishmentType(
@@ -59,7 +64,7 @@ export default class RehabilitativeActivitiesSchedulePage {
     if (this.batchPunishments(req, chargeNumber).length) {
       this.punishmentsService.setSuccessMessage(req, chargeNumber, 'Rehabilitative activity added')
     }
-    this.punishmentsService.clearRehabBatch(req, chargeNumber)
+    this.rehabBatchSessionService.clear(req, chargeNumber)
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

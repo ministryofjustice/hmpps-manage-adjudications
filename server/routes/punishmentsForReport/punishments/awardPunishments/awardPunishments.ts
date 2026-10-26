@@ -9,6 +9,8 @@ import {
   flattenPunishments,
 } from '../../../../data/PunishmentResult'
 import PunishmentsService from '../../../../services/punishmentsService'
+import type PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
+import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { hasAnyRole } from '../../../../utils/utils'
 import UserService from '../../../../services/userService'
@@ -37,6 +39,8 @@ export default class AwardPunishmentsPage {
     pageType: PageRequestType,
     private readonly punishmentsService: PunishmentsService,
     private readonly userService: UserService,
+    private readonly punishmentBatchSessionService: PunishmentBatchSessionService,
+    private readonly rehabBatchSessionService: RehabBatchSessionService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -72,8 +76,8 @@ export default class AwardPunishmentsPage {
     let successMessage: string = null
     if (multiPrivilegePunishments) {
       // Leaving a punishment or rehabilitative activity loop keeps what was answered and drops the rest
-      this.punishmentsService.clearPunishmentBatch(req, chargeNumber)
-      this.punishmentsService.clearRehabBatch(req, chargeNumber)
+      this.punishmentBatchSessionService.clear(req, chargeNumber)
+      this.rehabBatchSessionService.clear(req, chargeNumber)
       successMessage = this.punishmentsService.takeSuccessMessage(req, chargeNumber)
     }
 

@@ -21,6 +21,8 @@ import WitnessesSessionService from '../../services/witnessesSessionService'
 import HearingsService from '../../services/hearingsService'
 import OutcomesService from '../../services/outcomesService'
 import PunishmentsService from '../../services/punishmentsService'
+import PunishmentBatchSessionService from '../../services/punishmentBatchSessionService'
+import RehabBatchSessionService from '../../services/rehabBatchSessionService'
 
 import type { ApplicationInfo } from '../../applicationInfo'
 import ChartApiService from '../../services/chartApiService'
@@ -146,6 +148,8 @@ export default function appWithAllRoutes(
       hearingsService: {} as HearingsService,
       outcomesService: {} as OutcomesService,
       punishmentsService: {} as PunishmentsService,
+      punishmentBatchSessionService: {} as PunishmentBatchSessionService,
+      rehabBatchSessionService: {} as RehabBatchSessionService,
       applicationInfo: {} as ApplicationInfo,
       chartApiService: {} as ChartApiService,
       createOnBehalfOfSessionService: {} as CreateOnBehalfOfSessionService,

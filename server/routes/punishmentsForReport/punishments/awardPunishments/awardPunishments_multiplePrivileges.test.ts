@@ -1,16 +1,23 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import PunishmentsService from '../../../../services/punishmentsService'
+import PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
+import RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import UserService from '../../../../services/userService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
-import { PrivilegeType, PunishmentData, PunishmentType } from '../../../../data/PunishmentResult'
+import type { PunishmentData } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 import config from '../../../../config'
 
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/punishmentBatchSessionService')
+jest.mock('../../../../services/rehabBatchSessionService')
 jest.mock('../../../../services/userService')
 
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const punishmentBatchSessionService = new PunishmentBatchSessionService() as jest.Mocked<PunishmentBatchSessionService>
+const rehabBatchSessionService = new RehabBatchSessionService(null) as jest.Mocked<RehabBatchSessionService>
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 
 const suspendedLibrary: PunishmentData = {
@@ -63,7 +70,10 @@ beforeEach(() => {
     isIndependentAdjudicatorHearing: false,
     isAdult: true,
   })
-  app = appWithAllRoutes({ production: false }, { punishmentsService, userService })
+  app = appWithAllRoutes(
+    { production: false },
+    { punishmentsService, userService, punishmentBatchSessionService, rehabBatchSessionService },
+  )
 })
 
 afterEach(() => {
@@ -81,8 +91,8 @@ describe('Award punishments with the new journey switched on', () => {
       .expect(res => {
         expect(res.text).toContain('data-qa="success-banner"')
         expect(res.text).toContain('2 punishments added')
-        expect(punishmentsService.clearPunishmentBatch).toHaveBeenCalledWith(expect.anything(), '100')
-        expect(punishmentsService.clearRehabBatch).toHaveBeenCalledWith(expect.anything(), '100')
+        expect(punishmentBatchSessionService.clear).toHaveBeenCalledWith(expect.anything(), '100')
+        expect(rehabBatchSessionService.clear).toHaveBeenCalledWith(expect.anything(), '100')
       })
   })
 
@@ -140,7 +150,7 @@ describe('Award punishments with the new journey switched on', () => {
         expect(res.text).not.toContain('Add a rehabilitative activity')
         expect(res.text).not.toContain('2 punishments added')
         expect(res.text).toContain('End date and <br>number of sessions')
-        expect(punishmentsService.clearPunishmentBatch).not.toHaveBeenCalled()
+        expect(punishmentBatchSessionService.clear).not.toHaveBeenCalled()
       })
   })
 })

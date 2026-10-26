@@ -1,17 +1,21 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PrivilegeType, PunishmentBatch, PunishmentType } from '../../../../data/PunishmentResult'
+import PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
+import type { PunishmentBatch } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/punishmentBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const punishmentBatchSessionService = new PunishmentBatchSessionService() as jest.Mocked<PunishmentBatchSessionService>
 
 const canteen = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN }
 const library = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.OTHER, otherPrivilege: 'library' }
@@ -21,25 +25,24 @@ const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 // Items are given the ids item-0, item-1 and so on, which the form posts back as batchItemIds
 const withBatch = (batch: PunishmentBatch) => {
-  punishmentsService.getPunishmentBatch.mockReturnValue({
+  punishmentBatchSessionService.get.mockReturnValue({
     ...batch,
     items: batch.items.map((item, index) => ({ batchItemId: `item-${index}`, ...item })),
   })
-  punishmentsService.nextUnansweredBatchItemIndex.mockReturnValue(
-    batch.items.findIndex(item => !item.redisId || item.askAgain),
-  )
+  const index = batch.items.findIndex(item => !item.redisId || item.askAgain)
+  punishmentBatchSessionService.nextUnansweredIndex.mockReturnValue(index === -1 ? undefined : index)
 }
 
 beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, punishmentBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getLastHearingDate.mockResolvedValue('2026-08-17')
   punishmentsService.getPunishmentAvailability.mockResolvedValue({
     isIndependentAdjudicatorHearing: false,
     isAdult: true,
   })
-  punishmentsService.nextPunishmentBatchUrl.mockReturnValue(adjudicationUrls.punishmentSchedule.urls.start('100'))
+  punishmentBatchSessionService.nextUrl.mockReturnValue(adjudicationUrls.punishmentSchedule.urls.start('100'))
   punishmentsService.addSessionPunishment.mockResolvedValueOnce('first').mockResolvedValueOnce('second')
 })
 
@@ -167,7 +170,12 @@ describe('POST duration and start date', () => {
           },
           '100',
         )
-        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 0, 'first')
+        expect(punishmentBatchSessionService.markItemAnswered).toHaveBeenCalledWith(
+          expect.anything(),
+          '100',
+          0,
+          'first',
+        )
       })
   })
 
@@ -194,7 +202,12 @@ describe('POST duration and start date', () => {
           '100',
         )
         expect(punishmentsService.addSessionPunishment.mock.calls[0][1]).not.toHaveProperty('suspendedUntil')
-        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 1, 'first')
+        expect(punishmentBatchSessionService.markItemAnswered).toHaveBeenCalledWith(
+          expect.anything(),
+          '100',
+          1,
+          'first',
+        )
       })
   })
 
@@ -230,8 +243,18 @@ describe('POST duration and start date', () => {
       .expect(302)
       .then(() => {
         expect(punishmentsService.addSessionPunishment).toHaveBeenCalledTimes(2)
-        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 0, 'first')
-        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 1, 'second')
+        expect(punishmentBatchSessionService.markItemAnswered).toHaveBeenCalledWith(
+          expect.anything(),
+          '100',
+          0,
+          'first',
+        )
+        expect(punishmentBatchSessionService.markItemAnswered).toHaveBeenCalledWith(
+          expect.anything(),
+          '100',
+          1,
+          'second',
+        )
       })
   })
 
@@ -260,9 +283,14 @@ describe('POST duration and start date', () => {
           expect.objectContaining({ otherPrivilege: 'library', duration: 7 }),
           '100',
         )
-        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledTimes(2)
-        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 0, 'a')
-        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 1, 'first')
+        expect(punishmentBatchSessionService.markItemAnswered).toHaveBeenCalledTimes(2)
+        expect(punishmentBatchSessionService.markItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 0, 'a')
+        expect(punishmentBatchSessionService.markItemAnswered).toHaveBeenCalledWith(
+          expect.anything(),
+          '100',
+          1,
+          'first',
+        )
       })
   })
 
@@ -285,7 +313,7 @@ describe('POST duration and start date', () => {
           '100',
           'a',
         )
-        expect(punishmentsService.markBatchItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 0, 'a')
+        expect(punishmentBatchSessionService.markItemAnswered).toHaveBeenCalledWith(expect.anything(), '100', 0, 'a')
         expect(punishmentsService.addSessionPunishment).not.toHaveBeenCalled()
       })
   })
@@ -345,7 +373,7 @@ describe('POST duration and start date', () => {
     ['without the punishments it was shown for', { items: [canteen, library] }, undefined],
   ])('saves nothing from a form for punishments %s, and shows the current question', (_, batch, ids) => {
     withBatch(batch)
-    punishmentsService.nextPunishmentBatchUrl.mockReturnValue(adjudicationUrls.punishmentDuration.urls.start('100'))
+    punishmentBatchSessionService.nextUrl.mockReturnValue(adjudicationUrls.punishmentDuration.urls.start('100'))
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.start('100'))
       .send({ batchItemIds: ids, duration: '21', startMode: 'IMMEDIATE' })
@@ -353,7 +381,7 @@ describe('POST duration and start date', () => {
       .expect('Location', adjudicationUrls.punishmentDuration.urls.start('100'))
       .then(() => {
         expect(punishmentsService.addSessionPunishment).not.toHaveBeenCalled()
-        expect(punishmentsService.markBatchItemAnswered).not.toHaveBeenCalled()
+        expect(punishmentBatchSessionService.markItemAnswered).not.toHaveBeenCalled()
       })
   })
 })
@@ -390,7 +418,7 @@ describe('changing a punishment', () => {
 
   it('returns to the schedule when the punishment is in the batch being added', () => {
     punishmentsService.getSessionPunishment.mockReturnValue(existing)
-    punishmentsService.isInPunishmentBatch.mockReturnValue(true)
+    punishmentBatchSessionService.includes.mockReturnValue(true)
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.edit('100', 'xyz'))
       .send({ duration: '14', startMode: 'SUSPENDED', suspendedUntil: '30/11/2026' })
@@ -429,7 +457,7 @@ describe('changing a punishment', () => {
 
   it('returns to the award punishments page otherwise, dropping activities from a punishment no longer suspended', () => {
     punishmentsService.getSessionPunishment.mockReturnValue(existing)
-    punishmentsService.isInPunishmentBatch.mockReturnValue(false)
+    punishmentBatchSessionService.includes.mockReturnValue(false)
     return request(app)
       .post(adjudicationUrls.punishmentDuration.urls.edit('100', 'xyz'))
       .send({ duration: '14', startMode: 'IMMEDIATE' })

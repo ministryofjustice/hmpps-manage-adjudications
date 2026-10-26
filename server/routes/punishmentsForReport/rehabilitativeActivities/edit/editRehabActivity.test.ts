@@ -1,17 +1,20 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
+import RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/rehabBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const rehabBatchSessionService = new RehabBatchSessionService(null) as jest.Mocked<RehabBatchSessionService>
 
 let app: Express
 const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
@@ -20,7 +23,7 @@ const answers = { details: 'Course', monitorName: 'Thomas Brown', endDate: '20/0
 
 beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, rehabBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getPrisonerDetails.mockResolvedValue({ friendlyName: 'John Smith' } as never)
   punishmentsService.getSessionPunishment.mockReturnValue({

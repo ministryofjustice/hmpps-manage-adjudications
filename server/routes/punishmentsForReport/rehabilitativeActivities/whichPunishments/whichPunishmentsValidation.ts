@@ -1,4 +1,4 @@
-import { FormError } from '../../../../@types/template'
+import type { FormError } from '../../../../@types/template'
 
 type WhichPunishmentsForm = {
   redisIds: string[]
@@ -12,6 +12,8 @@ const errors: { [key: string]: FormError } = {
 }
 
 export default function validateForm({ redisIds }: WhichPunishmentsForm): FormError | null {
-  if (!redisIds.length) return errors.MISSING_PUNISHMENT
+  if (!redisIds.length) {
+    return errors.MISSING_PUNISHMENT
+  }
   return null
 }

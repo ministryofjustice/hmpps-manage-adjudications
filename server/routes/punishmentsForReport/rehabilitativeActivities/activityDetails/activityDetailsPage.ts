@@ -12,6 +12,7 @@ import {
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import PunishmentsService from '../../../../services/punishmentsService'
+import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import validateForm, { validateCompletionDate } from './activityDetailsValidation'
 import { PunishmentData, RehabilitativeActivity, convertPunishmentType } from '../../../../data/PunishmentResult'
 
@@ -27,6 +28,7 @@ export default class rehabilitativeActivityDetailsPage {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly rehabBatchSessionService: RehabBatchSessionService,
   ) {}
 
   // With the toggle on (IR-1904) the details are entered for the punishments in the rehab batch:
@@ -36,7 +38,7 @@ export default class rehabilitativeActivityDetailsPage {
   // The punishments this activity will be recorded against — all of the batch when one answer covers them
   private coveredPunishments = (req: Request): PunishmentData[] => {
     const { chargeNumber, redisId } = req.params
-    const batch = this.punishmentsService.getRehabBatch(req, chargeNumber)
+    const batch = this.rehabBatchSessionService.get(req, chargeNumber)
     const redisIds = batch?.sameForAll && batch.redisIds.includes(redisId) ? batch.redisIds : [redisId]
     return redisIds.map(id => this.punishmentsService.getSessionPunishment(req, chargeNumber, id)).filter(Boolean)
   }
@@ -50,7 +52,7 @@ export default class rehabilitativeActivityDetailsPage {
     let endDateHint: string = null
     let rehabBatchId: string = null
     if (this.isBatchJourney(res)) {
-      rehabBatchId = this.punishmentsService.getRehabBatch(req, chargeNumber)?.id ?? ''
+      rehabBatchId = this.rehabBatchSessionService.get(req, chargeNumber)?.id ?? ''
       const punishments = this.coveredPunishments(req)
       const latest = this.latestCompletionDate(punishments)
       if (punishments.length === 1) {
@@ -106,7 +108,7 @@ export default class rehabilitativeActivityDetailsPage {
   // being entered again starts from its current details
   private activityToShow = (req: Request, activityNumber: number): RehabilitativeActivity => {
     const { chargeNumber, redisId } = req.params
-    const entered = this.punishmentsService.getRehabDraft(req, chargeNumber, redisId)?.[activityNumber - 1]
+    const entered = this.rehabBatchSessionService.getDraft(req, chargeNumber, redisId)?.[activityNumber - 1]
     if (entered) return entered
     const punishment = this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
     const existing = punishment?.hasRehabilitativeActivitiesDetails
@@ -119,10 +121,10 @@ export default class rehabilitativeActivityDetailsPage {
   // The activity number comes from the page address, so it is checked against the draft before it is used.
   private isExpectedForm = (req: Request, activityNumber: number): boolean => {
     const { chargeNumber, redisId } = req.params
-    if (!this.punishmentsService.isCurrentRehabBatchForm(req, chargeNumber, redisId, req.body.rehabBatchId)) {
+    if (!this.rehabBatchSessionService.isCurrentForm(req, chargeNumber, redisId, req.body.rehabBatchId)) {
       return false
     }
-    const draft = this.punishmentsService.getRehabDraft(req, chargeNumber, redisId)
+    const draft = this.rehabBatchSessionService.getDraft(req, chargeNumber, redisId)
     return (
       !!draft &&
       Number.isInteger(activityNumber) &&
@@ -138,7 +140,7 @@ export default class rehabilitativeActivityDetailsPage {
     const { details, monitorName, endDate, totalSessions } = req.body
 
     if (this.isBatchJourney(res) && !this.isExpectedForm(req, Number(currentActivityNumber))) {
-      return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
+      return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
     }
 
     const { friendlyName } = await this.punishmentsService.getPrisonerDetails(chargeNumber, res.locals.user)
@@ -168,7 +170,7 @@ export default class rehabilitativeActivityDetailsPage {
       sessionId: +currentActivityNumber,
     }
     if (this.isBatchJourney(res)) {
-      this.punishmentsService.saveRehabDraftActivity(
+      this.rehabBatchSessionService.saveDraftActivity(
         req,
         chargeNumber,
         redisId,
@@ -176,9 +178,9 @@ export default class rehabilitativeActivityDetailsPage {
         activityDetails,
       )
       if (Number(currentActivityNumber) === Number(numberOfActivities)) {
-        this.punishmentsService.applyRehabDraft(req, chargeNumber, redisId)
-        this.punishmentsService.completeRehabBatchItem(req, chargeNumber, redisId)
-        return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
+        this.rehabBatchSessionService.applyDraft(req, chargeNumber, redisId)
+        this.rehabBatchSessionService.completeItem(req, chargeNumber, redisId)
+        return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
       }
     } else {
       this.punishmentsService.addRehabilitativeActivity(

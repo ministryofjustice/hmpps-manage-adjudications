@@ -7,6 +7,7 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import validateForm, { validateBatchForm } from './validation'
 import PunishmentsService from '../../../../services/punishmentsService'
+import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import { PunishmentData, convertPunishmentType } from '../../../../data/PunishmentResult'
 
 type PageData = {
@@ -30,6 +31,7 @@ export default class HasRehabilitativeActivitiesDetailsPage {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly rehabBatchSessionService: RehabBatchSessionService,
   ) {}
 
   // With the toggle on (IR-1904) the number of activities is asked here, and the journey moves through
@@ -44,7 +46,7 @@ export default class HasRehabilitativeActivitiesDetailsPage {
     let appliesTo: string[] = []
     let rehabBatchId: string = null
     if (this.isBatchJourney(res)) {
-      const batch = this.punishmentsService.getRehabBatch(req, chargeNumber)
+      const batch = this.rehabBatchSessionService.get(req, chargeNumber)
       rehabBatchId = batch?.id ?? ''
       if (batch?.sameForAll && batch.redisIds.length > 1) {
         title = 'Do you have the details of the rehabilitative activities?'
@@ -142,8 +144,8 @@ export default class HasRehabilitativeActivitiesDetailsPage {
     if (!this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
-    if (!this.punishmentsService.isCurrentRehabBatchForm(req, chargeNumber, redisId, req.body.rehabBatchId)) {
-      return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
+    if (!this.rehabBatchSessionService.isCurrentForm(req, chargeNumber, redisId, req.body.rehabBatchId)) {
+      return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
     }
 
     const error = validateBatchForm({ hasDetails: hasRehabilitativeActivitiesDetails, numberOfActivities })
@@ -151,7 +153,7 @@ export default class HasRehabilitativeActivitiesDetailsPage {
 
     if (hasRehabilitativeActivitiesDetails === 'YES') {
       // the punishment keeps any activities it has until all the new ones are entered
-      this.punishmentsService.startRehabDraft(req, chargeNumber, redisId)
+      this.rehabBatchSessionService.startDraft(req, chargeNumber, redisId)
       return res.redirect(
         url.format({
           pathname: adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId),
@@ -166,7 +168,7 @@ export default class HasRehabilitativeActivitiesDetailsPage {
 
     // No details yet: one "Not entered" activity, which can be completed from the report later
     await this.punishmentsService.addEmptyRehabilitativeActivities(req, chargeNumber, redisId, 1)
-    this.punishmentsService.completeRehabBatchItem(req, chargeNumber, redisId)
-    return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
+    this.rehabBatchSessionService.completeItem(req, chargeNumber, redisId)
+    return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
   }
 }

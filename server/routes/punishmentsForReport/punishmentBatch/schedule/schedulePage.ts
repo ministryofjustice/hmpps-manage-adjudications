@@ -1,7 +1,9 @@
-import { Request, Response } from 'express'
-import UserService from '../../../../services/userService'
-import PunishmentsService from '../../../../services/punishmentsService'
-import { PunishmentData, convertPunishmentType, isSocialVisitsPunishment } from '../../../../data/PunishmentResult'
+import type { Request, Response } from 'express'
+import type UserService from '../../../../services/userService'
+import type PunishmentsService from '../../../../services/punishmentsService'
+import type PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
+import type { PunishmentData } from '../../../../data/PunishmentResult'
+import { convertPunishmentType, isSocialVisitsPunishment } from '../../../../data/PunishmentResult'
 import { formatTimestampTo, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 
@@ -17,11 +19,12 @@ export default class SchedulePage {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly punishmentBatchSessionService: PunishmentBatchSessionService,
   ) {}
 
   // The session punishments the open batch has added, in the order they were chosen
   private batchPunishments = (req: Request, chargeNumber: string): PunishmentData[] =>
-    (this.punishmentsService.getPunishmentBatch(req, chargeNumber)?.items || [])
+    (this.punishmentBatchSessionService.get(req, chargeNumber)?.items || [])
       .filter(item => item.redisId)
       .map(item => this.punishmentsService.getSessionPunishment(req, chargeNumber, item.redisId))
       .filter(Boolean)
@@ -35,7 +38,9 @@ export default class SchedulePage {
     }
 
     const punishments = this.batchPunishments(req, chargeNumber)
-    if (!punishments.length) return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    if (!punishments.length) {
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    }
 
     return res.render(`pages/punishmentSchedule.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
@@ -64,7 +69,7 @@ export default class SchedulePage {
           : `${punishments.length} punishments added`,
       )
     }
-    this.punishmentsService.clearPunishmentBatch(req, chargeNumber)
+    this.punishmentBatchSessionService.clear(req, chargeNumber)
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

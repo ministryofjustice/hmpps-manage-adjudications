@@ -1,6 +1,6 @@
 import moment from 'moment'
-import { FormError } from '../../../../@types/template'
-import { PunishmentBatchItem } from '../../../../data/PunishmentResult'
+import type { FormError } from '../../../../@types/template'
+import type { PunishmentBatchItem } from '../../../../data/PunishmentResult'
 import validateNumberOfDays from '../../punishmentDates/numberOfDays/numberOfDaysValidation'
 
 export enum StartMode {
@@ -62,7 +62,9 @@ export default function validateForm({
         }),
       )
       .find(Boolean)
-    if (daysError) errors.push(daysError)
+    if (daysError) {
+      errors.push(daysError)
+    }
   }
 
   if (!Object.values(StartMode).includes(startMode as StartMode)) {

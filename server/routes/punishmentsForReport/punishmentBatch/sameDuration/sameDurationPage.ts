@@ -1,7 +1,8 @@
-import { Request, Response } from 'express'
-import { FormError } from '../../../../@types/template'
-import UserService from '../../../../services/userService'
-import PunishmentsService from '../../../../services/punishmentsService'
+import type { Request, Response } from 'express'
+import type { FormError } from '../../../../@types/template'
+import type UserService from '../../../../services/userService'
+import type PunishmentsService from '../../../../services/punishmentsService'
+import type PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import validateForm from './sameDurationValidation'
@@ -15,6 +16,7 @@ export default class SameDurationPage {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly punishmentBatchSessionService: PunishmentBatchSessionService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -36,13 +38,15 @@ export default class SameDurationPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const batch = this.punishmentsService.getPunishmentBatch(req, chargeNumber)
+    const batch = this.punishmentBatchSessionService.get(req, chargeNumber)
     if (!batch || batch.items.length < 2) {
-      return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
+      return res.redirect(this.punishmentBatchSessionService.nextUrl(req, chargeNumber))
     }
 
     let sameForAll: string = null
-    if (batch.sameForAll !== undefined) sameForAll = batch.sameForAll ? 'yes' : 'no'
+    if (batch.sameForAll !== undefined) {
+      sameForAll = batch.sameForAll ? 'yes' : 'no'
+    }
     return this.renderView(req, res, { sameForAll })
   }
 
@@ -51,12 +55,14 @@ export default class SameDurationPage {
     const { sameForAll } = req.body
 
     const error = validateForm({ sameForAll })
-    if (error) return this.renderView(req, res, { error, sameForAll })
+    if (error) {
+      return this.renderView(req, res, { error, sameForAll })
+    }
 
-    if (!this.punishmentsService.getPunishmentBatch(req, chargeNumber)) {
+    if (!this.punishmentBatchSessionService.get(req, chargeNumber)) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
-    this.punishmentsService.setPunishmentBatchSameForAll(req, chargeNumber, sameForAll === 'yes')
+    this.punishmentBatchSessionService.setSameForAll(req, chargeNumber, sameForAll === 'yes')
     return res.redirect(adjudicationUrls.punishmentDuration.urls.start(chargeNumber))
   }
 }

@@ -1,7 +1,8 @@
-import { Request, Response } from 'express'
-import { FormError } from '../../../../@types/template'
-import UserService from '../../../../services/userService'
-import PunishmentsService from '../../../../services/punishmentsService'
+import type { Request, Response } from 'express'
+import type { FormError } from '../../../../@types/template'
+import type UserService from '../../../../services/userService'
+import type PunishmentsService from '../../../../services/punishmentsService'
+import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import validateForm from './sameActivityValidation'
@@ -15,6 +16,7 @@ export default class SameActivityPage {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly rehabBatchSessionService: RehabBatchSessionService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -36,13 +38,15 @@ export default class SameActivityPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const batch = this.punishmentsService.getRehabBatch(req, chargeNumber)
+    const batch = this.rehabBatchSessionService.get(req, chargeNumber)
     if (!batch || batch.redisIds.length < 2) {
-      return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
+      return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
     }
 
     let sameForAll: string = null
-    if (batch.sameForAll !== undefined) sameForAll = batch.sameForAll ? 'yes' : 'no'
+    if (batch.sameForAll !== undefined) {
+      sameForAll = batch.sameForAll ? 'yes' : 'no'
+    }
     return this.renderView(req, res, { sameForAll })
   }
 
@@ -51,12 +55,14 @@ export default class SameActivityPage {
     const { sameForAll } = req.body
 
     const error = validateForm({ sameForAll })
-    if (error) return this.renderView(req, res, { error, sameForAll })
+    if (error) {
+      return this.renderView(req, res, { error, sameForAll })
+    }
 
-    if (!this.punishmentsService.getRehabBatch(req, chargeNumber)) {
+    if (!this.rehabBatchSessionService.get(req, chargeNumber)) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
-    this.punishmentsService.setRehabBatchSameForAll(req, chargeNumber, sameForAll === 'yes')
-    return res.redirect(this.punishmentsService.nextRehabBatchUrl(req, chargeNumber))
+    this.rehabBatchSessionService.setSameForAll(req, chargeNumber, sameForAll === 'yes')
+    return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
   }
 }

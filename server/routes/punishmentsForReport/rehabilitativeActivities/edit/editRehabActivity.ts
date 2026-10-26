@@ -4,6 +4,7 @@ import { apiDateToDatePicker, datePickerToApi, formatDateForDatePicker, hasAnyRo
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import PunishmentsService from '../../../../services/punishmentsService'
+import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import validateForm, { validateCompletionDate } from '../activityDetails/activityDetailsValidation'
 
 type PageData = {
@@ -18,6 +19,7 @@ export default class editRehabilitativeActivityPage {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly rehabBatchSessionService: RehabBatchSessionService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -91,7 +93,7 @@ export default class editRehabilitativeActivityPage {
     // a change made from the rehabilitative schedule read-back returns there
     if (
       res.locals.featureToggles?.multiPrivilegePunishments &&
-      this.punishmentsService.isInRehabBatch(req, chargeNumber, redisId)
+      this.rehabBatchSessionService.includes(req, chargeNumber, redisId)
     ) {
       return res.redirect(adjudicationUrls.rehabilitativeActivitiesSchedule.urls.start(chargeNumber))
     }

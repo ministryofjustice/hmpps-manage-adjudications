@@ -2,19 +2,26 @@ import express, { RequestHandler, Router } from 'express'
 
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
+import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import EditRehabilitativeActivityPage from './editRehabActivity'
 
 export default function EditRehabilitativeActivityRoutes({
   userService,
   punishmentsService,
+  rehabBatchSessionService,
 }: {
   userService: UserService
   punishmentsService: PunishmentsService
+  rehabBatchSessionService: RehabBatchSessionService
 }): Router {
   const router = express.Router()
 
-  const editRehabilitativeActivityRoute = new EditRehabilitativeActivityPage(userService, punishmentsService)
+  const editRehabilitativeActivityRoute = new EditRehabilitativeActivityPage(
+    userService,
+    punishmentsService,
+    rehabBatchSessionService,
+  )
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)
   const post = (path: string, handler: RequestHandler) => router.post(path, handler)

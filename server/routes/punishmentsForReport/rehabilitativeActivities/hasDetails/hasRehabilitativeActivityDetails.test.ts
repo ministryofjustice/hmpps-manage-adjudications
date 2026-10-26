@@ -1,17 +1,21 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PrivilegeType, PunishmentData, PunishmentType } from '../../../../data/PunishmentResult'
+import RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
+import type { PunishmentData } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/rehabBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const rehabBatchSessionService = new RehabBatchSessionService(null) as jest.Mocked<RehabBatchSessionService>
 
 const sessionPunishments: { [redisId: string]: PunishmentData } = {
   library: {
@@ -38,18 +42,18 @@ const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, rehabBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockImplementation(
     (req, chargeNumber, redisId) => sessionPunishments[redisId],
   )
-  punishmentsService.getRehabBatch.mockReturnValue({
+  rehabBatchSessionService.get.mockReturnValue({
     id: 'batch-1',
     redisIds: ['library', 'tv'],
     completedRedisIds: [],
   })
-  punishmentsService.isCurrentRehabBatchForm.mockReturnValue(true)
-  punishmentsService.nextRehabBatchUrl.mockReturnValue('/next')
+  rehabBatchSessionService.isCurrentForm.mockReturnValue(true)
+  rehabBatchSessionService.nextUrl.mockReturnValue('/next')
 })
 
 afterEach(() => {
@@ -70,7 +74,7 @@ describe('Do you have the details of the rehabilitative activities?', () => {
   })
 
   it('lists the punishments when one answer covers them all', () => {
-    punishmentsService.getRehabBatch.mockReturnValue({
+    rehabBatchSessionService.get.mockReturnValue({
       redisIds: ['library', 'tv'],
       completedRedisIds: [],
       sameForAll: true,
@@ -96,7 +100,7 @@ describe('Do you have the details of the rehabilitative activities?', () => {
         `${adjudicationUrls.rehabilitativeActivityDetails.urls.start('100', 'library')}?numberOfActivities=2&currentActivityNumber=1`,
       )
       .then(() => {
-        expect(punishmentsService.startRehabDraft).toHaveBeenCalledWith(expect.anything(), '100', 'library')
+        expect(rehabBatchSessionService.startDraft).toHaveBeenCalledWith(expect.anything(), '100', 'library')
         expect(punishmentsService.removeAnyRehabilitativeActivities).not.toHaveBeenCalled()
       })
   })
@@ -124,7 +128,7 @@ describe('Do you have the details of the rehabilitative activities?', () => {
           'library',
           1,
         )
-        expect(punishmentsService.completeRehabBatchItem).toHaveBeenCalledWith(expect.anything(), '100', 'library')
+        expect(rehabBatchSessionService.completeItem).toHaveBeenCalledWith(expect.anything(), '100', 'library')
       })
   })
 
@@ -151,22 +155,22 @@ describe('Do you have the details of the rehabilitative activities?', () => {
     ['YES', { hasRehabilitativeActivitiesDetails: 'YES', numberOfActivities: '2' }],
     ['NO', { hasRehabilitativeActivitiesDetails: 'NO' }],
   ])('changes nothing when answered %s on a form from another batch', (_, body) => {
-    punishmentsService.isCurrentRehabBatchForm.mockReturnValue(false)
+    rehabBatchSessionService.isCurrentForm.mockReturnValue(false)
     return request(app)
       .post(adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.urls.start('100', 'library'))
       .send({ rehabBatchId: 'old-batch', ...body })
       .expect(302)
       .expect('Location', '/next')
       .then(() => {
-        expect(punishmentsService.isCurrentRehabBatchForm).toHaveBeenCalledWith(
+        expect(rehabBatchSessionService.isCurrentForm).toHaveBeenCalledWith(
           expect.anything(),
           '100',
           'library',
           'old-batch',
         )
-        expect(punishmentsService.startRehabDraft).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.startDraft).not.toHaveBeenCalled()
         expect(punishmentsService.addEmptyRehabilitativeActivities).not.toHaveBeenCalled()
-        expect(punishmentsService.completeRehabBatchItem).not.toHaveBeenCalled()
+        expect(rehabBatchSessionService.completeItem).not.toHaveBeenCalled()
       })
   })
 

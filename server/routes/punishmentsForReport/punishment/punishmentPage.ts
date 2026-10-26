@@ -17,6 +17,7 @@ import {
   parseHasChildUnder18,
 } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
+import type PunishmentBatchSessionService from '../../../services/punishmentBatchSessionService'
 
 type PageData = {
   error?: FormError
@@ -54,6 +55,7 @@ export default class PunishmentPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly punishmentBatchSessionService: PunishmentBatchSessionService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -252,7 +254,7 @@ export default class PunishmentPage {
             .filter(privilege => privilegeTypes.includes(privilege))
             .map(privilege => typeDetails(privilege))
         : [typeDetails()]
-    this.punishmentsService.startPunishmentBatch(req, chargeNumber, items)
+    this.punishmentBatchSessionService.start(req, chargeNumber, items)
     if (items.length > 1) return res.redirect(adjudicationUrls.punishmentSameDuration.urls.start(chargeNumber))
     return res.redirect(adjudicationUrls.punishmentDuration.urls.start(chargeNumber))
   }

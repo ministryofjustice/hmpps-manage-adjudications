@@ -1,17 +1,20 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
+import PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/punishmentBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const punishmentBatchSessionService = new PunishmentBatchSessionService() as jest.Mocked<PunishmentBatchSessionService>
 
 const twoPrivileges = {
   items: [
@@ -25,9 +28,9 @@ const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, punishmentBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  punishmentsService.getPunishmentBatch.mockReturnValue(twoPrivileges)
+  punishmentBatchSessionService.get.mockReturnValue(twoPrivileges)
 })
 
 afterEach(() => {
@@ -48,8 +51,8 @@ describe('Do they all have the same duration and start date?', () => {
   })
 
   it('skips the question for a single punishment', () => {
-    punishmentsService.getPunishmentBatch.mockReturnValue({ items: [twoPrivileges.items[0]] })
-    punishmentsService.nextPunishmentBatchUrl.mockReturnValue(adjudicationUrls.punishmentDuration.urls.start('100'))
+    punishmentBatchSessionService.get.mockReturnValue({ items: [twoPrivileges.items[0]] })
+    punishmentBatchSessionService.nextUrl.mockReturnValue(adjudicationUrls.punishmentDuration.urls.start('100'))
     return request(app)
       .get(adjudicationUrls.punishmentSameDuration.urls.start('100'))
       .expect(302)
@@ -66,11 +69,7 @@ describe('Do they all have the same duration and start date?', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.punishmentDuration.urls.start('100'))
       .then(() =>
-        expect(punishmentsService.setPunishmentBatchSameForAll).toHaveBeenCalledWith(
-          expect.anything(),
-          '100',
-          expected,
-        ),
+        expect(punishmentBatchSessionService.setSameForAll).toHaveBeenCalledWith(expect.anything(), '100', expected),
       )
   })
 

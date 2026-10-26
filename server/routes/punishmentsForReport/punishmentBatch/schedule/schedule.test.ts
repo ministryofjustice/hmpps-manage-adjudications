@@ -1,17 +1,21 @@
-import { Express } from 'express'
+import type { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PrivilegeType, PunishmentData, PunishmentType } from '../../../../data/PunishmentResult'
+import PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
+import type { PunishmentData } from '../../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/punishmentBatchSessionService')
 
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
+const punishmentBatchSessionService = new PunishmentBatchSessionService() as jest.Mocked<PunishmentBatchSessionService>
 
 const sessionPunishments: { [redisId: string]: PunishmentData } = {
   a: {
@@ -39,9 +43,9 @@ const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
-  app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
+  app = appWithAllRoutes({ production: false }, { userService, punishmentsService, punishmentBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  punishmentsService.getPunishmentBatch.mockReturnValue({
+  punishmentBatchSessionService.get.mockReturnValue({
     items: [
       { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN, redisId: 'a' },
       { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.OTHER, otherPrivilege: 'Library', redisId: 'b' },
@@ -75,7 +79,7 @@ describe('Punishment schedule', () => {
   })
 
   it('goes back to the award punishments page when there is no batch', () => {
-    punishmentsService.getPunishmentBatch.mockReturnValue(undefined)
+    punishmentBatchSessionService.get.mockReturnValue(undefined)
     return request(app)
       .get(adjudicationUrls.punishmentSchedule.urls.start('100'))
       .expect(302)
@@ -93,12 +97,12 @@ describe('Punishment schedule', () => {
           '100',
           '2 punishments added',
         )
-        expect(punishmentsService.clearPunishmentBatch).toHaveBeenCalledWith(expect.anything(), '100')
+        expect(punishmentBatchSessionService.clear).toHaveBeenCalledWith(expect.anything(), '100')
       })
   })
 
   it('names the punishment when only one was added', () => {
-    punishmentsService.getPunishmentBatch.mockReturnValue({
+    punishmentBatchSessionService.get.mockReturnValue({
       items: [{ type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN, redisId: 'a' }],
     })
     return request(app)

@@ -1,14 +1,13 @@
 /* eslint-disable max-classes-per-file */
-import { Request, Response } from 'express'
-import { FormError } from '../../../../@types/template'
-import UserService from '../../../../services/userService'
-import PunishmentsService from '../../../../services/punishmentsService'
+import type { Request, Response } from 'express'
+import type { FormError } from '../../../../@types/template'
+import type UserService from '../../../../services/userService'
+import type PunishmentsService from '../../../../services/punishmentsService'
+import type PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
+import type { PunishmentBatchItem, PunishmentData, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 import {
   PrivilegeType,
-  PunishmentBatchItem,
-  PunishmentData,
   PunishmentType,
-  RehabilitativeActivity,
   convertPunishmentType,
   parseHasChildUnder18,
 } from '../../../../data/PunishmentResult'
@@ -63,6 +62,7 @@ export default class DurationPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly punishmentBatchSessionService: PunishmentBatchSessionService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -114,11 +114,13 @@ export default class DurationPage {
     return { punishments: [item], batchIndexes: [], heading: `${punishmentName(item)}: duration and start date` }
   }
 
-  private getBatchSubject = (req: Request): Subject => {
+  private getBatchSubject = (req: Request): Subject | null => {
     const { chargeNumber } = req.params
-    const batch = this.punishmentsService.getPunishmentBatch(req, chargeNumber)
-    const nextIndex = this.punishmentsService.nextUnansweredBatchItemIndex(req, chargeNumber)
-    if (!batch || nextIndex === -1) return null
+    const batch = this.punishmentBatchSessionService.get(req, chargeNumber)
+    const nextIndex = batch && this.punishmentBatchSessionService.nextUnansweredIndex(batch)
+    if (nextIndex === undefined) {
+      return null
+    }
 
     // One answer covers every punishment in the batch, including any saved before the answer to
     // "Do they all have the same duration?" was changed to yes
@@ -139,8 +141,10 @@ export default class DurationPage {
     }
   }
 
-  private getSubject = (req: Request): Subject => {
-    if (!this.pageOptions.isEdit()) return this.getBatchSubject(req)
+  private getSubject = (req: Request): Subject | null => {
+    if (!this.pageOptions.isEdit()) {
+      return this.getBatchSubject(req)
+    }
     const { chargeNumber, redisId } = req.params
     const punishment = this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
     return punishment ? this.getEditSubject(req, punishment) : null
@@ -156,7 +160,9 @@ export default class DurationPage {
     }
 
     const subject = this.getSubject(req)
-    if (!subject) return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
+    if (!subject) {
+      return res.redirect(this.punishmentBatchSessionService.nextUrl(req, chargeNumber))
+    }
 
     const lastHearingDate = await this.punishmentsService.getLastHearingDate(chargeNumber, user)
     // a punishment being changed, or asked about again in the batch, starts from its saved answers
@@ -164,11 +170,16 @@ export default class DurationPage {
       ? redisId
       : subject.punishments.length === 1 && subject.punishments[0].redisId
     const punishment = savedRedisId && this.punishmentsService.getSessionPunishment(req, chargeNumber, savedRedisId)
-    if (!punishment) return this.renderView(req, res, subject, lastHearingDate, {})
+    if (!punishment) {
+      return this.renderView(req, res, subject, lastHearingDate, {})
+    }
 
     let startMode = StartMode.LATER
-    if (punishment.suspendedUntil) startMode = StartMode.SUSPENDED
-    else if (punishment.startDate === lastHearingDate) startMode = StartMode.IMMEDIATE
+    if (punishment.suspendedUntil) {
+      startMode = StartMode.SUSPENDED
+    } else if (punishment.startDate === lastHearingDate) {
+      startMode = StartMode.IMMEDIATE
+    }
     return this.renderView(req, res, subject, lastHearingDate, {
       duration: punishment.duration ? String(punishment.duration) : '',
       startMode,
@@ -189,11 +200,13 @@ export default class DurationPage {
     }
 
     const subject = this.getSubject(req)
-    if (!subject) return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
+    if (!subject) {
+      return res.redirect(this.punishmentBatchSessionService.nextUrl(req, chargeNumber))
+    }
     // A form left open in another tab, or resubmitted from the browser history, can be for a punishment already
     // answered. Its answers must not be saved against whichever punishment is next, so show the current question.
     if (!this.pageOptions.isEdit() && req.body.batchItemIds !== batchItemIds(subject)) {
-      return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
+      return res.redirect(this.punishmentBatchSessionService.nextUrl(req, chargeNumber))
     }
 
     const [lastHearingDate, { isAdult }] = await Promise.all([
@@ -203,9 +216,13 @@ export default class DurationPage {
     const errors = validateForm({ ...values, punishments: subject.punishments, isYOI: !isAdult, lastHearingDate })
     if (!errors.length && this.pageOptions.isEdit()) {
       const activityError = this.activitiesStillFit(req, values)
-      if (activityError) errors.push(activityError)
+      if (activityError) {
+        errors.push(activityError)
+      }
     }
-    if (errors.length) return this.renderView(req, res, subject, lastHearingDate, values, errors)
+    if (errors.length) {
+      return this.renderView(req, res, subject, lastHearingDate, values, errors)
+    }
 
     const schedule = this.getSchedule(values, lastHearingDate)
     const punishmentData = (punishment: PunishmentBatchItem): PunishmentData => ({
@@ -226,9 +243,11 @@ export default class DurationPage {
         redisId,
       )
       // only a suspended punishment can have a rehabilitative activity condition
-      if (!schedule.suspendedUntil) this.punishmentsService.noRehabilitativeActivities(req, chargeNumber, redisId)
+      if (!schedule.suspendedUntil) {
+        this.punishmentsService.noRehabilitativeActivities(req, chargeNumber, redisId)
+      }
       return res.redirect(
-        this.punishmentsService.isInPunishmentBatch(req, chargeNumber, redisId)
+        this.punishmentBatchSessionService.includes(req, chargeNumber, redisId)
           ? adjudicationUrls.punishmentSchedule.urls.start(chargeNumber)
           : adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       )
@@ -246,7 +265,7 @@ export default class DurationPage {
           chargeNumber,
           punishment.redisId,
         )
-        this.punishmentsService.markBatchItemAnswered(req, chargeNumber, index, punishment.redisId)
+        this.punishmentBatchSessionService.markItemAnswered(req, chargeNumber, index, punishment.redisId)
       })
     const unsaved = answered.filter(({ punishment }) => !punishment.redisId)
     const newRedisIds = await Promise.all(
@@ -255,15 +274,17 @@ export default class DurationPage {
       ),
     )
     newRedisIds.forEach((newRedisId, i) =>
-      this.punishmentsService.markBatchItemAnswered(req, chargeNumber, unsaved[i].index, newRedisId),
+      this.punishmentBatchSessionService.markItemAnswered(req, chargeNumber, unsaved[i].index, newRedisId),
     )
-    return res.redirect(this.punishmentsService.nextPunishmentBatchUrl(req, chargeNumber))
+    return res.redirect(this.punishmentBatchSessionService.nextUrl(req, chargeNumber))
   }
 
   // A suspended punishment keeps its rehabilitative activities when changed, so it cannot become suspended
   // until a date before one of them has to be completed
-  private activitiesStillFit = (req: Request, values: FormValues): FormError => {
-    if (values.startMode !== StartMode.SUSPENDED) return null
+  private activitiesStillFit = (req: Request, values: FormValues): FormError | null => {
+    if (values.startMode !== StartMode.SUSPENDED) {
+      return null
+    }
     const { chargeNumber, redisId } = req.params
     const punishment = this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
     const latestActivity = (punishment?.rehabilitativeActivities || [])
@@ -272,7 +293,9 @@ export default class DurationPage {
       .sort()
       .pop()
     const suspendedUntil = parseDatePickerDate(values.suspendedUntil)
-    if (!latestActivity || !suspendedUntil || !suspendedUntil.isBefore(latestActivity, 'day')) return null
+    if (!latestActivity || !suspendedUntil || !suspendedUntil.isBefore(latestActivity, 'day')) {
+      return null
+    }
     return {
       href: '#suspendedUntil',
       text: `Date suspended until must be on or after ${formatTimestampTo(latestActivity, 'D MMMM YYYY')}, when its rehabilitative activity must be completed`,
