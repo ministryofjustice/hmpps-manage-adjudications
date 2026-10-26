@@ -60,8 +60,8 @@ describe('Do they all have the same duration and start date?', () => {
   })
 
   it.each([
-    ['yes', true],
-    ['no', false],
+    ['YES', true],
+    ['NO', false],
   ])('records the answer %s', (sameForAll, expected) => {
     return request(app)
       .post(adjudicationUrls.punishmentSameDuration.urls.start('100'))

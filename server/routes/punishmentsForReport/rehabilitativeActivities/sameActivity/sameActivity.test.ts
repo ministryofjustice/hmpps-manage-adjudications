@@ -50,7 +50,7 @@ describe('Do they all have the same rehabilitative activity?', () => {
   it('records the answer and moves on', () => {
     return request(app)
       .post(adjudicationUrls.sameRehabilitativeActivity.urls.start('100'))
-      .send({ sameForAll: 'yes' })
+      .send({ sameForAll: 'YES' })
       .expect(302)
       .expect('Location', '/next')
       .then(() => expect(rehabBatchSessionService.setSameForAll).toHaveBeenCalledWith(expect.anything(), '100', true))

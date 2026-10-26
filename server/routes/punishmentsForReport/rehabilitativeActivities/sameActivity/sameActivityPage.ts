@@ -45,7 +45,7 @@ export default class SameActivityPage {
 
     let sameForAll: string = null
     if (batch.sameForAll !== undefined) {
-      sameForAll = batch.sameForAll ? 'yes' : 'no'
+      sameForAll = batch.sameForAll ? 'YES' : 'NO'
     }
     return this.renderView(req, res, { sameForAll })
   }
@@ -62,7 +62,7 @@ export default class SameActivityPage {
     if (!this.rehabBatchSessionService.get(req, chargeNumber)) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
-    this.rehabBatchSessionService.setSameForAll(req, chargeNumber, sameForAll === 'yes')
+    this.rehabBatchSessionService.setSameForAll(req, chargeNumber, sameForAll === 'YES')
     return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
   }
 }

@@ -108,7 +108,7 @@ context('Award several punishments in one journey', () => {
     const samePage = Page.verifyOnPage(PunishmentSameDurationPage)
     samePage.submitButton().click()
     samePage.errorSummary().contains('Select yes if they all have the same duration and start date')
-    samePage.sameForAll().find('input[value="no"]').check()
+    samePage.sameForAll().find('input[value="NO"]').check()
     samePage.submitButton().click()
 
     const durationPage = Page.verifyOnPage(PunishmentDurationPage)
@@ -215,7 +215,7 @@ context('Award several punishments in one journey', () => {
     choosePrivileges(PrivilegeType.GYM, PrivilegeType.ASSOCIATION)
 
     const samePage = Page.verifyOnPage(PunishmentSameDurationPage)
-    samePage.sameForAll().find('input[value="yes"]').check()
+    samePage.sameForAll().find('input[value="YES"]').check()
     samePage.submitButton().click()
 
     const durationPage = Page.verifyOnPage(PunishmentDurationPage)
@@ -232,7 +232,7 @@ context('Award several punishments in one journey', () => {
     whichPage.submitButton().click()
 
     const sameActivityPage = Page.verifyOnPage(SameRehabilitativeActivityPage)
-    sameActivityPage.sameForAll().find('input[value="yes"]').check()
+    sameActivityPage.sameForAll().find('input[value="YES"]').check()
     sameActivityPage.submitButton().click()
 
     const hasDetailsPage = Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage)
@@ -286,7 +286,7 @@ context('Award several punishments in one journey', () => {
     // two privileges, the first answered, then leave
     Page.verifyOnPage(AwardPunishmentsPage).newPunishment().click()
     choosePrivileges(PrivilegeType.CANTEEN, PrivilegeType.TV)
-    Page.verifyOnPage(PunishmentSameDurationPage).sameForAll().find('input[value="no"]').check()
+    Page.verifyOnPage(PunishmentSameDurationPage).sameForAll().find('input[value="NO"]').check()
     Page.verifyOnPage(PunishmentSameDurationPage).submitButton().click()
     answerDuration('10', 'IMMEDIATE')
     Page.verifyOnPage(PunishmentDurationPage).cancel().click()

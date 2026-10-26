@@ -12,7 +12,7 @@ const errors: { [key: string]: FormError } = {
 }
 
 export default function validateForm({ sameForAll }: SameActivityForm): FormError | null {
-  if (!['yes', 'no'].includes(sameForAll)) {
+  if (!['YES', 'NO'].includes(sameForAll)) {
     return errors.MISSING_CHOICE
   }
   return null

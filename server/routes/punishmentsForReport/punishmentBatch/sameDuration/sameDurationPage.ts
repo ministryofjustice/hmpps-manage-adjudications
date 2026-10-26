@@ -45,7 +45,7 @@ export default class SameDurationPage {
 
     let sameForAll: string = null
     if (batch.sameForAll !== undefined) {
-      sameForAll = batch.sameForAll ? 'yes' : 'no'
+      sameForAll = batch.sameForAll ? 'YES' : 'NO'
     }
     return this.renderView(req, res, { sameForAll })
   }
@@ -62,7 +62,7 @@ export default class SameDurationPage {
     if (!this.punishmentBatchSessionService.get(req, chargeNumber)) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
-    this.punishmentBatchSessionService.setSameForAll(req, chargeNumber, sameForAll === 'yes')
+    this.punishmentBatchSessionService.setSameForAll(req, chargeNumber, sameForAll === 'YES')
     return res.redirect(adjudicationUrls.punishmentDuration.urls.start(chargeNumber))
   }
 }
