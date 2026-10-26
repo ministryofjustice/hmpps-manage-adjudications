@@ -2,6 +2,7 @@ import Page, { PageElement } from './page'
 
 export default class HasRehabilitativeActivitesDetailsPage extends Page {
   constructor() {
+    // matches both "activity?" and "activities?", as the heading depends on how many punishments it covers
     super('Do you have the details of the rehabilitative activit')
   }
 
