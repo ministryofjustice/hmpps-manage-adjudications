@@ -62,6 +62,15 @@ export default class AwardPunishmentsPage {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
 
+    // a punishment added with exactly the same details as another is usually a mistake, so ask before showing it
+    if (this.pageOptions.displaySessionData()) {
+      const duplicate = this.punishmentsService.getUnconfirmedDuplicate(req, chargeNumber)
+      if (duplicate)
+        return res.redirect(
+          adjudicationUrls.punishmentAlreadyAdded.urls.start(chargeNumber, duplicate.punishment.redisId),
+        )
+    }
+
     const continueHref = await this.getContinueHref(chargeNumber, user)
 
     const filteredPunishments = await this.punishmentsService.filteredPunishments(punishments)

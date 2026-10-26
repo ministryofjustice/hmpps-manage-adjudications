@@ -67,6 +67,7 @@ export type PunishmentData = {
   consecutiveChargeNumber?: string
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
+  paybackNotes?: string
   hasChildUnder18?: boolean
   canRemove?: boolean
   canEdit?: boolean
@@ -76,6 +77,7 @@ export type PunishmentData = {
   rehabilitativeActivitiesCompleted?: boolean
   rehabilitativeActivitiesNotCompletedOutcome?: NotCompletedOutcome
   previousSuspendedUntilDate?: string
+  duplicateConfirmed?: boolean
 }
 
 export type PunishmentSchedule = {
@@ -98,6 +100,7 @@ export type PunishmentDataWithSchedule = {
   consecutiveChargeNumber?: string
   consecutiveReportAvailable?: boolean
   damagesOwedAmount?: number
+  paybackNotes?: string
   hasChildUnder18?: boolean
   canRemove?: boolean
   canEdit?: boolean
@@ -305,6 +308,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     consecutiveChargeNumber,
     consecutiveReportAvailable,
     damagesOwedAmount,
+    paybackNotes,
     hasChildUnder18,
     canRemove,
     canEdit,
@@ -332,6 +336,7 @@ export function flattenPunishment(punishment: PunishmentDataWithSchedule): Punis
     ...(consecutiveChargeNumber && { consecutiveChargeNumber }),
     ...(consecutiveReportAvailable && { consecutiveReportAvailable }),
     ...(damagesOwedAmount && { damagesOwedAmount }),
+    ...(paybackNotes && { paybackNotes }),
     ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
     rehabilitativeActivities,
     rehabilitativeActivitiesCompleted,
@@ -348,6 +353,43 @@ export function parseHasChildUnder18(value: unknown): boolean | undefined {
   if (value === true || value === 'true') return true
   if (value === false || value === 'false') return false
   return undefined
+}
+
+const sameValue = (a: unknown, b: unknown): boolean => (a ?? null) === (b ?? null) || `${a ?? ''}` === `${b ?? ''}`
+
+const sameText = (a?: string, b?: string): boolean => sameValue(a?.trim().toLowerCase(), b?.trim().toLowerCase())
+
+// The activities in any order, as they can be reordered by editing one
+const activitiesKey = (punishment: PunishmentData): string =>
+  JSON.stringify(
+    (punishment.rehabilitativeActivities || [])
+      .map(ra =>
+        [ra.details?.trim().toLowerCase(), ra.monitor?.trim().toLowerCase(), ra.endDate, ra.totalSessions].map(
+          value => `${value ?? ''}`,
+        ),
+      )
+      .map(fields => JSON.stringify(fields))
+      .sort(),
+  )
+
+// Two punishments with every detail the same - the second is usually the same punishment entered twice by mistake
+export function isSamePunishment(a: PunishmentData, b: PunishmentData): boolean {
+  return (
+    a.type === b.type &&
+    sameValue(a.privilegeType, b.privilegeType) &&
+    sameText(a.otherPrivilege, b.otherPrivilege) &&
+    sameValue(a.stoppagePercentage, b.stoppagePercentage) &&
+    sameValue(a.damagesOwedAmount, b.damagesOwedAmount) &&
+    sameText(a.paybackNotes, b.paybackNotes) &&
+    sameValue(a.duration, b.duration) &&
+    sameValue(a.startDate, b.startDate) &&
+    sameValue(a.endDate, b.endDate) &&
+    sameValue(a.suspendedUntil, b.suspendedUntil) &&
+    sameValue(a.consecutiveChargeNumber, b.consecutiveChargeNumber) &&
+    sameValue(a.activatedFrom, b.activatedFrom) &&
+    sameValue(a.hasChildUnder18, b.hasChildUnder18) &&
+    activitiesKey(a) === activitiesKey(b)
+  )
 }
 
 export function flattenPunishments(punishments: PunishmentDataWithSchedule[]): PunishmentData[] {
