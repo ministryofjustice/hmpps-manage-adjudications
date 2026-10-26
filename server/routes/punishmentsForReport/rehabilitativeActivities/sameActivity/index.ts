@@ -1,4 +1,4 @@
-import express, { RequestHandler, Router } from 'express'
+import express, { Router } from 'express'
 
 import SameActivityPage from './sameActivityPage'
 
@@ -17,11 +17,8 @@ export default function SameActivityRoutes({
 
   const page = new SameActivityPage(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
-  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
-
-  get(adjudicationUrls.sameRehabilitativeActivity.matchers.start, page.view)
-  post(adjudicationUrls.sameRehabilitativeActivity.matchers.start, page.submit)
+  router.get(adjudicationUrls.sameRehabilitativeActivity.matchers.start, page.view)
+  router.post(adjudicationUrls.sameRehabilitativeActivity.matchers.start, page.submit)
 
   return router
 }

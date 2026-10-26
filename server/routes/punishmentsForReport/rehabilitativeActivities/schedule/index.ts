@@ -1,4 +1,4 @@
-import express, { RequestHandler, Router } from 'express'
+import express, { Router } from 'express'
 
 import RehabilitativeActivitiesSchedulePage from './rehabilitativeActivitiesSchedulePage'
 
@@ -17,11 +17,8 @@ export default function RehabilitativeActivitiesScheduleRoutes({
 
   const page = new RehabilitativeActivitiesSchedulePage(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
-  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
-
-  get(adjudicationUrls.rehabilitativeActivitiesSchedule.matchers.start, page.view)
-  post(adjudicationUrls.rehabilitativeActivitiesSchedule.matchers.start, page.submit)
+  router.get(adjudicationUrls.rehabilitativeActivitiesSchedule.matchers.start, page.view)
+  router.post(adjudicationUrls.rehabilitativeActivitiesSchedule.matchers.start, page.submit)
 
   return router
 }

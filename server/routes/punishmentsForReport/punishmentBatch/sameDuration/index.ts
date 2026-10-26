@@ -1,4 +1,4 @@
-import express, { RequestHandler, Router } from 'express'
+import express, { Router } from 'express'
 
 import SameDurationPage from './sameDurationPage'
 
@@ -17,11 +17,8 @@ export default function SameDurationRoutes({
 
   const page = new SameDurationPage(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
-  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
-
-  get(adjudicationUrls.punishmentSameDuration.matchers.start, page.view)
-  post(adjudicationUrls.punishmentSameDuration.matchers.start, page.submit)
+  router.get(adjudicationUrls.punishmentSameDuration.matchers.start, page.view)
+  router.post(adjudicationUrls.punishmentSameDuration.matchers.start, page.submit)
 
   return router
 }

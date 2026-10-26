@@ -1,4 +1,4 @@
-import express, { RequestHandler, Router } from 'express'
+import express, { Router } from 'express'
 
 import SchedulePage from './schedulePage'
 
@@ -17,11 +17,8 @@ export default function PunishmentScheduleRoutes({
 
   const page = new SchedulePage(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
-  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
-
-  get(adjudicationUrls.punishmentSchedule.matchers.start, page.view)
-  post(adjudicationUrls.punishmentSchedule.matchers.start, page.submit)
+  router.get(adjudicationUrls.punishmentSchedule.matchers.start, page.view)
+  router.post(adjudicationUrls.punishmentSchedule.matchers.start, page.submit)
 
   return router
 }

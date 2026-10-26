@@ -1,4 +1,4 @@
-import express, { RequestHandler, Router } from 'express'
+import express, { Router } from 'express'
 
 import DurationPage, { PageRequestType } from './durationPage'
 
@@ -18,13 +18,10 @@ export default function DurationRoutes({
   const page = new DurationPage(PageRequestType.CREATION, userService, punishmentsService)
   const editPage = new DurationPage(PageRequestType.EDIT, userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
-  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
-
-  get(adjudicationUrls.punishmentDuration.matchers.start, page.view)
-  post(adjudicationUrls.punishmentDuration.matchers.start, page.submit)
-  get(adjudicationUrls.punishmentDuration.matchers.edit, editPage.view)
-  post(adjudicationUrls.punishmentDuration.matchers.edit, editPage.submit)
+  router.get(adjudicationUrls.punishmentDuration.matchers.start, page.view)
+  router.post(adjudicationUrls.punishmentDuration.matchers.start, page.submit)
+  router.get(adjudicationUrls.punishmentDuration.matchers.edit, editPage.view)
+  router.post(adjudicationUrls.punishmentDuration.matchers.edit, editPage.submit)
 
   return router
 }

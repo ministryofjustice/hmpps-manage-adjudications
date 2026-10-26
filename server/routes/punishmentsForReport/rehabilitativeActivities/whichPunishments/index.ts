@@ -1,4 +1,4 @@
-import express, { RequestHandler, Router } from 'express'
+import express, { Router } from 'express'
 
 import WhichPunishmentsPage from './whichPunishmentsPage'
 
@@ -17,11 +17,8 @@ export default function WhichPunishmentsRoutes({
 
   const page = new WhichPunishmentsPage(userService, punishmentsService)
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, handler)
-  const post = (path: string, handler: RequestHandler) => router.post(path, handler)
-
-  get(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.matchers.start, page.view)
-  post(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.matchers.start, page.submit)
+  router.get(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.matchers.start, page.view)
+  router.post(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.matchers.start, page.submit)
 
   return router
 }
