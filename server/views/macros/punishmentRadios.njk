@@ -2,7 +2,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% macro punishmentRadios(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, hasChildUnder18, errors, title, multiplePrivileges = false, privilegeTypes = [], privilegesAlreadyAdded = []) %}
+{% macro punishmentRadios(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, hasChildUnder18, errors, title, multiplePrivileges = false, privilegeTypes = []) %}
   {% set otherPrivilegeHtml %}
   {{ govukInput({
       id: "otherPrivilege",
@@ -96,15 +96,12 @@
       { value: "GYM", text: "Gym" },
       { value: "OTHER", text: "Other" }
     ] %}
-      {# a privilege can only be lost once per report, except "Other" #}
-      {% if privilege.value == "OTHER" or privilegesAlreadyAdded.indexOf(privilege.value) == -1 %}
-        {% set privilegeCheckboxItems = (privilegeCheckboxItems.push({
-          value: privilege.value,
-          text: privilege.text,
-          checked: privilegeTypes.indexOf(privilege.value) > -1,
-          conditional: { html: otherPrivilegeHtml } if privilege.value == "OTHER" else undefined
-        }), privilegeCheckboxItems) %}
-      {% endif %}
+      {% set privilegeCheckboxItems = (privilegeCheckboxItems.push({
+        value: privilege.value,
+        text: privilege.text,
+        checked: privilegeTypes.indexOf(privilege.value) > -1,
+        conditional: { html: otherPrivilegeHtml } if privilege.value == "OTHER" else undefined
+      }), privilegeCheckboxItems) %}
     {% endfor %}
     {% set privilegeHtml %}
     {{ govukCheckboxes({

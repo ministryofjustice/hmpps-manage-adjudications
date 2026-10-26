@@ -100,7 +100,6 @@ export default class PunishmentPage {
       privilegeType,
       multiplePrivileges: this.isMultiplePrivileges(res),
       privilegeTypes: privilegeTypes || [],
-      privilegesAlreadyAdded: this.privilegesAlreadyAdded(sessionPunishments),
       otherPrivilege,
       stoppagePercentage,
       damagesOwedAmount,
@@ -167,11 +166,6 @@ export default class PunishmentPage {
       stoppagePercentage: stoppageOfEarningsPercentage,
       damagesOwedAmount,
       damagesAlreadyAdded,
-      // also checked here, as a form from another tab or the browser history can still offer them,
-      // and a punishment being changed must not become a privilege another punishment already withdraws
-      privilegesAlreadyAdded: res.locals.featureToggles?.multiPrivilegePunishments
-        ? this.privilegesAlreadyAdded(sessionPunishments, this.pageOptions.isEdit() ? redisId : undefined)
-        : [],
       hasChildUnder18,
     })
     if (error)
@@ -303,16 +297,6 @@ export default class PunishmentPage {
       return adjudicationUrls.paybackPunishmentSpecifics.urls.start(chargeNumber)
     return adjudicationUrls.punishmentNumberOfDays.urls.start(chargeNumber)
   }
-
-  // The privileges withdrawn by the punishments on the report, apart from the one being changed
-  private privilegesAlreadyAdded = (
-    sessionPunishments: PunishmentDataWithSchedule[],
-    exceptRedisId?: string,
-  ): PrivilegeType[] =>
-    (sessionPunishments || [])
-      .filter((punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.PRIVILEGE)
-      .filter((punishment: PunishmentDataWithSchedule) => !exceptRedisId || punishment.redisId !== exceptRedisId)
-      .map((punishment: PunishmentDataWithSchedule) => punishment.privilegeType)
 
   private damagesAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
     if (sessionPunishments) {

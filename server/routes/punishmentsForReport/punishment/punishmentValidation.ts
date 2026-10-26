@@ -1,10 +1,5 @@
 import { FormError } from '../../../@types/template'
-import {
-  PrivilegeType,
-  PunishmentType,
-  convertPunishmentType,
-  isSocialVisitsPunishment,
-} from '../../../data/PunishmentResult'
+import { PrivilegeType, PunishmentType, isSocialVisitsPunishment } from '../../../data/PunishmentResult'
 
 type PunishmentForm = {
   punishmentType: PunishmentType
@@ -16,7 +11,6 @@ type PunishmentForm = {
   damagesOwedAmount?: number
   damagesAlreadyAdded?: boolean
   // privileges other than Other can only be withdrawn once on a charge
-  privilegesAlreadyAdded?: PrivilegeType[]
   hasChildUnder18?: boolean
 }
 
@@ -80,7 +74,6 @@ export default function validateForm({
   stoppagePercentage,
   damagesOwedAmount,
   damagesAlreadyAdded,
-  privilegesAlreadyAdded = [],
   hasChildUnder18,
 }: PunishmentForm): FormError | null {
   if (!punishmentType) {
@@ -99,19 +92,6 @@ export default function validateForm({
   if (punishmentType === PunishmentType.PRIVILEGE && multiplePrivileges) {
     if (!privilegeTypes.length) return errors.MISSING_PRIVILEGE_TYPES
   } else if (punishmentType === PunishmentType.PRIVILEGE && !privilegeType) return errors.MISSING_PRIVILEGE_TYPE
-
-  if (punishmentType === PunishmentType.PRIVILEGE) {
-    const chosen = multiplePrivileges ? privilegeTypes : [privilegeType]
-    const alreadyAdded = chosen.find(
-      privilege => privilege !== PrivilegeType.OTHER && privilegesAlreadyAdded.includes(privilege),
-    )
-    if (alreadyAdded) {
-      return {
-        href: multiplePrivileges ? '#privilegeTypes' : '#privilegeType',
-        text: `${convertPunishmentType(PunishmentType.PRIVILEGE, null, alreadyAdded, null)} has already been added. Select a different privilege`,
-      }
-    }
-  }
 
   const otherPrivilegeChosen = multiplePrivileges
     ? privilegeTypes.includes(PrivilegeType.OTHER)

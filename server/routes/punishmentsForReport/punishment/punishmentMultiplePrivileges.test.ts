@@ -45,7 +45,7 @@ describe('GET /punishment with multiple privileges switched on', () => {
       })
   })
 
-  it('does not offer a privilege that has already been added, apart from Other', () => {
+  it('still offers a privilege that has already been added', () => {
     punishmentsService.getAllSessionPunishments.mockReturnValue([
       { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN, rehabilitativeActivities: [] },
       {
@@ -59,7 +59,7 @@ describe('GET /punishment with multiple privileges switched on', () => {
       .get(adjudicationUrls.punishment.urls.start('100'))
       .expect(200)
       .expect(res => {
-        expect(res.text).not.toContain('value="CANTEEN"')
+        expect(res.text).toContain('value="CANTEEN"')
         expect(res.text).toContain('value="TV"')
         expect(res.text).toContain('value="OTHER"')
       })
@@ -110,7 +110,7 @@ describe('POST /punishment with multiple privileges switched on', () => {
       )
   })
 
-  it('will not add a privilege again from a form that still offers it', () => {
+  it('adds a privilege again, for example an immediate and a suspended loss of canteen', () => {
     punishmentsService.getAllSessionPunishments.mockReturnValue([
       { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN, rehabilitativeActivities: [] },
       {
@@ -126,12 +126,14 @@ describe('POST /punishment with multiple privileges switched on', () => {
         punishmentType: PunishmentType.PRIVILEGE,
         privilegeTypes: [PrivilegeType.TV, PrivilegeType.CANTEEN],
       })
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain('Loss of canteen has already been added. Select a different privilege')
-        expect(res.text).not.toContain('value="CANTEEN"')
-        expect(punishmentsService.startPunishmentBatch).not.toHaveBeenCalled()
-      })
+      .expect(302)
+      .expect('Location', adjudicationUrls.punishmentSameDuration.urls.start('100'))
+      .then(() =>
+        expect(punishmentsService.startPunishmentBatch).toHaveBeenCalledWith(expect.anything(), '100', [
+          { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN },
+          { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.TV },
+        ]),
+      )
   })
 
   it('still allows another Other privilege', () => {
@@ -168,12 +170,12 @@ describe('POST /punishment with multiple privileges switched on', () => {
       ]),
     )
 
-    it('will not change it to a privilege another punishment already withdraws', () =>
+    it('can change it to a privilege another punishment already withdraws', () =>
       request(app)
         .post(adjudicationUrls.punishment.urls.edit('100', 'canteen'))
         .send({ punishmentType: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.TV })
-        .expect(200)
-        .expect(res => expect(res.text).toContain('Loss of TV has already been added. Select a different privilege')))
+        .expect(302)
+        .expect('Location', /^\/punishment-duration\/100\/edit\/canteen/))
 
     it('keeps its own privilege', () =>
       request(app)
@@ -181,14 +183,6 @@ describe('POST /punishment with multiple privileges switched on', () => {
         .send({ punishmentType: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.TV })
         .expect(302)
         .expect('Location', /^\/punishment-duration\/100\/edit\/tv/))
-
-    it('is not checked where the prison is not switched on', () => {
-      config.featureToggles.multiPrivilegePunishmentsPrisons = ['LEI']
-      return request(app)
-        .post(adjudicationUrls.punishment.urls.edit('100', 'canteen'))
-        .send({ punishmentType: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.TV })
-        .expect(302)
-    })
   })
 
   it('goes straight to the duration page for one privilege', () => {
