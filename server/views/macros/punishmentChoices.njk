@@ -2,7 +2,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% macro punishmentRadios(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, hasChildUnder18, errors, title, multiplePrivileges = false, privilegeTypes = []) %}
+{% macro punishmentChoices(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, hasChildUnder18, errors, title, multiplePrivileges = false, privilegeTypes = []) %}
   {% set otherPrivilegeHtml %}
   {{ govukInput({
       id: "otherPrivilege",
