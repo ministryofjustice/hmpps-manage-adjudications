@@ -5,13 +5,11 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
-import TestData from '../../../testutils/testData'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
 jest.mock('../../../../services/reportedAdjudicationsService.ts')
 
-const testData = new TestData()
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -27,21 +25,7 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-    reportedAdjudication: testData.reportedAdjudication({
-      chargeNumber: '100',
-      prisonerNumber: 'G6123VU',
-      dateTimeOfIncident: '2023-08-31T12:54:09.197Z',
-      hearings: [
-        testData.singleHearing({
-          dateTimeOfHearing: '2023-09-02T10:50:00.000Z',
-        }),
-        testData.singleHearing({
-          dateTimeOfHearing: '2023-09-03T12:00:00.000Z',
-        }),
-      ],
-    }),
-  })
+  punishmentsService.getLastHearingDate.mockResolvedValue('2023-09-03')
 })
 
 afterEach(() => {

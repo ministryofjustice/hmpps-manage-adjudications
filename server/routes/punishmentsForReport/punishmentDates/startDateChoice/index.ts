@@ -6,29 +6,18 @@ import PunishmentStartDateChoiceEditRoute from './startDateChoiceEdit'
 import UserService from '../../../../services/userService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
-import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 
 export default function PunishmentStartDateChoiceRoutes({
   userService,
   punishmentsService,
-  reportedAdjudicationsService,
 }: {
   userService: UserService
   punishmentsService: PunishmentsService
-  reportedAdjudicationsService: ReportedAdjudicationsService
 }): Router {
   const router = express.Router()
 
-  const startDateChoiceRoute = new PunishmentStartDateChoiceRoute(
-    userService,
-    punishmentsService,
-    reportedAdjudicationsService,
-  )
-  const startDateChoiceEditRoute = new PunishmentStartDateChoiceEditRoute(
-    userService,
-    punishmentsService,
-    reportedAdjudicationsService,
-  )
+  const startDateChoiceRoute = new PunishmentStartDateChoiceRoute(userService, punishmentsService)
+  const startDateChoiceEditRoute = new PunishmentStartDateChoiceEditRoute(userService, punishmentsService)
 
   const get = (path: string, handler: RequestHandler) => router.get(path, handler)
   const post = (path: string, handler: RequestHandler) => router.post(path, handler)

@@ -510,7 +510,7 @@ export default function routes(
   )
   router.use(
     adjudicationUrls.whenWillPunishmentStart.root,
-    punishmentStartDateChoiceRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
+    punishmentStartDateChoiceRoutes({ userService, punishmentsService }),
   )
   router.use(
     adjudicationUrls.suspendedPunishmentNumberOfDays.root,
