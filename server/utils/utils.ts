@@ -130,6 +130,9 @@ export const formatTimestampTo = (timestamp: string, format: string): string =>
 
 export const numberRange = (start: number, end: number): number[] => generateRange(start, end, _ => _)
 
+// Digits only, so "1.5", "-1", "1e2" and " 1" are not whole numbers. Callers check the range they allow.
+export const isWholeNumber = (value: string): boolean => /^\d+$/.test(value ?? '')
+
 export function generateRange<T>(start: number, end: number, generator: (index: number) => T): T[] {
   const length = end - start + 1
   if (!Number.isFinite(length) || length <= 0) return []

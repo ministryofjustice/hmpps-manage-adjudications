@@ -140,6 +140,10 @@ describe('Do you have the details of the rehabilitative activities?', () => {
       'Number of rehabilitative activities must be a whole number, like 1',
     ],
     [
+      { hasRehabilitativeActivitiesDetails: 'YES', numberOfActivities: '0' },
+      'Number of rehabilitative activities must be a whole number, like 1',
+    ],
+    [
       { hasRehabilitativeActivitiesDetails: 'YES', numberOfActivities: '11' },
       'Number of rehabilitative activities must be 10 or fewer',
     ],

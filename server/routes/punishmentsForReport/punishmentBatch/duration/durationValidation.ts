@@ -2,6 +2,7 @@ import moment from 'moment'
 import type { FormError } from '../../../../@types/template'
 import type { PunishmentBatchItem } from '../../../../data/PunishmentResult'
 import validateNumberOfDays from '../../punishmentDates/numberOfDays/numberOfDaysValidation'
+import { isWholeNumber } from '../../../../utils/utils'
 
 export enum StartMode {
   IMMEDIATE = 'IMMEDIATE',
@@ -48,10 +49,11 @@ export default function validateForm({
   const hearingDayText = hearingDay?.format('D MMMM YYYY')
 
   const days = String(duration ?? '').trim()
-  if (days && !/^\d+$/.test(days)) {
+  if (days && !isWholeNumber(days)) {
     errors.push({ href: '#duration', text: 'Number of days must be a whole number, like 21' })
   } else {
-    // the same maximums as the number of days page, checked for every punishment the answer applies to
+    // the same rules as the number of days page, including at least 1 day, checked for every punishment the
+    // answer applies to
     const daysError = punishments
       .map(punishment =>
         validateNumberOfDays({

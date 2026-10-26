@@ -333,6 +333,7 @@ describe('POST duration and start date', () => {
 
   it.each([
     [{ duration: 'ten', startMode: 'IMMEDIATE' }, 'Number of days must be a whole number, like 21'],
+    [{ duration: '0', startMode: 'IMMEDIATE' }, 'Enter one or more days'],
     [{ duration: '5', startMode: 'LATER' }, 'Enter the date the punishment will start'],
     [{ duration: '5', startMode: 'LATER', startDate: '31/2/2026' }, 'Start date must be a real date'],
     [

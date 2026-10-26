@@ -19,6 +19,7 @@ import {
   getLastMonthText,
   formatName,
   activeCaseLoadLocation,
+  isWholeNumber,
 } from './utils'
 
 describe('Convert to title case', () => {
@@ -324,5 +325,12 @@ describe('agencyIdToName', () => {
       const result = getLastMonthText()
       expect(result).toEqual('December 2019')
     })
+  })
+
+  describe('isWholeNumber', () => {
+    it.each(['0', '1', '21', '02'])('accepts %s', value => expect(isWholeNumber(value)).toBe(true))
+    it.each(['', ' 1', '1.5', '-1', '1e2', 'ten', undefined])('rejects %s', value =>
+      expect(isWholeNumber(value)).toBe(false),
+    )
   })
 })

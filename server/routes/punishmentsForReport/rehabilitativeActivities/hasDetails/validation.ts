@@ -1,4 +1,5 @@
 import { FormError } from '../../../../@types/template'
+import { isWholeNumber } from '../../../../utils/utils'
 
 type PunishmentForm = {
   hasDetails: boolean
@@ -9,6 +10,7 @@ type BatchForm = {
   numberOfActivities: string
 }
 
+// From the design: the activity pages are worded "first" to "tenth"
 export const MAX_ACTIVITIES = 10
 
 const errors: { [key: string]: FormError } = {
@@ -46,7 +48,7 @@ export function validateBatchForm({ hasDetails, numberOfActivities }: BatchForm)
   if (!['YES', 'NO'].includes(hasDetails)) return errors.MISSING_CHOICE_BATCH
   if (hasDetails === 'NO') return null
   if (!numberOfActivities) return errors.MISSING_NO_OF_ACTIVITIES
-  if (!/^\d+$/.test(numberOfActivities) || Number(numberOfActivities) < 1) return errors.NOT_A_NUMBER
+  if (!isWholeNumber(numberOfActivities) || Number(numberOfActivities) < 1) return errors.NOT_A_NUMBER
   if (Number(numberOfActivities) > MAX_ACTIVITIES) return errors.TOO_MANY
   return null
 }
