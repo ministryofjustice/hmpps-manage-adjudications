@@ -51,6 +51,7 @@ beforeEach(() => {
     id: 'batch-1',
     redisIds: ['library', 'tv'],
     completedRedisIds: [],
+    drafts: {},
   })
   rehabBatchSessionService.isCurrentForm.mockReturnValue(true)
   rehabBatchSessionService.nextUrl.mockReturnValue('/next')
@@ -75,9 +76,11 @@ describe('Do you have the details of the rehabilitative activities?', () => {
 
   it('lists the punishments when one answer covers them all', () => {
     rehabBatchSessionService.get.mockReturnValue({
+      id: 'batch-1',
       redisIds: ['library', 'tv'],
       completedRedisIds: [],
       sameForAll: true,
+      drafts: {},
     })
     return request(app)
       .get(adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.urls.start('100', 'library'))

@@ -22,7 +22,12 @@ beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, rehabBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  rehabBatchSessionService.get.mockReturnValue({ redisIds: ['a', 'b'], completedRedisIds: [] })
+  rehabBatchSessionService.get.mockReturnValue({
+    id: 'batch-1',
+    redisIds: ['a', 'b'],
+    completedRedisIds: [],
+    drafts: {},
+  })
   rehabBatchSessionService.nextUrl.mockReturnValue('/next')
 })
 
@@ -40,7 +45,7 @@ describe('Do they all have the same rehabilitative activity?', () => {
   })
 
   it('skips the question for a single punishment', () => {
-    rehabBatchSessionService.get.mockReturnValue({ redisIds: ['a'], completedRedisIds: [] })
+    rehabBatchSessionService.get.mockReturnValue({ id: 'batch-1', redisIds: ['a'], completedRedisIds: [], drafts: {} })
     return request(app)
       .get(adjudicationUrls.sameRehabilitativeActivity.urls.start('100'))
       .expect(302)

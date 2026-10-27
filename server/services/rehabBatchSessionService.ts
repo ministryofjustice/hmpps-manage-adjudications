@@ -12,7 +12,12 @@ export default class RehabBatchSessionService {
     if (!req.session.rehabBatch) {
       req.session.rehabBatch = {}
     }
-    req.session.rehabBatch[chargeNumber] = { id: randomUUID(), redisIds: [...redisIds], completedRedisIds: [] }
+    req.session.rehabBatch[chargeNumber] = {
+      id: randomUUID(),
+      redisIds: [...redisIds],
+      completedRedisIds: [],
+      drafts: {},
+    }
   }
 
   get(req: Request, chargeNumber: string): RehabBatch | undefined {
@@ -23,7 +28,7 @@ export default class RehabBatchSessionService {
   // in another tab while a new batch was started, must not change the punishments in this one.
   isCurrentForm(req: Request, chargeNumber: string, redisId: string, rehabBatchId: string): boolean {
     const batch = this.get(req, chargeNumber)
-    return !!batch && (batch.id ?? '') === (rehabBatchId ?? '') && batch.redisIds.includes(redisId)
+    return !!batch && batch.id === rehabBatchId && batch.redisIds.includes(redisId)
   }
 
   // Changing the answer asks about the punishments again. Each keeps its activities until new ones are entered.
@@ -71,12 +76,12 @@ export default class RehabBatchSessionService {
   startDraft(req: Request, chargeNumber: string, redisId: string) {
     const batch = this.get(req, chargeNumber)
     if (batch) {
-      batch.drafts = { ...batch.drafts, [redisId]: [] }
+      batch.drafts[redisId] = []
     }
   }
 
   getDraft(req: Request, chargeNumber: string, redisId: string): RehabilitativeActivity[] | undefined {
-    return this.get(req, chargeNumber)?.drafts?.[redisId]
+    return this.get(req, chargeNumber)?.drafts[redisId]
   }
 
   saveDraftActivity(
@@ -95,7 +100,7 @@ export default class RehabBatchSessionService {
   // Replaces the punishment's activities with those entered
   applyDraft(req: Request, chargeNumber: string, redisId: string) {
     const batch = this.get(req, chargeNumber)
-    const draft = batch?.drafts?.[redisId]
+    const draft = batch?.drafts[redisId]
     if (!draft) {
       return
     }

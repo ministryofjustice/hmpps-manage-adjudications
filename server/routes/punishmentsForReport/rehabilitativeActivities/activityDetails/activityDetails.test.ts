@@ -43,7 +43,12 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockReturnValue(library)
   punishmentsService.getPrisonerDetails.mockResolvedValue({ friendlyName: 'John Smith' } as never)
-  rehabBatchSessionService.get.mockReturnValue({ id: 'batch-1', redisIds: ['library'], completedRedisIds: [] })
+  rehabBatchSessionService.get.mockReturnValue({
+    id: 'batch-1',
+    redisIds: ['library'],
+    completedRedisIds: [],
+    drafts: {},
+  })
   rehabBatchSessionService.isCurrentForm.mockReturnValue(true)
   rehabBatchSessionService.getDraft.mockReturnValue([])
   rehabBatchSessionService.nextUrl.mockReturnValue('/next')

@@ -46,7 +46,12 @@ beforeEach(() => {
   config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, rehabBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  rehabBatchSessionService.get.mockReturnValue({ redisIds: ['library', 'tv'], completedRedisIds: [] })
+  rehabBatchSessionService.get.mockReturnValue({
+    id: 'batch-1',
+    redisIds: ['library', 'tv'],
+    completedRedisIds: [],
+    drafts: {},
+  })
   punishmentsService.getSessionPunishment.mockImplementation((req, chargeNumber, redisId) => ({ library, tv })[redisId])
   punishmentsService.extendRehabActivities.mockImplementation(extendRehabActivities)
 })
