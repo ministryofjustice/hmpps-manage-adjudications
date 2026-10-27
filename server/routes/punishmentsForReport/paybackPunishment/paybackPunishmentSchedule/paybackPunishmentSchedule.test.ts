@@ -17,6 +17,10 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  // the real lookup, so each test only sets up the session punishments
+  punishmentsService.getChangedOrLatestSessionPunishment.mockImplementation(
+    jest.requireActual('../../../../services/punishmentsService').default.prototype.getChangedOrLatestSessionPunishment,
+  )
   punishmentsService.getAllSessionPunishments.mockReturnValue([
     { redisId: 'changed', type: PunishmentType.PAYBACK, duration: 4, endDate: '2023-05-05', paybackNotes: 'Cleaning' },
     { redisId: 'other', type: PunishmentType.PAYBACK, duration: 9, endDate: '2023-06-30', paybackNotes: 'Garden' },

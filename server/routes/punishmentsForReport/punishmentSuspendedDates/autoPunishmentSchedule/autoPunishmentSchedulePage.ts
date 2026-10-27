@@ -98,14 +98,11 @@ export default class AutoPunishmentSuspendedSchedulePage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
-    // the punishment just changed, when named, or else the one just added, which is last.
-    // A changed punishment keeps its place in the list, so it is not always the last.
-    const { redisId } = req.query
-    const lastAddedPunishment =
-      (redisId && sessionPunishments.find((punishment: { redisId?: string }) => punishment.redisId === redisId)) ||
-      sessionPunishments[sessionPunishments.length - 1] ||
-      {}
+    const lastAddedPunishment = this.punishmentsService.getChangedOrLatestSessionPunishment(
+      req,
+      chargeNumber,
+      req.query.redisId as string,
+    )
     if (!lastAddedPunishment) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }

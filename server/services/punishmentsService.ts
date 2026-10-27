@@ -270,6 +270,18 @@ export default class PunishmentsService {
     return req.session?.punishments?.[chargeNumber]
   }
 
+  // The punishment a schedule page shows: the one just changed, when named, or else the one just added, which is
+  // last. A changed punishment keeps its place in the list, so it is not always the last.
+  getChangedOrLatestSessionPunishment(
+    req: Request,
+    chargeNumber: string,
+    redisId?: string,
+  ): PunishmentData | undefined {
+    const punishments: PunishmentData[] = this.getAllSessionPunishments(req, chargeNumber) || []
+    const changed = redisId ? punishments.find(punishment => punishment.redisId === redisId) : undefined
+    return changed ?? punishments[punishments.length - 1]
+  }
+
   // The latest punishment added in this session that matches another on the charge in every detail,
   // and that the user has not yet said they want to keep
   getUnconfirmedDuplicate(

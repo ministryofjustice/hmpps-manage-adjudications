@@ -569,6 +569,30 @@ describe('PunishmentsService session punishments', () => {
   const canteen = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN }
   const library = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.OTHER, otherPrivilege: 'library' }
 
+  describe('the punishment a schedule page shows', () => {
+    const req = newRequest({
+      punishments: {
+        100: [
+          { ...canteen, redisId: 'a', rehabilitativeActivities: [] },
+          { ...library, redisId: 'b', rehabilitativeActivities: [] },
+        ],
+      },
+    })
+
+    it('is the one named, when it was changed', () => {
+      expect(service.getChangedOrLatestSessionPunishment(req, '100', 'a').redisId).toEqual('a')
+    })
+
+    it('is the latest one added when none is named, or the one named is not found', () => {
+      expect(service.getChangedOrLatestSessionPunishment(req, '100').redisId).toEqual('b')
+      expect(service.getChangedOrLatestSessionPunishment(req, '100', 'gone').redisId).toEqual('b')
+    })
+
+    it('is missing when there are no punishments', () => {
+      expect(service.getChangedOrLatestSessionPunishment(newRequest(), '100')).toBeUndefined()
+    })
+  })
+
   describe('updating a session punishment', () => {
     it('keeps it in its place in the list', () => {
       const req = newRequest({

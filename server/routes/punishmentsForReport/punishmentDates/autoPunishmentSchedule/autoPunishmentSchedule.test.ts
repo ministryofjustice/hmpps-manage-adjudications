@@ -26,7 +26,11 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  punishmentsService.getAllSessionPunishments.mockResolvedValue([
+  // the real lookup, so each test only sets up the session punishments
+  punishmentsService.getChangedOrLatestSessionPunishment.mockImplementation(
+    jest.requireActual('../../../../services/punishmentsService').default.prototype.getChangedOrLatestSessionPunishment,
+  )
+  punishmentsService.getAllSessionPunishments.mockReturnValue([
     {
       type: PunishmentType.DAMAGES_OWED,
       duration: 0,
@@ -77,7 +81,7 @@ describe('GET', () => {
   })
 
   it('shows the punishment that was changed, which keeps its place in the list', () => {
-    punishmentsService.getAllSessionPunishments.mockResolvedValue([
+    punishmentsService.getAllSessionPunishments.mockReturnValue([
       {
         redisId: 'changed',
         type: PunishmentType.CONFINEMENT,
@@ -108,7 +112,7 @@ describe('GET', () => {
   })
 
   it('displays the calculated last day and child answer for a social visits punishment', () => {
-    punishmentsService.getAllSessionPunishments.mockResolvedValue([
+    punishmentsService.getAllSessionPunishments.mockReturnValue([
       {
         type: PunishmentType.LOSS_OF_SOCIAL_VISITS,
         duration: 27,
