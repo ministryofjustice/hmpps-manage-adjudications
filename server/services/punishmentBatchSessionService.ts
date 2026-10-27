@@ -16,7 +16,7 @@ export default class PunishmentBatchSessionService {
   }
 
   get(req: Request, chargeNumber: string): PunishmentBatch | undefined {
-    return req.session?.punishmentBatch?.[chargeNumber]
+    return req.session.punishmentBatch?.[chargeNumber]
   }
 
   // Changing the answer asks about the punishments again. Those already saved keep their place on the
@@ -52,7 +52,7 @@ export default class PunishmentBatchSessionService {
   }
 
   clear(req: Request, chargeNumber: string) {
-    delete req.session?.punishmentBatch?.[chargeNumber]
+    delete req.session.punishmentBatch?.[chargeNumber]
   }
 
   nextUrl(req: Request, chargeNumber: string): string {

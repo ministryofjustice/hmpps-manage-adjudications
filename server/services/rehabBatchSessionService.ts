@@ -21,7 +21,7 @@ export default class RehabBatchSessionService {
   }
 
   get(req: Request, chargeNumber: string): RehabBatch | undefined {
-    return req.session?.rehabBatch?.[chargeNumber]
+    return req.session.rehabBatch?.[chargeNumber]
   }
 
   // A rehabilitative activity form belongs to the batch it was shown in. One from an earlier batch, or left open
@@ -113,7 +113,7 @@ export default class RehabBatchSessionService {
   }
 
   clear(req: Request, chargeNumber: string) {
-    delete req.session?.rehabBatch?.[chargeNumber]
+    delete req.session.rehabBatch?.[chargeNumber]
   }
 
   nextUrl(req: Request, chargeNumber: string): string {

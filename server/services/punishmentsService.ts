@@ -338,10 +338,6 @@ export default class PunishmentsService {
     req.session.punishments[chargeNumber] = punishments
   }
 
-  deleteAllSessionPunishments(req: Request, chargeNumber: string) {
-    return delete req.session?.punishments?.[chargeNumber]
-  }
-
   // Replaces the punishment's activities with those entered for it in a rehabilitative activity batch
   replaceRehabilitativeActivities(
     req: Request,
@@ -393,8 +389,8 @@ export default class PunishmentsService {
   }
 
   takeSuccessMessage(req: Request, chargeNumber: string): string | undefined {
-    const message = req.session?.punishmentSuccessMessage?.[chargeNumber]
-    delete req.session?.punishmentSuccessMessage?.[chargeNumber]
+    const message = req.session.punishmentSuccessMessage?.[chargeNumber]
+    delete req.session.punishmentSuccessMessage?.[chargeNumber]
     return message
   }
 
