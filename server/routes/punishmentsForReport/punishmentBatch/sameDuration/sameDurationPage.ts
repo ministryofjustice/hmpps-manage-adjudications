@@ -1,9 +1,7 @@
 import type { Request, Response } from 'express'
 import type { FormError } from '../../../../@types/template'
-import type UserService from '../../../../services/userService'
 import type PunishmentsService from '../../../../services/punishmentsService'
 import type PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
-import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import validateForm from './sameDurationValidation'
 
@@ -14,7 +12,6 @@ type PageData = {
 
 export default class SameDurationPage {
   constructor(
-    private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
     private readonly punishmentBatchSessionService: PunishmentBatchSessionService,
   ) {}
@@ -32,12 +29,6 @@ export default class SameDurationPage {
 
   view = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
-    const userRoles = await this.userService.getUserRoles(res.locals.user.token)
-
-    if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
-      return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
-    }
-
     const batch = this.punishmentBatchSessionService.get(req, chargeNumber)
     if (!batch || batch.items.length < 2) {
       return res.redirect(this.punishmentBatchSessionService.nextUrl(req, chargeNumber))

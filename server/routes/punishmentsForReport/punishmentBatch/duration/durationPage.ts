@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { Request, Response } from 'express'
 import type { FormError } from '../../../../@types/template'
-import type UserService from '../../../../services/userService'
 import type PunishmentsService from '../../../../services/punishmentsService'
 import type PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
 import type { PunishmentBatchItem, PunishmentData, RehabilitativeActivity } from '../../../../data/PunishmentResult'
@@ -11,7 +10,7 @@ import {
   convertPunishmentType,
   parseHasChildUnder18,
 } from '../../../../data/PunishmentResult'
-import { apiDateToDatePicker, formatTimestampTo, hasAnyRole } from '../../../../utils/utils'
+import { apiDateToDatePicker, formatTimestampTo } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import validateForm, { StartMode, parseDatePickerDate } from './durationValidation'
 
@@ -60,7 +59,6 @@ export default class DurationPage {
 
   constructor(
     pageType: PageRequestType,
-    private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
     private readonly punishmentBatchSessionService: PunishmentBatchSessionService,
   ) {
@@ -153,12 +151,6 @@ export default class DurationPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, redisId } = req.params
     const { user } = res.locals
-    const userRoles = await this.userService.getUserRoles(user.token)
-
-    if (!hasAnyRole(['ADJUDICATIONS_REVIEWER'], userRoles)) {
-      return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
-    }
-
     const subject = this.getSubject(req)
     if (!subject) {
       return res.redirect(this.punishmentBatchSessionService.nextUrl(req, chargeNumber))
