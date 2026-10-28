@@ -22,8 +22,22 @@ beforeEach(() => {
     jest.requireActual('../../../../services/punishmentsService').default.prototype.getChangedOrLatestSessionPunishment,
   )
   punishmentsService.getAllSessionPunishments.mockReturnValue([
-    { redisId: 'changed', type: PunishmentType.PAYBACK, duration: 4, endDate: '2023-05-05', paybackNotes: 'Cleaning' },
-    { redisId: 'other', type: PunishmentType.PAYBACK, duration: 9, endDate: '2023-06-30', paybackNotes: 'Garden' },
+    {
+      rehabilitativeActivities: [],
+      redisId: 'changed',
+      type: PunishmentType.PAYBACK,
+      duration: 4,
+      endDate: '2023-05-05',
+      paybackNotes: 'Cleaning',
+    },
+    {
+      rehabilitativeActivities: [],
+      redisId: 'other',
+      type: PunishmentType.PAYBACK,
+      duration: 9,
+      endDate: '2023-06-30',
+      paybackNotes: 'Garden',
+    },
   ])
 })
 

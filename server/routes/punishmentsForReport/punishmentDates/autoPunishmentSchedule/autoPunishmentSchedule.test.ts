@@ -31,14 +31,11 @@ beforeEach(() => {
     jest.requireActual('../../../../services/punishmentsService').default.prototype.getChangedOrLatestSessionPunishment,
   )
   punishmentsService.getAllSessionPunishments.mockReturnValue([
+    { rehabilitativeActivities: [], type: PunishmentType.DAMAGES_OWED, duration: 0, damagesOwedAmount: 50 },
     {
-      type: PunishmentType.DAMAGES_OWED,
-      duration: 0,
-      amount: 50,
-    },
-    {
+      rehabilitativeActivities: [],
       type: PunishmentType.PRIVILEGE,
-      PrivilegeType: PrivilegeType.OTHER,
+      privilegeType: PrivilegeType.OTHER,
       otherPrivilege: 'nintendo switch',
       duration: 10,
       startDate: '2023-04-10',
@@ -83,6 +80,7 @@ describe('GET', () => {
   it('shows the punishment that was changed, which keeps its place in the list', () => {
     punishmentsService.getAllSessionPunishments.mockReturnValue([
       {
+        rehabilitativeActivities: [],
         redisId: 'changed',
         type: PunishmentType.CONFINEMENT,
         duration: 5,
@@ -90,6 +88,7 @@ describe('GET', () => {
         endDate: '2023-05-05',
       },
       {
+        rehabilitativeActivities: [],
         redisId: 'other',
         type: PunishmentType.PRIVILEGE,
         privilegeType: PrivilegeType.OTHER,
@@ -114,6 +113,7 @@ describe('GET', () => {
   it('displays the calculated last day and child answer for a social visits punishment', () => {
     punishmentsService.getAllSessionPunishments.mockReturnValue([
       {
+        rehabilitativeActivities: [],
         type: PunishmentType.LOSS_OF_SOCIAL_VISITS,
         duration: 27,
         startDate: '2023-12-13',

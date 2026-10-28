@@ -17,7 +17,8 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { punishmentsService, userService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  punishmentsService.getSessionPunishment.mockResolvedValue({
+  punishmentsService.getSessionPunishment.mockReturnValue({
+    rehabilitativeActivities: [],
     type: PunishmentType.DAMAGES_OWED,
     damagesOwedAmount: 100,
     duration: 0,

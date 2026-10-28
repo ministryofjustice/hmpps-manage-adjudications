@@ -27,7 +27,8 @@ beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getLastHearingDate.mockResolvedValue('2023-09-03')
-  punishmentsService.getSessionPunishment.mockResolvedValue({
+  punishmentsService.getSessionPunishment.mockReturnValue({
+    rehabilitativeActivities: [],
     type: PunishmentType.PRIVILEGE,
     privilegeType: PrivilegeType.OTHER,
     otherPrivilege: 'nintendo switch',

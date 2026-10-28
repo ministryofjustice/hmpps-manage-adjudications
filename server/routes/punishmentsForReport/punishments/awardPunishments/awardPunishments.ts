@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import { User } from '../../../../data/hmppsManageUsersClient'
 import {
   PunishmentData,
-  PunishmentDataWithSchedule,
   PunishmentType,
   canHaveRehabilitativeActivity,
   flattenPunishments,
@@ -140,7 +139,7 @@ export default class AwardPunishmentsPage {
     return adjudicationUrls.checkPunishments.urls.start(chargeNumber)
   }
 
-  hasCautionBeenAdded = async (punishments: PunishmentDataWithSchedule[]) => {
+  hasCautionBeenAdded = async (punishments: PunishmentData[]) => {
     if (!punishments) return false
     return !!punishments.filter(pun => pun.type === PunishmentType.CAUTION).length
   }

@@ -29,7 +29,7 @@ const punishmentsOnSession: PunishmentData[] = [
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { punishmentsService, userService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  punishmentsService.getAllSessionPunishments.mockResolvedValue(punishmentsOnSession)
+  punishmentsService.getAllSessionPunishments.mockReturnValue(punishmentsOnSession)
   punishmentsService.getReasonForChangePunishments.mockResolvedValue({})
 })
 

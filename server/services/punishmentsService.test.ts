@@ -604,10 +604,7 @@ describe('PunishmentsService session punishments', () => {
         },
       })
       service.updateSessionPunishment(req, { ...canteen, duration: 9, rehabilitativeActivities: [] }, '100', 'a')
-      expect(service.getAllSessionPunishments(req, '100').map((p: { redisId: string }) => p.redisId)).toEqual([
-        'a',
-        'b',
-      ])
+      expect(service.getAllSessionPunishments(req, '100').map(p => p.redisId)).toEqual(['a', 'b'])
       expect(service.getSessionPunishment(req, '100', 'a').duration).toEqual(9)
     })
 

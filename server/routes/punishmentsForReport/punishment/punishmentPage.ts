@@ -9,7 +9,7 @@ import adjudicationUrls from '../../../utils/urlGenerator'
 import {
   PrivilegeType,
   PunishmentBatchItem,
-  PunishmentDataWithSchedule,
+  PunishmentData,
   PunishmentType,
   RehabilitativeActivity,
   isDayBasedPunishment,
@@ -300,30 +300,29 @@ export default class PunishmentPage {
     return adjudicationUrls.punishmentNumberOfDays.urls.start(chargeNumber)
   }
 
-  private damagesAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
+  private damagesAlreadyAdded = async (sessionPunishments: PunishmentData[]) => {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.DAMAGES_OWED,
+        (punishment: PunishmentData) => punishment.type === PunishmentType.DAMAGES_OWED,
       ).length
     }
     return false
   }
 
-  private punishmentsAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
+  private punishmentsAlreadyAdded = async (sessionPunishments: PunishmentData[]) => {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithSchedule) =>
+        (punishment: PunishmentData) =>
           punishment.type !== PunishmentType.CAUTION && punishment.type !== PunishmentType.DAMAGES_OWED,
       ).length
     }
     return false
   }
 
-  private cautionAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
+  private cautionAlreadyAdded = async (sessionPunishments: PunishmentData[]) => {
     if (sessionPunishments) {
-      return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.CAUTION,
-      ).length
+      return !!sessionPunishments.filter((punishment: PunishmentData) => punishment.type === PunishmentType.CAUTION)
+        .length
     }
     return false
   }

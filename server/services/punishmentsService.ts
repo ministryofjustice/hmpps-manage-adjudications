@@ -102,7 +102,7 @@ export default class PunishmentsService {
 
   noRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    const updatedPunishment = {
+    const updatedPunishment: PunishmentData = {
       ...punishment,
       isThereRehabilitativeActivities: false,
       // no details are held any more, so the punishment can be changed again
@@ -123,7 +123,7 @@ export default class PunishmentsService {
     }
 
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    const updatedPunishment = {
+    const updatedPunishment: PunishmentData = {
       ...punishment,
       isThereRehabilitativeActivities: true,
       hasRehabilitativeActivitiesDetails: false,
@@ -137,7 +137,7 @@ export default class PunishmentsService {
 
   removeAnyRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    const updatedPunishment = {
+    const updatedPunishment: PunishmentData = {
       ...punishment,
       isThereRehabilitativeActivities: true,
       hasRehabilitativeActivitiesDetails: true,
@@ -266,7 +266,7 @@ export default class PunishmentsService {
     return sessionData.filter((punishment: PunishmentData) => punishment.redisId === redisId)[0]
   }
 
-  getAllSessionPunishments(req: Request, chargeNumber: string) {
+  getAllSessionPunishments(req: Request, chargeNumber: string): PunishmentData[] | undefined {
     return req.session?.punishments?.[chargeNumber]
   }
 
@@ -277,7 +277,7 @@ export default class PunishmentsService {
     chargeNumber: string,
     redisId?: string,
   ): PunishmentData | undefined {
-    const punishments: PunishmentData[] = this.getAllSessionPunishments(req, chargeNumber) || []
+    const punishments = this.getAllSessionPunishments(req, chargeNumber) || []
     const changed = redisId ? punishments.find(punishment => punishment.redisId === redisId) : undefined
     return changed ?? punishments[punishments.length - 1]
   }
@@ -288,7 +288,7 @@ export default class PunishmentsService {
     req: Request,
     chargeNumber: string,
   ): { punishment: PunishmentData; matches: PunishmentData } | null {
-    const punishments: PunishmentData[] = this.getAllSessionPunishments(req, chargeNumber) || []
+    const punishments = this.getAllSessionPunishments(req, chargeNumber) || []
     for (let i = punishments.length - 1; i >= 0; i -= 1) {
       const punishment = punishments[i]
       if (!punishment.id && !punishment.duplicateConfirmed) {

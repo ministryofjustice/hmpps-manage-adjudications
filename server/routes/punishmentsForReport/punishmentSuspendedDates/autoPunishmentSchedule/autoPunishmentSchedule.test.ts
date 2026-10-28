@@ -32,6 +32,7 @@ beforeEach(() => {
   )
   punishmentsService.getAllSessionPunishments.mockReturnValue([
     {
+      rehabilitativeActivities: [],
       redisId: 'changed',
       type: PunishmentType.CONFINEMENT,
       duration: 5,
@@ -40,6 +41,7 @@ beforeEach(() => {
       activatedFrom: '99',
     },
     {
+      rehabilitativeActivities: [],
       redisId: 'other',
       type: PunishmentType.CONFINEMENT,
       duration: 10,
