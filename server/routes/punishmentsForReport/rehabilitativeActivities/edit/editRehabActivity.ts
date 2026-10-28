@@ -4,7 +4,8 @@ import { apiDateToDatePicker, datePickerToApi, formatDateForDatePicker, hasAnyRo
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
 import PunishmentsService from '../../../../services/punishmentsService'
-import validateForm from '../activityDetails/activityDetailsValidation'
+import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
+import validateForm, { validateCompletionDate } from '../activityDetails/activityDetailsValidation'
 
 type PageData = {
   error?: FormError
@@ -18,6 +19,7 @@ export default class editRehabilitativeActivityPage {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly rehabBatchSessionService: RehabBatchSessionService,
   ) {}
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
@@ -62,7 +64,14 @@ export default class editRehabilitativeActivityPage {
 
     const { friendlyName } = await this.punishmentsService.getPrisonerDetails(chargeNumber, res.locals.user)
 
-    const error = validateForm({ prisonerName: friendlyName, details, monitorName, endDate, totalSessions })
+    const error =
+      validateForm({ prisonerName: friendlyName, details, monitorName, endDate, totalSessions }) ||
+      (res.locals.featureToggles?.multiPrivilegePunishments &&
+        validateCompletionDate({
+          endDate,
+          latestDate: this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)?.suspendedUntil,
+          coversSeveralPunishments: false,
+        }))
     if (error)
       return this.renderView(req, res, {
         error,
@@ -81,6 +90,13 @@ export default class editRehabilitativeActivityPage {
     }
 
     await this.punishmentsService.editRehabilitativeActivity(req, chargeNumber, redisId, +id, updatedRehabActivity)
+    // a change made from the rehabilitative schedule read-back returns there
+    if (
+      res.locals.featureToggles?.multiPrivilegePunishments &&
+      this.rehabBatchSessionService.includes(req, chargeNumber, redisId)
+    ) {
+      return res.redirect(adjudicationUrls.rehabilitativeActivitiesSchedule.urls.start(chargeNumber))
+    }
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

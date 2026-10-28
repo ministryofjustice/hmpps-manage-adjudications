@@ -31,6 +31,8 @@ import WitnessesSessionService from './witnessesSessionService'
 import HearingsService from './hearingsService'
 import OutcomesService from './outcomesService'
 import PunishmentsService from './punishmentsService'
+import PunishmentBatchSessionService from './punishmentBatchSessionService'
+import RehabBatchSessionService from './rehabBatchSessionService'
 import ChartApiService from './chartApiService'
 import HmppsManageUsersClient from '../data/hmppsManageUsersClient'
 import CreateOnBehalfOfSessionService from '../routes/createOnBehalfOf/createOnBehalfOfSessionService'
@@ -78,6 +80,8 @@ const witnessesSessionService = new WitnessesSessionService()
 const hearingsService = new HearingsService(hmppsAuthClient)
 const outcomesService = new OutcomesService()
 const punishmentsService = new PunishmentsService(hmppsAuthClient, hmppsManageUsersClient)
+const punishmentBatchSessionService = new PunishmentBatchSessionService()
+const rehabBatchSessionService = new RehabBatchSessionService(punishmentsService)
 const createOnBehalfOfSessionService = new CreateOnBehalfOfSessionService()
 const frontendComponentService = new FrontendComponentService(frontendComponentApiClient)
 
@@ -108,6 +112,8 @@ export const services = {
   hearingsService,
   outcomesService,
   punishmentsService,
+  punishmentBatchSessionService,
+  rehabBatchSessionService,
   applicationInfo,
   chartApiService,
   createOnBehalfOfSessionService,

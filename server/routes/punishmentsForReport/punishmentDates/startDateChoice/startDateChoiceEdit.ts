@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import PunishmentStartDateChoicePage, { PageRequestType } from './startDateChoicePage'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
-import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 
 export default class PunishmentStartDateChoiceEditRoute {
   page: PunishmentStartDateChoicePage
@@ -10,14 +9,8 @@ export default class PunishmentStartDateChoiceEditRoute {
   constructor(
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
-    this.page = new PunishmentStartDateChoicePage(
-      PageRequestType.EDIT,
-      userService,
-      punishmentsService,
-      reportedAdjudicationsService,
-    )
+    this.page = new PunishmentStartDateChoicePage(PageRequestType.EDIT, userService, punishmentsService)
   }
 
   view = async (req: Request, res: Response): Promise<void> => {

@@ -73,6 +73,8 @@ describe('POST', () => {
       .then(() => {
         expect(punishmentsService.deleteSessionPunishments).toHaveBeenCalledWith(expect.anything(), 'copy', '100')
         expect(punishmentsService.confirmDuplicatePunishment).not.toHaveBeenCalled()
+        // the banner would say a punishment was added that has just been removed
+        expect(punishmentsService.takeSuccessMessage).toHaveBeenCalledWith(expect.anything(), '100')
       }))
 
   it('keeps the copy when the answer is yes', () =>
@@ -84,6 +86,7 @@ describe('POST', () => {
       .then(() => {
         expect(punishmentsService.confirmDuplicatePunishment).toHaveBeenCalledWith(expect.anything(), '100', 'copy')
         expect(punishmentsService.deleteSessionPunishments).not.toHaveBeenCalled()
+        expect(punishmentsService.takeSuccessMessage).not.toHaveBeenCalled()
       }))
 
   it('shows an error when no answer is given', () =>

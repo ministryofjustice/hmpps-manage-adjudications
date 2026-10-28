@@ -49,7 +49,7 @@
 
       {% if rehabActivities | length %}
          <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
-         {{ awardRehabilitativeActivitiesTable(rehabActivities, true) }}
+         {{ awardRehabilitativeActivitiesTable(rehabActivities, true, featureToggles.multiPrivilegePunishments) }}
       {% endif %}
 
       {% if reasonForChange %}

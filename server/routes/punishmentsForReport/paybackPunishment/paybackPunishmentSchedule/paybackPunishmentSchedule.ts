@@ -68,8 +68,11 @@ export default class PaybackPunishmentScheduleRoute {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    const sessionPunishments = await this.punishmentsService.getAllSessionPunishments(req, chargeNumber)
-    const lastAddedPunishment = sessionPunishments[sessionPunishments.length - 1] || {}
+    const lastAddedPunishment = this.punishmentsService.getChangedOrLatestSessionPunishment(
+      req,
+      chargeNumber,
+      req.query.redisId as string,
+    )
     if (!lastAddedPunishment) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }

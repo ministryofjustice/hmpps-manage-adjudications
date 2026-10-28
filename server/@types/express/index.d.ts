@@ -3,6 +3,8 @@ import { SubmittedDateTime } from '../template'
 import { OffenceData } from '../../routes/offenceCodeDecisions/offenceData'
 import { PdfFooterData, PdfHeaderData, PdfPageData } from '../../utils/pdfRenderer'
 import { PdfMargins } from '../../data/gotenbergClient'
+import type { FeatureToggles } from '../../utils/featureToggles'
+import type { PunishmentBatch, PunishmentData, RehabBatch } from '../../data/PunishmentResult'
 
 export default {}
 
@@ -31,7 +33,10 @@ declare module 'express-session' {
     evidence: { [key: string]; evidence? }
     witnessData: { [key: string]; witnessData? }
     witnesses: { [key: string]; witnesses? }
-    punishments: { [key: string]; punishments? }
+    punishments: { [chargeNumber: string]: PunishmentData[] }
+    punishmentBatch: { [chargeNumber: string]: PunishmentBatch }
+    rehabBatch: { [chargeNumber: string]: RehabBatch }
+    punishmentSuccessMessage: { [chargeNumber: string]: string }
     userDetails: UserDetails
     punishmentReasonForChange: { [key: string]; punishmentReasonForChange? }
     createdOnBehalfOf: { [key: string]; string? }
@@ -56,6 +61,8 @@ export declare global {
     interface Locals {
       /** the page view being audited to HMPPS Audit, see auditPageView middleware */
       auditEvent?: PageViewEventDetails
+      /** set per request from the user's active caseload, see setUpFeatureToggles middleware */
+      featureToggles?: FeatureToggles
     }
 
     interface Response {

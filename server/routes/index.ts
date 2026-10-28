@@ -72,6 +72,9 @@ import paybackPunishmentDurationRoutes from './punishmentsForReport/paybackPunis
 import isThereRehabilitativeActivitiesRoutes from './punishmentsForReport/rehabilitativeActivities/isThere'
 import HasRehabilitativeActivitiesDetailsRoutes from './punishmentsForReport/rehabilitativeActivities/hasDetails'
 import rehabilitativeActivityDetailsRoutes from './punishmentsForReport/rehabilitativeActivities/activityDetails'
+import whichPunishmentsRehabilitativeActivitiesRoutes from './punishmentsForReport/rehabilitativeActivities/whichPunishments'
+import sameRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/sameActivity'
+import rehabilitativeActivitiesScheduleRoutes from './punishmentsForReport/rehabilitativeActivities/schedule'
 import RemoveRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/remove'
 import CompleteRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/complete'
 import IncompleteRehabilitativeActivityRoutes from './punishmentsForReport/rehabilitativeActivities/incomplete'
@@ -94,6 +97,9 @@ import whichPunishmentConsecutiveToRoutes from './punishmentsForReport/additiona
 import damagesAmountRoutes from './punishmentsForReport/punishments/damagesAmount'
 import reasonForChangeRoutes from './punishmentsForReport/punishments/reasonForChange'
 import punishmentNumberOfDaysRoutes from './punishmentsForReport/punishmentDates/numberOfDays'
+import punishmentSameDurationRoutes from './punishmentsForReport/punishmentBatch/sameDuration'
+import punishmentDurationRoutes from './punishmentsForReport/punishmentBatch/duration'
+import punishmentScheduleRoutes from './punishmentsForReport/punishmentBatch/schedule'
 import punishmentSuspendedRoutes from './punishmentsForReport/punishmentDates/isPunishmentSuspended'
 import punishmentSuspendedUntilDateRoutes from './punishmentsForReport/punishmentDates/suspendedUntilDate'
 import punishmentStartDateChoiceRoutes from './punishmentsForReport/punishmentDates/startDateChoice'
@@ -110,6 +116,8 @@ import adjudicationHistoryRoutes from './adjudicationHistory'
 import activePunishmentsRoutes from './activePunishments'
 import adjudicationConsolidatedViewRoutes from './adjudicationConsolidatedView'
 import adjudicationUrls from '../utils/urlGenerator'
+import multiPrivilegePunishmentsOnly from '../middleware/multiPrivilegePunishmentsOnly'
+import reviewerOnly from '../middleware/reviewerOnly'
 
 export default function routes(
   router: Router,
@@ -126,6 +134,8 @@ export default function routes(
     hearingsService,
     outcomesService,
     punishmentsService,
+    punishmentBatchSessionService,
+    rehabBatchSessionService,
     chartApiService,
     createOnBehalfOfSessionService,
     permissionsService,
@@ -340,7 +350,10 @@ export default function routes(
     punishmentsAndDamagesRoutes({ reportedAdjudicationsService, userService, punishmentsService }),
   )
   router.use(adjudicationUrls.punishmentComment.root, PunishmentCommentRoutes({ userService, punishmentsService }))
-  router.use(adjudicationUrls.punishment.root, PunishmentRoutes({ userService, punishmentsService }))
+  router.use(
+    adjudicationUrls.punishment.root,
+    PunishmentRoutes({ userService, punishmentsService, punishmentBatchSessionService }),
+  )
 
   router.use(
     adjudicationUrls.paybackPunishmentSpecifics.root,
@@ -358,13 +371,34 @@ export default function routes(
   )
 
   router.use(
+    adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.root,
+    multiPrivilegePunishmentsOnly(),
+    reviewerOnly(userService),
+    whichPunishmentsRehabilitativeActivitiesRoutes({ punishmentsService, rehabBatchSessionService }),
+  )
+
+  router.use(
+    adjudicationUrls.sameRehabilitativeActivity.root,
+    multiPrivilegePunishmentsOnly(),
+    reviewerOnly(userService),
+    sameRehabilitativeActivityRoutes({ punishmentsService, rehabBatchSessionService }),
+  )
+
+  router.use(
+    adjudicationUrls.rehabilitativeActivitiesSchedule.root,
+    multiPrivilegePunishmentsOnly(),
+    reviewerOnly(userService),
+    rehabilitativeActivitiesScheduleRoutes({ punishmentsService, rehabBatchSessionService }),
+  )
+
+  router.use(
     adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.root,
-    HasRehabilitativeActivitiesDetailsRoutes({ userService, punishmentsService }),
+    HasRehabilitativeActivitiesDetailsRoutes({ userService, punishmentsService, rehabBatchSessionService }),
   )
 
   router.use(
     adjudicationUrls.rehabilitativeActivityDetails.root,
-    rehabilitativeActivityDetailsRoutes({ userService, punishmentsService }),
+    rehabilitativeActivityDetailsRoutes({ userService, punishmentsService, rehabBatchSessionService }),
   )
 
   router.use(
@@ -374,7 +408,7 @@ export default function routes(
 
   router.use(
     adjudicationUrls.editRehabilitativeActivity.root,
-    EditRehabilitativeActivityPage({ userService, punishmentsService }),
+    EditRehabilitativeActivityPage({ userService, punishmentsService, rehabBatchSessionService }),
   )
 
   router.use(
@@ -425,7 +459,15 @@ export default function routes(
     adjudicationUrls.whichPunishmentIsItConsecutiveTo.root,
     whichPunishmentConsecutiveToRoutes({ userService, punishmentsService }),
   )
-  router.use(adjudicationUrls.awardPunishments.root, awardPunishmentsRoutes({ punishmentsService, userService }))
+  router.use(
+    adjudicationUrls.awardPunishments.root,
+    awardPunishmentsRoutes({
+      punishmentsService,
+      userService,
+      punishmentBatchSessionService,
+      rehabBatchSessionService,
+    }),
+  )
   router.use(
     adjudicationUrls.punishmentAlreadyAdded.root,
     punishmentAlreadyAddedRoutes({ userService, punishmentsService }),
@@ -454,6 +496,24 @@ export default function routes(
   router.use(adjudicationUrls.isPrisonerStillInEstablishment.root, isPrisonerStillInEstablishmentRoutes())
 
   router.use(
+    adjudicationUrls.punishmentSameDuration.root,
+    multiPrivilegePunishmentsOnly(),
+    reviewerOnly(userService),
+    punishmentSameDurationRoutes({ punishmentsService, punishmentBatchSessionService }),
+  )
+  router.use(
+    adjudicationUrls.punishmentDuration.root,
+    multiPrivilegePunishmentsOnly(),
+    reviewerOnly(userService),
+    punishmentDurationRoutes({ punishmentsService, punishmentBatchSessionService }),
+  )
+  router.use(
+    adjudicationUrls.punishmentSchedule.root,
+    multiPrivilegePunishmentsOnly(),
+    reviewerOnly(userService),
+    punishmentScheduleRoutes({ punishmentsService, punishmentBatchSessionService }),
+  )
+  router.use(
     adjudicationUrls.punishmentNumberOfDays.root,
     punishmentNumberOfDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
   )
@@ -475,7 +535,7 @@ export default function routes(
   )
   router.use(
     adjudicationUrls.whenWillPunishmentStart.root,
-    punishmentStartDateChoiceRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
+    punishmentStartDateChoiceRoutes({ userService, punishmentsService }),
   )
   router.use(
     adjudicationUrls.suspendedPunishmentNumberOfDays.root,

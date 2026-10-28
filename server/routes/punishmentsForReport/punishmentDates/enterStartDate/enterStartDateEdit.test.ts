@@ -26,9 +26,10 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  punishmentsService.getSessionPunishment.mockResolvedValue({
+  punishmentsService.getSessionPunishment.mockReturnValue({
+    rehabilitativeActivities: [],
     type: PunishmentType.PRIVILEGE,
-    PrivilegeType: PrivilegeType.OTHER,
+    privilegeType: PrivilegeType.OTHER,
     otherPrivilege: 'nintendo switch',
     duration: 10,
     startDate: '4/4/2023',
@@ -93,7 +94,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(
           '100',
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=13%2F12%2F2023`,
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=13%2F12%2F2023&redisId=xyz`,
       )
       .then(() =>
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalledWith(

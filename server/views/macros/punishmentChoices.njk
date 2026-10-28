@@ -1,7 +1,8 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% macro punishmentRadios(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, hasChildUnder18, errors, title) %}
+{% macro punishmentChoices(punishmentsAvailable, punishmentType, privilegeType, otherPrivilege, stoppagePercentage, damagesOwedAmount, hasChildUnder18, errors, title, multiplePrivileges = false, privilegeTypes = []) %}
   {% set otherPrivilegeHtml %}
   {{ govukInput({
       id: "otherPrivilege",
@@ -84,58 +85,94 @@
     }) }}
   {% endset -%}
 
-  {% set privilegeHtml %}
-  {{ govukRadios({
-        idPrefix: 'privilegeType',
-        id: 'privilegeType',
-        name: 'privilegeType',
-        fieldset: {
-          legend: {
-            isPageHeading: false
-          }
-        },
-        attributes: { "data-qa": "privilege-radio-buttons" },
-        errorMessage: "privilegeType" | findError(errors),
-        items: [
-        {
-        value: "CANTEEN",
-        text: "Canteen",
-        checked: privilegeType == 'CANTEEN'
-        },
-        {
-        value: "FACILITIES",
-        text: "Facilities to purchase",
-        checked: privilegeType == 'FACILITIES'
-        },
-        {
-        value: "MONEY",
-        text: "Use of private cash",
-        checked: privilegeType == 'MONEY'
-        },
-        {
-        value: "TV",
-        text: "TV",
-        checked: privilegeType == 'TV'
-        },
-        {
-        value: "ASSOCIATION",
-        text: "Association",
-        checked: privilegeType == 'ASSOCIATION'
-        },
-      {
-        value: "GYM",
-        text: "Gym",
-        checked: privilegeType == 'GYM'
-      },
-        {
-        value: "OTHER",
-        text: "Other",
-        checked: privilegeType == 'OTHER',
-        conditional: { html: otherPrivilegeHtml }
+  {% if multiplePrivileges %}
+    {% set privilegeCheckboxItems = [] %}
+    {% for privilege in [
+      { value: "CANTEEN", text: "Canteen" },
+      { value: "FACILITIES", text: "Facilities to purchase" },
+      { value: "MONEY", text: "Use of private cash" },
+      { value: "TV", text: "TV" },
+      { value: "ASSOCIATION", text: "Association" },
+      { value: "GYM", text: "Gym" },
+      { value: "OTHER", text: "Other" }
+    ] %}
+      {% set privilegeCheckboxItems = (privilegeCheckboxItems.push({
+        value: privilege.value,
+        text: privilege.text,
+        checked: privilegeTypes.indexOf(privilege.value) > -1,
+        conditional: { html: otherPrivilegeHtml } if privilege.value == "OTHER" else undefined
+      }), privilegeCheckboxItems) %}
+    {% endfor %}
+    {% set privilegeHtml %}
+    {{ govukCheckboxes({
+      idPrefix: 'privilegeTypes',
+      name: 'privilegeTypes',
+      fieldset: {
+        legend: {
+          text: 'Which privileges will be withdrawn?',
+          classes: 'govuk-visually-hidden'
         }
-        ] })
-      }}
-  {% endset -%}
+      },
+      hint: { text: 'Select all that apply.' },
+      attributes: { "data-qa": "privilege-checkboxes" },
+      errorMessage: "privilegeTypes" | findError(errors),
+      items: privilegeCheckboxItems
+    }) }}
+    {% endset -%}
+  {% else %}
+  {% set privilegeHtml %}
+    {{ govukRadios({
+          idPrefix: 'privilegeType',
+          id: 'privilegeType',
+          name: 'privilegeType',
+          fieldset: {
+            legend: {
+              isPageHeading: false
+            }
+          },
+          attributes: { "data-qa": "privilege-radio-buttons" },
+          errorMessage: "privilegeType" | findError(errors),
+          items: [
+          {
+          value: "CANTEEN",
+          text: "Canteen",
+          checked: privilegeType == 'CANTEEN'
+          },
+          {
+          value: "FACILITIES",
+          text: "Facilities to purchase",
+          checked: privilegeType == 'FACILITIES'
+          },
+          {
+          value: "MONEY",
+          text: "Use of private cash",
+          checked: privilegeType == 'MONEY'
+          },
+          {
+          value: "TV",
+          text: "TV",
+          checked: privilegeType == 'TV'
+          },
+          {
+          value: "ASSOCIATION",
+          text: "Association",
+          checked: privilegeType == 'ASSOCIATION'
+          },
+        {
+          value: "GYM",
+          text: "Gym",
+          checked: privilegeType == 'GYM'
+        },
+          {
+          value: "OTHER",
+          text: "Other",
+          checked: privilegeType == 'OTHER',
+          conditional: { html: otherPrivilegeHtml }
+          }
+          ] })
+        }}
+    {% endset -%}
+  {% endif %}
 
   {% set stoppageOfEarningsHtml %}
   {{ govukInput({

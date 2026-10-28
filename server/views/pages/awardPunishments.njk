@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "../partials/breadCrumb.njk" import breadcrumb %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "../macros/awardPunishmentsTable.njk" import awardPunishmentsTable %}
 {% from "../macros/awardRehabilitativeActivitiesTable.njk" import awardRehabilitativeActivitiesTable %}
 {% from "../macros/awardPunishmentsTable_damages.njk" import awardPunishmentsTableDamages %}
@@ -17,6 +18,13 @@
 {% endblock %}
 
 {% block content %}
+  {% if successMessage %}
+    {{ govukNotificationBanner({
+      type: "success",
+      text: successMessage,
+      attributes: { "data-qa": "success-banner" }
+    }) }}
+  {% endif %}
   <h1 class="govuk-heading-l">{{ title }}</h1>
   <div>
     <form method="POST" novalidate="novalidate" class="govuk-!-margin-top-5">
@@ -29,7 +37,7 @@
         {{ awardPunishmentsTable(filteredPunishments.otherPunishments, redirectAfterRemoveUrl, chargeNumber, false, false) }}
         {% if rehabActivities | length %}
          <h2 class="govuk-heading-m">Rehabilitative activity conditions</h2>
-         {{ awardRehabilitativeActivitiesTable(rehabActivities) }} 
+         {{ awardRehabilitativeActivitiesTable(rehabActivities, false, featureToggles.multiPrivilegePunishments) }}
         {% endif %}
       {% else %}
         <p class="govuk-body">There are currently no punishments or damages for this adjudication. You can activate <br>existing suspended punishments and add new punishments.</p>
@@ -59,10 +67,21 @@
         text: 'Activate an existing suspended punishment',
         element: "a",
         href: adjudicationUrls.activateSuspendedPunishments.urls.start(chargeNumber),
-        classes: "govuk-button--secondary govuk-!-margin-bottom-5",
+        classes: "govuk-button--secondary " + ("govuk-!-margin-bottom-3" if canAddRehabilitativeActivity else "govuk-!-margin-bottom-5"),
         attributes: { "data-qa": "activate-suspended-punishment-button" }
       }) }}
       </div>
+      {% if canAddRehabilitativeActivity %}
+        <div>
+          {{ govukButton({
+            text: 'Add a rehabilitative activity',
+            element: "a",
+            href: adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.urls.start(chargeNumber),
+            classes: "govuk-button--secondary govuk-!-margin-bottom-5",
+            attributes: { "data-qa": "add-rehabilitative-activity-button" }
+          }) }}
+        </div>
+      {% endif %}
 
       <div class="flex-container flex-center">
         {% if punishments | length %}

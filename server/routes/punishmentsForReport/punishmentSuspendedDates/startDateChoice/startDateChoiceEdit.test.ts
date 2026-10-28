@@ -29,6 +29,7 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
+  punishmentsService.getLastHearingDate.mockResolvedValue('2023-09-03')
   reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
     reportedAdjudication: testData.reportedAdjudication({
       chargeNumber: '100',
@@ -138,7 +139,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(
           '100',
-        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=`,
+        )}?punishmentType=CONFINEMENT&privilegeType=&otherPrivilege=&stoppagePercentage=&duration=&startDate=03%2F09%2F2023&punishmentNumberToActivate=72&chargeNumberForSuspendedPunishment=&redisId=xyz`,
       )
       .then(() => {
         expect(punishmentsService.updateSessionPunishment).toHaveBeenCalled()

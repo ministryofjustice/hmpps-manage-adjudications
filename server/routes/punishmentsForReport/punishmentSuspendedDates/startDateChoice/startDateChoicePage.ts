@@ -60,7 +60,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
 
     const { error, immediate } = pageData
 
-    const lastHearingDate = await this.getLastHearingDate(chargeNumber, user)
+    const lastHearingDate = await this.punishmentsService.getLastHearingDate(chargeNumber, user)
     return res.render(`pages/punishmentStartDateChoice.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
@@ -113,7 +113,7 @@ export default class PunishmentSuspendedStartDateChoicePage {
     let lastHearingDate = null
 
     if (immediate === 'true') {
-      const lastHearingDateTime = await this.getLastHearingDate(chargeNumber, user)
+      const lastHearingDateTime = await this.punishmentsService.getLastHearingDate(chargeNumber, user)
       lastHearingDate = formatTimestampToDate(lastHearingDateTime)
       const numberOfDays = Number(duration)
       try {
@@ -165,6 +165,8 @@ export default class PunishmentSuspendedStartDateChoicePage {
           startDate: lastHearingDate,
           punishmentNumberToActivate,
           chargeNumberForSuspendedPunishment,
+          // so the schedule shows the punishment that was changed
+          ...(this.pageOptions.isEdit() && immediate === 'true' && { redisId: req.params.redisId }),
         } as ParsedUrlQueryInput,
       }),
     )
@@ -178,14 +180,6 @@ export default class PunishmentSuspendedStartDateChoicePage {
       return adjudicationUrls.suspendedPunishmentStartDate.urls.edit(chargeNumber, req.params.redisId)
     }
     return adjudicationUrls.suspendedPunishmentStartDate.urls.existing(chargeNumber)
-  }
-
-  getLastHearingDate = async (chargeNumber: string, user: User) => {
-    const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-      chargeNumber,
-      user,
-    )
-    return reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing || ''
   }
 
   updatePunishment(

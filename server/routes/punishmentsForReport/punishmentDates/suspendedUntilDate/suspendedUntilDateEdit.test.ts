@@ -30,9 +30,10 @@ beforeEach(() => {
     isIndependentAdjudicatorHearing: false,
     isAdult: true,
   })
-  punishmentsService.getSessionPunishment.mockResolvedValue({
+  punishmentsService.getSessionPunishment.mockReturnValue({
+    rehabilitativeActivities: [],
     type: PunishmentType.PRIVILEGE,
-    PrivilegeType: PrivilegeType.OTHER,
+    privilegeType: PrivilegeType.OTHER,
     otherPrivilege: 'nintendo switch',
     duration: 10,
     suspendedUntil: '4/4/2023',

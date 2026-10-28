@@ -7,9 +7,7 @@ import UserService from '../../../../services/userService'
 import { calculatePunishmentEndDate, datePickerToApi, formatTimestampToDate, hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
-import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import validateForm from './startDateChoiceValidation'
-import { User } from '../../../../data/hmppsManageUsersClient'
 import {
   PrivilegeType,
   PunishmentType,
@@ -43,7 +41,6 @@ export default class PunishmentStartDateChoicePage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
-    private readonly reportedAdjudicationsService: ReportedAdjudicationsService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -53,7 +50,7 @@ export default class PunishmentStartDateChoicePage {
     const { user } = res.locals
     const { error, immediate } = pageData
 
-    const lastHearingDate = await this.getLastHearingDate(chargeNumber, user)
+    const lastHearingDate = await this.punishmentsService.getLastHearingDate(chargeNumber, user)
     return res.render(`pages/punishmentStartDateChoice.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
@@ -72,7 +69,9 @@ export default class PunishmentStartDateChoicePage {
     }
 
     if (this.pageOptions.isEdit()) {
-      const lastHearingDate = formatTimestampToDate(await this.getLastHearingDate(chargeNumber, user))
+      const lastHearingDate = formatTimestampToDate(
+        await this.punishmentsService.getLastHearingDate(chargeNumber, user),
+      )
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
       return this.renderView(req, res, {
         immediate: sessionData.startDate === lastHearingDate ? 'true' : 'false',
@@ -102,7 +101,7 @@ export default class PunishmentStartDateChoicePage {
 
     let lastHearingDate = null
     if (immediate === 'true') {
-      const lastHearingDateTime = await this.getLastHearingDate(chargeNumber, user)
+      const lastHearingDateTime = await this.punishmentsService.getLastHearingDate(chargeNumber, user)
       lastHearingDate = formatTimestampToDate(lastHearingDateTime)
       const startDate = datePickerToApi(lastHearingDate)
       const numberOfDays = Number(duration)
@@ -141,6 +140,8 @@ export default class PunishmentStartDateChoicePage {
           ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
           duration,
           startDate: lastHearingDate,
+          // so the schedule shows the punishment that was changed
+          ...(this.pageOptions.isEdit() && immediate === 'true' && { redisId: req.params.redisId }),
         } as ParsedUrlQueryInput,
       }),
     )
@@ -153,13 +154,5 @@ export default class PunishmentStartDateChoicePage {
     }
     if (immediate === 'true') return adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(chargeNumber)
     return adjudicationUrls.punishmentStartDate.urls.start(chargeNumber)
-  }
-
-  getLastHearingDate = async (chargeNumber: string, user: User) => {
-    const { reportedAdjudication } = await this.reportedAdjudicationsService.getReportedAdjudicationDetails(
-      chargeNumber,
-      user,
-    )
-    return reportedAdjudication.hearings[reportedAdjudication.hearings.length - 1].dateTimeOfHearing || ''
   }
 }

@@ -125,6 +125,8 @@ export default class PunishmentStartDatePage {
         ...(hasChildUnder18 !== undefined && { hasChildUnder18 }),
         duration,
         startDate,
+        // so the schedule shows the punishment that was changed
+        ...(this.pageOptions.isEdit() && { redisId: req.params.redisId }),
       } as ParsedUrlQueryInput,
     })
 

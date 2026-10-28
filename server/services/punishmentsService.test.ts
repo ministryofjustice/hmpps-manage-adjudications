@@ -264,6 +264,29 @@ describe('PunishmentsService', () => {
       )
     })
   })
+  describe('getLastHearingDate', () => {
+    it('returns the date of the last hearing', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '100',
+          prisonerNumber: 'G6123VU',
+          hearings: [
+            testData.singleHearing({ dateTimeOfHearing: '2026-08-10T10:00:00', id: 1 }),
+            testData.singleHearing({ dateTimeOfHearing: '2026-08-17T14:30:00', id: 2 }),
+          ],
+        }),
+      })
+      expect(await service.getLastHearingDate('100', user)).toEqual('2026-08-17')
+    })
+
+    it('returns null when there is no hearing', async () => {
+      getReportedAdjudication.mockResolvedValue({
+        reportedAdjudication: testData.reportedAdjudication({ chargeNumber: '100', prisonerNumber: 'G6123VU' }),
+      })
+      expect(await service.getLastHearingDate('100', user)).toBeNull()
+    })
+  })
+
   describe('getPunishmentAvailability', () => {
     it('returns adult availability when there are no hearings present on the adjudication', async () => {
       getReportedAdjudication.mockResolvedValue({
@@ -534,6 +557,106 @@ describe('PunishmentsService', () => {
     it('does not treat an activated suspended punishment as a copy of a new one', () => {
       const req = reqWith([tv({ redisId: 'a', activatedFrom: '99' }), tv({ redisId: 'b' })])
       expect(service.getUnconfirmedDuplicate(req, '100')).toBeNull()
+    })
+  })
+})
+
+describe('PunishmentsService session punishments', () => {
+  const service = new PunishmentsService(null, null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const newRequest = (session: Record<string, unknown> = {}): any => ({ session })
+
+  const canteen = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.CANTEEN }
+  const library = { type: PunishmentType.PRIVILEGE, privilegeType: PrivilegeType.OTHER, otherPrivilege: 'library' }
+
+  describe('the punishment a schedule page shows', () => {
+    const req = newRequest({
+      punishments: {
+        100: [
+          { ...canteen, redisId: 'a', rehabilitativeActivities: [] },
+          { ...library, redisId: 'b', rehabilitativeActivities: [] },
+        ],
+      },
+    })
+
+    it('is the one named, when it was changed', () => {
+      expect(service.getChangedOrLatestSessionPunishment(req, '100', 'a').redisId).toEqual('a')
+    })
+
+    it('is the latest one added when none is named, or the one named is not found', () => {
+      expect(service.getChangedOrLatestSessionPunishment(req, '100').redisId).toEqual('b')
+      expect(service.getChangedOrLatestSessionPunishment(req, '100', 'gone').redisId).toEqual('b')
+    })
+
+    it('is missing when there are no punishments', () => {
+      expect(service.getChangedOrLatestSessionPunishment(newRequest(), '100')).toBeUndefined()
+    })
+  })
+
+  describe('updating a session punishment', () => {
+    it('keeps it in its place in the list', () => {
+      const req = newRequest({
+        punishments: {
+          100: [
+            { ...canteen, redisId: 'a', duration: 5, rehabilitativeActivities: [] },
+            { ...library, redisId: 'b', duration: 5, rehabilitativeActivities: [] },
+          ],
+        },
+      })
+      service.updateSessionPunishment(req, { ...canteen, duration: 9, rehabilitativeActivities: [] }, '100', 'a')
+      expect(service.getAllSessionPunishments(req, '100').map(p => p.redisId)).toEqual(['a', 'b'])
+      expect(service.getSessionPunishment(req, '100', 'a').duration).toEqual(9)
+    })
+
+    it('keeps an edited activity in its place', () => {
+      const activities = [
+        { sessionId: 1, details: 'first' },
+        { sessionId: 2, details: 'second' },
+      ]
+      const req = newRequest({
+        punishments: { 100: [{ ...library, redisId: 'b', rehabilitativeActivities: activities }] },
+      })
+      service.editRehabilitativeActivity(req, '100', 'b', 1, { sessionId: 1, details: 'changed' })
+      expect(
+        service
+          .getSessionPunishment(req, '100', 'b')
+          .rehabilitativeActivities.map((a: { details: string }) => a.details),
+      ).toEqual(['changed', 'second'])
+    })
+  })
+
+  describe('removing a rehabilitative activity condition', () => {
+    it('clears the activities and unlocks the punishment for changes', () => {
+      const req = newRequest({
+        punishments: {
+          100: [
+            {
+              ...library,
+              redisId: 'b',
+              isThereRehabilitativeActivities: true,
+              hasRehabilitativeActivitiesDetails: true,
+              rehabilitativeActivities: [{ sessionId: 1, details: 'Course' }],
+            },
+          ],
+        },
+      })
+      service.noRehabilitativeActivities(req, '100', 'b')
+      expect(service.getSessionPunishment(req, '100', 'b')).toEqual(
+        expect.objectContaining({
+          isThereRehabilitativeActivities: false,
+          hasRehabilitativeActivitiesDetails: false,
+          rehabilitativeActivities: [],
+        }),
+      )
+    })
+  })
+
+  describe('success message', () => {
+    it('is returned once only', () => {
+      const req = newRequest()
+      service.setSuccessMessage(req, '100', '2 punishments added')
+      expect(service.takeSuccessMessage(req, '100')).toEqual('2 punishments added')
+      expect(service.takeSuccessMessage(req, '100')).toBeUndefined()
     })
   })
 })

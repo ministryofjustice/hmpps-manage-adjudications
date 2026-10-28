@@ -5,19 +5,11 @@ export default class PunishmentSchedulePage extends Page {
     super('Punishment schedule')
   }
 
-  days = (): PageElement => cy.get('input[id="days"]')
+  punishmentName = (index: number): PageElement => cy.get(`[data-qa="punishment-name-${index}"]`)
 
-  suspended = (): PageElement => cy.get('[data-qa="suspended-radio-buttons"]')
+  schedule = (index: number): PageElement => cy.get(`[data-qa="punishment-schedule-${index}"]`)
 
-  suspendedUntil = (): PageElement => cy.get('[data-qa="suspended-until-date-picker"]')
+  submitButton = (): PageElement => cy.get('[data-qa="submit"]')
 
-  startDate = (): PageElement => cy.get('[data-qa="start-date-picker"]')
-
-  endDate = (): PageElement => cy.get('[data-qa="end-date-picker"]')
-
-  submitButton = (): PageElement => cy.get('[data-qa="punishment-schedule-submit"]')
-
-  cancelButton = (): PageElement => cy.get('[data-qa="punishment-schedule-cancel"]')
-
-  errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
+  cancel = (): PageElement => cy.get('[data-qa="cancel"]')
 }

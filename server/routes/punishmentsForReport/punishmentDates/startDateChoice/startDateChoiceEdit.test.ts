@@ -5,14 +5,12 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
-import TestData from '../../../testutils/testData'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
 jest.mock('../../../../services/reportedAdjudicationsService.ts')
 
-const testData = new TestData()
 const userService = new UserService(null, null) as jest.Mocked<UserService>
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
 const reportedAdjudicationsService = new ReportedAdjudicationsService(
@@ -28,22 +26,9 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, reportedAdjudicationsService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
-  reportedAdjudicationsService.getReportedAdjudicationDetails.mockResolvedValue({
-    reportedAdjudication: testData.reportedAdjudication({
-      chargeNumber: '100',
-      prisonerNumber: 'G6123VU',
-      dateTimeOfIncident: '2023-08-31T12:54:09.197Z',
-      hearings: [
-        testData.singleHearing({
-          dateTimeOfHearing: '2023-09-02T10:50:00.000Z',
-        }),
-        testData.singleHearing({
-          dateTimeOfHearing: '2023-09-03T12:00:00.000Z',
-        }),
-      ],
-    }),
-  })
-  punishmentsService.getSessionPunishment.mockResolvedValue({
+  punishmentsService.getLastHearingDate.mockResolvedValue('2023-09-03')
+  punishmentsService.getSessionPunishment.mockReturnValue({
+    rehabilitativeActivities: [],
     type: PunishmentType.PRIVILEGE,
     privilegeType: PrivilegeType.OTHER,
     otherPrivilege: 'nintendo switch',
@@ -104,7 +89,7 @@ describe('POST ', () => {
         'Location',
         `${adjudicationUrls.punishmentAutomaticDateSchedule.urls.start(
           '100',
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=03%2F09%2F2023`,
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6&startDate=03%2F09%2F2023&redisId=xyz`,
       )
   })
   it('redirects to the enter start date page if user does not select another date', () => {

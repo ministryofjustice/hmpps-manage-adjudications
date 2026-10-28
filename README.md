@@ -32,7 +32,10 @@ FRONTEND_COMPONENT_API_URL=https://frontend-components-dev.hmpps.service.justice
 DATA_INSIGHTS_API_URL=https://adjudications-insights-api-dev.hmpps.service.justice.gov.uk
 ENVIRONMENT_NAME=DEV
 REDIS_HOST=localhost
+MULTI_PRIVILEGE_PUNISHMENTS_PRISONS=ALL
 ```
+
+`MULTI_PRIVILEGE_PUNISHMENTS_PRISONS` switches on the new award-punishments journey (several privileges at once, one duration and start date page, rehabilitative activities added from the award punishments table). It is a comma-separated list of prison ids matched against the user's active caseload (for example `LEI,MDI`), `ALL` for every prison, or empty to switch it off everywhere.
 
 To start the main services excluding the manage adjudications app:
 

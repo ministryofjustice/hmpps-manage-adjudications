@@ -88,7 +88,6 @@ export default class PunishmentsService {
 
   updateSessionPunishment(req: Request, punishmentData: PunishmentData, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    this.deleteSessionPunishments(req, redisId, chargeNumber)
     const updatedPunishment = {
       ...punishmentData,
       isThereRehabilitativeActivities: punishment.isThereRehabilitativeActivities,
@@ -98,21 +97,22 @@ export default class PunishmentsService {
       id: punishment.id,
     }
 
-    return req.session.punishments[chargeNumber].push(updatedPunishment)
+    return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
   }
 
   noRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    this.deleteSessionPunishments(req, redisId, chargeNumber)
-    const updatedPunishment = {
+    const updatedPunishment: PunishmentData = {
       ...punishment,
       isThereRehabilitativeActivities: false,
+      // no details are held any more, so the punishment can be changed again
+      hasRehabilitativeActivitiesDetails: false,
       rehabilitativeActivities: [],
       redisId,
       id: punishment.id,
     }
 
-    return req.session.punishments[chargeNumber].push(updatedPunishment)
+    return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
   }
 
   addEmptyRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string, numberOfActivities: number) {
@@ -123,8 +123,7 @@ export default class PunishmentsService {
     }
 
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    this.deleteSessionPunishments(req, redisId, chargeNumber)
-    const updatedPunishment = {
+    const updatedPunishment: PunishmentData = {
       ...punishment,
       isThereRehabilitativeActivities: true,
       hasRehabilitativeActivitiesDetails: false,
@@ -133,13 +132,12 @@ export default class PunishmentsService {
       id: punishment.id,
     }
 
-    return req.session.punishments[chargeNumber].push(updatedPunishment)
+    return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
   }
 
   removeAnyRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    this.deleteSessionPunishments(req, redisId, chargeNumber)
-    const updatedPunishment = {
+    const updatedPunishment: PunishmentData = {
       ...punishment,
       isThereRehabilitativeActivities: true,
       hasRehabilitativeActivitiesDetails: true,
@@ -148,7 +146,7 @@ export default class PunishmentsService {
       id: punishment.id,
     }
 
-    return req.session.punishments[chargeNumber].push(updatedPunishment)
+    return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
   }
 
   addRehabilitativeActivity(
@@ -159,7 +157,6 @@ export default class PunishmentsService {
     activityDetails: RehabilitativeActivity,
   ) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    this.deleteSessionPunishments(req, redisId, chargeNumber)
 
     const updatedRehabActivityList = [...punishment.rehabilitativeActivities, activityDetails]
 
@@ -172,12 +169,11 @@ export default class PunishmentsService {
       redisId,
       id: punishment.id,
     }
-    return req.session.punishments[chargeNumber].push(updatedPunishment)
+    return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
   }
 
   removeRehabilitativeActivity(req: Request, chargeNumber: string, redisId: string, sessionId: number) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    this.deleteSessionPunishments(req, redisId, chargeNumber)
 
     const updatedRehabActivityList = punishment.rehabilitativeActivities.filter(
       (ra: RehabilitativeActivity) => ra.sessionId !== sessionId,
@@ -193,7 +189,7 @@ export default class PunishmentsService {
       id: punishment.id,
     }
 
-    return req.session.punishments[chargeNumber].push(updatedPunishment)
+    return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
   }
 
   editRehabilitativeActivity(
@@ -204,12 +200,15 @@ export default class PunishmentsService {
     activityDetails: RehabilitativeActivity,
   ) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    this.deleteSessionPunishments(req, redisId, chargeNumber)
 
-    const updatedRehabActivityList = [
-      ...punishment.rehabilitativeActivities.filter((ra: RehabilitativeActivity) => ra.sessionId !== sessionId),
-      activityDetails,
-    ]
+    // keep the activity in its place in the list
+    const updatedRehabActivityList = [...punishment.rehabilitativeActivities]
+    const index = updatedRehabActivityList.findIndex((ra: RehabilitativeActivity) => ra.sessionId === sessionId)
+    if (index > -1) {
+      updatedRehabActivityList[index] = activityDetails
+    } else {
+      updatedRehabActivityList.push(activityDetails)
+    }
 
     const updatedPunishment = {
       ...punishment,
@@ -221,7 +220,7 @@ export default class PunishmentsService {
       id: punishment.id,
     }
 
-    return req.session.punishments[chargeNumber].push(updatedPunishment)
+    return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
   }
 
   addCompletedRehabilitativeActivity(
@@ -236,6 +235,17 @@ export default class PunishmentsService {
       daysToActivate,
       suspendedUntil,
       outcome,
+    }
+  }
+
+  // Swaps in the updated punishment where the old one was, so the award punishments table keeps its order
+  private replaceSessionPunishment(req: Request, chargeNumber: string, redisId: string, punishment: PunishmentData) {
+    const punishments = req.session.punishments[chargeNumber]
+    const index = punishments.findIndex((existing: PunishmentData) => existing.redisId === redisId)
+    if (index > -1) {
+      punishments[index] = punishment
+    } else {
+      punishments.push(punishment)
     }
   }
 
@@ -256,8 +266,20 @@ export default class PunishmentsService {
     return sessionData.filter((punishment: PunishmentData) => punishment.redisId === redisId)[0]
   }
 
-  getAllSessionPunishments(req: Request, chargeNumber: string) {
+  getAllSessionPunishments(req: Request, chargeNumber: string): PunishmentData[] | undefined {
     return req.session?.punishments?.[chargeNumber]
+  }
+
+  // The punishment a schedule page shows: the one just changed, when named, or else the one just added, which is
+  // last. A changed punishment keeps its place in the list, so it is not always the last.
+  getChangedOrLatestSessionPunishment(
+    req: Request,
+    chargeNumber: string,
+    redisId?: string,
+  ): PunishmentData | undefined {
+    const punishments = this.getAllSessionPunishments(req, chargeNumber) || []
+    const changed = redisId ? punishments.find(punishment => punishment.redisId === redisId) : undefined
+    return changed ?? punishments[punishments.length - 1]
   }
 
   // The latest punishment added in this session that matches another on the charge in every detail,
@@ -266,7 +288,7 @@ export default class PunishmentsService {
     req: Request,
     chargeNumber: string,
   ): { punishment: PunishmentData; matches: PunishmentData } | null {
-    const punishments: PunishmentData[] = this.getAllSessionPunishments(req, chargeNumber) || []
+    const punishments = this.getAllSessionPunishments(req, chargeNumber) || []
     for (let i = punishments.length - 1; i >= 0; i -= 1) {
       const punishment = punishments[i]
       if (!punishment.id && !punishment.duplicateConfirmed) {
@@ -316,8 +338,60 @@ export default class PunishmentsService {
     req.session.punishments[chargeNumber] = punishments
   }
 
-  deleteAllSessionPunishments(req: Request, chargeNumber: string) {
-    return delete req.session?.punishments?.[chargeNumber]
+  // Replaces the punishment's activities with those entered for it in a rehabilitative activity batch
+  replaceRehabilitativeActivities(
+    req: Request,
+    chargeNumber: string,
+    redisId: string,
+    rehabilitativeActivities: RehabilitativeActivity[],
+  ) {
+    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+    if (!punishment) {
+      return
+    }
+    this.replaceSessionPunishment(req, chargeNumber, redisId, {
+      ...punishment,
+      isThereRehabilitativeActivities: true,
+      hasRehabilitativeActivitiesDetails: true,
+      rehabilitativeActivities,
+      redisId,
+      id: punishment.id,
+    })
+  }
+
+  copyRehabilitativeActivities(req: Request, chargeNumber: string, fromRedisId: string, toRedisIds: string[]) {
+    const from = this.getSessionPunishment(req, chargeNumber, fromRedisId)
+    if (!from) {
+      return
+    }
+    toRedisIds.forEach(redisId => {
+      const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
+      if (!punishment) {
+        return
+      }
+      Object.assign(punishment, {
+        isThereRehabilitativeActivities: from.isThereRehabilitativeActivities,
+        hasRehabilitativeActivitiesDetails: from.hasRehabilitativeActivitiesDetails,
+        rehabilitativeActivities: from.rehabilitativeActivities.map((activity: RehabilitativeActivity) => ({
+          ...activity,
+          id: undefined as number,
+        })),
+      })
+    })
+  }
+
+  // A one-off message for the success banner on the award punishments page
+  setSuccessMessage(req: Request, chargeNumber: string, message: string) {
+    if (!req.session.punishmentSuccessMessage) {
+      req.session.punishmentSuccessMessage = {}
+    }
+    req.session.punishmentSuccessMessage[chargeNumber] = message
+  }
+
+  takeSuccessMessage(req: Request, chargeNumber: string): string | undefined {
+    const message = req.session.punishmentSuccessMessage?.[chargeNumber]
+    delete req.session.punishmentSuccessMessage?.[chargeNumber]
+    return message
   }
 
   setReasonForChangePunishments(req: Request, reasonForChange: punishmentChangeReasonAndDetails, chargeNumber: string) {
@@ -475,6 +549,13 @@ export default class PunishmentsService {
       isIndependentAdjudicatorHearing: lastHearing?.oicHearingType.includes('INAD') || false,
       isAdult: !reportedAdjudication.isYouthOffender,
     }
+  }
+
+  // The last day of the hearing, as YYYY-MM-DD — the date an "immediate" punishment starts
+  async getLastHearingDate(chargeNumber: string, user: User): Promise<string | null> {
+    const reportedAdjudication = await this.getReportedAdjudication(chargeNumber, user)
+    const lastHearing = reportedAdjudication.hearings?.[reportedAdjudication.hearings.length - 1]
+    return lastHearing?.dateTimeOfHearing ? formatTimestampTo(lastHearing.dateTimeOfHearing, 'YYYY-MM-DD') : null
   }
 
   async getPrisonerDetails(chargeNumber: string, user: User): Promise<PrisonerResult & { friendlyName: string }> {

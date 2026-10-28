@@ -4,7 +4,12 @@ import appWithAllRoutes from '../../../testutils/appSetup'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
-import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
+import {
+  PrivilegeType,
+  PunishmentData,
+  PunishmentType,
+  RehabilitativeActivity,
+} from '../../../../data/PunishmentResult'
 import { ReportedAdjudicationStatus } from '../../../../data/ReportedAdjudicationResult'
 
 jest.mock('../../../../services/userService')
@@ -15,13 +20,14 @@ const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<Pun
 
 let app: Express
 
-const punishmentsOnSession = [
+const punishmentsOnSession: PunishmentData[] = [
   {
     redisId: 'qwerty-123',
     type: PunishmentType.CONFINEMENT,
     duration: 5,
     startDate: '2023-04-20',
     endDate: '2023-04-25',
+    rehabilitativeActivities: [],
   },
   {
     redisId: 'asdfg-123-erty',
@@ -30,6 +36,7 @@ const punishmentsOnSession = [
     duration: 10,
     startDate: '2023-04-10',
     endDate: '2023-04-20',
+    rehabilitativeActivities: [],
   },
 ]
 
@@ -76,7 +83,7 @@ beforeEach(() => {
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSuspendedPunishmentDetails.mockResolvedValue(suspendedPunishments)
   punishmentsService.getSuspendedPunishment.mockResolvedValue(suspendedPunishments.suspendedPunishments)
-  punishmentsService.getAllSessionPunishments.mockResolvedValue(punishmentsOnSession)
+  punishmentsService.getAllSessionPunishments.mockReturnValue(punishmentsOnSession)
 })
 
 afterEach(() => {

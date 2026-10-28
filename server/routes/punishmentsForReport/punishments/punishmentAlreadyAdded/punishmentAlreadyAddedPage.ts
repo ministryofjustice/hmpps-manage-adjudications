@@ -48,6 +48,8 @@ export default class PunishmentAlreadyAddedPage {
         this.punishmentsService.confirmDuplicatePunishment(req, chargeNumber, redisId)
       } else {
         await this.punishmentsService.deleteSessionPunishments(req, redisId, chargeNumber)
+        // a banner saying the punishment was added would now be wrong
+        this.punishmentsService.takeSuccessMessage(req, chargeNumber)
       }
     }
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))

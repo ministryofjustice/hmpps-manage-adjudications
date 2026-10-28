@@ -1,64 +1,90 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro awardRehabilitativeActivitiesTable(rehabActivities, readOnly = false) %}
+{# splitEndDateAndSessions: the IR-1904 layout, with end date and number of sessions in separate columns #}
+{% macro awardRehabilitativeActivitiesTable(rehabActivities, readOnly = false, splitEndDateAndSessions = false) %}
   {% set rows = [] %}
   {% for data in rehabActivities %}
 
    {% set changeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+data.changeUrl+'" data-qa="edit-activity" class="govuk-link">Change <span class="govuk-visually-hidden"></span></a></p>' %}
    {% set removeColumnValue = '<p class="govuk-body govuk-!-margin-bottom-1"><a href="'+data.removeUrl+'" data-qa="delete-activity" class="govuk-link">Remove <span class="govuk-visually-hidden"></span></a></p>' %}
 
-  
-    {% set rows = (rows.push(
-      [
+    {% set punishmentColumn = {
+      html: data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege),
+      classes: "columnWidth20"
+    } %}
+    {% set detailsColumn = {
+      text: data.details or 'Not entered',
+      classes: "columnWidth20" if splitEndDateAndSessions else "columnWidth30"
+    } %}
+    {% set monitorColumn = {
+      text:  data.monitor | initialiseName or 'Not entered',
+      classes: "columnWidth17"
+    } %}
+    {% set actionColumns = [
+      {
+        html: changeColumnValue if data.canChangeOrRemove and not readOnly else '',
+        classes: ""
+      },
+      {
+        html: removeColumnValue if data.canChangeOrRemove and not readOnly else '',
+        classes: ""
+      }
+    ] %}
+
+    {% if splitEndDateAndSessions %}
+      {% set rows = (rows.push(
+        [
+          punishmentColumn,
+          detailsColumn,
           {
-            html: data.type | convertPunishmentType(data.stoppagePercentage, data.privilegeType, data.otherPrivilege),
-            classes: "columnWidth20"
+            text: data.endDate | formatTimestampTo('D MMM YYYY') if data.endDate else 'Not entered',
+            classes: "columnWidth12"
           },
           {
-            text: data.details or 'Not entered',
-            classes: "columnWidth30"
+            text: data.totalSessions if data.totalSessions else '-',
+            classes: "columnWidth12"
           },
+          monitorColumn
+        ].concat(actionColumns)
+      ), rows) %}
+    {% else %}
+      {% set rows = (rows.push(
+        [
+          punishmentColumn,
+          detailsColumn,
           {
             text: data.endDate | endDateSessionNumberText(data.totalSessions) or 'Not entered',
             classes: "columnWidth20"
           },
-          {
-            text:  data.monitor | initialiseName or 'Not entered',
-            classes: "columnWidth17"
-          },
-          {
-            html: changeColumnValue if data.canChangeOrRemove and not readOnly else '',
-            classes: ""
-          },
-          {
-            html: removeColumnValue if data.canChangeOrRemove and not readOnly else '',
-            classes: ""
-          }
-      ]
-    ), rows) %}
+          monitorColumn
+        ].concat(actionColumns)
+      ), rows) %}
+    {% endif %}
   {% endfor %}
 
+  {% if splitEndDateAndSessions %}
+    {% set head = [
+      { html: "Suspended <br>punishment" },
+      { html: "Activity <br>details" },
+      { text: "End date" },
+      { html: "Number of <br>sessions" },
+      { text: "Who is monitoring the prisoner" },
+      { text: null },
+      { text: null }
+    ] %}
+  {% else %}
+    {% set head = [
+      { html: "Suspended <br>punishment" },
+      { html: "Activity <br>details" },
+      { html: "End date and <br>number of sessions" },
+      { text: "Who is monitoring the prisoner" },
+      { text: null },
+      { text: null }
+    ] %}
+  {% endif %}
+
         {{ govukTable({
-        head: [
-          {
-            html: "Suspended <br>punishment"
-          },
-          {
-            html: "Activity <br>details"
-          },
-          {
-            html: "End date and <br>number of sessions"
-          },
-          {
-            text: "Who is monitoring the prisoner"
-          },
-          {
-            text: null
-          },
-          {
-            text: null
-          }
-        ],
+        head: head,
         rows: rows,
         attributes: {"data-qa": "rehabilitative-activities-table"}
       }) }}

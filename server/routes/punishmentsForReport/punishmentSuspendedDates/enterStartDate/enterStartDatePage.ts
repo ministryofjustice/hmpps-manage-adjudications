@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { randomUUID } from 'crypto'
+import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../../../@types/template'
 import UserService from '../../../../services/userService'
@@ -130,12 +131,16 @@ export default class PunishmentSuspendedStartDatePage {
       res.locals.redirectUrl = adjudicationUrls.punishmentsAndDamages.urls.review(chargeNumber)
       throw postError
     }
-    const redirectUrl = this.getRedirectUrl(chargeNumber)
+    const redirectUrl = this.getRedirectUrl(chargeNumber, req)
     return res.redirect(redirectUrl)
   }
 
-  getRedirectUrl = (chargeNumber: string) => {
-    return adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(chargeNumber)
+  // in edit mode the schedule is told which punishment was changed
+  getRedirectUrl = (chargeNumber: string, req: Request) => {
+    return url.format({
+      pathname: adjudicationUrls.suspendedPunishmentAutoDates.urls.existing(chargeNumber),
+      query: this.pageOptions.isEdit() ? { redisId: req.params.redisId } : {},
+    })
   }
 
   getYoiInfo = async (chargeNumber: string, user: User): Promise<boolean> => {

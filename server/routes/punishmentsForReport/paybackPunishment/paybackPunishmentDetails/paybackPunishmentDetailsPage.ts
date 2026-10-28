@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import url from 'url'
 import { Request, Response } from 'express'
 import { FormError } from '../../../../@types/template'
 import UserService from '../../../../services/userService'
@@ -94,6 +95,12 @@ export default class PaybackPunishmentDetailsPage {
       await this.punishmentsService.addSessionPunishment(req, playbackPunishmentData, chargeNumber)
     }
 
-    return res.redirect(adjudicationUrls.paybackPunishmentSchedule.urls.start(chargeNumber))
+    // so the schedule shows the punishment that was changed
+    return res.redirect(
+      url.format({
+        pathname: adjudicationUrls.paybackPunishmentSchedule.urls.start(chargeNumber),
+        query: this.pageOptions.isEdit() ? { redisId } : {},
+      }),
+    )
   }
 }

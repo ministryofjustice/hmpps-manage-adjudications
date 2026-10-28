@@ -8,22 +8,31 @@ import { hasAnyRole } from '../../../utils/utils'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import {
   PrivilegeType,
-  PunishmentDataWithSchedule,
+  PunishmentBatchItem,
+  PunishmentData,
   PunishmentType,
   RehabilitativeActivity,
+  isDayBasedPunishment,
   isSocialVisitsPunishment,
   parseHasChildUnder18,
 } from '../../../data/PunishmentResult'
 import PunishmentsService from '../../../services/punishmentsService'
+import type PunishmentBatchSessionService from '../../../services/punishmentBatchSessionService'
 
 type PageData = {
   error?: FormError
   punishmentType?: PunishmentType
   privilegeType?: PrivilegeType
+  privilegeTypes?: PrivilegeType[]
   otherPrivilege?: string
   stoppagePercentage?: number
   damagesOwedAmount?: number
   hasChildUnder18?: boolean
+}
+
+const toArray = <T>(value: T | T[]): T[] => {
+  if (value === undefined || value === null || value === '') return []
+  return Array.isArray(value) ? value : [value]
 }
 
 export enum PageRequestType {
@@ -46,6 +55,7 @@ export default class PunishmentPage {
     pageType: PageRequestType,
     private readonly userService: UserService,
     private readonly punishmentsService: PunishmentsService,
+    private readonly punishmentBatchSessionService: PunishmentBatchSessionService,
   ) {
     this.pageOptions = new PageOptions(pageType)
   }
@@ -57,6 +67,7 @@ export default class PunishmentPage {
       error,
       punishmentType,
       privilegeType,
+      privilegeTypes,
       otherPrivilege,
       stoppagePercentage,
       damagesOwedAmount,
@@ -89,6 +100,8 @@ export default class PunishmentPage {
       punishmentsAvailable,
       punishmentType,
       privilegeType,
+      multiplePrivileges: this.isMultiplePrivileges(res),
+      privilegeTypes: privilegeTypes || [],
       otherPrivilege,
       stoppagePercentage,
       damagesOwedAmount,
@@ -130,7 +143,14 @@ export default class PunishmentPage {
       damagesOwedAmount,
       lossHasChildUnder18,
       restrictionHasChildUnder18,
+      action,
     } = req.body
+    const multiplePrivileges = this.isMultiplePrivileges(res)
+    // Save and exit is shown whenever the toggle is on, including when changing a punishment
+    if (res.locals.featureToggles?.multiPrivilegePunishments && action === 'exit') {
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    }
+    const privilegeTypes = multiplePrivileges ? toArray<PrivilegeType>(req.body.privilegeTypes) : []
     const hasChildUnder18 = parseHasChildUnder18(
       punishmentType === PunishmentType.LOSS_OF_SOCIAL_VISITS ? lossHasChildUnder18 : restrictionHasChildUnder18,
     )
@@ -142,6 +162,8 @@ export default class PunishmentPage {
     const error = validateForm({
       punishmentType,
       privilegeType,
+      privilegeTypes,
+      multiplePrivileges,
       otherPrivilege,
       stoppagePercentage: stoppageOfEarningsPercentage,
       damagesOwedAmount,
@@ -153,6 +175,7 @@ export default class PunishmentPage {
         error,
         punishmentType,
         privilegeType,
+        privilegeTypes,
         otherPrivilege,
         stoppagePercentage: stoppageOfEarningsPercentage,
         damagesOwedAmount,
@@ -174,6 +197,17 @@ export default class PunishmentPage {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
 
+    if (res.locals.featureToggles?.multiPrivilegePunishments && isDayBasedPunishment(punishmentType)) {
+      return this.startDurationJourney(req, res, {
+        punishmentType,
+        privilegeType,
+        privilegeTypes,
+        otherPrivilege,
+        stoppagePercentage: stoppageOfEarningsPercentage,
+        hasChildUnder18,
+      })
+    }
+
     const redirectUrlPrefix = this.getRedirectUrl(chargeNumber, req, punishmentType as PunishmentType)
     const query = this.getQueryParamsToPass(
       punishmentType,
@@ -189,6 +223,45 @@ export default class PunishmentPage {
       }),
     )
   }
+
+  // Day-based punishments go to the combined duration and start date page (IR-1904).
+  // A new loss of privileges becomes one batch item per privilege ticked; anything else is a batch of one.
+  private startDurationJourney = (req: Request, res: Response, pageData: PageData) => {
+    const { chargeNumber, redisId } = req.params
+    const { punishmentType, privilegeType, privilegeTypes, otherPrivilege, stoppagePercentage, hasChildUnder18 } =
+      pageData
+    const typeDetails = (privilege?: PrivilegeType): PunishmentBatchItem => ({
+      type: punishmentType,
+      ...(privilege && { privilegeType: privilege }),
+      ...(privilege === PrivilegeType.OTHER && { otherPrivilege: otherPrivilege.trim() }),
+      ...(punishmentType === PunishmentType.EARNINGS && { stoppagePercentage }),
+      ...(isSocialVisitsPunishment(punishmentType) && { hasChildUnder18 }),
+    })
+
+    if (this.pageOptions.isEdit()) {
+      const { type, ...details } = typeDetails(punishmentType === PunishmentType.PRIVILEGE ? privilegeType : undefined)
+      return res.redirect(
+        url.format({
+          pathname: adjudicationUrls.punishmentDuration.urls.edit(chargeNumber, redisId),
+          query: { punishmentType: type, ...details },
+        }),
+      )
+    }
+
+    const items =
+      punishmentType === PunishmentType.PRIVILEGE
+        ? Object.values(PrivilegeType)
+            .filter(privilege => privilegeTypes.includes(privilege))
+            .map(privilege => typeDetails(privilege))
+        : [typeDetails()]
+    this.punishmentBatchSessionService.start(req, chargeNumber, items)
+    if (items.length > 1) return res.redirect(adjudicationUrls.punishmentSameDuration.urls.start(chargeNumber))
+    return res.redirect(adjudicationUrls.punishmentDuration.urls.start(chargeNumber))
+  }
+
+  // Edit mode keeps the single-choice radios: one punishment cannot be changed into several
+  private isMultiplePrivileges = (res: Response): boolean =>
+    !!res.locals.featureToggles?.multiPrivilegePunishments && !this.pageOptions.isEdit()
 
   private getQueryParamsToPass = (
     punishmentType: PunishmentType,
@@ -227,30 +300,29 @@ export default class PunishmentPage {
     return adjudicationUrls.punishmentNumberOfDays.urls.start(chargeNumber)
   }
 
-  private damagesAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
+  private damagesAlreadyAdded = async (sessionPunishments: PunishmentData[]) => {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.DAMAGES_OWED,
+        (punishment: PunishmentData) => punishment.type === PunishmentType.DAMAGES_OWED,
       ).length
     }
     return false
   }
 
-  private punishmentsAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
+  private punishmentsAlreadyAdded = async (sessionPunishments: PunishmentData[]) => {
     if (sessionPunishments) {
       return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithSchedule) =>
+        (punishment: PunishmentData) =>
           punishment.type !== PunishmentType.CAUTION && punishment.type !== PunishmentType.DAMAGES_OWED,
       ).length
     }
     return false
   }
 
-  private cautionAlreadyAdded = async (sessionPunishments: PunishmentDataWithSchedule[]) => {
+  private cautionAlreadyAdded = async (sessionPunishments: PunishmentData[]) => {
     if (sessionPunishments) {
-      return !!sessionPunishments.filter(
-        (punishment: PunishmentDataWithSchedule) => punishment.type === PunishmentType.CAUTION,
-      ).length
+      return !!sessionPunishments.filter((punishment: PunishmentData) => punishment.type === PunishmentType.CAUTION)
+        .length
     }
     return false
   }

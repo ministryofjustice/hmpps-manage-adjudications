@@ -1,0 +1,59 @@
+import type { Request, Response } from 'express'
+import type { FormError } from '../../../../@types/template'
+import type PunishmentsService from '../../../../services/punishmentsService'
+import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
+import adjudicationUrls from '../../../../utils/urlGenerator'
+import validateForm from './sameActivityValidation'
+
+type PageData = {
+  error?: FormError
+  sameForAll?: string
+}
+
+export default class SameActivityPage {
+  constructor(
+    private readonly punishmentsService: PunishmentsService,
+    private readonly rehabBatchSessionService: RehabBatchSessionService,
+  ) {}
+
+  private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
+    const { chargeNumber } = req.params
+    const { error, sameForAll } = pageData
+
+    return res.render(`pages/sameRehabilitativeActivity.njk`, {
+      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
+      errors: error ? [error] : [],
+      sameForAll,
+    })
+  }
+
+  view = async (req: Request, res: Response): Promise<void> => {
+    const { chargeNumber } = req.params
+    const batch = this.rehabBatchSessionService.get(req, chargeNumber)
+    if (!batch || batch.redisIds.length < 2) {
+      return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
+    }
+
+    let sameForAll: string = null
+    if (batch.sameForAll !== undefined) {
+      sameForAll = batch.sameForAll ? 'YES' : 'NO'
+    }
+    return this.renderView(req, res, { sameForAll })
+  }
+
+  submit = async (req: Request, res: Response): Promise<void> => {
+    const { chargeNumber } = req.params
+    const { sameForAll } = req.body
+
+    const error = validateForm({ sameForAll })
+    if (error) {
+      return this.renderView(req, res, { error, sameForAll })
+    }
+
+    if (!this.rehabBatchSessionService.get(req, chargeNumber)) {
+      return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
+    }
+    this.rehabBatchSessionService.setSameForAll(req, chargeNumber, sameForAll === 'YES')
+    return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
+  }
+}
