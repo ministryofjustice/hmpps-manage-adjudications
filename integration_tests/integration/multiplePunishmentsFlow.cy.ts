@@ -58,9 +58,9 @@ type SentPunishment = Record<string, unknown> & { rehabilitativeActivities: Reco
 // The fields of each punishment the user answered, from the one POST made for the charge
 // (the app also sends its own session fields, such as the redisId, which vary per run)
 const sentPunishments = (chargeNumber: string) =>
-  cy.task('getSentPunishments', { chargeNumber }).then(sent => {
-    expect(sent as unknown[]).to.have.length(1)
-    return ((sent as SentPunishment[][])[0] || []).map(punishment => {
+  cy.task<SentPunishment[][]>('getSentPunishments', { chargeNumber }).then(sent => {
+    expect(sent).to.have.length(1)
+    return (sent[0] || []).map(punishment => {
       const answered: Record<string, unknown> = {}
       ;['type', 'privilegeType', 'otherPrivilege', 'duration', 'startDate', 'endDate', 'suspendedUntil'].forEach(
         key => {
