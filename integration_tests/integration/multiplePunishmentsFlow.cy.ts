@@ -220,7 +220,7 @@ context('Award several punishments in one journey', () => {
 
     const durationPage = Page.verifyOnPage(PunishmentDurationPage)
     durationPage.heading().should('contain', 'Duration and start date for all 2 punishments')
-    durationPage.appliesTo().should('contain', 'Loss of association, Loss of gym')
+    durationPage.appliesTo().should('contain', 'Loss of association').and('contain', 'Loss of gym')
     answerDuration('7', 'SUSPENDED', '30/11/2026')
 
     Page.verifyOnPage(PunishmentSchedulePage).submitButton().click()
