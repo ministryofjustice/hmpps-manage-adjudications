@@ -81,7 +81,9 @@ describe('GET duration and start date', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Duration and start date for all 2 punishments')
-        expect(res.text).toContain('These answers will be applied to: Loss of canteen, Loss of library.')
+        expect(res.text).toContain('These answers will be applied to:')
+        expect(res.text).toContain('<li>Loss of canteen</li>')
+        expect(res.text).toContain('<li>Loss of library</li>')
         expect(res.text).toContain('How many days will the punishments last?')
         expect(res.text).not.toContain('Punishment 1 of 2')
         expect(res.text).toContain('name="batchItemIds" value="item-0,item-1"')
@@ -95,7 +97,9 @@ describe('GET duration and start date', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Duration and start date for all 2 punishments')
-        expect(res.text).toContain('These answers will be applied to: Loss of canteen, Loss of library.')
+        expect(res.text).toContain('These answers will be applied to:')
+        expect(res.text).toContain('<li>Loss of canteen</li>')
+        expect(res.text).toContain('<li>Loss of library</li>')
         expect(res.text).toContain('name="batchItemIds" value="item-0,item-1"')
       })
   })

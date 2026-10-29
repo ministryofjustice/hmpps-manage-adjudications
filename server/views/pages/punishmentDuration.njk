@@ -29,7 +29,12 @@
       {% endif %}
       <h1 class="govuk-heading-l" data-qa="punishment-duration-heading">{{ heading }}</h1>
       {% if appliesTo | length %}
-        <p class="govuk-body" data-qa="applies-to">These answers will be applied to: {{ appliesTo | join(', ') }}.</p>
+        <p class="govuk-body">These answers will be applied to:</p>
+        <ul class="govuk-list govuk-list--bullet" data-qa="applies-to">
+        {% for name in appliesTo %}
+          <li>{{ name }}</li>
+        {% endfor %}
+      </ul>
       {% endif %}
 
       <form method="POST" novalidate="novalidate">
