@@ -17,6 +17,7 @@ generic-service:
     PRISON_API_URL: https://prison-api.prison.service.justice.gov.uk
     LOCATIONS_INSIDE_PRISON_API_URL: https://locations-inside-prison-api.hmpps.service.justice.gov.uk
     NOMIS_SYNC_PRISONER_MAPPING_API_URL: https://nomis-sync-prisoner-mapping.hmpps.service.justice.gov.uk
+    MULTI_PRIVILEGE_PUNISHMENTS_PRISONS: "NMI"
     SUPPORT_URL: https://support.hmpps.service.justice.gov.uk/
     PRISONER_SEARCH_API_URL: https://prisoner-search.prison.service.justice.gov.uk
     DATA_INSIGHTS_API_URL: https://adjudications-insights-api.hmpps.service.justice.gov.uk
