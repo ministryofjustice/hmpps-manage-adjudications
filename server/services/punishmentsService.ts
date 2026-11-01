@@ -179,6 +179,11 @@ export default class PunishmentsService {
       (ra: RehabilitativeActivity) => ra.sessionId !== sessionId,
     )
 
+    // with the last one gone there is no condition left, so the punishment can be changed again
+    if (!updatedRehabActivityList.length) {
+      return this.noRehabilitativeActivities(req, chargeNumber, redisId)
+    }
+
     const updatedPunishment = {
       ...punishment,
       isThereRehabilitativeActivities: true,
