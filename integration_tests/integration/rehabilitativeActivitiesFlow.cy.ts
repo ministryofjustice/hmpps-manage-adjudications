@@ -167,6 +167,38 @@ context('Add a rehabilitative activity', () => {
         }),
       },
     })
+    cy.task('stubGetReportedAdjudication', {
+      id: 112,
+      response: {
+        reportedAdjudication: testData.reportedAdjudication({
+          chargeNumber: '112',
+          prisonerNumber: 'G6123VU',
+          status: ReportedAdjudicationStatus.CHARGE_PROVED,
+          hearings: [
+            testData.singleHearing({
+              dateTimeOfHearing: '2024-11-23T17:00:00',
+              id: 68,
+            }),
+          ],
+          punishments: [
+            {
+              id: 1,
+              type: PunishmentType.CONFINEMENT,
+              rehabilitativeActivities: [
+                { id: 1, details: 'Victim awareness course', monitor: 'Ann Smith', endDate: '2024-11-10' },
+                { id: 2, details: 'Gym sessions', monitor: 'Jo Brown', endDate: '2024-11-20', totalSessions: 4 },
+              ],
+              canEdit: true,
+              schedule: {
+                duration: 10,
+                measurement: PunishmentMeasurement.DAYS,
+                suspendedUntil: '2024-11-23',
+              },
+            },
+          ],
+        }),
+      },
+    })
     cy.task('stubCreatePunishments', {
       chargeNumber: 100,
       response: {
@@ -447,6 +479,25 @@ context('Add a rehabilitative activity', () => {
 
         hasPage.detailsChoice().find('input[value="NO"]').should('not.be.checked')
         hasPage.detailsChoice().find('input[value="YES"]').should('not.be.checked')
+      })
+      it('changes or removes only the chosen activity on a saved charge', () => {
+        cy.visit(adjudicationUrls.awardPunishments.urls.start('112'))
+        const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
+        awardPunishmentsPage.activitiesTable().find('tbody tr').should('have.length', 2)
+
+        // Change on the second activity opens that activity
+        awardPunishmentsPage.changeActivity().eq(1).click()
+        const activityDetails = Page.verifyOnPage(RehabilitativeActivityDetailsPage)
+        activityDetails.activityDescription().should('have.value', 'Gym sessions')
+        activityDetails.monitorName().should('have.value', 'Jo Brown')
+        cy.go('back')
+
+        // Remove on the second activity removes only that one
+        Page.verifyOnPage(AwardPunishmentsPage).removeActivity().eq(1).click()
+        Page.verifyOnPage(RemoveActivityPage).submitButton().click()
+        const afterRemoval = Page.verifyOnPage(AwardPunishmentsPage)
+        afterRemoval.activitiesTable().find('tbody tr').should('have.length', 1)
+        afterRemoval.activitiesTable().should('contain', 'Victim awareness course').and('not.contain', 'Gym sessions')
       })
       it('change and remove links should be disabled if the condition has a completed value set', () => {
         cy.visit(adjudicationUrls.awardPunishments.urls.start('102'))
