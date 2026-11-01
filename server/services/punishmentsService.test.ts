@@ -626,32 +626,6 @@ describe('PunishmentsService session punishments', () => {
     })
   })
 
-  describe('removing a rehabilitative activity condition', () => {
-    it('clears the activities and unlocks the punishment for changes', () => {
-      const req = newRequest({
-        punishments: {
-          100: [
-            {
-              ...library,
-              redisId: 'b',
-              isThereRehabilitativeActivities: true,
-              hasRehabilitativeActivitiesDetails: true,
-              rehabilitativeActivities: [{ sessionId: 1, details: 'Course' }],
-            },
-          ],
-        },
-      })
-      service.noRehabilitativeActivities(req, '100', 'b')
-      expect(service.getSessionPunishment(req, '100', 'b')).toEqual(
-        expect.objectContaining({
-          isThereRehabilitativeActivities: false,
-          hasRehabilitativeActivitiesDetails: false,
-          rehabilitativeActivities: [],
-        }),
-      )
-    })
-  })
-
   describe('punishments loaded from a saved charge', () => {
     const saved = (): PunishmentData[] => [
       {
@@ -692,6 +666,32 @@ describe('PunishmentsService session punishments', () => {
       expect((await service.getRehabActivity(session.req, '100', session.redisId, 2)).details).toEqual('Gym')
       service.editRehabilitativeActivity(session.req, '100', session.redisId, 2, { sessionId: 2, details: 'Library' })
       expect(details(session)).toEqual(['Course', 'Library'])
+    })
+  })
+
+  describe('removing a rehabilitative activity condition', () => {
+    it('clears the activities and unlocks the punishment for changes', () => {
+      const req = newRequest({
+        punishments: {
+          100: [
+            {
+              ...library,
+              redisId: 'b',
+              isThereRehabilitativeActivities: true,
+              hasRehabilitativeActivitiesDetails: true,
+              rehabilitativeActivities: [{ sessionId: 1, details: 'Course' }],
+            },
+          ],
+        },
+      })
+      service.noRehabilitativeActivities(req, '100', 'b')
+      expect(service.getSessionPunishment(req, '100', 'b')).toEqual(
+        expect.objectContaining({
+          isThereRehabilitativeActivities: false,
+          hasRehabilitativeActivitiesDetails: false,
+          rehabilitativeActivities: [],
+        }),
+      )
     })
   })
 
