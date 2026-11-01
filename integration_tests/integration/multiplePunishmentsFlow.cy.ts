@@ -269,6 +269,54 @@ context('Award several punishments in one journey', () => {
     ])
   })
 
+  it('removes the activities of an unticked punishment only when the rehabilitative journey is finished', () => {
+    cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
+    Page.verifyOnPage(AwardPunishmentsPage).newPunishment().click()
+    choosePrivileges(PrivilegeType.GYM, PrivilegeType.ASSOCIATION)
+    Page.verifyOnPage(PunishmentSameDurationPage).sameForAll().find('input[value="YES"]').check()
+    Page.verifyOnPage(PunishmentSameDurationPage).submitButton().click()
+    answerDuration('7', 'SUSPENDED', '30/11/2026')
+    Page.verifyOnPage(PunishmentSchedulePage).submitButton().click()
+
+    // both punishments get an activity
+    Page.verifyOnPage(AwardPunishmentsPage).addRehabilitativeActivity().click()
+    Page.verifyOnPage(WhichPunishmentsHaveRehabilitativeActivitiesPage)
+      .punishments()
+      .find('input[type="checkbox"]')
+      .check()
+    Page.verifyOnPage(WhichPunishmentsHaveRehabilitativeActivitiesPage).submitButton().click()
+    Page.verifyOnPage(SameRehabilitativeActivityPage).sameForAll().find('input[value="YES"]').check()
+    Page.verifyOnPage(SameRehabilitativeActivityPage).submitButton().click()
+    Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage).detailsChoice().find('input[value="NO"]').check()
+    Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage).submitButton().click()
+    Page.verifyOnPage(RehabilitativeActivitiesSchedulePage).submitButton().click()
+    Page.verifyOnPage(AwardPunishmentsPage).activitiesTable().find('tbody tr').should('have.length', 2)
+
+    // untick association, then leave part way through: both keep their activities
+    Page.verifyOnPage(AwardPunishmentsPage).addRehabilitativeActivity().click()
+    const whichPage = Page.verifyOnPage(WhichPunishmentsHaveRehabilitativeActivitiesPage)
+    whichPage.punishments().find('input[value]').should('be.checked')
+    whichPage.punishments().find('input[type="checkbox"]').first().uncheck()
+    whichPage.submitButton().click()
+    Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage).cancel().click()
+    Page.verifyOnPage(AwardPunishmentsPage).activitiesTable().find('tbody tr').should('have.length', 2)
+
+    // untick association again and finish: only gym keeps an activity
+    Page.verifyOnPage(AwardPunishmentsPage).addRehabilitativeActivity().click()
+    Page.verifyOnPage(WhichPunishmentsHaveRehabilitativeActivitiesPage)
+      .punishments()
+      .find('input[type="checkbox"]')
+      .first()
+      .uncheck()
+    Page.verifyOnPage(WhichPunishmentsHaveRehabilitativeActivitiesPage).submitButton().click()
+    Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage).detailsChoice().find('input[value="NO"]').check()
+    Page.verifyOnPage(HasRehabilitativeActivitesDetailsPage).submitButton().click()
+    Page.verifyOnPage(RehabilitativeActivitiesSchedulePage).submitButton().click()
+
+    const awardPage = Page.verifyOnPage(AwardPunishmentsPage)
+    awardPage.activitiesTable().find('tbody tr').should('have.length', 1).and('contain', 'Loss of gym')
+  })
+
   it('sends a single day-based punishment through the same pages, and keeps answers when leaving a loop', () => {
     cy.visit(adjudicationUrls.awardPunishments.urls.start('100'))
     Page.verifyOnPage(AwardPunishmentsPage).newPunishment().click()

@@ -93,9 +93,26 @@ describe('Which punishments have a rehabilitative activity condition?', () => {
       .expect(302)
       .expect('Location', '/next')
       .then(() => {
-        expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv'])
-        // library had a condition and was unticked
-        expect(punishmentsService.noRehabilitativeActivities).toHaveBeenCalledWith(expect.anything(), '100', 'library')
+        // library had a condition and was unticked: its activities stay until the batch is finished
+        expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv'], ['library'])
+        expect(punishmentsService.noRehabilitativeActivities).not.toHaveBeenCalled()
+      })
+  })
+
+  it('shows what was ticked when coming back part way through a batch', () => {
+    rehabBatchSessionService.get.mockReturnValue({
+      id: 'batch-1',
+      redisIds: ['tv'],
+      completedRedisIds: [],
+      untickedRedisIds: ['library'],
+      drafts: {},
+    })
+    return request(app)
+      .get(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.urls.start('100'))
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toMatch(/value="tv" checked/)
+        expect(res.text).not.toMatch(/value="library" checked/)
       })
   })
 
@@ -106,7 +123,7 @@ describe('Which punishments have a rehabilitative activity condition?', () => {
       .expect(302)
       .expect('Location', adjudicationUrls.sameRehabilitativeActivity.urls.start('100'))
       .then(() =>
-        expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv', 'library']),
+        expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv', 'library'], []),
       )
   })
 

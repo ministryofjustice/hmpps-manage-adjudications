@@ -26,6 +26,7 @@ beforeEach(() => {
     id: 'batch-1',
     redisIds: ['a', 'b'],
     completedRedisIds: [],
+    untickedRedisIds: [],
     drafts: {},
   })
   rehabBatchSessionService.nextUrl.mockReturnValue('/next')
@@ -45,7 +46,13 @@ describe('Do they all have the same rehabilitative activity?', () => {
   })
 
   it('skips the question for a single punishment', () => {
-    rehabBatchSessionService.get.mockReturnValue({ id: 'batch-1', redisIds: ['a'], completedRedisIds: [], drafts: {} })
+    rehabBatchSessionService.get.mockReturnValue({
+      id: 'batch-1',
+      redisIds: ['a'],
+      completedRedisIds: [],
+      untickedRedisIds: [],
+      drafts: {},
+    })
     return request(app)
       .get(adjudicationUrls.sameRehabilitativeActivity.urls.start('100'))
       .expect(302)

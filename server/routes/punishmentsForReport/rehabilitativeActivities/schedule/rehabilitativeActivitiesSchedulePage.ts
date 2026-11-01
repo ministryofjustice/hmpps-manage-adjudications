@@ -56,7 +56,7 @@ export default class RehabilitativeActivitiesSchedulePage {
     if (this.batchPunishments(req, chargeNumber).length) {
       this.punishmentsService.setSuccessMessage(req, chargeNumber, 'Rehabilitative activity added')
     }
-    this.rehabBatchSessionService.clear(req, chargeNumber)
+    this.rehabBatchSessionService.finish(req, chargeNumber)
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
   }
 }

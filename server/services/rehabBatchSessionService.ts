@@ -8,7 +8,9 @@ import adjudicationUrls from '../utils/urlGenerator'
 export default class RehabBatchSessionService {
   constructor(private readonly punishmentsService: PunishmentsService) {}
 
-  start(req: Request, chargeNumber: string, redisIds: string[]) {
+  // untickedRedisIds: punishments that had activities and were not ticked this time. They keep their activities
+  // until the batch is finished, so leaving part way through changes nothing on them.
+  start(req: Request, chargeNumber: string, redisIds: string[], untickedRedisIds: string[] = []) {
     if (!req.session.rehabBatch) {
       req.session.rehabBatch = {}
     }
@@ -16,6 +18,7 @@ export default class RehabBatchSessionService {
       id: randomUUID(),
       redisIds: [...redisIds],
       completedRedisIds: [],
+      untickedRedisIds: [...untickedRedisIds],
       drafts: {},
     }
   }
@@ -114,6 +117,18 @@ export default class RehabBatchSessionService {
 
   clear(req: Request, chargeNumber: string) {
     delete req.session.rehabBatch?.[chargeNumber]
+  }
+
+  // Confirms the batch: punishments that were unticked lose their activities now, then the batch is closed
+  finish(req: Request, chargeNumber: string) {
+    // a batch started before untickedRedisIds was added has none
+    const untickedRedisIds = this.get(req, chargeNumber)?.untickedRedisIds ?? []
+    untickedRedisIds.forEach(redisId => {
+      if (this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)) {
+        this.punishmentsService.noRehabilitativeActivities(req, chargeNumber, redisId)
+      }
+    })
+    this.clear(req, chargeNumber)
   }
 
   nextUrl(req: Request, chargeNumber: string): string {

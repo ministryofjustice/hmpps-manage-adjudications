@@ -51,6 +51,7 @@ beforeEach(() => {
     id: 'batch-1',
     redisIds: ['library', 'tv'],
     completedRedisIds: [],
+    untickedRedisIds: [],
     drafts: {},
   })
   rehabBatchSessionService.isCurrentForm.mockReturnValue(true)
@@ -79,6 +80,7 @@ describe('Do you have the details of the rehabilitative activities?', () => {
       id: 'batch-1',
       redisIds: ['library', 'tv'],
       completedRedisIds: [],
+      untickedRedisIds: [],
       sameForAll: true,
       drafts: {},
     })

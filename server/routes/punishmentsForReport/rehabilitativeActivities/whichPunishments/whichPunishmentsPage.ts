@@ -75,10 +75,14 @@ export default class WhichPunishmentsPage {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
 
+    // coming back to this page part way through shows what was ticked, not what has activities so far
+    const batch = this.rehabBatchSessionService.get(req, chargeNumber)
     return this.renderView(req, res, punishments, {
-      redisIds: punishments
-        .filter(punishment => punishment.rehabilitativeActivities?.length)
-        .map(punishment => punishment.redisId),
+      redisIds: batch
+        ? batch.redisIds
+        : punishments
+            .filter(punishment => punishment.rehabilitativeActivities?.length)
+            .map(punishment => punishment.redisId),
     })
   }
 
@@ -97,16 +101,18 @@ export default class WhichPunishmentsPage {
       return this.renderView(req, res, punishments, { error, redisIds })
     }
 
-    // unticking a punishment removes the activities it had
-    punishments
+    // unticking a punishment removes the activities it had, but only once the batch is finished,
+    // so cancelling part way through leaves them as they were
+    const untickedRedisIds = punishments
       .filter(punishment => !redisIds.includes(punishment.redisId) && punishment.rehabilitativeActivities?.length)
-      .forEach(punishment => this.punishmentsService.noRehabilitativeActivities(req, chargeNumber, punishment.redisId))
+      .map(punishment => punishment.redisId)
 
     // keep the order of the table, whatever order the form sent
     this.rehabBatchSessionService.start(
       req,
       chargeNumber,
       eligibleRedisIds.filter(redisId => redisIds.includes(redisId)),
+      untickedRedisIds,
     )
     if (redisIds.length > 1) {
       return res.redirect(adjudicationUrls.sameRehabilitativeActivity.urls.start(chargeNumber))
