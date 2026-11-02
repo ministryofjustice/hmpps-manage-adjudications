@@ -651,6 +651,50 @@ describe('PunishmentsService session punishments', () => {
     })
   })
 
+  describe('removing one rehabilitative activity', () => {
+    const withActivities = (activities: { sessionId: number; details: string }[]) =>
+      newRequest({
+        punishments: {
+          100: [
+            {
+              ...library,
+              redisId: 'b',
+              isThereRehabilitativeActivities: true,
+              hasRehabilitativeActivitiesDetails: true,
+              rehabilitativeActivities: activities,
+            },
+          ],
+        },
+      })
+
+    it('unlocks the punishment for changes when the last activity is removed', () => {
+      const req = withActivities([{ sessionId: 1, details: 'Course' }])
+      service.removeRehabilitativeActivity(req, '100', 'b', 1)
+      expect(service.getSessionPunishment(req, '100', 'b')).toEqual(
+        expect.objectContaining({
+          isThereRehabilitativeActivities: false,
+          hasRehabilitativeActivitiesDetails: false,
+          rehabilitativeActivities: [],
+        }),
+      )
+    })
+
+    it('keeps the punishment locked while other activities remain', () => {
+      const req = withActivities([
+        { sessionId: 1, details: 'Course' },
+        { sessionId: 2, details: 'Gym' },
+      ])
+      service.removeRehabilitativeActivity(req, '100', 'b', 1)
+      expect(service.getSessionPunishment(req, '100', 'b')).toEqual(
+        expect.objectContaining({
+          isThereRehabilitativeActivities: true,
+          hasRehabilitativeActivitiesDetails: true,
+          rehabilitativeActivities: [{ sessionId: 2, details: 'Gym' }],
+        }),
+      )
+    })
+  })
+
   describe('success message', () => {
     it('is returned once only', () => {
       const req = newRequest()

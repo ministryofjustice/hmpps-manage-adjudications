@@ -337,6 +337,14 @@ context('Add a rehabilitative activity', () => {
           expect($summaryData.get(4).innerText).to.contain('10 Oct 2030 - with a rehabilitative activity condition')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
+
+      // the punishment cannot be changed while it has an activity, and can again once the last one is removed
+      awardedPunishments.editPunishment().should('not.exist')
+      awardedPunishments.removeActivity().first().click()
+      Page.verifyOnPage(RemoveActivityPage).submitButton().click()
+      const afterRemoval = Page.verifyOnPage(AwardPunishmentsPage)
+      afterRemoval.punishmentsTable().should('not.contain', 'with a rehabilitative activity condition')
+      afterRemoval.editPunishment().should('have.length', 1)
     })
     it('adds a rehab activity with information available - two activities', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
