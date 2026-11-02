@@ -1,6 +1,7 @@
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import {
   PrivilegeType,
+  PunishmentData,
   PunishmentReasonForChange,
   PunishmentType,
   RehabilitativeActivity,
@@ -622,6 +623,49 @@ describe('PunishmentsService session punishments', () => {
           .getSessionPunishment(req, '100', 'b')
           .rehabilitativeActivities.map((a: { details: string }) => a.details),
       ).toEqual(['changed', 'second'])
+    })
+  })
+
+  describe('punishments loaded from a saved charge', () => {
+    const saved = (): PunishmentData[] => [
+      {
+        ...library,
+        id: 7,
+        duration: 10,
+        suspendedUntil: '2026-11-30',
+        rehabilitativeActivities: [
+          { id: 1, details: 'Course', monitor: 'Ann', endDate: '2026-11-10' },
+          { id: 2, details: 'Gym', monitor: 'Jo', endDate: '2026-11-20' },
+        ],
+      },
+    ]
+    const loaded = () => {
+      const req = newRequest()
+      service.setAllSessionPunishments(req, saved(), '100')
+      const { redisId } = service.getAllSessionPunishments(req, '100')[0]
+      return { req, redisId }
+    }
+    const details = ({ req, redisId }: ReturnType<typeof loaded>) =>
+      service.getSessionPunishment(req, '100', redisId).rehabilitativeActivities.map(activity => activity.details)
+
+    it('gives each activity its own sessionId', () => {
+      const { req, redisId } = loaded()
+      expect(
+        service.getSessionPunishment(req, '100', redisId).rehabilitativeActivities.map(activity => activity.sessionId),
+      ).toEqual([1, 2])
+    })
+
+    it('removes only the chosen activity', () => {
+      const session = loaded()
+      service.removeRehabilitativeActivity(session.req, '100', session.redisId, 2)
+      expect(details(session)).toEqual(['Course'])
+    })
+
+    it('shows and changes only the chosen activity', async () => {
+      const session = loaded()
+      expect((await service.getRehabActivity(session.req, '100', session.redisId, 2)).details).toEqual('Gym')
+      service.editRehabilitativeActivity(session.req, '100', session.redisId, 2, { sessionId: 2, details: 'Library' })
+      expect(details(session)).toEqual(['Course', 'Library'])
     })
   })
 

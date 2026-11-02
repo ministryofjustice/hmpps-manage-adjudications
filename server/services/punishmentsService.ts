@@ -327,9 +327,9 @@ export default class PunishmentsService {
           hasRehabilitativeActivitiesDetails = punishment.rehabilitativeActivities.some(ra => ra.details !== null)
         }
       }
-      const sessionId = 0
-      const rehabilitativeActivities = punishment.rehabilitativeActivities.map(ra => {
-        return { ...ra, sessionId }
+      // each activity needs its own sessionId, as Change and Remove find the activity by it
+      const rehabilitativeActivities = punishment.rehabilitativeActivities.map((ra, index) => {
+        return { ...ra, sessionId: index + 1 }
       })
 
       return {
