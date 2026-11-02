@@ -157,6 +157,8 @@ export type RehabBatch = {
   id: string
   redisIds: string[]
   completedRedisIds: string[]
+  // punishments that had activities and were unticked; theirs are removed only when the batch is finished
+  untickedRedisIds: string[]
   sameForAll?: boolean
   // activities being entered, by redisId; they replace the punishment's own only when the last one is saved
   drafts: { [redisId: string]: RehabilitativeActivity[] }

@@ -47,6 +47,7 @@ beforeEach(() => {
     id: 'batch-1',
     redisIds: ['library'],
     completedRedisIds: [],
+    untickedRedisIds: [],
     drafts: {},
   })
   rehabBatchSessionService.isCurrentForm.mockReturnValue(true)
