@@ -157,8 +157,6 @@ export type RehabBatch = {
   id: string
   redisIds: string[]
   completedRedisIds: string[]
-  // punishments that had activities and were unticked; theirs are removed only when the batch is finished
-  untickedRedisIds: string[]
   sameForAll?: boolean
   // activities being entered, by redisId; they replace the punishment's own only when the last one is saved
   drafts: { [redisId: string]: RehabilitativeActivity[] }
@@ -197,6 +195,11 @@ export function canHaveRehabilitativeActivity(punishment: PunishmentData): boole
     (punishment.rehabilitativeActivitiesCompleted === undefined ||
       punishment.rehabilitativeActivitiesCompleted === null)
   )
+}
+
+// A punishment with a rehabilitative activity condition already added, including one whose details were not entered
+export function hasRehabilitativeActivities(punishment: PunishmentData): boolean {
+  return !!punishment.rehabilitativeActivities?.length
 }
 
 export interface PunishmentWithConvertedName extends PunishmentData {

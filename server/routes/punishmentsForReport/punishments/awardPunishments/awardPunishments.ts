@@ -5,6 +5,7 @@ import {
   PunishmentData,
   PunishmentType,
   canHaveRehabilitativeActivity,
+  hasRehabilitativeActivities,
   flattenPunishments,
 } from '../../../../data/PunishmentResult'
 import PunishmentsService from '../../../../services/punishmentsService'
@@ -116,7 +117,13 @@ export default class AwardPunishmentsPage {
   }
 
   canAddRehabilitativeActivity = async (chargeNumber: string, user: User, punishments: PunishmentData[]) => {
-    if (!punishments?.some(punishment => canHaveRehabilitativeActivity(punishment))) return false
+    // a punishment that already has a condition is changed or removed from this page, not added to again
+    if (
+      !punishments?.some(
+        punishment => canHaveRehabilitativeActivity(punishment) && !hasRehabilitativeActivities(punishment),
+      )
+    )
+      return false
     const { isIndependentAdjudicatorHearing } = await this.punishmentsService.getPunishmentAvailability(
       chargeNumber,
       user,

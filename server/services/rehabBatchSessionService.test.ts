@@ -138,38 +138,4 @@ describe('RehabBatchSessionService', () => {
     service.startDraft(req, '100', 'a')
     expect(service.getDraft(req, '100', 'a')).toEqual([])
   })
-
-  it('removes the activities of unticked punishments only when the batch is finished', () => {
-    const existing = { sessionId: 1, details: 'Course', monitor: 'Thomas', endDate: '2026-11-01' }
-    const req = newRequest({ punishments: { 100: [suspended('a', [existing]), suspended('b')] } })
-    service.start(req, '100', ['b'], ['a'])
-
-    // leaving part way through keeps them
-    service.clear(req, '100')
-    expect(punishmentsService.getSessionPunishment(req, '100', 'a').rehabilitativeActivities).toEqual([existing])
-
-    service.start(req, '100', ['b'], ['a'])
-    service.finish(req, '100')
-    expect(punishmentsService.getSessionPunishment(req, '100', 'a')).toEqual(
-      expect.objectContaining({
-        isThereRehabilitativeActivities: false,
-        hasRehabilitativeActivitiesDetails: false,
-        rehabilitativeActivities: [],
-      }),
-    )
-    expect(service.get(req, '100')).toBeUndefined()
-  })
-
-  it('finishes without error when an unticked punishment has since been deleted', () => {
-    const req = newRequest({ punishments: { 100: [suspended('b')] } })
-    service.start(req, '100', ['b'], ['a'])
-    service.finish(req, '100')
-    expect(service.get(req, '100')).toBeUndefined()
-  })
-
-  it('finishes a batch started before unticked punishments were recorded', () => {
-    const req = newRequest({ rehabBatch: { 100: { id: 'old', redisIds: ['a'], completedRedisIds: [], drafts: {} } } })
-    service.finish(req, '100')
-    expect(service.get(req, '100')).toBeUndefined()
-  })
 })

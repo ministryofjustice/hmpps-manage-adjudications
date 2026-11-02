@@ -50,7 +50,6 @@ beforeEach(() => {
     id: 'batch-1',
     redisIds: ['library', 'tv'],
     completedRedisIds: [],
-    untickedRedisIds: [],
     drafts: {},
   })
   punishmentsService.getSessionPunishment.mockImplementation((req, chargeNumber, redisId) => ({ library, tv })[redisId])
@@ -99,7 +98,7 @@ describe('Rehabilitative schedule', () => {
           '100',
           'Rehabilitative activity added',
         )
-        expect(rehabBatchSessionService.finish).toHaveBeenCalledWith(expect.anything(), '100')
+        expect(rehabBatchSessionService.clear).toHaveBeenCalledWith(expect.anything(), '100')
       })
   })
 })

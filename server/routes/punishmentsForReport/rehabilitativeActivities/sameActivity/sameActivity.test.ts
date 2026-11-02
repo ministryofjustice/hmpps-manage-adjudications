@@ -26,7 +26,6 @@ beforeEach(() => {
     id: 'batch-1',
     redisIds: ['a', 'b'],
     completedRedisIds: [],
-    untickedRedisIds: [],
     drafts: {},
   })
   rehabBatchSessionService.nextUrl.mockReturnValue('/next')
@@ -50,7 +49,6 @@ describe('Do they all have the same rehabilitative activity?', () => {
       id: 'batch-1',
       redisIds: ['a'],
       completedRedisIds: [],
-      untickedRedisIds: [],
       drafts: {},
     })
     return request(app)
