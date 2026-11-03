@@ -669,6 +669,32 @@ describe('PunishmentsService session punishments', () => {
     })
   })
 
+  describe('Change and Remove links for rehabilitative activities', () => {
+    const withCompleted = (rehabilitativeActivitiesCompleted: boolean | null | undefined): PunishmentData => ({
+      ...library,
+      redisId: 'b',
+      duration: 10,
+      suspendedUntil: '2026-11-30',
+      rehabilitativeActivities: [{ sessionId: 1, details: 'Course' }],
+      rehabilitativeActivitiesCompleted,
+    })
+    const canChangeOrRemove = (punishment: PunishmentData) =>
+      service.extendRehabActivities([punishment], '100')[0].canChangeOrRemove
+
+    it('are shown for a punishment added in this session', () => {
+      expect(canChangeOrRemove(withCompleted(undefined))).toEqual(true)
+    })
+
+    it('are shown for a punishment saved on the charge, which the API sends with completion null', () => {
+      expect(canChangeOrRemove(withCompleted(null))).toEqual(true)
+    })
+
+    it('are not shown once completion has been recorded', () => {
+      expect(canChangeOrRemove(withCompleted(true))).toEqual(false)
+      expect(canChangeOrRemove(withCompleted(false))).toEqual(false)
+    })
+  })
+
   describe('removing a rehabilitative activity condition', () => {
     it('clears the activities and unlocks the punishment for changes', () => {
       const req = newRequest({
