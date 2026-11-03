@@ -114,8 +114,8 @@ describe('Award punishments with the new journey switched on', () => {
       })
   })
 
-  it('offers a rehabilitative activity when a punishment is suspended on a governor hearing', () => {
-    withPunishments([canteen, suspendedLibrary])
+  it('offers a rehabilitative activity when a suspended punishment on a governor hearing has none', () => {
+    withPunishments([canteen, suspendedLibrary, { ...suspendedLibrary, redisId: 'c', rehabilitativeActivities: [] }])
     return request(app)
       .get(adjudicationUrls.awardPunishments.urls.modified('100'))
       .expect(200)
@@ -135,6 +135,14 @@ describe('Award punishments with the new journey switched on', () => {
         expect(res.text).not.toContain('End date and <br>number of sessions')
         expect(res.text).toContain('16 Sep 2026')
       })
+  })
+
+  it('does not offer a rehabilitative activity when every suspended punishment already has one', () => {
+    withPunishments([canteen, suspendedLibrary])
+    return request(app)
+      .get(adjudicationUrls.awardPunishments.urls.modified('100'))
+      .expect(200)
+      .expect(res => expect(res.text).not.toContain('Add a rehabilitative activity'))
   })
 
   it('does not offer a rehabilitative activity when nothing is suspended', () => {

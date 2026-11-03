@@ -3,7 +3,11 @@ import type { FormError } from '../../../../@types/template'
 import type PunishmentsService from '../../../../services/punishmentsService'
 import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import type { PunishmentData } from '../../../../data/PunishmentResult'
-import { canHaveRehabilitativeActivity, convertPunishmentType } from '../../../../data/PunishmentResult'
+import {
+  canHaveRehabilitativeActivity,
+  convertPunishmentType,
+  hasRehabilitativeActivities,
+} from '../../../../data/PunishmentResult'
 import { formatTimestampTo } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import validateForm from './whichPunishmentsValidation'
@@ -12,6 +16,14 @@ type PageData = {
   error?: FormError
   redisIds?: string[]
 }
+
+const punishmentName = (punishment: PunishmentData): string =>
+  convertPunishmentType(
+    punishment.type,
+    punishment.stoppagePercentage,
+    punishment.privilegeType,
+    punishment.otherPrivilege,
+  )
 
 const toArray = (value: string | string[]): string[] => {
   if (!value) {
@@ -42,10 +54,22 @@ export default class WhichPunishmentsPage {
     return isIndependentAdjudicatorHearing ? [] : punishments
   }
 
+  // A punishment that already has a condition is left off the list: it is changed or removed on the award
+  // punishments page. One in the batch being answered stays on, so coming back part way through shows the choice.
+  private availablePunishments = (req: Request, punishments: PunishmentData[]): PunishmentData[] => {
+    const { chargeNumber } = req.params
+    return punishments.filter(
+      punishment =>
+        !hasRehabilitativeActivities(punishment) ||
+        this.rehabBatchSessionService.includes(req, chargeNumber, punishment.redisId),
+    )
+  }
+
   private renderView = async (
     req: Request,
     res: Response,
     punishments: PunishmentData[],
+    available: PunishmentData[],
     pageData: PageData,
   ): Promise<void> => {
     const { chargeNumber } = req.params
@@ -54,14 +78,10 @@ export default class WhichPunishmentsPage {
     return res.render(`pages/whichPunishmentsHaveRehabilitativeActivities.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
-      items: punishments.map(punishment => ({
+      alreadyAdded: punishments.filter(punishment => !available.includes(punishment)).map(punishmentName),
+      items: available.map(punishment => ({
         value: punishment.redisId,
-        text: convertPunishmentType(
-          punishment.type,
-          punishment.stoppagePercentage,
-          punishment.privilegeType,
-          punishment.otherPrivilege,
-        ),
+        text: punishmentName(punishment),
         hint: { text: `Suspended until ${formatTimestampTo(punishment.suspendedUntil, 'D MMMM YYYY')}` },
         checked: redisIds.includes(punishment.redisId),
       })),
@@ -71,48 +91,39 @@ export default class WhichPunishmentsPage {
   view = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const punishments = await this.eligiblePunishments(req, res)
-    if (!punishments.length) {
+    const available = this.availablePunishments(req, punishments)
+    if (!available.length) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
 
-    // coming back to this page part way through shows what was ticked, not what has activities so far
-    const batch = this.rehabBatchSessionService.get(req, chargeNumber)
-    return this.renderView(req, res, punishments, {
-      redisIds: batch
-        ? batch.redisIds
-        : punishments
-            .filter(punishment => punishment.rehabilitativeActivities?.length)
-            .map(punishment => punishment.redisId),
+    // coming back to this page part way through shows what was ticked
+    return this.renderView(req, res, punishments, available, {
+      redisIds: this.rehabBatchSessionService.get(req, chargeNumber)?.redisIds ?? [],
     })
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber } = req.params
     const punishments = await this.eligiblePunishments(req, res)
-    if (!punishments.length) {
+    const available = this.availablePunishments(req, punishments)
+    if (!available.length) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
 
-    const eligibleRedisIds = punishments.map(punishment => punishment.redisId)
-    const redisIds = toArray(req.body.redisIds).filter(redisId => eligibleRedisIds.includes(redisId))
+    const availableRedisIds = available.map(punishment => punishment.redisId)
+    const redisIds = toArray(req.body.redisIds).filter(redisId => availableRedisIds.includes(redisId))
 
     const error = validateForm({ redisIds })
     if (error) {
-      return this.renderView(req, res, punishments, { error, redisIds })
+      return this.renderView(req, res, punishments, available, { error, redisIds })
     }
 
-    // unticking a punishment removes the activities it had, but only once the batch is finished,
-    // so cancelling part way through leaves them as they were
-    const untickedRedisIds = punishments
-      .filter(punishment => !redisIds.includes(punishment.redisId) && punishment.rehabilitativeActivities?.length)
-      .map(punishment => punishment.redisId)
-
-    // keep the order of the table, whatever order the form sent
+    // Unticking takes nothing away: a condition is removed on the award punishments page.
+    // Keep the order of the table, whatever order the form sent.
     this.rehabBatchSessionService.start(
       req,
       chargeNumber,
-      eligibleRedisIds.filter(redisId => redisIds.includes(redisId)),
-      untickedRedisIds,
+      availableRedisIds.filter(redisId => redisIds.includes(redisId)),
     )
     if (redisIds.length > 1) {
       return res.redirect(adjudicationUrls.sameRehabilitativeActivity.urls.start(chargeNumber))

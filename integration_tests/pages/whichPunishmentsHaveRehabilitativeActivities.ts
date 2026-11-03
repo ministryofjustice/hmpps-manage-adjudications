@@ -7,6 +7,8 @@ export default class WhichPunishmentsHaveRehabilitativeActivitiesPage extends Pa
 
   punishments = (): PageElement => cy.get('[data-qa="rehabilitative-activity-punishments"]')
 
+  alreadyAdded = (): PageElement => cy.get('[data-qa="already-added"]')
+
   submitButton = (): PageElement => cy.get('[data-qa="submit"]')
 
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')

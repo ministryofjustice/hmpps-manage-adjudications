@@ -6,6 +6,15 @@
 
 {% set title = "Which punishments have a rehabilitative activity condition?" %}
 
+{% set alreadyAddedHtml %}
+  <p class="govuk-body govuk-!-margin-bottom-2">Already added:</p>
+  <ul class="govuk-list govuk-list--bullet" data-qa="already-added">
+    {% for name in alreadyAdded %}
+      <li>{{ name }}</li>
+    {% endfor %}
+  </ul>
+{% endset %}
+
 {% block pageTitle %}
   {{ title }} - Adjudications - Digital Prison Services
 {% endblock %}
@@ -40,6 +49,7 @@
             }
           },
           hint: { text: "Select all that apply." },
+          formGroup: { beforeInputs: { html: alreadyAddedHtml } } if alreadyAdded | length else undefined,
           items: items
         }) }}
 

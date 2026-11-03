@@ -59,7 +59,7 @@ afterEach(() => {
 })
 
 describe('Which punishments have a rehabilitative activity condition?', () => {
-  it('lists only suspended punishments that can have a condition, ticking ones that already have one', () => {
+  it('lists suspended punishments without a condition, and those with one as already added', () => {
     return request(app)
       .get(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.urls.start('100'))
       .expect(200)
@@ -67,12 +67,32 @@ describe('Which punishments have a rehabilitative activity condition?', () => {
         expect(res.text).toContain('Which punishments have a rehabilitative activity condition?')
         expect(res.text).toContain('Loss of TV')
         expect(res.text).toContain('Suspended until 31 October 2026')
-        expect(res.text).toContain('Loss of library')
         expect(res.text).not.toContain('Loss of canteen')
         expect(res.text).not.toContain('Additional days')
-        expect(res.text).toMatch(/value="library" checked/)
         expect(res.text).not.toMatch(/value="tv" checked/)
+        // library already has a condition, so it is listed but cannot be ticked
+        expect(res.text).not.toContain('value="library"')
+        expect(res.text).toContain('Already added:')
+        expect(res.text).toMatch(/data-qa="already-added">\s*<li>Loss of library<\/li>/)
       })
+  })
+
+  it('shows no already added list when no punishment has a condition yet', () => {
+    punishmentsService.getAllSessionPunishments.mockReturnValue([punishment('tv', { suspendedUntil: '2026-10-31' })])
+    return request(app)
+      .get(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.urls.start('100'))
+      .expect(200)
+      .expect(res => expect(res.text).not.toContain('Already added:'))
+  })
+
+  it('goes back to the award punishments page when every suspended punishment already has a condition', () => {
+    punishmentsService.getAllSessionPunishments.mockReturnValue([
+      punishment('library', { suspendedUntil: '2026-09-16', rehabilitativeActivities: [{ sessionId: 1 }] }),
+    ])
+    return request(app)
+      .get(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.urls.start('100'))
+      .expect(302)
+      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
   })
 
   it('goes back to the award punishments page after an independent adjudicator hearing', () => {
@@ -93,8 +113,8 @@ describe('Which punishments have a rehabilitative activity condition?', () => {
       .expect(302)
       .expect('Location', '/next')
       .then(() => {
-        // library had a condition and was unticked: its activities stay until the batch is finished
-        expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv'], ['library'])
+        // library already had a condition: it keeps it and is not asked about again
+        expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv'])
         expect(punishmentsService.noRehabilitativeActivities).not.toHaveBeenCalled()
       })
   })
@@ -104,7 +124,6 @@ describe('Which punishments have a rehabilitative activity condition?', () => {
       id: 'batch-1',
       redisIds: ['tv'],
       completedRedisIds: [],
-      untickedRedisIds: ['library'],
       drafts: {},
     })
     return request(app)
@@ -112,19 +131,50 @@ describe('Which punishments have a rehabilitative activity condition?', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toMatch(/value="tv" checked/)
-        expect(res.text).not.toMatch(/value="library" checked/)
+        expect(res.text).not.toContain('value="library"')
+      })
+  })
+
+  it('keeps a punishment in the batch on the list after its activities are saved, so it can be unticked', () => {
+    rehabBatchSessionService.get.mockReturnValue({
+      id: 'batch-1',
+      redisIds: ['tv', 'library'],
+      completedRedisIds: ['library'],
+      drafts: {},
+    })
+    rehabBatchSessionService.includes.mockImplementation((_req, _chargeNumber, redisId) =>
+      ['tv', 'library'].includes(redisId),
+    )
+    return request(app)
+      .get(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.urls.start('100'))
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toMatch(/value="tv" checked/)
+        expect(res.text).toMatch(/value="library" checked/)
+        expect(res.text).not.toContain('Already added:')
       })
   })
 
   it('asks whether several punishments share an activity, keeping the table order', () => {
+    punishmentsService.getAllSessionPunishments.mockReturnValue([
+      ...sessionPunishments,
+      punishment('gym', { privilegeType: PrivilegeType.GYM, suspendedUntil: '2026-12-01' }),
+    ])
     return request(app)
       .post(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.urls.start('100'))
-      .send({ redisIds: ['library', 'tv', 'canteen'] })
+      .send({ redisIds: ['gym', 'tv', 'canteen'] })
       .expect(302)
       .expect('Location', adjudicationUrls.sameRehabilitativeActivity.urls.start('100'))
-      .then(() =>
-        expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv', 'library'], []),
-      )
+      .then(() => expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv', 'gym']))
+  })
+
+  it('ignores a punishment that already has a condition if the form sends it', () => {
+    return request(app)
+      .post(adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.urls.start('100'))
+      .send({ redisIds: ['library', 'tv'] })
+      .expect(302)
+      .expect('Location', '/next')
+      .then(() => expect(rehabBatchSessionService.start).toHaveBeenCalledWith(expect.anything(), '100', ['tv']))
   })
 
   it('asks for at least one punishment', () => {
