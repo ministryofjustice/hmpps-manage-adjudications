@@ -658,7 +658,9 @@ export default class PunishmentsService {
           changeUrl: adjudicationUrls.editRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
           removeUrl: adjudicationUrls.removeRehabilitativeActivity.urls.start(chargeNumber, p.redisId, ra.sessionId),
           completeUrl: adjudicationUrls.completeRehabilitativeActivity.urls.start(chargeNumber, p.id),
-          canChangeOrRemove: p.rehabilitativeActivitiesCompleted === undefined,
+          // only until completion is recorded; a saved punishment comes back from the API with null, not undefined
+          canChangeOrRemove:
+            p.rehabilitativeActivitiesCompleted === undefined || p.rehabilitativeActivitiesCompleted === null,
           rehabilitativeActivitiesCompleted: p.rehabilitativeActivitiesCompleted,
           rehabilitativeActivitiesNotCompletedOutcome: p.rehabilitativeActivitiesNotCompletedOutcome,
           type: p.type,
