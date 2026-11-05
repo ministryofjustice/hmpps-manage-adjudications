@@ -37,11 +37,11 @@
 @use './components/transferBanner';
 @use './components/adjudicationHistory';
 
-@use 'homepage';
-@use 'helpers';
-@use 'horizontal-content';
+@use './page/homepage';
+@use './components/helpers';
+@use './components/horizontal-content';
 
-@use 'local';
+@use './overrides/local';
 
 .flex-container {
   display: flex;
