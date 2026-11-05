@@ -6,18 +6,12 @@
   "license": "MIT",
   "scripts": {
     "prepare": "hmpps-precommit-hooks-prepare",
-    "copy-views": "cp -R server/views dist/server/",
-    "compile-sass": "sass --no-source-map --quiet-deps --load-path=node_modules/govuk-frontend --load-path=node_modules/@ministryofjustice/frontend --load-path=. ./assets/scss/application.scss:./assets/stylesheets/application.css --style compressed --quiet",
     "watch-ts": "tsc -w",
-    "watch-views": "nodemon --watch server/views -e html,njk -x npm run copy-views",
-    "watch-node": "DEBUG=gov-starter-server* nodemon -r dotenv/config --watch dist/ dist/server.js | bunyan -o short",
-    "watch-sass": "npm run compile-sass -- --watch",
-    "build": "npm run compile-sass && tsc && npm run copy-views",
+    "build": "node esbuild/esbuild",
     "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
-    "start:dev": "concurrently -k -p \"[{name}]\" -n \"Views,TypeScript,Node,Sass\" -c \"yellow.bold,cyan.bold,green.bold,blue.bold\" \"npm run watch-views\" \"npm run watch-ts\" \"npm run watch-node\" \"npm run watch-sass\"",
-    "start-feature": "export $(cat feature.env) && node $NODE_DEBUG_OPTION dist/server.js | bunyan -o short",
-    "watch-node-feature": "export $(cat feature.env) && nodemon --watch dist/ $NODE_DEBUG_OPTION dist/server.js | bunyan -o short",
-    "start-feature:dev": "concurrently -k -p \"[{name}]\" -n \"Views,TypeScript,Node,Sass\" -c \"yellow.bold,cyan.bold,green.bold,blue.bold\" \"npm run watch-views\" \"npm run watch-ts\" \"npm run watch-node-feature\" \"npm run watch-sass\"",
+    "start:dev": "node esbuild/esbuild --watch",
+    "start-feature": "node $NODE_DEBUG_OPTION --env-file=feature.env dist/server.js | bunyan -o short",
+    "start-feature:dev": "node esbuild/esbuild --watch --env feature.env",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests",
@@ -26,7 +20,7 @@
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open --e2e --browser chrome",
-    "clean": "rm -rf dist build node_modules stylesheets",
+    "clean": "rm -rf dist test_results",
     "rebuild": "npm run clean && npm run setup && npm run build",
     "precommit:secrets": "gitleaks git --pre-commit --redact --staged --verbose --config .gitleaks/config.toml",
     "precommit:lint": "node_modules/.bin/lint-staged",
@@ -36,16 +30,6 @@
   "engines": {
     "node": "^24",
     "npm": "^12"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "migrations/*",
-      "node_modules/*",
-      "test/*",
-      "integration_tests/*"
-    ],
-    "delay": 2500,
-    "ext": "js,json,html,njk"
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^11.1.0",
@@ -84,6 +68,7 @@
     "url": "^0.11.4"
   },
   "devDependencies": {
+    "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
     "@ministryofjustice/hmpps-precommit-hooks": "^3.0.2",
     "@tsconfig/node24": "^24.0.5",
@@ -105,10 +90,13 @@
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.11",
     "@types/supertest": "^7.2.1",
-    "concurrently": "^10.0.6",
     "cypress": "^16.2.0",
     "cypress-multi-reporters": "^2.0.5",
-    "dotenv": "^17.4.2",
+    "del": "9.0.1",
+    "esbuild": "^0.28.2",
+    "esbuild-plugin-copy": "^2.1.1",
+    "esbuild-plugin-manifest": "^1.0.5",
+    "esbuild-sass-plugin": "^3.7.0",
     "jest": "^30.5.2",
     "jest-html-reporter": "^4.4.2",
     "jest-junit": "^17.0.0",
@@ -116,7 +104,6 @@
     "lint-staged": "^17.6.0",
     "mocha-junit-reporter": "^2.2.1",
     "nock": "^15.0.5",
-    "nodemon": "^3.1.14",
     "prettier": "^3.9.10",
     "prettier-plugin-jinja-template": "^2.2.0",
     "sass": "^1.106.1",
@@ -144,6 +131,7 @@
     "@parcel/watcher@2.6.0": true,
     "cypress@16.2.0": true,
     "dtrace-provider@0.8.8": false,
+    "esbuild@0.28.2": true,
     "fsevents@2.3.3": true,
     "unrs-resolver@1.12.2": true
   }

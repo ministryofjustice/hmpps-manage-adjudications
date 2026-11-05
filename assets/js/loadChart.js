@@ -9,7 +9,7 @@ function loadCharts() {
   const chartSettings = JSON.parse(dataCharSettings)
 
   Object.keys(chartSettings).forEach(chartName => {
-    return CHART_COMMANDS.loadChart(chartSettings[chartName].chartData)
+    return window.CHART_COMMANDS.loadChart(chartSettings[chartName].chartData)
   })
 }
 

@@ -101,7 +101,7 @@ function appSetup(route: Router, production: boolean, session: Record<string, un
 
   app.set('view engine', 'njk')
 
-  nunjucksSetup(app, testAppInfo)
+  nunjucksSetup(app)
 
   app.use((req, res, next) => {
     res.locals = {}
@@ -150,7 +150,7 @@ export default function appWithAllRoutes(
       punishmentsService: {} as PunishmentsService,
       punishmentBatchSessionService: {} as PunishmentBatchSessionService,
       rehabBatchSessionService: {} as RehabBatchSessionService,
-      applicationInfo: {} as ApplicationInfo,
+      applicationInfo: testAppInfo,
       chartApiService: {} as ChartApiService,
       createOnBehalfOfSessionService: {} as CreateOnBehalfOfSessionService,
       frontendComponentService: {} as FrontendComponentService,

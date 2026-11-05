@@ -18,7 +18,7 @@ export default function prisonerRoutes({
   const router = express.Router()
 
   const sendPlaceholder = (res: Response) => {
-    const placeHolder = path.join(process.cwd(), '/assets/images/image-missing.jpg')
+    const placeHolder = path.resolve(__dirname, '../../assets/images/image-missing.jpg')
     res.sendFile(placeHolder)
   }
 

@@ -11,28 +11,26 @@ export default function setUpStaticResources(): Router {
   router.use(compression())
 
   //  Static Resources Configuration
-  const cacheControl = { maxAge: config.staticResourceCacheDuration * 1000 }
+  const staticResourcesConfig = { maxAge: config.staticResourceCacheDuration, redirect: false }
 
   Array.of(
-    '/assets',
-    '/assets/stylesheets',
-    '/assets/js',
+    '/dist/assets',
     '/node_modules/govuk-frontend/dist/govuk/assets',
     '/node_modules/govuk-frontend/dist',
     '/node_modules/@ministryofjustice/frontend/moj/assets',
     '/node_modules/@ministryofjustice/frontend',
   ).forEach(dir => {
-    router.use('/assets', express.static(path.join(process.cwd(), dir), cacheControl))
+    router.use('/assets', express.static(path.join(process.cwd(), dir), staticResourcesConfig))
   })
 
   Array.of('/node_modules/govuk_frontend_toolkit/images').forEach(dir => {
-    router.use('/assets/images/icons', express.static(path.join(process.cwd(), dir), cacheControl))
+    router.use('/assets/images/icons', express.static(path.join(process.cwd(), dir), staticResourcesConfig))
   })
 
   Array.of('chart.umd.js', 'chart.umd.js.map').forEach(file => {
     router.use(
       `/assets/js/${file}`,
-      express.static(path.join(process.cwd(), `/node_modules/chart.js/dist/${file}`), cacheControl),
+      express.static(path.join(process.cwd(), `/node_modules/chart.js/dist/${file}`), staticResourcesConfig),
     )
   })
 

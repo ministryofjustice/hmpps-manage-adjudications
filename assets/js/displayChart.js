@@ -1,4 +1,4 @@
-const CHART_COMMANDS = (function () {
+window.CHART_COMMANDS = (function () {
   const storage = {}
 
   const loadChart = chartSettings => {

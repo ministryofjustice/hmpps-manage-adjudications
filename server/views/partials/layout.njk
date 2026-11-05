@@ -24,11 +24,11 @@
     <!-- End Google Tag Manager -->
   {% endif %}
   <!--[if !IE 8]><!-->
-  <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
+  <link href="{{ '/assets/css/application.css' | assetMap }}" rel="stylesheet"/>
   <!--<![endif]-->
 
   <!--[if lt IE 9]>
-  <script src="/assets/js/html5shiv-3.7.3.min.js"></script>
+  <script src="{{ '/assets/js/html5shiv-3.7.3.min.js' | assetMap }}"></script>
   <![endif]-->
 
 {% if feComponents.cssIncludes %}
@@ -69,9 +69,9 @@
 {% block bodyEnd %}
   {# Run JavaScript at end of the
   <body>, to avoid blocking the initial render. #}
-  <script type="module" src="/assets/js/frontend-init.js"></script>
+  <script type="module" src="{{ '/assets/js/frontend-init.js' | assetMap }}"></script>
 
-  <script src="/assets/js/date-picker.js"></script>
+  <script src="{{ '/assets/js/date-picker.js' | assetMap }}"></script>
 
   {% if feComponents.jsIncludes %}
     {% for js in feComponents.jsIncludes %}

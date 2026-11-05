@@ -17,7 +17,7 @@ RUN test -n "$GIT_BRANCH" || (echo "GIT_BRANCH not set" && false)
 
 WORKDIR /app
 
-RUN npm install -g npm@12.0.2
+RUN npm install -g npm@12
 COPY package*.json .npmrc ./
 RUN CYPRESS_INSTALL_BINARY=0 NPM_CONFIG_AUDIT=false NPM_CONFIG_FUND=false npm run setup
 ENV NODE_ENV='production'
@@ -38,9 +38,6 @@ COPY --from=build --chown=appuser:appgroup \
         /app/package.json \
         /app/package-lock.json \
         ./
-
-COPY --from=build --chown=appuser:appgroup \
-        /app/assets ./assets
 
 COPY --from=build --chown=appuser:appgroup \
         /app/dist ./dist
