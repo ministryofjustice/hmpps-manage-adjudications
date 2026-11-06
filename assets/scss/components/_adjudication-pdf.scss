@@ -319,6 +319,11 @@ div.adjudication-pdf {
     }
     &:nth-child(4) {
       width: 30%;
+
+      .adjudication-pdf-input-text-box-sixty-width {
+        box-sizing: border-box;
+        width: calc((100% - 15px) / 3);
+      }
     }
     &:nth-child(5) {
       width: 10%;
