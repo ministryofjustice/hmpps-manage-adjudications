@@ -1,6 +1,10 @@
 import moment from 'moment'
 import { FormError } from '../../../../@types/template'
 
+// The API stores these in columns of this size; anything longer is rejected when the punishments are saved
+export const maxDetailsLength = 4000
+export const maxMonitorNameLength = 32
+
 type ValidationForm = {
   details: string
   monitorName: string
@@ -22,10 +26,22 @@ export default function validateForm({
       text: `Enter the activity ${prisonerName || 'the prisoner'} will be doing`,
     }
   }
+  if (details.length > maxDetailsLength) {
+    return {
+      href: '#details',
+      text: `The activity must be ${maxDetailsLength} characters or less`,
+    }
+  }
   if (!monitorName) {
     return {
       href: '#monitorName',
       text: `Enter who is monitoring ${prisonerName || 'the prisoner'} on the activity`,
+    }
+  }
+  if (monitorName.length > maxMonitorNameLength) {
+    return {
+      href: '#monitorName',
+      text: `Who is monitoring the activity must be ${maxMonitorNameLength} characters or less`,
     }
   }
   if (!endDate) {

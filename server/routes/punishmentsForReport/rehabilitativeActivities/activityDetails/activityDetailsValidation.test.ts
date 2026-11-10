@@ -31,6 +31,32 @@ describe('', () => {
       text: `Enter who is monitoring ${prisonerName} on the activity`,
     })
   })
+  it('Errors if the activity is longer than 4000 characters', () => {
+    expect(validateForm({ prisonerName, details: 'a'.repeat(4001), monitorName, endDate, totalSessions })).toEqual({
+      href: '#details',
+      text: 'The activity must be 4000 characters or less',
+    })
+  })
+  it('Accepts an activity of exactly 4000 characters', () => {
+    expect(validateForm({ prisonerName, details: 'a'.repeat(4000), monitorName, endDate, totalSessions })).toBeNull()
+  })
+  it('Errors if the monitor name is longer than 32 characters', () => {
+    expect(
+      validateForm({
+        prisonerName,
+        details,
+        monitorName: 'Safer Custody and Violence Reduction',
+        endDate,
+        totalSessions,
+      }),
+    ).toEqual({
+      href: '#monitorName',
+      text: 'Who is monitoring the activity must be 32 characters or less',
+    })
+  })
+  it('Accepts a monitor name of exactly 32 characters', () => {
+    expect(validateForm({ prisonerName, details, monitorName: 'a'.repeat(32), endDate, totalSessions })).toBeNull()
+  })
   it('Errors if the end date is missing', () => {
     // @ts-expect-error: End date missing
     expect(validateForm({ prisonerName, details, monitorName, totalSessions })).toEqual({
