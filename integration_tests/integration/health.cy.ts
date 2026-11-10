@@ -4,7 +4,6 @@ context('Health check', () => {
       cy.task('reset')
       cy.task('stubAuthPing')
       cy.task('stubAlertPing')
-      cy.task('stubCuriousPing')
       cy.task('stubDataInsightsPing')
       cy.task('stubGotenbergPing')
       cy.task('stubManageUsersApiPing')
@@ -33,7 +32,7 @@ context('Health check', () => {
         expect(response.body.components.gotenberg.status).to.eq('UP')
         expect(response.body.components.prisonerSearch.status).to.eq('UP')
         expect(response.body.components.adjudications.status).to.eq('UP')
-        expect(response.body.components.curious.status).to.eq('UP')
+        expect(response.body.components.curious).to.equal(undefined)
         expect(response.body.components.tokenVerification.status).to.eq('UP')
         expect(response.body.components.frontendComponents.status).to.eq('UP')
       })
@@ -53,7 +52,6 @@ context('Health check', () => {
       cy.task('reset')
       cy.task('stubAuthPing', 500)
       cy.task('stubAlertPing', 500)
-      cy.task('stubCuriousPing', 500)
       cy.task('stubDataInsightsPing', 500)
       cy.task('stubGotenbergPing', 500)
       cy.task('stubManageUsersApiPing', 500)
@@ -82,7 +80,7 @@ context('Health check', () => {
         expect(response.body.components.gotenberg.status).to.eq('DOWN')
         expect(response.body.components.prisonerSearch.status).to.eq('DOWN')
         expect(response.body.components.adjudications.status).to.eq('DOWN')
-        expect(response.body.components.curious.status).to.eq('DOWN')
+        expect(response.body.components.curious).to.equal(undefined)
         expect(response.body.components.tokenVerification.status).to.eq('DOWN')
         expect(response.body.components.frontendComponents.status).to.eq('DOWN')
       })
@@ -94,6 +92,33 @@ context('Health check', () => {
 
     it('Info is visible', () => {
       cy.request('/info').its('body.productId').should('equal', 'DPS001')
+    })
+  })
+
+  describe('Curious unavailable', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubAuthPing')
+      cy.task('stubAlertPing')
+      cy.task('stubCuriousPing', 500)
+      cy.task('stubDataInsightsPing')
+      cy.task('stubGotenbergPing')
+      cy.task('stubManageUsersApiPing')
+      cy.task('stubTokenPing')
+      cy.task('stubPrisonerSearchPing')
+      cy.task('stubPrisonApiPing')
+      cy.task('stubAdjudicationsPing')
+      cy.task('stubLocationsInsidePrisonApiPing')
+      cy.task('stubNomisSyncPrisonerMappingApiPing')
+      cy.task('stubFEComponentsAPIPing')
+    })
+
+    it('Health check stays UP because Curious is optional', () => {
+      cy.request({ url: '/health', method: 'GET', failOnStatusCode: false }).then(response => {
+        expect(response.status).to.eq(200)
+        expect(response.body.status).to.eq('UP')
+        expect(response.body.components.curious).to.equal(undefined)
+      })
     })
   })
 })
