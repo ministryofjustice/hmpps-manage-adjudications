@@ -10,7 +10,7 @@ describe('blank DIS7 loss of privileges', () => {
   it.each([
     { isYouthOffender: false, maxDays: 84 },
     { isYouthOffender: true, maxDays: 21 },
-  ])('includes Gym in both punishment tables for isYOI=$isYouthOffender', ({ isYouthOffender, maxDays }) => {
+  ])('renders privileges for isYOI=$isYouthOffender', ({ isYouthOffender, maxDays }) => {
     const report = new AdjudicationResultReportDataBlank(
       '123',
       {
@@ -48,11 +48,34 @@ describe('blank DIS7 loss of privileges', () => {
       expect(html.indexOf('Specify any other privileges withdrawn', row.index)).toBeGreaterThan(row.index!)
     }
 
+    const sections = html.split('Specify any other privileges withdrawn')
+    expect(sections).toHaveLength(3)
+    for (const [index, section] of sections.slice(1).entries()) {
+      const rows = [
+        ...section.matchAll(
+          /<div class='adjudication-pdf-section-(suspended-)?punishment-details'>\s*<div[^>]*>\s*<p[^>]*><\/p>\s*<\/div>\s*<div[^>]*>\s*<p[^>]*>(.*?)<\/p>([\s\S]*?)\n\s{4}<\/div>/g,
+        ),
+      ].slice(0, 2)
+      expect(rows).toHaveLength(2)
+      for (const row of rows) {
+        expect(row[1] || '').toBe(index === 0 ? '' : 'suspended-')
+        expect(row[2].trim()).toBe(`${maxDays} days`)
+        expect(row[0].match(/<input\b/g)).toHaveLength(index === 0 ? 4 : 6)
+      }
+    }
+
+    expect(html).toMatch(
+      /<div class='break-inside-avoid'>\s*<div class='adjudication-pdf-section-punishment-details'>[\s\S]*?<strong>Stoppage of earnings<\/strong>[\s\S]*?<p[^>]*>Percentage<\/p>[\s\S]*?\n\s{4}<\/div>\s*<\/div>/,
+    )
+
     const visitGroups = [
       ...html.matchAll(
         /<div class='break-inside-avoid'>\s*<div class='adjudication-pdf-section-(?:suspended-)?punishment-details'>([\s\S]*?)\n\s{4}<\/div>\s*<div class='adjudication-pdf-section-(?:suspended-)?punishment-details'>([\s\S]*?)\n\s{4}<\/div>\s*<\/div>/g,
       ),
-    ]
+    ].filter(
+      group =>
+        /(?:Loss|Restriction) of social visits/.test(group[1]) || group[2].includes('Prisoner has a child under 18'),
+    )
     expect(visitGroups).toHaveLength(isYouthOffender ? 0 : 4)
     for (const group of visitGroups) {
       expect(group[1]).toMatch(/(?:Loss|Restriction) of social visits/)
