@@ -36,10 +36,8 @@ services:
       - gotenberg
       # Flags should match ones in values.yaml unless there is a good reason
       - --chromium-ignore-certificate-errors
-      - --pdfengines-merge-engines=pdftk
       - --libreoffice-disable-routes
       - --webhook-disable
-      - --prometheus-disable-collect
     networks:
       - hmpps
     container_name: gotenberg
