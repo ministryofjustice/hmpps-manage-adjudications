@@ -106,7 +106,7 @@ export default function validateForm({
         href: '#suspendedUntil',
         text: `Date suspended until must be after the last day of the hearing, ${hearingDayText}`,
       })
-    } else if (hearingDay && date.isAfter(lastSuspendedDay, 'day')) {
+    } else if (lastSuspendedDay && date.isAfter(lastSuspendedDay, 'day')) {
       errors.push({
         href: '#suspendedUntil',
         text: `Date suspended cannot be later than 6 months after the last day of the hearing, ${lastSuspendedDayText}`,
