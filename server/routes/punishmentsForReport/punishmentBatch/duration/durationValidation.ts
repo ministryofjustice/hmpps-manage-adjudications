@@ -47,6 +47,8 @@ export default function validateForm({
   const thesePunishments = punishments.length > 1 ? 'the punishments' : 'this punishment'
   const hearingDay = lastHearingDate ? moment(lastHearingDate, 'YYYY-MM-DD') : null
   const hearingDayText = hearingDay?.format('D MMMM YYYY')
+  const lastSuspendedDay = moment(hearingDay).add(6, 'months')
+  const lastSuspendedDayText = lastSuspendedDay?.format('D MMMM YYYY')
 
   const days = String(duration ?? '').trim()
   if (days && !isWholeNumber(days)) {
@@ -103,6 +105,11 @@ export default function validateForm({
       errors.push({
         href: '#suspendedUntil',
         text: `Date suspended until must be after the last day of the hearing, ${hearingDayText}`,
+      })
+    } else if (lastSuspendedDay && date.isAfter(lastSuspendedDay, 'day')) {
+      errors.push({
+        href: '#suspendedUntil',
+        text: `Date suspended cannot be later than 6 months after the last day of the hearing, ${lastSuspendedDayText}`,
       })
     }
   }

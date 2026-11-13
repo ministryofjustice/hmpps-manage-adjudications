@@ -35,6 +35,8 @@
           },
           classes: 'hmpps-datepicker--fixed-width',
           value: suspendedUntil,
+          minDate: lastHearingDate,
+          maxDate: lastSuspendedDate,
           errorMessage: errors | findErrors(['suspendedUntil'])
       }) }}
 

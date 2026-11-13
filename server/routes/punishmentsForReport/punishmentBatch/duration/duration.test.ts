@@ -349,6 +349,10 @@ describe('POST duration and start date', () => {
       { duration: '5', startMode: 'SUSPENDED', suspendedUntil: '1/8/2026' },
       'Date suspended until must be after the last day of the hearing, 17 August 2026',
     ],
+    [
+      { duration: '5', startMode: 'SUSPENDED', suspendedUntil: '18/2/2027' },
+      'Date suspended cannot be later than 6 months after the last day of the hearing, 17 February 2027',
+    ],
   ])('rejects %o', (body, message) => {
     withBatch({ items: [canteen] })
     return request(app)
