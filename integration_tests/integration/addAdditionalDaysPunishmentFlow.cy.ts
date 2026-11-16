@@ -88,7 +88,7 @@ context('Add additional days punishments', () => {
       willPunishmentBeSuspendedPage.submitButton().click()
 
       const punishmentSuspendedUntilPage = Page.verifyOnPage(suspendedUntilPage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
+      const date = formatDateForDatePicker(new Date('10/10/2023').toISOString(), 'short')
       punishmentSuspendedUntilPage.suspendedUntil().type(date)
       punishmentSuspendedUntilPage.submitButton().click()
       cy.location().should(loc => {
@@ -103,7 +103,7 @@ context('Add additional days punishments', () => {
           expect($summaryData.get(9).innerText).to.contain('-')
           expect($summaryData.get(10).innerText).to.contain('-')
           expect($summaryData.get(11).innerText).to.contain('10')
-          expect($summaryData.get(12).innerText).to.contain('10 Oct 2030')
+          expect($summaryData.get(12).innerText).to.contain('10 Oct 2023')
           expect($summaryData.get(13).innerText).to.contain('-')
         })
     })
