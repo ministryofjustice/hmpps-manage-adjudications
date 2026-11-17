@@ -786,42 +786,6 @@ const adjudicationUrls = {
         `${adjudicationUrls.paybackPunishmentSchedule.root}/${chargeNumber}/edit/${redisId}`,
     },
   },
-  punishmentNumberOfDays: {
-    root: '/punishment-number-of-days',
-    matchers: {
-      start: '/:chargeNumber',
-      edit: '/:chargeNumber/edit/:redisId',
-    },
-    urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.punishmentNumberOfDays.root}/${chargeNumber}`,
-      edit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.punishmentNumberOfDays.root}/${chargeNumber}/edit/${redisId}`,
-    },
-  },
-  punishmentIsSuspended: {
-    root: '/punishment-suspended',
-    matchers: {
-      start: '/:chargeNumber',
-      edit: '/:chargeNumber/edit/:redisId',
-    },
-    urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.punishmentIsSuspended.root}/${chargeNumber}`,
-      edit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.punishmentIsSuspended.root}/${chargeNumber}/edit/${redisId}`,
-    },
-  },
-  punishmentSuspendedUntil: {
-    root: '/punishment-suspended-until',
-    matchers: {
-      start: '/:chargeNumber',
-      edit: '/:chargeNumber/edit/:redisId',
-    },
-    urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.punishmentSuspendedUntil.root}/${chargeNumber}`,
-      edit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.punishmentSuspendedUntil.root}/${chargeNumber}/edit/${redisId}`,
-    },
-  },
   punishmentHasRehabilitativeActivities: {
     root: '/punishment-has-rehabilitative-activities',
     matchers: {
@@ -902,30 +866,6 @@ const adjudicationUrls = {
         `${adjudicationUrls.checkYourAnswersCompleteRehabilitativeActivity.root}/${chargeNumber}/${punishmentId}`,
     },
   },
-  whenWillPunishmentStart: {
-    root: '/when-will-punishment-start',
-    matchers: {
-      start: '/:chargeNumber',
-      edit: '/:chargeNumber/edit/:redisId',
-    },
-    urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.whenWillPunishmentStart.root}/${chargeNumber}`,
-      edit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.whenWillPunishmentStart.root}/${chargeNumber}/edit/${redisId}`,
-    },
-  },
-  punishmentStartDate: {
-    root: '/punishment-start-date',
-    matchers: {
-      start: '/:chargeNumber',
-      edit: '/:chargeNumber/edit/:redisId',
-    },
-    urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.punishmentStartDate.root}/${chargeNumber}`,
-      edit: (chargeNumber: string, redisId: string) =>
-        `${adjudicationUrls.punishmentStartDate.root}/${chargeNumber}/edit/${redisId}`,
-    },
-  },
   punishmentSameDuration: {
     root: '/punishment-same-duration',
     matchers: {
@@ -982,15 +922,6 @@ const adjudicationUrls = {
     },
     urls: {
       start: (chargeNumber: string) => `${adjudicationUrls.rehabilitativeActivitiesSchedule.root}/${chargeNumber}`,
-    },
-  },
-  punishmentAutomaticDateSchedule: {
-    root: '/punishment-automatic-date-schedule',
-    matchers: {
-      start: '/:chargeNumber',
-    },
-    urls: {
-      start: (chargeNumber: string) => `${adjudicationUrls.punishmentAutomaticDateSchedule.root}/${chargeNumber}`,
     },
   },
   numberOfAdditionalDays: {
