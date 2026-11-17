@@ -1,7 +1,7 @@
 import moment from 'moment'
 import type { FormError } from '../../../../@types/template'
 import type { PunishmentBatchItem } from '../../../../data/PunishmentResult'
-import validateNumberOfDays from '../../punishmentDates/numberOfDays/numberOfDaysValidation'
+import validateNumberOfDays from './durationDaysValidation'
 import { isWholeNumber } from '../../../../utils/utils'
 
 export enum StartMode {

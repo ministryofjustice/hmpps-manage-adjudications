@@ -96,15 +96,9 @@ import willPunishmentBeConsecutiveRoutes from './punishmentsForReport/additional
 import whichPunishmentConsecutiveToRoutes from './punishmentsForReport/additionalDays/whichPunishmentConsecutiveTo'
 import damagesAmountRoutes from './punishmentsForReport/punishments/damagesAmount'
 import reasonForChangeRoutes from './punishmentsForReport/punishments/reasonForChange'
-import punishmentNumberOfDaysRoutes from './punishmentsForReport/punishmentDates/numberOfDays'
 import punishmentSameDurationRoutes from './punishmentsForReport/punishmentBatch/sameDuration'
 import punishmentDurationRoutes from './punishmentsForReport/punishmentBatch/duration'
 import punishmentScheduleRoutes from './punishmentsForReport/punishmentBatch/schedule'
-import punishmentSuspendedRoutes from './punishmentsForReport/punishmentDates/isPunishmentSuspended'
-import punishmentSuspendedUntilDateRoutes from './punishmentsForReport/punishmentDates/suspendedUntilDate'
-import punishmentStartDateChoiceRoutes from './punishmentsForReport/punishmentDates/startDateChoice'
-import enterStartDateRoutes from './punishmentsForReport/punishmentDates/enterStartDate'
-import autoPunishmentScheduleRoutes from './punishmentsForReport/punishmentDates/autoPunishmentSchedule'
 import createOnBehalfOfRoutes from './createOnBehalfOf'
 import awardedPunishmentsAndDamagesRoutes from './punishmentsForReport/punishments/awardedPunishmentsAndDamages'
 import suspendedPunishmentStartDateChoiceRoutes from './punishmentsForReport/punishmentSuspendedDates/startDateChoice'
@@ -505,30 +499,6 @@ export default function routes(
     adjudicationUrls.punishmentSchedule.root,
     reviewerOnly(userService),
     punishmentScheduleRoutes({ punishmentsService, punishmentBatchSessionService }),
-  )
-  router.use(
-    adjudicationUrls.punishmentNumberOfDays.root,
-    punishmentNumberOfDaysRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
-  )
-  router.use(
-    adjudicationUrls.punishmentIsSuspended.root,
-    punishmentSuspendedRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
-  )
-  router.use(
-    adjudicationUrls.punishmentSuspendedUntil.root,
-    punishmentSuspendedUntilDateRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
-  )
-  router.use(
-    adjudicationUrls.punishmentStartDate.root,
-    enterStartDateRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
-  )
-  router.use(
-    adjudicationUrls.punishmentAutomaticDateSchedule.root,
-    autoPunishmentScheduleRoutes({ userService, punishmentsService, reportedAdjudicationsService }),
-  )
-  router.use(
-    adjudicationUrls.whenWillPunishmentStart.root,
-    punishmentStartDateChoiceRoutes({ userService, punishmentsService }),
   )
   router.use(
     adjudicationUrls.suspendedPunishmentNumberOfDays.root,

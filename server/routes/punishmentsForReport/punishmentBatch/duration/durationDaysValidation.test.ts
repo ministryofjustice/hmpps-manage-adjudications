@@ -1,5 +1,5 @@
 import { PunishmentType } from '../../../../data/PunishmentResult'
-import validateForm from './numberOfDaysValidation'
+import validateForm from './durationDaysValidation'
 
 describe('validateForm', () => {
   it('Valid submit when prospective days', () => {
