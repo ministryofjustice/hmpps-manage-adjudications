@@ -114,7 +114,7 @@ describe('Rehabilitative activity details', () => {
             sessionId: 1,
           },
         )
-        expect(punishmentsService.addRehabilitativeActivity).not.toHaveBeenCalled()
+        expect(punishmentsService.replaceRehabilitativeActivities).not.toHaveBeenCalled()
         expect(rehabBatchSessionService.applyDraft).not.toHaveBeenCalled()
       }))
 
