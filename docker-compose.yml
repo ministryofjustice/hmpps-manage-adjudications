@@ -31,7 +31,13 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
 
   gotenberg:
-    image: gotenberg/gotenberg:8.40.0
+    image: gotenberg/gotenberg:9.4.1
+    command:
+      - gotenberg
+      # Flags should match ones in values.yaml unless there is a good reason
+      - --chromium-ignore-certificate-errors
+      - --libreoffice-disable-routes
+      - --webhook-disable
     networks:
       - hmpps
     container_name: gotenberg
