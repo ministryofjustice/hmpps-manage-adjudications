@@ -3,7 +3,6 @@ import { SubmittedDateTime } from '../template'
 import { OffenceData } from '../../routes/offenceCodeDecisions/offenceData'
 import { PdfFooterData, PdfHeaderData, PdfPageData } from '../../utils/pdfRenderer'
 import { PdfMargins } from '../../data/gotenbergClient'
-import type { FeatureToggles } from '../../utils/featureToggles'
 import type { PunishmentBatch, PunishmentData, RehabBatch } from '../../data/PunishmentResult'
 
 export default {}
@@ -61,8 +60,6 @@ export declare global {
     interface Locals {
       /** the page view being audited to HMPPS Audit, see auditPageView middleware */
       auditEvent?: PageViewEventDetails
-      /** set per request from the user's active caseload, see setUpFeatureToggles middleware */
-      featureToggles?: FeatureToggles
     }
 
     interface Response {

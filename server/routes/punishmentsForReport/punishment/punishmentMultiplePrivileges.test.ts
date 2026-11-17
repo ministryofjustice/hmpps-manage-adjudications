@@ -6,7 +6,6 @@ import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import PunishmentBatchSessionService from '../../../services/punishmentBatchSessionService'
 import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
-import config from '../../../config'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
@@ -17,10 +16,8 @@ const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<Pun
 const punishmentBatchSessionService = new PunishmentBatchSessionService() as jest.Mocked<PunishmentBatchSessionService>
 
 let app: Express
-const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = ['MDI']
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, punishmentBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getPunishmentAvailability.mockResolvedValue({
@@ -30,11 +27,10 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = originalPrisons
   jest.resetAllMocks()
 })
 
-describe('GET /punishment with multiple privileges switched on', () => {
+describe('GET /punishment with multiple privileges', () => {
   it('offers the privileges as checkboxes and Save and exit', () => {
     return request(app)
       .get(adjudicationUrls.punishment.urls.start('100'))
@@ -68,17 +64,6 @@ describe('GET /punishment with multiple privileges switched on', () => {
       })
   })
 
-  it('keeps radios when the prison is not switched on', () => {
-    config.featureToggles.multiPrivilegePunishmentsPrisons = ['LEI']
-    return request(app)
-      .get(adjudicationUrls.punishment.urls.start('100'))
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain('data-qa="privilege-radio-buttons"')
-        expect(res.text).not.toContain('Save and exit')
-      })
-  })
-
   it('keeps radios when changing a punishment', () => {
     punishmentsService.getSessionPunishment.mockReturnValue({
       type: PunishmentType.PRIVILEGE,
@@ -94,7 +79,7 @@ describe('GET /punishment with multiple privileges switched on', () => {
   })
 })
 
-describe('POST /punishment with multiple privileges switched on', () => {
+describe('POST /punishment with multiple privileges', () => {
   it('starts a batch with one item per privilege, in list order, and asks if they share a duration', () => {
     return request(app)
       .post(adjudicationUrls.punishment.urls.start('100'))
@@ -205,6 +190,10 @@ describe('POST /punishment with multiple privileges switched on', () => {
     [
       { punishmentType: PunishmentType.LOSS_OF_SOCIAL_VISITS, lossHasChildUnder18: 'true' },
       { type: PunishmentType.LOSS_OF_SOCIAL_VISITS, hasChildUnder18: true },
+    ],
+    [
+      { punishmentType: PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, restrictionHasChildUnder18: 'false' },
+      { type: PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, hasChildUnder18: false },
     ],
   ])('sends a day-based punishment to the duration page as a batch of one: %o', (body, item) => {
     return request(app)

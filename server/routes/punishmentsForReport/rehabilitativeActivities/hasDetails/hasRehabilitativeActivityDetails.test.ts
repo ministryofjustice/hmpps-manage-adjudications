@@ -7,7 +7,6 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import type { PunishmentData } from '../../../../data/PunishmentResult'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
-import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
@@ -38,10 +37,8 @@ const sessionPunishments: { [redisId: string]: PunishmentData } = {
 }
 
 let app: Express
-const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, rehabBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockImplementation(
@@ -58,7 +55,6 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = originalPrisons
   jest.resetAllMocks()
 })
 
@@ -179,24 +175,5 @@ describe('Do you have the details of the rehabilitative activities?', () => {
         expect(punishmentsService.addEmptyRehabilitativeActivities).not.toHaveBeenCalled()
         expect(rehabBatchSessionService.completeItem).not.toHaveBeenCalled()
       })
-  })
-
-  it('keeps the old page when the prison is not switched on', () => {
-    config.featureToggles.multiPrivilegePunishmentsPrisons = []
-    return request(app)
-      .post(
-        `${adjudicationUrls.doYouHaveTheRehabilitativeActivitiesDetails.urls.start('100', 'library')}?numberOfActivities=3`,
-      )
-      .send({ hasRehabilitativeActivitiesDetails: 'NO' })
-      .expect(302)
-      .expect('Location', adjudicationUrls.awardPunishments.urls.modified('100'))
-      .then(() =>
-        expect(punishmentsService.addEmptyRehabilitativeActivities).toHaveBeenCalledWith(
-          expect.anything(),
-          '100',
-          'library',
-          3,
-        ),
-      )
   })
 })

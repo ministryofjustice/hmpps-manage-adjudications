@@ -35,18 +35,14 @@
               attributes: { "data-qa": "punishment-submit" }
               }) }}
 
-        {% if featureToggles.multiPrivilegePunishments %}
-          {{ govukButton({
-            text: 'Save and exit',
-            type: "submit",
-            name: "action",
-            value: "exit",
-            classes: "govuk-button--secondary",
-            attributes: { "data-qa": "punishment-save-and-exit" }
-          }) }}
-        {% else %}
-          <a class="govuk-link" href=' {{ cancelHref }} ' data-qa='punishment-cancel'>Return to ‘Award punishments and add money for damages’</a>
-        {% endif %}
+        {{ govukButton({
+          text: 'Save and exit',
+          type: "submit",
+          name: "action",
+          value: "exit",
+          classes: "govuk-button--secondary",
+          attributes: { "data-qa": "punishment-save-and-exit" }
+        }) }}
       </div>
 
     </form>

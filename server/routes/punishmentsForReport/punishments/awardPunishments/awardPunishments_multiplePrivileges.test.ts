@@ -8,7 +8,6 @@ import UserService from '../../../../services/userService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import type { PunishmentData } from '../../../../data/PunishmentResult'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
-import config from '../../../../config'
 
 jest.mock('../../../../services/punishmentsService')
 jest.mock('../../../../services/punishmentBatchSessionService')
@@ -42,7 +41,6 @@ const canteen: PunishmentData = {
 }
 
 let app: Express
-const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 const withPunishments = (punishments: PunishmentData[]) => {
   punishmentsService.getAllSessionPunishments.mockReturnValue(punishments)
@@ -63,7 +61,6 @@ const withPunishments = (punishments: PunishmentData[]) => {
 }
 
 beforeEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getPunishmentsFromServer.mockResolvedValue([])
   punishmentsService.getPunishmentAvailability.mockResolvedValue({
@@ -77,11 +74,10 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = originalPrisons
   jest.resetAllMocks()
 })
 
-describe('Award punishments with the new journey switched on', () => {
+describe('Award punishments', () => {
   it('shows the success message once, and clears any open batch', () => {
     withPunishments([canteen])
     punishmentsService.takeSuccessMessage.mockReturnValue('2 punishments added')
@@ -163,20 +159,5 @@ describe('Award punishments with the new journey switched on', () => {
       .get(adjudicationUrls.awardPunishments.urls.modified('100'))
       .expect(200)
       .expect(res => expect(res.text).not.toContain('Add a rehabilitative activity'))
-  })
-
-  it('changes nothing when the prison is not switched on', () => {
-    config.featureToggles.multiPrivilegePunishmentsPrisons = []
-    withPunishments([canteen, suspendedLibrary])
-    punishmentsService.takeSuccessMessage.mockReturnValue('2 punishments added')
-    return request(app)
-      .get(adjudicationUrls.awardPunishments.urls.modified('100'))
-      .expect(200)
-      .expect(res => {
-        expect(res.text).not.toContain('Add a rehabilitative activity')
-        expect(res.text).not.toContain('2 punishments added')
-        expect(res.text).toContain('End date and <br>number of sessions')
-        expect(punishmentBatchSessionService.clear).not.toHaveBeenCalled()
-      })
   })
 })

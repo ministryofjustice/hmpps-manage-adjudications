@@ -2,15 +2,21 @@ import { Express } from 'express'
 import request from 'supertest'
 import appWithAllRoutes from '../../../testutils/appSetup'
 import PunishmentsService from '../../../../services/punishmentsService'
+import PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
+import RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import UserService from '../../../../services/userService'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
 
 jest.mock('../../../../services/punishmentsService')
+jest.mock('../../../../services/punishmentBatchSessionService')
+jest.mock('../../../../services/rehabBatchSessionService')
 jest.mock('../../../../services/userService')
 
 const punishmentsService = new PunishmentsService(null, null) as jest.Mocked<PunishmentsService>
 const userService = new UserService(null, null) as jest.Mocked<UserService>
+const punishmentBatchSessionService = new PunishmentBatchSessionService() as jest.Mocked<PunishmentBatchSessionService>
+const rehabBatchSessionService = new RehabBatchSessionService(null) as jest.Mocked<RehabBatchSessionService>
 
 let app: Express
 const punishmentsOnServer = [
@@ -39,7 +45,10 @@ beforeEach(() => {
     otherPunishments: punishmentsOnServer,
   })
 
-  app = appWithAllRoutes({ production: false }, { punishmentsService, userService })
+  app = appWithAllRoutes(
+    { production: false },
+    { punishmentsService, userService, punishmentBatchSessionService, rehabBatchSessionService },
+  )
 })
 
 afterEach(() => {

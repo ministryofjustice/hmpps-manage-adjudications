@@ -95,12 +95,11 @@ export default class PunishmentPage {
     }
 
     return res.render(`pages/punishment.njk`, {
-      cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       punishmentsAvailable,
       punishmentType,
       privilegeType,
-      multiplePrivileges: this.isMultiplePrivileges(res),
+      multiplePrivileges: this.isMultiplePrivileges(),
       privilegeTypes: privilegeTypes || [],
       otherPrivilege,
       stoppagePercentage,
@@ -145,9 +144,9 @@ export default class PunishmentPage {
       restrictionHasChildUnder18,
       action,
     } = req.body
-    const multiplePrivileges = this.isMultiplePrivileges(res)
-    // Save and exit is shown whenever the toggle is on, including when changing a punishment
-    if (res.locals.featureToggles?.multiPrivilegePunishments && action === 'exit') {
+    const multiplePrivileges = this.isMultiplePrivileges()
+    // Save and exit is shown when adding and when changing a punishment
+    if (action === 'exit') {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
     const privilegeTypes = multiplePrivileges ? toArray<PrivilegeType>(req.body.privilegeTypes) : []
@@ -197,7 +196,7 @@ export default class PunishmentPage {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
 
-    if (res.locals.featureToggles?.multiPrivilegePunishments && isDayBasedPunishment(punishmentType)) {
+    if (isDayBasedPunishment(punishmentType)) {
       return this.startDurationJourney(req, res, {
         punishmentType,
         privilegeType,
@@ -260,8 +259,7 @@ export default class PunishmentPage {
   }
 
   // Edit mode keeps the single-choice radios: one punishment cannot be changed into several
-  private isMultiplePrivileges = (res: Response): boolean =>
-    !!res.locals.featureToggles?.multiPrivilegePunishments && !this.pageOptions.isEdit()
+  private isMultiplePrivileges = (): boolean => !this.pageOptions.isEdit()
 
   private getQueryParamsToPass = (
     punishmentType: PunishmentType,
@@ -282,6 +280,7 @@ export default class PunishmentPage {
     return { punishmentType, privilegeType, otherPrivilege, stoppagePercentage: stoppageOfEarningsPercentage }
   }
 
+  // Day-based punishments have already gone to the duration page, which leaves additional days and payback
   private getRedirectUrl = (chargeNumber: string, req: Request, punishmentType: PunishmentType) => {
     if ([PunishmentType.ADDITIONAL_DAYS, PunishmentType.PROSPECTIVE_DAYS].includes(punishmentType)) {
       if (this.pageOptions.isEdit()) {
@@ -291,13 +290,9 @@ export default class PunishmentPage {
     }
 
     if (this.pageOptions.isEdit()) {
-      if (punishmentType === PunishmentType.PAYBACK)
-        return adjudicationUrls.paybackPunishmentSpecifics.urls.edit(chargeNumber, req.params.redisId)
-      return adjudicationUrls.punishmentNumberOfDays.urls.edit(chargeNumber, req.params.redisId)
+      return adjudicationUrls.paybackPunishmentSpecifics.urls.edit(chargeNumber, req.params.redisId)
     }
-    if (punishmentType === PunishmentType.PAYBACK)
-      return adjudicationUrls.paybackPunishmentSpecifics.urls.start(chargeNumber)
-    return adjudicationUrls.punishmentNumberOfDays.urls.start(chargeNumber)
+    return adjudicationUrls.paybackPunishmentSpecifics.urls.start(chargeNumber)
   }
 
   private damagesAlreadyAdded = async (sessionPunishments: PunishmentData[]) => {

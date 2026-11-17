@@ -19,7 +19,5 @@ export default class PunishmentPage extends Page {
 
   submitButton = (): PageElement => cy.get('[data-qa="punishment-submit"]')
 
-  cancelButton = (): PageElement => cy.get('[data-qa="punishment-cancel"]')
-
   errorSummary = (): PageElement => cy.get('[data-qa="error-summary"]')
 }

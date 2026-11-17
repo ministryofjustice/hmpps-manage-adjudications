@@ -6,18 +6,17 @@ import ActivateSuspendedPunishmentsPage from '../pages/activateSuspendedPunishme
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import NumberOfAdditionalDaysPage from '../pages/numberOfAdditionalDays'
 import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
-import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
-import PunishmentSuspendedUntilPage from '../pages/punishmentSuspendedUntil'
+import PunishmentDurationPage from '../pages/punishmentDuration'
+import PunishmentSchedulePage from '../pages/punishmentSchedule'
 import PunishmentStartDateChoicePage from '../pages/punishmentStartDateChoice'
 import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDates'
 import WillPunishmentBeSuspendedPage from '../pages/willPunishmentBeSuspended'
 import WillPunishmentBeConsecutivePage from '../pages/willPunishmentBeConsective'
 import WhichPunishmentConsecutiveToPage from '../pages/whichPunishmentConsecutiveTo'
-import IsThereRehabilitativeActivitesPage from '../pages/isThereRehabilitativeActivitiesPage'
 import DamagesAmountPage from '../pages/damagesAmountOwed'
 import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResult'
 import { OicHearingType, ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
-import { formatDateForDatePicker } from '../../server/utils/utils'
+import { addDuration, answerDuration } from '../support/punishmentDuration'
 
 const susPun = [
   {
@@ -238,35 +237,18 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
       punishmentPage.submitButton().click()
 
-      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      punishmentNumberOfDaysPage.days().type('10')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
-      punishmentSuspendedUntilPage.suspendedUntil().type(date)
-      punishmentSuspendedUntilPage.submitButton().click()
-
-      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
-      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
-      rehabActivityConditionPage.submitButton().click()
+      addDuration('10', 'SUSPENDED', '10/12/2030')
 
       awardPunishmentsPage.editPunishment().first().click()
       punishmentPage.punishment().find('input[value="CONFINEMENT"]').should('be.checked')
       punishmentPage.submitButton().click()
 
-      punishmentNumberOfDaysPage.days().should('have.value', '10')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').should('be.checked')
-      punishmentSuspendedPage.submitButton().click()
-
-      punishmentSuspendedUntilPage.suspendedUntil().should('have.value', '10/10/2030')
-      punishmentSuspendedUntilPage.submitButton().click()
+      const durationPage = Page.verifyOnPage(PunishmentDurationPage)
+      durationPage.days().should('have.value', '10')
+      durationPage.startMode().find('input[value="SUSPENDED"]').should('be.checked')
+      durationPage.suspendedUntil().should('have.value', '10/12/2030')
+      durationPage.submitButton().click()
+      Page.verifyOnPage(AwardPunishmentsPage)
     })
 
     it('create and edit punishments - EARNINGS', () => {
@@ -280,36 +262,11 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentPage.stoppagePercentage().type('10')
       punishmentPage.submitButton().click()
 
-      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      punishmentNumberOfDaysPage.days().type('10')
-      punishmentNumberOfDaysPage.submitButton().click()
+      answerDuration('10', 'IMMEDIATE')
 
-      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
-      punishmentStartDateChoicePage.submitButton().click()
-
-      const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
-      punishmentAutomaticEndDatesPage.name().contains('Stoppage of earnings: 10%')
-      punishmentAutomaticEndDatesPage
-        .summary()
-        .find('dt')
-        .then($summaryLabels => {
-          expect($summaryLabels.get(0).innerText).to.contain('Start date')
-          expect($summaryLabels.get(1).innerText).to.contain('Number of days')
-          expect($summaryLabels.get(2).innerText).to.contain('Last day')
-        })
-      punishmentAutomaticEndDatesPage
-        .summary()
-        .find('dd')
-        .then($summaryData => {
-          expect($summaryData.get(0).innerText).to.contain('23 Nov 2030')
-          expect($summaryData.get(2).innerText).to.contain('10')
-          expect($summaryData.get(4).innerText).to.contain('2 Dec 2030')
-        })
+      const punishmentSchedulePage = Page.verifyOnPage(PunishmentSchedulePage)
+      punishmentSchedulePage.punishmentName(1).should('contain', 'Stoppage of earnings: 10%')
+      punishmentSchedulePage.schedule(1).should('contain', '23 November 2030').and('contain', '2 December 2030')
     })
 
     it('create and edit punishments - PRIVILEGE - CANTEEN', () => {
@@ -320,25 +277,10 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="CANTEEN"]').check()
+      punishmentPage.privilegeCheckboxes().find('input[value="CANTEEN"]').check()
       punishmentPage.submitButton().click()
 
-      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      punishmentNumberOfDaysPage.days().type('10')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
-      punishmentSuspendedUntilPage.suspendedUntil().type(date)
-      punishmentSuspendedUntilPage.submitButton().click()
-
-      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
-      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
-      rehabActivityConditionPage.submitButton().click()
+      addDuration('10', 'SUSPENDED', '10/12/2030')
 
       awardPunishmentsPage
         .punishmentsTable()
@@ -348,7 +290,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           expect($summaryData.get(1).innerText).to.contain('-')
           expect($summaryData.get(2).innerText).to.contain('-')
           expect($summaryData.get(3).innerText).to.contain('10')
-          expect($summaryData.get(4).innerText).to.contain('10 Oct 2030')
+          expect($summaryData.get(4).innerText).to.contain('10 Dec 2030')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
     })
@@ -361,26 +303,11 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="GYM"]').check()
+      punishmentPage.privilegeCheckboxes().find('input[value="GYM"]').check()
 
       punishmentPage.submitButton().click()
 
-      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      punishmentNumberOfDaysPage.days().type('10')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
-      punishmentSuspendedUntilPage.suspendedUntil().type(date)
-      punishmentSuspendedUntilPage.submitButton().click()
-
-      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
-      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
-      rehabActivityConditionPage.submitButton().click()
+      addDuration('10', 'SUSPENDED', '10/12/2030')
 
       awardPunishmentsPage
         .punishmentsTable()
@@ -390,7 +317,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           expect($summaryData.get(1).innerText).to.contain('-')
           expect($summaryData.get(2).innerText).to.contain('-')
           expect($summaryData.get(3).innerText).to.contain('10')
-          expect($summaryData.get(4).innerText).to.contain('10 Oct 2030')
+          expect($summaryData.get(4).innerText).to.contain('10 Dec 2030')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
     })
@@ -403,26 +330,11 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="OTHER"]').check()
+      punishmentPage.privilegeCheckboxes().find('input[value="OTHER"]').check()
       punishmentPage.otherPrivilege().type('nintendo switch')
       punishmentPage.submitButton().click()
 
-      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      punishmentNumberOfDaysPage.days().type('10')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
-      punishmentSuspendedUntilPage.suspendedUntil().type(date)
-      punishmentSuspendedUntilPage.submitButton().click()
-
-      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
-      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
-      rehabActivityConditionPage.submitButton().click()
+      addDuration('10', 'SUSPENDED', '10/12/2030')
 
       awardPunishmentsPage
         .punishmentsTable()
@@ -432,7 +344,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
           expect($summaryData.get(1).innerText).to.contain('-')
           expect($summaryData.get(2).innerText).to.contain('-')
           expect($summaryData.get(3).innerText).to.contain('10')
-          expect($summaryData.get(4).innerText).to.contain('10 Oct 2030')
+          expect($summaryData.get(4).innerText).to.contain('10 Dec 2030')
           expect($summaryData.get(5).innerText).to.contain('-')
         })
     })
@@ -555,22 +467,7 @@ context('e2e tests to create and edit punishments and schedules with redis', () 
       punishmentPage.punishment().find('input[value="CONFINEMENT"]').click()
       punishmentPage.submitButton().click()
 
-      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      punishmentNumberOfDaysPage.days().type('10')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').click()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
-      punishmentSuspendedUntilPage.suspendedUntil().type(date)
-      punishmentSuspendedUntilPage.submitButton().click()
-
-      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
-      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
-      rehabActivityConditionPage.submitButton().click()
+      addDuration('10', 'SUSPENDED', '10/12/2030')
 
       awardPunishmentsPage.newPunishment().click()
 

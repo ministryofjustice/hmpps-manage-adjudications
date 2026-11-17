@@ -116,7 +116,6 @@ import adjudicationHistoryRoutes from './adjudicationHistory'
 import activePunishmentsRoutes from './activePunishments'
 import adjudicationConsolidatedViewRoutes from './adjudicationConsolidatedView'
 import adjudicationUrls from '../utils/urlGenerator'
-import multiPrivilegePunishmentsOnly from '../middleware/multiPrivilegePunishmentsOnly'
 import reviewerOnly from '../middleware/reviewerOnly'
 
 export default function routes(
@@ -372,21 +371,18 @@ export default function routes(
 
   router.use(
     adjudicationUrls.whichPunishmentsHaveRehabilitativeActivities.root,
-    multiPrivilegePunishmentsOnly(),
     reviewerOnly(userService),
     whichPunishmentsRehabilitativeActivitiesRoutes({ punishmentsService, rehabBatchSessionService }),
   )
 
   router.use(
     adjudicationUrls.sameRehabilitativeActivity.root,
-    multiPrivilegePunishmentsOnly(),
     reviewerOnly(userService),
     sameRehabilitativeActivityRoutes({ punishmentsService, rehabBatchSessionService }),
   )
 
   router.use(
     adjudicationUrls.rehabilitativeActivitiesSchedule.root,
-    multiPrivilegePunishmentsOnly(),
     reviewerOnly(userService),
     rehabilitativeActivitiesScheduleRoutes({ punishmentsService, rehabBatchSessionService }),
   )
@@ -497,19 +493,16 @@ export default function routes(
 
   router.use(
     adjudicationUrls.punishmentSameDuration.root,
-    multiPrivilegePunishmentsOnly(),
     reviewerOnly(userService),
     punishmentSameDurationRoutes({ punishmentsService, punishmentBatchSessionService }),
   )
   router.use(
     adjudicationUrls.punishmentDuration.root,
-    multiPrivilegePunishmentsOnly(),
     reviewerOnly(userService),
     punishmentDurationRoutes({ punishmentsService, punishmentBatchSessionService }),
   )
   router.use(
     adjudicationUrls.punishmentSchedule.root,
-    multiPrivilegePunishmentsOnly(),
     reviewerOnly(userService),
     punishmentScheduleRoutes({ punishmentsService, punishmentBatchSessionService }),
   )

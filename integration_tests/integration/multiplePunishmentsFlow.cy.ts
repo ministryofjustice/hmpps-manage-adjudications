@@ -6,6 +6,7 @@ import { PrivilegeType, PunishmentType } from '../../server/data/PunishmentResul
 import PunishmentPage from '../pages/punishment'
 import PunishmentSameDurationPage from '../pages/punishmentSameDuration'
 import PunishmentDurationPage from '../pages/punishmentDuration'
+import { answerDuration } from '../support/punishmentDuration'
 import PunishmentSchedulePage from '../pages/punishmentSchedule'
 import AwardPunishmentsPage from '../pages/awardPunishments'
 import WhichPunishmentsHaveRehabilitativeActivitiesPage from '../pages/whichPunishmentsHaveRehabilitativeActivities'
@@ -14,12 +15,8 @@ import HasRehabilitativeActivitesDetailsPage from '../pages/hasRehabilitativeAct
 import RehabilitativeActivityDetailsPage from '../pages/rehabilitativeActivityDetails'
 import RehabilitativeActivitiesSchedulePage from '../pages/rehabilitativeActivitiesSchedule'
 import CheckPunishmentsPage from '../pages/checkPunishments'
-import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
 
 const testData = new TestData()
-
-// The journey is switched on for Leeds only (feature.env), so these tests sign in with Leeds as the active caseload
-const switchedOnPrison = { caseLoadId: 'LEI', description: 'Leeds (HMP)' }
 
 const stubReport = (chargeNumber: string, isYouthOffender = false) =>
   cy.task('stubGetReportedAdjudication', {
@@ -42,15 +39,6 @@ const choosePrivileges = (...privileges: PrivilegeType[]) => {
   privileges.forEach(privilege => punishmentPage.privilegeCheckboxes().find(`input[value="${privilege}"]`).check())
   if (privileges.includes(PrivilegeType.OTHER)) punishmentPage.otherPrivilege().type('Library')
   punishmentPage.submitButton().click()
-}
-
-const answerDuration = (days: string, startMode: 'IMMEDIATE' | 'LATER' | 'SUSPENDED', date?: string) => {
-  const durationPage = Page.verifyOnPage(PunishmentDurationPage)
-  durationPage.days().clear().type(days)
-  durationPage.startMode().find(`input[value="${startMode}"]`).check()
-  if (startMode === 'LATER') durationPage.startDate().clear().type(date)
-  if (startMode === 'SUSPENDED') durationPage.suspendedUntil().clear().type(date)
-  durationPage.submitButton().click()
 }
 
 type SentPunishment = Record<string, unknown> & { rehabilitativeActivities: Record<string, unknown>[] }
@@ -78,7 +66,6 @@ context('Award several punishments in one journey', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubFeComponents', switchedOnPrison)
     cy.task('stubAuthUser')
     cy.task('stubGetUserFromUsername', { username: 'USER1', response: testData.userFromUsername() })
     cy.task('stubGetPrisonerDetails', {
@@ -387,17 +374,5 @@ context('Award several punishments in one journey', () => {
     Page.verifyOnPage(PunishmentDurationPage)
       .errorSummary()
       .contains('Cellular confinement cannot be more than 10 days for an offence under YOI rules')
-  })
-
-  it('keeps today’s journey for a prison that is not switched on', () => {
-    cy.task('stubFeComponents', {})
-    cy.visit(adjudicationUrls.punishment.urls.start('100'))
-    const punishmentPage = Page.verifyOnPage(PunishmentPage)
-    punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-    punishmentPage.privilege().should('exist')
-    punishmentPage.saveAndExit().should('not.exist')
-    punishmentPage.privilege().find('input[value="TV"]').check()
-    punishmentPage.submitButton().click()
-    Page.verifyOnPage(PunishmentNumberOfDaysPage)
   })
 })

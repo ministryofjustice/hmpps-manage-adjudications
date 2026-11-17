@@ -1,7 +1,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{# splitEndDateAndSessions: the IR-1904 layout, with end date and number of sessions in separate columns #}
-{% macro awardRehabilitativeActivitiesTable(rehabActivities, readOnly = false, splitEndDateAndSessions = false) %}
+{% macro awardRehabilitativeActivitiesTable(rehabActivities, readOnly = false) %}
   {% set rows = [] %}
   {% for data in rehabActivities %}
 
@@ -14,7 +13,7 @@
     } %}
     {% set detailsColumn = {
       text: data.details or 'Not entered',
-      classes: "columnWidth20" if splitEndDateAndSessions else "columnWidth30"
+      classes: "columnWidth20"
     } %}
     {% set monitorColumn = {
       text:  data.monitor | initialiseName or 'Not entered',
@@ -31,61 +30,36 @@
       }
     ] %}
 
-    {% if splitEndDateAndSessions %}
-      {% set rows = (rows.push(
-        [
-          punishmentColumn,
-          detailsColumn,
-          {
-            text: data.endDate | formatTimestampTo('D MMM YYYY') if data.endDate else 'Not entered',
-            classes: "columnWidth12"
-          },
-          {
-            text: data.totalSessions if data.totalSessions else '-',
-            classes: "columnWidth12"
-          },
-          monitorColumn
-        ].concat(actionColumns)
-      ), rows) %}
-    {% else %}
-      {% set rows = (rows.push(
-        [
-          punishmentColumn,
-          detailsColumn,
-          {
-            text: data.endDate | endDateSessionNumberText(data.totalSessions) or 'Not entered',
-            classes: "columnWidth20"
-          },
-          monitorColumn
-        ].concat(actionColumns)
-      ), rows) %}
-    {% endif %}
+    {% set rows = (rows.push(
+      [
+        punishmentColumn,
+        detailsColumn,
+        {
+          text: data.endDate | formatTimestampTo('D MMM YYYY') if data.endDate else 'Not entered',
+          classes: "columnWidth12"
+        },
+        {
+          text: data.totalSessions if data.totalSessions else '-',
+          classes: "columnWidth12"
+        },
+        monitorColumn
+      ].concat(actionColumns)
+    ), rows) %}
   {% endfor %}
 
-  {% if splitEndDateAndSessions %}
-    {% set head = [
-      { html: "Suspended <br>punishment" },
-      { html: "Activity <br>details" },
-      { text: "End date" },
-      { html: "Number of <br>sessions" },
-      { text: "Who is monitoring the prisoner" },
-      { text: null },
-      { text: null }
-    ] %}
-  {% else %}
-    {% set head = [
-      { html: "Suspended <br>punishment" },
-      { html: "Activity <br>details" },
-      { html: "End date and <br>number of sessions" },
-      { text: "Who is monitoring the prisoner" },
-      { text: null },
-      { text: null }
-    ] %}
-  {% endif %}
+  {% set head = [
+    { html: "Suspended <br>punishment" },
+    { html: "Activity <br>details" },
+    { text: "End date" },
+    { html: "Number of <br>sessions" },
+    { text: "Who is monitoring the prisoner" },
+    { text: null },
+    { text: null }
+  ] %}
 
-        {{ govukTable({
-        head: head,
-        rows: rows,
-        attributes: {"data-qa": "rehabilitative-activities-table"}
+  {{ govukTable({
+    head: head,
+    rows: rows,
+    attributes: {"data-qa": "rehabilitative-activities-table"}
       }) }}
 {% endmacro %}
