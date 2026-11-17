@@ -135,43 +135,6 @@ export default class PunishmentsService {
     return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
   }
 
-  removeAnyRehabilitativeActivities(req: Request, chargeNumber: string, redisId: string) {
-    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-    const updatedPunishment: PunishmentData = {
-      ...punishment,
-      isThereRehabilitativeActivities: true,
-      hasRehabilitativeActivitiesDetails: true,
-      rehabilitativeActivities: [],
-      redisId,
-      id: punishment.id,
-    }
-
-    return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
-  }
-
-  addRehabilitativeActivity(
-    req: Request,
-    chargeNumber: string,
-    redisId: string,
-    currentActivityNumber: number,
-    activityDetails: RehabilitativeActivity,
-  ) {
-    const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
-
-    const updatedRehabActivityList = [...punishment.rehabilitativeActivities, activityDetails]
-
-    const updatedPunishment = {
-      ...punishment,
-      isThereRehabilitativeActivities: true,
-      hasRehabilitativeActivitiesDetails: true,
-      rehabilitativeActivities: updatedRehabActivityList,
-      currentActivityNumber,
-      redisId,
-      id: punishment.id,
-    }
-    return this.replaceSessionPunishment(req, chargeNumber, redisId, updatedPunishment)
-  }
-
   removeRehabilitativeActivity(req: Request, chargeNumber: string, redisId: string, sessionId: number) {
     const punishment = this.getSessionPunishment(req, chargeNumber, redisId)
 

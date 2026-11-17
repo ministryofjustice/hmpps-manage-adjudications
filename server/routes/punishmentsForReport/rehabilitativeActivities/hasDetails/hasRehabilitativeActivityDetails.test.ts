@@ -100,7 +100,7 @@ describe('Do you have the details of the rehabilitative activities?', () => {
       )
       .then(() => {
         expect(rehabBatchSessionService.startDraft).toHaveBeenCalledWith(expect.anything(), '100', 'library')
-        expect(punishmentsService.removeAnyRehabilitativeActivities).not.toHaveBeenCalled()
+        expect(punishmentsService.replaceRehabilitativeActivities).not.toHaveBeenCalled()
       })
   })
 
