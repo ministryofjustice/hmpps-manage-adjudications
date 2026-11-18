@@ -263,11 +263,13 @@
       }), radioButtonItems) %}
     {% endif %}
 
-    {% set radioButtonItems = (radioButtonItems.push({
-      value: "EXCLUSION_WORK",
-      text: "Exclusion from associated work",
-      checked: punishmentType == 'EXCLUSION_WORK'
-    }), radioButtonItems) %}
+    {% if punishmentsAvailable.exclusionFromWork %}
+      {% set radioButtonItems = (radioButtonItems.push({
+        value: "EXCLUSION_WORK",
+        text: "Exclusion from associated work",
+        checked: punishmentType == 'EXCLUSION_WORK'
+      }), radioButtonItems) %}
+    {% endif %}
 
     {% if punishmentsAvailable.extraWork %}
       {% set radioButtonItems = (radioButtonItems.push({

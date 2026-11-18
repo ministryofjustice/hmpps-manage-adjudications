@@ -52,10 +52,11 @@ describe('GET /punishment', () => {
         expect(res.text).toContain('Loss of social visits')
         expect(res.text).toContain('Restriction of social visits')
         expect(res.text).toContain('Does the prisoner have any children under 18?')
+        expect(res.text).toContain('Exclusion from associated work')
       })
   })
 
-  it('does not offer social visits punishments for a YOI adjudication', async () => {
+  it('does not offer adult-only punishments for a YOI adjudication', async () => {
     punishmentsService.getPunishmentAvailability.mockResolvedValue({
       isIndependentAdjudicatorHearing: false,
       isAdult: false,
@@ -67,6 +68,7 @@ describe('GET /punishment', () => {
       .expect(res => {
         expect(res.text).not.toContain('Loss of social visits')
         expect(res.text).not.toContain('Restriction of social visits')
+        expect(res.text).not.toContain('Exclusion from associated work')
       })
   })
 })

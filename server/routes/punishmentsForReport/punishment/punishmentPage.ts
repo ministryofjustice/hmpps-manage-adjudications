@@ -89,6 +89,7 @@ export default class PunishmentPage {
       addedDays: isIndependentAdjudicatorHearing,
       caution: !(punishmentsAlreadyAdded || cautionAlreadyAdded),
       damages: !damagesAlreadyAdded,
+      exclusionFromWork: isAdult,
       extraWork: !isAdult,
       removalFromActivity: !isAdult,
       socialVisits: isAdult,
