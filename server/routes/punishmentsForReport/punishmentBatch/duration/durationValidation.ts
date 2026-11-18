@@ -2,7 +2,7 @@ import moment from 'moment'
 import type { FormError } from '../../../../@types/template'
 import type { PunishmentBatchItem } from '../../../../data/PunishmentResult'
 import validateNumberOfDays from '../../punishmentDates/numberOfDays/numberOfDaysValidation'
-import { isWholeNumber } from '../../../../utils/utils'
+import { formatTimestampTo, isWholeNumber } from '../../../../utils/utils'
 
 export enum StartMode {
   IMMEDIATE = 'IMMEDIATE',
@@ -29,10 +29,19 @@ export const parseDatePickerDate = (value: string): moment.Moment => {
   return date.isValid() ? date : null
 }
 
-const example = (lastHearingDate: string, days: number) =>
+export const example = (lastHearingDate: string, days: number) =>
   moment(lastHearingDate || undefined)
     .add(days, 'days')
     .format('D/M/YYYY')
+
+export const firstSuspendedDay = (lastHearingDate: string) =>
+  moment(lastHearingDate || undefined)
+    .add(1, 'days')
+    .format('YYYY-MM-DD')
+export const lastSuspendedDay = (lastHearingDate: string) =>
+  moment(lastHearingDate || undefined)
+    .add(6, 'months')
+    .format('YYYY-MM-DD')
 
 export default function validateForm({
   duration,
@@ -47,8 +56,8 @@ export default function validateForm({
   const thesePunishments = punishments.length > 1 ? 'the punishments' : 'this punishment'
   const hearingDay = lastHearingDate ? moment(lastHearingDate, 'YYYY-MM-DD') : null
   const hearingDayText = hearingDay?.format('D MMMM YYYY')
-  const lastSuspendedDay = moment(hearingDay).add(6, 'months')
-  const lastSuspendedDayText = lastSuspendedDay?.format('D MMMM YYYY')
+  const lastSuspendedDate = lastHearingDate ? lastSuspendedDay(lastHearingDate) : null
+  const lastSuspendedDayText = lastSuspendedDate ? formatTimestampTo(lastSuspendedDate, 'D MMMM YYYY') : null
 
   const days = String(duration ?? '').trim()
   if (days && !isWholeNumber(days)) {
@@ -106,7 +115,7 @@ export default function validateForm({
         href: '#suspendedUntil',
         text: `Date suspended until must be after the last day of the hearing, ${hearingDayText}`,
       })
-    } else if (lastSuspendedDay && date.isAfter(lastSuspendedDay, 'day')) {
+    } else if (lastSuspendedDay && date.isAfter(lastSuspendedDate, 'day')) {
       errors.push({
         href: '#suspendedUntil',
         text: `Date suspended cannot be later than 6 months after the last day of the hearing, ${lastSuspendedDayText}`,

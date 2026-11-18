@@ -67,6 +67,9 @@ describe('GET', () => {
 })
 
 describe('POST ', () => {
+  // beforeEach(() => {
+  //   punishmentsService.getLastHearingDate.mockResolvedValue('2023-08-17')
+  // })
   it('redirects to the award punishment page and saves to session', () => {
     return request(app)
       .post(
@@ -102,7 +105,7 @@ describe('Validations', () => {
     punishmentsService.getLastHearingDate.mockResolvedValue('2026-08-17')
   })
   it.each([
-    { scenario: 'No date entered', message: 'Enter the date the punishment is suspended until' },
+    { scenario: 'No date entered', message: 'Date suspended until must be a real date, like 16/9/2026' },
     {
       scenario: 'Date before hearing date',
       suspendedUntil: '16/8/2026',
@@ -113,7 +116,7 @@ describe('Validations', () => {
       suspendedUntil: '18/2/2027',
       message: 'Date suspended cannot be later than 6 months after the last day of the hearing, 17 February 2027',
     },
-  ])('Error message triggered when: %scenario', ({ suspendedUntil, message }) => {
+  ])('Error message triggered when: $scenario', ({ suspendedUntil, message }) => {
     return request(app)
       .post(
         `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.start(

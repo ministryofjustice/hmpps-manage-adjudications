@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { Request, Response } from 'express'
-import moment from 'moment'
 import validateForm from './suspendedUntilValidation'
 import { FormError } from '../../../../@types/template'
 import UserService from '../../../../services/userService'
@@ -9,11 +8,13 @@ import adjudicationUrls from '../../../../utils/urlGenerator'
 import PunishmentsService from '../../../../services/punishmentsService'
 import ReportedAdjudicationsService from '../../../../services/reportedAdjudicationsService'
 import { PrivilegeType, PunishmentType, RehabilitativeActivity } from '../../../../data/PunishmentResult'
+import { firstSuspendedDay, lastSuspendedDay } from '../../punishmentBatch/duration/durationValidation'
 
 type PageData = {
   error?: FormError
   suspendedUntil?: string
   lastHearingDate?: string
+  firstSuspendedDate?: string
   lastSuspendedDate?: string
 }
 
@@ -44,14 +45,14 @@ export default class SuspendedUntilDateAdditionalDaysPage {
 
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber } = req.params
-    const { error, suspendedUntil, lastHearingDate, lastSuspendedDate } = pageData
+    const { error, suspendedUntil, firstSuspendedDate, lastSuspendedDate } = pageData
 
     return res.render(`pages/punishmentSuspendedUntilDate.njk`, {
       cancelHref: adjudicationUrls.awardPunishments.urls.modified(chargeNumber),
       errors: error ? [error] : [],
       suspendedUntil,
-      lastHearingDate,
-      lastSuspendedDate,
+      minStartDate: formatTimestampTo(firstSuspendedDate, 'DD/MM/YYYY'),
+      lastSuspendedDate: formatTimestampTo(lastSuspendedDate, 'DD/MM/YYYY'),
     })
   }
 
@@ -66,19 +67,22 @@ export default class SuspendedUntilDateAdditionalDaysPage {
 
     // Get dates to limit range of date picker
     const lastHearingDate = await this.punishmentsService.getLastHearingDate(chargeNumber, user)
-    const lastSuspendedDate = moment(lastHearingDate).add(6, 'months').format('DD/MM/YYYY')
+    const firstSuspendedDate = lastHearingDate ? firstSuspendedDay(lastHearingDate) : null
+    const lastSuspendedDate = lastHearingDate ? lastSuspendedDay(lastHearingDate) : null
 
     if (this.pageOptions.isEdit()) {
       const sessionData = await this.punishmentsService.getSessionPunishment(req, chargeNumber, req.params.redisId)
       return this.renderView(req, res, {
         suspendedUntil: sessionData.suspendedUntil && apiDateToDatePicker(sessionData.suspendedUntil),
         lastHearingDate: formatTimestampTo(lastHearingDate, 'DD/MM/YYYY'),
+        firstSuspendedDate,
         lastSuspendedDate,
       })
     }
 
     return this.renderView(req, res, {
       lastHearingDate: formatTimestampTo(lastHearingDate, 'DD/MM/YYYY'),
+      firstSuspendedDate,
       lastSuspendedDate,
     })
   }
@@ -90,7 +94,7 @@ export default class SuspendedUntilDateAdditionalDaysPage {
     const type = PunishmentType[punishmentType as keyof typeof PunishmentType]
     const { user } = res.locals
     const lastHearingDate = await this.punishmentsService.getLastHearingDate(chargeNumber, user)
-    const lastSuspendedDate = moment(lastHearingDate).add(6, 'months').format('YYYY-MM-DD')
+    const lastSuspendedDate = lastHearingDate ? lastSuspendedDay(lastHearingDate) : null
 
     const error = validateForm({
       suspendedUntil,
