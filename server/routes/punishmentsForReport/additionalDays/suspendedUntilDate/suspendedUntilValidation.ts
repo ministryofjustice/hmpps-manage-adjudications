@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { FormError } from '../../../../@types/template'
-import { example, parseDatePickerDate } from '../../punishmentBatch/duration/durationValidation'
+import { exampleFutureDate, parseDatePickerDate } from '../../punishmentBatch/duration/durationValidation'
 
 type SuspendedUntilDateForm = {
   suspendedUntil?: string
@@ -20,7 +20,7 @@ export default function validateForm({
   if (!date) {
     return {
       href: '#suspendedUntil',
-      text: `Date suspended until must be a real date, like ${example(lastHearingDate, 30)}`,
+      text: `Date suspended until must be a real date, like ${exampleFutureDate(lastHearingDate, 30)}`,
     }
   }
   if (lastHearingDate && !date.isAfter(lastHearingDate, 'day')) {

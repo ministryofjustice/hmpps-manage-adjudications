@@ -2,7 +2,7 @@ import moment from 'moment'
 import type { FormError } from '../../../../@types/template'
 import type { PunishmentBatchItem } from '../../../../data/PunishmentResult'
 import validateNumberOfDays from '../../punishmentDates/numberOfDays/numberOfDaysValidation'
-import { formatTimestampTo, isWholeNumber } from '../../../../utils/utils'
+import { formatTimestampTo, isWholeNumber, momentDateToApi } from '../../../../utils/utils'
 
 export enum StartMode {
   IMMEDIATE = 'IMMEDIATE',
@@ -29,15 +29,13 @@ export const parseDatePickerDate = (value: string): moment.Moment => {
   return date.isValid() ? date : null
 }
 
-export const example = (lastHearingDate: string, days: number) =>
+export const exampleFutureDate = (lastHearingDate: string, days: number) =>
   moment(lastHearingDate || undefined)
     .add(days, 'days')
     .format('D/M/YYYY')
 
-export const firstSuspendedDay = (lastHearingDate: string) =>
-  moment(lastHearingDate).add(1, 'days').format('YYYY-MM-DD')
-export const lastSuspendedDay = (lastHearingDate: string) =>
-  moment(lastHearingDate).add(6, 'months').format('YYYY-MM-DD')
+export const firstSuspendedDay = (lastHearingDate: string) => momentDateToApi(moment(lastHearingDate).add(1, 'days'))
+export const lastSuspendedDay = (lastHearingDate: string) => momentDateToApi(moment(lastHearingDate).add(6, 'months'))
 
 export default function validateForm({
   duration,
@@ -87,7 +85,7 @@ export default function validateForm({
     } else if (!date) {
       errors.push({
         href: '#startDate',
-        text: `Start date must be a real date, like ${example(lastHearingDate, 1)}`,
+        text: `Start date must be a real date, like ${exampleFutureDate(lastHearingDate, 1)}`,
       })
     } else if (hearingDay && !date.isAfter(hearingDay, 'day')) {
       errors.push({
@@ -104,7 +102,7 @@ export default function validateForm({
     } else if (!date) {
       errors.push({
         href: '#suspendedUntil',
-        text: `Date suspended until must be a real date, like ${example(lastHearingDate, 30)}`,
+        text: `Date suspended until must be a real date, like ${exampleFutureDate(lastHearingDate, 30)}`,
       })
     } else if (hearingDay && !date.isAfter(hearingDay, 'day')) {
       errors.push({
