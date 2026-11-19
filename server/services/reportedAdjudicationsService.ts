@@ -1601,7 +1601,7 @@ export default class ReportedAdjudicationsService {
 
     return {
       ...adjudicationsData,
-      ...damageObligations,
+      damageObligations,
       balances,
     }
   }
