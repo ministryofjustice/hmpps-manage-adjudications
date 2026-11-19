@@ -67,9 +67,9 @@ describe('GET', () => {
 })
 
 describe('POST ', () => {
-  // beforeEach(() => {
-  //   punishmentsService.getLastHearingDate.mockResolvedValue('2023-08-17')
-  // })
+  beforeEach(() => {
+    punishmentsService.getLastHearingDate.mockResolvedValue('2023-08-17')
+  })
   it('redirects to the award punishment page and saves to session', () => {
     return request(app)
       .post(
