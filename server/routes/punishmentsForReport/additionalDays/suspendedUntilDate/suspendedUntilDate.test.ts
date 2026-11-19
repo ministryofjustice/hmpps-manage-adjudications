@@ -67,6 +67,9 @@ describe('GET', () => {
 })
 
 describe('POST ', () => {
+  beforeEach(() => {
+    punishmentsService.getLastHearingDate.mockResolvedValue('2023-08-17')
+  })
   it('redirects to the award punishment page and saves to session', () => {
     return request(app)
       .post(
@@ -94,5 +97,36 @@ describe('POST ', () => {
           '100',
         ),
       )
+  })
+})
+
+describe('Validations', () => {
+  beforeEach(() => {
+    punishmentsService.getLastHearingDate.mockResolvedValue('2026-08-17')
+  })
+  it.each([
+    { scenario: 'No date entered', message: 'Date suspended until must be a real date, like 16/9/2026' },
+    {
+      scenario: 'Date before hearing date',
+      suspendedUntil: '16/8/2026',
+      message: 'Date suspended until must be after the last day of the hearing, 17 August 2026',
+    },
+    {
+      scenario: 'Date more than 6 months after hearing date',
+      suspendedUntil: '18/2/2027',
+      message: 'Date suspended cannot be later than 6 months after the last day of the hearing, 17 February 2027',
+    },
+  ])('Error message triggered when: $scenario', ({ suspendedUntil, message }) => {
+    return request(app)
+      .post(
+        `${adjudicationUrls.punishmentSuspendedUntilAdditionalDays.urls.start(
+          '100',
+        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=&duration=6`,
+      )
+      .send({
+        suspendedUntil,
+      })
+      .expect(200)
+      .expect(res => expect(res.text).toContain(message))
   })
 })

@@ -12,7 +12,7 @@ import {
 } from '../../../../data/PunishmentResult'
 import { apiDateToDatePicker, formatTimestampTo } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
-import validateForm, { StartMode, parseDatePickerDate } from './durationValidation'
+import validateForm, { StartMode, parseDatePickerDate, firstSuspendedDay, lastSuspendedDay } from './durationValidation'
 
 export enum PageRequestType {
   CREATION,
@@ -70,6 +70,8 @@ export default class DurationPage {
     res: Response,
     subject: Subject,
     lastHearingDate: string,
+    firstSuspendedDate: string,
+    lastSuspendedDate: string,
     values: FormValues,
     errors: FormError[] = [],
   ): Promise<void> => {
@@ -85,7 +87,8 @@ export default class DurationPage {
       appliesTo: many ? subject.punishments.map(punishmentName) : [],
       these: many ? 'the punishments' : 'this punishment',
       lastHearingDate: formatTimestampTo(lastHearingDate, 'D MMMM YYYY'),
-      minStartDate: formatTimestampTo(lastHearingDate, 'DD/MM/YYYY'),
+      minStartDate: formatTimestampTo(firstSuspendedDate, 'DD/MM/YYYY'),
+      lastSuspendedDate: formatTimestampTo(lastSuspendedDate, 'DD/MM/YYYY'),
       ...values,
     })
   }
@@ -157,13 +160,17 @@ export default class DurationPage {
     }
 
     const lastHearingDate = await this.punishmentsService.getLastHearingDate(chargeNumber, user)
+    // Latest date a punishment can be suspended until
+    const firstSuspendedDate = lastHearingDate ? firstSuspendedDay(lastHearingDate) : null
+    // Latest date a punishment can be suspended until
+    const lastSuspendedDate = lastHearingDate ? lastSuspendedDay(lastHearingDate) : null
     // a punishment being changed, or asked about again in the batch, starts from its saved answers
     const savedRedisId = this.pageOptions.isEdit()
       ? redisId
       : subject.punishments.length === 1 && subject.punishments[0].redisId
     const punishment = savedRedisId && this.punishmentsService.getSessionPunishment(req, chargeNumber, savedRedisId)
     if (!punishment) {
-      return this.renderView(req, res, subject, lastHearingDate, {})
+      return this.renderView(req, res, subject, lastHearingDate, firstSuspendedDate, lastSuspendedDate, {})
     }
 
     let startMode = StartMode.LATER
@@ -172,7 +179,8 @@ export default class DurationPage {
     } else if (punishment.startDate === lastHearingDate) {
       startMode = StartMode.IMMEDIATE
     }
-    return this.renderView(req, res, subject, lastHearingDate, {
+
+    return this.renderView(req, res, subject, lastHearingDate, firstSuspendedDate, lastSuspendedDate, {
       duration: punishment.duration ? String(punishment.duration) : '',
       startMode,
       startDate: startMode === StartMode.LATER && punishment.startDate ? apiDateToDatePicker(punishment.startDate) : '',
@@ -205,6 +213,8 @@ export default class DurationPage {
       this.punishmentsService.getLastHearingDate(chargeNumber, user),
       this.punishmentsService.getPunishmentAvailability(chargeNumber, user),
     ])
+    const firstSuspendedDate = lastHearingDate ? firstSuspendedDay(lastHearingDate) : null
+    const lastSuspendedDate = lastHearingDate ? lastSuspendedDay(lastHearingDate) : null
     const errors = validateForm({ ...values, punishments: subject.punishments, isYOI: !isAdult, lastHearingDate })
     if (!errors.length && this.pageOptions.isEdit()) {
       const activityError = this.activitiesStillFit(req, values)
@@ -213,7 +223,7 @@ export default class DurationPage {
       }
     }
     if (errors.length) {
-      return this.renderView(req, res, subject, lastHearingDate, values, errors)
+      return this.renderView(req, res, subject, lastHearingDate, firstSuspendedDate, lastSuspendedDate, values, errors)
     }
 
     const schedule = this.getSchedule(values, lastHearingDate)
