@@ -35,13 +35,9 @@ export const example = (lastHearingDate: string, days: number) =>
     .format('D/M/YYYY')
 
 export const firstSuspendedDay = (lastHearingDate: string) =>
-  moment(lastHearingDate || undefined)
-    .add(1, 'days')
-    .format('YYYY-MM-DD')
+  moment(lastHearingDate).add(1, 'days').format('YYYY-MM-DD')
 export const lastSuspendedDay = (lastHearingDate: string) =>
-  moment(lastHearingDate || undefined)
-    .add(6, 'months')
-    .format('YYYY-MM-DD')
+  moment(lastHearingDate).add(6, 'months').format('YYYY-MM-DD')
 
 export default function validateForm({
   duration,
