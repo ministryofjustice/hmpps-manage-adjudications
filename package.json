@@ -116,6 +116,7 @@
     "@ministryofjustice/frontend": {
       "moment": "$moment"
     },
+    "@opentelemetry/instrumentation-http": "^0.223.2",
     "csurf": {
       "cookie": "1.1.1"
     },
