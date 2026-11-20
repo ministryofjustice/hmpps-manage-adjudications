@@ -31,7 +31,7 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
 
   gotenberg:
-    image: gotenberg/gotenberg:9.4.1
+    image: gotenberg/gotenberg:9.9.1
     command:
       - gotenberg
       # Flags should match ones in values.yaml unless there is a good reason
