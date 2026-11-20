@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/node24/tsconfig.json",
+  "extends": "@tsconfig/node26/tsconfig.json",
   "compileOnSave": true,
   "compilerOptions": {
     "outDir": "./dist",
@@ -17,6 +17,14 @@
     "types": ["node", "jest"],
     "rootDir": "."
   },
-  "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "cypress.config.ts", "esbuild", "eslint.config.mjs"],
+  "exclude": [
+    "node_modules",
+    "assets/**/*.js",
+    "integration_tests",
+    "dist",
+    "cypress.config.ts",
+    "esbuild",
+    "eslint.config.mjs"
+  ],
   "include": ["**/*.js", "**/*.ts"]
 }

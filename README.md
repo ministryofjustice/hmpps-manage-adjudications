@@ -41,7 +41,7 @@ To start the main services excluding the manage adjudications app:
 
 `docker compose up`
 
-Install dependencies using `npm run setup`, ensuring you are using `Node v24.x` and `npm v12.x`.
+Install dependencies using `npm run setup`, ensuring you are using `Node v26.x` and `npm v12.x`.
 
 And then, to build the assets and start the app with esbuild:
 
