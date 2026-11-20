@@ -71,7 +71,7 @@
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.4",
     "@ministryofjustice/hmpps-precommit-hooks": "^3.0.2",
-    "@tsconfig/node26": "^26",
+    "@tsconfig/node26": "^26.0.2",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
@@ -84,7 +84,7 @@
     "@types/express-session": "^1.19.0",
     "@types/http-errors": "^2.0.5",
     "@types/jest": "^30.0.0",
-    "@types/node": "^26",
+    "@types/node": "^26.6.6",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.8.0",
@@ -116,7 +116,7 @@
     "@ministryofjustice/frontend": {
       "moment": "$moment"
     },
-    "@opentelemetry/instrumentation-http": "^0.223.2",
+    "@opentelemetry/instrumentation-http": "^0.301.2",
     "csurf": {
       "cookie": "1.1.1"
     },
