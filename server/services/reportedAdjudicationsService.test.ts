@@ -43,6 +43,9 @@ const getAlertsForPrisoner = jest.fn()
 const getMovementByOffender = jest.fn()
 const getPrisonerAdjudicationHistory = jest.fn()
 const getPrisonerAdjudicationHistoryAllBookings = jest.fn()
+const getDamageObligation = jest.fn()
+const getBalances = jest.fn()
+const getDataForDis5 = jest.fn()
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/hmppsManageUsersClient')
@@ -54,6 +57,8 @@ jest.mock('../data/prisonApiClient', () => {
       getSecondaryLanguages,
       getBatchPrisonerDetails,
       getMovementByOffender,
+      getDamageObligation,
+      getBalances,
     }
   })
 })
@@ -82,6 +87,7 @@ jest.mock('../data/manageAdjudicationsSystemTokensClient', () => {
       getReportedAdjudicationPrintData,
       getPrisonerAdjudicationHistory,
       getPrisonerAdjudicationHistoryAllBookings,
+      getDataForDis5,
     }
   })
 })
@@ -1494,6 +1500,57 @@ describe('reportedAdjudicationsService', () => {
         totalElements: 1,
         content: [testData.reportedAdjudication({ chargeNumber: '1234', prisonerNumber: 'G6123VU' })],
       })
+    })
+  })
+
+  describe('getDis5Data', () => {
+    const dis5Data = {
+      chargeNumber: 'MDI-000060',
+      dateOfIncident: '2023-02-10',
+      dateOfDiscovery: '2023-02-10',
+      previousCount: 0,
+      previousAtCurrentEstablishmentCount: 0,
+      sameOffenceCount: 0,
+      chargesWithSuspendedPunishments: [] as never[],
+      existingPunishments: [] as never[],
+    }
+    const balances = { spends: 100, cash: 10, savings: 10, currency: 'GBP', damageObligations: 80 }
+    const damageObligation = {
+      id: 1,
+      offenderNo: 'G6123VU',
+      referenceNumber: 'MDI-000010',
+      startDateTime: '2023-01-05T00:00:00',
+      endDateTime: '2023-03-05T00:00:00',
+      prisonId: 'MDI',
+      amountToPay: 100,
+      amountPaid: 20,
+      status: 'ACTIVE',
+      comment: 'Broken cell window',
+      currency: 'GBP',
+    }
+
+    beforeEach(() => {
+      getDataForDis5.mockResolvedValue(dis5Data)
+      getBalances.mockResolvedValue(balances)
+    })
+
+    it('returns active damage obligations as a list alongside the balances', async () => {
+      getDamageObligation.mockResolvedValue([damageObligation])
+
+      const result = await service.getDis5Data('MDI-000060', 'G6123VU', 123, user)
+
+      expect(getDataForDis5).toHaveBeenCalledWith('MDI-000060')
+      expect(getDamageObligation).toHaveBeenCalledWith('G6123VU')
+      expect(getBalances).toHaveBeenCalledWith(123)
+      expect(result).toEqual({ ...dis5Data, damageObligations: [damageObligation], balances })
+    })
+
+    it('returns an empty list when there are no active damage obligations', async () => {
+      getDamageObligation.mockResolvedValue([])
+
+      const result = await service.getDis5Data('MDI-000060', 'G6123VU', 123, user)
+
+      expect(result).toEqual({ ...dis5Data, damageObligations: [], balances })
     })
   })
 })
