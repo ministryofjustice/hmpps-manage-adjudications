@@ -7,7 +7,6 @@ import PunishmentsService from '../../../../services/punishmentsService'
 import RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import type { PunishmentData } from '../../../../data/PunishmentResult'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
-import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
@@ -35,10 +34,8 @@ const firstOfTwo = activityPage(1)
 const enteredFirst = { details: 'Gym', monitor: 'Jo', endDate: '2026-11-20', sessionId: 1 }
 
 let app: Express
-const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, rehabBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentsService.getSessionPunishment.mockReturnValue(library)
@@ -55,7 +52,6 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = originalPrisons
   jest.resetAllMocks()
 })
 
@@ -172,25 +168,6 @@ describe('Rehabilitative activity details', () => {
       .then(() => {
         expect(rehabBatchSessionService.saveDraftActivity).not.toHaveBeenCalled()
         expect(rehabBatchSessionService.applyDraft).not.toHaveBeenCalled()
-      })
-  })
-
-  it('keeps the old page when the prison is not switched on', () => {
-    config.featureToggles.multiPrivilegePunishmentsPrisons = []
-    return request(app)
-      .post(firstOfTwo)
-      .send(activity)
-      .expect(302)
-      .expect('Location', activityPage(2))
-      .then(() => {
-        expect(punishmentsService.addRehabilitativeActivity).toHaveBeenCalledWith(
-          expect.anything(),
-          '100',
-          'library',
-          1,
-          expect.objectContaining({ details: 'Victim awareness' }),
-        )
-        expect(rehabBatchSessionService.saveDraftActivity).not.toHaveBeenCalled()
       })
   })
 

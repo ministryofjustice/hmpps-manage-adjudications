@@ -5,7 +5,7 @@ import UserService from '../../../../services/userService'
 import { hasAnyRole } from '../../../../utils/utils'
 import adjudicationUrls from '../../../../utils/urlGenerator'
 import { FormError } from '../../../../@types/template'
-import validateForm, { validateBatchForm } from './validation'
+import { validateBatchForm } from './validation'
 import PunishmentsService from '../../../../services/punishmentsService'
 import type RehabBatchSessionService from '../../../../services/rehabBatchSessionService'
 import { PunishmentData, convertPunishmentType } from '../../../../data/PunishmentResult'
@@ -34,30 +34,24 @@ export default class HasRehabilitativeActivitiesDetailsPage {
     private readonly rehabBatchSessionService: RehabBatchSessionService,
   ) {}
 
-  // With the toggle on (IR-1904) the number of activities is asked here, and the journey moves through
-  // the punishments ticked on "Which punishments have a rehabilitative activity condition?"
-  private isBatchJourney = (res: Response) => !!res.locals.featureToggles?.multiPrivilegePunishments
-
   private renderView = async (req: Request, res: Response, pageData: PageData): Promise<void> => {
     const { chargeNumber, redisId } = req.params
     const { error, hasRehabilitativeActivitiesDetails, numberOfActivities } = pageData
 
-    let title = 'Do you have the details of the rehabilitative activity?'
+    // The journey moves through the punishments ticked on "Which punishments have a rehabilitative activity condition?"
+    let title: string
     let appliesTo: string[] = []
-    let rehabBatchId: string = null
-    if (this.isBatchJourney(res)) {
-      const batch = this.rehabBatchSessionService.get(req, chargeNumber)
-      rehabBatchId = batch?.id ?? ''
-      if (batch?.sameForAll && batch.redisIds.length > 1) {
-        title = 'Do you have the details of the rehabilitative activities?'
-        appliesTo = batch.redisIds
-          .map(id => this.punishmentsService.getSessionPunishment(req, chargeNumber, id))
-          .filter(Boolean)
-          .map(punishmentName)
-      } else {
-        const punishment = this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
-        title = `Do you have the details of the rehabilitative activities for ${lowerFirst(punishmentName(punishment))}?`
-      }
+    const batch = this.rehabBatchSessionService.get(req, chargeNumber)
+    const rehabBatchId = batch?.id ?? ''
+    if (batch?.sameForAll && batch.redisIds.length > 1) {
+      title = 'Do you have the details of the rehabilitative activities?'
+      appliesTo = batch.redisIds
+        .map(id => this.punishmentsService.getSessionPunishment(req, chargeNumber, id))
+        .filter(Boolean)
+        .map(punishmentName)
+    } else {
+      const punishment = this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)
+      title = `Do you have the details of the rehabilitative activities for ${lowerFirst(punishmentName(punishment))}?`
     }
 
     return res.render(`pages/hasRehabilitativeActivitiesDetails.njk`, {
@@ -65,7 +59,6 @@ export default class HasRehabilitativeActivitiesDetailsPage {
       errors: error ? [error] : [],
       hasRehabilitativeActivitiesDetails,
       numberOfActivities,
-      askNumberOfActivities: this.isBatchJourney(res),
       title,
       appliesTo,
       rehabBatchId,
@@ -90,7 +83,7 @@ export default class HasRehabilitativeActivitiesDetailsPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    if (this.isBatchJourney(res) && !sessionData) {
+    if (!sessionData) {
       return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
     }
 
@@ -102,41 +95,6 @@ export default class HasRehabilitativeActivitiesDetailsPage {
   }
 
   submit = async (req: Request, res: Response): Promise<void> => {
-    if (this.isBatchJourney(res)) return this.submitBatch(req, res)
-
-    const { numberOfActivities } = req.query
-    const { chargeNumber, redisId } = req.params
-    const { hasRehabilitativeActivitiesDetails } = req.body
-
-    const error = validateForm({ hasDetails: hasRehabilitativeActivitiesDetails })
-
-    if (error)
-      return this.renderView(req, res, {
-        error,
-      })
-
-    if (hasRehabilitativeActivitiesDetails === 'YES') {
-      await this.punishmentsService.removeAnyRehabilitativeActivities(req, chargeNumber, redisId)
-      const redirectUrl = adjudicationUrls.rehabilitativeActivityDetails.urls.start(chargeNumber, redisId)
-      const currentActivityNumber = '1'
-      return res.redirect(
-        url.format({
-          pathname: redirectUrl,
-          query: { numberOfActivities, currentActivityNumber } as ParsedUrlQuery,
-        }),
-      )
-    }
-
-    await this.punishmentsService.addEmptyRehabilitativeActivities(
-      req,
-      chargeNumber,
-      redisId,
-      Number(numberOfActivities),
-    )
-    return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
-  }
-
-  private submitBatch = async (req: Request, res: Response): Promise<void> => {
     const { chargeNumber, redisId } = req.params
     const { hasRehabilitativeActivitiesDetails } = req.body
     const numberOfActivities = String(req.body.numberOfActivities ?? '').trim()

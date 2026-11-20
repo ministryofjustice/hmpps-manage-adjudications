@@ -4,7 +4,7 @@ import appWithAllRoutes from '../../testutils/appSetup'
 import adjudicationUrls from '../../../utils/urlGenerator'
 import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
-import { PrivilegeType, PunishmentType } from '../../../data/PunishmentResult'
+import { PunishmentType } from '../../../data/PunishmentResult'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
@@ -74,39 +74,6 @@ describe('GET /punishment', () => {
 })
 
 describe('POST /punishment', () => {
-  it('should successfully call the endpoint and redirect', () => {
-    return request(app)
-      .post(`${adjudicationUrls.punishment.urls.start('100')}`)
-      .send({
-        punishmentType: PunishmentType.PRIVILEGE,
-        privilegeType: PrivilegeType.OTHER,
-        otherPrivilege: 'nintendo switch',
-      })
-      .expect(302)
-      .expect(
-        'Location',
-        `${adjudicationUrls.punishmentNumberOfDays.urls.start(
-          '100',
-        )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch&stoppagePercentage=`,
-      )
-  })
-
-  it.each([
-    [PunishmentType.LOSS_OF_SOCIAL_VISITS, 'lossHasChildUnder18', 'true'],
-    [PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, 'restrictionHasChildUnder18', 'false'],
-  ])('carries the child answer into the schedule for %s', (punishmentType, childField, hasChildUnder18) => {
-    return request(app)
-      .post(adjudicationUrls.punishment.urls.start('100'))
-      .send({ punishmentType, [childField]: hasChildUnder18 })
-      .expect(302)
-      .expect(
-        'Location',
-        `${adjudicationUrls.punishmentNumberOfDays.urls.start(
-          '100',
-        )}?punishmentType=${punishmentType}&hasChildUnder18=${hasChildUnder18}`,
-      )
-  })
-
   it.each([
     [PunishmentType.LOSS_OF_SOCIAL_VISITS, 'lossHasChildUnder18'],
     [PunishmentType.RESTRICTION_OF_SOCIAL_VISITS, 'restrictionHasChildUnder18'],

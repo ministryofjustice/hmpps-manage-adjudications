@@ -4,10 +4,7 @@ import TestData from '../../server/routes/testutils/testData'
 import ReasonForChangePunishmentPage from '../pages/reasonForChangePunishment'
 import { ReportedAdjudicationStatus } from '../../server/data/ReportedAdjudicationResult'
 import { PunishmentType } from '../../server/data/PunishmentResult'
-import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
-import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
-import PunishmentStartDateChoicePage from '../pages/punishmentStartDateChoice'
-import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDates'
+import { addDuration } from '../support/punishmentDuration'
 
 const testData = new TestData()
 context('What is the reason for this change', () => {
@@ -77,20 +74,7 @@ context('What is the reason for this change', () => {
       cy.get('#stoppagePercentage').type('25')
       cy.get('[data-qa="punishment-submit"]').click()
 
-      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      punishmentNumberOfDaysPage.days().type('10')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
-      punishmentStartDateChoicePage.submitButton().click()
-
-      const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
-      punishmentAutomaticEndDatesPage.submitButton().click()
+      addDuration('10', 'IMMEDIATE')
 
       cy.get('[data-qa="punishments-continue').click()
 
