@@ -46,7 +46,7 @@
     "class-transformer": "^0.5.1",
     "compression": "^1.8.2",
     "connect-flash": "^0.1.1",
-    "connect-redis": "^10.0.0",
+    "connect-redis": "^11.0.0",
     "cookie-session": "^2.1.1",
     "csurf": "^1.11.0",
     "escape-html": "^1.0.3",
