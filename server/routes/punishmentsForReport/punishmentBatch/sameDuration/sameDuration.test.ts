@@ -6,7 +6,6 @@ import UserService from '../../../../services/userService'
 import PunishmentsService from '../../../../services/punishmentsService'
 import PunishmentBatchSessionService from '../../../../services/punishmentBatchSessionService'
 import { PrivilegeType, PunishmentType } from '../../../../data/PunishmentResult'
-import config from '../../../../config'
 
 jest.mock('../../../../services/userService')
 jest.mock('../../../../services/punishmentsService')
@@ -24,17 +23,14 @@ const twoPrivileges = {
 }
 
 let app: Express
-const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
   app = appWithAllRoutes({ production: false }, { userService, punishmentsService, punishmentBatchSessionService }, {})
   userService.getUserRoles.mockResolvedValue(['ADJUDICATIONS_REVIEWER'])
   punishmentBatchSessionService.get.mockReturnValue(twoPrivileges)
 })
 
 afterEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = originalPrisons
   jest.resetAllMocks()
 })
 

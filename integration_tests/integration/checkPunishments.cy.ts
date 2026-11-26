@@ -6,15 +6,8 @@ import ReasonForChangePunishmentPage from '../pages/reasonForChangePunishment'
 import Page from '../pages/page'
 import { PunishmentType } from '../../server/data/PunishmentResult'
 import PunishmentPage from '../pages/punishment'
-import PunishmentNumberOfDaysPage from '../pages/punishmentNumberOfDays'
-import PunishmentIsSuspendedPage from '../pages/punishmentIsSuspended'
-import PunishmentStartDateChoicePage from '../pages/punishmentStartDateChoice'
-import PunishmentSuspendedUntilPage from '../pages/punishmentSuspendedUntil'
-import PunishmentAutomaticEndDatesPage from '../pages/punishmentAutomaticEndDates'
 import AwardPunishmentsPage from '../pages/awardPunishments'
-import PunishmentStartDatePage from '../pages/punishmentStartDate'
-import { formatDateForDatePicker } from '../../server/utils/utils'
-import IsThereRehabilitativeActivitesPage from '../pages/isThereRehabilitativeActivitiesPage'
+import { addDuration } from '../support/punishmentDuration'
 
 const testData = new TestData()
 
@@ -196,22 +189,7 @@ context('Check punishments', () => {
       punishmentPage.punishment().find('input[value="CONFINEMENT"]').check()
       punishmentPage.submitButton().click()
 
-      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      punishmentNumberOfDaysPage.days().type('5')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="yes"]').check()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentSuspendedUntilPage = Page.verifyOnPage(PunishmentSuspendedUntilPage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
-      punishmentSuspendedUntilPage.suspendedUntil().type(date)
-      punishmentSuspendedUntilPage.submitButton().click()
-
-      const rehabActivityConditionPage = Page.verifyOnPage(IsThereRehabilitativeActivitesPage)
-      rehabActivityConditionPage.rehabChoice().find('input[value="NO"]').click()
-      rehabActivityConditionPage.submitButton().click()
+      addDuration('5', 'SUSPENDED', '10/10/2030')
 
       cy.get('[data-qa="punishments-table"]')
         .find('td')
@@ -229,18 +207,7 @@ context('Check punishments', () => {
       cy.get('#stoppagePercentage').type('25')
       punishmentPage.submitButton().click()
 
-      punishmentNumberOfDaysPage.days().type('2')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="true"]').check()
-      punishmentStartDateChoicePage.submitButton().click()
-
-      const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
-      punishmentAutomaticEndDatesPage.submitButton().click()
+      addDuration('2', 'IMMEDIATE')
 
       const awardPunishmentsPage = Page.verifyOnPage(AwardPunishmentsPage)
       awardPunishmentsPage.continue().click()
@@ -276,25 +243,7 @@ context('Check punishments', () => {
       cy.get('#stoppagePercentage').type('25')
       cy.get('[data-qa="punishment-submit"]').click()
 
-      const punishmentNumberOfDaysPage = Page.verifyOnPage(PunishmentNumberOfDaysPage)
-      punishmentNumberOfDaysPage.days().type('2')
-      punishmentNumberOfDaysPage.submitButton().click()
-
-      const punishmentSuspendedPage = Page.verifyOnPage(PunishmentIsSuspendedPage)
-      punishmentSuspendedPage.suspended().find('input[value="no"]').check()
-      punishmentSuspendedPage.submitButton().click()
-
-      const punishmentStartDateChoicePage = Page.verifyOnPage(PunishmentStartDateChoicePage)
-      punishmentStartDateChoicePage.radioButtons().find('input[value="false"]').check()
-      punishmentStartDateChoicePage.submitButton().click()
-
-      const punishmentStartDatePage = Page.verifyOnPage(PunishmentStartDatePage)
-      const date = formatDateForDatePicker(new Date('10/10/2030').toISOString(), 'short')
-      punishmentStartDatePage.datepicker().type(date)
-      punishmentStartDatePage.submitButton().click()
-
-      const punishmentAutomaticEndDatesPage = Page.verifyOnPage(PunishmentAutomaticEndDatesPage)
-      punishmentAutomaticEndDatesPage.submitButton().click()
+      addDuration('2', 'LATER', '10/10/2030')
 
       cy.get('[data-qa="punishments-continue').click()
       const reasonForChangePunishmentPage: ReasonForChangePunishmentPage =

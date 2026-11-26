@@ -66,12 +66,11 @@ export default class editRehabilitativeActivityPage {
 
     const error =
       validateForm({ prisonerName: friendlyName, details, monitorName, endDate, totalSessions }) ||
-      (res.locals.featureToggles?.multiPrivilegePunishments &&
-        validateCompletionDate({
-          endDate,
-          latestDate: this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)?.suspendedUntil,
-          coversSeveralPunishments: false,
-        }))
+      validateCompletionDate({
+        endDate,
+        latestDate: this.punishmentsService.getSessionPunishment(req, chargeNumber, redisId)?.suspendedUntil,
+        coversSeveralPunishments: false,
+      })
     if (error)
       return this.renderView(req, res, {
         error,
@@ -91,10 +90,7 @@ export default class editRehabilitativeActivityPage {
 
     await this.punishmentsService.editRehabilitativeActivity(req, chargeNumber, redisId, +id, updatedRehabActivity)
     // a change made from the rehabilitative schedule read-back returns there
-    if (
-      res.locals.featureToggles?.multiPrivilegePunishments &&
-      this.rehabBatchSessionService.includes(req, chargeNumber, redisId)
-    ) {
+    if (this.rehabBatchSessionService.includes(req, chargeNumber, redisId)) {
       return res.redirect(adjudicationUrls.rehabilitativeActivitiesSchedule.urls.start(chargeNumber))
     }
     return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))

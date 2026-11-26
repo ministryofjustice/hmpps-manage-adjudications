@@ -31,10 +31,6 @@ export default class rehabilitativeActivityDetailsPage {
     private readonly rehabBatchSessionService: RehabBatchSessionService,
   ) {}
 
-  // With the toggle on (IR-1904) the details are entered for the punishments in the rehab batch:
-  // the activity has to be completed by the date they are suspended until
-  private isBatchJourney = (res: Response) => !!res.locals.featureToggles?.multiPrivilegePunishments
-
   // The punishments this activity will be recorded against — all of the batch when one answer covers them
   private coveredPunishments = (req: Request): PunishmentData[] => {
     const { chargeNumber, redisId } = req.params
@@ -48,27 +44,26 @@ export default class rehabilitativeActivityDetailsPage {
     const { error, details, monitorName, endDate, totalSessions } = pageData
     const { numberOfActivities, currentActivityNumber } = req.query
 
+    // The details are entered for the punishments in the rehab batch: the activity has to be completed by the
+    // date they are suspended until
     let caption: string = null
     let endDateHint: string = null
-    let rehabBatchId: string = null
-    if (this.isBatchJourney(res)) {
-      rehabBatchId = this.rehabBatchSessionService.get(req, chargeNumber)?.id ?? ''
-      const punishments = this.coveredPunishments(req)
-      const latest = this.latestCompletionDate(punishments)
-      if (punishments.length === 1) {
-        const [punishment] = punishments
-        caption = convertPunishmentType(
-          punishment.type,
-          punishment.stoppagePercentage,
-          punishment.privilegeType,
-          punishment.otherPrivilege,
-        )
-        if (latest) {
-          endDateHint = `It must be on or before the date the punishment is suspended until, ${formatTimestampTo(latest, 'D MMMM YYYY')}.`
-        }
-      } else if (latest) {
-        endDateHint = `It must be on or before ${formatTimestampTo(latest, 'D MMMM YYYY')}, the earliest date these punishments are suspended until.`
+    const rehabBatchId = this.rehabBatchSessionService.get(req, chargeNumber)?.id ?? ''
+    const punishments = this.coveredPunishments(req)
+    const latest = this.latestCompletionDate(punishments)
+    if (punishments.length === 1) {
+      const [punishment] = punishments
+      caption = convertPunishmentType(
+        punishment.type,
+        punishment.stoppagePercentage,
+        punishment.privilegeType,
+        punishment.otherPrivilege,
+      )
+      if (latest) {
+        endDateHint = `It must be on or before the date the punishment is suspended until, ${formatTimestampTo(latest, 'D MMMM YYYY')}.`
       }
+    } else if (latest) {
+      endDateHint = `It must be on or before ${formatTimestampTo(latest, 'D MMMM YYYY')}, the earliest date these punishments are suspended until.`
     }
 
     return res.render(`pages/rehabilitativeActivityDetails.njk`, {
@@ -94,7 +89,6 @@ export default class rehabilitativeActivityDetailsPage {
       return res.render('pages/notFound.njk', { url: req.headers.referer || adjudicationUrls.homepage.root })
     }
 
-    if (!this.isBatchJourney(res)) return this.renderView(req, res, {})
     const activity = this.activityToShow(req, Number(req.query.currentActivityNumber))
     return this.renderView(req, res, {
       details: activity?.details,
@@ -139,7 +133,7 @@ export default class rehabilitativeActivityDetailsPage {
     const { chargeNumber, redisId } = req.params
     const { details, monitorName, endDate, totalSessions } = req.body
 
-    if (this.isBatchJourney(res) && !this.isExpectedForm(req, Number(currentActivityNumber))) {
+    if (!this.isExpectedForm(req, Number(currentActivityNumber))) {
       return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
     }
 
@@ -147,12 +141,11 @@ export default class rehabilitativeActivityDetailsPage {
 
     const error =
       validateForm({ prisonerName: friendlyName, details, monitorName, endDate, totalSessions }) ||
-      (this.isBatchJourney(res) &&
-        validateCompletionDate({
-          endDate,
-          latestDate: this.latestCompletionDate(this.coveredPunishments(req)),
-          coversSeveralPunishments: this.coveredPunishments(req).length > 1,
-        }))
+      validateCompletionDate({
+        endDate,
+        latestDate: this.latestCompletionDate(this.coveredPunishments(req)),
+        coversSeveralPunishments: this.coveredPunishments(req).length > 1,
+      })
     if (error)
       return this.renderView(req, res, {
         error,
@@ -169,30 +162,17 @@ export default class rehabilitativeActivityDetailsPage {
       totalSessions: totalSessions ? Number(totalSessions) : null,
       sessionId: +currentActivityNumber,
     }
-    if (this.isBatchJourney(res)) {
-      this.rehabBatchSessionService.saveDraftActivity(
-        req,
-        chargeNumber,
-        redisId,
-        Number(currentActivityNumber),
-        activityDetails,
-      )
-      if (Number(currentActivityNumber) === Number(numberOfActivities)) {
-        this.rehabBatchSessionService.applyDraft(req, chargeNumber, redisId)
-        this.rehabBatchSessionService.completeItem(req, chargeNumber, redisId)
-        return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
-      }
-    } else {
-      this.punishmentsService.addRehabilitativeActivity(
-        req,
-        chargeNumber,
-        redisId,
-        Number(currentActivityNumber),
-        activityDetails,
-      )
-      if (Number(currentActivityNumber) === Number(numberOfActivities)) {
-        return res.redirect(adjudicationUrls.awardPunishments.urls.modified(chargeNumber))
-      }
+    this.rehabBatchSessionService.saveDraftActivity(
+      req,
+      chargeNumber,
+      redisId,
+      Number(currentActivityNumber),
+      activityDetails,
+    )
+    if (Number(currentActivityNumber) === Number(numberOfActivities)) {
+      this.rehabBatchSessionService.applyDraft(req, chargeNumber, redisId)
+      this.rehabBatchSessionService.completeItem(req, chargeNumber, redisId)
+      return res.redirect(this.rehabBatchSessionService.nextUrl(req, chargeNumber))
     }
     return res.redirect(
       url.format({

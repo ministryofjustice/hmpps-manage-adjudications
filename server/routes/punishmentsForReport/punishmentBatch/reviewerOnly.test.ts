@@ -6,7 +6,6 @@ import UserService from '../../../services/userService'
 import PunishmentsService from '../../../services/punishmentsService'
 import PunishmentBatchSessionService from '../../../services/punishmentBatchSessionService'
 import RehabBatchSessionService from '../../../services/rehabBatchSessionService'
-import config from '../../../config'
 
 jest.mock('../../../services/userService')
 jest.mock('../../../services/punishmentsService')
@@ -30,10 +29,8 @@ const pages = [
 ]
 
 let app: Express
-const originalPrisons = config.featureToggles.multiPrivilegePunishmentsPrisons
 
 beforeEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = ['ALL']
   app = appWithAllRoutes(
     { production: false },
     { userService, punishmentsService, punishmentBatchSessionService, rehabBatchSessionService },
@@ -43,7 +40,6 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  config.featureToggles.multiPrivilegePunishmentsPrisons = originalPrisons
   jest.resetAllMocks()
 })
 

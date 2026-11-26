@@ -1,10 +1,6 @@
 import { FormError } from '../../../../@types/template'
 import { isWholeNumber } from '../../../../utils/utils'
 
-type PunishmentForm = {
-  hasDetails: boolean
-}
-
 type BatchForm = {
   hasDetails: string
   numberOfActivities: string
@@ -14,10 +10,6 @@ type BatchForm = {
 export const MAX_ACTIVITIES = 10
 
 const errors: { [key: string]: FormError } = {
-  MISSING_CHOICE: {
-    href: '#hasRehabilitativeActivitiesDetails',
-    text: 'Select yes if you have the details of the rehabilitative activity',
-  },
   MISSING_CHOICE_BATCH: {
     href: '#hasRehabilitativeActivitiesDetails',
     text: 'Select yes if you have the details of the rehabilitative activities',
@@ -34,14 +26,6 @@ const errors: { [key: string]: FormError } = {
     href: '#numberOfActivities',
     text: `Number of rehabilitative activities must be ${MAX_ACTIVITIES} or fewer`,
   },
-}
-
-export default function validateForm({ hasDetails }: PunishmentForm): FormError | null {
-  if (!hasDetails) {
-    return errors.MISSING_CHOICE
-  }
-
-  return null
 }
 
 export function validateBatchForm({ hasDetails, numberOfActivities }: BatchForm): FormError | null {

@@ -71,7 +71,7 @@ describe('POST /punishment', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.punishmentNumberOfDays.urls.edit(
+        `${adjudicationUrls.punishmentDuration.urls.edit(
           '100',
           'XYZ',
         )}?punishmentType=PRIVILEGE&privilegeType=OTHER&otherPrivilege=nintendo%20switch`,
@@ -84,10 +84,7 @@ describe('POST /punishment', () => {
         punishmentType: PunishmentType.EXTRA_WORK,
       })
       .expect(302)
-      .expect(
-        'Location',
-        `${adjudicationUrls.punishmentNumberOfDays.urls.edit('100', 'XYZ')}?punishmentType=EXTRA_WORK`,
-      )
+      .expect('Location', `${adjudicationUrls.punishmentDuration.urls.edit('100', 'XYZ')}?punishmentType=EXTRA_WORK`)
   })
   it('preserves the child answer when editing a social visits punishment', () => {
     return request(app)
@@ -99,7 +96,7 @@ describe('POST /punishment', () => {
       .expect(302)
       .expect(
         'Location',
-        `${adjudicationUrls.punishmentNumberOfDays.urls.edit(
+        `${adjudicationUrls.punishmentDuration.urls.edit(
           '100',
           'XYZ',
         )}?punishmentType=RESTRICTION_OF_SOCIAL_VISITS&hasChildUnder18=false`,

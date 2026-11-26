@@ -55,13 +55,13 @@ context('Add a new punishment', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.submitButton().should('exist')
-      punishmentPage.cancelButton().should('exist')
+      punishmentPage.saveAndExit().should('exist')
       punishmentPage.punishment().should('exist')
     })
-    it('cancel link goes back to punishments page', () => {
+    it('save and exit goes back to the award punishments page', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
-      punishmentPage.cancelButton().click()
+      punishmentPage.saveAndExit().click()
       cy.location().should(loc => {
         expect(loc.pathname).to.eq(adjudicationUrls.awardPunishments.urls.modified('100'))
       })
@@ -119,14 +119,14 @@ context('Add a new punishment', () => {
         .errorSummary()
         .find('li')
         .then($error => {
-          expect($error.get(0).innerText).to.contain('Select the type of privilege')
+          expect($error.get(0).innerText).to.contain('Select which privileges will be withdrawn')
         })
     })
     it('should error when no other privilege selected', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="OTHER"]').check()
+      punishmentPage.privilegeCheckboxes().find('input[value="OTHER"]').check()
 
       punishmentPage.submitButton().click()
 
@@ -170,7 +170,7 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentDuration.urls.start('100'))
       })
     })
 
@@ -183,7 +183,7 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentDuration.urls.start('100'))
       })
     })
 
@@ -192,12 +192,12 @@ context('Add a new punishment', () => {
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="CANTEEN"]').check()
+      punishmentPage.privilegeCheckboxes().find('input[value="CANTEEN"]').check()
 
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentDuration.urls.start('100'))
       })
     })
 
@@ -206,17 +206,17 @@ context('Add a new punishment', () => {
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
       punishmentPage.punishment().find('input[value="PRIVILEGE"]').check()
-      punishmentPage.privilege().find('input[value="OTHER"]').check()
+      punishmentPage.privilegeCheckboxes().find('input[value="OTHER"]').check()
       punishmentPage.otherPrivilege().type('nintendo switch')
 
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentDuration.urls.start('100'))
       })
     })
 
-    it('should carry the child answer when adding a social visits punishment', () => {
+    it('should submit successfully and redirect for a social visits punishment once the child question is answered', () => {
       cy.visit(adjudicationUrls.punishment.urls.start('100'))
       const punishmentPage = Page.verifyOnPage(PunishmentPage)
 
@@ -225,9 +225,7 @@ context('Add a new punishment', () => {
       punishmentPage.submitButton().click()
 
       cy.location().should(loc => {
-        expect(loc.pathname).to.eq(adjudicationUrls.punishmentNumberOfDays.urls.start('100'))
-        expect(loc.search).to.contain('punishmentType=RESTRICTION_OF_SOCIAL_VISITS')
-        expect(loc.search).to.contain('hasChildUnder18=false')
+        expect(loc.pathname).to.eq(adjudicationUrls.punishmentDuration.urls.start('100'))
       })
     })
   })
